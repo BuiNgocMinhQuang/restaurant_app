@@ -8,14 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-class StaffForgotPassword extends StatefulWidget {
-  const StaffForgotPassword({super.key});
+class ManagerForgotPassword extends StatefulWidget {
+  const ManagerForgotPassword({super.key});
 
   @override
-  State<StaffForgotPassword> createState() => _StaffForgotPasswordState();
+  State<ManagerForgotPassword> createState() => _ManagerForgotPasswordState();
 }
 
-class _StaffForgotPasswordState extends State<StaffForgotPassword> {
+class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
   bool light = true;
 
   @override
@@ -62,9 +62,10 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                       color2:
                                           const Color.fromRGBO(255, 0, 128, 1),
                                       event: () {
-                                        context.go("/staff_sign_in");
+                                        context.go("/");
                                       },
-                                      text: "Đăng nhập với tư cách nhân viên",
+                                      text:
+                                          "Đăng nhập với tư cách chủ cửa hàng",
                                       textColor: Colors.white,
                                     ),
                                   ),
@@ -105,7 +106,7 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                   52, 71, 103, 1),
                                               fontFamily: "Icomoon",
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 26.sp,
+                                              fontSize: 24.sp,
                                             ),
                                             gradient:
                                                 const LinearGradient(colors: [
@@ -116,68 +117,17 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                           SizedBox(
                                             height: 10.h,
                                           ),
-                                          const Center(
+                                          Center(
                                             child: Text(
                                               "Chúng tôi sẽ gửi mã xác nhận về email của bạn trong vòng 60 giây",
                                               textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 12.sp,
+                                              ),
                                             ),
                                           ),
                                           SizedBox(
                                             height: 30.h,
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              TextApp(
-                                                text: " Mã cửa hàng",
-                                                fontsize: 10.sp,
-                                                fontWeight: FontWeight.bold,
-                                                color: blueText,
-                                              ),
-                                              SizedBox(
-                                                height: 10.h,
-                                              ),
-                                              TextField(
-                                                cursorColor:
-                                                    const Color.fromRGBO(
-                                                        73, 80, 87, 1),
-                                                decoration: InputDecoration(
-                                                    fillColor:
-                                                        const Color.fromARGB(
-                                                            255, 226, 104, 159),
-                                                    focusedBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide:
-                                                          const BorderSide(
-                                                              color: Color
-                                                                  .fromRGBO(
-                                                                      214,
-                                                                      51,
-                                                                      123,
-                                                                      0.6),
-                                                              width: 2.0),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.r),
-                                                    ),
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.r),
-                                                    ),
-                                                    hintText: 'Mã cửa hàng',
-                                                    isDense: true,
-                                                    contentPadding:
-                                                        EdgeInsets.all(
-                                                            1.sw > 600
-                                                                ? 20.w
-                                                                : 10.w)),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 20.h,
                                           ),
                                           Column(
                                             crossAxisAlignment:
@@ -193,9 +143,10 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                 height: 10.h,
                                               ),
                                               TextField(
-                                                cursorColor:
-                                                    const Color.fromRGBO(
-                                                        73, 80, 87, 1),
+                                                style: TextStyle(
+                                                    fontSize: 14.sp,
+                                                    color: grey),
+                                                cursorColor: grey,
                                                 decoration: InputDecoration(
                                                     fillColor:
                                                         const Color.fromARGB(
@@ -223,10 +174,7 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                     hintText: 'Email',
                                                     isDense: true,
                                                     contentPadding:
-                                                        EdgeInsets.all(
-                                                            1.sw > 600
-                                                                ? 20.w
-                                                                : 10.w)),
+                                                        EdgeInsets.all(10.w)),
                                               ),
                                             ],
                                           ),

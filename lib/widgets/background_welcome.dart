@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BackgroundWelcome extends StatelessWidget {
   const BackgroundWelcome({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
         Text(
           "Chào mừng!",
@@ -13,11 +14,11 @@ class BackgroundWelcome extends StatelessWidget {
             color: Colors.white,
             fontFamily: "Icomoon",
             fontWeight: FontWeight.bold,
-            fontSize: 26,
+            fontSize: 24.sp,
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 15, left: 15, right: 15),
+          padding: EdgeInsets.only(top: 15.w, left: 15.w, right: 15.w),
           child: Center(
             child: Text(
               textAlign: TextAlign.center,
@@ -26,7 +27,7 @@ class BackgroundWelcome extends StatelessWidget {
                 color: Colors.white,
                 fontFamily: "Icomoon",
                 fontWeight: FontWeight.normal,
-                fontSize: 16,
+                fontSize: 14.sp,
               ),
             ),
           ),

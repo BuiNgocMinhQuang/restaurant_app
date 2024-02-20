@@ -8,14 +8,14 @@ import 'package:app_restaurant/config/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-class StaffSignIn extends StatefulWidget {
-  const StaffSignIn({super.key});
+class ManagerSignIn extends StatefulWidget {
+  const ManagerSignIn({super.key});
 
   @override
-  State<StaffSignIn> createState() => _StaffSignInState();
+  State<ManagerSignIn> createState() => _ManagerSignInState();
 }
 
-class _StaffSignInState extends State<StaffSignIn> {
+class _ManagerSignInState extends State<ManagerSignIn> {
   bool light = false;
   @override
   Widget build(BuildContext context) {
@@ -54,16 +54,15 @@ class _StaffSignInState extends State<StaffSignIn> {
                               Column(
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.all(30.w),
+                                    padding: EdgeInsets.all(20.w),
                                     child: ButtonGradient(
                                       color1: pupple,
                                       color2: red,
                                       event: () {
-                                        context.go("/");
+                                        context.go("/staff_sign_in");
                                       },
                                       fontSize: 12.sp,
-                                      text:
-                                          "Đăng nhập với tư cách chủ cửa hàng",
+                                      text: "Đăng nhập với tư cách nhân viên",
                                       textColor: Colors.white,
                                     ),
                                   ),
@@ -105,17 +104,18 @@ class _StaffSignInState extends State<StaffSignIn> {
                                                   52, 71, 103, 1),
                                               fontFamily: "Icomoon",
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 26.sp,
+                                              fontSize: 24.sp,
                                             ),
                                           ),
                                           SizedBox(
-                                            height: 10.h,
+                                            height: 10.w,
                                           ),
                                           Container(
                                             height: 40.h,
                                             decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(8.r),
+                                                color: Colors.amber,
                                                 gradient: const LinearGradient(
                                                   begin: Alignment.topRight,
                                                   end: Alignment.bottomLeft,
@@ -126,7 +126,7 @@ class _StaffSignInState extends State<StaffSignIn> {
                                                 )),
                                             child: Center(
                                               child: Text(
-                                                "Bạn đang đăng nhập với tư cách nhân viên!",
+                                                "Bạn đang đăng nhập với tư cách chủ cửa hàng!",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     color: Colors.white,
@@ -137,41 +137,11 @@ class _StaffSignInState extends State<StaffSignIn> {
                                             ),
                                           ),
                                           SizedBox(
-                                            height: 30.h,
+                                            height: 30.w,
                                           ),
                                           TextField(
                                             style: TextStyle(
-                                                fontSize: 14.sp, color: grey),
-                                            cursorColor: grey,
-                                            decoration: InputDecoration(
-                                                fillColor: const Color.fromARGB(
-                                                    255, 226, 104, 159),
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Color.fromRGBO(
-                                                          214, 51, 123, 0.6),
-                                                      width: 2.0),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.r),
-                                                ),
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.r),
-                                                ),
-                                                hintText: 'Mã cửa hàng',
-                                                isDense: true,
-                                                contentPadding: EdgeInsets.all(
-                                                    1.sw > 600 ? 20.h : 10.h)),
-                                          ),
-                                          SizedBox(
-                                            height: 20.h,
-                                          ),
-                                          TextField(
-                                            style: TextStyle(
-                                                fontSize: 14.sp, color: grey),
+                                                fontSize: 12.sp, color: grey),
                                             cursorColor: grey,
                                             decoration: InputDecoration(
                                                 fillColor: const Color.fromARGB(
@@ -193,15 +163,15 @@ class _StaffSignInState extends State<StaffSignIn> {
                                                 ),
                                                 hintText: 'Email',
                                                 isDense: true,
-                                                contentPadding: EdgeInsets.all(
-                                                    1.sw > 600 ? 20.h : 10.h)),
+                                                contentPadding:
+                                                    EdgeInsets.all(10.w)),
                                           ),
                                           SizedBox(
-                                            height: 20.h,
+                                            height: 20.w,
                                           ),
                                           TextField(
                                             style: TextStyle(
-                                                fontSize: 14.sp, color: grey),
+                                                fontSize: 12.sp, color: grey),
                                             cursorColor: grey,
                                             decoration: InputDecoration(
                                                 fillColor: const Color.fromARGB(
@@ -223,8 +193,8 @@ class _StaffSignInState extends State<StaffSignIn> {
                                                 ),
                                                 hintText: 'Mật khẩu',
                                                 isDense: true,
-                                                contentPadding: EdgeInsets.all(
-                                                    1.sw > 600 ? 20.h : 10.h)),
+                                                contentPadding:
+                                                    EdgeInsets.all(10.w)),
                                           ),
                                           SizedBox(
                                             height: 20.h,
@@ -254,7 +224,7 @@ class _StaffSignInState extends State<StaffSignIn> {
                                                 ),
                                               ),
                                               SizedBox(
-                                                width: 10.h,
+                                                width: 10.w,
                                               ),
                                               Text(
                                                 "Ghi nhớ tài khoản",
@@ -285,10 +255,63 @@ class _StaffSignInState extends State<StaffSignIn> {
                                           SizedBox(
                                             height: 20.h,
                                           ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width: 100,
+                                                height: 1, // Thickness
+                                                color: Color.fromRGBO(
+                                                    103, 116, 142, 1),
+                                              ),
+                                              SizedBox(
+                                                width: 12.w,
+                                              ),
+                                              Text(
+                                                "hoặc",
+                                                style: TextStyle(
+                                                  fontSize: 12.sp,
+                                                  color: Color.fromRGBO(
+                                                      103, 116, 142, 1),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 12.w,
+                                              ),
+                                              Container(
+                                                width: 100,
+                                                height: 1, // Thickness
+                                                color: Color.fromRGBO(
+                                                    103, 116, 142, 1),
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 20.h,
+                                          ),
+                                          ButtonGradient(
+                                            color1: const Color.fromRGBO(
+                                                20, 23, 39, 1),
+                                            color2: const Color.fromRGBO(
+                                                58, 65, 111, 1),
+                                            event: () {
+                                              context.go("/manager_sign_up");
+                                            },
+                                            text: "Đăng ký",
+                                            fontSize: 12.sp,
+                                            radius: 8.r,
+                                            textColor: Colors.white,
+                                          ),
+                                          SizedBox(
+                                            height: 20.h,
+                                          ),
                                           GestureDetector(
                                             onTap: () {
-                                              context
-                                                  .go("/staff_forgot_password");
+                                              context.go(
+                                                  "/manager_forgot_password");
                                             },
                                             child: TextApp(
                                               text: "Quên mật khẩu?",
@@ -307,7 +330,6 @@ class _StaffSignInState extends State<StaffSignIn> {
                               ),
                               SizedBox(
                                 width: 1.sw / 2,
-                                // height: 80,
                                 child: const CopyRightText(),
                               ),
                             ],

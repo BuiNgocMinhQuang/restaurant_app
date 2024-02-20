@@ -1,28 +1,38 @@
-import 'package:app_restaurant/screen/staff/signin.dart';
 import 'package:app_restaurant/widgets/background_welcome.dart';
 import 'package:app_restaurant/widgets/button_gradient.dart';
 import 'package:app_restaurant/widgets/copy_right_text.dart';
-import 'package:app_restaurant/widgets/text_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:app_restaurant/config/colors.dart';
 
-class StaffSignUp extends StatefulWidget {
-  const StaffSignUp({super.key});
+class ManagerSignUp extends StatefulWidget {
+  const ManagerSignUp({super.key});
 
   @override
-  State<StaffSignUp> createState() => _StaffSignUpState();
+  State<ManagerSignUp> createState() => _ManagerSignUpState();
 }
 
-class _StaffSignUpState extends State<StaffSignUp> {
+class _ManagerSignUpState extends State<ManagerSignUp> {
+  bool isChecked = false;
+
   @override
   Widget build(BuildContext context) {
-    bool? isChecked = false;
+    Color getColor(Set<MaterialState> states) {
+      const Set<MaterialState> interactiveStates = <MaterialState>{
+        MaterialState.pressed,
+        MaterialState.hovered,
+        MaterialState.focused,
+      };
+      if (states.any(interactiveStates.contains)) {
+        return blueText;
+      }
+      return blueText;
+    }
 
-    var heightView = MediaQuery.sizeOf(context).height;
-    var widthView = MediaQuery.sizeOf(context).width;
     return Scaffold(
         backgroundColor: const Color.fromRGBO(248, 249, 250, 1),
         body: SafeArea(
@@ -30,7 +40,7 @@ class _StaffSignUpState extends State<StaffSignUp> {
               child: Column(
             children: [
               Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  padding: EdgeInsets.only(left: 20.w, right: 20.w),
                   child: Column(
                     children: [
                       Stack(
@@ -39,9 +49,9 @@ class _StaffSignUpState extends State<StaffSignUp> {
                             children: [
                               Container(
                                 width: double.infinity,
-                                height: heightView / 2,
+                                height: 1.sh / 2,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(15.r),
                                     image: const DecorationImage(
                                       image: AssetImage(
                                           "assets/images/curved9.jpg"),
@@ -50,17 +60,17 @@ class _StaffSignUpState extends State<StaffSignUp> {
                               ),
                               Container(
                                 width: double.infinity,
-                                height: heightView / 2,
+                                height: 1.sh / 2,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(15.r),
                                     color: Colors.black.withOpacity(0.5)),
                               ),
-                              const Column(
+                              Column(
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.all(30),
+                                    padding: EdgeInsets.all(20.w),
                                   ),
-                                  BackgroundWelcome()
+                                  const BackgroundWelcome()
                                 ],
                               ),
                             ],
@@ -69,12 +79,14 @@ class _StaffSignUpState extends State<StaffSignUp> {
                             children: [
                               Padding(
                                 padding: EdgeInsets.only(
-                                    top: heightView / 4, left: 10, right: 10),
+                                    top: 1.sh > 933 ? 1.sh / 3 : 1.sh / 4,
+                                    left: 10.w,
+                                    right: 10.w),
                                 child: Container(
                                     width: double.infinity,
                                     // height: heightView / 2,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
+                                      borderRadius: BorderRadius.circular(15.r),
                                       color: Colors.white,
                                       boxShadow: [
                                         BoxShadow(
@@ -87,24 +99,21 @@ class _StaffSignUpState extends State<StaffSignUp> {
                                       ],
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.all(20),
+                                      padding: EdgeInsets.all(20.w),
                                       child: Column(
                                         children: [
-                                          const Text(
+                                          Text(
                                             "Đăng ký",
                                             style: TextStyle(
-                                              color: Color.fromRGBO(
+                                              color: const Color.fromRGBO(
                                                   52, 71, 103, 1),
                                               fontFamily: "Icomoon",
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 26,
+                                              fontSize: 24.sp,
                                             ),
                                           ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          const SizedBox(
-                                            height: 30,
+                                          SizedBox(
+                                            height: 30.h,
                                           ),
                                           Row(
                                             children: [
@@ -112,7 +121,7 @@ class _StaffSignUpState extends State<StaffSignUp> {
                                                 flex: 1,
                                                 child: TextField(
                                                   style: TextStyle(
-                                                      fontSize: 14,
+                                                      fontSize: 12.sp,
                                                       color: grey),
                                                   cursorColor: grey,
                                                   decoration: InputDecoration(
@@ -130,28 +139,28 @@ class _StaffSignUpState extends State<StaffSignUp> {
                                                             width: 2.0),
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(10),
+                                                                .circular(8.r),
                                                       ),
                                                       border:
                                                           OutlineInputBorder(
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(10),
+                                                                .circular(8.r),
                                                       ),
                                                       hintText: 'Họ',
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(12)),
+                                                          EdgeInsets.all(10.h)),
                                                 ),
                                               ),
                                               SizedBox(
-                                                width: 20,
+                                                width: 10.w,
                                               ),
                                               Expanded(
                                                 flex: 1,
                                                 child: TextField(
                                                   style: TextStyle(
-                                                      fontSize: 14,
+                                                      fontSize: 12.sp,
                                                       color: grey),
                                                   cursorColor: grey,
                                                   decoration: InputDecoration(
@@ -174,28 +183,28 @@ class _StaffSignUpState extends State<StaffSignUp> {
                                                                 width: 2.0),
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(10),
+                                                                .circular(8.r),
                                                       ),
                                                       border:
                                                           OutlineInputBorder(
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(10),
+                                                                .circular(8.r),
                                                       ),
                                                       hintText: 'Tên',
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(12)),
+                                                          EdgeInsets.all(10.h)),
                                                 ),
                                               ),
                                             ],
                                           ),
-                                          const SizedBox(
-                                            height: 20,
+                                          SizedBox(
+                                            height: 20.h,
                                           ),
                                           TextField(
                                             style: TextStyle(
-                                                fontSize: 14, color: grey),
+                                                fontSize: 12.sp, color: grey),
                                             cursorColor: grey,
                                             decoration: InputDecoration(
                                                 fillColor: const Color.fromARGB(
@@ -207,23 +216,25 @@ class _StaffSignUpState extends State<StaffSignUp> {
                                                           214, 51, 123, 0.6),
                                                       width: 2.0),
                                                   borderRadius:
-                                                      BorderRadius.circular(10),
+                                                      BorderRadius.circular(
+                                                          8.r),
                                                 ),
                                                 border: OutlineInputBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(10),
+                                                      BorderRadius.circular(
+                                                          8.r),
                                                 ),
                                                 hintText: 'Họ và tên',
                                                 isDense: true,
                                                 contentPadding:
-                                                    EdgeInsets.all(12)),
+                                                    EdgeInsets.all(10.h)),
                                           ),
-                                          const SizedBox(
-                                            height: 20,
+                                          SizedBox(
+                                            height: 20.h,
                                           ),
                                           TextField(
                                             style: TextStyle(
-                                                fontSize: 14, color: grey),
+                                                fontSize: 12.sp, color: grey),
                                             cursorColor: grey,
                                             decoration: InputDecoration(
                                                 fillColor: const Color.fromARGB(
@@ -235,48 +246,55 @@ class _StaffSignUpState extends State<StaffSignUp> {
                                                           214, 51, 123, 0.6),
                                                       width: 2.0),
                                                   borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                                border: OutlineInputBorder(),
-                                                hintText: 'Email',
-                                                isDense: true,
-                                                contentPadding:
-                                                    EdgeInsets.all(12)),
-                                          ),
-                                          const SizedBox(
-                                            height: 20,
-                                          ),
-                                          TextField(
-                                            style: TextStyle(
-                                                fontSize: 14, color: grey),
-                                            cursorColor: grey,
-                                            decoration: InputDecoration(
-                                                fillColor: const Color.fromARGB(
-                                                    255, 226, 104, 159),
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Color.fromRGBO(
-                                                          214, 51, 123, 0.6),
-                                                      width: 2.0),
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
+                                                      BorderRadius.circular(
+                                                          8.r),
                                                 ),
                                                 border: OutlineInputBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(10),
+                                                      BorderRadius.circular(
+                                                          8.r),
+                                                ),
+                                                hintText: 'Email',
+                                                isDense: true,
+                                                contentPadding:
+                                                    EdgeInsets.all(10.h)),
+                                          ),
+                                          SizedBox(
+                                            height: 20.h,
+                                          ),
+                                          TextField(
+                                            style: TextStyle(
+                                                fontSize: 12.sp, color: grey),
+                                            cursorColor: grey,
+                                            decoration: InputDecoration(
+                                                fillColor: const Color.fromARGB(
+                                                    255, 226, 104, 159),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Color.fromRGBO(
+                                                          214, 51, 123, 0.6),
+                                                      width: 2.0),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.r),
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.r),
                                                 ),
                                                 hintText: 'Số điện thoại',
                                                 isDense: true,
                                                 contentPadding:
-                                                    EdgeInsets.all(12)),
+                                                    EdgeInsets.all(10.h)),
                                           ),
-                                          const SizedBox(
-                                            height: 20,
+                                          SizedBox(
+                                            height: 20.h,
                                           ),
                                           TextField(
                                             style: TextStyle(
-                                                fontSize: 14, color: grey),
+                                                fontSize: 12.sp, color: grey),
                                             cursorColor: grey,
                                             decoration: InputDecoration(
                                                 fillColor: const Color.fromARGB(
@@ -288,23 +306,25 @@ class _StaffSignUpState extends State<StaffSignUp> {
                                                           214, 51, 123, 0.6),
                                                       width: 2.0),
                                                   borderRadius:
-                                                      BorderRadius.circular(10),
+                                                      BorderRadius.circular(
+                                                          8.r),
                                                 ),
                                                 border: OutlineInputBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(10),
+                                                      BorderRadius.circular(
+                                                          8.r),
                                                 ),
                                                 hintText: 'Mật khẩu',
                                                 isDense: true,
                                                 contentPadding:
-                                                    EdgeInsets.all(12)),
+                                                    EdgeInsets.all(10.h)),
                                           ),
-                                          const SizedBox(
-                                            height: 20,
+                                          SizedBox(
+                                            height: 20.h,
                                           ),
                                           TextField(
                                             style: TextStyle(
-                                                fontSize: 14, color: grey),
+                                                fontSize: 12.sp, color: grey),
                                             cursorColor: grey,
                                             decoration: InputDecoration(
                                                 fillColor: const Color.fromARGB(
@@ -316,19 +336,21 @@ class _StaffSignUpState extends State<StaffSignUp> {
                                                           214, 51, 123, 0.6),
                                                       width: 2.0),
                                                   borderRadius:
-                                                      BorderRadius.circular(10),
+                                                      BorderRadius.circular(
+                                                          8.r),
                                                 ),
                                                 border: OutlineInputBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(10),
+                                                      BorderRadius.circular(
+                                                          8.r),
                                                 ),
                                                 hintText: 'Nhập lại mật khẩu',
                                                 isDense: true,
                                                 contentPadding:
-                                                    EdgeInsets.all(12)),
+                                                    EdgeInsets.all(10.h)),
                                           ),
-                                          const SizedBox(
-                                            height: 20,
+                                          SizedBox(
+                                            height: 20.h,
                                           ),
                                           Row(
                                             mainAxisAlignment:
@@ -336,17 +358,31 @@ class _StaffSignUpState extends State<StaffSignUp> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
                                             children: [
+                                              // Checkbox(
+                                              //   value: isChecked,
+                                              //   activeColor: Colors.amber,
+                                              //   checkColor: Colors.white,
+                                              //   // tristate: true,
+                                              //   onChanged: (bool? value) {
+                                              //     setState(() {
+                                              //       isChecked = value!;
+                                              //       print("press $isChecked");
+                                              //     });
+                                              //   },
+                                              // ),
                                               Checkbox(
-                                                value: isChecked,
-                                                activeColor: Colors.amber,
-                                                tristate: true,
-                                                onChanged: (bool? newBool) {
-                                                  setState(() {
-                                                    isChecked = newBool;
-                                                    print("press");
-                                                  });
-                                                },
-                                              ),
+                                                  checkColor: Colors.white,
+                                                  fillColor:
+                                                      MaterialStateProperty
+                                                          .resolveWith(
+                                                              getColor),
+                                                  value: isChecked,
+                                                  onChanged: (bool? value) {
+                                                    setState(() {
+                                                      isChecked = value!;
+                                                      print(isChecked);
+                                                    });
+                                                  }),
                                               RichText(
                                                 text: TextSpan(
                                                   children: [
@@ -354,7 +390,7 @@ class _StaffSignUpState extends State<StaffSignUp> {
                                                         text:
                                                             "Tôi đồng ý với các",
                                                         style: TextStyle(
-                                                          fontSize: 14,
+                                                          fontSize: 12.sp,
                                                           color: const Color
                                                               .fromRGBO(
                                                               52, 71, 103, 1),
@@ -373,7 +409,7 @@ class _StaffSignUpState extends State<StaffSignUp> {
                                                                 // Single tapped.
                                                               },
                                                         style: TextStyle(
-                                                          fontSize: 14,
+                                                          fontSize: 12.sp,
                                                           color: const Color
                                                               .fromRGBO(
                                                               52, 71, 103, 1),
@@ -387,8 +423,8 @@ class _StaffSignUpState extends State<StaffSignUp> {
                                               ),
                                             ],
                                           ),
-                                          const SizedBox(
-                                            height: 20,
+                                          SizedBox(
+                                            height: 20.h,
                                           ),
                                           ButtonGradient(
                                             color1: const Color.fromRGBO(
@@ -399,11 +435,12 @@ class _StaffSignUpState extends State<StaffSignUp> {
                                               print("hellooopeee");
                                             },
                                             text: "Đăng ký",
-                                            radius: 10,
+                                            fontSize: 12.sp,
+                                            radius: 8.r,
                                             textColor: Colors.white,
                                           ),
-                                          const SizedBox(
-                                            height: 20,
+                                          SizedBox(
+                                            height: 20.h,
                                           ),
                                           RichText(
                                             text: TextSpan(
@@ -412,7 +449,7 @@ class _StaffSignUpState extends State<StaffSignUp> {
                                                     text:
                                                         "Bạn đã có tài khoản?",
                                                     style: TextStyle(
-                                                      fontSize: 14,
+                                                      fontSize: 12.sp,
                                                       color:
                                                           const Color.fromRGBO(
                                                               52, 71, 103, 1),
@@ -425,16 +462,11 @@ class _StaffSignUpState extends State<StaffSignUp> {
                                                     recognizer:
                                                         TapGestureRecognizer()
                                                           ..onTap = () {
-                                                            Navigator.pop(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder:
-                                                                        (context) =>
-                                                                            StaffSignUp()));
+                                                            context.go("/");
                                                             // Single tapped.
                                                           },
                                                     style: TextStyle(
-                                                      fontSize: 14,
+                                                      fontSize: 12.sp,
                                                       color:
                                                           const Color.fromRGBO(
                                                               52, 71, 103, 1),
@@ -445,26 +477,25 @@ class _StaffSignUpState extends State<StaffSignUp> {
                                               ],
                                             ),
                                           ),
-                                          const SizedBox(
-                                            height: 10,
+                                          SizedBox(
+                                            height: 10.h,
                                           ),
-                                          TextApp(
-                                            text: "Quên mật khẩu?",
-                                            color: const Color.fromRGBO(
-                                                52, 71, 103, 1),
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: "OpenSans",
-                                          )
+                                          // TextApp(
+                                          //   text: "Quên mật khẩu?",
+                                          //   color: const Color.fromRGBO(
+                                          //       52, 71, 103, 1),
+                                          //   fontWeight: FontWeight.bold,
+                                          //   fontFamily: "OpenSans",
+                                          // )
                                         ],
                                       ),
                                     )),
                               ),
-                              const SizedBox(
-                                height: 30,
+                              SizedBox(
+                                height: 30.h,
                               ),
                               SizedBox(
-                                width: widthView / 2,
-                                // height: 80,
+                                width: 1.sw / 2,
                                 child: const CopyRightText(),
                               ),
                             ],

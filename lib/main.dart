@@ -1,6 +1,6 @@
-import 'package:app_restaurant/screen/staff/signin.dart';
-import 'package:app_restaurant/screen/staff/sigup.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,6 +11,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: StaffSignIn());
+    return ScreenUtilInit(
+        designSize: const Size(430, 932),
+        builder: (_, child) {
+          return MaterialApp.router(
+              debugShowCheckedModeBanner: false,
+              routerConfig: NyAppRouter().router
+              // routeInformationProvider: NyAppRouter().router.routeInformationProvider,
+              // routeInformationParser: NyAppRouter().router.routeInformationParser,
+              // routerDelegate: NyAppRouter().router.routerDelegate,
+              );
+        });
   }
 }

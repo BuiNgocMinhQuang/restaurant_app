@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TextApp extends StatelessWidget {
   final String text;
@@ -9,7 +10,7 @@ class TextApp extends StatelessWidget {
   TextApp(
       {Key? key,
       required this.text,
-      this.fontsize = 14,
+      this.fontsize = 0,
       this.color = Colors.black,
       this.fontFamily = "Icomoon",
       this.fontWeight = FontWeight.normal})
@@ -20,7 +21,7 @@ class TextApp extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-          fontSize: fontsize,
+          fontSize: fontsize == 0 ? 12.sp : fontsize,
           color: color,
           fontFamily: fontFamily,
           fontWeight: fontWeight),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ButtonGradient extends StatelessWidget {
   void Function() event;
@@ -17,10 +18,10 @@ class ButtonGradient extends StatelessWidget {
       required this.event,
       required this.text,
       this.textColor = Colors.black,
-      this.radius = 25,
-      this.fontSize = 12,
+      this.radius = 0,
+      this.fontSize = 0,
       this.isUpperCase = true,
-      this.height = 45})
+      this.height = 0})
       : super(key: key);
 
   @override
@@ -30,9 +31,9 @@ class ButtonGradient extends StatelessWidget {
         event();
       },
       child: Container(
-        height: height,
+        height: height == 0 ? 45.h : height,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(radius),
+            borderRadius: BorderRadius.circular(radius == 0 ? 20.r : radius),
             gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
@@ -46,7 +47,7 @@ class ButtonGradient extends StatelessWidget {
                 color: textColor,
                 fontFamily: "Icomoon",
                 fontWeight: FontWeight.bold,
-                fontSize: fontSize),
+                fontSize: fontSize == 0 ? 12.sp : fontSize),
           ),
         ),
       ),
