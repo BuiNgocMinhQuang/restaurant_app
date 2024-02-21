@@ -12,7 +12,7 @@ class TextApp extends StatelessWidget {
       required this.text,
       this.fontsize = 0,
       this.color = Colors.black,
-      this.fontFamily = "Icomoon",
+      this.fontFamily = "OpenSans",
       this.fontWeight = FontWeight.normal})
       : super(key: key);
 

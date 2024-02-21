@@ -1,6 +1,8 @@
+import 'package:app_restaurant/provider/drawer_provider.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,13 +16,28 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
         designSize: const Size(430, 932),
         builder: (_, child) {
-          return MaterialApp.router(
+          return ChangeNotifierProvider(
+            create: (context) => DrawerProvider(),
+            child: MaterialApp.router(
               debugShowCheckedModeBanner: false,
-              routerConfig: NyAppRouter().router
-              // routeInformationProvider: NyAppRouter().router.routeInformationProvider,
-              // routeInformationParser: NyAppRouter().router.routeInformationParser,
-              // routerDelegate: NyAppRouter().router.routerDelegate,
-              );
+              routerConfig: NyAppRouter().customRouter,
+            ),
+          );
         });
   }
 }
+
+
+//          _ . - / ` )
+//         //    /   / )
+//    . = //    /   / / )
+//   //`  /    /   / / /
+//   //` /            /
+//  ||               /
+//   \\             /
+//   ))           .'
+//  //           /
+//             /
+// Khi bắt đầu dự án này, chỉ có Chúa và tôi biêt cách chạy nó.
+// Giờ thì chỉ có Chúa mới biết :( !!!
+

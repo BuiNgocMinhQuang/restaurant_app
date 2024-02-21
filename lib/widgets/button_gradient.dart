@@ -11,18 +11,19 @@ class ButtonGradient extends StatelessWidget {
   bool isUpperCase;
   double radius;
   final String text;
-  ButtonGradient(
-      {Key? key,
-      required this.color1,
-      required this.color2,
-      required this.event,
-      required this.text,
-      this.textColor = Colors.black,
-      this.radius = 0,
-      this.fontSize = 0,
-      this.isUpperCase = true,
-      this.height = 0})
-      : super(key: key);
+
+  ButtonGradient({
+    Key? key,
+    required this.color1,
+    required this.color2,
+    required this.event,
+    required this.text,
+    this.textColor = Colors.black,
+    this.radius = 0,
+    this.fontSize = 0,
+    this.isUpperCase = true,
+    this.height = 0,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

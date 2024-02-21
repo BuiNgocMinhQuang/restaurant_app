@@ -246,7 +246,9 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                 33, 82, 255, 1),
                                             color2: const Color.fromRGBO(
                                                 33, 212, 253, 1),
-                                            event: () {},
+                                            event: () {
+                                              context.go('/manager_home');
+                                            },
                                             text: "Đăng nhập",
                                             fontSize: 12.sp,
                                             radius: 8.r,
