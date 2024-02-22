@@ -16,12 +16,9 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
         designSize: const Size(430, 932),
         builder: (_, child) {
-          return ChangeNotifierProvider(
-            create: (context) => DrawerProvider(),
-            child: MaterialApp.router(
-              debugShowCheckedModeBanner: false,
-              routerConfig: NyAppRouter().customRouter,
-            ),
+          return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            routerConfig: NyAppRouter().customRouter,
           );
         });
   }

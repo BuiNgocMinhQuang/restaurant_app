@@ -8,14 +8,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 class CreateStoreModal extends StatefulWidget {
-  List imageFileList;
-  Function eventButton;
+  List<XFile>? imageFileList;
+  Function eventCloseButton;
+  Function eventSaveButton;
   CreateStoreModal({
     Key? key,
     required this.imageFileList,
-    required this.eventButton,
+    required this.eventCloseButton,
+    required this.eventSaveButton,
   }) : super(key: key);
 
   @override
@@ -29,6 +32,13 @@ class _CreateStoreModalState extends State<CreateStoreModal> {
   File? selectedImage;
 
   final ImagePicker imagePicker = ImagePicker();
+  QuillController _controllerQuill = QuillController.basic();
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _controllerQuill;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -246,6 +256,53 @@ class _CreateStoreModalState extends State<CreateStoreModal> {
                           color: blueText,
                         ),
                         SizedBox(
+                          height: 20.h,
+                        ),
+                        Container(
+                            width: 1.sw,
+                            height: 250.h,
+                            color: Colors.amber,
+                            child: Column(
+                              children: [
+                                QuillProvider(
+                                    configurations: QuillConfigurations(
+                                        controller: _controllerQuill),
+                                    child: Column(
+                                      children: [
+                                        QuillToolbar(
+                                          configurations:
+                                              QuillToolbarConfigurations(
+                                            toolbarIconAlignment:
+                                                WrapAlignment.start,
+                                            showColorButton: false,
+                                            showCodeBlock: false,
+                                            showHeaderStyle: false,
+                                            showSearchButton: false,
+                                            showFontFamily: false,
+                                            showLeftAlignment: false,
+                                            showRightAlignment: false,
+                                            showCenterAlignment: false,
+                                            showQuote: false,
+                                            showUndo: false,
+                                            showRedo: false,
+                                            showDirection: false,
+                                          ),
+                                        ),
+                                        Container(
+                                          color: Colors.red,
+                                          height: 100.h,
+                                          child: QuillEditor.basic(
+                                            configurations:
+                                                QuillEditorConfigurations(
+                                              readOnly: false,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    )),
+                              ],
+                            )),
+                        SizedBox(
                           height: 30.h,
                         ),
                         TextApp(
@@ -280,15 +337,15 @@ class _CreateStoreModalState extends State<CreateStoreModal> {
                                   height: 100,
                                   color: Colors.blue,
                                   child: GridView.builder(
-                                      itemCount: widget.imageFileList.length,
+                                      itemCount: widget.imageFileList!.length,
                                       gridDelegate:
                                           SliverGridDelegateWithFixedCrossAxisCount(
                                               crossAxisCount: 3),
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         return Image.file(
-                                          File(
-                                              widget.imageFileList[index].path),
+                                          File(widget
+                                              .imageFileList![index].path),
                                           fit: BoxFit.cover,
                                         );
                                       }),
@@ -348,7 +405,9 @@ class _CreateStoreModalState extends State<CreateStoreModal> {
                                 ButtonGradient(
                                   color1: const Color.fromRGBO(33, 82, 255, 1),
                                   color2: const Color.fromRGBO(33, 212, 253, 1),
-                                  event: () {},
+                                  event: () {
+                                    pickImage();
+                                  },
                                   text: "Chụp ảnh",
                                   fontSize: 12.sp,
                                   radius: 8.r,
@@ -383,7 +442,7 @@ class _CreateStoreModalState extends State<CreateStoreModal> {
                       children: [
                         ButtonApp(
                           event: () {
-                            widget.eventButton();
+                            widget.eventCloseButton();
                           },
                           text: "Đóng",
                           colorText: Colors.white,
@@ -395,7 +454,7 @@ class _CreateStoreModalState extends State<CreateStoreModal> {
                         ),
                         ButtonApp(
                           event: () {
-                            widget.eventButton();
+                            widget.eventSaveButton();
                           },
                           text: "Lưu",
                           colorText: Colors.white,
@@ -434,7 +493,7 @@ class _CreateStoreModalState extends State<CreateStoreModal> {
   void selectImages() async {
     final List<XFile> selectedImages = await imagePicker.pickMultiImage();
     if (selectedImages.isNotEmpty) {
-      widget.imageFileList.addAll(selectedImages);
+      widget.imageFileList!.addAll(selectedImages);
     }
     setState(() {});
   } //sele

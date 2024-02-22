@@ -15,7 +15,10 @@ class ListBill extends StatefulWidget {
 class _ListBillState extends State<ListBill> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    TabController _tabController = TabController(length: 4, vsync: this);
+    TabController _tabController = TabController(
+      length: 4,
+      vsync: this,
+    );
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -71,9 +74,9 @@ class _ListBillState extends State<ListBill> with TickerProviderStateMixin {
                               ]),
                         ))),
               ),
-              Container(
+              Expanded(
+                  child: Container(
                 width: 1.sw,
-                height: 500,
                 color: Colors.white,
                 child: TabBarView(controller: _tabController, children: [
                   //Tab All
@@ -122,7 +125,7 @@ class _ListBillState extends State<ListBill> with TickerProviderStateMixin {
                         );
                       }),
                 ]),
-              ),
+              )),
               SizedBox(
                 height: 15.h,
               ),

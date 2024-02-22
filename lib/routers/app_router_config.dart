@@ -1,7 +1,9 @@
 import 'package:app_restaurant/routers/app_router_constant.dart';
+import 'package:app_restaurant/screen/manager/booking_table.dart';
 import 'package:app_restaurant/screen/manager/brought_receipt.dart';
 import 'package:app_restaurant/screen/manager/forgot_password.dart';
 import 'package:app_restaurant/screen/manager/home.dart';
+import 'package:app_restaurant/screen/manager/list_bill.dart';
 import 'package:app_restaurant/screen/manager/signin.dart';
 import 'package:app_restaurant/screen/manager/sigup.dart';
 import 'package:app_restaurant/screen/manager/stores.dart';
@@ -19,11 +21,11 @@ class NyAppRouter {
     //       return const ManagerHome();
     //     }),
     GoRoute(
-        name: AppRouterContants.managerStoresRouterName,
+        name: AppRouterContants.managerBookingTableRouterName,
         // path: '/manager_stores',
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return const Stores();
+          return const BookingTable();
         }),
   ]);
 

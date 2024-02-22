@@ -22,6 +22,8 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   avatar_stack: ^1.2.0
   image_picker: ^1.0.7
+  flutter_quill: ^8.1.1
+  dropdown_search: ^5.0.6
 
 dev_dependencies:
   flutter_test:
