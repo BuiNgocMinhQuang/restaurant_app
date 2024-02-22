@@ -7,6 +7,7 @@ class ButtonApp extends StatelessWidget {
   final String fontFamily;
   FontWeight fontWeight;
   double fontsize;
+  double radius;
   Color colorText;
   Color backgroundColor;
   Color outlineColor;
@@ -18,6 +19,7 @@ class ButtonApp extends StatelessWidget {
     required this.colorText,
     required this.backgroundColor,
     required this.outlineColor,
+    this.radius = 0,
     this.fontsize = 0,
     this.fontFamily = "OpenSans",
     this.fontWeight = FontWeight.normal,
@@ -28,6 +30,9 @@ class ButtonApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radius == 0 ? 10.r : radius),
+        ),
         backgroundColor: backgroundColor,
         side: BorderSide(color: outlineColor, width: line), //<-- SEE HERE
       ),

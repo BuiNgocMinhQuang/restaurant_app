@@ -1,4 +1,5 @@
 import 'package:app_restaurant/routers/app_router_constant.dart';
+import 'package:app_restaurant/screen/manager/brought_receipt.dart';
 import 'package:app_restaurant/screen/manager/forgot_password.dart';
 import 'package:app_restaurant/screen/manager/home.dart';
 import 'package:app_restaurant/screen/manager/signin.dart';
