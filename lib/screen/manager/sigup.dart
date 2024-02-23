@@ -150,7 +150,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                       hintText: 'Họ',
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(10.h)),
+                                                          EdgeInsets.all(15.w)),
                                                 ),
                                               ),
                                               SizedBox(
@@ -194,7 +194,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                       hintText: 'Tên',
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(10.h)),
+                                                          EdgeInsets.all(15.w)),
                                                 ),
                                               ),
                                             ],
@@ -227,7 +227,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                 hintText: 'Họ và tên',
                                                 isDense: true,
                                                 contentPadding:
-                                                    EdgeInsets.all(10.h)),
+                                                    EdgeInsets.all(15.w)),
                                           ),
                                           SizedBox(
                                             height: 20.h,
@@ -257,7 +257,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                 hintText: 'Email',
                                                 isDense: true,
                                                 contentPadding:
-                                                    EdgeInsets.all(10.h)),
+                                                    EdgeInsets.all(15.w)),
                                           ),
                                           SizedBox(
                                             height: 20.h,
@@ -287,7 +287,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                 hintText: 'Số điện thoại',
                                                 isDense: true,
                                                 contentPadding:
-                                                    EdgeInsets.all(10.h)),
+                                                    EdgeInsets.all(15.w)),
                                           ),
                                           SizedBox(
                                             height: 20.h,
@@ -317,7 +317,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                 hintText: 'Mật khẩu',
                                                 isDense: true,
                                                 contentPadding:
-                                                    EdgeInsets.all(10.h)),
+                                                    EdgeInsets.all(15.w)),
                                           ),
                                           SizedBox(
                                             height: 20.h,
@@ -347,7 +347,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                 hintText: 'Nhập lại mật khẩu',
                                                 isDense: true,
                                                 contentPadding:
-                                                    EdgeInsets.all(10.h)),
+                                                    EdgeInsets.all(15.w)),
                                           ),
                                           SizedBox(
                                             height: 20.h,

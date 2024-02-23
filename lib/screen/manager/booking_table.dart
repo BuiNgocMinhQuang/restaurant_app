@@ -1,14 +1,12 @@
-import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/widgets/bill_infor_container.dart';
 import 'package:app_restaurant/widgets/booking_table_modal.dart';
 import 'package:app_restaurant/widgets/button_app.dart';
 import 'package:app_restaurant/widgets/button_gradient.dart';
 import 'package:app_restaurant/widgets/copy_right_text.dart';
-import 'package:app_restaurant/widgets/custom_tab.dart';
 import 'package:app_restaurant/widgets/move_table_modal.dart';
+import 'package:app_restaurant/widgets/pay_bill_modal.dart';
 import 'package:app_restaurant/widgets/see_bill.dart';
 import 'package:app_restaurant/widgets/text_app.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,6 +24,32 @@ class _BookingTableState extends State<BookingTable>
   bool isShowMoveTableModal = false;
   bool isShowBookingTableModal = false;
   bool isShowSeeBillModal = false;
+  bool isShowPayBillModal = false;
+
+  void closeBookingModal() {
+    setState(() {
+      isShowBookingTableModal = false;
+    });
+  }
+
+  void closeMoveModal() {
+    setState(() {
+      isShowMoveTableModal = false;
+    });
+  }
+
+  void closeSeeBillModal() {
+    setState(() {
+      isShowSeeBillModal = false;
+    });
+  }
+
+  void closePayBillModal() {
+    setState(() {
+      isShowPayBillModal = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     TabController _tabController = TabController(
@@ -302,7 +326,6 @@ class _BookingTableState extends State<BookingTable>
                                       event: () {
                                         setState(() {
                                           isShowEditModal = false;
-
                                           isShowMoveTableModal = true;
                                         });
                                       },
@@ -323,7 +346,6 @@ class _BookingTableState extends State<BookingTable>
                                       event: () {
                                         setState(() {
                                           isShowEditModal = false;
-
                                           isShowSeeBillModal = true;
                                         });
                                       },
@@ -341,7 +363,12 @@ class _BookingTableState extends State<BookingTable>
                                           const Color.fromRGBO(33, 82, 255, 1),
                                       color2:
                                           const Color.fromRGBO(33, 212, 253, 1),
-                                      event: () {},
+                                      event: () {
+                                        setState(() {
+                                          isShowEditModal = false;
+                                          isShowPayBillModal = true;
+                                        });
+                                      },
                                       text: "Thanh toán",
                                       fontSize: 12.sp,
                                       radius: 8.r,
@@ -407,26 +434,11 @@ class _BookingTableState extends State<BookingTable>
                 child: MoveTableModal(eventCloseButton: closeMoveModal)),
             Visibility(
                 visible: isShowSeeBillModal,
-                child: SeeBillModal(eventCloseButton: closeSeeBillModal))
+                child: SeeBillModal(eventCloseButton: closeSeeBillModal)),
+            Visibility(
+                visible: isShowPayBillModal,
+                child: PayBillModal(eventCloseButton: closePayBillModal))
           ],
         ));
-  }
-
-  void closeBookingModal() {
-    setState(() {
-      isShowBookingTableModal = false;
-    });
-  }
-
-  void closeMoveModal() {
-    setState(() {
-      isShowMoveTableModal = false;
-    });
-  }
-
-  void closeSeeBillModal() {
-    setState(() {
-      isShowBookingTableModal = false;
-    });
   }
 }

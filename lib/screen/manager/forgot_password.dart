@@ -118,12 +118,11 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                             height: 10.h,
                                           ),
                                           Center(
-                                            child: Text(
-                                              "Chúng tôi sẽ gửi mã xác nhận về email của bạn trong vòng 60 giây",
+                                            child: TextApp(
+                                              text:
+                                                  "Chúng tôi sẽ gửi mã xác nhận về email của bạn trong vòng 60 giây",
                                               textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontSize: 12.sp,
-                                              ),
+                                              fontsize: 12.sp,
                                             ),
                                           ),
                                           SizedBox(
@@ -135,7 +134,7 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                             children: [
                                               TextApp(
                                                 text: " Email",
-                                                fontsize: 10.sp,
+                                                fontsize: 12.sp,
                                                 fontWeight: FontWeight.bold,
                                                 color: blueText,
                                               ),
@@ -174,7 +173,7 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                                     hintText: 'Email',
                                                     isDense: true,
                                                     contentPadding:
-                                                        EdgeInsets.all(10.w)),
+                                                        EdgeInsets.all(15.w)),
                                               ),
                                             ],
                                           ),

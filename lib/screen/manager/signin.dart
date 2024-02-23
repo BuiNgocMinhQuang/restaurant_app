@@ -125,15 +125,14 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                   ],
                                                 )),
                                             child: Center(
-                                              child: Text(
-                                                "Bạn đang đăng nhập với tư cách chủ cửa hàng!",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: "Icomoon",
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 12.sp),
-                                              ),
+                                              child: TextApp(
+                                                  text:
+                                                      "Bạn đang đăng nhập với tư cách chủ cửa hàng!",
+                                                  textAlign: TextAlign.center,
+                                                  color: Colors.white,
+                                                  fontFamily: "OpenSans",
+                                                  fontWeight: FontWeight.bold,
+                                                  fontsize: 12.sp),
                                             ),
                                           ),
                                           SizedBox(
@@ -164,7 +163,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                 hintText: 'Email',
                                                 isDense: true,
                                                 contentPadding:
-                                                    EdgeInsets.all(10.w)),
+                                                    EdgeInsets.all(15.w)),
                                           ),
                                           SizedBox(
                                             height: 20.w,
@@ -194,7 +193,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                 hintText: 'Mật khẩu',
                                                 isDense: true,
                                                 contentPadding:
-                                                    EdgeInsets.all(10.w)),
+                                                    EdgeInsets.all(15.w)),
                                           ),
                                           SizedBox(
                                             height: 20.h,
@@ -226,16 +225,13 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                               SizedBox(
                                                 width: 10.w,
                                               ),
-                                              Text(
-                                                "Ghi nhớ tài khoản",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: grey,
-                                                    fontFamily: "OpenSans",
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    fontSize: 12.sp),
-                                              ),
+                                              TextApp(
+                                                  text: "Ghi nhớ tài khoản",
+                                                  textAlign: TextAlign.center,
+                                                  color: grey,
+                                                  fontFamily: "OpenSans",
+                                                  fontWeight: FontWeight.normal,
+                                                  fontsize: 12.sp),
                                             ],
                                           ),
                                           SizedBox(

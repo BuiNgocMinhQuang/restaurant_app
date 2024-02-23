@@ -1,4 +1,5 @@
 import 'package:app_restaurant/routers/app_router_constant.dart';
+import 'package:app_restaurant/screen/manager/add_staff.dart';
 import 'package:app_restaurant/screen/manager/booking_table.dart';
 import 'package:app_restaurant/screen/manager/brought_receipt.dart';
 import 'package:app_restaurant/screen/manager/forgot_password.dart';
@@ -21,11 +22,11 @@ class NyAppRouter {
     //       return const ManagerHome();
     //     }),
     GoRoute(
-        name: AppRouterContants.managerBookingTableRouterName,
+        name: AppRouterContants.managerAddStaffRouterName,
         // path: '/manager_stores',
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return const BookingTable();
+          return const AddStaff();
         }),
   ]);
 

@@ -1,8 +1,6 @@
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/widgets/button_app.dart';
-import 'package:app_restaurant/widgets/custom_tab.dart';
 import 'package:app_restaurant/widgets/text_app.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,7 +18,26 @@ class SeeBillModal extends StatefulWidget {
 
 class _SeeBillModalState extends State<SeeBillModal>
     with TickerProviderStateMixin {
-  final _popupCustomValidationKey = GlobalKey<DropdownSearchState<int>>();
+  int _counter = 1;
+  bool isDelete = false;
+  void _increase() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  void _decrease() {
+    if (_counter == 1) {
+      setState(() {
+        isDelete = true;
+      });
+    } else {
+      setState(() {
+        _counter--;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -86,6 +103,352 @@ class _SeeBillModalState extends State<SeeBillModal>
                           )
                         ],
                       )),
+                  Flexible(
+                    fit: FlexFit.tight,
+                    child: Padding(
+                      padding: EdgeInsets.all(20.w),
+                      child: Column(
+                        children: [
+                          Flexible(
+                            fit: FlexFit.tight,
+                            child: Column(
+                              children: [
+                                Container(
+                                    width: 1.sw,
+                                    // height: 100.h,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.r),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 2,
+                                          blurRadius: 4,
+                                          offset: const Offset(0,
+                                              3), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          width: 1.sw,
+                                          // height: 30.h,
+                                          decoration: BoxDecoration(
+                                            gradient: const LinearGradient(
+                                              begin: Alignment.topRight,
+                                              end: Alignment.bottomLeft,
+                                              colors: [
+                                                Color.fromRGBO(33, 82, 255, 1),
+                                                Color.fromRGBO(33, 212, 253, 1),
+                                              ],
+                                            ),
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(10.r),
+                                                topRight:
+                                                    Radius.circular(10.r)),
+                                            color: Colors.blue,
+                                          ),
+                                          child: Padding(
+                                            padding: EdgeInsets.only(
+                                                top: 10.h,
+                                                left: 10.w,
+                                                bottom: 10.h),
+                                            child: TextApp(
+                                              text: "Tổng quan",
+                                              fontsize: 18.sp,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 1.sw,
+                                          // height: 30.h,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15.r),
+                                            color: Colors.white,
+                                          ),
+                                          child: Padding(
+                                            padding: EdgeInsets.all(20.w),
+                                            child: Column(
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    TextApp(
+                                                        text:
+                                                            "22-02-2024 13:44:51",
+                                                        fontsize: 14.sp),
+                                                    SizedBox(
+                                                      width: 5.w,
+                                                    ),
+                                                    Icon(
+                                                      Icons.access_time_filled,
+                                                      size: 14.sp,
+                                                      color: Colors.grey,
+                                                    )
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  height: 15.h,
+                                                ),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    TextApp(
+                                                      text: "Tổng tiền",
+                                                      fontsize: 14.sp,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                    TextApp(
+                                                        text: "200,000 đ",
+                                                        fontsize: 14.sp),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    )),
+                                SizedBox(
+                                  height: 20.h,
+                                ),
+                                Flexible(
+                                  fit: FlexFit.tight,
+                                  child: Container(
+                                      width: 1.sw,
+                                      // height: 100.h,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10.r),
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            spreadRadius: 2,
+                                            blurRadius: 4,
+                                            offset: const Offset(0,
+                                                3), // changes position of shadow
+                                          ),
+                                        ],
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            width: 1.sw,
+                                            // height: 30.h,
+                                            decoration: BoxDecoration(
+                                              gradient: const LinearGradient(
+                                                begin: Alignment.topRight,
+                                                end: Alignment.bottomLeft,
+                                                colors: [
+                                                  Color.fromRGBO(
+                                                      33, 82, 255, 1),
+                                                  Color.fromRGBO(
+                                                      33, 212, 253, 1),
+                                                ],
+                                              ),
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft:
+                                                      Radius.circular(10.r),
+                                                  topRight:
+                                                      Radius.circular(10.r)),
+                                              color: Colors.blue,
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.only(
+                                                  top: 10.h,
+                                                  left: 10.w,
+                                                  bottom: 10.h),
+                                              child: TextApp(
+                                                text:
+                                                    "Danh sách món ăn được chọn",
+                                                fontsize: 18.sp,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          Flexible(
+                                              child: Container(
+                                            width: 1.sw,
+                                            // height: 100.h,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(10.r),
+                                                  bottomRight:
+                                                      Radius.circular(10.r)),
+                                              color: Colors.white,
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 20.w, right: 20.w),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  // SizedBox(
+                                                  //   height: 200.h,
+                                                  //   child:
+                                                  // ),
+                                                  Flexible(
+                                                    child: ListView.builder(
+                                                        itemCount: 10,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          return !isDelete
+                                                              ? Column(
+                                                                  children: [
+                                                                    Padding(
+                                                                      padding: EdgeInsets.only(
+                                                                          bottom:
+                                                                              10.h),
+                                                                      child: Container(
+                                                                          width: 1.sw,
+                                                                          child: Padding(
+                                                                            padding:
+                                                                                EdgeInsets.all(20.w),
+                                                                            child:
+                                                                                Column(
+                                                                              children: [
+                                                                                Row(
+                                                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                  children: [
+                                                                                    SizedBox(
+                                                                                      width: 100.w,
+                                                                                      height: 100.w,
+                                                                                      child: Image.asset(
+                                                                                        "assets/images/banner1.png",
+                                                                                        fit: BoxFit.cover,
+                                                                                      ),
+                                                                                    ),
+                                                                                    Column(
+                                                                                      children: [
+                                                                                        TextApp(text: "Ten mon an"),
+                                                                                        TextApp(text: "Gia mon an")
+                                                                                      ],
+                                                                                    )
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(
+                                                                                  height: 15.h,
+                                                                                ),
+                                                                                Container(
+                                                                                    width: 1.sw,
+                                                                                    decoration: BoxDecoration(
+                                                                                      borderRadius: BorderRadius.all(Radius.circular(8.r)),
+
+                                                                                      // color:
+                                                                                      //     Colors.pink,
+                                                                                    ),
+                                                                                    child: IntrinsicHeight(
+                                                                                      child: Row(
+                                                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                                                        children: [
+                                                                                          GestureDetector(
+                                                                                            onTap: _decrease,
+                                                                                            child: Container(
+                                                                                              width: 50.w,
+                                                                                              height: 25.w,
+                                                                                              decoration: BoxDecoration(
+                                                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(8.r), bottomLeft: Radius.circular(8.r)),
+                                                                                                  gradient: LinearGradient(
+                                                                                                    begin: Alignment.topRight,
+                                                                                                    end: Alignment.bottomLeft,
+                                                                                                    colors: [
+                                                                                                      Color.fromRGBO(33, 82, 255, 1),
+                                                                                                      Color.fromRGBO(33, 212, 253, 1)
+                                                                                                    ],
+                                                                                                  )),
+                                                                                              child: Center(
+                                                                                                child: TextApp(text: "-", textAlign: TextAlign.center, color: Colors.white, fontsize: 14.sp),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                          Expanded(
+                                                                                              child: Container(
+                                                                                            decoration: BoxDecoration(
+                                                                                              border: Border.all(width: 0.4, color: Colors.grey),
+                                                                                            ),
+                                                                                            child: Center(
+                                                                                              child: TextApp(
+                                                                                                text: "$_counter",
+                                                                                                textAlign: TextAlign.center,
+                                                                                              ),
+                                                                                            ),
+                                                                                          )),
+                                                                                          // Flexible(
+                                                                                          //     child: TextApp(text: "1")),
+                                                                                          GestureDetector(
+                                                                                            onTap: _increase,
+                                                                                            child: Container(
+                                                                                              width: 50.w,
+                                                                                              height: 25.w,
+                                                                                              decoration: BoxDecoration(
+                                                                                                  borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), bottomRight: Radius.circular(8.r)),
+                                                                                                  gradient: LinearGradient(
+                                                                                                    begin: Alignment.topRight,
+                                                                                                    end: Alignment.bottomLeft,
+                                                                                                    colors: [
+                                                                                                      Color.fromRGBO(33, 82, 255, 1),
+                                                                                                      Color.fromRGBO(33, 212, 253, 1)
+                                                                                                    ],
+                                                                                                  )),
+                                                                                              child: Center(
+                                                                                                child: TextApp(
+                                                                                                  text: "+",
+                                                                                                  textAlign: TextAlign.center,
+                                                                                                  color: Colors.white,
+                                                                                                  fontsize: 14.sp,
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          )
+                                                                                        ],
+                                                                                      ),
+                                                                                    )),
+                                                                              ],
+                                                                            ),
+                                                                          )),
+                                                                    ),
+                                                                    Divider(
+                                                                      height: 1,
+                                                                      color: Colors
+                                                                          .grey,
+                                                                    )
+                                                                  ],
+                                                                )
+                                                              : Container();
+                                                        }),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ))
+                                        ],
+                                      )),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
                   Container(
                     width: 1.sw,
                     height: 80,
@@ -101,32 +464,16 @@ class _SeeBillModalState extends State<SeeBillModal>
                       // color: Colors.green,
                     ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ButtonApp(
                           event: () {
-                            // widget.eventCloseButton();
                             widget.eventCloseButton();
                           },
                           text: "Đóng",
                           colorText: Colors.white,
                           backgroundColor: Color.fromRGBO(131, 146, 171, 1),
                           outlineColor: Color.fromRGBO(131, 146, 171, 1),
-                        ),
-                        SizedBox(
-                          width: 20.w,
-                        ),
-                        ButtonApp(
-                          event: () {
-                            // widget.eventSaveButton();
-                          },
-                          text: "Lưu",
-                          colorText: Colors.white,
-                          backgroundColor: Color.fromRGBO(23, 193, 232, 1),
-                          outlineColor: Color.fromRGBO(23, 193, 232, 1),
-                        ),
-                        SizedBox(
-                          width: 20.w,
                         ),
                       ],
                     ),

@@ -116,9 +116,10 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                           SizedBox(
                                             height: 10.h,
                                           ),
-                                          const Center(
-                                            child: Text(
-                                              "Chúng tôi sẽ gửi mã xác nhận về email của bạn trong vòng 60 giây",
+                                          Center(
+                                            child: TextApp(
+                                              text:
+                                                  "Chúng tôi sẽ gửi mã xác nhận về email của bạn trong vòng 60 giây",
                                               textAlign: TextAlign.center,
                                             ),
                                           ),
@@ -172,7 +173,7 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                         EdgeInsets.all(
                                                             1.sw > 600
                                                                 ? 20.w
-                                                                : 10.w)),
+                                                                : 15.w)),
                                               ),
                                             ],
                                           ),
@@ -226,7 +227,7 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                         EdgeInsets.all(
                                                             1.sw > 600
                                                                 ? 20.w
-                                                                : 10.w)),
+                                                                : 15.w)),
                                               ),
                                             ],
                                           ),

@@ -125,15 +125,14 @@ class _StaffSignInState extends State<StaffSignIn> {
                                                   ],
                                                 )),
                                             child: Center(
-                                              child: Text(
-                                                "Bạn đang đăng nhập với tư cách nhân viên!",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: "Icomoon",
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 12.sp),
-                                              ),
+                                              child: TextApp(
+                                                  text:
+                                                      "Bạn đang đăng nhập với tư cách nhân viên!",
+                                                  textAlign: TextAlign.center,
+                                                  color: Colors.white,
+                                                  fontFamily: "Icomoon",
+                                                  fontWeight: FontWeight.bold,
+                                                  fontsize: 12.sp),
                                             ),
                                           ),
                                           SizedBox(
@@ -164,7 +163,7 @@ class _StaffSignInState extends State<StaffSignIn> {
                                                 hintText: 'Mã cửa hàng',
                                                 isDense: true,
                                                 contentPadding: EdgeInsets.all(
-                                                    1.sw > 600 ? 20.h : 10.h)),
+                                                    1.sw > 600 ? 20.w : 15.w)),
                                           ),
                                           SizedBox(
                                             height: 20.h,
@@ -194,7 +193,7 @@ class _StaffSignInState extends State<StaffSignIn> {
                                                 hintText: 'Email',
                                                 isDense: true,
                                                 contentPadding: EdgeInsets.all(
-                                                    1.sw > 600 ? 20.h : 10.h)),
+                                                    1.sw > 600 ? 20.w : 15.w)),
                                           ),
                                           SizedBox(
                                             height: 20.h,
@@ -224,7 +223,7 @@ class _StaffSignInState extends State<StaffSignIn> {
                                                 hintText: 'Mật khẩu',
                                                 isDense: true,
                                                 contentPadding: EdgeInsets.all(
-                                                    1.sw > 600 ? 20.h : 10.h)),
+                                                    1.sw > 600 ? 20.w : 15.w)),
                                           ),
                                           SizedBox(
                                             height: 20.h,
@@ -256,16 +255,13 @@ class _StaffSignInState extends State<StaffSignIn> {
                                               SizedBox(
                                                 width: 10.h,
                                               ),
-                                              Text(
-                                                "Ghi nhớ tài khoản",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: grey,
-                                                    fontFamily: "OpenSans",
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    fontSize: 12.sp),
-                                              ),
+                                              TextApp(
+                                                  text: "Ghi nhớ tài khoản",
+                                                  textAlign: TextAlign.center,
+                                                  color: grey,
+                                                  fontFamily: "OpenSans",
+                                                  fontWeight: FontWeight.normal,
+                                                  fontsize: 12.sp),
                                             ],
                                           ),
                                           SizedBox(

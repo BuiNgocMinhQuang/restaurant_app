@@ -166,7 +166,7 @@ class _BookingTableModalState extends State<BookingTableModal>
                                         hintText: 'Thời gian kết thúc',
                                         isDense: true,
                                         contentPadding: EdgeInsets.all(
-                                            1.sw > 600 ? 20.w : 10.w)),
+                                            1.sw > 600 ? 20.w : 15.w)),
                                   ),
                                   ////////
                                   SizedBox(
@@ -203,7 +203,7 @@ class _BookingTableModalState extends State<BookingTableModal>
                                         hintText: 'Tên khách hàng',
                                         isDense: true,
                                         contentPadding: EdgeInsets.all(
-                                            1.sw > 600 ? 20.w : 10.w)),
+                                            1.sw > 600 ? 20.w : 15.w)),
                                   ),
                                   /////
                                   SizedBox(
@@ -240,7 +240,7 @@ class _BookingTableModalState extends State<BookingTableModal>
                                         hintText: 'Số điện thoại',
                                         isDense: true,
                                         contentPadding: EdgeInsets.all(
-                                            1.sw > 600 ? 20.w : 10.w)),
+                                            1.sw > 600 ? 20.w : 15.w)),
                                   ),
                                   /////
                                   SizedBox(
@@ -340,8 +340,8 @@ class _BookingTableModalState extends State<BookingTableModal>
                                         contentPadding: EdgeInsets.only(
                                             bottom: 1.sw > 600 ? 50.w : 40.w,
                                             top: 0,
-                                            left: 1.sw > 600 ? 20.w : 10.w,
-                                            right: 1.sw > 600 ? 20.w : 10.w)),
+                                            left: 1.sw > 600 ? 20.w : 15.w,
+                                            right: 1.sw > 600 ? 20.w : 15.w)),
                                   ),
 
                                   SizedBox(
@@ -449,9 +449,9 @@ class _BookingTableModalState extends State<BookingTableModal>
                                                 bottom:
                                                     1.sw > 600 ? 50.w : 40.w,
                                                 top: 0,
-                                                left: 1.sw > 600 ? 20.w : 10.w,
+                                                left: 1.sw > 600 ? 20.w : 15.w,
                                                 right:
-                                                    1.sw > 600 ? 20.w : 10.w)),
+                                                    1.sw > 600 ? 20.w : 15.w)),
                                       ),
                                     ],
                                   ))

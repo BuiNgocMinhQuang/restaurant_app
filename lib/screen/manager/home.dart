@@ -216,17 +216,18 @@ class _ManagerHomeState extends State<ManagerHome> {
                             SizedBox(
                               height: 15.h,
                             ),
-                            const Center(
-                              child: Text(
-                                "Ten Chu Cua Hang",
+                            Center(
+                              child: TextApp(
+                                text: "Ten Chu Cua Hang",
                                 textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.white),
+                                color: Colors.white,
                               ),
                             ),
-                            const Center(
-                              child: Text("chucuahang@gmail.com",
+                            Center(
+                              child: TextApp(
+                                  text: "chucuahang@gmail.com",
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white)),
+                                  color: Colors.white),
                             ),
                             SizedBox(
                               height: 10.h,
@@ -330,13 +331,12 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                   color: Colors.red,
                                                 ),
                                                 child: Center(
-                                                  child: Text(
-                                                    "99+",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontSize: 10.sp,
-                                                        color: Colors.white),
-                                                  ),
+                                                  child: TextApp(
+                                                      text: "99+",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      fontsize: 10.sp,
+                                                      color: Colors.white),
                                                 ),
                                               )),
                                         ],

@@ -1,3 +1,4 @@
+import 'package:app_restaurant/widgets/text_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -20,15 +21,14 @@ class BackgroundWelcome extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(top: 15.w, left: 15.w, right: 15.w),
           child: Center(
-            child: Text(
+            child: TextApp(
               textAlign: TextAlign.center,
-              "Sử dụng các biểu mẫu tuyệt vời này để đăng nhập hoặc tạo tài khoản mới trong cửa hàng của bạn.",
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: "Icomoon",
-                fontWeight: FontWeight.normal,
-                fontSize: 14.sp,
-              ),
+              text:
+                  "Sử dụng các biểu mẫu tuyệt vời này để đăng nhập hoặc tạo tài khoản mới trong cửa hàng của bạn.",
+              color: Colors.white,
+              fontFamily: "Icomoon",
+              fontWeight: FontWeight.normal,
+              fontsize: 14.sp,
             ),
           ),
         )

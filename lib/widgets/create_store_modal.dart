@@ -125,7 +125,7 @@ class _CreateStoreModalState extends State<CreateStoreModal> {
                               hintText: 'Mã cửa hàng',
                               isDense: true,
                               contentPadding:
-                                  EdgeInsets.all(1.sw > 600 ? 20.w : 10.w)),
+                                  EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
                         ),
                         ////////
                         SizedBox(
@@ -158,7 +158,7 @@ class _CreateStoreModalState extends State<CreateStoreModal> {
                               hintText: 'Tên cửa hàng',
                               isDense: true,
                               contentPadding:
-                                  EdgeInsets.all(1.sw > 600 ? 20.w : 10.w)),
+                                  EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
                         ),
                         /////
                         SizedBox(
@@ -191,7 +191,7 @@ class _CreateStoreModalState extends State<CreateStoreModal> {
                               hintText: 'Địa chỉ cửa hàng',
                               isDense: true,
                               contentPadding:
-                                  EdgeInsets.all(1.sw > 600 ? 20.w : 10.w)),
+                                  EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
                         ),
                         /////
                         SizedBox(

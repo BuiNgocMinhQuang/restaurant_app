@@ -1,6 +1,7 @@
 import 'package:app_restaurant/widgets/bill_infor_container.dart';
 import 'package:app_restaurant/widgets/copy_right_text.dart';
 import 'package:app_restaurant/widgets/custom_tab.dart';
+import 'package:app_restaurant/widgets/text_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -104,12 +105,11 @@ class _BroughtReceiptState extends State<BroughtReceipt>
                             SizedBox(
                               height: 10.h,
                             ),
-                            Text(
-                              "Chưa có hoá đơn :(",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 16.sp, color: Colors.black),
-                            ),
+                            TextApp(
+                                text: "Chưa có hoá đơn :(",
+                                textAlign: TextAlign.center,
+                                fontsize: 16.sp,
+                                color: Colors.black),
                           ],
                         )),
                     // ListView.builder(

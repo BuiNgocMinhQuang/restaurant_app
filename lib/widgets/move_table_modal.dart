@@ -84,129 +84,132 @@ class _MoveTableModalState extends State<MoveTableModal> {
                           )
                         ],
                       )),
-                  Expanded(
+                  Flexible(
+                      fit: FlexFit.tight,
                       child: SingleChildScrollView(
-                    child: Padding(
-                      padding: EdgeInsets.all(20.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          TextApp(
-                            text: "Bàn hiện tại",
-                            fontsize: 12.sp,
-                            fontWeight: FontWeight.bold,
-                            color: blueText,
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          ButtonApp(
-                            event: () {},
-                            text: "Table 1",
-                            colorText: Colors.blue,
-                            backgroundColor: Colors.white,
-                            outlineColor: Colors.blue,
-                            radius: 8.r,
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                        child: Padding(
+                          padding: EdgeInsets.all(20.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               TextApp(
-                                text: "Bàn có thể đổi:",
+                                text: "Bàn hiện tại",
                                 fontsize: 12.sp,
                                 fontWeight: FontWeight.bold,
                                 color: blueText,
                               ),
                               SizedBox(
-                                width: 20.w,
+                                height: 10.h,
                               ),
-                              Expanded(
-                                  child: Container(
-                                // width: 1.sw,
-                                height: 25.h,
-                                color: Colors.blue,
-                              ))
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                              ButtonApp(
+                                event: () {},
+                                text: "Table 1",
+                                colorText: Colors.blue,
+                                backgroundColor: Colors.white,
+                                outlineColor: Colors.blue,
+                                radius: 8.r,
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Container(
-                                    width: 20,
-                                    height: 20,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors
-                                              .blue, //                   <--- border color
-                                          width: 1.w,
-                                        ),
-                                        color: Colors.white),
+                                  TextApp(
+                                    text: "Bàn có thể đổi:",
+                                    fontsize: 12.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: blueText,
                                   ),
                                   SizedBox(
-                                    width: 5.w,
+                                    width: 20.w,
                                   ),
-                                  TextApp(text: "Đang phục vụ")
+                                  Flexible(
+                                      fit: FlexFit.tight,
+                                      child: Container(
+                                        // width: 1.sw,
+                                        height: 25.h,
+                                        color: Colors.blue,
+                                      ))
                                 ],
                               ),
                               SizedBox(
-                                width: 10.w,
+                                height: 10.h,
                               ),
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Container(
-                                    width: 20,
-                                    height: 20,
-                                    color: Colors.blue,
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: 20,
+                                        height: 20,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Colors
+                                                  .blue, //                   <--- border color
+                                              width: 1.w,
+                                            ),
+                                            color: Colors.white),
+                                      ),
+                                      SizedBox(
+                                        width: 5.w,
+                                      ),
+                                      TextApp(text: "Đang phục vụ")
+                                    ],
                                   ),
                                   SizedBox(
-                                    width: 5.w,
+                                    width: 10.w,
                                   ),
-                                  TextApp(text: "Bàn trống")
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: 20,
+                                        height: 20,
+                                        color: Colors.blue,
+                                      ),
+                                      SizedBox(
+                                        width: 5.w,
+                                      ),
+                                      TextApp(text: "Bàn trống")
+                                    ],
+                                  )
                                 ],
-                              )
+                              ),
+                              // Flexible(
+                              //     fit: FlexFit.tight,
+                              //     child: Column(
+                              //       children: [
+                              //         GridView.builder(
+                              //             physics:
+                              //                 NeverScrollableScrollPhysics(),
+                              //             itemCount: listTable.length,
+                              //             gridDelegate:
+                              //                 SliverGridDelegateWithFixedCrossAxisCount(
+                              //               crossAxisCount: 2,
+                              //             ),
+                              //             itemBuilder: (context, index) {
+                              //               return Padding(
+                              //                 padding: EdgeInsets.all(10.w),
+                              //                 child: ButtonApp(
+                              //                   event: () {},
+                              //                   text: listTable[index],
+                              //                   colorText: Colors.white,
+                              //                   backgroundColor: Color.fromRGBO(
+                              //                       131, 146, 171, 1),
+                              //                   outlineColor: Color.fromRGBO(
+                              //                       131, 146, 171, 1),
+                              //                 ),
+                              //               );
+                              //             }),
+                              //       ],
+                              //     ))
                             ],
                           ),
-
-                          // Expanded(
-                          //     child: Column(
-                          //   children: [
-                          //     GridView.builder(
-                          //         physics: NeverScrollableScrollPhysics(),
-                          //         itemCount: listTable.length,
-                          //         gridDelegate:
-                          //             SliverGridDelegateWithFixedCrossAxisCount(
-                          //           crossAxisCount: 2,
-                          //         ),
-                          //         itemBuilder: (context, index) {
-                          //           return Padding(
-                          //             padding: EdgeInsets.all(10.w),
-                          //             child: ButtonApp(
-                          //               event: () {},
-                          //               text: listTable[index],
-                          //               colorText: Colors.white,
-                          //               backgroundColor:
-                          //                   Color.fromRGBO(131, 146, 171, 1),
-                          //               outlineColor:
-                          //                   Color.fromRGBO(131, 146, 171, 1),
-                          //             ),
-                          //           );
-                          //         }),
-                          //   ],
-                          // ))
-                        ],
-                      ),
-                    ),
-                  )),
+                        ),
+                      )),
                   Container(
                     width: 1.sw,
                     height: 80,
