@@ -81,25 +81,3 @@ class ButtonIcon extends StatelessWidget {
     );
   }
 }
-
-
-
-// Container(
-//         height: height == 0 ? 45.h : height,
-//         decoration: BoxDecoration(
-//             borderRadius: isHaveIcon
-//                 ? BorderRadius.all(Radius.circular(25.h))
-//                 : BorderRadius.circular(radius == 0 ? 20.r : radius),
-//             gradient: LinearGradient(
-//               begin: Alignment.topRight,
-//               end: Alignment.bottomLeft,
-//               colors: [color1, color2],
-//             )),
-//         child: Center(
-//           child: SizedBox(
-//                   width: sizeIcon == 0 ? 25.w : sizeIcon,
-//                   height: sizeIcon == 0 ? 25.w : sizeIcon,
-//                   child: Icon(icon),
-//                 )
-//         ),
-//       ),

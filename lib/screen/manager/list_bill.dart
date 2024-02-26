@@ -1,5 +1,5 @@
 import 'package:app_restaurant/widgets/bill_infor_container.dart';
-import 'package:app_restaurant/widgets/copy_right_text.dart';
+import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/custom_tab.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

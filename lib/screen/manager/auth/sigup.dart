@@ -1,7 +1,7 @@
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/background_welcome.dart';
-import 'package:app_restaurant/widgets/button_gradient.dart';
-import 'package:app_restaurant/widgets/copy_right_text.dart';
+import 'package:app_restaurant/widgets/button/button_gradient.dart';
+import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

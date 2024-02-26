@@ -3,7 +3,7 @@ import 'package:app_restaurant/screen/manager/home.dart';
 import 'package:app_restaurant/screen/manager/manager_infor.dart';
 import 'package:app_restaurant/screen/manager/notifications.dart';
 import 'package:app_restaurant/screen/manager/stores.dart';
-import 'package:app_restaurant/widgets/text_app.dart';
+import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

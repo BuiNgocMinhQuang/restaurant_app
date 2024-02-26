@@ -1,7 +1,7 @@
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/widgets/button_app.dart';
+import 'package:app_restaurant/widgets/button/button_app.dart';
 import 'package:app_restaurant/widgets/custom_tab.dart';
-import 'package:app_restaurant/widgets/text_app.dart';
+import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

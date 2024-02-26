@@ -1,10 +1,10 @@
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/screen/manager/stores.dart';
-import 'package:app_restaurant/widgets/button_gradient.dart';
-import 'package:app_restaurant/widgets/button_icon.dart';
+import 'package:app_restaurant/widgets/button/button_gradient.dart';
+import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/item_drawer.dart';
 import 'package:app_restaurant/widgets/sub_item_drawer.dart';
-import 'package:app_restaurant/widgets/text_app.dart';
+import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

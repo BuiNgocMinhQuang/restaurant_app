@@ -1,8 +1,8 @@
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/background_welcome.dart';
-import 'package:app_restaurant/widgets/button_gradient.dart';
-import 'package:app_restaurant/widgets/copy_right_text.dart';
-import 'package:app_restaurant/widgets/text_app.dart';
+import 'package:app_restaurant/widgets/button/button_gradient.dart';
+import 'package:app_restaurant/widgets/text/copy_right_text.dart';
+import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:app_restaurant/config/colors.dart';

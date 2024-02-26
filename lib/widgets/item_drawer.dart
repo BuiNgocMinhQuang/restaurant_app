@@ -1,9 +1,6 @@
-import 'package:app_restaurant/provider/drawer_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:app_restaurant/model/drawer_item.dart';
-import 'package:provider/provider.dart';
 
 class ItemDrawer extends StatelessWidget {
   Color textColor;
@@ -28,10 +25,6 @@ class ItemDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final provider = Provider.of<DrawerProvider>(context);
-    // final currentItem = provider.drawerItem;
-    // final isSelectedItem = item == currentItem;
-
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: isExpand

@@ -1,5 +1,5 @@
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/widgets/text_app.dart';
+import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
