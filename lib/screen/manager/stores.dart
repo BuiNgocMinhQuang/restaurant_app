@@ -58,23 +58,23 @@ class _StoresState extends State<Stores> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       //Carousel
-                      CarouselSlider.builder(
-                          itemCount: bannerList.length,
-                          itemBuilder: (context, index, realIndex) {
-                            final currentBanner = bannerList[index];
-                            return buildImage(currentBanner, index);
-                          },
-                          options: CarouselOptions(
-                              height: 300,
-                              autoPlay: true,
-                              reverse: false,
-                              autoPlayInterval: Duration(seconds: 2),
-                              onPageChanged: (index, reason) {
-                                setState(() {
-                                  activeIndex = index;
-                                });
-                              },
-                              viewportFraction: 1)),
+                      // CarouselSlider.builder(
+                      //     itemCount: bannerList.length,
+                      //     itemBuilder: (context, index, realIndex) {
+                      //       final currentBanner = bannerList[index];
+                      //       return buildImage(currentBanner, index);
+                      //     },
+                      //     options: CarouselOptions(
+                      //         height: 300,
+                      //         autoPlay: true,
+                      //         reverse: false,
+                      //         autoPlayInterval: Duration(seconds: 2),
+                      //         onPageChanged: (index, reason) {
+                      //           setState(() {
+                      //             activeIndex = index;
+                      //           });
+                      //         },
+                      //         viewportFraction: 1)),
                       SizedBox(
                         height: 25.h,
                       ),

@@ -1,5 +1,6 @@
 import 'package:app_restaurant/provider/drawer_provider.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
+import 'package:app_restaurant/screen/manager/signin_copy.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -14,13 +15,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-        designSize: const Size(430, 932),
-        builder: (_, child) {
-          return MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            routerConfig: NyAppRouter().customRouter,
-          );
-        });
+      designSize: const Size(430, 932),
+      builder: (BuildContext context, Widget? child) {
+        print("Build lai Screen");
+        return child!;
+      },
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        routerConfig: NyAppRouter().router,
+      ),
+    );
   }
 }
 

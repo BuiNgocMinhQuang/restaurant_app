@@ -5,9 +5,12 @@ import 'package:app_restaurant/screen/manager/brought_receipt.dart';
 import 'package:app_restaurant/screen/manager/forgot_password.dart';
 import 'package:app_restaurant/screen/manager/home.dart';
 import 'package:app_restaurant/screen/manager/list_bill.dart';
+import 'package:app_restaurant/screen/manager/list_staff.dart';
 import 'package:app_restaurant/screen/manager/signin.dart';
+import 'package:app_restaurant/screen/manager/signin_copy.dart';
 import 'package:app_restaurant/screen/manager/sigup.dart';
 import 'package:app_restaurant/screen/manager/stores.dart';
+import 'package:app_restaurant/screen/manager/test_flexible.dart';
 import 'package:app_restaurant/screen/staff/forgot_password.dart';
 import 'package:app_restaurant/screen/staff/signin.dart';
 import 'package:flutter/material.dart';
@@ -22,11 +25,11 @@ class NyAppRouter {
     //       return const ManagerHome();
     //     }),
     GoRoute(
-        name: AppRouterContants.managerAddStaffRouterName,
+        name: AppRouterContants.managerSignInRouterName,
         // path: '/manager_stores',
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return const AddStaff();
+          return const ManagerSignUp();
         }),
   ]);
 
