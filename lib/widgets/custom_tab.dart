@@ -34,10 +34,8 @@ class CustomTab extends StatelessWidget {
           SizedBox(
             width: 3.w,
           ),
-          TextApp(
+          Tab(
             text: text,
-            fontsize: fontSize == 0 ? 16.sp : fontSize,
-            color: colorText,
           )
         ],
       ),

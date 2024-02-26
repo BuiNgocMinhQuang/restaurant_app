@@ -30,3 +30,6 @@ const String desStore = "Mô tả cửa hàng";
 const String describeDetailSotre =
     "Đây là cách những người khác sẽ tìm hiểu về về nhà hàng, vì vậy hãy làm cho nó thật tốt!";
 const String storeImage = "Hình ảnh về cửa hàng";
+const String bookingTable = "Đặt bàn";
+const String invoiceList = "Danh sách hóa đơn";
+const String takeHomeReceipt = "Hóa đơn mang về";

@@ -3,26 +3,30 @@ import 'package:app_restaurant/screen/manager/home.dart';
 import 'package:app_restaurant/screen/manager/manager_infor.dart';
 import 'package:app_restaurant/screen/manager/notifications.dart';
 import 'package:app_restaurant/screen/manager/stores.dart';
+import 'package:app_restaurant/screen/staff/brought_receipt.dart';
+import 'package:app_restaurant/screen/staff/home.dart';
+import 'package:app_restaurant/screen/staff/list_bill.dart';
+import 'package:app_restaurant/screen/staff/user_infor.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class NavBottomManger extends StatefulWidget {
-  const NavBottomManger({super.key});
+class NavBottomStaff extends StatefulWidget {
+  const NavBottomStaff({super.key});
 
   @override
-  State<NavBottomManger> createState() => _NavBottomMangerState();
+  State<NavBottomStaff> createState() => _NavBottomStaffState();
 }
 
-class _NavBottomMangerState extends State<NavBottomManger> {
+class _NavBottomStaffState extends State<NavBottomStaff> {
   int _selectedIndex = 2;
   static const List<Widget> _widgetOptions = <Widget>[
-    Stores(),
     AddStaff(),
-    ManagerHome(),
-    ManagerInformation(),
-    ManagerNotifications()
+    StaffBroughtReceipt(),
+    StaffBookingTable(),
+    StaffListBill(),
+    StaffUserInformation()
   ];
 
   void _onItemTapped(int index) {
@@ -74,13 +78,13 @@ class _NavBottomMangerState extends State<NavBottomManger> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.store,
+                          Icons.dinner_dining,
                           size: 32.w,
                           color:
                               _selectedIndex == 0 ? Colors.blue : Colors.grey,
                         ),
                         TextApp(
-                          text: "Cửa hàng",
+                          text: "Món ăn",
                           color:
                               _selectedIndex == 0 ? Colors.blue : Colors.grey,
                           fontsize: 12.sp,
@@ -101,13 +105,13 @@ class _NavBottomMangerState extends State<NavBottomManger> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.person_add,
+                          Icons.delivery_dining,
                           size: 32.w,
                           color:
                               _selectedIndex == 1 ? Colors.blue : Colors.grey,
                         ),
                         TextApp(
-                          text: "Nhân viên",
+                          text: "Mang về",
                           color:
                               _selectedIndex == 1 ? Colors.blue : Colors.grey,
                           fontsize: 12.sp,
@@ -136,13 +140,13 @@ class _NavBottomMangerState extends State<NavBottomManger> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.person,
+                          Icons.receipt,
                           size: 32.w,
                           color:
                               _selectedIndex == 3 ? Colors.blue : Colors.grey,
                         ),
                         TextApp(
-                          text: "Cá nhân",
+                          text: "Hoá đơn",
                           color:
                               _selectedIndex == 3 ? Colors.blue : Colors.grey,
                           fontsize: 12.sp,
@@ -163,13 +167,13 @@ class _NavBottomMangerState extends State<NavBottomManger> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.notifications,
+                          Icons.person,
                           size: 32.w,
                           color:
                               _selectedIndex == 4 ? Colors.blue : Colors.grey,
                         ),
                         TextApp(
-                          text: "Thông báo",
+                          text: "Cá nhân",
                           color:
                               _selectedIndex == 4 ? Colors.blue : Colors.grey,
                           fontsize: 12.sp,

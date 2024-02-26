@@ -11,14 +11,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class BookingTable extends StatefulWidget {
-  const BookingTable({super.key});
+class ManagerBookingTable extends StatefulWidget {
+  const ManagerBookingTable({super.key});
 
   @override
-  State<BookingTable> createState() => _BookingTableState();
+  State<ManagerBookingTable> createState() => _ManagerBookingTableState();
 }
 
-class _BookingTableState extends State<BookingTable>
+class _ManagerBookingTableState extends State<ManagerBookingTable>
     with TickerProviderStateMixin {
   bool isShowEditModal = false;
   bool isShowMoveTableModal = false;

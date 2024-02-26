@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
+import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
@@ -15,6 +16,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -277,7 +279,16 @@ class _StoresState extends State<Stores> {
                     text: 'Cửa hàng 1',
                     subItem: [
                       SubItemDrawer(
-                          text: "Đặt bàn",
+                          text: bookingTable,
+                          event: () {
+                            Navigator.pop(context);
+                            context.go('/manager_booking_table');
+                          }),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      SubItemDrawer(
+                          text: invoiceList,
                           event: () {
                             Navigator.pop(context);
                           }),
@@ -285,15 +296,7 @@ class _StoresState extends State<Stores> {
                         height: 10.h,
                       ),
                       SubItemDrawer(
-                          text: "Danh sách hóa đơn",
-                          event: () {
-                            Navigator.pop(context);
-                          }),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      SubItemDrawer(
-                          text: "Hóa đơn mang về",
+                          text: takeHomeReceipt,
                           event: () {
                             Navigator.pop(context);
                           })
@@ -305,7 +308,7 @@ class _StoresState extends State<Stores> {
                     text: 'Cửa hàng 2',
                     subItem: [
                       SubItemDrawer(
-                          text: "Đặt bàn",
+                          text: bookingTable,
                           event: () {
                             Navigator.pop(context);
                           }),
@@ -313,7 +316,7 @@ class _StoresState extends State<Stores> {
                         height: 10.h,
                       ),
                       SubItemDrawer(
-                          text: "Danh sách hóa đơn",
+                          text: invoiceList,
                           event: () {
                             Navigator.pop(context);
                           }),
@@ -321,7 +324,7 @@ class _StoresState extends State<Stores> {
                         height: 10.h,
                       ),
                       SubItemDrawer(
-                          text: "Hóa đơn mang về",
+                          text: takeHomeReceipt,
                           event: () {
                             Navigator.pop(context);
                           })
@@ -376,7 +379,9 @@ class _StoresState extends State<Stores> {
                           ButtonGradient(
                             color1: Colors.white,
                             color2: Colors.white,
-                            event: () {},
+                            event: () {
+                              context.go("/");
+                            },
                             text: "Đăng xuất",
                             textColor: Colors.black,
                             radius: 8.r,

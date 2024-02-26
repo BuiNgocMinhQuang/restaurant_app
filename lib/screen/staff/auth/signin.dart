@@ -390,6 +390,7 @@ class _StaffSignInState extends State<StaffSignIn> {
                                                   event: () {
                                                     if (_formField.currentState!
                                                         .validate()) {
+                                                      context.go("/staff_home");
                                                       storeIdController.clear();
                                                       emailController.clear();
                                                       passworldController

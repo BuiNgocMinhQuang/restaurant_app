@@ -10,76 +10,23 @@ import 'package:app_restaurant/screen/manager/nav_bottom.dart';
 import 'package:app_restaurant/screen/manager/list_bill.dart';
 import 'package:app_restaurant/screen/manager/list_staff.dart';
 import 'package:app_restaurant/screen/manager/stores.dart';
-import 'package:app_restaurant/screen/staff/forgot_password.dart';
-import 'package:app_restaurant/screen/staff/signin.dart';
+import 'package:app_restaurant/screen/staff/auth/forgot_password.dart';
+import 'package:app_restaurant/screen/staff/auth/signin.dart';
+import 'package:app_restaurant/screen/staff/nav_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class NyAppRouter {
-  final GoRouter customRouter = GoRouter(routes: [
-    // GoRoute(
-    //     name: AppRouterContants.managerHomeRouterName,
-    //     path: '/',
-    //     builder: (BuildContext context, GoRouterState state) {
-    //       return const ManagerHome();
-    //     }),
+  final GoRouter testRouter = GoRouter(routes: <RouteBase>[
     GoRoute(
-        name: AppRouterContants.managerSignInRouterName,
-        // path: '/manager_stores',
+        name: AppRouterContants.managerHomeRouterName,
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return const NavBottom();
-        }),
-  ]);
-
-  final GoRouter isAuth = GoRouter(routes: <RouteBase>[
-    GoRoute(
-      name: AppRouterContants.managerHomeRouterName,
-      path: '/',
-      builder: (BuildContext context, GoRouterState state) {
-        return const ManagerHome();
-      },
-    ),
-    GoRoute(
-        name: AppRouterContants.managerStoresRouterName,
-        path: '/manager_stores',
-        builder: (BuildContext context, GoRouterState state) {
-          return const Stores();
-        }),
-    GoRoute(
-        name: AppRouterContants.managerListBillRouterName,
-        path: '/manager_list_bill',
-        builder: (BuildContext context, GoRouterState state) {
-          return const ListBill();
-        }),
-    GoRoute(
-        name: AppRouterContants.managerBroughtReceiptRouterName,
-        path: '/manager_brought_receipt',
-        builder: (BuildContext context, GoRouterState state) {
-          return const BroughtReceipt();
-        }),
-    GoRoute(
-        name: AppRouterContants.managerBookingTableRouterName,
-        path: '/manager_booking_table',
-        builder: (BuildContext context, GoRouterState state) {
-          return const BookingTable();
-        }),
-    GoRoute(
-        name: AppRouterContants.managerAddStaffRouterName,
-        path: '/manager_add_staff',
-        builder: (BuildContext context, GoRouterState state) {
-          return const AddStaff();
-        }),
-    GoRoute(
-        name: AppRouterContants.managerListStaffRouterName,
-        path: '/manager_list_staff',
-        builder: (BuildContext context, GoRouterState state) {
-          return const ListStaff();
+          return const NavBottomManger();
         }),
   ]);
   final GoRouter router = GoRouter(routes: <RouteBase>[
     //Router Manager
-
     GoRoute(
       name: AppRouterContants.managerSignInRouterName,
       path: '/',
@@ -103,7 +50,7 @@ class NyAppRouter {
         name: AppRouterContants.managerHomeRouterName,
         path: '/manager_home',
         builder: (BuildContext context, GoRouterState state) {
-          return const ManagerHome();
+          return const NavBottomManger();
         }),
     GoRoute(
         name: AppRouterContants.managerStoresRouterName,
@@ -115,19 +62,19 @@ class NyAppRouter {
         name: AppRouterContants.managerListBillRouterName,
         path: '/manager_list_bill',
         builder: (BuildContext context, GoRouterState state) {
-          return const ListBill();
+          return const ManagerListBill();
         }),
     GoRoute(
         name: AppRouterContants.managerBroughtReceiptRouterName,
         path: '/manager_brought_receipt',
         builder: (BuildContext context, GoRouterState state) {
-          return const BroughtReceipt();
+          return const ManagerBroughtReceipt();
         }),
     GoRoute(
         name: AppRouterContants.managerBookingTableRouterName,
         path: '/manager_booking_table',
         builder: (BuildContext context, GoRouterState state) {
-          return const BookingTable();
+          return const ManagerBookingTable();
         }),
 
     GoRoute(
@@ -155,6 +102,12 @@ class NyAppRouter {
         path: '/staff_forgot_password',
         builder: (BuildContext context, GoRouterState state) {
           return const StaffForgotPassword();
+        }),
+    GoRoute(
+        name: AppRouterContants.staffHomeRouterName,
+        path: '/staff_home',
+        builder: (BuildContext context, GoRouterState state) {
+          return const NavBottomStaff();
         }),
   ]);
 }

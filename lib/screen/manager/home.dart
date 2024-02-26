@@ -263,101 +263,102 @@ class _ManagerHomeState extends State<ManagerHome> {
                       controller: _scrollController,
                       // Optional
                       header: Container(
-                          // height: 50.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.w),
-                            color: Colors.white,
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(20.w),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextApp(
-                                  text: "Default",
-                                  color: blueText,
-                                  fontsize: 26.w,
-                                ),
-                                SizedBox(
-                                  height: 15.h,
-                                ),
-                                Row(
-                                  children: [
-                                    // ButtonIcon(
-                                    //     color1: Color.fromRGBO(33, 82, 255, 1),
-                                    //     color2: Color.fromRGBO(33, 212, 253, 1),
-                                    //     event: () {
-                                    //       Scaffold.of(context).openDrawer();
-                                    //     },
-                                    //     icon: Icons.person),
-                                    // SizedBox(
-                                    //   width: 15.w,
-                                    // ),
-                                    Builder(
-                                      builder: (context) => ButtonIcon(
-                                          color1:
-                                              Color.fromRGBO(33, 82, 255, 1),
-                                          color2:
-                                              Color.fromRGBO(33, 212, 253, 1),
-                                          event: () {
-                                            Scaffold.of(context).openDrawer();
-                                          },
-                                          icon: Icons.menu),
-                                    ),
-                                    SizedBox(
-                                      width: 10.w,
-                                    ),
-                                    SizedBox(
-                                      width: 65.w,
-                                      height: 65.w,
-                                      child: Stack(
-                                        children: [
-                                          // Center(
-                                          //   child: ButtonIcon(
-                                          //       color1: Color.fromRGBO(
-                                          //           33, 82, 255, 1),
-                                          //       color2: Color.fromRGBO(
-                                          //           33, 212, 253, 1),
-                                          //       event: () {
-                                          //         Scaffold.of(context)
-                                          //             .openDrawer();
-                                          //       },
-                                          //       icon: Icons.message),
-                                          // ),
-                                          // Positioned(
-                                          //     top: 0,
-                                          //     right: 0,
-                                          //     child: Container(
-                                          //       width: 25.w,
-                                          //       height: 25.w,
-                                          //       decoration: const BoxDecoration(
-                                          //         shape: BoxShape.circle,
-                                          //         color: Colors.red,
-                                          //       ),
-                                          //       child: Center(
-                                          //         child: TextApp(
-                                          //             text: "99+",
-                                          //             textAlign:
-                                          //                 TextAlign.center,
-                                          //             fontsize: 10.sp,
-                                          //             color: Colors.white),
-                                          //       ),
-                                          //     )),
-                                        ],
-                                      ),
-                                    ),
-                                    // ButtonIcon(
-                                    //   color1: Color.fromRGBO(255, 0, 128, 1),
-                                    //   color2: Color.fromRGBO(121, 40, 202, 1),
-                                    //   event: () {},
-                                    //   icon: Icons.woman_outlined,
-                                    //   isIconCircle: false,
-                                    // )
-                                  ],
-                                )
-                              ],
-                            ),
-                          )),
+                        // height: 50.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.w),
+                          color: Colors.white,
+                        ),
+                        // child: Padding(
+                        //   padding: EdgeInsets.all(20.w),
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     children: [
+                        //       // TextApp(
+                        //       //   text: "Default",
+                        //       //   color: blueText,
+                        //       //   fontsize: 26.w,
+                        //       // ),
+                        //       // SizedBox(
+                        //       //   height: 15.h,
+                        //       // ),
+                        //       // Row(
+                        //       //   children: [
+                        //       //     // ButtonIcon(
+                        //       //     //     color1: Color.fromRGBO(33, 82, 255, 1),
+                        //       //     //     color2: Color.fromRGBO(33, 212, 253, 1),
+                        //       //     //     event: () {
+                        //       //     //       Scaffold.of(context).openDrawer();
+                        //       //     //     },
+                        //       //     //     icon: Icons.person),
+                        //       //     // SizedBox(
+                        //       //     //   width: 15.w,
+                        //       //     // ),
+                        //       //     Builder(
+                        //       //       builder: (context) => ButtonIcon(
+                        //       //           color1:
+                        //       //               Color.fromRGBO(33, 82, 255, 1),
+                        //       //           color2:
+                        //       //               Color.fromRGBO(33, 212, 253, 1),
+                        //       //           event: () {
+                        //       //             Scaffold.of(context).openDrawer();
+                        //       //           },
+                        //       //           icon: Icons.menu),
+                        //       //     ),
+                        //       //     SizedBox(
+                        //       //       width: 10.w,
+                        //       //     ),
+                        //       //     SizedBox(
+                        //       //       width: 65.w,
+                        //       //       height: 65.w,
+                        //       //       child: Stack(
+                        //       //         children: [
+                        //       //           // Center(
+                        //       //           //   child: ButtonIcon(
+                        //       //           //       color1: Color.fromRGBO(
+                        //       //           //           33, 82, 255, 1),
+                        //       //           //       color2: Color.fromRGBO(
+                        //       //           //           33, 212, 253, 1),
+                        //       //           //       event: () {
+                        //       //           //         Scaffold.of(context)
+                        //       //           //             .openDrawer();
+                        //       //           //       },
+                        //       //           //       icon: Icons.message),
+                        //       //           // ),
+                        //       //           // Positioned(
+                        //       //           //     top: 0,
+                        //       //           //     right: 0,
+                        //       //           //     child: Container(
+                        //       //           //       width: 25.w,
+                        //       //           //       height: 25.w,
+                        //       //           //       decoration: const BoxDecoration(
+                        //       //           //         shape: BoxShape.circle,
+                        //       //           //         color: Colors.red,
+                        //       //           //       ),
+                        //       //           //       child: Center(
+                        //       //           //         child: TextApp(
+                        //       //           //             text: "99+",
+                        //       //           //             textAlign:
+                        //       //           //                 TextAlign.center,
+                        //       //           //             fontsize: 10.sp,
+                        //       //           //             color: Colors.white),
+                        //       //           //       ),
+                        //       //           //     )),
+                        //       //         ],
+                        //       //       ),
+                        //       //     ),
+                        //       //     // ButtonIcon(
+                        //       //     //   color1: Color.fromRGBO(255, 0, 128, 1),
+                        //       //     //   color2: Color.fromRGBO(121, 40, 202, 1),
+                        //       //     //   event: () {},
+                        //       //     //   icon: Icons.woman_outlined,
+                        //       //     //   isIconCircle: false,
+                        //       //     // )
+                        //       //   ],
+                        //       // )
+                        //     ],
+                        //   ),
+                        // )),
+                      ),
                       content:
                           ////
                           ListView.builder(

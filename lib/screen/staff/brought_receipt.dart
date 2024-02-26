@@ -6,23 +6,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ManagerBroughtReceipt extends StatefulWidget {
-  const ManagerBroughtReceipt({super.key});
+class StaffBroughtReceipt extends StatefulWidget {
+  const StaffBroughtReceipt({super.key});
 
   @override
-  State<ManagerBroughtReceipt> createState() => _ManagerBroughtReceiptState();
+  State<StaffBroughtReceipt> createState() => _StaffBroughtReceiptState();
 }
 
-class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
+class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
     with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     TabController _tabController = TabController(length: 4, vsync: this);
 
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-            child: Padding(
+      appBar: AppBar(
+        title: Text("Hoá đơn mang về"),
+      ),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Padding(
           padding:
               EdgeInsets.only(top: 10.h, left: 25.w, right: 25.w, bottom: 10.h),
           child: Column(
@@ -151,9 +154,10 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
               SizedBox(
                 height: 15.h,
               ),
-              const CopyRightText()
             ],
           ),
-        )));
+        ),
+      ),
+    );
   }
 }

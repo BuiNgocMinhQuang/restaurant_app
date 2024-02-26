@@ -1,6 +1,4 @@
 class AppRouterContants {
-  static const String testFlexibleRouterName = 'TestFlexible';
-
   // const of Manager
   static const String managerSignInRouterName = 'ManagerSignIn';
   static const String managerSignUpRouterName = 'ManagerSignUp';
@@ -16,4 +14,5 @@ class AppRouterContants {
   //const of Staff
   static const String staffSignInRouterName = 'StaffSignIn';
   static const String staffForgotpasswordRouterName = 'StaffForgotPassword';
+  static const String staffHomeRouterName = 'StaffHome';
 }

@@ -5,14 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ManagerListBill extends StatefulWidget {
-  const ManagerListBill({super.key});
+class StaffListBill extends StatefulWidget {
+  const StaffListBill({super.key});
 
   @override
-  State<ManagerListBill> createState() => _ManagerListBillState();
+  State<StaffListBill> createState() => _StaffListBillState();
 }
 
-class _ManagerListBillState extends State<ManagerListBill>
+class _StaffListBillState extends State<StaffListBill>
     with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
@@ -20,8 +20,11 @@ class _ManagerListBillState extends State<ManagerListBill>
       length: 4,
       vsync: this,
     );
-
+    print("_tabController + ${_tabController.index}");
     return Scaffold(
+        appBar: AppBar(
+          title: Text("Danh sách hoá đơn"),
+        ),
         backgroundColor: Colors.white,
         body: SafeArea(
             child: Padding(
@@ -42,7 +45,7 @@ class _ManagerListBillState extends State<ManagerListBill>
                           child: TabBar(
                               labelPadding:
                                   EdgeInsets.only(left: 20, right: 20),
-                              labelColor: Colors.black,
+                              labelColor: Colors.white,
                               unselectedLabelColor:
                                   Colors.black.withOpacity(0.5),
                               labelStyle: TextStyle(color: Colors.red),
@@ -130,7 +133,6 @@ class _ManagerListBillState extends State<ManagerListBill>
               SizedBox(
                 height: 15.h,
               ),
-              const CopyRightText()
             ],
           ),
         )));

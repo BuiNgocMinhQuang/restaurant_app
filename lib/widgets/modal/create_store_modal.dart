@@ -351,8 +351,7 @@ class _CreateStoreModalState extends State<CreateStoreModal> {
                               side: BorderSide(color: Colors.grey, width: 1), //
                             ),
                             onPressed: () {
-                              // pickImage();
-                              // takeImage();
+                              selectImages();
                             },
                             child: Container(
                               width: 1.sw,
@@ -384,72 +383,19 @@ class _CreateStoreModalState extends State<CreateStoreModal> {
                                   SizedBox(
                                     height: 20.h,
                                   ),
-                                  ButtonGradient(
-                                    color1:
-                                        const Color.fromRGBO(33, 82, 255, 1),
-                                    color2:
-                                        const Color.fromRGBO(33, 212, 253, 1),
-                                    event: () {
-                                      selectImages();
-                                    },
-                                    text: "Chọn ảnh từ thiết bị",
-                                    fontSize: 12.sp,
-                                    radius: 8.r,
-                                    textColor: Colors.white,
-                                  ),
-                                  SizedBox(
-                                    height: 20.h,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 100,
-                                        height: 1, // Thickness
-                                        color: Color.fromRGBO(103, 116, 142, 1),
-                                      ),
-                                      SizedBox(
-                                        width: 12.w,
-                                      ),
-                                      Text(
-                                        "hoặc",
-                                        style: TextStyle(
-                                          fontSize: 12.sp,
-                                          color:
-                                              Color.fromRGBO(103, 116, 142, 1),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 12.w,
-                                      ),
-                                      Container(
-                                        width: 100,
-                                        height: 1, // Thickness
-                                        color: Color.fromRGBO(103, 116, 142, 1),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 20.h,
-                                  ),
-                                  ButtonGradient(
-                                    color1:
-                                        const Color.fromRGBO(33, 82, 255, 1),
-                                    color2:
-                                        const Color.fromRGBO(33, 212, 253, 1),
-                                    event: () {
-                                      pickImage();
-                                    },
-                                    text: "Chụp ảnh",
-                                    fontSize: 12.sp,
-                                    radius: 8.r,
-                                    textColor: Colors.white,
-                                  ),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
+                                  // ButtonGradient(
+                                  //   color1:
+                                  //       const Color.fromRGBO(33, 82, 255, 1),
+                                  //   color2:
+                                  //       const Color.fromRGBO(33, 212, 253, 1),
+                                  //   event: () {
+                                  //     selectImages();
+                                  //   },
+                                  //   text: "Chọn ảnh từ thiết bị",
+                                  //   fontSize: 12.sp,
+                                  //   radius: 8.r,
+                                  //   textColor: Colors.white,
+                                  // ),
                                 ],
                               ),
                             ),

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app_restaurant/config/colors.dart';
+import 'package:app_restaurant/config/fake_data.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
@@ -8,6 +9,7 @@ import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/item_drawer.dart';
 import 'package:app_restaurant/widgets/sub_item_drawer.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -186,7 +188,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                               children: [
                                                 TextApp(
                                                   text: " Mã cửa hàng",
-                                                  fontsize: 10.sp,
+                                                  fontsize: 12.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
@@ -225,7 +227,10 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp),
                                                       // hintText: 'Họ',
+
                                                       isDense: true,
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
@@ -244,7 +249,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                               children: [
                                                 TextApp(
                                                   text: " Họ và tên",
-                                                  fontsize: 10.sp,
+                                                  fontsize: 12.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
@@ -296,6 +301,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                                 .circular(8.r),
                                                       ),
                                                       // hintText: 'Tên',
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp),
                                                       isDense: true,
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
@@ -320,7 +327,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                               children: [
                                                 TextApp(
                                                   text: " Họ",
-                                                  fontsize: 10.sp,
+                                                  fontsize: 12.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
@@ -366,6 +373,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                                 .circular(8.r),
                                                       ),
                                                       // hintText: 'Họ',
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp),
                                                       isDense: true,
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
@@ -384,7 +393,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                               children: [
                                                 TextApp(
                                                   text: " Tên",
-                                                  fontsize: 10.sp,
+                                                  fontsize: 12.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
@@ -435,6 +444,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                                 .circular(8.r),
                                                       ),
                                                       // hintText: 'Tên',
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp),
                                                       isDense: true,
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
@@ -459,7 +470,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                               children: [
                                                 TextApp(
                                                   text: " Chức vụ",
-                                                  fontsize: 10.sp,
+                                                  fontsize: 12.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
@@ -498,6 +509,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                                 .circular(8.r),
                                                       ),
                                                       // hintText: 'Họ',
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp),
                                                       isDense: true,
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
@@ -516,7 +529,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                               children: [
                                                 TextApp(
                                                   text: " Số điện thoại",
-                                                  fontsize: 10.sp,
+                                                  fontsize: 12.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
@@ -572,6 +585,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                                 .circular(8.r),
                                                       ),
                                                       // hintText: 'Tên',
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp),
                                                       isDense: true,
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
@@ -596,77 +611,27 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                               children: [
                                                 TextApp(
                                                   text: " Tỉnh/Thành phố",
-                                                  fontsize: 10.sp,
+                                                  fontsize: 12.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
                                                 SizedBox(
                                                   height: 10.h,
                                                 ),
-                                                TextFormField(
-                                                  keyboardType:
-                                                      TextInputType.name,
-                                                  style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
-                                                  cursorColor: grey,
-                                                  decoration: InputDecoration(
-                                                      fillColor: Color.fromARGB(
-                                                          255, 226, 104, 159),
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color:
-                                                                Color.fromRGBO(
-                                                                    214,
-                                                                    51,
-                                                                    123,
-                                                                    0.6),
-                                                            width: 2.0),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8.r),
-                                                      ),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8.r),
-                                                      ),
-                                                      // hintText: 'Họ',
-                                                      isDense: true,
-                                                      contentPadding:
-                                                          EdgeInsets.all(15.w)),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 10.w,
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                TextApp(
-                                                  text: " Quận/Huyện",
-                                                  fontsize: 10.sp,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: blueText,
-                                                ),
-                                                SizedBox(
-                                                  height: 10.h,
-                                                ),
-                                                TextFormField(
-                                                  keyboardType:
-                                                      TextInputType.name,
-                                                  style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
-                                                  cursorColor: grey,
-                                                  decoration: InputDecoration(
+                                                DropdownSearch(
+                                                  validator: (value) {
+                                                    if (value ==
+                                                        "Chọn tỉnh/thành phố") {
+                                                      return canNotNull;
+                                                    }
+                                                  },
+                                                  items: listProvinces,
+                                                  dropdownDecoratorProps:
+                                                      DropDownDecoratorProps(
+                                                    dropdownSearchDecoration:
+                                                        InputDecoration(
+                                                      // isCollapsed: true,
+                                                      hintMaxLines: 1,
                                                       fillColor:
                                                           const Color.fromARGB(
                                                               255,
@@ -694,10 +659,90 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
-                                                      // hintText: 'Tên',
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(15.w),
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp),
+                                                      hintText:
+                                                          "Chọn tỉnh/thành phố",
+                                                    ),
+                                                  ),
+                                                  onChanged: print,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10.w,
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                TextApp(
+                                                  text: " Quận/Huyện",
+                                                  fontsize: 12.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: blueText,
+                                                ),
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
+                                                DropdownSearch(
+                                                  validator: (value) {
+                                                    if (value ==
+                                                        "Chọn quận/huyện") {
+                                                      return canNotNull;
+                                                    }
+                                                  },
+                                                  items: listRole,
+                                                  dropdownDecoratorProps:
+                                                      DropDownDecoratorProps(
+                                                    dropdownSearchDecoration:
+                                                        InputDecoration(
+                                                      hintMaxLines: 1,
+                                                      fillColor:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              226,
+                                                              104,
+                                                              159),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color: Color
+                                                                    .fromRGBO(
+                                                                        214,
+                                                                        51,
+                                                                        123,
+                                                                        0.6),
+                                                                width: 2.0),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      isDense: true,
+                                                      contentPadding:
+                                                          EdgeInsets.all(15.w),
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp),
+                                                      hintText:
+                                                          "Chọn quận/huyện",
+                                                    ),
+                                                  ),
+                                                  onChanged: print,
+                                                  // selectedItem:
+                                                  //     "Chọn quận/huyện",
                                                 ),
                                               ],
                                             ),
@@ -719,33 +764,43 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                               children: [
                                                 TextApp(
                                                   text: " Phường/Xã",
-                                                  fontsize: 10.sp,
+                                                  fontsize: 12.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
                                                 SizedBox(
                                                   height: 10.h,
                                                 ),
-                                                TextFormField(
-                                                  keyboardType:
-                                                      TextInputType.name,
-                                                  style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
-                                                  cursorColor: grey,
-                                                  decoration: InputDecoration(
-                                                      fillColor: Color.fromARGB(
-                                                          255, 226, 104, 159),
+                                                DropdownSearch(
+                                                  validator: (value) {
+                                                    if (value ==
+                                                        "Chọn phường/xã") {
+                                                      return canNotNull;
+                                                    }
+                                                  },
+                                                  items: listRole,
+                                                  dropdownDecoratorProps:
+                                                      DropDownDecoratorProps(
+                                                    dropdownSearchDecoration:
+                                                        InputDecoration(
+                                                      hintMaxLines: 1,
+                                                      fillColor:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              226,
+                                                              104,
+                                                              159),
                                                       focusedBorder:
                                                           OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color:
-                                                                Color.fromRGBO(
-                                                                    214,
-                                                                    51,
-                                                                    123,
-                                                                    0.6),
-                                                            width: 2.0),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color: Color
+                                                                    .fromRGBO(
+                                                                        214,
+                                                                        51,
+                                                                        123,
+                                                                        0.6),
+                                                                width: 2.0),
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(8.r),
@@ -756,10 +811,18 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
-                                                      // hintText: 'Họ',
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(15.w),
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp),
+                                                      hintText:
+                                                          "Chọn phường/xã",
+                                                    ),
+                                                  ),
+                                                  onChanged: print,
+                                                  // selectedItem:
+                                                  //     "Chọn phường/xã",
                                                 ),
                                               ],
                                             ),
@@ -775,7 +838,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                               children: [
                                                 TextApp(
                                                   text: " Số nhà, đường",
-                                                  fontsize: 10.sp,
+                                                  fontsize: 12.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
@@ -818,6 +881,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                                 .circular(8.r),
                                                       ),
                                                       // hintText: 'Tên',
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp),
                                                       isDense: true,
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
@@ -876,6 +941,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                 borderRadius:
                                                     BorderRadius.circular(8.r),
                                               ),
+                                              hintStyle:
+                                                  TextStyle(fontSize: 14.sp),
                                               hintText: 'Email',
                                               isDense: true,
                                               contentPadding:
@@ -918,6 +985,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                 borderRadius:
                                                     BorderRadius.circular(8.r),
                                               ),
+                                              hintStyle:
+                                                  TextStyle(fontSize: 14.sp),
                                               hintText: 'Twitter',
                                               isDense: true,
                                               contentPadding:
@@ -958,6 +1027,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                 borderRadius:
                                                     BorderRadius.circular(8.r),
                                               ),
+                                              hintStyle:
+                                                  TextStyle(fontSize: 14.sp),
                                               hintText: 'Facebook',
                                               isDense: true,
                                               contentPadding:
@@ -998,6 +1069,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                 borderRadius:
                                                     BorderRadius.circular(8.r),
                                               ),
+                                              hintStyle:
+                                                  TextStyle(fontSize: 14.sp),
                                               hintText: 'Instagram',
                                               isDense: true,
                                               contentPadding:
@@ -1140,6 +1213,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                             borderRadius:
                                                 BorderRadius.circular(8.r),
                                           ),
+                                          hintStyle: TextStyle(fontSize: 14.sp),
                                           hintText: 'Mật khẩu hiện tại',
                                           isDense: true,
                                           contentPadding: EdgeInsets.all(15.w)),
@@ -1206,6 +1280,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                             borderRadius:
                                                 BorderRadius.circular(8.r),
                                           ),
+                                          hintStyle: TextStyle(fontSize: 14.sp),
                                           hintText: 'Mật khẩu mới',
                                           isDense: true,
                                           contentPadding: EdgeInsets.all(15.w)),
@@ -1272,6 +1347,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                             borderRadius:
                                                 BorderRadius.circular(8.r),
                                           ),
+                                          hintStyle: TextStyle(fontSize: 14.sp),
                                           hintText: 'Nhập lại mật khẩu mới',
                                           isDense: true,
                                           contentPadding: EdgeInsets.all(15.w)),
