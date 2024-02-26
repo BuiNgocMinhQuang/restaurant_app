@@ -1,4 +1,5 @@
 import 'package:app_restaurant/config/colors.dart';
+import 'package:app_restaurant/screen/manager/stores.dart';
 import 'package:app_restaurant/widgets/button_gradient.dart';
 import 'package:app_restaurant/widgets/button_icon.dart';
 import 'package:app_restaurant/widgets/item_drawer.dart';
@@ -22,6 +23,9 @@ class _ManagerHomeState extends State<ManagerHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          title: Text("Home"),
+        ),
         drawer: Drawer(
           child: ListView(
             children: [
@@ -279,16 +283,16 @@ class _ManagerHomeState extends State<ManagerHome> {
                                 ),
                                 Row(
                                   children: [
-                                    ButtonIcon(
-                                        color1: Color.fromRGBO(33, 82, 255, 1),
-                                        color2: Color.fromRGBO(33, 212, 253, 1),
-                                        event: () {
-                                          Scaffold.of(context).openDrawer();
-                                        },
-                                        icon: Icons.person),
-                                    SizedBox(
-                                      width: 15.w,
-                                    ),
+                                    // ButtonIcon(
+                                    //     color1: Color.fromRGBO(33, 82, 255, 1),
+                                    //     color2: Color.fromRGBO(33, 212, 253, 1),
+                                    //     event: () {
+                                    //       Scaffold.of(context).openDrawer();
+                                    //     },
+                                    //     icon: Icons.person),
+                                    // SizedBox(
+                                    //   width: 15.w,
+                                    // ),
                                     Builder(
                                       builder: (context) => ButtonIcon(
                                           color1:
@@ -308,74 +312,77 @@ class _ManagerHomeState extends State<ManagerHome> {
                                       height: 65.w,
                                       child: Stack(
                                         children: [
-                                          Center(
-                                            child: ButtonIcon(
-                                                color1: Color.fromRGBO(
-                                                    33, 82, 255, 1),
-                                                color2: Color.fromRGBO(
-                                                    33, 212, 253, 1),
-                                                event: () {
-                                                  Scaffold.of(context)
-                                                      .openDrawer();
-                                                },
-                                                icon: Icons.message),
-                                          ),
-                                          Positioned(
-                                              top: 0,
-                                              right: 0,
-                                              child: Container(
-                                                width: 25.w,
-                                                height: 25.w,
-                                                decoration: const BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Colors.red,
-                                                ),
-                                                child: Center(
-                                                  child: TextApp(
-                                                      text: "99+",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      fontsize: 10.sp,
-                                                      color: Colors.white),
-                                                ),
-                                              )),
+                                          // Center(
+                                          //   child: ButtonIcon(
+                                          //       color1: Color.fromRGBO(
+                                          //           33, 82, 255, 1),
+                                          //       color2: Color.fromRGBO(
+                                          //           33, 212, 253, 1),
+                                          //       event: () {
+                                          //         Scaffold.of(context)
+                                          //             .openDrawer();
+                                          //       },
+                                          //       icon: Icons.message),
+                                          // ),
+                                          // Positioned(
+                                          //     top: 0,
+                                          //     right: 0,
+                                          //     child: Container(
+                                          //       width: 25.w,
+                                          //       height: 25.w,
+                                          //       decoration: const BoxDecoration(
+                                          //         shape: BoxShape.circle,
+                                          //         color: Colors.red,
+                                          //       ),
+                                          //       child: Center(
+                                          //         child: TextApp(
+                                          //             text: "99+",
+                                          //             textAlign:
+                                          //                 TextAlign.center,
+                                          //             fontsize: 10.sp,
+                                          //             color: Colors.white),
+                                          //       ),
+                                          //     )),
                                         ],
                                       ),
                                     ),
-                                    ButtonIcon(
-                                      color1: Color.fromRGBO(255, 0, 128, 1),
-                                      color2: Color.fromRGBO(121, 40, 202, 1),
-                                      event: () {},
-                                      icon: Icons.woman_outlined,
-                                      isIconCircle: false,
-                                    )
+                                    // ButtonIcon(
+                                    //   color1: Color.fromRGBO(255, 0, 128, 1),
+                                    //   color2: Color.fromRGBO(121, 40, 202, 1),
+                                    //   event: () {},
+                                    //   icon: Icons.woman_outlined,
+                                    //   isIconCircle: false,
+                                    // )
                                   ],
                                 )
                               ],
                             ),
                           )),
-                      content: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const ClampingScrollPhysics(),
-                          itemCount: 6,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Card(
-                              child: Row(
-                                children: [
-                                  Image.network("https://picsum.photos/200"),
-                                  const SizedBox(
-                                    width: 20,
+                      content:
+                          ////
+                          ListView.builder(
+                              shrinkWrap: true,
+                              physics: const ClampingScrollPhysics(),
+                              itemCount: 6,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Card(
+                                  child: Row(
+                                    children: [
+                                      Image.network(
+                                          "https://picsum.photos/200"),
+                                      const SizedBox(
+                                        width: 20,
+                                      ),
+                                      const Expanded(
+                                        child: Text(
+                                          "Every city is good for travel.",
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  const Expanded(
-                                    child: Text(
-                                      "Every city is good for travel.",
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          })),
+                                );
+                              })),
                 ],
               ),
             )));

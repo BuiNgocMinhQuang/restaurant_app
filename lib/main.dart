@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // bool isLogin = true;
     return ScreenUtilInit(
       designSize: const Size(430, 932),
       builder: (BuildContext context, Widget? child) {
@@ -21,9 +22,8 @@ class MyApp extends StatelessWidget {
         return child!;
       },
       child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        routerConfig: NyAppRouter().router,
-      ),
+          debugShowCheckedModeBanner: false,
+          routerConfig: NyAppRouter().customRouter),
     );
   }
 }
