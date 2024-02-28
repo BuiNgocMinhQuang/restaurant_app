@@ -55,6 +55,7 @@ class _NavBottomStaffState extends State<NavBottomStaff> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
       bottomNavigationBar: BottomAppBar(
+        color: Colors.blue,
         shape: CircularNotchedRectangle(),
         child: Container(
           height: 60.h,
@@ -81,12 +82,12 @@ class _NavBottomStaffState extends State<NavBottomStaff> {
                           Icons.dinner_dining,
                           size: 32.w,
                           color:
-                              _selectedIndex == 0 ? Colors.blue : Colors.grey,
+                              _selectedIndex == 0 ? Colors.white : Colors.black,
                         ),
                         TextApp(
                           text: "Món ăn",
                           color:
-                              _selectedIndex == 0 ? Colors.blue : Colors.grey,
+                              _selectedIndex == 0 ? Colors.white : Colors.black,
                           fontsize: 12.sp,
                         )
                       ],
@@ -108,12 +109,12 @@ class _NavBottomStaffState extends State<NavBottomStaff> {
                           Icons.delivery_dining,
                           size: 32.w,
                           color:
-                              _selectedIndex == 1 ? Colors.blue : Colors.grey,
+                              _selectedIndex == 1 ? Colors.white : Colors.black,
                         ),
                         TextApp(
                           text: "Mang về",
                           color:
-                              _selectedIndex == 1 ? Colors.blue : Colors.grey,
+                              _selectedIndex == 1 ? Colors.white : Colors.black,
                           fontsize: 12.sp,
                         )
                       ],
@@ -143,12 +144,12 @@ class _NavBottomStaffState extends State<NavBottomStaff> {
                           Icons.receipt,
                           size: 32.w,
                           color:
-                              _selectedIndex == 3 ? Colors.blue : Colors.grey,
+                              _selectedIndex == 3 ? Colors.white : Colors.black,
                         ),
                         TextApp(
                           text: "Hoá đơn",
                           color:
-                              _selectedIndex == 3 ? Colors.blue : Colors.grey,
+                              _selectedIndex == 3 ? Colors.white : Colors.black,
                           fontsize: 12.sp,
                         )
                       ],
@@ -170,12 +171,12 @@ class _NavBottomStaffState extends State<NavBottomStaff> {
                           Icons.person,
                           size: 32.w,
                           color:
-                              _selectedIndex == 4 ? Colors.blue : Colors.grey,
+                              _selectedIndex == 4 ? Colors.white : Colors.black,
                         ),
                         TextApp(
                           text: "Cá nhân",
                           color:
-                              _selectedIndex == 4 ? Colors.blue : Colors.grey,
+                              _selectedIndex == 4 ? Colors.white : Colors.black,
                           fontsize: 12.sp,
                         )
                       ],

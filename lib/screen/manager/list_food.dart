@@ -1,6 +1,8 @@
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
+import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
+import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/status_box.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
@@ -14,14 +16,14 @@ import 'package:go_router/go_router.dart';
 
 List<String> listState = ["Tất cả", "Đang hoạt động", "Đã chặn"];
 
-class ListStaff extends StatefulWidget {
-  const ListStaff({super.key});
+class ListFood extends StatefulWidget {
+  const ListFood({super.key});
 
   @override
-  State<ListStaff> createState() => _ListStaffState();
+  State<ListFood> createState() => _ListFoodState();
 }
 
-class _ListStaffState extends State<ListStaff> {
+class _ListFoodState extends State<ListFood> {
   TextEditingController _dateStartController = TextEditingController();
   TextEditingController _dateEndController = TextEditingController();
   String accountStatus = "isActive";
@@ -34,15 +36,7 @@ class _ListStaffState extends State<ListStaff> {
             title: 'Bạn có chắc chắn thực hiện tác vụ này!',
             desc: 'Sau khi bạn xác nhận sẽ không thể trở lại.',
             btnOkOnPress: () {
-              if (accountStatus == "isLock") {
-                setState(() {
-                  accountStatus = "isActive";
-                });
-              } else {
-                setState(() {
-                  accountStatus = "isLock";
-                });
-              }
+              print("Delete Product");
             },
             btnOkText: "Xác Nhận",
             btnCancelOnPress: () {},
@@ -116,6 +110,33 @@ class _ListStaffState extends State<ListStaff> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextApp(
+                                  text: "Tất cả món ăn",
+                                  fontsize: 18.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: blueText),
+                              TextApp(
+                                text: allYourFoodHere,
+                                fontsize: 14.sp,
+                                color: blueText.withOpacity(0.6),
+                              ),
+                            ],
+                          ),
+                          space20H,
+                          ButtonGradient(
+                            color1: const Color.fromRGBO(121, 40, 202, 1),
+                            color2: const Color.fromRGBO(255, 0, 128, 1),
+                            event: () {
+                              context.go("/manager_add_food");
+                            },
+                            text: "  + Thêm món ăn",
+                            textColor: Colors.white,
+                            radius: 10.w,
+                          ),
+                          space40H,
                           Row(
                             children: [
                               Flexible(
@@ -232,12 +253,7 @@ class _ListStaffState extends State<ListStaff> {
                                       height: 10.h,
                                     ),
                                     DropdownSearch(
-                                      // popupProps: PopupProps.menu(
-                                      //   showSelectedItems: true,
-                                      //   disabledItemFn: (String s) => s.startsWith(''),
-                                      // ),
                                       items: listState,
-
                                       dropdownDecoratorProps:
                                           DropDownDecoratorProps(
                                         dropdownSearchDecoration:
@@ -319,37 +335,25 @@ class _ListStaffState extends State<ListStaff> {
                                   DataTable(columns: const [
                                     DataColumn(
                                       label: Center(
-                                        child: Text('Tên nhân viên',
+                                        child: Text('Món ăn',
                                             textAlign: TextAlign.center),
                                       ),
                                     ),
                                     DataColumn(
                                       label: Center(
-                                        child: Text('Chức vụ',
+                                        child: Text('Cửa hàng',
                                             textAlign: TextAlign.center),
                                       ),
                                     ),
                                     DataColumn(
                                       label: Center(
-                                        child: Text('Làm việc tại cửa hàng',
+                                        child: Text('Giá tiền',
                                             textAlign: TextAlign.center),
                                       ),
                                     ),
                                     DataColumn(
                                       label: Center(
                                         child: Text('Trạng thái',
-                                            textAlign: TextAlign.center),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Center(
-                                        child: Text('Số điện thoại',
-                                            textAlign: TextAlign.center),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Center(
-                                        child: Text('Email',
                                             textAlign: TextAlign.center),
                                       ),
                                     ),
@@ -365,30 +369,37 @@ class _ListStaffState extends State<ListStaff> {
                                   ], rows: [
                                     DataRow(cells: [
                                       DataCell(Center(
-                                        child: Text('Nhan vien 1',
-                                            textAlign: TextAlign.center),
-                                      )),
-                                      DataCell(Center(
-                                        child: Text('Nhan vien',
-                                            textAlign: TextAlign.center),
-                                      )),
+                                          child: IntrinsicHeight(
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              width: 80.w,
+                                              height: 80.w,
+                                              color: Colors.amber,
+                                              child: Image.asset(
+                                                "assets/images/banner1.png",
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                            space10W,
+                                            TextApp(text: "Mon an 1")
+                                          ],
+                                        ),
+                                      ))),
                                       DataCell(Center(
                                         child: Text('shop 1',
                                             textAlign: TextAlign.center),
                                       )),
                                       DataCell(Center(
-                                        child: accountStatus == "isActive"
-                                            ? StatusBoxIsActive()
-                                            : StatusBoxIsLock(),
-                                      )),
-                                      DataCell(Center(
-                                        child: Text('0987653663',
+                                        child: Text('2,000,000đ',
                                             textAlign: TextAlign.center),
                                       )),
-                                      DataCell(Center(
-                                        child: Text('Dang@gmail.com',
-                                            textAlign: TextAlign.center),
-                                      )),
+                                      DataCell(
+                                          Center(child: StatusBoxIsSelling())),
                                       DataCell(Center(
                                         child: Text('26/02/2024 11:35:12',
                                             textAlign: TextAlign.center),
@@ -414,22 +425,14 @@ class _ListStaffState extends State<ListStaff> {
                                             height: 30.h,
                                             child: ButtonIcon(
                                                 isIconCircle: false,
-                                                color1: accountStatus ==
-                                                        "isActive"
-                                                    ? Color.fromRGBO(
-                                                        251, 207, 51, 1)
-                                                    : Color.fromRGBO(
-                                                        103, 177, 8, 1),
-                                                color2:
-                                                    accountStatus == "isActive"
-                                                        ? Color.fromRGBO(
-                                                            251, 207, 51, 1)
-                                                        : Color.fromRGBO(
-                                                            103, 177, 8, 1),
+                                                color1: Color.fromRGBO(
+                                                    234, 6, 6, 1),
+                                                color2: Color.fromRGBO(
+                                                    234, 6, 6, 1),
                                                 event: () {
                                                   _showUpdateInfoModal(context);
                                                 },
-                                                icon: Icons.lock),
+                                                icon: Icons.delete),
                                           )
                                         ],
                                       ))

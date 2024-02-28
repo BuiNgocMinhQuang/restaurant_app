@@ -1,4 +1,6 @@
 import 'package:app_restaurant/config/colors.dart';
+import 'package:app_restaurant/config/fake_data.dart';
+import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/bill_infor_container.dart';
 import 'package:app_restaurant/widgets/item_drawer.dart';
 import 'package:app_restaurant/widgets/modal/booking_table_modal.dart';
@@ -10,6 +12,8 @@ import 'package:app_restaurant/widgets/modal/move_table_modal.dart';
 import 'package:app_restaurant/widgets/modal/pay_bill_modal.dart';
 import 'package:app_restaurant/widgets/modal/see_bill_modal.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,7 +28,7 @@ class StaffBookingTable extends StatefulWidget {
 
 class _StaffBookingTableState extends State<StaffBookingTable>
     with TickerProviderStateMixin {
-  bool isShowEditModal = false;
+  // bool isShowEditModal = false;
   bool isShowMoveTableModal = false;
   bool isShowBookingTableModal = false;
   bool isShowSeeBillModal = false;
@@ -51,6 +55,35 @@ class _StaffBookingTableState extends State<StaffBookingTable>
   void closePayBillModal() {
     setState(() {
       isShowPayBillModal = false;
+    });
+  }
+
+  _showSuccesModal(context) {
+    AwesomeDialog(
+      context: context,
+      animType: AnimType.leftSlide,
+      headerAnimationLoop: false,
+      dialogType: DialogType.success,
+      showCloseIcon: true,
+      title: 'Thành công',
+      desc: 'Đăng nhập thành công!',
+      btnOkOnPress: () {
+        debugPrint('OnClcik');
+      },
+      btnOkText: 'OK',
+      // btnOkIcon: Icons.check_circle,
+      onDismissCallback: (type) {
+        debugPrint('Dialog Dissmiss from callback $type');
+      },
+    ).show();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showSuccesModal(context);
     });
   }
 
@@ -219,11 +252,37 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                 right: 0,
                                                 child: InkWell(
                                                   onTap: () {
-                                                    setState(() {
-                                                      isShowEditModal = true;
-                                                    });
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (_) =>
+                                                            EditModal(
+                                                              eventButton1: () {
+                                                                setState(() {
+                                                                  isShowBookingTableModal =
+                                                                      true;
+                                                                });
+                                                              },
+                                                              eventButton2: () {
+                                                                setState(() {
+                                                                  isShowMoveTableModal =
+                                                                      true;
+                                                                });
+                                                              },
+                                                              eventButton3: () {
+                                                                setState(() {
+                                                                  isShowSeeBillModal =
+                                                                      true;
+                                                                });
+                                                              },
+                                                              eventButton4: () {
+                                                                setState(() {
+                                                                  isShowPayBillModal =
+                                                                      true;
+                                                                });
+                                                              },
+                                                            ));
                                                   },
-                                                  child: Icon(
+                                                  child: const Icon(
                                                     Icons.edit,
                                                     color: Colors.white,
                                                   ),
@@ -297,7 +356,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(8.r),
-                                          color: Colors.blue,
+                                          color: Colors.green,
                                         ),
                                         width: 50,
                                         height: 50,
@@ -337,9 +396,35 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                 right: 0,
                                                 child: InkWell(
                                                   onTap: () {
-                                                    setState(() {
-                                                      isShowEditModal = true;
-                                                    });
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (_) =>
+                                                            EditModal(
+                                                              eventButton1: () {
+                                                                setState(() {
+                                                                  isShowBookingTableModal =
+                                                                      true;
+                                                                });
+                                                              },
+                                                              eventButton2: () {
+                                                                setState(() {
+                                                                  isShowMoveTableModal =
+                                                                      true;
+                                                                });
+                                                              },
+                                                              eventButton3: () {
+                                                                setState(() {
+                                                                  isShowSeeBillModal =
+                                                                      true;
+                                                                });
+                                                              },
+                                                              eventButton4: () {
+                                                                setState(() {
+                                                                  isShowPayBillModal =
+                                                                      true;
+                                                                });
+                                                              },
+                                                            ));
                                                   },
                                                   child: Icon(
                                                     Icons.edit,
@@ -415,7 +500,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(8.r),
-                                          color: Colors.blue,
+                                          color: Colors.orange,
                                         ),
                                         width: 50,
                                         height: 50,
@@ -455,9 +540,35 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                 right: 0,
                                                 child: InkWell(
                                                   onTap: () {
-                                                    setState(() {
-                                                      isShowEditModal = true;
-                                                    });
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (_) =>
+                                                            EditModal(
+                                                              eventButton1: () {
+                                                                setState(() {
+                                                                  isShowBookingTableModal =
+                                                                      true;
+                                                                });
+                                                              },
+                                                              eventButton2: () {
+                                                                setState(() {
+                                                                  isShowMoveTableModal =
+                                                                      true;
+                                                                });
+                                                              },
+                                                              eventButton3: () {
+                                                                setState(() {
+                                                                  isShowSeeBillModal =
+                                                                      true;
+                                                                });
+                                                              },
+                                                              eventButton4: () {
+                                                                setState(() {
+                                                                  isShowPayBillModal =
+                                                                      true;
+                                                                });
+                                                              },
+                                                            ));
                                                   },
                                                   child: Icon(
                                                     Icons.edit,
@@ -533,7 +644,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(8.r),
-                                          color: Colors.blue,
+                                          color: Colors.red,
                                         ),
                                         width: 50,
                                         height: 50,
@@ -572,11 +683,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                 top: 0,
                                                 right: 0,
                                                 child: InkWell(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      isShowEditModal = true;
-                                                    });
-                                                  },
+                                                  onTap: () {},
                                                   child: Icon(
                                                     Icons.edit,
                                                     color: Colors.white,
@@ -598,157 +705,6 @@ class _StaffBookingTableState extends State<StaffBookingTable>
               ],
             ),
           )),
-          Visibility(
-              visible: isShowEditModal,
-              child: Container(
-                  width: 1.sw,
-                  height: 1.sh,
-                  color: Colors.black.withOpacity(0.3),
-                  child: Center(
-                      child: Padding(
-                    padding: EdgeInsets.only(
-                        top: 100.h, bottom: 100.h, left: 35.w, right: 35.w),
-                    child: Container(
-                        width: 1.sw,
-                        height: 1.sh / 3,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.r),
-                          color: Colors.white,
-                        ),
-                        child: Column(
-                          children: [
-                            Expanded(
-                                child: SingleChildScrollView(
-                                    child: Padding(
-                              padding: EdgeInsets.all(20.w),
-                              child: Column(
-                                children: [
-                                  ButtonGradient(
-                                    color1:
-                                        const Color.fromRGBO(33, 82, 255, 1),
-                                    color2:
-                                        const Color.fromRGBO(33, 212, 253, 1),
-                                    event: () {
-                                      setState(() {
-                                        isShowEditModal = false;
-                                        isShowBookingTableModal = true;
-                                      });
-                                    },
-                                    text: "Quản lý bàn",
-                                    fontSize: 12.sp,
-                                    radius: 8.r,
-                                    textColor: Colors.white,
-                                  ),
-                                  ////////
-                                  SizedBox(
-                                    height: 30.h,
-                                  ),
-                                  //////
-                                  ButtonGradient(
-                                    color1:
-                                        const Color.fromRGBO(33, 82, 255, 1),
-                                    color2:
-                                        const Color.fromRGBO(33, 212, 253, 1),
-                                    event: () {
-                                      setState(() {
-                                        isShowEditModal = false;
-                                        isShowMoveTableModal = true;
-                                      });
-                                    },
-                                    text: "Chuyển bàn",
-                                    fontSize: 12.sp,
-                                    radius: 8.r,
-                                    textColor: Colors.white,
-                                  ),
-                                  /////
-                                  SizedBox(
-                                    height: 30.h,
-                                  ),
-                                  ButtonGradient(
-                                    color1:
-                                        const Color.fromRGBO(33, 82, 255, 1),
-                                    color2:
-                                        const Color.fromRGBO(33, 212, 253, 1),
-                                    event: () {
-                                      setState(() {
-                                        isShowEditModal = false;
-                                        isShowSeeBillModal = true;
-                                      });
-                                    },
-                                    text: "Xem hoá đơn",
-                                    fontSize: 12.sp,
-                                    radius: 8.r,
-                                    textColor: Colors.white,
-                                  ),
-                                  /////
-                                  SizedBox(
-                                    height: 30.h,
-                                  ),
-                                  ButtonGradient(
-                                    color1:
-                                        const Color.fromRGBO(33, 82, 255, 1),
-                                    color2:
-                                        const Color.fromRGBO(33, 212, 253, 1),
-                                    event: () {
-                                      setState(() {
-                                        isShowEditModal = false;
-                                        isShowPayBillModal = true;
-                                      });
-                                    },
-                                    text: "Thanh toán",
-                                    fontSize: 12.sp,
-                                    radius: 8.r,
-                                    textColor: Colors.white,
-                                  ),
-
-                                  ////
-                                ],
-                              ),
-                            ))),
-                            Container(
-                              width: 1.sw,
-                              height: 80.h,
-                              decoration: BoxDecoration(
-                                border: const Border(
-                                    top: BorderSide(
-                                        width: 1, color: Colors.grey),
-                                    bottom: BorderSide(
-                                        width: 0, color: Colors.grey),
-                                    left: BorderSide(
-                                        width: 0, color: Colors.grey),
-                                    right: BorderSide(
-                                        width: 0, color: Colors.grey)),
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(15.w),
-                                    bottomRight: Radius.circular(15.w)),
-                                // color: Colors.green,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  ButtonApp(
-                                    event: () {
-                                      setState(() {
-                                        print("CLOSE");
-                                        isShowEditModal = false;
-                                      });
-                                    },
-                                    text: "Đóng",
-                                    colorText: Colors.white,
-                                    backgroundColor:
-                                        Color.fromRGBO(131, 146, 171, 1),
-                                    outlineColor:
-                                        Color.fromRGBO(131, 146, 171, 1),
-                                  ),
-                                  SizedBox(
-                                    width: 20.w,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        )),
-                  )))),
           Visibility(
               visible: isShowBookingTableModal,
               child: BookingTableModal(
@@ -786,163 +742,60 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                 SizedBox(
                   height: 10.h,
                 ),
-                InkWell(
-                  onTap: () {},
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 100.w,
-                        height: 25.h,
-                      ),
-                      SizedBox(
-                        width: 10.w,
-                      ),
-                      Text(
-                        "hlaldo",
-                      ),
-                    ],
-                  ),
-                ),
                 ItemDrawer(
                   isExpand: false,
                   text: "Trang chủ",
                   icon: Icons.home,
                   subItem: [],
                 ),
-                TextApp(
-                  text: 'Quản lý',
-                  color: grey,
-                  fontsize: 20,
-                  fontWeight: FontWeight.bold,
+                SizedBox(
+                  height: 25.h,
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: ItemDrawer(
+                      isExpand: false,
+                      // item: DrawerItem.staff,
+                      text: 'Danh sách món ăn',
+                      subItem: [],
+                      icon: Icons.dinner_dining),
                 ),
                 SizedBox(
                   height: 25.h,
                 ),
-                ItemDrawer(
-                    // item: DrawerItem.stores,
-                    text: 'Cửa hàng',
-                    subItem: [
-                      SubItemDrawer(
-                          text: "Danh sách cửa hàng",
-                          event: () {
-                            Navigator.pop(context);
-                          }),
-                    ],
-                    icon: Icons.store),
-                SizedBox(
-                  height: 25.h,
-                ),
-                ItemDrawer(
-                    isExpand: false,
-                    // item: DrawerItem.staff,
-                    text: 'Nhân viên',
-                    subItem: [
-                      SubItemDrawer(
-                          text: "Danh sách nhân viên",
-                          event: () {
-                            Navigator.pop(context);
-                          }),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      SubItemDrawer(
-                          text: "Thêm nhân viên",
-                          event: () {
-                            Navigator.pop(context);
-                          })
-                    ],
-                    icon: Icons.safety_divider),
-                SizedBox(
-                  height: 25.h,
-                ),
-                ItemDrawer(
-                    // item: DrawerItem.menu,
-                    text: 'Thực đơn',
-                    subItem: [
-                      SubItemDrawer(
-                          text: "Danh sách món ăn",
-                          event: () {
-                            Navigator.pop(context);
-                          }),
-                    ],
-                    icon: Icons.local_dining_outlined),
-                SizedBox(
-                  height: 25.h,
-                ),
-                const Divider(
-                  color: Colors.black45,
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                TextApp(
-                  text: 'Tất cả cửa hàng',
-                  color: grey,
-                  fontsize: 20,
-                  fontWeight: FontWeight.bold,
+                GestureDetector(
+                  onTap: () {},
+                  child: ItemDrawer(
+                      isExpand: false,
+                      // item: DrawerItem.staff,
+                      text: 'Hóa đơn mang về',
+                      subItem: [],
+                      icon: Icons.receipt),
                 ),
                 SizedBox(
                   height: 25.h,
                 ),
-                ItemDrawer(
-                    // item: DrawerItem.stores,
-                    text: 'Cửa hàng 1',
-                    subItem: [
-                      SubItemDrawer(
-                          text: "Đặt bàn",
-                          event: () {
-                            Navigator.pop(context);
-                          }),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      SubItemDrawer(
-                          text: "Danh sách hóa đơn",
-                          event: () {
-                            Navigator.pop(context);
-                          }),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      SubItemDrawer(
-                          text: "Hóa đơn mang về",
-                          event: () {
-                            Navigator.pop(context);
-                          })
-                    ],
-                    icon: Icons.store),
+                GestureDetector(
+                  onTap: () {},
+                  child: ItemDrawer(
+                      isExpand: false,
+                      // item: DrawerItem.staff,
+                      text: 'Danh sách hóa đơn',
+                      subItem: [],
+                      icon: Icons.shopping_bag),
+                ),
                 SizedBox(
                   height: 25.h,
                 ),
-                ItemDrawer(
-                    // item: DrawerItem.stores,
-                    text: 'Cửa hàng 2',
-                    subItem: [
-                      SubItemDrawer(
-                          text: "Đặt bàn",
-                          event: () {
-                            Navigator.pop(context);
-                          }),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      SubItemDrawer(
-                          text: "Danh sách hóa đơn",
-                          event: () {
-                            Navigator.pop(context);
-                          }),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      SubItemDrawer(
-                          text: "Hóa đơn mang về",
-                          event: () {
-                            Navigator.pop(context);
-                          })
-                    ],
-                    icon: Icons.store),
+                GestureDetector(
+                  onTap: () {},
+                  child: ItemDrawer(
+                      isExpand: false,
+                      // item: DrawerItem.staff,
+                      text: 'Thông tin cá nhân',
+                      subItem: [],
+                      icon: Icons.person),
+                ),
               ],
             ),
             SizedBox(
@@ -981,14 +834,14 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                           ),
                           Center(
                             child: TextApp(
-                              text: "Ten Chu Cua Hang",
+                              text: "Ten nhan vien",
                               textAlign: TextAlign.center,
                               color: Colors.white,
                             ),
                           ),
                           Center(
                             child: TextApp(
-                                text: "chucuahang@gmail.com",
+                                text: "nhanvien@gmail.com",
                                 textAlign: TextAlign.center,
                                 color: Colors.white),
                           ),
@@ -1014,5 +867,147 @@ class _StaffBookingTableState extends State<StaffBookingTable>
         ),
       ),
     );
+  }
+}
+
+class EditModal extends StatelessWidget {
+  Function eventButton1;
+  Function eventButton2;
+  Function eventButton3;
+  Function eventButton4;
+  EditModal({
+    Key? key,
+    required this.eventButton1,
+    required this.eventButton2,
+    required this.eventButton3,
+    required this.eventButton4,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+        child: Padding(
+      padding:
+          EdgeInsets.only(top: 100.h, bottom: 100.h, left: 35.w, right: 35.w),
+      child: Container(
+          width: 1.sw,
+          height: 1.sh / 3,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.r),
+            color: Colors.white,
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: SingleChildScrollView(
+                      child: Padding(
+                padding: EdgeInsets.all(20.w),
+                child: Column(
+                  children: [
+                    ButtonGradient(
+                      color1: const Color.fromRGBO(33, 82, 255, 1),
+                      color2: const Color.fromRGBO(33, 212, 253, 1),
+                      event: () {
+                        eventButton1();
+                        Navigator.pop(context);
+
+                        // setState(() {
+                        //   isShowEditModal = false;
+                        //   isShowBookingTableModal = true;
+                        // });
+                      },
+                      text: "Quản lý bàn",
+                      fontSize: 12.sp,
+                      radius: 8.r,
+                      textColor: Colors.white,
+                    ),
+                    ////////
+                    SizedBox(
+                      height: 30.h,
+                    ),
+                    //////
+                    ButtonGradient(
+                      color1: const Color.fromRGBO(33, 82, 255, 1),
+                      color2: const Color.fromRGBO(33, 212, 253, 1),
+                      event: () {
+                        eventButton2();
+                        Navigator.pop(context);
+                      },
+                      text: "Chuyển bàn",
+                      fontSize: 12.sp,
+                      radius: 8.r,
+                      textColor: Colors.white,
+                    ),
+                    /////
+                    SizedBox(
+                      height: 30.h,
+                    ),
+                    ButtonGradient(
+                      color1: const Color.fromRGBO(33, 82, 255, 1),
+                      color2: const Color.fromRGBO(33, 212, 253, 1),
+                      event: () {
+                        eventButton3();
+                        Navigator.pop(context);
+                      },
+                      text: "Xem hoá đơn",
+                      fontSize: 12.sp,
+                      radius: 8.r,
+                      textColor: Colors.white,
+                    ),
+                    /////
+                    SizedBox(
+                      height: 30.h,
+                    ),
+                    ButtonGradient(
+                      color1: const Color.fromRGBO(33, 82, 255, 1),
+                      color2: const Color.fromRGBO(33, 212, 253, 1),
+                      event: () {
+                        eventButton4();
+                        Navigator.pop(context);
+                      },
+                      text: "Thanh toán",
+                      fontSize: 12.sp,
+                      radius: 8.r,
+                      textColor: Colors.white,
+                    ),
+
+                    ////
+                  ],
+                ),
+              ))),
+              Container(
+                width: 1.sw,
+                height: 80.h,
+                decoration: BoxDecoration(
+                  border: const Border(
+                      top: BorderSide(width: 1, color: Colors.grey),
+                      bottom: BorderSide(width: 0, color: Colors.grey),
+                      left: BorderSide(width: 0, color: Colors.grey),
+                      right: BorderSide(width: 0, color: Colors.grey)),
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(15.w),
+                      bottomRight: Radius.circular(15.w)),
+                  // color: Colors.green,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ButtonApp(
+                      event: () {
+                        Navigator.pop(context);
+                      },
+                      text: "Đóng",
+                      colorText: Colors.white,
+                      backgroundColor: Color.fromRGBO(131, 146, 171, 1),
+                      outlineColor: Color.fromRGBO(131, 146, 171, 1),
+                    ),
+                    SizedBox(
+                      width: 20.w,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )),
+    ));
   }
 }

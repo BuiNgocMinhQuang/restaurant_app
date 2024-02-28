@@ -541,9 +541,20 @@ class _AddStaffState extends State<AddStaff> {
                                   color2: const Color.fromRGBO(58, 65, 111, 1),
                                   event: () {
                                     if (_formField.currentState!.validate()) {
-                                      setState(() {
-                                        currentSection++;
-                                      });
+                                      // setState(() {
+                                      //   currentSection++;
+
+                                      // });
+                                      final isLastStep =
+                                          currentStep == getStep().length - 1;
+                                      if (isLastStep) {
+                                        print("Complete");
+                                      } else {
+                                        setState(() {
+                                          currentSection++;
+                                          currentStep += 1;
+                                        });
+                                      }
                                       surNameController.clear();
                                       nameController.clear();
                                       fullNameController.clear();
@@ -821,9 +832,15 @@ class _AddStaffState extends State<AddStaff> {
                                   color2:
                                       const Color.fromRGBO(235, 239, 244, 1),
                                   event: () {
-                                    setState(() {
-                                      currentSection--;
-                                    });
+                                    // setState(() {
+                                    //   currentSection--;
+                                    // });
+                                    currentStep == 0
+                                        ? null
+                                        : setState(() {
+                                            currentStep -= 1;
+                                            currentSection--;
+                                          });
                                   },
                                   text: "Về trước",
                                   fontSize: 12.sp,
@@ -838,9 +855,20 @@ class _AddStaffState extends State<AddStaff> {
                                   color2: const Color.fromRGBO(58, 65, 111, 1),
                                   event: () {
                                     if (_formField2.currentState!.validate()) {
-                                      setState(() {
-                                        currentSection++;
-                                      });
+                                      // setState(() {
+                                      //   currentSection++;
+                                      //   currentStep += 1;
+                                      // });
+                                      final isLastStep =
+                                          currentStep == getStep().length - 1;
+                                      if (isLastStep) {
+                                        print("Complete");
+                                      } else {
+                                        setState(() {
+                                          currentStep += 1;
+                                          currentSection++;
+                                        });
+                                      }
                                       addressController.clear();
                                     }
                                   },
@@ -1012,9 +1040,15 @@ class _AddStaffState extends State<AddStaff> {
                                 color1: const Color.fromRGBO(206, 212, 218, 1),
                                 color2: const Color.fromRGBO(235, 239, 244, 1),
                                 event: () {
-                                  setState(() {
-                                    currentSection--;
-                                  });
+                                  // setState(() {
+                                  //   currentSection--;
+                                  // });
+                                  currentStep == 0
+                                      ? null
+                                      : setState(() {
+                                          currentStep -= 1;
+                                          currentSection--;
+                                        });
                                 },
                                 text: "Về trước",
                                 fontSize: 12.sp,
@@ -1027,7 +1061,17 @@ class _AddStaffState extends State<AddStaff> {
                               child: ButtonGradient(
                                 color1: const Color.fromRGBO(20, 23, 39, 1),
                                 color2: const Color.fromRGBO(58, 65, 111, 1),
-                                event: () {},
+                                event: () {
+                                  final isLastStep =
+                                      currentStep == getStep().length - 1;
+                                  if (isLastStep) {
+                                    print("Complete");
+                                  } else {
+                                    setState(() {
+                                      currentStep += 1;
+                                    });
+                                  }
+                                },
                                 text: "Lưu",
                                 fontSize: 12.sp,
                                 radius: 8.r,
@@ -1057,9 +1101,28 @@ class _AddStaffState extends State<AddStaff> {
     });
   }
 
+  List<Step> getStep() => [
+        Step(
+            isActive: currentStep >= 0,
+            state: currentStep > 0 ? StepState.complete : StepState.indexed,
+            title: Text(""),
+            content: Container()),
+        Step(
+            isActive: currentStep >= 1,
+            state: currentStep > 1 ? StepState.complete : StepState.indexed,
+            title: Text(""),
+            content: Container()),
+        Step(
+            isActive: currentStep >= 2,
+            state: currentStep > 2 ? StepState.complete : StepState.indexed,
+            title: Text(""),
+            content: Container())
+      ];
+  int currentStep = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text("Thêm nhân viên"),
       ),
@@ -1072,12 +1135,43 @@ class _AddStaffState extends State<AddStaff> {
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(40.w),
+                    padding: EdgeInsets.only(left: 40.w, right: 40.w),
                     child: Container(
-                      width: 1.sw,
-                      height: 30.h,
-                      color: Colors.black,
-                    ),
+                        width: 1.sw,
+                        height: 100.h,
+                        // color: Colors.white,
+                        child: Theme(
+                          data: ThemeData(canvasColor: Colors.white),
+                          child: Stepper(
+                            currentStep: currentStep,
+                            type: StepperType.horizontal,
+                            steps: getStep(),
+                            onStepTapped: (step) {
+                              setState(() {
+                                currentStep = step;
+                                currentSection = step + 1;
+                              });
+                            },
+                            onStepContinue: () {
+                              final isLastStep =
+                                  currentStep == getStep().length - 1;
+                              if (isLastStep) {
+                                print("Complete");
+                              } else {
+                                setState(() {
+                                  currentStep += 1;
+                                });
+                              }
+                            },
+                            onStepCancel: () {
+                              currentStep == 0
+                                  ? null
+                                  : setState(() {
+                                      currentStep -= 1;
+                                    });
+                            },
+                          ),
+                        )),
                   ),
                   sectionController()
                   // AboutStaffModal()

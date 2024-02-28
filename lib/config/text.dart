@@ -33,3 +33,22 @@ const String storeImage = "Hình ảnh về cửa hàng";
 const String bookingTable = "Đặt bàn";
 const String invoiceList = "Danh sách hóa đơn";
 const String takeHomeReceipt = "Hóa đơn mang về";
+const String lockAccountDes =
+    "Một khi bạn khóa tài khoản này, thì tài khoản này không thể đăng nhập. Xin hãy chắc chắn.";
+const String youWantToFixAccountStatus =
+    "Bạn muốn sửa trạng thái tài khoản này.";
+const String allYourFoodHere =
+    "Tất cả món ăn của các cửa hàng của bạn đều sẽ được hiển thị tại đây.";
+const String allowFoodReady =
+    "Nếu bạn sẵn sàng mở bán cho món ăn này, bạn phải cấp phép tại đây.";
+const String createFoodInEachYourStore =
+    "Lưu ý: sẽ tạo món ở mỗi cửa hàng bạn chọn";
+const String foodInfor = "Thông tin món";
+const String foodName = "Tên món ăn";
+const String type = "Loại";
+const String chooseType = "Chọn loại";
+const String next = "Tiếp";
+const String back = "Về trước";
+const String image = "Hình ảnh";
+const String foodImage = "Hình ảnh món ăn";
+const String addPictureHere = "Thêm hình ảnh ở đây";

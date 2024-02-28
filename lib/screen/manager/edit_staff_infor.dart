@@ -16,19 +16,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
-class StaffUserInformation extends StatefulWidget {
-  const StaffUserInformation({super.key});
+class EditStaffInformation extends StatefulWidget {
+  const EditStaffInformation({super.key});
 
   @override
-  State<StaffUserInformation> createState() => _StaffUserInformationState();
+  State<EditStaffInformation> createState() => _EditStaffInformationState();
 }
 
-class _StaffUserInformationState extends State<StaffUserInformation> {
+class _EditStaffInformationState extends State<EditStaffInformation> {
   final _formField1 = GlobalKey<FormState>();
   final _formField2 = GlobalKey<FormState>();
   bool currentPasswordVisible = true;
   bool newPasswordVisible = true;
   bool reNewPasswordVisible = true;
+  bool light = false;
   final surNameController = TextEditingController();
   final nameController = TextEditingController();
   final fullNameController = TextEditingController();
@@ -82,7 +83,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Thông tin cá nhân"),
+        title: Text("Thông tin nhân viên"),
       ),
       body: SafeArea(
           child: SingleChildScrollView(
@@ -1423,168 +1424,134 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                     ),
                   ),
                   space25H,
+//Status Account
+
+                  Padding(
+                    padding:
+                        EdgeInsets.only(top: 20.h, left: 10.w, right: 10.w),
+                    child: Container(
+                        width: double.infinity,
+                        // height: heightView / 2,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.r),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: const Offset(
+                                  0, 3), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(20.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Trạng thái tài khoản",
+                                style: TextStyle(
+                                  color: const Color.fromRGBO(52, 71, 103, 1),
+                                  fontFamily: "Icomoon",
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24.sp,
+                                ),
+                              ),
+                              space10H,
+                              TextApp(
+                                text: lockAccountDes,
+                                color: blueText,
+                                fontsize: 12.sp,
+                              ),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 50.w,
+                                        height: 30.w,
+                                        child: FittedBox(
+                                          fit: BoxFit.fill,
+                                          child: CupertinoSwitch(
+                                            value: light,
+                                            activeColor: const Color.fromRGBO(
+                                                58, 65, 111, .95),
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                light = value;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      space20W,
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          TextApp(
+                                              text: "Xác nhận",
+                                              fontsize: 12.sp,
+                                              fontWeight: FontWeight.bold,
+                                              color: blueText),
+                                          TextApp(
+                                            text: youWantToFixAccountStatus,
+                                            fontsize: 12.sp,
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                              space20H,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: 200.w,
+                                    child: ButtonGradient(
+                                      color1:
+                                          const Color.fromRGBO(245, 57, 57, 1),
+                                      color2:
+                                          const Color.fromRGBO(251, 207, 51, 1),
+                                      event: () {
+                                        if (_formField2.currentState!
+                                            .validate()) {
+                                          _showUpdatePasswordModal(context);
+                                          currentPassworldController.clear();
+                                          newPassworldController.clear();
+                                          reNewPassworldController.clear();
+                                        }
+                                      },
+                                      text: "Chặn tài khoản",
+                                      fontSize: 12.sp,
+                                      radius: 8.r,
+                                      textColor: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                            ],
+                          ),
+                        )),
+                  ),
+                  space30H,
 
                   CopyRightText(),
                   space35H,
                 ],
               ))),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 100.w,
-                  height: 100.w,
-                  child: Image.asset(
-                    "assets/images/logo-thv.png",
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                const Divider(
-                  color: Colors.black45,
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                TextApp(
-                  text: 'Tất cả cửa hàng',
-                  color: grey,
-                  fontsize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: 25.h,
-                ),
-                ItemDrawer(
-                    // item: DrawerItem.stores,
-                    text: 'Cửa hàng 1',
-                    subItem: [
-                      SubItemDrawer(
-                          text: "Đặt bàn",
-                          event: () {
-                            Navigator.pop(context);
-                          }),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      SubItemDrawer(
-                          text: "Danh sách hóa đơn",
-                          event: () {
-                            Navigator.pop(context);
-                          }),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      SubItemDrawer(
-                          text: "Hóa đơn mang về",
-                          event: () {
-                            Navigator.pop(context);
-                          })
-                    ],
-                    icon: Icons.store),
-                SizedBox(
-                  height: 25.h,
-                ),
-                ItemDrawer(
-                    // item: DrawerItem.stores,
-                    text: 'Cửa hàng 2',
-                    subItem: [
-                      SubItemDrawer(
-                          text: "Đặt bàn",
-                          event: () {
-                            Navigator.pop(context);
-                          }),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      SubItemDrawer(
-                          text: "Danh sách hóa đơn",
-                          event: () {
-                            Navigator.pop(context);
-                          }),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      SubItemDrawer(
-                          text: "Hóa đơn mang về",
-                          event: () {
-                            Navigator.pop(context);
-                          })
-                    ],
-                    icon: Icons.store),
-              ],
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            Padding(
-                padding: EdgeInsets.all(15.w),
-                child: Stack(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: 180.h,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: const DecorationImage(
-                            image: AssetImage("assets/images/curved9.jpg"),
-                            fit: BoxFit.fill,
-                          )),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(15.w),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white),
-                            child: Icon(Icons.power_settings_new_outlined),
-                          ),
-                          SizedBox(
-                            height: 15.h,
-                          ),
-                          Center(
-                            child: TextApp(
-                              text: "Ten Chu Cua Hang",
-                              textAlign: TextAlign.center,
-                              color: Colors.white,
-                            ),
-                          ),
-                          Center(
-                            child: TextApp(
-                                text: "chucuahang@gmail.com",
-                                textAlign: TextAlign.center,
-                                color: Colors.white),
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          ButtonGradient(
-                            color1: Colors.white,
-                            color2: Colors.white,
-                            event: () {},
-                            text: "Đăng xuất",
-                            textColor: Colors.black,
-                            radius: 8.w,
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ))
-          ],
-        ),
-      ),
     );
   }
 }

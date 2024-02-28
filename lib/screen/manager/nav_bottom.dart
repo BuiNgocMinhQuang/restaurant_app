@@ -51,6 +51,7 @@ class _NavBottomMangerState extends State<NavBottomManger> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
       bottomNavigationBar: BottomAppBar(
+        color: Colors.blue,
         shape: CircularNotchedRectangle(),
         child: Container(
           height: 60.h,
@@ -77,12 +78,12 @@ class _NavBottomMangerState extends State<NavBottomManger> {
                           Icons.store,
                           size: 32.w,
                           color:
-                              _selectedIndex == 0 ? Colors.blue : Colors.grey,
+                              _selectedIndex == 0 ? Colors.white : Colors.black,
                         ),
                         TextApp(
                           text: "Cửa hàng",
                           color:
-                              _selectedIndex == 0 ? Colors.blue : Colors.grey,
+                              _selectedIndex == 0 ? Colors.white : Colors.black,
                           fontsize: 12.sp,
                         )
                       ],
@@ -104,12 +105,12 @@ class _NavBottomMangerState extends State<NavBottomManger> {
                           Icons.person_add,
                           size: 32.w,
                           color:
-                              _selectedIndex == 1 ? Colors.blue : Colors.grey,
+                              _selectedIndex == 1 ? Colors.white : Colors.black,
                         ),
                         TextApp(
                           text: "Nhân viên",
                           color:
-                              _selectedIndex == 1 ? Colors.blue : Colors.grey,
+                              _selectedIndex == 1 ? Colors.white : Colors.black,
                           fontsize: 12.sp,
                         )
                       ],
@@ -139,12 +140,12 @@ class _NavBottomMangerState extends State<NavBottomManger> {
                           Icons.person,
                           size: 32.w,
                           color:
-                              _selectedIndex == 3 ? Colors.blue : Colors.grey,
+                              _selectedIndex == 3 ? Colors.white : Colors.black,
                         ),
                         TextApp(
                           text: "Cá nhân",
                           color:
-                              _selectedIndex == 3 ? Colors.blue : Colors.grey,
+                              _selectedIndex == 3 ? Colors.white : Colors.black,
                           fontsize: 12.sp,
                         )
                       ],
@@ -166,12 +167,12 @@ class _NavBottomMangerState extends State<NavBottomManger> {
                           Icons.notifications,
                           size: 32.w,
                           color:
-                              _selectedIndex == 4 ? Colors.blue : Colors.grey,
+                              _selectedIndex == 4 ? Colors.white : Colors.black,
                         ),
                         TextApp(
                           text: "Thông báo",
                           color:
-                              _selectedIndex == 4 ? Colors.blue : Colors.grey,
+                              _selectedIndex == 4 ? Colors.white : Colors.black,
                           fontsize: 12.sp,
                         )
                       ],

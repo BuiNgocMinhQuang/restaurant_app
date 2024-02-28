@@ -9,8 +9,11 @@ class AppRouterContants {
   static const String managerBroughtReceiptRouterName = 'ManagerBroughtReceipt';
   static const String managerBookingTableRouterName = 'ManagerBookingTable';
   static const String managerAddStaffRouterName = 'ManagerAddStaff';
+  static const String managerAddFoodRouterName = 'ManagerAddFood';
   static const String managerListStaffRouterName = 'ManagerListStaff';
-
+  static const String managerEditStaffInformationRouterName =
+      'ManagerEditStaffInformation';
+  static const String managerListFoodRoutername = 'ManagerListFood';
   //const of Staff
   static const String staffSignInRouterName = 'StaffSignIn';
   static const String staffForgotpasswordRouterName = 'StaffForgotPassword';

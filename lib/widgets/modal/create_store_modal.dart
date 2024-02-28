@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app_restaurant/config/colors.dart';
+import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
@@ -288,8 +289,21 @@ class _CreateStoreModalState extends State<CreateStoreModal> {
                           ),
                           Container(
                               width: 1.sw,
-                              height: 250.h,
-                              color: Colors.amber,
+                              // height: 250.h,
+
+                              decoration: BoxDecoration(
+                                border: const Border(
+                                    top: BorderSide(
+                                        width: 1, color: Colors.grey),
+                                    bottom: BorderSide(
+                                        width: 1, color: Colors.grey),
+                                    left: BorderSide(
+                                        width: 1, color: Colors.grey),
+                                    right: BorderSide(
+                                        width: 1, color: Colors.grey)),
+                                borderRadius: BorderRadius.circular(15.w),
+                                // color: Colors.amber,
+                              ),
                               child: Column(
                                 children: [
                                   QuillProvider(
@@ -297,31 +311,85 @@ class _CreateStoreModalState extends State<CreateStoreModal> {
                                           controller: _controllerQuill),
                                       child: Column(
                                         children: [
-                                          QuillToolbar(
-                                            configurations:
-                                                QuillToolbarConfigurations(
-                                              toolbarIconAlignment:
-                                                  WrapAlignment.start,
-                                              showColorButton: false,
-                                              showCodeBlock: false,
-                                              showHeaderStyle: false,
-                                              showSearchButton: false,
-                                              showFontFamily: false,
-                                              showLeftAlignment: false,
-                                              showRightAlignment: false,
-                                              showCenterAlignment: false,
-                                              showQuote: false,
-                                              showUndo: false,
-                                              showRedo: false,
-                                              showDirection: false,
-                                            ),
-                                          ),
                                           Container(
-                                            color: Colors.red,
-                                            height: 100.h,
+                                              width: 1.sw,
+                                              decoration: const BoxDecoration(
+                                                border: Border(
+                                                    top: BorderSide(
+                                                        width: 0,
+                                                        color: Colors.grey),
+                                                    bottom: BorderSide(
+                                                        width: 1,
+                                                        color: Colors.grey),
+                                                    left: BorderSide(
+                                                        width: 0,
+                                                        color: Colors.grey),
+                                                    right: BorderSide(
+                                                        width: 0,
+                                                        color: Colors.grey)),
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(10.w),
+                                                child: const QuillToolbar(
+                                                  configurations:
+                                                      QuillToolbarConfigurations(
+                                                          toolbarIconAlignment:
+                                                              WrapAlignment
+                                                                  .center,
+                                                          showFontFamily: true,
+                                                          showFontSize: false,
+                                                          showBoldButton: true,
+                                                          showItalicButton:
+                                                              true,
+                                                          showSmallButton:
+                                                              false,
+                                                          showUnderLineButton:
+                                                              true,
+                                                          showStrikeThrough:
+                                                              false,
+                                                          showInlineCode: false,
+                                                          showColorButton:
+                                                              false,
+                                                          showBackgroundColorButton:
+                                                              false,
+                                                          showClearFormat:
+                                                              false,
+                                                          showAlignmentButtons:
+                                                              true,
+                                                          showLeftAlignment:
+                                                              true,
+                                                          showCenterAlignment:
+                                                              true,
+                                                          showRightAlignment:
+                                                              true,
+                                                          showJustifyAlignment:
+                                                              true,
+                                                          showHeaderStyle:
+                                                              false,
+                                                          showListNumbers: true,
+                                                          showListBullets: true,
+                                                          showListCheck: false,
+                                                          showCodeBlock: false,
+                                                          showQuote: false,
+                                                          showIndent: false,
+                                                          showLink: true,
+                                                          showUndo: false,
+                                                          showRedo: false,
+                                                          showDirection: false,
+                                                          showSearchButton:
+                                                              false,
+                                                          showSubscript: false,
+                                                          showSuperscript:
+                                                              false),
+                                                ),
+                                              )),
+                                          // space20H,
+                                          Container(
+                                            margin: EdgeInsets.all(5.w),
+                                            height: 200.h,
                                             child: QuillEditor.basic(
                                               configurations:
-                                                  QuillEditorConfigurations(
+                                                  const QuillEditorConfigurations(
                                                 readOnly: false,
                                               ),
                                             ),
@@ -343,63 +411,63 @@ class _CreateStoreModalState extends State<CreateStoreModal> {
                             height: 15.h,
                           ),
                           OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.r),
+                              style: OutlinedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.r),
+                                ),
+                                backgroundColor: Colors.white,
+                                side:
+                                    BorderSide(color: Colors.grey, width: 1), //
                               ),
-                              backgroundColor: Colors.white,
-                              side: BorderSide(color: Colors.grey, width: 1), //
-                            ),
-                            onPressed: () {
-                              selectImages();
-                            },
-                            child: Container(
-                              width: 1.sw,
-                              height: 300.h,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 200,
-                                    height: 100,
-                                    color: Colors.blue,
-                                    child: GridView.builder(
-                                        itemCount: widget.imageFileList!.length,
-                                        gridDelegate:
-                                            SliverGridDelegateWithFixedCrossAxisCount(
-                                                crossAxisCount: 3),
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return Image.file(
-                                            File(widget
-                                                .imageFileList![index].path),
-                                            fit: BoxFit.cover,
-                                          );
-                                        }),
-                                    // child: selectedImage != null
-                                    //     ? Image.file(selectedImage!)
-                                    //     : null,
-                                  ),
-                                  SizedBox(
-                                    height: 20.h,
-                                  ),
-                                  // ButtonGradient(
-                                  //   color1:
-                                  //       const Color.fromRGBO(33, 82, 255, 1),
-                                  //   color2:
-                                  //       const Color.fromRGBO(33, 212, 253, 1),
-                                  //   event: () {
-                                  //     selectImages();
-                                  //   },
-                                  //   text: "Chọn ảnh từ thiết bị",
-                                  //   fontSize: 12.sp,
-                                  //   radius: 8.r,
-                                  //   textColor: Colors.white,
-                                  // ),
-                                ],
-                              ),
-                            ),
-                          ),
+                              onPressed: () {
+                                selectImages();
+                              },
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: GridView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: widget.imageFileList!.length,
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2),
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                              width: 100.w,
+                                              height: 100.w,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(15.w),
+                                                child: Image.file(
+                                                  File(widget
+                                                      .imageFileList![index]
+                                                      .path),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              )),
+                                          space10H,
+                                          InkWell(
+                                            onTap: () {
+                                              deleteImages(
+                                                  widget.imageFileList![index]);
+                                            },
+                                            child: TextApp(
+                                              text: 'Xóa hình ảnh',
+                                              color: Colors.blue,
+                                            ),
+                                          )
+                                        ],
+                                      );
+                                    }),
+                              )),
                         ],
                       ),
                     ),
@@ -482,5 +550,10 @@ class _CreateStoreModalState extends State<CreateStoreModal> {
       widget.imageFileList!.addAll(selectedImages);
     }
     setState(() {});
-  } //sele
+  } //selecte multi image
+
+  void deleteImages(data) {
+    widget.imageFileList!.remove(data);
+    setState(() {});
+  }
 }
