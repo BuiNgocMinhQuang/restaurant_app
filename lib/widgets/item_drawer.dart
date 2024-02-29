@@ -4,24 +4,29 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ItemDrawer extends StatelessWidget {
   Color textColor;
+  Color backgroundIconColor;
+  Color iconColor;
   double fontSize;
   double iconSize;
   IconData icon;
+
   // DrawerItem item;
   final String text;
   bool isExpand;
   List<Widget> subItem;
-  ItemDrawer({
-    Key? key,
-    required this.text,
-    required this.subItem,
-    required this.icon,
-    // required this.item,
-    this.isExpand = true,
-    this.iconSize = 0,
-    this.fontSize = 0,
-    this.textColor = Colors.black,
-  }) : super(key: key);
+  ItemDrawer(
+      {Key? key,
+      required this.text,
+      required this.subItem,
+      required this.icon,
+      // required this.item,
+      this.isExpand = true,
+      this.iconSize = 0,
+      this.fontSize = 0,
+      this.textColor = Colors.black,
+      this.backgroundIconColor = const Color.fromRGBO(233, 236, 239, 1),
+      this.iconColor = Colors.black})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +39,7 @@ class ItemDrawer extends StatelessWidget {
                 height: 40.w,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
-                  color: Color.fromRGBO(233, 236, 239, 1),
+                  color: backgroundIconColor,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.5),
@@ -47,10 +52,13 @@ class ItemDrawer extends StatelessWidget {
                 child: Icon(
                   icon,
                   size: iconSize == 0 ? 20.w : iconSize,
-                  color: Color.fromRGBO(17, 17, 17, 1),
+                  color: iconColor,
                 ),
               ),
-              title: Text(text),
+              title: Text(
+                text,
+                style: TextStyle(color: textColor),
+              ),
               children: subItem)
           : ListTile(
               leading: Container(
@@ -58,7 +66,8 @@ class ItemDrawer extends StatelessWidget {
                 height: 40.w,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
-                  color: Color.fromRGBO(233, 236, 239, 1),
+                  // color: Color.fromRGBO(233, 236, 239, 1),
+                  color: backgroundIconColor,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.5),
@@ -71,10 +80,13 @@ class ItemDrawer extends StatelessWidget {
                 child: Icon(
                   icon,
                   size: iconSize == 0 ? 20.w : iconSize,
-                  color: Color.fromRGBO(17, 17, 17, 1),
+                  color: iconColor,
                 ),
               ),
-              title: Text(text),
+              title: Text(
+                text,
+                style: TextStyle(color: textColor),
+              ),
             ),
     );
   }

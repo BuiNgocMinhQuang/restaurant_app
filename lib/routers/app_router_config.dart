@@ -9,26 +9,43 @@ import 'package:app_restaurant/screen/manager/auth/forgot_password.dart';
 import 'package:app_restaurant/screen/manager/edit_staff_infor.dart';
 import 'package:app_restaurant/screen/manager/home.dart';
 import 'package:app_restaurant/screen/manager/list_food.dart';
+import 'package:app_restaurant/screen/manager/manage_store.dart';
 import 'package:app_restaurant/screen/manager/nav_bottom.dart';
 import 'package:app_restaurant/screen/manager/list_bill.dart';
 import 'package:app_restaurant/screen/manager/list_staff.dart';
-import 'package:app_restaurant/screen/manager/stores.dart';
+import 'package:app_restaurant/screen/manager/staff_list.dart';
+import 'package:app_restaurant/screen/manager/list_stores.dart';
 import 'package:app_restaurant/screen/staff/auth/forgot_password.dart';
 import 'package:app_restaurant/screen/staff/auth/signin.dart';
 import 'package:app_restaurant/screen/staff/home.dart';
 import 'package:app_restaurant/screen/staff/list_food.dart';
-import 'package:app_restaurant/screen/staff/nav_bottom.dart';
+
+import 'package:app_restaurant/screen/staff/staff_bottom_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class NyAppRouter {
   final GoRouter testRouter = GoRouter(routes: <RouteBase>[
+    // GoRoute(
+    //     name: "111",
+    //     path: '/',
+    //     builder: (BuildContext context, GoRouterState state) {
+    //       return ListStores();
+    //     }),
     GoRoute(
-        name: AppRouterContants.managerListFoodRoutername,
+        name: "2222",
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return StaffBookingTable();
+          return StaffFabTab(
+            selectedIndex: 2,
+          );
         }),
+    // GoRoute(
+    //     name: "motcaiten",
+    //     path: '/staff_list_food',
+    //     builder: (BuildContext context, GoRouterState state) {
+    //       return StaffList();
+    //     }),
   ]);
   final GoRouter router = GoRouter(routes: <RouteBase>[
     //Router Manager
@@ -58,10 +75,16 @@ class NyAppRouter {
           return const NavBottomManger();
         }),
     GoRoute(
-        name: AppRouterContants.managerStoresRouterName,
-        path: '/manager_stores',
+        name: AppRouterContants.managerListStoresRouterName,
+        path: '/manager_list_stores',
         builder: (BuildContext context, GoRouterState state) {
-          return const Stores();
+          return const ListStores();
+        }),
+    GoRoute(
+        name: AppRouterContants.managerManageStoresRouterName,
+        path: '/manager_manage_stores',
+        builder: (BuildContext context, GoRouterState state) {
+          return const ManageStore();
         }),
     GoRoute(
         name: AppRouterContants.managerListBillRouterName,
@@ -112,7 +135,9 @@ class NyAppRouter {
         name: AppRouterContants.staffHomeRouterName,
         path: '/staff_home',
         builder: (BuildContext context, GoRouterState state) {
-          return const NavBottomStaff();
+          return StaffFabTab(
+            selectedIndex: 2,
+          );
         }),
     GoRoute(
         name: AppRouterContants.staffListFoodRouterName,

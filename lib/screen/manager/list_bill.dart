@@ -1,4 +1,5 @@
 import 'package:app_restaurant/widgets/bill_infor_container.dart';
+import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/custom_tab.dart';
 import 'package:flutter/cupertino.dart';
@@ -87,8 +88,14 @@ class _ManagerListBillState extends State<ManagerListBill>
                       itemBuilder: (BuildContext context, int index) {
                         return Padding(
                           padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                          child:
-                              BillInforContainer(statusText: "Đã thanh toán"),
+                          child: BillInforContainer(
+                              typePopMenu: PopUpMenuBroughtReceipt(
+                                eventButton1: () {},
+                                eventButton2: () {},
+                                eventButton3: () {},
+                                eventButton4: () {},
+                              ),
+                              statusText: "Đã thanh toán"),
                         );
                       }),
                   //Tab Paid
@@ -98,8 +105,14 @@ class _ManagerListBillState extends State<ManagerListBill>
                       itemBuilder: (BuildContext context, int index) {
                         return Padding(
                           padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                          child:
-                              BillInforContainer(statusText: "Đã thanh toán"),
+                          child: BillInforContainer(
+                              typePopMenu: PopUpMenuBroughtReceipt(
+                                eventButton1: () {},
+                                eventButton2: () {},
+                                eventButton3: () {},
+                                eventButton4: () {},
+                              ),
+                              statusText: "Đã thanh toán"),
                         );
                       }),
                   //Tab Unpaid
@@ -110,6 +123,12 @@ class _ManagerListBillState extends State<ManagerListBill>
                         return Padding(
                           padding: EdgeInsets.only(left: 5.w, right: 5.w),
                           child: BillInforContainer(
+                            typePopMenu: PopUpMenuBroughtReceipt(
+                              eventButton1: () {},
+                              eventButton2: () {},
+                              eventButton3: () {},
+                              eventButton4: () {},
+                            ),
                             statusText: "Chưa thanh toán",
                           ),
                         );
@@ -121,8 +140,14 @@ class _ManagerListBillState extends State<ManagerListBill>
                       itemBuilder: (BuildContext context, int index) {
                         return Padding(
                           padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                          child:
-                              BillInforContainer(statusText: "Hóa đơn đã hủy"),
+                          child: BillInforContainer(
+                              typePopMenu: PopUpMenuBroughtReceipt(
+                                eventButton1: () {},
+                                eventButton2: () {},
+                                eventButton3: () {},
+                                eventButton4: () {},
+                              ),
+                              statusText: "Hóa đơn đã hủy"),
                         );
                       }),
                 ]),

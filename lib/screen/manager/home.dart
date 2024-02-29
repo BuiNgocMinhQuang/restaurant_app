@@ -1,9 +1,6 @@
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/screen/manager/stores.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
-import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/item_drawer.dart';
-import 'package:app_restaurant/widgets/modal/login_succes.dart';
 import 'package:app_restaurant/widgets/sub_item_drawer.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -12,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sticky_headers/sticky_headers.dart';
-import 'package:app_restaurant/widgets/modal/void_app.dart';
 
 class ManagerHome extends StatefulWidget {
   const ManagerHome({super.key});
@@ -142,12 +138,7 @@ class _ManagerHomeState extends State<ManagerHome> {
                     // item: DrawerItem.stores,
                     text: 'Cửa hàng',
                     subItem: [
-                      SubItemDrawer(
-                          text: "Danh sách cửa hàng",
-                          event: () {
-                            Navigator.pop(context);
-                            context.go('/manager_stores');
-                          }),
+                      SubItemDrawer(text: "Danh sách cửa hàng", event: () {}),
                     ],
                     icon: Icons.store),
                 SizedBox(

@@ -1,4 +1,6 @@
+import 'package:app_restaurant/screen/staff/staff_drawer.dart';
 import 'package:app_restaurant/widgets/bill_infor_container.dart';
+import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/custom_tab.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,10 +24,11 @@ class _StaffListBillState extends State<StaffListBill>
     );
     print("_tabController + ${_tabController.index}");
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Danh sách hoá đơn"),
-        ),
+        // appBar: AppBar(
+        //   title: Text("Danh sách hoá đơn"),
+        // ),
         backgroundColor: Colors.white,
+        // drawer: StaffSileMenu(),
         body: SafeArea(
             child: Padding(
           padding:
@@ -90,8 +93,14 @@ class _StaffListBillState extends State<StaffListBill>
                       itemBuilder: (BuildContext context, int index) {
                         return Padding(
                           padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                          child:
-                              BillInforContainer(statusText: "Đã thanh toán"),
+                          child: BillInforContainer(
+                              typePopMenu: PopUpMenuBroughtReceipt(
+                                eventButton1: () {},
+                                eventButton2: () {},
+                                eventButton3: () {},
+                                eventButton4: () {},
+                              ),
+                              statusText: "Đã thanh toán"),
                         );
                       }),
                   //Tab Paid
@@ -101,8 +110,14 @@ class _StaffListBillState extends State<StaffListBill>
                       itemBuilder: (BuildContext context, int index) {
                         return Padding(
                           padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                          child:
-                              BillInforContainer(statusText: "Đã thanh toán"),
+                          child: BillInforContainer(
+                              typePopMenu: PopUpMenuBroughtReceipt(
+                                eventButton1: () {},
+                                eventButton2: () {},
+                                eventButton3: () {},
+                                eventButton4: () {},
+                              ),
+                              statusText: "Đã thanh toán"),
                         );
                       }),
                   //Tab Unpaid
@@ -113,6 +128,12 @@ class _StaffListBillState extends State<StaffListBill>
                         return Padding(
                           padding: EdgeInsets.only(left: 5.w, right: 5.w),
                           child: BillInforContainer(
+                            typePopMenu: PopUpMenuBroughtReceipt(
+                              eventButton1: () {},
+                              eventButton2: () {},
+                              eventButton3: () {},
+                              eventButton4: () {},
+                            ),
                             statusText: "Chưa thanh toán",
                           ),
                         );
@@ -124,8 +145,14 @@ class _StaffListBillState extends State<StaffListBill>
                       itemBuilder: (BuildContext context, int index) {
                         return Padding(
                           padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                          child:
-                              BillInforContainer(statusText: "Hóa đơn đã hủy"),
+                          child: BillInforContainer(
+                              typePopMenu: PopUpMenuBroughtReceipt(
+                                eventButton1: () {},
+                                eventButton2: () {},
+                                eventButton3: () {},
+                                eventButton4: () {},
+                              ),
+                              statusText: "Hóa đơn đã hủy"),
                         );
                       }),
                 ]),

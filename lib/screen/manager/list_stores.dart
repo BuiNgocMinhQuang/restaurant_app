@@ -20,11 +20,11 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class Stores extends StatefulWidget {
-  const Stores({super.key});
+class ListStores extends StatefulWidget {
+  const ListStores({super.key});
 
   @override
-  State<Stores> createState() => _StoresState();
+  State<ListStores> createState() => _ListStoresState();
 }
 
 final List<String> bannerList = [
@@ -44,7 +44,7 @@ final List<String> staffList = [
 
 List<XFile>? imageFileList = [];
 
-class _StoresState extends State<Stores> {
+class _ListStoresState extends State<ListStores> {
   int activeIndex = 0;
   bool showModal = false;
   bool light = false;
@@ -149,7 +149,9 @@ class _StoresState extends State<Stores> {
                                                 CrossAxisAlignment.center,
                                             children: [
                                               ButtonApp(
-                                                event: () {},
+                                                event: () {
+                                                  context.go('/manage_store');
+                                                },
                                                 text: "Quản lý cửa hàng",
                                                 colorText: Color.fromRGBO(
                                                     23, 193, 232, 1),

@@ -1,4 +1,5 @@
 import 'package:app_restaurant/widgets/bill_infor_container.dart';
+import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/modal/booking_table_modal.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
@@ -237,6 +238,12 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                             return Padding(
                               padding: EdgeInsets.only(left: 5.w, right: 5.w),
                               child: BillInforContainer(
+                                  typePopMenu: PopUpMenuBroughtReceipt(
+                                    eventButton1: () {},
+                                    eventButton2: () {},
+                                    eventButton3: () {},
+                                    eventButton4: () {},
+                                  ),
                                   statusText: "Đã thanh toán"),
                             );
                           }),
@@ -248,6 +255,12 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                             return Padding(
                               padding: EdgeInsets.only(left: 5.w, right: 5.w),
                               child: BillInforContainer(
+                                typePopMenu: PopUpMenuBroughtReceipt(
+                                  eventButton1: () {},
+                                  eventButton2: () {},
+                                  eventButton3: () {},
+                                  eventButton4: () {},
+                                ),
                                 statusText: "Chưa thanh toán",
                               ),
                             );
@@ -260,6 +273,12 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                             return Padding(
                               padding: EdgeInsets.only(left: 5.w, right: 5.w),
                               child: BillInforContainer(
+                                  typePopMenu: PopUpMenuBroughtReceipt(
+                                    eventButton1: () {},
+                                    eventButton2: () {},
+                                    eventButton3: () {},
+                                    eventButton4: () {},
+                                  ),
                                   statusText: "Hóa đơn đã hủy"),
                             );
                           }),

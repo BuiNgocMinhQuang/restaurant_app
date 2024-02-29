@@ -1,6 +1,7 @@
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/fake_data.dart';
 import 'package:app_restaurant/config/space.dart';
+import 'package:app_restaurant/screen/staff/staff_drawer.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -47,9 +48,10 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        appBar: AppBar(
-          title: Text("Danh sách món ăn"),
-        ),
+        // appBar: AppBar(
+        //   title: Text("Danh sách món ăn"),
+        // ),
+        // drawer: StaffSileMenu(),
         body: SafeArea(
             child: Padding(
           padding: EdgeInsets.all(20.w),

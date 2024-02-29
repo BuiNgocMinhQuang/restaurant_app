@@ -2,7 +2,7 @@ import 'package:app_restaurant/screen/manager/add_staff.dart';
 import 'package:app_restaurant/screen/manager/home.dart';
 import 'package:app_restaurant/screen/manager/manager_infor.dart';
 import 'package:app_restaurant/screen/manager/notifications.dart';
-import 'package:app_restaurant/screen/manager/stores.dart';
+import 'package:app_restaurant/screen/manager/list_stores.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,7 @@ class NavBottomManger extends StatefulWidget {
 class _NavBottomMangerState extends State<NavBottomManger> {
   int _selectedIndex = 2;
   static const List<Widget> _widgetOptions = <Widget>[
-    Stores(),
+    ListStores(),
     AddStaff(),
     ManagerHome(),
     ManagerInformation(),
