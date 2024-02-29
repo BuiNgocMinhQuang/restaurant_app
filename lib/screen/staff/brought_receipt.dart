@@ -43,7 +43,7 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                           child: TabBar(
                               labelPadding:
                                   EdgeInsets.only(left: 20, right: 20),
-                              labelColor: Colors.black,
+                              labelColor: Colors.white,
                               unselectedLabelColor:
                                   Colors.black.withOpacity(0.5),
                               labelStyle: TextStyle(color: Colors.red),

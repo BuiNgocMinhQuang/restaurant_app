@@ -16,23 +16,18 @@ import 'package:app_restaurant/screen/manager/stores.dart';
 import 'package:app_restaurant/screen/staff/auth/forgot_password.dart';
 import 'package:app_restaurant/screen/staff/auth/signin.dart';
 import 'package:app_restaurant/screen/staff/home.dart';
+import 'package:app_restaurant/screen/staff/list_food.dart';
 import 'package:app_restaurant/screen/staff/nav_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class NyAppRouter {
   final GoRouter testRouter = GoRouter(routes: <RouteBase>[
-    // GoRoute(
-    //     name: AppRouterContants.managerListFoodRoutername,
-    //     path: '/',
-    //     builder: (BuildContext context, GoRouterState state) {
-    //       return const ListFood();
-    //     }),
     GoRoute(
-        name: AppRouterContants.managerAddFoodRouterName,
+        name: AppRouterContants.managerListFoodRoutername,
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return const StaffBookingTable();
+          return StaffBookingTable();
         }),
   ]);
   final GoRouter router = GoRouter(routes: <RouteBase>[
@@ -118,6 +113,12 @@ class NyAppRouter {
         path: '/staff_home',
         builder: (BuildContext context, GoRouterState state) {
           return const NavBottomStaff();
+        }),
+    GoRoute(
+        name: AppRouterContants.staffListFoodRouterName,
+        path: '/staff_list_food',
+        builder: (BuildContext context, GoRouterState state) {
+          return const ListFoodStaff();
         }),
   ]);
 }

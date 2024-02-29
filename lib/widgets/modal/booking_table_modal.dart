@@ -11,10 +11,12 @@ List<String> listtable = ["bàn 1", "bàn 2", "bàn 3"];
 
 class BookingTableModal extends StatefulWidget {
   Function eventCloseButton;
+  Function eventSaveButton;
   bool isUsingTable;
   BookingTableModal({
     Key? key,
     required this.eventCloseButton,
+    required this.eventSaveButton,
     this.isUsingTable = false,
   }) : super(key: key);
 
@@ -25,11 +27,58 @@ class BookingTableModal extends StatefulWidget {
 class _BookingTableModalState extends State<BookingTableModal>
     with TickerProviderStateMixin {
   final _popupCustomValidationKey = GlobalKey<DropdownSearchState<int>>();
+  TextEditingController _dateStartController = TextEditingController();
+
+  DateTime dateTime = DateTime(2022, 12, 24, 5, 30);
+
+  Future<DateTime?> pickDate() => showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2025));
+
+  Future<TimeOfDay?> pickTime() => showTimePicker(
+        context: context,
+        initialTime: TimeOfDay(hour: dateTime.hour, minute: dateTime.minute),
+      );
+
+  Future pickDateAndTime() async {
+    DateTime? date = await pickDate();
+    if (date == null) return;
+    TimeOfDay? time = await pickTime();
+    if (time == null) return;
+
+    final newDateTime =
+        DateTime(date.year, date.month, date.day, time.hour, time.minute);
+    setState(() {
+      dateTime = newDateTime;
+      _dateStartController.text = newDateTime.toString();
+    });
+  }
+
+  void selectDayStart() async {
+    DateTime? picked = await showDatePicker(
+        // helpText: 'Chọn ngày bắt đầu', // Can be used as title
+        // cancelText: 'Huỷ',
+        // confirmText: 'Xác nhận',
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2020),
+        lastDate: DateTime(2025));
+
+    if (picked != null) {
+      setState(() {
+        _dateStartController.text = picked.toString().split(" ")[0];
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     TabController _tabController = TabController(length: 3, vsync: this);
     TabController _tabSubController = TabController(length: 4, vsync: this);
-
+    final hours = dateTime.hour.toString().padLeft(2, '0');
+    final minute = dateTime.minute.toString().padLeft(2, '0');
     return Container(
         width: 1.sw,
         height: 1.sh,
@@ -127,8 +176,7 @@ class _BookingTableModalState extends State<BookingTableModal>
                         ),
                         Container(
                           width: 1.sw,
-                          // color: Colors.pink,
-                          height: 500,
+                          height: 600.h,
                           child: TabBarView(
                             controller: _tabController,
                             children: [
@@ -146,6 +194,9 @@ class _BookingTableModalState extends State<BookingTableModal>
                                     height: 10.h,
                                   ),
                                   TextField(
+                                    readOnly: true,
+                                    controller: _dateStartController,
+                                    onTap: pickDateAndTime,
                                     cursorColor:
                                         const Color.fromRGBO(73, 80, 87, 1),
                                     decoration: InputDecoration(
@@ -163,7 +214,6 @@ class _BookingTableModalState extends State<BookingTableModal>
                                           borderRadius:
                                               BorderRadius.circular(8.r),
                                         ),
-                                        hintText: 'Thời gian kết thúc',
                                         isDense: true,
                                         contentPadding: EdgeInsets.all(
                                             1.sw > 600 ? 20.w : 15.w)),
@@ -266,39 +316,48 @@ class _BookingTableModalState extends State<BookingTableModal>
                                     height: 10.h,
                                   ),
 
-                                  Expanded(
-                                    child: DropdownSearch.multiSelection(
-                                      key: _popupCustomValidationKey,
-                                      items: listtable,
-                                      popupProps: PopupPropsMultiSelection.dialog(
-                                          // validationWidgetBuilder:
-                                          //     (context, item) {
-                                          //   return Container(
-                                          //     color: Colors.blue[200],
-                                          //     height: 50.h,
-                                          //     child: Align(
-                                          //       alignment: Alignment.center,
-                                          //       child: MaterialButton(
-                                          //         child: Text('ĐÓNG'),
-                                          //         onPressed: () {
-                                          //           _popupCustomValidationKey
-                                          //               .currentState
-                                          //               ?.popupOnValidate();
-                                          //         },
-                                          //       ),
-                                          //     ),
-                                          //   );
-                                          // },
-                                          title: Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 15.w, top: 10.h),
-                                        child: TextApp(
-                                          text: "Chọn bàn để ghép",
-                                          fontsize: 16.sp,
-                                          fontWeight: FontWeight.bold,
-                                          color: blueText,
+                                  Container(
+                                    height: 50,
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          child: DropdownSearch.multiSelection(
+                                            key: _popupCustomValidationKey,
+                                            items: listtable,
+                                            popupProps: PopupPropsMultiSelection.dialog(
+                                                // validationWidgetBuilder:
+                                                //     (context, item) {
+                                                //   return Container(
+                                                //     color: Colors.blue[200],
+                                                //     height: 50.h,
+                                                //     child: Align(
+                                                //       alignment:
+                                                //           Alignment.center,
+                                                //       child: MaterialButton(
+                                                //         child: Text('ĐÓNG'),
+                                                //         onPressed: () {
+                                                //           print("odakd");
+                                                //           _popupCustomValidationKey
+                                                //               .currentState
+                                                //               ?.popupOnValidate();
+                                                //         },
+                                                //       ),
+                                                //     ),
+                                                //   );
+                                                // },
+                                                title: Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 15.w, top: 10.h),
+                                              child: TextApp(
+                                                text: "Chọn bàn để ghép",
+                                                fontsize: 16.sp,
+                                                fontWeight: FontWeight.bold,
+                                                color: blueText,
+                                              ),
+                                            )),
+                                          ),
                                         ),
-                                      )),
+                                      ],
                                     ),
                                   ),
 
@@ -480,7 +539,6 @@ class _BookingTableModalState extends State<BookingTableModal>
                       children: [
                         ButtonApp(
                           event: () {
-                            // widget.eventCloseButton();
                             widget.eventCloseButton();
                           },
                           text: "Đóng",
@@ -493,7 +551,7 @@ class _BookingTableModalState extends State<BookingTableModal>
                         ),
                         ButtonApp(
                           event: () {
-                            // widget.eventSaveButton();
+                            widget.eventSaveButton();
                           },
                           text: "Lưu",
                           colorText: Colors.white,

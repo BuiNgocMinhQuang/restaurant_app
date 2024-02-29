@@ -6,6 +6,7 @@ import 'package:app_restaurant/screen/manager/stores.dart';
 import 'package:app_restaurant/screen/staff/brought_receipt.dart';
 import 'package:app_restaurant/screen/staff/home.dart';
 import 'package:app_restaurant/screen/staff/list_bill.dart';
+import 'package:app_restaurant/screen/staff/list_food.dart';
 import 'package:app_restaurant/screen/staff/user_infor.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,12 +22,13 @@ class NavBottomStaff extends StatefulWidget {
 
 class _NavBottomStaffState extends State<NavBottomStaff> {
   int _selectedIndex = 2;
-  static const List<Widget> _widgetOptions = <Widget>[
-    AddStaff(),
-    StaffBroughtReceipt(),
+
+  static final List<Widget> _widgetOptions = <Widget>[
+    const ListFoodStaff(),
+    const StaffBroughtReceipt(),
     StaffBookingTable(),
-    StaffListBill(),
-    StaffUserInformation()
+    const StaffListBill(),
+    const StaffUserInformation()
   ];
 
   void _onItemTapped(int index) {

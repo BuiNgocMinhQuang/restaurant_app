@@ -1,9 +1,6 @@
-import 'package:app_restaurant/provider/drawer_provider.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,14 +18,9 @@ class MyApp extends StatelessWidget {
         print("Build lai Screen");
         return child!;
       },
-      child: MaterialApp.router(localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ], supportedLocales: const [
-        Locale('en'),
-        Locale('vi'),
-      ], debugShowCheckedModeBanner: false, routerConfig: NyAppRouter().router),
+      child: MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          routerConfig: NyAppRouter().router),
     );
   }
 }

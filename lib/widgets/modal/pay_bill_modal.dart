@@ -17,8 +17,19 @@ class PayBillModal extends StatefulWidget {
 List<String> options = ["Tiền mặt", "Thẻ", "Chuyển khoản"];
 
 class _PayBillModalState extends State<PayBillModal> {
+  final moneySaleController = TextEditingController();
+
   String currentOptions = options[0];
   int selectedOption = 1;
+  double totalMoney = 600000;
+  double moneyMustPay = 10000;
+  double moneySale = 0;
+
+  void caculateMoneyMustPay() {
+    moneyMustPay = totalMoney - moneySale;
+    print(moneyMustPay);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -93,8 +104,8 @@ class _PayBillModalState extends State<PayBillModal> {
                               padding: EdgeInsets.all(10.w),
                               child: Container(
                                 width: 1.sw,
-                                height: 100.h,
-                                color: Colors.green,
+                                // height: 100.h,
+                                // color: Colors.green,
                                 child: Column(
                                   children: [
                                     Container(
@@ -185,7 +196,92 @@ class _PayBillModalState extends State<PayBillModal> {
                                           ],
                                         ),
                                       ],
-                                    ),
+                                    )
+                                    // Column(
+                                    //   children: [
+                                    //     ListView.builder(
+                                    //         itemCount: 3,
+                                    //         itemBuilder: (context, index) {
+                                    //           return Row(
+                                    //             crossAxisAlignment:
+                                    //                 CrossAxisAlignment.center,
+                                    //             mainAxisAlignment:
+                                    //                 MainAxisAlignment
+                                    //                     .spaceBetween,
+                                    //             children: [
+                                    //               Column(
+                                    //                 mainAxisAlignment:
+                                    //                     MainAxisAlignment
+                                    //                         .center,
+                                    //                 children: [
+                                    //                   TextApp(
+                                    //                     text: "Tên món ăn",
+                                    //                     color: Colors.black,
+                                    //                     fontsize: 14.sp,
+                                    //                   ),
+                                    //                   TextApp(
+                                    //                     text: "thit heo nuong",
+                                    //                     color: Colors.black,
+                                    //                     fontsize: 14.sp,
+                                    //                   ),
+                                    //                 ],
+                                    //               ),
+                                    //               Column(
+                                    //                 mainAxisAlignment:
+                                    //                     MainAxisAlignment
+                                    //                         .center,
+                                    //                 children: [
+                                    //                   TextApp(
+                                    //                     text: "Số lượng",
+                                    //                     color: Colors.black,
+                                    //                     fontsize: 14.sp,
+                                    //                   ),
+                                    //                   TextApp(
+                                    //                     text: "3",
+                                    //                     color: Colors.black,
+                                    //                     fontsize: 14.sp,
+                                    //                   ),
+                                    //                 ],
+                                    //               ),
+                                    //               Column(
+                                    //                 mainAxisAlignment:
+                                    //                     MainAxisAlignment
+                                    //                         .center,
+                                    //                 children: [
+                                    //                   TextApp(
+                                    //                     text: "Giá",
+                                    //                     color: Colors.black,
+                                    //                     fontsize: 14.sp,
+                                    //                   ),
+                                    //                   TextApp(
+                                    //                     text: "200,000",
+                                    //                     color: Colors.black,
+                                    //                     fontsize: 14.sp,
+                                    //                   ),
+                                    //                 ],
+                                    //               ),
+                                    //               Column(
+                                    //                 mainAxisAlignment:
+                                    //                     MainAxisAlignment
+                                    //                         .center,
+                                    //                 children: [
+                                    //                   TextApp(
+                                    //                     text: "Tổng",
+                                    //                     color: Colors.black,
+                                    //                     fontsize: 14.sp,
+                                    //                   ),
+                                    //                   TextApp(
+                                    //                     text: "600,000",
+                                    //                     color: Colors.black,
+                                    //                     fontsize: 14.sp,
+                                    //                   ),
+                                    //                 ],
+                                    //               ),
+                                    //             ],
+                                    //           );
+                                    //         })
+                                    //   ],
+                                    // )
                                   ],
                                 ),
                               ),
@@ -244,7 +340,7 @@ class _PayBillModalState extends State<PayBillModal> {
                                         fontsize: 14.sp,
                                       ),
                                       TextApp(
-                                        text: "600,000",
+                                        text: totalMoney.toString(),
                                         color: Colors.black,
                                         fontsize: 14.sp,
                                       ),
@@ -268,6 +364,10 @@ class _PayBillModalState extends State<PayBillModal> {
                                         child: TextField(
                                           style: TextStyle(
                                               fontSize: 12.sp, color: grey),
+                                          controller: moneySaleController,
+                                          onEditingComplete: () {
+                                            caculateMoneyMustPay();
+                                          },
                                           cursorColor: grey,
                                           decoration: InputDecoration(
                                               fillColor: const Color.fromARGB(
@@ -305,7 +405,7 @@ class _PayBillModalState extends State<PayBillModal> {
                                         fontsize: 14.sp,
                                       ),
                                       TextApp(
-                                        text: "600,000",
+                                        text: moneyMustPay.toString(),
                                         color: Colors.black,
                                         fontsize: 14.sp,
                                       ),

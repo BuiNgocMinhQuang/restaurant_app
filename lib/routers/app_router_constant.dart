@@ -18,4 +18,5 @@ class AppRouterContants {
   static const String staffSignInRouterName = 'StaffSignIn';
   static const String staffForgotpasswordRouterName = 'StaffForgotPassword';
   static const String staffHomeRouterName = 'StaffHome';
+  static const String staffListFoodRouterName = 'StaffListFood';
 }

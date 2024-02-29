@@ -20,7 +20,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 class StaffBookingTable extends StatefulWidget {
-  const StaffBookingTable({super.key});
+  StaffBookingTable({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<StaffBookingTable> createState() => _StaffBookingTableState();
@@ -82,9 +84,12 @@ class _StaffBookingTableState extends State<StaffBookingTable>
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _showSuccesModal(context);
-    });
+
+    // if (widget.isLogin) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     _showSuccesModal(context);
+    //   });
+    // }
   }
 
   @override
@@ -709,6 +714,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
               visible: isShowBookingTableModal,
               child: BookingTableModal(
                 eventCloseButton: closeBookingModal,
+                eventSaveButton: closeBookingModal,
                 isUsingTable: true,
               )),
           Visibility(
@@ -752,7 +758,9 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                   height: 25.h,
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    // context.go("/staff_list_food");
+                  },
                   child: ItemDrawer(
                       isExpand: false,
                       // item: DrawerItem.staff,

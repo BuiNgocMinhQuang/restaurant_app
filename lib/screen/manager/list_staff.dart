@@ -55,7 +55,6 @@ class _ListStaffState extends State<ListStaff> {
         // helpText: 'Chọn ngày bắt đầu', // Can be used as title
         // cancelText: 'Huỷ',
         // confirmText: 'Xác nhận',
-        locale: const Locale('vi'),
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(2020),

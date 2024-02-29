@@ -1,7 +1,6 @@
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
-import 'package:app_restaurant/widgets/button/button_app.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/status_box.dart';
@@ -16,14 +15,14 @@ import 'package:go_router/go_router.dart';
 
 List<String> listState = ["Tất cả", "Đang hoạt động", "Đã chặn"];
 
-class ListFood extends StatefulWidget {
-  const ListFood({super.key});
+class ListFoodManager extends StatefulWidget {
+  const ListFoodManager({super.key});
 
   @override
-  State<ListFood> createState() => _ListFoodState();
+  State<ListFoodManager> createState() => _ListFoodManagerState();
 }
 
-class _ListFoodState extends State<ListFood> {
+class _ListFoodManagerState extends State<ListFoodManager> {
   TextEditingController _dateStartController = TextEditingController();
   TextEditingController _dateEndController = TextEditingController();
   String accountStatus = "isActive";
@@ -49,7 +48,6 @@ class _ListFoodState extends State<ListFood> {
         // helpText: 'Chọn ngày bắt đầu', // Can be used as title
         // cancelText: 'Huỷ',
         // confirmText: 'Xác nhận',
-        locale: const Locale('vi'),
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(2020),

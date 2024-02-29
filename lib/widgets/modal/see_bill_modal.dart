@@ -1,4 +1,5 @@
 import 'package:app_restaurant/config/colors.dart';
+import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/cupertino.dart';
@@ -325,17 +326,19 @@ class _SeeBillModalState extends State<SeeBillModal>
                                                                               children: [
                                                                                 Row(
                                                                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                  mainAxisAlignment: MainAxisAlignment.start,
                                                                                   children: [
                                                                                     SizedBox(
-                                                                                      width: 100.w,
-                                                                                      height: 100.w,
+                                                                                      width: 50.w,
+                                                                                      height: 50.w,
                                                                                       child: Image.asset(
                                                                                         "assets/images/banner1.png",
                                                                                         fit: BoxFit.cover,
                                                                                       ),
                                                                                     ),
+                                                                                    space50W,
                                                                                     Column(
+                                                                                      crossAxisAlignment: CrossAxisAlignment.center,
                                                                                       children: [
                                                                                         TextApp(text: "Ten mon an"),
                                                                                         TextApp(text: "Gia mon an")

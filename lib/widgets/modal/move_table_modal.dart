@@ -1,11 +1,12 @@
 import 'package:app_restaurant/config/colors.dart';
+import 'package:app_restaurant/config/fake_data.dart';
+import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-List listTable = ["ban so 2", "ban so 3", "ban so 4"];
 
 class MoveTableModal extends StatefulWidget {
   Function eventCloseButton;
@@ -126,12 +127,41 @@ class _MoveTableModalState extends State<MoveTableModal> {
                                     width: 20.w,
                                   ),
                                   Flexible(
-                                      fit: FlexFit.tight,
-                                      child: Container(
-                                        // width: 1.sw,
-                                        height: 25.h,
-                                        color: Colors.blue,
-                                      ))
+                                    fit: FlexFit.tight,
+                                    child: DropdownSearch(
+                                      validator: (value) {
+                                        if (value == "Chọn phòng") {
+                                          return canNotNull;
+                                        }
+                                        return null;
+                                      },
+                                      items: listTable,
+                                      dropdownDecoratorProps:
+                                          DropDownDecoratorProps(
+                                        dropdownSearchDecoration:
+                                            InputDecoration(
+                                          fillColor: const Color.fromARGB(
+                                              255, 226, 104, 159),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: Color.fromRGBO(
+                                                    214, 51, 123, 0.6),
+                                                width: 2.0),
+                                            borderRadius:
+                                                BorderRadius.circular(8.r),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.r),
+                                          ),
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.all(15.w),
+                                        ),
+                                      ),
+                                      onChanged: print,
+                                      selectedItem: "Chọn phòng",
+                                    ),
+                                  )
                                 ],
                               ),
                               SizedBox(

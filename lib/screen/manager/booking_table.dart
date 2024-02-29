@@ -427,6 +427,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                 visible: isShowBookingTableModal,
                 child: BookingTableModal(
                   eventCloseButton: closeBookingModal,
+                  eventSaveButton: closeBookingModal,
                   isUsingTable: true,
                 )),
             Visibility(

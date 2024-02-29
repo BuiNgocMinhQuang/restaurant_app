@@ -25,13 +25,13 @@ class _ManagerHomeState extends State<ManagerHome> {
   bool showModal = true;
   final ScrollController _scrollController = ScrollController();
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _showSuccesModal(context);
-    });
-  }
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     _showSuccesModal(context);
+  //   });
+  // }
 
   _showSuccesModal(context) {
     AwesomeDialog(
