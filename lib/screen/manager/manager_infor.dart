@@ -48,9 +48,6 @@ class _ManagerInformationState extends State<ManagerInformation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Thông tin cá nhân"),
-      ),
       body: SafeArea(
           child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),

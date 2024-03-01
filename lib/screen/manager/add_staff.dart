@@ -96,14 +96,11 @@ class _AddStaffState extends State<AddStaff> {
                                 height: 10.h,
                               ),
                               DropdownSearch(
-                                // popupProps: PopupProps.menu(
-                                //   showSelectedItems: true,
-                                //   disabledItemFn: (String s) => s.startsWith(''),
-                                // ),
-
                                 validator: (value) {
                                   if (value == "Chọn cửa hàng") {
                                     return canNotNull;
+                                  } else {
+                                    return null;
                                   }
                                 },
                                 items: listStore,
@@ -145,13 +142,11 @@ class _AddStaffState extends State<AddStaff> {
                                 height: 10.h,
                               ),
                               DropdownSearch(
-                                // popupProps: PopupProps.menu(
-                                //   showSelectedItems: true,
-                                //   disabledItemFn: (String s) => s.startsWith(''),
-                                // ),
                                 validator: (value) {
                                   if (value == "Chọn chức vụ") {
                                     return canNotNull;
+                                  } else {
+                                    return null;
                                   }
                                 },
                                 items: listRole,
@@ -337,6 +332,8 @@ class _AddStaffState extends State<AddStaff> {
 
                                   if (!phoneValid) {
                                     return invalidPhone;
+                                  } else {
+                                    return null;
                                   }
                                 },
                                 decoration: InputDecoration(
@@ -386,6 +383,8 @@ class _AddStaffState extends State<AddStaff> {
 
                                   if (!emailValid) {
                                     return invalidEmail;
+                                  } else {
+                                    return null;
                                   }
                                 },
                                 decoration: InputDecoration(
@@ -541,10 +540,6 @@ class _AddStaffState extends State<AddStaff> {
                                   color2: const Color.fromRGBO(58, 65, 111, 1),
                                   event: () {
                                     if (_formField.currentState!.validate()) {
-                                      // setState(() {
-                                      //   currentSection++;
-
-                                      // });
                                       final isLastStep =
                                           currentStep == getStep().length - 1;
                                       if (isLastStep) {
@@ -563,11 +558,6 @@ class _AddStaffState extends State<AddStaff> {
                                       passworldController.clear();
                                       rePassworldController.clear();
                                     }
-                                    // else {
-                                    // setState(() {
-                                    //   currentSection++;
-                                    // });
-                                    // }
                                   },
                                   text: "Tiếp",
                                   fontSize: 12.sp,
@@ -645,17 +635,14 @@ class _AddStaffState extends State<AddStaff> {
                                 height: 10.h,
                               ),
                               DropdownSearch(
-                                // popupProps: PopupProps.menu(
-                                //   showSelectedItems: true,
-                                //   disabledItemFn: (String s) => s.startsWith(''),
-                                // ),
                                 validator: (value) {
                                   if (value == "Chọn tỉnh/thành phố") {
                                     return canNotNull;
+                                  } else {
+                                    return null;
                                   }
                                 },
                                 items: listProvinces,
-
                                 dropdownDecoratorProps: DropDownDecoratorProps(
                                   dropdownSearchDecoration: InputDecoration(
                                     fillColor: const Color.fromARGB(
@@ -694,13 +681,11 @@ class _AddStaffState extends State<AddStaff> {
                                 height: 10.h,
                               ),
                               DropdownSearch(
-                                // popupProps: PopupProps.menu(
-                                //   showSelectedItems: true,
-                                //   disabledItemFn: (String s) => s.startsWith(''),
-                                // ),
                                 validator: (value) {
                                   if (value == "Chọn quận/huyện") {
                                     return canNotNull;
+                                  } else {
+                                    return null;
                                   }
                                 },
                                 items: listRole,
@@ -742,13 +727,11 @@ class _AddStaffState extends State<AddStaff> {
                                 height: 10.h,
                               ),
                               DropdownSearch(
-                                // popupProps: PopupProps.menu(
-                                //   showSelectedItems: true,
-                                //   disabledItemFn: (String s) => s.startsWith(''),
-                                // ),
                                 validator: (value) {
                                   if (value == "Chọn phường/xã") {
                                     return canNotNull;
+                                  } else {
+                                    return null;
                                   }
                                 },
                                 items: listRole,
@@ -832,9 +815,6 @@ class _AddStaffState extends State<AddStaff> {
                                   color2:
                                       const Color.fromRGBO(235, 239, 244, 1),
                                   event: () {
-                                    // setState(() {
-                                    //   currentSection--;
-                                    // });
                                     currentStep == 0
                                         ? null
                                         : setState(() {
@@ -855,10 +835,6 @@ class _AddStaffState extends State<AddStaff> {
                                   color2: const Color.fromRGBO(58, 65, 111, 1),
                                   event: () {
                                     if (_formField2.currentState!.validate()) {
-                                      // setState(() {
-                                      //   currentSection++;
-                                      //   currentStep += 1;
-                                      // });
                                       final isLastStep =
                                           currentStep == getStep().length - 1;
                                       if (isLastStep) {
@@ -1040,9 +1016,6 @@ class _AddStaffState extends State<AddStaff> {
                                 color1: const Color.fromRGBO(206, 212, 218, 1),
                                 color2: const Color.fromRGBO(235, 239, 244, 1),
                                 event: () {
-                                  // setState(() {
-                                  //   currentSection--;
-                                  // });
                                   currentStep == 0
                                       ? null
                                       : setState(() {
@@ -1123,9 +1096,6 @@ class _AddStaffState extends State<AddStaff> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text("Thêm nhân viên"),
-      ),
       body: Stack(
         children: [
           SafeArea(

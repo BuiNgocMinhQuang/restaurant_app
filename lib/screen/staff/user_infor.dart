@@ -4,7 +4,6 @@ import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/fake_data.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
-import 'package:app_restaurant/screen/staff/staff_drawer.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/item_drawer.dart';
@@ -82,10 +81,6 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("Thông tin cá nhân"),
-      // ),
-      // drawer: StaffSileMenu(),
       body: SafeArea(
           child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),

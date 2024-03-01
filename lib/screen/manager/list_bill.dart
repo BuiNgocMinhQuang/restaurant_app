@@ -155,7 +155,10 @@ class _ManagerListBillState extends State<ManagerListBill>
               SizedBox(
                 height: 15.h,
               ),
-              const CopyRightText()
+              const CopyRightText(),
+              SizedBox(
+                height: 20.h,
+              ),
             ],
           ),
         )));

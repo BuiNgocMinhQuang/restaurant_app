@@ -10,10 +10,9 @@ import 'package:app_restaurant/screen/manager/edit_staff_infor.dart';
 import 'package:app_restaurant/screen/manager/home.dart';
 import 'package:app_restaurant/screen/manager/list_food.dart';
 import 'package:app_restaurant/screen/manager/manage_store.dart';
-import 'package:app_restaurant/screen/manager/nav_bottom.dart';
+import 'package:app_restaurant/screen/manager/manager_bottom_nav.dart';
 import 'package:app_restaurant/screen/manager/list_bill.dart';
 import 'package:app_restaurant/screen/manager/list_staff.dart';
-import 'package:app_restaurant/screen/manager/staff_list.dart';
 import 'package:app_restaurant/screen/manager/list_stores.dart';
 import 'package:app_restaurant/screen/staff/auth/forgot_password.dart';
 import 'package:app_restaurant/screen/staff/auth/signin.dart';
@@ -26,26 +25,14 @@ import 'package:go_router/go_router.dart';
 
 class NyAppRouter {
   final GoRouter testRouter = GoRouter(routes: <RouteBase>[
-    // GoRoute(
-    //     name: "111",
-    //     path: '/',
-    //     builder: (BuildContext context, GoRouterState state) {
-    //       return ListStores();
-    //     }),
     GoRoute(
-        name: "2222",
+        name: AppRouterContants.managerHomeRouterName,
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return StaffFabTab(
-            selectedIndex: 2,
+          return ManagerFabTab(
+            selectedIndex: 0,
           );
         }),
-    // GoRoute(
-    //     name: "motcaiten",
-    //     path: '/staff_list_food',
-    //     builder: (BuildContext context, GoRouterState state) {
-    //       return StaffList();
-    //     }),
   ]);
   final GoRouter router = GoRouter(routes: <RouteBase>[
     //Router Manager
@@ -72,7 +59,9 @@ class NyAppRouter {
         name: AppRouterContants.managerHomeRouterName,
         path: '/manager_home',
         builder: (BuildContext context, GoRouterState state) {
-          return const NavBottomManger();
+          return ManagerFabTab(
+            selectedIndex: 0,
+          );
         }),
     GoRoute(
         name: AppRouterContants.managerListStoresRouterName,
@@ -117,6 +106,18 @@ class NyAppRouter {
         path: '/manager_list_staff',
         builder: (BuildContext context, GoRouterState state) {
           return const ListStaff();
+        }),
+    // GoRoute(
+    //     name: AppRouterContants.managerAddFoodRouterName,
+    //     path: '/manager_list_staff',
+    //     builder: (BuildContext context, GoRouterState state) {
+    //       return const ManagerAddFood();
+    //     }),
+    GoRoute(
+        name: AppRouterContants.managerEditStaffInformationRouterName,
+        path: '/manager_edit_staff_info',
+        builder: (BuildContext context, GoRouterState state) {
+          return const EditStaffInformation();
         }),
 //Router Staff
     GoRoute(

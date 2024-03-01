@@ -83,8 +83,8 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Thông tin nhân viên"),
-      ),
+          // title: Text("Thông tin nhân viên"),
+          ),
       body: SafeArea(
           child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),

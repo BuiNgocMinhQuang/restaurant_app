@@ -413,8 +413,9 @@ class _CreateStoreModalState extends State<CreateStoreModal> {
                           OutlinedButton(
                               style: OutlinedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.r),
+                                  borderRadius: BorderRadius.circular(10.r),
                                 ),
+
                                 backgroundColor: Colors.white,
                                 side:
                                     BorderSide(color: Colors.grey, width: 1), //
@@ -422,51 +423,61 @@ class _CreateStoreModalState extends State<CreateStoreModal> {
                               onPressed: () {
                                 selectImages();
                               },
-                              child: SizedBox(
-                                width: double.infinity,
-                                child: GridView.builder(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: widget.imageFileList!.length,
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 2),
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                              width: 100.w,
-                                              height: 100.w,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(15.w),
-                                                child: Image.file(
-                                                  File(widget
-                                                      .imageFileList![index]
-                                                      .path),
-                                                  fit: BoxFit.cover,
+                              child: Column(
+                                children: [
+                                  Visibility(
+                                      visible:
+                                          widget.imageFileList!.length == 0,
+                                      child:
+                                          SizedBox(width: 1.sw, height: 150.h)),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: GridView.builder(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        itemCount: widget.imageFileList!.length,
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 2),
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              SizedBox(
+                                                  width: 100.w,
+                                                  height: 100.w,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15.w),
+                                                    child: Image.file(
+                                                      File(widget
+                                                          .imageFileList![index]
+                                                          .path),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  )),
+                                              space10H,
+                                              InkWell(
+                                                onTap: () {
+                                                  deleteImages(widget
+                                                      .imageFileList![index]);
+                                                },
+                                                child: TextApp(
+                                                  text: 'Xóa hình ảnh',
+                                                  color: Colors.blue,
                                                 ),
-                                              )),
-                                          space10H,
-                                          InkWell(
-                                            onTap: () {
-                                              deleteImages(
-                                                  widget.imageFileList![index]);
-                                            },
-                                            child: TextApp(
-                                              text: 'Xóa hình ảnh',
-                                              color: Colors.blue,
-                                            ),
-                                          )
-                                        ],
-                                      );
-                                    }),
+                                              )
+                                            ],
+                                          );
+                                        }),
+                                  )
+                                ],
                               )),
                         ],
                       ),

@@ -1,5 +1,6 @@
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
+import 'package:app_restaurant/screen/manager/edit_staff_infor.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/status_box.dart';
@@ -403,8 +404,14 @@ class _ListStaffState extends State<ListStaff> {
                                                 color2: Color.fromRGBO(
                                                     23, 193, 232, 1),
                                                 event: () {
-                                                  context.go(
-                                                      "/manager_edit_staff_info");
+                                                  // context.go(
+                                                  //     "/manager_edit_staff_info");
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            const EditStaffInformation()),
+                                                  );
                                                 },
                                                 icon: Icons.edit),
                                           ),

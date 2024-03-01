@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
+import 'package:app_restaurant/screen/manager/manage_store.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
@@ -53,9 +54,6 @@ class _ListStoresState extends State<ListStores> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Danh sách cửa hàng"),
-      ),
       body: Stack(
         children: [
           SafeArea(
@@ -150,7 +148,14 @@ class _ListStoresState extends State<ListStores> {
                                             children: [
                                               ButtonApp(
                                                 event: () {
-                                                  context.go('/manage_store');
+                                                  // context.go(
+                                                  //     '/manager_manage_stores');
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ManageStore()),
+                                                  );
                                                 },
                                                 text: "Quản lý cửa hàng",
                                                 colorText: Color.fromRGBO(

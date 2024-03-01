@@ -54,7 +54,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
   @override
   Widget build(BuildContext context) {
     TabController _tabController = TabController(
-      length: 4,
+      length: 1,
       vsync: this,
     );
     return Scaffold(
@@ -92,15 +92,6 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                     Tab(
                                       text: "Phòng số 1",
                                     ),
-                                    Tab(
-                                      text: "Phòng số 2",
-                                    ),
-                                    Tab(
-                                      text: "Phòng số 3",
-                                    ),
-                                    Tab(
-                                      text: "Phòng số 4",
-                                    ),
                                   ]),
                             ))),
                   ),
@@ -115,7 +106,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                       //Tab All
                       Container(
                         width: 1.sw,
-                        color: Colors.pink,
+                        // color: Colors.pink,
                         child: Column(
                           children: [
                             SizedBox(
@@ -211,17 +202,26 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                               Positioned(
                                                   top: 0,
                                                   right: 0,
-                                                  child: InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        isShowEditModal = true;
-                                                      });
-                                                    },
-                                                    child: Icon(
-                                                      Icons.edit,
-                                                      color: Colors.white,
-                                                    ),
-                                                  )),
+                                                  child: PopUpMenuUsingTable(
+                                                      eventButton1: () {
+                                                    setState(() {
+                                                      isShowBookingTableModal =
+                                                          true;
+                                                    });
+                                                  }, eventButton2: () {
+                                                    setState(() {
+                                                      isShowMoveTableModal =
+                                                          true;
+                                                    });
+                                                  }, eventButton3: () {
+                                                    setState(() {
+                                                      isShowSeeBillModal = true;
+                                                    });
+                                                  }, eventButton4: () {
+                                                    setState(() {
+                                                      isShowPayBillModal = true;
+                                                    });
+                                                  })),
                                             ],
                                           )),
                                     );
@@ -231,63 +231,15 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                         ),
                       ),
                       //Tab Paid
-                      ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: 4,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Padding(
-                              padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                              child: BillInforContainer(
-                                  typePopMenu: PopUpMenuBroughtReceipt(
-                                    eventButton1: () {},
-                                    eventButton2: () {},
-                                    eventButton3: () {},
-                                    eventButton4: () {},
-                                  ),
-                                  statusText: "Đã thanh toán"),
-                            );
-                          }),
-                      //Tab Unpaid
-                      ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: 4,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Padding(
-                              padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                              child: BillInforContainer(
-                                typePopMenu: PopUpMenuBroughtReceipt(
-                                  eventButton1: () {},
-                                  eventButton2: () {},
-                                  eventButton3: () {},
-                                  eventButton4: () {},
-                                ),
-                                statusText: "Chưa thanh toán",
-                              ),
-                            );
-                          }),
-                      //Tab cancle
-                      ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: 4,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Padding(
-                              padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                              child: BillInforContainer(
-                                  typePopMenu: PopUpMenuBroughtReceipt(
-                                    eventButton1: () {},
-                                    eventButton2: () {},
-                                    eventButton3: () {},
-                                    eventButton4: () {},
-                                  ),
-                                  statusText: "Hóa đơn đã hủy"),
-                            );
-                          }),
                     ]),
                   )),
                   SizedBox(
                     height: 15.h,
                   ),
-                  const CopyRightText()
+                  const CopyRightText(),
+                  SizedBox(
+                    height: 35.h,
+                  ),
                 ],
               ),
             )),

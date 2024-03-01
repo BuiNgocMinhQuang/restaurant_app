@@ -170,7 +170,10 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
               SizedBox(
                 height: 15.h,
               ),
-              const CopyRightText()
+              const CopyRightText(),
+              SizedBox(
+                height: 20.h,
+              ),
             ],
           ),
         )));

@@ -19,9 +19,6 @@ class _ManagerNotificationsState extends State<ManagerNotifications> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Thông báo"),
-      ),
       drawer: Drawer(
         child: ListView(
           children: [

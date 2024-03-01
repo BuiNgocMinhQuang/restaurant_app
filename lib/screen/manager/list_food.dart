@@ -1,6 +1,7 @@
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
+import 'package:app_restaurant/screen/manager/add_food.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/status_box.dart';
@@ -123,17 +124,23 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                               ),
                             ],
                           ),
-                          space20H,
-                          ButtonGradient(
-                            color1: const Color.fromRGBO(121, 40, 202, 1),
-                            color2: const Color.fromRGBO(255, 0, 128, 1),
-                            event: () {
-                              context.go("/manager_add_food");
-                            },
-                            text: "  + Thêm món ăn",
-                            textColor: Colors.white,
-                            radius: 10.w,
-                          ),
+                          // space20H,
+                          // ButtonGradient(
+                          //   color1: const Color.fromRGBO(121, 40, 202, 1),
+                          //   color2: const Color.fromRGBO(255, 0, 128, 1),
+                          //   event: () {
+                          //     print("Hello");
+                          //     Navigator.push(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //           builder: (context) =>
+                          //               const ManagerAddFood()),
+                          //     );
+                          //   },
+                          //   text: "  + Thêm món ăn",
+                          //   textColor: Colors.white,
+                          //   radius: 10.w,
+                          // ),
                           space40H,
                           Row(
                             children: [
@@ -413,8 +420,8 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                 color2: Color.fromRGBO(
                                                     23, 193, 232, 1),
                                                 event: () {
-                                                  context.go(
-                                                      "/manager_edit_staff_info");
+                                                  // context.go(
+                                                  //     "/manager_edit_staff_info");
                                                 },
                                                 icon: Icons.edit),
                                           ),

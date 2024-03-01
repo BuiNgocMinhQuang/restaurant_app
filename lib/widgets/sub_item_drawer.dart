@@ -40,7 +40,8 @@ class SubItemDrawer extends StatelessWidget {
           ),
           Text(
             text,
-            style: TextStyle(fontSize: fontSize == 0 ? 14.w : fontSize),
+            style: TextStyle(
+                fontSize: fontSize == 0 ? 14.w : fontSize, color: textColor),
           ),
         ],
       ),

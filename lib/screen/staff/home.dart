@@ -1,24 +1,13 @@
-import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/fake_data.dart';
-import 'package:app_restaurant/config/text.dart';
-import 'package:app_restaurant/screen/staff/staff_drawer.dart';
-import 'package:app_restaurant/widgets/bill_infor_container.dart';
-import 'package:app_restaurant/widgets/item_drawer.dart';
+import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/modal/booking_table_modal.dart';
-import 'package:app_restaurant/widgets/button/button_app.dart';
-import 'package:app_restaurant/widgets/button/button_gradient.dart';
-import 'package:app_restaurant/widgets/sub_item_drawer.dart';
-import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/modal/move_table_modal.dart';
 import 'package:app_restaurant/widgets/modal/pay_bill_modal.dart';
 import 'package:app_restaurant/widgets/modal/see_bill_modal.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 
 class StaffBookingTable extends StatefulWidget {
   StaffBookingTable({
@@ -219,8 +208,8 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                             Positioned(
                                                 top: 0,
                                                 right: 0,
-                                                child:
-                                                    PopUpMenu(eventButton1: () {
+                                                child: PopUpMenuUsingTable(
+                                                    eventButton1: () {
                                                   setState(() {
                                                     isShowBookingTableModal =
                                                         true;
@@ -311,8 +300,8 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                             Positioned(
                                                 top: 0,
                                                 right: 0,
-                                                child:
-                                                    PopUpMenu(eventButton1: () {
+                                                child: PopUpMenuUsingTable(
+                                                    eventButton1: () {
                                                   setState(() {
                                                     isShowBookingTableModal =
                                                         true;
@@ -403,8 +392,8 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                             Positioned(
                                                 top: 0,
                                                 right: 0,
-                                                child:
-                                                    PopUpMenu(eventButton1: () {
+                                                child: PopUpMenuUsingTable(
+                                                    eventButton1: () {
                                                   setState(() {
                                                     isShowBookingTableModal =
                                                         true;
@@ -537,56 +526,6 @@ class _StaffBookingTableState extends State<StaffBookingTable>
         ],
       ),
       // drawer: StaffSileMenu()
-    );
-  }
-}
-
-class PopUpMenu extends StatelessWidget {
-  Function eventButton1;
-  Function eventButton2;
-  Function eventButton3;
-  Function eventButton4;
-  PopUpMenu({
-    Key? key,
-    required this.eventButton1,
-    required this.eventButton2,
-    required this.eventButton3,
-    required this.eventButton4,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton(
-      icon: Icon(
-        Icons.edit,
-        color: Colors.white,
-      ),
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          onTap: () {
-            eventButton1();
-          },
-          child: Text("Quản lý bàn"),
-        ),
-        PopupMenuItem(
-          onTap: () {
-            eventButton2();
-          },
-          child: Text("Chuyển bàn"),
-        ),
-        PopupMenuItem(
-          onTap: () {
-            eventButton3();
-          },
-          child: Text("Xem hoá đơn"),
-        ),
-        PopupMenuItem(
-          onTap: () {
-            eventButton4();
-          },
-          child: Text("Thanh toán"),
-        )
-      ],
     );
   }
 }

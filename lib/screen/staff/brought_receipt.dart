@@ -1,4 +1,3 @@
-import 'package:app_restaurant/screen/staff/staff_drawer.dart';
 import 'package:app_restaurant/widgets/bill_infor_container.dart';
 import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
@@ -22,9 +21,6 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
     TabController _tabController = TabController(length: 4, vsync: this);
 
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("Hoá đơn mang về"),
-      // ),
       backgroundColor: Colors.white,
       // drawer: StaffSileMenu(),
       body: SafeArea(

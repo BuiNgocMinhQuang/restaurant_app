@@ -1,4 +1,3 @@
-import 'package:app_restaurant/screen/staff/staff_drawer.dart';
 import 'package:app_restaurant/widgets/bill_infor_container.dart';
 import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
@@ -24,9 +23,6 @@ class _StaffListBillState extends State<StaffListBill>
     );
     print("_tabController + ${_tabController.index}");
     return Scaffold(
-        // appBar: AppBar(
-        //   title: Text("Danh sách hoá đơn"),
-        // ),
         backgroundColor: Colors.white,
         // drawer: StaffSileMenu(),
         body: SafeArea(

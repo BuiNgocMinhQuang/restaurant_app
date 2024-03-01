@@ -14,14 +14,14 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AddFood extends StatefulWidget {
-  const AddFood({super.key});
+class ManagerAddFood extends StatefulWidget {
+  const ManagerAddFood({super.key});
 
   @override
-  State<AddFood> createState() => _AddFoodState();
+  State<ManagerAddFood> createState() => _ManagerAddFoodState();
 }
 
-class _AddFoodState extends State<AddFood> {
+class _ManagerAddFoodState extends State<ManagerAddFood> {
   bool isShowListStores = false;
   bool isShowListRoles = false;
   bool passwordVisible = true;
@@ -944,9 +944,6 @@ class _AddFoodState extends State<AddFood> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text("Thêm món ăn"),
-      ),
       body: Stack(
         children: [
           SafeArea(
