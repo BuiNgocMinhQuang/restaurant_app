@@ -7,7 +7,6 @@ import 'package:app_restaurant/widgets/item_drawer.dart';
 import 'package:app_restaurant/widgets/sub_item_drawer.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -536,8 +535,8 @@ class _AddStaffState extends State<AddStaff> {
                               SizedBox(
                                 width: 100.w,
                                 child: ButtonGradient(
-                                  color1: const Color.fromRGBO(20, 23, 39, 1),
-                                  color2: const Color.fromRGBO(58, 65, 111, 1),
+                                  color1: color1DarkButton,
+                                  color2: color2DarkButton,
                                   event: () {
                                     if (_formField.currentState!.validate()) {
                                       final isLastStep =
@@ -810,10 +809,8 @@ class _AddStaffState extends State<AddStaff> {
                               SizedBox(
                                 width: 100.w,
                                 child: ButtonGradient(
-                                  color1:
-                                      const Color.fromRGBO(206, 212, 218, 1),
-                                  color2:
-                                      const Color.fromRGBO(235, 239, 244, 1),
+                                  color1: color1GreyButton,
+                                  color2: color2GreyButton,
                                   event: () {
                                     currentStep == 0
                                         ? null
@@ -831,14 +828,13 @@ class _AddStaffState extends State<AddStaff> {
                               SizedBox(
                                 width: 100.w,
                                 child: ButtonGradient(
-                                  color1: const Color.fromRGBO(20, 23, 39, 1),
-                                  color2: const Color.fromRGBO(58, 65, 111, 1),
+                                  color1: color1DarkButton,
+                                  color2: color2DarkButton,
                                   event: () {
                                     if (_formField2.currentState!.validate()) {
                                       final isLastStep =
                                           currentStep == getStep().length - 1;
                                       if (isLastStep) {
-                                        print("Complete");
                                       } else {
                                         setState(() {
                                           currentStep += 1;
@@ -1013,8 +1009,8 @@ class _AddStaffState extends State<AddStaff> {
                             SizedBox(
                               width: 100.w,
                               child: ButtonGradient(
-                                color1: const Color.fromRGBO(206, 212, 218, 1),
-                                color2: const Color.fromRGBO(235, 239, 244, 1),
+                                color1: color1GreyButton,
+                                color2: color2GreyButton,
                                 event: () {
                                   currentStep == 0
                                       ? null
@@ -1032,13 +1028,12 @@ class _AddStaffState extends State<AddStaff> {
                             SizedBox(
                               width: 100.w,
                               child: ButtonGradient(
-                                color1: const Color.fromRGBO(20, 23, 39, 1),
-                                color2: const Color.fromRGBO(58, 65, 111, 1),
+                                color1: color1DarkButton,
+                                color2: color2DarkButton,
                                 event: () {
                                   final isLastStep =
                                       currentStep == getStep().length - 1;
                                   if (isLastStep) {
-                                    print("Complete");
                                   } else {
                                     setState(() {
                                       currentStep += 1;
@@ -1078,17 +1073,17 @@ class _AddStaffState extends State<AddStaff> {
         Step(
             isActive: currentStep >= 0,
             state: currentStep > 0 ? StepState.complete : StepState.indexed,
-            title: Text(""),
+            title: const Text(""),
             content: Container()),
         Step(
             isActive: currentStep >= 1,
             state: currentStep > 1 ? StepState.complete : StepState.indexed,
-            title: Text(""),
+            title: const Text(""),
             content: Container()),
         Step(
             isActive: currentStep >= 2,
             state: currentStep > 2 ? StepState.complete : StepState.indexed,
-            title: Text(""),
+            title: const Text(""),
             content: Container())
       ];
   int currentStep = 0;
@@ -1106,7 +1101,7 @@ class _AddStaffState extends State<AddStaff> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 40.w, right: 40.w),
-                    child: Container(
+                    child: SizedBox(
                         width: 1.sw,
                         height: 100.h,
                         // color: Colors.white,
@@ -1126,7 +1121,6 @@ class _AddStaffState extends State<AddStaff> {
                               final isLastStep =
                                   currentStep == getStep().length - 1;
                               if (isLastStep) {
-                                print("Complete");
                               } else {
                                 setState(() {
                                   currentStep += 1;
@@ -1260,7 +1254,8 @@ class _AddStaffState extends State<AddStaff> {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.white),
-                            child: Icon(Icons.power_settings_new_outlined),
+                            child:
+                                const Icon(Icons.power_settings_new_outlined),
                           ),
                           space15H,
                           Center(

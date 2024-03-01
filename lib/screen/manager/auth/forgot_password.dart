@@ -4,7 +4,6 @@ import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/gradient_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -64,10 +63,8 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                         Padding(
                                           padding: EdgeInsets.all(30.w),
                                           child: ButtonGradient(
-                                            color1: const Color.fromRGBO(
-                                                121, 40, 202, 1),
-                                            color2: const Color.fromRGBO(
-                                                255, 0, 128, 1),
+                                            color1: pupple,
+                                            color2: red,
                                             event: () {
                                               context.go("/");
                                             },
@@ -171,6 +168,8 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
 
                                                         if (!emailValid) {
                                                           return invalidEmail;
+                                                        } else {
+                                                          return null;
                                                         }
                                                       },
                                                       decoration:
@@ -217,10 +216,8 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                                   height: 40.h,
                                                 ),
                                                 ButtonGradient(
-                                                  color1: const Color.fromRGBO(
-                                                      33, 82, 255, 1),
-                                                  color2: const Color.fromRGBO(
-                                                      33, 212, 253, 1),
+                                                  color1: color1BlueButton,
+                                                  color2: color2BlueButton,
                                                   event: () {
                                                     if (_formField.currentState!
                                                         .validate()) {

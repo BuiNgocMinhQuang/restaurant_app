@@ -1,8 +1,6 @@
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
-import 'package:app_restaurant/screen/manager/add_food.dart';
-import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/status_box.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
@@ -12,7 +10,6 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 
 List<String> listState = ["Tất cả", "Đang hoạt động", "Đã chặn"];
 
@@ -395,17 +392,17 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                           ],
                                         ),
                                       ))),
-                                      DataCell(Center(
+                                      const DataCell(Center(
                                         child: Text('shop 1',
                                             textAlign: TextAlign.center),
                                       )),
-                                      DataCell(Center(
+                                      const DataCell(Center(
                                         child: Text('2,000,000đ',
                                             textAlign: TextAlign.center),
                                       )),
-                                      DataCell(
+                                      const DataCell(
                                           Center(child: StatusBoxIsSelling())),
-                                      DataCell(Center(
+                                      const DataCell(Center(
                                         child: Text('26/02/2024 11:35:12',
                                             textAlign: TextAlign.center),
                                       )),
@@ -415,9 +412,9 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                             height: 30.h,
                                             child: ButtonIcon(
                                                 isIconCircle: false,
-                                                color1: Color.fromRGBO(
+                                                color1: const Color.fromRGBO(
                                                     23, 193, 232, 1),
-                                                color2: Color.fromRGBO(
+                                                color2: const Color.fromRGBO(
                                                     23, 193, 232, 1),
                                                 event: () {
                                                   // context.go(
@@ -430,9 +427,9 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                             height: 30.h,
                                             child: ButtonIcon(
                                                 isIconCircle: false,
-                                                color1: Color.fromRGBO(
+                                                color1: const Color.fromRGBO(
                                                     234, 6, 6, 1),
-                                                color2: Color.fromRGBO(
+                                                color2: const Color.fromRGBO(
                                                     234, 6, 6, 1),
                                                 event: () {
                                                   _showUpdateInfoModal(context);
@@ -449,7 +446,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                       ),
                     )),
                 space30H,
-                CopyRightText()
+                const CopyRightText()
               ],
             ),
           ),

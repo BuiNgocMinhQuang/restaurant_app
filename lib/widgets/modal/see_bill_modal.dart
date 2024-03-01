@@ -2,13 +2,12 @@ import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SeeBillModal extends StatefulWidget {
-  Function eventCloseButton;
-  SeeBillModal({
+  final Function eventCloseButton;
+  const SeeBillModal({
     Key? key,
     required this.eventCloseButton,
   }) : super(key: key);
@@ -316,7 +315,7 @@ class _SeeBillModalState extends State<SeeBillModal>
                                                                       padding: EdgeInsets.only(
                                                                           bottom:
                                                                               10.h),
-                                                                      child: Container(
+                                                                      child: SizedBox(
                                                                           width: 1.sw,
                                                                           child: Padding(
                                                                             padding:
@@ -362,14 +361,14 @@ class _SeeBillModalState extends State<SeeBillModal>
                                                                                         mainAxisAlignment: MainAxisAlignment.center,
                                                                                         crossAxisAlignment: CrossAxisAlignment.stretch,
                                                                                         children: [
-                                                                                          GestureDetector(
+                                                                                          InkWell(
                                                                                             onTap: _decrease,
                                                                                             child: Container(
                                                                                               width: 50.w,
                                                                                               height: 25.w,
                                                                                               decoration: BoxDecoration(
                                                                                                   borderRadius: BorderRadius.only(topLeft: Radius.circular(8.r), bottomLeft: Radius.circular(8.r)),
-                                                                                                  gradient: LinearGradient(
+                                                                                                  gradient: const LinearGradient(
                                                                                                     begin: Alignment.topRight,
                                                                                                     end: Alignment.bottomLeft,
                                                                                                     colors: [
@@ -394,16 +393,14 @@ class _SeeBillModalState extends State<SeeBillModal>
                                                                                               ),
                                                                                             ),
                                                                                           )),
-                                                                                          // Flexible(
-                                                                                          //     child: TextApp(text: "1")),
-                                                                                          GestureDetector(
+                                                                                          InkWell(
                                                                                             onTap: _increase,
                                                                                             child: Container(
                                                                                               width: 50.w,
                                                                                               height: 25.w,
                                                                                               decoration: BoxDecoration(
                                                                                                   borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), bottomRight: Radius.circular(8.r)),
-                                                                                                  gradient: LinearGradient(
+                                                                                                  gradient: const LinearGradient(
                                                                                                     begin: Alignment.topRight,
                                                                                                     end: Alignment.bottomLeft,
                                                                                                     colors: [
@@ -428,7 +425,7 @@ class _SeeBillModalState extends State<SeeBillModal>
                                                                             ),
                                                                           )),
                                                                     ),
-                                                                    Divider(
+                                                                    const Divider(
                                                                       height: 1,
                                                                       color: Colors
                                                                           .grey,
@@ -475,8 +472,9 @@ class _SeeBillModalState extends State<SeeBillModal>
                           },
                           text: "Đóng",
                           colorText: Colors.white,
-                          backgroundColor: Color.fromRGBO(131, 146, 171, 1),
-                          outlineColor: Color.fromRGBO(131, 146, 171, 1),
+                          backgroundColor:
+                              const Color.fromRGBO(131, 146, 171, 1),
+                          outlineColor: const Color.fromRGBO(131, 146, 171, 1),
                         ),
                       ],
                     ),

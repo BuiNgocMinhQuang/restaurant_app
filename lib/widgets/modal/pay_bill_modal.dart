@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PayBillModal extends StatefulWidget {
-  Function eventCloseButton;
+  final Function eventCloseButton;
   PayBillModal({Key? key, required this.eventCloseButton}) : super(key: key);
 
   @override
@@ -27,7 +27,6 @@ class _PayBillModalState extends State<PayBillModal> {
 
   void caculateMoneyMustPay() {
     moneyMustPay = totalMoney - moneySale;
-    print(moneyMustPay);
   }
 
   @override
@@ -197,91 +196,6 @@ class _PayBillModalState extends State<PayBillModal> {
                                         ),
                                       ],
                                     )
-                                    // Column(
-                                    //   children: [
-                                    //     ListView.builder(
-                                    //         itemCount: 3,
-                                    //         itemBuilder: (context, index) {
-                                    //           return Row(
-                                    //             crossAxisAlignment:
-                                    //                 CrossAxisAlignment.center,
-                                    //             mainAxisAlignment:
-                                    //                 MainAxisAlignment
-                                    //                     .spaceBetween,
-                                    //             children: [
-                                    //               Column(
-                                    //                 mainAxisAlignment:
-                                    //                     MainAxisAlignment
-                                    //                         .center,
-                                    //                 children: [
-                                    //                   TextApp(
-                                    //                     text: "Tên món ăn",
-                                    //                     color: Colors.black,
-                                    //                     fontsize: 14.sp,
-                                    //                   ),
-                                    //                   TextApp(
-                                    //                     text: "thit heo nuong",
-                                    //                     color: Colors.black,
-                                    //                     fontsize: 14.sp,
-                                    //                   ),
-                                    //                 ],
-                                    //               ),
-                                    //               Column(
-                                    //                 mainAxisAlignment:
-                                    //                     MainAxisAlignment
-                                    //                         .center,
-                                    //                 children: [
-                                    //                   TextApp(
-                                    //                     text: "Số lượng",
-                                    //                     color: Colors.black,
-                                    //                     fontsize: 14.sp,
-                                    //                   ),
-                                    //                   TextApp(
-                                    //                     text: "3",
-                                    //                     color: Colors.black,
-                                    //                     fontsize: 14.sp,
-                                    //                   ),
-                                    //                 ],
-                                    //               ),
-                                    //               Column(
-                                    //                 mainAxisAlignment:
-                                    //                     MainAxisAlignment
-                                    //                         .center,
-                                    //                 children: [
-                                    //                   TextApp(
-                                    //                     text: "Giá",
-                                    //                     color: Colors.black,
-                                    //                     fontsize: 14.sp,
-                                    //                   ),
-                                    //                   TextApp(
-                                    //                     text: "200,000",
-                                    //                     color: Colors.black,
-                                    //                     fontsize: 14.sp,
-                                    //                   ),
-                                    //                 ],
-                                    //               ),
-                                    //               Column(
-                                    //                 mainAxisAlignment:
-                                    //                     MainAxisAlignment
-                                    //                         .center,
-                                    //                 children: [
-                                    //                   TextApp(
-                                    //                     text: "Tổng",
-                                    //                     color: Colors.black,
-                                    //                     fontsize: 14.sp,
-                                    //                   ),
-                                    //                   TextApp(
-                                    //                     text: "600,000",
-                                    //                     color: Colors.black,
-                                    //                     fontsize: 14.sp,
-                                    //                   ),
-                                    //                 ],
-                                    //               ),
-                                    //             ],
-                                    //           );
-                                    //         })
-                                    //   ],
-                                    // )
                                   ],
                                 ),
                               ),

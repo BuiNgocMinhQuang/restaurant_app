@@ -76,9 +76,9 @@ class _StaffBookingTableState extends State<StaffBookingTable>
     super.initState();
 
     // if (widget.isLogin) {
-    //   WidgetsBinding.instance.addPostFrameCallback((_) {
-    //     _showSuccesModal(context);
-    //   });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showSuccesModal(context);
+    });
     // }
   }
 

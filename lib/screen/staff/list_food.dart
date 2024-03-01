@@ -35,7 +35,6 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
 
   @override
   Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
     final filterProducts = listFood.where((product) {
       final foodTitle = product.name.toLowerCase();
       final input = query.toLowerCase();
@@ -44,7 +43,7 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
               selectedCategories.contains(product.category)) &&
           foodTitle.contains(input);
     }).toList();
-    return GestureDetector(
+    return InkWell(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         body: SafeArea(
@@ -114,7 +113,6 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
               TextFormField(
                 onChanged: searchProduct,
                 controller: searchController,
-                keyboardType: TextInputType.phone,
                 style: TextStyle(fontSize: 12, color: Colors.grey),
                 cursorColor: Colors.black,
                 decoration: InputDecoration(

@@ -299,14 +299,13 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                               SizedBox(
                                 width: 100.w,
                                 child: ButtonGradient(
-                                  color1: const Color.fromRGBO(20, 23, 39, 1),
-                                  color2: const Color.fromRGBO(58, 65, 111, 1),
+                                  color1: color1DarkButton,
+                                  color2: color2DarkButton,
                                   event: () {
                                     if (_formField.currentState!.validate()) {
                                       final isLastStep =
                                           currentStep == getStep().length - 1;
                                       if (isLastStep) {
-                                        print("Complete");
                                       } else {
                                         setState(() {
                                           currentSection++;
@@ -384,7 +383,8 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                 borderRadius: BorderRadius.circular(15.r),
                               ),
                               backgroundColor: Colors.white,
-                              side: BorderSide(color: Colors.grey, width: 1), //
+                              side: const BorderSide(
+                                  color: Colors.grey, width: 1), //
                             ),
                             onPressed: () {
                               selectImages();
@@ -455,8 +455,8 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                             SizedBox(
                               width: 100.w,
                               child: ButtonGradient(
-                                color1: const Color.fromRGBO(206, 212, 218, 1),
-                                color2: const Color.fromRGBO(235, 239, 244, 1),
+                                color1: color1GreyButton,
+                                color2: color2GreyButton,
                                 event: () {
                                   currentStep == 0
                                       ? null
@@ -474,13 +474,12 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                             SizedBox(
                               width: 100.w,
                               child: ButtonGradient(
-                                color1: const Color.fromRGBO(20, 23, 39, 1),
-                                color2: const Color.fromRGBO(58, 65, 111, 1),
+                                color1: color1DarkButton,
+                                color2: color2DarkButton,
                                 event: () {
                                   final isLastStep =
                                       currentStep == getStep().length - 1;
                                   if (isLastStep) {
-                                    print("Complete");
                                   } else {
                                     setState(() {
                                       currentStep += 1;
@@ -624,8 +623,8 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                       SizedBox(
                         width: 100.w,
                         child: ButtonGradient(
-                          color1: const Color.fromRGBO(206, 212, 218, 1),
-                          color2: const Color.fromRGBO(235, 239, 244, 1),
+                          color1: color1GreyButton,
+                          color2: color2GreyButton,
                           event: () {
                             currentStep == 0
                                 ? null
@@ -643,13 +642,12 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                       SizedBox(
                         width: 100.w,
                         child: ButtonGradient(
-                          color1: const Color.fromRGBO(20, 23, 39, 1),
-                          color2: const Color.fromRGBO(58, 65, 111, 1),
+                          color1: color1DarkButton,
+                          color2: color2DarkButton,
                           event: () {
                             final isLastStep =
                                 currentStep == getStep().length - 1;
                             if (isLastStep) {
-                              print("Complete");
                             } else {
                               setState(() {
                                 currentSection++;
@@ -800,7 +798,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                             color: blueText,
                           ),
                           space10H,
-                          Container(
+                          SizedBox(
                             width: 1.sw,
                             height: 100.h,
                             child: Expanded(
@@ -808,24 +806,6 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                 key: _popupCustomValidationKey,
                                 items: listStore,
                                 popupProps: PopupPropsMultiSelection.dialog(
-                                    // validationWidgetBuilder:
-                                    //     (context, item) {
-                                    //   return Container(
-                                    //     color: Colors.blue[200],
-                                    //     height: 50.h,
-                                    //     child: Align(
-                                    //       alignment: Alignment.center,
-                                    //       child: MaterialButton(
-                                    //         child: Text('ĐÓNG'),
-                                    //         onPressed: () {
-                                    //           _popupCustomValidationKey
-                                    //               .currentState
-                                    //               ?.popupOnValidate();
-                                    //         },
-                                    //       ),
-                                    //     ),
-                                    //   );
-                                    // },
                                     title: Padding(
                                   padding:
                                       EdgeInsets.only(left: 15.w, top: 10.h),
@@ -847,14 +827,9 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                               SizedBox(
                                 width: 100.w,
                                 child: ButtonGradient(
-                                  color1:
-                                      const Color.fromRGBO(206, 212, 218, 1),
-                                  color2:
-                                      const Color.fromRGBO(235, 239, 244, 1),
+                                  color1: color1GreyButton,
+                                  color2: color2GreyButton,
                                   event: () {
-                                    // setState(() {
-                                    //   currentSection--;
-                                    // });
                                     currentStep == 0
                                         ? null
                                         : setState(() {
@@ -871,14 +846,13 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                               SizedBox(
                                 width: 100.w,
                                 child: ButtonGradient(
-                                  color1: const Color.fromRGBO(20, 23, 39, 1),
-                                  color2: const Color.fromRGBO(58, 65, 111, 1),
+                                  color1: color1DarkButton,
+                                  color2: color2DarkButton,
                                   event: () {
                                     if (_formField2.currentState!.validate()) {
                                       final isLastStep =
                                           currentStep == getStep().length - 1;
                                       if (isLastStep) {
-                                        print("Complete");
                                       } else {
                                         setState(() {
                                           currentStep += 1;
@@ -921,22 +895,22 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
         Step(
             isActive: currentStep >= 0,
             state: currentStep > 0 ? StepState.complete : StepState.indexed,
-            title: Text(""),
+            title: const Text(""),
             content: Container()),
         Step(
             isActive: currentStep >= 1,
             state: currentStep > 1 ? StepState.complete : StepState.indexed,
-            title: Text(""),
+            title: const Text(""),
             content: Container()),
         Step(
             isActive: currentStep >= 2,
             state: currentStep > 2 ? StepState.complete : StepState.indexed,
-            title: Text(""),
+            title: const Text(""),
             content: Container()),
         Step(
             isActive: currentStep >= 3,
             state: currentStep > 3 ? StepState.complete : StepState.indexed,
-            title: Text(""),
+            title: const Text(""),
             content: Container())
       ];
   int currentStep = 0;
@@ -954,10 +928,9 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 40.w, right: 40.w),
-                    child: Container(
+                    child: SizedBox(
                         width: 1.sw,
                         height: 100.h,
-                        // color: Colors.white,
                         child: Theme(
                           data: ThemeData(canvasColor: Colors.white),
                           child: Stepper(
@@ -974,7 +947,6 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                               final isLastStep =
                                   currentStep == getStep().length - 1;
                               if (isLastStep) {
-                                print("Complete");
                               } else {
                                 setState(() {
                                   currentStep += 1;

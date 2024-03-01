@@ -10,25 +10,25 @@ import 'package:app_restaurant/screen/manager/list_food.dart';
 import 'package:app_restaurant/screen/manager/list_staff.dart';
 import 'package:app_restaurant/screen/manager/list_stores.dart';
 import 'package:app_restaurant/screen/manager/manager_infor.dart';
+import 'package:app_restaurant/screen/manager/notifications.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/item_drawer.dart';
 import 'package:app_restaurant/widgets/sub_item_drawer.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 class ManagerFabTab extends StatefulWidget {
   ManagerFabTab({Key? key, required this.selectedIndex}) : super(key: key);
-  int selectedIndex = 2;
+  int selectedIndex = 8;
   @override
   State<ManagerFabTab> createState() => _ManagerFabTabState();
 }
 
 class _ManagerFabTabState extends State<ManagerFabTab> {
-  int currentIndex = 0;
-
+  int currentIndex = 8;
+  bool isHaveNoti = true;
   @override
   void initState() {
     // TODO: implement initState
@@ -47,6 +47,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
     ManagerBroughtReceipt(), //index = 8
     ManagerAddFood(), //index 9
   ];
+  final ScrollController _scrollController = ScrollController();
 
   final PageStorageBucket bucket = PageStorageBucket();
   @override
@@ -72,7 +73,99 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                         : const ManagerAddFood();
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        centerTitle: true,
+        title: Container(
+          // width: 100.w,
+          height: 50.w,
+          child: Image.asset(
+            "assets/images/logo-thv.png",
+            fit: BoxFit.cover,
+          ),
+        ),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(35.w))),
+        leading: InkWell(
+          onTap: () {},
+          child: Builder(
+            builder: (context) => // Ensure Scaffold is in context
+                IconButton(
+                    icon: Icon(
+                      Icons.menu,
+                      size: 35.w,
+                    ),
+                    onPressed: () => Scaffold.of(context).openDrawer()),
+          ),
+        ),
+        actions: [
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ManagerNotifications()),
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.all(8.w),
+              child: isHaveNoti
+                  ? Stack(
+                      children: [
+                        Icon(
+                          Icons.notifications,
+                          size: 35.w,
+                          color: Colors.white,
+                        ),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.red,
+                            ),
+                            width: 15.w,
+                            height: 15.w,
+                          ),
+                        )
+                      ],
+                    )
+                  : Icon(
+                      Icons.notifications,
+                      size: 35.w,
+                      color: Colors.white,
+                    ),
+            ),
+          )
+        ],
+        bottom: PreferredSize(
+            preferredSize: Size.fromHeight(20.w),
+            child: Container(
+              child: Padding(padding: EdgeInsets.only(left: 30, bottom: 20)),
+            )),
+      ),
+      body: PageStorage(bucket: bucket, child: currentScreen),
+      // body: PageStorage(
+      //     bucket: bucket,
+      //     child: SafeArea(
+      //       child: Stack(
+      //         children: [
+      //           currentScreen,
+      //           Positioned(
+      //             left: 10,
+      //             top: 20,
+      //             child: Builder(
+      //               builder: (context) => // Ensure Scaffold is in context
+      //                   IconButton(
+      //                       icon: Icon(Icons.menu),
+      //                       onPressed: () => Scaffold.of(context).openDrawer()),
+      //             ),
+      //           ),
+      //         ],
+      //       ),
+      //     )),
+
       drawer: Drawer(
         child: ListView(
           children: [
@@ -93,7 +186,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                 SizedBox(
                   height: 10.h,
                 ),
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     setState(() {
                       currentScreen = const ManagerHome();
@@ -121,7 +214,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                 SizedBox(
                   height: 25.h,
                 ),
-                GestureDetector(
+                InkWell(
                   onTap: () {},
                   child: ItemDrawer(
                       isExpand: true,
@@ -150,7 +243,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                 SizedBox(
                   height: 25.h,
                 ),
-                GestureDetector(
+                InkWell(
                   onTap: () {},
                   child: ItemDrawer(
                       isExpand: true,
@@ -195,7 +288,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                 SizedBox(
                   height: 25.h,
                 ),
-                GestureDetector(
+                InkWell(
                   onTap: () {},
                   child: ItemDrawer(
                       isExpand: true,
@@ -249,7 +342,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                 SizedBox(
                   height: 25.h,
                 ),
-                GestureDetector(
+                InkWell(
                   onTap: () {},
                   child: ItemDrawer(
                       isExpand: true,
@@ -379,10 +472,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
           ],
         ),
       ),
-      body: PageStorage(
-        bucket: bucket,
-        child: currentScreen,
-      ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {

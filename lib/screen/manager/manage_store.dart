@@ -1,3 +1,4 @@
+import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
@@ -85,8 +86,8 @@ class _ManageStoreState extends State<ManageStore> {
                             Container(
                               width: 220.w,
                               child: ButtonGradient(
-                                color1: const Color.fromRGBO(20, 23, 39, 1),
-                                color2: const Color.fromRGBO(58, 65, 111, 1),
+                                color1: color1DarkButton,
+                                color2: color2DarkButton,
                                 event: () {},
                                 text: "Tổng thu nhập cửa hàng".toUpperCase(),
                                 fontSize: 12.sp,
@@ -329,10 +330,8 @@ class _ManageStoreState extends State<ManageStore> {
                                         width: 150.w,
                                         child: ButtonGradient(
                                           radius: 8.w,
-                                          color1:
-                                              Color.fromRGBO(23, 193, 232, 1),
-                                          color2:
-                                              Color.fromRGBO(23, 193, 232, 1),
+                                          color1: lightBlue,
+                                          color2: lightBlue,
                                           event: () {
                                             setState(() {
                                               isShowCreateRoomModal = true;

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/background_welcome.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
@@ -154,15 +156,16 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                         },
                                                         decoration:
                                                             InputDecoration(
-                                                                fillColor: Color
-                                                                    .fromARGB(
+                                                                fillColor:
+                                                                    const Color
+                                                                        .fromARGB(
                                                                         255,
                                                                         226,
                                                                         104,
                                                                         159),
                                                                 focusedBorder:
                                                                     OutlineInputBorder(
-                                                                  borderSide: BorderSide(
+                                                                  borderSide: const BorderSide(
                                                                       color: Color.fromRGBO(
                                                                           214,
                                                                           51,
@@ -325,6 +328,8 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
 
                                                     if (!emailValid) {
                                                       return invalidEmail;
+                                                    } else {
+                                                      return null;
                                                     }
                                                   },
                                                   decoration: InputDecoration(
@@ -381,6 +386,8 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
 
                                                     if (!phoneValid) {
                                                       return invalidPhone;
+                                                    } else {
+                                                      return null;
                                                     }
                                                   },
                                                   decoration: InputDecoration(
@@ -439,8 +446,11 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                   },
                                                   decoration: InputDecoration(
                                                       suffixIconColor:
-                                                          Color.fromARGB(255,
-                                                              226, 104, 159),
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              226,
+                                                              104,
+                                                              159),
                                                       suffixIcon: IconButton(
                                                           onPressed: () {
                                                             setState(
@@ -512,8 +522,11 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                   },
                                                   decoration: InputDecoration(
                                                       suffixIconColor:
-                                                          Color.fromARGB(255,
-                                                              226, 104, 159),
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              226,
+                                                              104,
+                                                              159),
                                                       suffixIcon: IconButton(
                                                           onPressed: () {
                                                             setState(
@@ -570,18 +583,6 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.center,
                                                   children: [
-                                                    // Checkbox(
-                                                    //   value: isChecked,
-                                                    //   activeColor: Colors.amber,
-                                                    //   checkColor: Colors.white,
-                                                    //   // tristate: true,
-                                                    //   onChanged: (bool? value) {
-                                                    //     setState(() {
-                                                    //       isChecked = value!;
-                                                    //       print("press $isChecked");
-                                                    //     });
-                                                    //   },
-                                                    // ),
                                                     Checkbox(
                                                         checkColor:
                                                             Colors.white,
@@ -594,7 +595,6 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                             (bool? value) {
                                                           setState(() {
                                                             isChecked = value!;
-                                                            print(isChecked);
                                                           });
                                                         }),
                                                     RichText(
@@ -650,14 +650,11 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                   height: 20.h,
                                                 ),
                                                 ButtonGradient(
-                                                  color1: const Color.fromRGBO(
-                                                      20, 23, 39, 1),
-                                                  color2: const Color.fromRGBO(
-                                                      58, 65, 111, 1),
+                                                  color1: color1DarkButton,
+                                                  color2: color2DarkButton,
                                                   event: () {
                                                     if (_formField.currentState!
                                                         .validate()) {
-                                                      print("SignUp Succecs");
                                                       surNameController.clear();
                                                       nameController.clear();
                                                       fullNameController

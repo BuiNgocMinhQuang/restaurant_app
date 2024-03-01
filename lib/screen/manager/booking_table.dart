@@ -1,14 +1,10 @@
-import 'package:app_restaurant/widgets/bill_infor_container.dart';
 import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/modal/booking_table_modal.dart';
-import 'package:app_restaurant/widgets/button/button_app.dart';
-import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/modal/move_table_modal.dart';
 import 'package:app_restaurant/widgets/modal/pay_bill_modal.dart';
 import 'package:app_restaurant/widgets/modal/see_bill_modal.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -21,7 +17,6 @@ class ManagerBookingTable extends StatefulWidget {
 
 class _ManagerBookingTableState extends State<ManagerBookingTable>
     with TickerProviderStateMixin {
-  bool isShowEditModal = false;
   bool isShowMoveTableModal = false;
   bool isShowBookingTableModal = false;
   bool isShowSeeBillModal = false;
@@ -76,8 +71,8 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                               height: 40.h,
                               color: Colors.white,
                               child: TabBar(
-                                  labelPadding:
-                                      EdgeInsets.only(left: 20, right: 20),
+                                  labelPadding: const EdgeInsets.only(
+                                      left: 20, right: 20),
                                   labelColor: Colors.blue,
                                   labelStyle: TextStyle(
                                       fontSize: 14.sp,
@@ -88,7 +83,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                   controller: _tabController,
                                   isScrollable: true,
                                   indicatorSize: TabBarIndicatorSize.label,
-                                  tabs: [
+                                  tabs: const [
                                     Tab(
                                       text: "Phòng số 1",
                                     ),
@@ -104,7 +99,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                     color: Colors.white,
                     child: TabBarView(controller: _tabController, children: [
                       //Tab All
-                      Container(
+                      SizedBox(
                         width: 1.sw,
                         // color: Colors.pink,
                         child: Column(
@@ -151,7 +146,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                               child: GridView.builder(
                                   itemCount: 5,
                                   gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 3,
                                   ),
                                   itemBuilder: (context, index) {
@@ -243,157 +238,6 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                 ],
               ),
             )),
-            Visibility(
-                visible: isShowEditModal,
-                child: Container(
-                    width: 1.sw,
-                    height: 1.sh,
-                    color: Colors.black.withOpacity(0.3),
-                    child: Center(
-                        child: Padding(
-                      padding: EdgeInsets.only(
-                          top: 100.h, bottom: 100.h, left: 35.w, right: 35.w),
-                      child: Container(
-                          width: 1.sw,
-                          height: 1.sh / 3,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.r),
-                            color: Colors.white,
-                          ),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                  child: SingleChildScrollView(
-                                      child: Padding(
-                                padding: EdgeInsets.all(20.w),
-                                child: Column(
-                                  children: [
-                                    ButtonGradient(
-                                      color1:
-                                          const Color.fromRGBO(33, 82, 255, 1),
-                                      color2:
-                                          const Color.fromRGBO(33, 212, 253, 1),
-                                      event: () {
-                                        setState(() {
-                                          isShowEditModal = false;
-                                          isShowBookingTableModal = true;
-                                        });
-                                      },
-                                      text: "Quản lý bàn",
-                                      fontSize: 12.sp,
-                                      radius: 8.r,
-                                      textColor: Colors.white,
-                                    ),
-                                    ////////
-                                    SizedBox(
-                                      height: 30.h,
-                                    ),
-                                    //////
-                                    ButtonGradient(
-                                      color1:
-                                          const Color.fromRGBO(33, 82, 255, 1),
-                                      color2:
-                                          const Color.fromRGBO(33, 212, 253, 1),
-                                      event: () {
-                                        setState(() {
-                                          isShowEditModal = false;
-                                          isShowMoveTableModal = true;
-                                        });
-                                      },
-                                      text: "Chuyển bàn",
-                                      fontSize: 12.sp,
-                                      radius: 8.r,
-                                      textColor: Colors.white,
-                                    ),
-                                    /////
-                                    SizedBox(
-                                      height: 30.h,
-                                    ),
-                                    ButtonGradient(
-                                      color1:
-                                          const Color.fromRGBO(33, 82, 255, 1),
-                                      color2:
-                                          const Color.fromRGBO(33, 212, 253, 1),
-                                      event: () {
-                                        setState(() {
-                                          isShowEditModal = false;
-                                          isShowSeeBillModal = true;
-                                        });
-                                      },
-                                      text: "Xem hoá đơn",
-                                      fontSize: 12.sp,
-                                      radius: 8.r,
-                                      textColor: Colors.white,
-                                    ),
-                                    /////
-                                    SizedBox(
-                                      height: 30.h,
-                                    ),
-                                    ButtonGradient(
-                                      color1:
-                                          const Color.fromRGBO(33, 82, 255, 1),
-                                      color2:
-                                          const Color.fromRGBO(33, 212, 253, 1),
-                                      event: () {
-                                        setState(() {
-                                          isShowEditModal = false;
-                                          isShowPayBillModal = true;
-                                        });
-                                      },
-                                      text: "Thanh toán",
-                                      fontSize: 12.sp,
-                                      radius: 8.r,
-                                      textColor: Colors.white,
-                                    ),
-
-                                    ////
-                                  ],
-                                ),
-                              ))),
-                              Container(
-                                width: 1.sw,
-                                height: 80.h,
-                                decoration: BoxDecoration(
-                                  border: const Border(
-                                      top: BorderSide(
-                                          width: 1, color: Colors.grey),
-                                      bottom: BorderSide(
-                                          width: 0, color: Colors.grey),
-                                      left: BorderSide(
-                                          width: 0, color: Colors.grey),
-                                      right: BorderSide(
-                                          width: 0, color: Colors.grey)),
-                                  borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(15.w),
-                                      bottomRight: Radius.circular(15.w)),
-                                  // color: Colors.green,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    ButtonApp(
-                                      event: () {
-                                        setState(() {
-                                          print("CLOSE");
-                                          isShowEditModal = false;
-                                        });
-                                      },
-                                      text: "Đóng",
-                                      colorText: Colors.white,
-                                      backgroundColor:
-                                          Color.fromRGBO(131, 146, 171, 1),
-                                      outlineColor:
-                                          Color.fromRGBO(131, 146, 171, 1),
-                                    ),
-                                    SizedBox(
-                                      width: 20.w,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )),
-                    )))),
             Visibility(
                 visible: isShowBookingTableModal,
                 child: BookingTableModal(

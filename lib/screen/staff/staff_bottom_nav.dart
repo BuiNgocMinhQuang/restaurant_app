@@ -56,7 +56,50 @@ class _StaffFabTabState extends State<StaffFabTab> {
                     : const StaffUserInformation();
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        centerTitle: true,
+        title: Container(
+          // width: 100.w,
+          height: 50.w,
+          child: Image.asset(
+            "assets/images/logo-thv.png",
+            fit: BoxFit.cover,
+          ),
+        ),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(35.w))),
+        leading: InkWell(
+          onTap: () {},
+          child: Builder(
+            builder: (context) => // Ensure Scaffold is in context
+                IconButton(
+                    icon: Icon(
+                      Icons.menu,
+                      size: 25.w,
+                    ),
+                    onPressed: () => Scaffold.of(context).openDrawer()),
+          ),
+        ),
+        actions: [
+          InkWell(
+            onTap: () {},
+            child: Padding(
+              padding: EdgeInsets.all(8.w),
+              child: Icon(
+                Icons.notifications,
+                size: 25.w,
+                color: Colors.white,
+              ),
+            ),
+          )
+        ],
+        bottom: PreferredSize(
+            preferredSize: Size.fromHeight(20.w),
+            child: Container(
+              child: Padding(padding: EdgeInsets.only(left: 30, bottom: 20)),
+            )),
+      ),
       drawer: Drawer(
         child: ListView(
           children: [
@@ -77,7 +120,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                 SizedBox(
                   height: 10.h,
                 ),
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     setState(() {
                       currentScreen = StaffBookingTable();
@@ -99,7 +142,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                 SizedBox(
                   height: 25.h,
                 ),
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     setState(() {
                       currentScreen = ListFoodStaff();
@@ -122,7 +165,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                 SizedBox(
                   height: 25.h,
                 ),
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     setState(() {
                       currentScreen = StaffBroughtReceipt();
@@ -145,7 +188,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                 SizedBox(
                   height: 25.h,
                 ),
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     setState(() {
                       currentScreen = StaffListBill();
@@ -168,7 +211,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                 SizedBox(
                   height: 25.h,
                 ),
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     setState(() {
                       currentScreen = StaffUserInformation();

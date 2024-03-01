@@ -112,7 +112,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              GestureDetector(
+                              InkWell(
                                   onTap: () {
                                     pickImage();
                                   },
@@ -1113,10 +1113,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                         SizedBox(
                                           width: 200.w,
                                           child: ButtonGradient(
-                                            color1: const Color.fromRGBO(
-                                                20, 23, 39, 1),
-                                            color2: const Color.fromRGBO(
-                                                58, 65, 111, 1),
+                                            color1: color1DarkButton,
+                                            color2: color2DarkButton,
                                             event: () {
                                               if (_formField1.currentState!
                                                   .validate()) {
@@ -1390,10 +1388,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                     SizedBox(
                                       width: 200.w,
                                       child: ButtonGradient(
-                                        color1:
-                                            const Color.fromRGBO(20, 23, 39, 1),
-                                        color2: const Color.fromRGBO(
-                                            58, 65, 111, 1),
+                                        color1: color1DarkButton,
+                                        color2: color2DarkButton,
                                         event: () {
                                           if (_formField2.currentState!
                                               .validate()) {

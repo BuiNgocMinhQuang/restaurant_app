@@ -1,5 +1,4 @@
 import 'package:app_restaurant/routers/app_router_constant.dart';
-import 'package:app_restaurant/screen/manager/add_food.dart';
 import 'package:app_restaurant/screen/manager/add_staff.dart';
 import 'package:app_restaurant/screen/manager/auth/signin.dart';
 import 'package:app_restaurant/screen/manager/auth/sigup.dart';
@@ -7,8 +6,6 @@ import 'package:app_restaurant/screen/manager/booking_table.dart';
 import 'package:app_restaurant/screen/manager/brought_receipt.dart';
 import 'package:app_restaurant/screen/manager/auth/forgot_password.dart';
 import 'package:app_restaurant/screen/manager/edit_staff_infor.dart';
-import 'package:app_restaurant/screen/manager/home.dart';
-import 'package:app_restaurant/screen/manager/list_food.dart';
 import 'package:app_restaurant/screen/manager/manage_store.dart';
 import 'package:app_restaurant/screen/manager/manager_bottom_nav.dart';
 import 'package:app_restaurant/screen/manager/list_bill.dart';
@@ -16,7 +13,6 @@ import 'package:app_restaurant/screen/manager/list_staff.dart';
 import 'package:app_restaurant/screen/manager/list_stores.dart';
 import 'package:app_restaurant/screen/staff/auth/forgot_password.dart';
 import 'package:app_restaurant/screen/staff/auth/signin.dart';
-import 'package:app_restaurant/screen/staff/home.dart';
 import 'package:app_restaurant/screen/staff/list_food.dart';
 
 import 'package:app_restaurant/screen/staff/staff_bottom_nav.dart';

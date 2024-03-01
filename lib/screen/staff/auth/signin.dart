@@ -383,10 +383,8 @@ class _StaffSignInState extends State<StaffSignIn> {
                                                   height: 20.h,
                                                 ),
                                                 ButtonGradient(
-                                                  color1: const Color.fromRGBO(
-                                                      33, 82, 255, 1),
-                                                  color2: const Color.fromRGBO(
-                                                      33, 212, 253, 1),
+                                                  color1: color1BlueButton,
+                                                  color2: color2BlueButton,
                                                   event: () {
                                                     if (_formField.currentState!
                                                         .validate()) {
@@ -405,7 +403,7 @@ class _StaffSignInState extends State<StaffSignIn> {
                                                 SizedBox(
                                                   height: 20.h,
                                                 ),
-                                                GestureDetector(
+                                                InkWell(
                                                   onTap: () {
                                                     context.go(
                                                         "/staff_forgot_password");

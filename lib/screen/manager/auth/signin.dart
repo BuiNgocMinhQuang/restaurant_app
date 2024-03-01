@@ -175,6 +175,8 @@ class _ManagerSignInState extends State<ManagerSignIn> {
 
                                                     if (!emailValid) {
                                                       return invalidEmail;
+                                                    } else {
+                                                      return null;
                                                     }
                                                   },
                                                   decoration: InputDecoration(
@@ -230,8 +232,11 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                   },
                                                   decoration: InputDecoration(
                                                       suffixIconColor:
-                                                          Color.fromARGB(255,
-                                                              226, 104, 159),
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              226,
+                                                              104,
+                                                              159),
                                                       suffixIcon: IconButton(
                                                           onPressed: () {
                                                             setState(
@@ -325,14 +330,11 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                   height: 20.h,
                                                 ),
                                                 ButtonGradient(
-                                                  color1: const Color.fromRGBO(
-                                                      33, 82, 255, 1),
-                                                  color2: const Color.fromRGBO(
-                                                      33, 212, 253, 1),
+                                                  color1: color1BlueButton,
+                                                  color2: color2BlueButton,
                                                   event: () {
                                                     if (_formField.currentState!
                                                         .validate()) {
-                                                      print("Login Succecs");
                                                       context
                                                           .go('/manager_home');
                                                       emailController.clear();
@@ -357,8 +359,9 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                     Container(
                                                       width: 100,
                                                       height: 1, // Thickness
-                                                      color: Color.fromRGBO(
-                                                          103, 116, 142, 1),
+                                                      color:
+                                                          const Color.fromRGBO(
+                                                              103, 116, 142, 1),
                                                     ),
                                                     SizedBox(
                                                       width: 12.w,
@@ -367,7 +370,8 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                       "hoặc",
                                                       style: TextStyle(
                                                         fontSize: 12.sp,
-                                                        color: Color.fromRGBO(
+                                                        color: const Color
+                                                            .fromRGBO(
                                                             103, 116, 142, 1),
                                                       ),
                                                     ),
@@ -377,8 +381,9 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                     Container(
                                                       width: 100,
                                                       height: 1, // Thickness
-                                                      color: Color.fromRGBO(
-                                                          103, 116, 142, 1),
+                                                      color:
+                                                          const Color.fromRGBO(
+                                                              103, 116, 142, 1),
                                                     )
                                                   ],
                                                 ),
@@ -386,10 +391,8 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                   height: 20.h,
                                                 ),
                                                 ButtonGradient(
-                                                  color1: const Color.fromRGBO(
-                                                      20, 23, 39, 1),
-                                                  color2: const Color.fromRGBO(
-                                                      58, 65, 111, 1),
+                                                  color1: color1DarkButton,
+                                                  color2: color2DarkButton,
                                                   event: () {
                                                     context
                                                         .go("/manager_sign_up");
@@ -402,7 +405,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                 SizedBox(
                                                   height: 20.h,
                                                 ),
-                                                GestureDetector(
+                                                InkWell(
                                                   onTap: () {
                                                     context.go(
                                                         "/manager_forgot_password");

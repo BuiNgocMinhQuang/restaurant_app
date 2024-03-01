@@ -67,7 +67,7 @@ class PopUpMenuUsingTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
-      icon: Icon(
+      icon: const Icon(
         Icons.edit,
         color: Colors.white,
       ),
@@ -76,26 +76,53 @@ class PopUpMenuUsingTable extends StatelessWidget {
           onTap: () {
             eventButton1();
           },
-          child: Text("Quản lý bàn"),
+          child: const Text("Quản lý bàn"),
         ),
         PopupMenuItem(
           onTap: () {
             eventButton2();
           },
-          child: Text("Chuyển bàn"),
+          child: const Text("Chuyển bàn"),
         ),
         PopupMenuItem(
           onTap: () {
             eventButton3();
           },
-          child: Text("Xem hoá đơn"),
+          child: const Text("Xem hoá đơn"),
         ),
         PopupMenuItem(
           onTap: () {
             eventButton4();
           },
-          child: Text("Thanh toán"),
+          child: const Text("Thanh toán"),
         )
+      ],
+    );
+  }
+}
+
+class PopUpMenuPrintBill extends StatelessWidget {
+  Function eventButton1;
+
+  PopUpMenuPrintBill({
+    Key? key,
+    required this.eventButton1,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+      icon: const Icon(
+        Icons.more_horiz_outlined,
+        color: Colors.black,
+      ),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          onTap: () {
+            eventButton1();
+          },
+          child: const Text("In hoá đơn"),
+        ),
       ],
     );
   }

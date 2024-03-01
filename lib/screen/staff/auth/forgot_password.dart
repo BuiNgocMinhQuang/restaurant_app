@@ -65,10 +65,8 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                         Padding(
                                           padding: EdgeInsets.all(30.w),
                                           child: ButtonGradient(
-                                            color1: const Color.fromRGBO(
-                                                121, 40, 202, 1),
-                                            color2: const Color.fromRGBO(
-                                                255, 0, 128, 1),
+                                            color1: pupple,
+                                            color2: red,
                                             event: () {
                                               context.go("/staff_sign_in");
                                             },
@@ -285,10 +283,8 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                   height: 40.h,
                                                 ),
                                                 ButtonGradient(
-                                                  color1: const Color.fromRGBO(
-                                                      33, 82, 255, 1),
-                                                  color2: const Color.fromRGBO(
-                                                      33, 212, 253, 1),
+                                                  color1: color1BlueButton,
+                                                  color2: color2BlueButton,
                                                   event: () {
                                                     if (_formField.currentState!
                                                         .validate()) {

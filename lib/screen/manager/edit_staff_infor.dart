@@ -6,8 +6,6 @@ import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
-import 'package:app_restaurant/widgets/item_drawer.dart';
-import 'package:app_restaurant/widgets/sub_item_drawer.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -116,7 +114,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              GestureDetector(
+                              InkWell(
                                   onTap: () {
                                     pickImage();
                                   },
@@ -1117,10 +1115,8 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         SizedBox(
                                           width: 200.w,
                                           child: ButtonGradient(
-                                            color1: const Color.fromRGBO(
-                                                20, 23, 39, 1),
-                                            color2: const Color.fromRGBO(
-                                                58, 65, 111, 1),
+                                            color1: color1DarkButton,
+                                            color2: color2DarkButton,
                                             event: () {
                                               if (_formField1.currentState!
                                                   .validate()) {
@@ -1394,10 +1390,8 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                     SizedBox(
                                       width: 200.w,
                                       child: ButtonGradient(
-                                        color1:
-                                            const Color.fromRGBO(20, 23, 39, 1),
-                                        color2: const Color.fromRGBO(
-                                            58, 65, 111, 1),
+                                        color1: color1DarkButton,
+                                        color2: color2DarkButton,
                                         event: () {
                                           if (_formField2.currentState!
                                               .validate()) {
@@ -1518,10 +1512,8 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                   SizedBox(
                                     width: 200.w,
                                     child: ButtonGradient(
-                                      color1:
-                                          const Color.fromRGBO(245, 57, 57, 1),
-                                      color2:
-                                          const Color.fromRGBO(251, 207, 51, 1),
+                                      color1: organe,
+                                      color2: yellow,
                                       event: () {
                                         if (_formField2.currentState!
                                             .validate()) {
@@ -1548,7 +1540,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                   ),
                   space30H,
 
-                  CopyRightText(),
+                  const CopyRightText(),
                   space35H,
                 ],
               ))),
