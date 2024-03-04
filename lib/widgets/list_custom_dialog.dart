@@ -564,15 +564,14 @@ class MoveTableDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      content: Container(
-          width: 1.sw,
-          height: 1.sh / 2,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.r),
-            color: Colors.white,
-          ),
-          child: Column(
+        content: SizedBox(
+      width: double.maxFinite,
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Container(
                   width: 1.sw,
@@ -619,190 +618,165 @@ class MoveTableDialog extends StatelessWidget {
                       )
                     ],
                   )),
-              Flexible(
-                fit: FlexFit.tight,
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: EdgeInsets.all(20.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        TextApp(
-                          text: "Bàn hiện tại",
-                          fontsize: 12.sp,
-                          fontWeight: FontWeight.bold,
-                          color: blueText,
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        ButtonApp(
-                          event: () {},
-                          text: "Table 1",
-                          colorText: Colors.blue,
-                          backgroundColor: Colors.white,
-                          outlineColor: Colors.blue,
-                          radius: 8.r,
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            TextApp(
-                              text: "Bàn có thể đổi:",
-                              fontsize: 12.sp,
-                              fontWeight: FontWeight.bold,
-                              color: blueText,
-                            ),
-                            SizedBox(
-                              width: 20.w,
-                            ),
-                            Flexible(
-                              fit: FlexFit.tight,
-                              child: DropdownSearch(
-                                validator: (value) {
-                                  if (value == "Chọn phòng") {
-                                    return canNotNull;
-                                  }
-                                  return null;
-                                },
-                                items: listTable,
-                                dropdownDecoratorProps: DropDownDecoratorProps(
-                                  dropdownSearchDecoration: InputDecoration(
-                                    fillColor: const Color.fromARGB(
-                                        255, 226, 104, 159),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color:
-                                              Color.fromRGBO(214, 51, 123, 0.6),
-                                          width: 2.0),
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.all(15.w),
+              SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.all(20.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      TextApp(
+                        text: "Bàn hiện tại",
+                        fontsize: 12.sp,
+                        fontWeight: FontWeight.bold,
+                        color: blueText,
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      ButtonApp(
+                        event: () {},
+                        text: "Table 1",
+                        colorText: Colors.blue,
+                        backgroundColor: Colors.white,
+                        outlineColor: Colors.blue,
+                        radius: 8.r,
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          TextApp(
+                            text: "Bàn có thể đổi:",
+                            fontsize: 12.sp,
+                            fontWeight: FontWeight.bold,
+                            color: blueText,
+                          ),
+                          SizedBox(
+                            width: 20.w,
+                          ),
+                          Flexible(
+                            fit: FlexFit.tight,
+                            child: DropdownSearch(
+                              validator: (value) {
+                                if (value == "Chọn phòng") {
+                                  return canNotNull;
+                                }
+                                return null;
+                              },
+                              items: listTable,
+                              dropdownDecoratorProps: DropDownDecoratorProps(
+                                dropdownSearchDecoration: InputDecoration(
+                                  fillColor:
+                                      const Color.fromARGB(255, 226, 104, 159),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color:
+                                            Color.fromRGBO(214, 51, 123, 0.6),
+                                        width: 2.0),
+                                    borderRadius: BorderRadius.circular(8.r),
                                   ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8.r),
+                                  ),
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.all(15.w),
                                 ),
-                                onChanged: print,
-                                selectedItem: "Chọn phòng",
                               ),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  width: 20,
-                                  height: 20,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Colors
-                                            .blue, //                   <--- border color
-                                        width: 1.w,
-                                      ),
-                                      color: Colors.white),
-                                ),
-                                SizedBox(
-                                  width: 5.w,
-                                ),
-                                TextApp(text: "Đang phục vụ")
-                              ],
+                              onChanged: print,
+                              selectedItem: "Chọn phòng",
                             ),
-                            SizedBox(
-                              width: 10.w,
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  width: 20,
-                                  height: 20,
-                                  color: Colors.blue,
-                                ),
-                                SizedBox(
-                                  width: 5.w,
-                                ),
-                                TextApp(text: "Bàn trống")
-                              ],
-                            )
-                          ],
-                        ),
-                        GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: listTable.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                            ),
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: EdgeInsets.all(10.w),
-                                child: ButtonApp(
-                                  event: () {},
-                                  text: listTable[index],
-                                  colorText: Colors.white,
-                                  backgroundColor: Colors.blue,
-                                  outlineColor:
-                                      Color.fromRGBO(131, 146, 171, 1),
-                                ),
-                              );
-                            }),
-                        GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: listTable.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                            ),
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: EdgeInsets.all(10.w),
-                                child: ButtonApp(
-                                  event: () {},
-                                  text: listTable[index],
-                                  colorText: Colors.white,
-                                  backgroundColor: Colors.blue,
-                                  outlineColor:
-                                      Color.fromRGBO(131, 146, 171, 1),
-                                ),
-                              );
-                            }),
-                        GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: listTable.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                            ),
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: EdgeInsets.all(10.w),
-                                child: ButtonApp(
-                                  event: () {},
-                                  text: listTable[index],
-                                  colorText: Colors.white,
-                                  backgroundColor: Colors.blue,
-                                  outlineColor:
-                                      Color.fromRGBO(131, 146, 171, 1),
-                                ),
-                              );
-                            }),
-                      ],
-                    ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors
+                                          .blue, //                   <--- border color
+                                      width: 1.w,
+                                    ),
+                                    color: Colors.white),
+                              ),
+                              SizedBox(
+                                width: 5.w,
+                              ),
+                              TextApp(text: "Đang phục vụ")
+                            ],
+                          ),
+                          SizedBox(
+                            width: 10.w,
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                color: Colors.blue,
+                              ),
+                              SizedBox(
+                                width: 5.w,
+                              ),
+                              TextApp(text: "Bàn trống")
+                            ],
+                          )
+                        ],
+                      ),
+                      space15H,
+                      GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: listTable.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                          ),
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.all(10.w),
+                              child: ButtonApp(
+                                event: () {},
+                                text: listTable[index],
+                                colorText: Colors.white,
+                                backgroundColor: Colors.blue,
+                                outlineColor: Color.fromRGBO(131, 146, 171, 1),
+                              ),
+                            );
+                          }),
+                      GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: listTable.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                          ),
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsets.all(10.w),
+                              child: ButtonApp(
+                                event: () {},
+                                text: listTable[index],
+                                colorText: Colors.white,
+                                backgroundColor: Colors.blue,
+                                outlineColor: Color.fromRGBO(131, 146, 171, 1),
+                              ),
+                            );
+                          }),
+                    ],
                   ),
                 ),
               ),
@@ -851,8 +825,10 @@ class MoveTableDialog extends StatelessWidget {
                 ),
               ),
             ],
-          )),
-    );
+          )
+        ],
+      ),
+    ));
   }
 }
 
@@ -3434,6 +3410,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
   }
 }
 
+//Modal tạo bàn
 class CreateTableDialog extends StatefulWidget {
   final Function eventSaveButton;
   const CreateTableDialog({

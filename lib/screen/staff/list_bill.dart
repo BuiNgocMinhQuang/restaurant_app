@@ -1,4 +1,5 @@
 import 'package:app_restaurant/widgets/bill_infor_container.dart';
+import 'package:app_restaurant/widgets/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/custom_tab.dart';
@@ -90,11 +91,14 @@ class _StaffListBillState extends State<StaffListBill>
                         return Padding(
                           padding: EdgeInsets.only(left: 5.w, right: 5.w),
                           child: BillInforContainer(
-                              typePopMenu: PopUpMenuBroughtReceipt(
-                                eventButton1: () {},
-                                eventButton2: () {},
-                                eventButton3: () {},
-                                eventButton4: () {},
+                              typePopMenu: PopUpMenuPrintBill(
+                                eventButton1: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return const PrintBillDialog();
+                                      });
+                                },
                               ),
                               statusText: "Đã thanh toán"),
                         );
@@ -107,11 +111,14 @@ class _StaffListBillState extends State<StaffListBill>
                         return Padding(
                           padding: EdgeInsets.only(left: 5.w, right: 5.w),
                           child: BillInforContainer(
-                              typePopMenu: PopUpMenuBroughtReceipt(
-                                eventButton1: () {},
-                                eventButton2: () {},
-                                eventButton3: () {},
-                                eventButton4: () {},
+                              typePopMenu: PopUpMenuPrintBill(
+                                eventButton1: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return const PrintBillDialog();
+                                      });
+                                },
                               ),
                               statusText: "Đã thanh toán"),
                         );
@@ -124,11 +131,14 @@ class _StaffListBillState extends State<StaffListBill>
                         return Padding(
                           padding: EdgeInsets.only(left: 5.w, right: 5.w),
                           child: BillInforContainer(
-                            typePopMenu: PopUpMenuBroughtReceipt(
-                              eventButton1: () {},
-                              eventButton2: () {},
-                              eventButton3: () {},
-                              eventButton4: () {},
+                            typePopMenu: PopUpMenuPrintBill(
+                              eventButton1: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return const PrintBillDialog();
+                                    });
+                              },
                             ),
                             statusText: "Chưa thanh toán",
                           ),
@@ -142,11 +152,14 @@ class _StaffListBillState extends State<StaffListBill>
                         return Padding(
                           padding: EdgeInsets.only(left: 5.w, right: 5.w),
                           child: BillInforContainer(
-                              typePopMenu: PopUpMenuBroughtReceipt(
-                                eventButton1: () {},
-                                eventButton2: () {},
-                                eventButton3: () {},
-                                eventButton4: () {},
+                              typePopMenu: PopUpMenuPrintBill(
+                                eventButton1: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return const PrintBillDialog();
+                                      });
+                                },
                               ),
                               statusText: "Hóa đơn đã hủy"),
                         );

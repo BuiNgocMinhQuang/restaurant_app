@@ -27,7 +27,7 @@ class NyAppRouter {
         name: AppRouterContants.managerHomeRouterName,
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return ManagerFabTab(
+          return StaffFabTab(
             selectedIndex: 0,
           );
         }),

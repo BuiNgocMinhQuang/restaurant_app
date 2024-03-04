@@ -1,3 +1,4 @@
+import 'package:app_restaurant/config/all_void.dart';
 import 'package:app_restaurant/widgets/bill_infor_container.dart';
 import 'package:app_restaurant/widgets/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/list_pop_menu.dart';
@@ -110,12 +111,9 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                                             });
                                       },
                                       eventButton2: () {
-                                        _showPayForBillModal(context);
+                                        showConfirmDialog(context, () {});
                                       },
                                       eventButton3: () {
-                                        // setState(() {
-                                        //   isShowPrintBillModal = true;
-                                        // });
                                         showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
