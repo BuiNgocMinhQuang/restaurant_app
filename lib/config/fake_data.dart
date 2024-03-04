@@ -4,9 +4,21 @@ List<String> listStore = [
   "Cửa hàng 3",
   "Cửa hàng 4"
 ];
+List<String> optionsCancle = [
+  "Đổi trả lại",
+  "Thêm nhầm đơn hàng",
+  "Khách báo hủy",
+  "Khác"
+];
 List<String> listRole = ["Nhân viên", "Trưởng nhóm", "Quản lý", "Kế toán"];
 List<String> listTable = ["ban so 2", "ban so 3", "ban so 4"];
-
+List<String> optionsPayment = ["Tiền mặt", "Thẻ", "Chuyển khoản"];
+final List<String> categories = [
+  "Combo",
+  "Món nướng",
+  "Món lẩu",
+  "Nước giải khát"
+];
 List<Object> listProvinces = [
   "An Giang",
   "Bà Rịa - Vũng Tàu",

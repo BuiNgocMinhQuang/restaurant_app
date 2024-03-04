@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class PopUpMenuBroughtReceipt extends StatelessWidget {
-  Function eventButton1;
-  Function eventButton2;
-  Function eventButton3;
-  Function eventButton4;
-  PopUpMenuBroughtReceipt({
+  final Function eventButton1;
+  final Function eventButton2;
+  final Function eventButton3;
+  final Function eventButton4;
+  const PopUpMenuBroughtReceipt({
     Key? key,
     required this.eventButton1,
     required this.eventButton2,
@@ -26,25 +26,25 @@ class PopUpMenuBroughtReceipt extends StatelessWidget {
           onTap: () {
             eventButton1();
           },
-          child: Text("Quản lý hoá đơn"),
+          child: const Text("Quản lý hoá đơn"),
         ),
         PopupMenuItem(
           onTap: () {
             eventButton2();
           },
-          child: Text("Thanh toán hoá đơn"),
+          child: const Text("Thanh toán hoá đơn"),
         ),
         PopupMenuItem(
           onTap: () {
             eventButton3();
           },
-          child: Text("In hoá đơn"),
+          child: const Text("In hoá đơn"),
         ),
         PopupMenuItem(
           onTap: () {
             eventButton4();
           },
-          child: Text("Huỷ hoá đơn"),
+          child: const Text("Huỷ hoá đơn"),
         )
       ],
     );
@@ -52,11 +52,11 @@ class PopUpMenuBroughtReceipt extends StatelessWidget {
 }
 
 class PopUpMenuUsingTable extends StatelessWidget {
-  Function eventButton1;
-  Function eventButton2;
-  Function eventButton3;
-  Function eventButton4;
-  PopUpMenuUsingTable({
+  final Function eventButton1;
+  final Function eventButton2;
+  final Function eventButton3;
+  final Function eventButton4;
+  const PopUpMenuUsingTable({
     Key? key,
     required this.eventButton1,
     required this.eventButton2,
@@ -102,9 +102,9 @@ class PopUpMenuUsingTable extends StatelessWidget {
 }
 
 class PopUpMenuPrintBill extends StatelessWidget {
-  Function eventButton1;
+  final Function eventButton1;
 
-  PopUpMenuPrintBill({
+  const PopUpMenuPrintBill({
     Key? key,
     required this.eventButton1,
   }) : super(key: key);
@@ -122,6 +122,83 @@ class PopUpMenuPrintBill extends StatelessWidget {
             eventButton1();
           },
           child: const Text("In hoá đơn"),
+        ),
+      ],
+    );
+  }
+}
+
+class PopUpMenuManageRoom extends StatelessWidget {
+  final Function eventButton1;
+  final Function eventButton2;
+  final Function eventButton3;
+  const PopUpMenuManageRoom({
+    Key? key,
+    required this.eventButton1,
+    required this.eventButton2,
+    required this.eventButton3,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+      icon: const Icon(
+        Icons.more_horiz_outlined,
+        color: Colors.black,
+      ),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          onTap: () {
+            eventButton1();
+          },
+          child: const Text("Chỉnh sửa phòng"),
+        ),
+        PopupMenuItem(
+          onTap: () {
+            eventButton2();
+          },
+          child: const Text("Quản lí bàn"),
+        ),
+        PopupMenuItem(
+          onTap: () {
+            eventButton3();
+          },
+          child: const Text("Xoá phòng"),
+        ),
+      ],
+    );
+  }
+}
+
+class PopUpEditTable extends StatelessWidget {
+  final Function eventButton1;
+  final Function eventButton2;
+
+  const PopUpEditTable({
+    Key? key,
+    required this.eventButton1,
+    required this.eventButton2,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+      icon: const Icon(
+        Icons.more_vert_outlined,
+        color: Colors.black,
+      ),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          onTap: () {
+            eventButton1();
+          },
+          child: const Text("Cập nhật"),
+        ),
+        PopupMenuItem(
+          onTap: () {
+            eventButton2();
+          },
+          child: const Text("Xoá"),
         ),
       ],
     );

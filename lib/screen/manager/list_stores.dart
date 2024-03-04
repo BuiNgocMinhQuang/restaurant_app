@@ -6,8 +6,8 @@ import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/screen/manager/manage_store.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
+import 'package:app_restaurant/widgets/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
-import 'package:app_restaurant/widgets/modal/create_store_modal.dart';
 import 'package:app_restaurant/widgets/item_drawer.dart';
 import 'package:app_restaurant/widgets/sub_item_drawer.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
@@ -47,7 +47,7 @@ List<XFile>? imageFileList = [];
 
 class _ListStoresState extends State<ListStores> {
   int activeIndex = 0;
-  bool showModal = false;
+  // bool showModal = false;
   bool light = false;
   File? selectedImage;
   final ImagePicker imagePicker = ImagePicker();
@@ -206,9 +206,16 @@ class _ListStoresState extends State<ListStores> {
                                       width: 1), //<-- SEE HERE
                                 ),
                                 onPressed: () {
-                                  setState(() {
-                                    showModal = true;
-                                  });
+                                  // setState(() {
+                                  //   showModal = true;
+                                  // });
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return CreateStoreDialog(
+                                            imageFileList: imageFileList,
+                                            eventSaveButton: () {});
+                                      });
                                 },
                                 child: Container(
                                   width: 1.sw,
@@ -242,17 +249,17 @@ class _ListStoresState extends State<ListStores> {
                   ]),
             ),
           )),
-          Visibility(
-              visible: showModal,
-              child: CreateStoreModal(
-                imageFileList: imageFileList,
-                eventCloseButton: () {
-                  setState(() {
-                    showModal = false;
-                  });
-                },
-                eventSaveButton: () {},
-              ))
+          // Visibility(
+          //     visible: showModal,
+          //     child: CreateStoreModal(
+          //       imageFileList: imageFileList,
+          //       eventCloseButton: () {
+          //         setState(() {
+          //           showModal = false;
+          //         });
+          //       },
+          //       eventSaveButton: () {},
+          //     ))
         ],
       ),
       backgroundColor: Color.fromARGB(255, 246, 246, 246).withOpacity(1),

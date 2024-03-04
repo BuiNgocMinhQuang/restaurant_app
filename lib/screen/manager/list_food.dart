@@ -1,6 +1,8 @@
+import 'package:app_restaurant/config/all_void.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
+import 'package:app_restaurant/screen/manager/edit_food.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/status_box.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
@@ -24,22 +26,6 @@ class _ListFoodManagerState extends State<ListFoodManager> {
   TextEditingController _dateStartController = TextEditingController();
   TextEditingController _dateEndController = TextEditingController();
   String accountStatus = "isActive";
-  _showUpdateInfoModal(context) {
-    AwesomeDialog(
-            context: context,
-            dialogType: DialogType.question,
-            animType: AnimType.rightSlide,
-            headerAnimationLoop: true,
-            title: 'Bạn có chắc chắn thực hiện tác vụ này!',
-            desc: 'Sau khi bạn xác nhận sẽ không thể trở lại.',
-            btnOkOnPress: () {
-              print("Delete Product");
-            },
-            btnOkText: "Xác Nhận",
-            btnCancelOnPress: () {},
-            btnCancelText: "Hủy")
-        .show();
-  }
 
   void selectDayStart() async {
     DateTime? picked = await showDatePicker(
@@ -121,23 +107,6 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                               ),
                             ],
                           ),
-                          // space20H,
-                          // ButtonGradient(
-                          //   color1: const Color.fromRGBO(121, 40, 202, 1),
-                          //   color2: const Color.fromRGBO(255, 0, 128, 1),
-                          //   event: () {
-                          //     print("Hello");
-                          //     Navigator.push(
-                          //       context,
-                          //       MaterialPageRoute(
-                          //           builder: (context) =>
-                          //               const ManagerAddFood()),
-                          //     );
-                          //   },
-                          //   text: "  + Thêm món ăn",
-                          //   textColor: Colors.white,
-                          //   radius: 10.w,
-                          // ),
                           space40H,
                           Row(
                             children: [
@@ -419,6 +388,12 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                 event: () {
                                                   // context.go(
                                                   //     "/manager_edit_staff_info");
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            EditFood()),
+                                                  );
                                                 },
                                                 icon: Icons.edit),
                                           ),
@@ -432,7 +407,10 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                 color2: const Color.fromRGBO(
                                                     234, 6, 6, 1),
                                                 event: () {
-                                                  _showUpdateInfoModal(context);
+                                                  showConfirmDialog(context,
+                                                      () {
+                                                    print("ConFIRM");
+                                                  });
                                                 },
                                                 icon: Icons.delete),
                                           )

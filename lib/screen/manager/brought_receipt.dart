@@ -1,13 +1,10 @@
 import 'package:app_restaurant/widgets/bill_infor_container.dart';
+import 'package:app_restaurant/widgets/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/list_pop_menu.dart';
-import 'package:app_restaurant/widgets/manage_brought_receipt.dart';
-import 'package:app_restaurant/widgets/modal/cancle_bill_modal.dart';
-import 'package:app_restaurant/widgets/modal/print_bill_modal.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/custom_tab.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -20,10 +17,6 @@ class ManagerBroughtReceipt extends StatefulWidget {
 
 class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
     with TickerProviderStateMixin {
-  bool isShowBillModal = false;
-  // bool isShowPayForBillModal = false;
-  bool isShowPrintBillModal = false;
-  bool isShowCancleBillModal = false;
   _showPayForBillModal(context) {
     AwesomeDialog(
             context: context,
@@ -37,24 +30,6 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
             btnCancelOnPress: () {},
             btnCancelText: "Hủy")
         .show();
-  }
-
-  void closeShowBillModal() {
-    setState(() {
-      isShowBillModal = false;
-    });
-  }
-
-  void closePrintBillModal() {
-    setState(() {
-      isShowPrintBillModal = false;
-    });
-  }
-
-  void closeCancleBillModal() {
-    setState(() {
-      isShowCancleBillModal = false;
-    });
   }
 
   @override
@@ -128,25 +103,31 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                                 child: BillInforContainer(
                                     typePopMenu: PopUpMenuBroughtReceipt(
                                       eventButton1: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const ManageBroughtReceipt()),
-                                        );
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return const ManageBroughtReceiptDialog();
+                                            });
                                       },
                                       eventButton2: () {
                                         _showPayForBillModal(context);
                                       },
                                       eventButton3: () {
-                                        setState(() {
-                                          isShowPrintBillModal = true;
-                                        });
+                                        // setState(() {
+                                        //   isShowPrintBillModal = true;
+                                        // });
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return const PrintBillDialog();
+                                            });
                                       },
                                       eventButton4: () {
-                                        setState(() {
-                                          isShowCancleBillModal = true;
-                                        });
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return const CancleBillDialog();
+                                            });
                                       },
                                     ),
                                     statusText: "Đang chế biến"),
@@ -185,25 +166,31 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                                 child: BillInforContainer(
                                   typePopMenu: PopUpMenuBroughtReceipt(
                                     eventButton1: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const ManageBroughtReceipt()),
-                                      );
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return const ManageBroughtReceiptDialog();
+                                          });
                                     },
                                     eventButton2: () {
                                       _showPayForBillModal(context);
                                     },
                                     eventButton3: () {
-                                      setState(() {
-                                        isShowPrintBillModal = true;
-                                      });
+                                      // setState(() {
+                                      //   isShowPrintBillModal = true;
+                                      // });
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return const PrintBillDialog();
+                                          });
                                     },
                                     eventButton4: () {
-                                      setState(() {
-                                        isShowCancleBillModal = true;
-                                      });
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return const CancleBillDialog();
+                                          });
                                     },
                                   ),
                                   statusText: "Đang chế biến",
@@ -220,9 +207,14 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                                 child: BillInforContainer(
                                     typePopMenu: PopUpMenuPrintBill(
                                       eventButton1: () {
-                                        setState(() {
-                                          isShowPrintBillModal = true;
-                                        });
+                                        // setState(() {
+                                        //   isShowPrintBillModal = true;
+                                        // });
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return const PrintBillDialog();
+                                            });
                                       },
                                     ),
                                     statusText: "Hóa đơn đã hủy"),
@@ -241,12 +233,6 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                 ],
               ),
             )),
-            Visibility(
-                visible: isShowPrintBillModal,
-                child: PrintBillModal(eventCloseButton: closePrintBillModal)),
-            Visibility(
-                visible: isShowCancleBillModal,
-                child: CancleBillModal(eventCloseButton: closeCancleBillModal))
           ],
         ));
   }

@@ -1,8 +1,11 @@
+import 'package:app_restaurant/config/all_void.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
+import 'package:app_restaurant/screen/manager/manage_room.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
-import 'package:app_restaurant/widgets/modal/create_room_modal.dart';
+import 'package:app_restaurant/widgets/list_custom_dialog.dart';
+import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,27 +20,8 @@ class ManageStore extends StatefulWidget {
 }
 
 class _ManageStoreState extends State<ManageStore> {
-  bool isShowCreateRoomModal = false;
-  void closeCreateRoomModal() {
-    setState(() {
-      isShowCreateRoomModal = false;
-    });
-  }
-
-  _showUpdateInfoModal(context) {
-    AwesomeDialog(
-            context: context,
-            dialogType: DialogType.question,
-            animType: AnimType.rightSlide,
-            headerAnimationLoop: true,
-            title: 'Bạn có chắc chắn thực hiện tác vụ này!',
-            desc: 'Sau khi bạn xác nhận sẽ không thể trở lại.',
-            btnOkOnPress: () {},
-            btnOkText: "Xác Nhận",
-            btnCancelOnPress: () {},
-            btnCancelText: "Hủy")
-        .show();
-  }
+  // bool isShowCreateRoomModal = false;
+  void createRoom() {}
 
   @override
   Widget build(BuildContext context) {
@@ -298,219 +282,178 @@ class _ManageStoreState extends State<ManageStore> {
                       ),
                       space25H,
                       Card(
-                        elevation: 8.0,
-                        margin: EdgeInsets.all(8),
-                        child: Container(
-                            width: 1.sw,
-                            height: 300,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20.w)),
-                            child: Padding(
-                              padding: EdgeInsets.all(10.w),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      TextApp(
-                                        text: "Danh sách phòng",
-                                        fontsize: 16.sp,
-                                        fontWeight: FontWeight.bold,
+                          elevation: 8.0,
+                          margin: EdgeInsets.all(8),
+                          child: Padding(
+                            padding: EdgeInsets.all(20.w),
+                            child: Column(
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextApp(
+                                      text: "Danh sách phòng",
+                                      fontsize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ],
+                                ),
+                                space10H,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      width: 150.w,
+                                      child: ButtonGradient(
+                                        radius: 8.w,
+                                        color1: lightBlue,
+                                        color2: lightBlue,
+                                        event: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return CreateRoomDialog(
+                                                    eventSaveButton:
+                                                        createRoom);
+                                              });
+                                        },
+                                        text: "Tạo phòng".toUpperCase(),
+                                        height: 30.h,
+                                        textColor: Colors.white,
                                       ),
-                                    ],
-                                  ),
-                                  space10H,
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        width: 150.w,
-                                        child: ButtonGradient(
-                                          radius: 8.w,
-                                          color1: lightBlue,
-                                          color2: lightBlue,
-                                          event: () {
-                                            setState(() {
-                                              isShowCreateRoomModal = true;
-                                            });
-                                          },
-                                          text: "Tạo phòng".toUpperCase(),
-                                          height: 30.h,
-                                          textColor: Colors.white,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  space10H,
-                                  Expanded(
-                                      child: ListView.builder(
-                                          // physics: NeverScrollableScrollPhysics(),
-                                          itemCount: 3,
-                                          itemBuilder: (context, index) {
-                                            return Column(
+                                    )
+                                  ],
+                                ),
+                                space10H,
+                                ListView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: 3,
+                                    itemBuilder: (context, index) {
+                                      return Column(
+                                        children: [
+                                          Divider(),
+                                          space10H,
+                                          Container(
+                                            width: 1.sw,
+                                            padding: EdgeInsets.all(10.w),
+                                            decoration: const BoxDecoration(
+                                              border: Border(
+                                                  top: BorderSide(
+                                                      width: 0,
+                                                      color: Colors.white),
+                                                  bottom: BorderSide(
+                                                      width: 0,
+                                                      color: Colors.white),
+                                                  left: BorderSide(
+                                                      width: 3,
+                                                      color: Colors.blue),
+                                                  right: BorderSide(
+                                                      width: 0,
+                                                      color: Colors.white)),
+                                            ),
+                                            child: Column(
                                               children: [
-                                                Divider(),
-                                                space10H,
-                                                Container(
-                                                  width: 1.sw,
-                                                  // height: 200,
-                                                  padding: EdgeInsets.all(10.w),
-                                                  decoration: BoxDecoration(
-                                                    border: const Border(
-                                                        top: BorderSide(
-                                                            width: 0,
-                                                            color:
-                                                                Colors.white),
-                                                        bottom: BorderSide(
-                                                            width: 0,
-                                                            color:
-                                                                Colors.white),
-                                                        left: BorderSide(
-                                                            width: 3,
-                                                            color: Colors.blue),
-                                                        right: BorderSide(
-                                                            width: 0,
-                                                            color:
-                                                                Colors.white)),
-
-                                                    // color: Colors.amber,
-                                                  ),
-                                                  child: Column(
-                                                    // crossAxisAlignment: CrossAxisAlignment.center,
-                                                    // mainAxisAlignment: MainAxisAlignment.center,
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    TextApp(text: "Phong 1"),
+                                                    // Icon(Icons.more),
+                                                    PopUpMenuManageRoom(
+                                                      eventButton1: () {
+                                                        showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return CreateRoomDialog(
+                                                                  eventSaveButton:
+                                                                      createRoom);
+                                                            });
+                                                      },
+                                                      eventButton2: () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  ManageRoom()),
+                                                        );
+                                                      },
+                                                      eventButton3: () {
+                                                        showConfirmDialog(
+                                                            context, () {
+                                                          print("ConFIRM");
+                                                        });
+                                                      },
+                                                    )
+                                                  ],
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.all(20.w),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                     children: [
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
+                                                      Column(
                                                         children: [
                                                           TextApp(
-                                                              text: "Phong 1"),
-                                                          // Icon(Icons.more),
-                                                          PopupMenuButton(
-                                                            onSelected:
-                                                                (value) {
-                                                              switch (value) {
-                                                                case '1':
-                                                                  // code for the edit action
-
-                                                                  break;
-                                                                case '2':
-                                                                  // code for the remove action
-                                                                  break;
-                                                                // other cases...
-                                                              }
-                                                            },
-                                                            itemBuilder:
-                                                                (context) => [
-                                                              PopupMenuItem(
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    isShowCreateRoomModal =
-                                                                        true;
-                                                                  });
-                                                                },
-                                                                child: Text(
-                                                                    "Chỉnh sửa phòng"),
-                                                              ),
-                                                              PopupMenuItem(
-                                                                onTap: () {
-                                                                  print(
-                                                                      "PRESS");
-                                                                },
-                                                                child: Text(
-                                                                    "Quản lí phòng"),
-                                                              ),
-                                                              PopupMenuItem(
-                                                                onTap: () {
-                                                                  _showUpdateInfoModal(
-                                                                      context);
-                                                                },
-                                                                child: Text(
-                                                                    "Xoá phòng"),
-                                                              )
-                                                            ],
-                                                          )
+                                                              text: "Ngày tạo"),
+                                                          space10H,
+                                                          TextApp(
+                                                            text: "26-02-2024",
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
                                                         ],
                                                       ),
-                                                      Padding(
-                                                        padding: EdgeInsets.all(
-                                                            20.w),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Column(
-                                                              children: [
-                                                                TextApp(
-                                                                    text:
-                                                                        "Ngày tạo"),
-                                                                space10H,
-                                                                TextApp(
-                                                                  text:
-                                                                      "26-02-2024",
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            Column(
-                                                              children: [
-                                                                TextApp(
-                                                                    text:
-                                                                        "Số bàn trong phòng"),
-                                                                space10H,
-                                                                TextApp(
-                                                                    text: "1",
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ],
-                                                            ),
-                                                            Column(
-                                                              children: [
-                                                                TextApp(
-                                                                    text:
-                                                                        "Trạng thái"),
-                                                                space10H,
-                                                                TextApp(
-                                                                    text:
-                                                                        "Đang hoạt động",
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ],
-                                                            )
-                                                          ],
-                                                        ),
+                                                      Column(
+                                                        children: [
+                                                          TextApp(
+                                                              text:
+                                                                  "Số bàn trong phòng"),
+                                                          space10H,
+                                                          TextApp(
+                                                              text: "1",
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ],
+                                                      ),
+                                                      Column(
+                                                        children: [
+                                                          TextApp(
+                                                              text:
+                                                                  "Trạng thái"),
+                                                          space10H,
+                                                          TextApp(
+                                                              text:
+                                                                  "Đang hoạt động",
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ],
                                                       )
                                                     ],
                                                   ),
                                                 )
                                               ],
-                                            );
-                                          }))
-                                ],
-                              ),
-                            )),
-                      )
+                                            ),
+                                          )
+                                        ],
+                                      );
+                                    })
+                              ],
+                            ),
+                          ))
                     ],
                   ),
                 ),
               ),
             ),
-            Visibility(
-                visible: isShowCreateRoomModal,
-                child: CreateRoomModal(
-                    eventCloseButton: () {
-                      closeCreateRoomModal();
-                    },
-                    eventSaveButton: () {})),
           ],
         ));
   }

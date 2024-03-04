@@ -9,7 +9,7 @@ import 'package:app_restaurant/screen/manager/list_bill.dart';
 import 'package:app_restaurant/screen/manager/list_food.dart';
 import 'package:app_restaurant/screen/manager/list_staff.dart';
 import 'package:app_restaurant/screen/manager/list_stores.dart';
-import 'package:app_restaurant/screen/manager/manager_infor.dart';
+import 'package:app_restaurant/screen/manager/manage_infor.dart';
 import 'package:app_restaurant/screen/manager/notifications.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/item_drawer.dart';
@@ -21,13 +21,13 @@ import 'package:go_router/go_router.dart';
 
 class ManagerFabTab extends StatefulWidget {
   ManagerFabTab({Key? key, required this.selectedIndex}) : super(key: key);
-  int selectedIndex = 8;
+  int selectedIndex = 4;
   @override
   State<ManagerFabTab> createState() => _ManagerFabTabState();
 }
 
 class _ManagerFabTabState extends State<ManagerFabTab> {
-  int currentIndex = 8;
+  int currentIndex = 4;
   bool isHaveNoti = true;
   @override
   void initState() {

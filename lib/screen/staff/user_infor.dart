@@ -1,15 +1,13 @@
 import 'dart:io';
 
+import 'package:app_restaurant/config/all_void.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/fake_data.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
-import 'package:app_restaurant/widgets/item_drawer.dart';
-import 'package:app_restaurant/widgets/sub_item_drawer.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,36 +44,6 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
     setState(() {
       selectedImage = File(returndImage.path);
     });
-  }
-
-  _showUpdateInfoModal(context) {
-    AwesomeDialog(
-            context: context,
-            dialogType: DialogType.question,
-            animType: AnimType.rightSlide,
-            headerAnimationLoop: true,
-            title: 'Bạn có chắc chắn thực hiện tác vụ này!',
-            desc: 'Sau khi bạn xác nhận sẽ không thể trở lại.',
-            btnOkOnPress: () {},
-            btnOkText: "Xác Nhận",
-            btnCancelOnPress: () {},
-            btnCancelText: "Hủy")
-        .show();
-  }
-
-  _showUpdatePasswordModal(context) {
-    AwesomeDialog(
-            context: context,
-            dialogType: DialogType.question,
-            animType: AnimType.rightSlide,
-            headerAnimationLoop: true,
-            title: 'Bạn có chắc chắn thực hiện tác vụ này!',
-            desc: 'Sau khi bạn xác nhận sẽ không thể trở lại.',
-            btnOkOnPress: () {},
-            btnOkText: "Xác Nhận",
-            btnCancelOnPress: () {},
-            btnCancelText: "Hủy")
-        .show();
   }
 
   @override
@@ -1118,7 +1086,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                             event: () {
                                               if (_formField1.currentState!
                                                   .validate()) {
-                                                _showUpdateInfoModal(context);
+                                                showConfirmDialog(context, () {
+                                                  print("ConFIRM");
+                                                });
                                                 surNameController.clear();
                                                 nameController.clear();
                                                 fullNameController.clear();
@@ -1393,7 +1363,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                         event: () {
                                           if (_formField2.currentState!
                                               .validate()) {
-                                            _showUpdatePasswordModal(context);
+                                            showConfirmDialog(context, () {
+                                              print("ConFIRM");
+                                            });
                                             currentPassworldController.clear();
                                             newPassworldController.clear();
                                             reNewPassworldController.clear();

@@ -24,6 +24,8 @@ const String storeId = "Mã cửa hàng";
 const String storeName = "Tên cửa hàng";
 const String storeAddress = "Địa chỉ cửa hàng";
 const String displayMode = "Chế độ hiển thị";
+const String allowOpenTable =
+    "Nếu bạn muốn bàn này được hoạt động thì hãy cấp phép.";
 const String allowOpenStore =
     "Nếu bạn sẵn sàng cho cửa hàng đi vào hoạt động, bạn phải cho phép nó hiển thị với những người khác.";
 const String desStore = "Mô tả cửa hàng";
@@ -52,3 +54,5 @@ const String back = "Về trước";
 const String image = "Hình ảnh";
 const String foodImage = "Hình ảnh món ăn";
 const String addPictureHere = "Thêm hình ảnh ở đây";
+const String notChangeFoodtoStore =
+    "Lưu ý: Khi bạn đổi cửa hàng thì món này sẽ chỉ xuất hiện ở đó.";

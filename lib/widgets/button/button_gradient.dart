@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ButtonGradient extends StatelessWidget {
-  void Function() event;
-  Color color1;
-  Color color2;
-  Color textColor;
-  double fontSize;
-  double height;
-  bool isUpperCase;
-  double radius;
+  final void Function() event;
+  final Color color1;
+  final Color color2;
+  final Color textColor;
+  final double fontSize;
+  final double height;
+  final bool isUpperCase;
+  final double radius;
   final String text;
 
-  ButtonGradient({
+  const ButtonGradient({
     Key? key,
     required this.color1,
     required this.color2,

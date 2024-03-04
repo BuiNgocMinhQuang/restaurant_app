@@ -1,3 +1,4 @@
+import 'package:app_restaurant/config/all_void.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/screen/manager/edit_staff_infor.dart';
@@ -26,30 +27,6 @@ class _ListStaffState extends State<ListStaff> {
   TextEditingController _dateStartController = TextEditingController();
   TextEditingController _dateEndController = TextEditingController();
   String accountStatus = "isActive";
-  _showUpdateInfoModal(context) {
-    AwesomeDialog(
-            context: context,
-            dialogType: DialogType.question,
-            animType: AnimType.rightSlide,
-            headerAnimationLoop: true,
-            title: 'Bạn có chắc chắn thực hiện tác vụ này!',
-            desc: 'Sau khi bạn xác nhận sẽ không thể trở lại.',
-            btnOkOnPress: () {
-              if (accountStatus == "isLock") {
-                setState(() {
-                  accountStatus = "isActive";
-                });
-              } else {
-                setState(() {
-                  accountStatus = "isLock";
-                });
-              }
-            },
-            btnOkText: "Xác Nhận",
-            btnCancelOnPress: () {},
-            btnCancelText: "Hủy")
-        .show();
-  }
 
   void selectDayStart() async {
     DateTime? picked = await showDatePicker(
@@ -433,7 +410,10 @@ class _ListStaffState extends State<ListStaff> {
                                                         : Color.fromRGBO(
                                                             103, 177, 8, 1),
                                                 event: () {
-                                                  _showUpdateInfoModal(context);
+                                                  showConfirmDialog(context,
+                                                      () {
+                                                    print("ConFIRM");
+                                                  });
                                                 },
                                                 icon: Icons.lock),
                                           )
