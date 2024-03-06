@@ -590,7 +590,7 @@ class _EditFoodState extends State<EditFood> {
                                                               index]);
                                                     },
                                                     child: TextApp(
-                                                      text: 'Xóa hình ảnh',
+                                                      text: deleteImage,
                                                       color: Colors.blue,
                                                     ),
                                                   )
@@ -629,7 +629,7 @@ class _EditFoodState extends State<EditFood> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextApp(
-                        text: "Giao diện",
+                        text: ui,
                         color: const Color.fromRGBO(52, 71, 103, 1),
                         fontFamily: "OpenSans",
                         fontWeight: FontWeight.bold,
@@ -637,7 +637,7 @@ class _EditFoodState extends State<EditFood> {
                       ),
                       space20H,
                       TextApp(
-                        text: "Nội dung",
+                        text: content,
                         fontsize: 12.sp,
                         fontWeight: FontWeight.bold,
                         color: blueText,
@@ -753,7 +753,7 @@ class _EditFoodState extends State<EditFood> {
                     color1: pupple,
                     color2: red,
                     event: () {},
-                    text: "Lưu",
+                    text: save,
                     textColor: Colors.white,
                     fontSize: 14.sp,
                   ),

@@ -56,3 +56,7 @@ const String foodImage = "Hình ảnh món ăn";
 const String addPictureHere = "Thêm hình ảnh ở đây";
 const String notChangeFoodtoStore =
     "Lưu ý: Khi bạn đổi cửa hàng thì món này sẽ chỉ xuất hiện ở đó.";
+const String deleteImage = "Xóa hình ảnh";
+const String content = "Nội dung";
+const String ui = "Giao diện";
+const String save = "Lưu";

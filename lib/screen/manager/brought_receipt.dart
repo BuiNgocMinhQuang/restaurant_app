@@ -18,21 +18,6 @@ class ManagerBroughtReceipt extends StatefulWidget {
 
 class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
     with TickerProviderStateMixin {
-  _showPayForBillModal(context) {
-    AwesomeDialog(
-            context: context,
-            dialogType: DialogType.question,
-            animType: AnimType.rightSlide,
-            headerAnimationLoop: true,
-            title: 'Bạn có chắc chắn thực hiện tác vụ này!',
-            desc: 'Sau khi bạn xác nhận sẽ không thể trở lại.',
-            btnOkOnPress: () {},
-            btnOkText: "Xác Nhận",
-            btnCancelOnPress: () {},
-            btnCancelText: "Hủy")
-        .show();
-  }
-
   @override
   Widget build(BuildContext context) {
     final TabController tabController = TabController(length: 4, vsync: this);
@@ -171,7 +156,7 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                                           });
                                     },
                                     eventButton2: () {
-                                      _showPayForBillModal(context);
+                                      showConfirmDialog(context, () {});
                                     },
                                     eventButton3: () {
                                       // setState(() {

@@ -8,8 +8,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:app_restaurant/config/colors.dart';
+import 'package:app_restaurant/config/all_void.dart';
 
 class ManagerSignUp extends StatefulWidget {
   const ManagerSignUp({super.key});
@@ -624,7 +624,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                                   TapGestureRecognizer()
                                                                     ..onTap =
                                                                         () {
-                                                                      _launchURL();
+                                                                      launchURL();
                                                                       // Single tapped.
                                                                     },
                                                               style: TextStyle(
@@ -738,12 +738,5 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                 ),
               )),
         ));
-  }
-}
-
-_launchURL() async {
-  final Uri url = Uri.parse('https://thuonghieuvietsol.com/');
-  if (!await launchUrl(url)) {
-    throw Exception('Could not launch $url');
   }
 }

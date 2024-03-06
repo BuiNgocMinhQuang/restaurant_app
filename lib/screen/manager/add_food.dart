@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/fake_data.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
-
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
@@ -439,7 +437,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                                       imageFileList![index]);
                                                 },
                                                 child: TextApp(
-                                                  text: 'Xóa hình ảnh',
+                                                  text: deleteImage,
                                                   color: Colors.blue,
                                                 ),
                                               )
@@ -522,7 +520,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextApp(
-                    text: "Nội dung",
+                    text: content,
                     color: const Color.fromRGBO(52, 71, 103, 1),
                     fontFamily: "OpenSans",
                     fontWeight: FontWeight.bold,
@@ -861,7 +859,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                       priceOfFood.clear();
                                     }
                                   },
-                                  text: "Lưu",
+                                  text: save,
                                   fontSize: 12.sp,
                                   radius: 8.r,
                                   textColor: Colors.white,

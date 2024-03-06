@@ -1,3 +1,6 @@
+import 'package:app_restaurant/screen/manager/list_inventory.dart';
+import 'package:flutter/material.dart';
+
 List<String> listStore = [
   "Cửa hàng 1",
   "Cửa hàng 2",
@@ -193,4 +196,68 @@ List<ItemFood> listFood = [
       image: "assets/images/banner3.png",
       price: "10,000 đ",
       category: "Nước giải khát"),
+];
+
+List<DataColumn> dataColumn = [
+  DataColumn(label: Text('Tên mặt hàng')),
+  DataColumn(label: Text('Đơn vị')),
+  DataColumn(label: Text('SL tối thiểu')),
+  DataColumn(label: Text('SL tồn cuối')),
+  DataColumn(label: Text('Trạng thái')),
+  DataColumn(label: Text('Thao tác kho')),
+];
+List<List<dynamic>> dataRow = [
+  ['Mặt hàng 1', 'Kg', 1, 10, 'Còn hàng'],
+  [2, 'Jane Smith', 'jane.smith@example.com'],
+  [3, 'Michael Brown', 'michael.brown@example.com'],
+  [3, 'Michael Brown', 'michael.brown@example.com'],
+  [3, 'Michael Brown', 'michael.brown@example.com'],
+  [3, 'Michael Brown', 'michael.brown@example.com'],
+];
+
+class MyData {
+  // final int id;
+  final String name;
+  final String unit;
+  final int minQuantity;
+  final int maxQuantity;
+  final String status;
+  bool isSelected = false;
+
+  MyData({
+    required this.name,
+    required this.unit,
+    required this.minQuantity,
+    required this.maxQuantity,
+    required this.status,
+  });
+}
+
+List<MyData> myData = [
+  MyData(
+      name: 'Mặt hàng 1',
+      unit: 'Kg',
+      minQuantity: 1,
+      maxQuantity: 100,
+      status: 'Còn hàng'),
+  MyData(
+      name: 'Mặt hàng 2',
+      unit: 'Tấn',
+      minQuantity: 0,
+      maxQuantity: 10,
+      status: 'Hết hàng'),
+  MyData(
+      name: 'Mặt hàng 3',
+      unit: 'Gam',
+      minQuantity: 98,
+      maxQuantity: 200,
+      status: 'Còn hàng'),
+];
+
+List<String> listMeasure = [
+  "Tấn",
+  "Tạ",
+  "Yến",
+  "Kg",
+  "Gram",
 ];

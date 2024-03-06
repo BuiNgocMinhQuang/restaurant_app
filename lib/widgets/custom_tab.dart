@@ -9,36 +9,35 @@ class CustomTab extends StatelessWidget {
   double sizeIcon;
   double fontSize;
   Color colorText;
-  CustomTab(
-      {Key? key,
-      required this.text,
-      required this.icon,
-      this.colorText = Colors.black,
-      this.sizeIcon = 0,
-      this.fontSize = 0})
-      : super(key: key);
+  CustomTab({
+    Key? key,
+    required this.text,
+    required this.icon,
+    this.colorText = Colors.black,
+    this.sizeIcon = 0,
+    this.fontSize = 0,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          EdgeInsets.only(left: 10.w, right: 10.w, top: 10.w, bottom: 10.w),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            size: sizeIcon == 0 ? 20.w : sizeIcon,
-          ),
-          SizedBox(
-            width: 3.w,
-          ),
-          Tab(
-            text: text,
-          )
-        ],
-      ),
-    );
+        padding:
+            EdgeInsets.only(left: 10.w, right: 10.w, top: 10.w, bottom: 10.w),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: sizeIcon == 0 ? 20.w : sizeIcon,
+            ),
+            SizedBox(
+              width: 3.w,
+            ),
+            Tab(
+              text: text,
+            )
+          ],
+        ));
   }
 }

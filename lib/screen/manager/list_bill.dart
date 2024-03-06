@@ -68,10 +68,6 @@ class _ManagerListBillState extends State<ManagerListBill>
                               CustomTab(
                                   text: "Hóa đơn đã hủy",
                                   icon: Icons.cancel_sharp),
-
-                              // Tab(text: "Đã thanh toán"),
-                              // Tab(text: "Chưa thanh toán"),
-                              // Tab(text: "Hóa đơn đã hủy"),
                             ]),
                       ))),
             ),

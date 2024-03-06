@@ -59,10 +59,54 @@ class StatusBoxIsLock extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(5.w),
           child: TextApp(
-            text: "Đang hoạt động".toUpperCase(),
+            text: "Đang bị khoá".toUpperCase(),
             fontsize: 8.sp,
             fontWeight: FontWeight.bold,
             color: Color.fromRGBO(89, 116, 162, 1),
+          ),
+        ));
+  }
+}
+
+class StatusBoxStocking extends StatelessWidget {
+  const StatusBoxStocking({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5.w),
+          color: Color.fromARGB(255, 144, 238, 30),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(5.w),
+          child: TextApp(
+            text: "Còn hàng".toUpperCase(),
+            fontsize: 8.sp,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ));
+  }
+}
+
+class StatusBoxOutOfStock extends StatelessWidget {
+  const StatusBoxOutOfStock({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5.w),
+          color: Color.fromARGB(255, 238, 41, 15),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(5.w),
+          child: TextApp(
+            text: "Hết hàng".toUpperCase(),
+            fontsize: 8.sp,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
         ));
   }

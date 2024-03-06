@@ -5,11 +5,13 @@ import 'package:app_restaurant/screen/manager/add_staff.dart';
 import 'package:app_restaurant/screen/manager/booking_table.dart';
 import 'package:app_restaurant/screen/manager/brought_receipt.dart';
 import 'package:app_restaurant/screen/manager/home.dart';
+import 'package:app_restaurant/screen/manager/import_inventory.dart';
 import 'package:app_restaurant/screen/manager/list_bill.dart';
 import 'package:app_restaurant/screen/manager/list_food.dart';
 import 'package:app_restaurant/screen/manager/list_staff.dart';
 import 'package:app_restaurant/screen/manager/list_stores.dart';
 import 'package:app_restaurant/screen/manager/manage_infor.dart';
+import 'package:app_restaurant/screen/manager/list_inventory.dart';
 import 'package:app_restaurant/screen/manager/notifications.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/item_drawer.dart';
@@ -21,13 +23,13 @@ import 'package:go_router/go_router.dart';
 
 class ManagerFabTab extends StatefulWidget {
   ManagerFabTab({Key? key, required this.selectedIndex}) : super(key: key);
-  int selectedIndex = 4;
+  int selectedIndex = 10;
   @override
   State<ManagerFabTab> createState() => _ManagerFabTabState();
 }
 
 class _ManagerFabTabState extends State<ManagerFabTab> {
-  int currentIndex = 4;
+  int currentIndex = 10;
   bool isHaveNoti = true;
   @override
   void initState() {
@@ -46,6 +48,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
     ManagerListBill(), //index = 7
     ManagerBroughtReceipt(), //index = 8
     ManagerAddFood(), //index 9
+    ListInventory(), //index 10
+    ImportInventory() //11
   ];
   final ScrollController _scrollController = ScrollController();
 
@@ -70,7 +74,11 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                     ? const ManagerListBill()
                                     : currentIndex == 8
                                         ? const ManagerBroughtReceipt()
-                                        : const ManagerAddFood();
+                                        : currentIndex == 9
+                                            ? const ManagerAddFood()
+                                            : currentIndex == 10
+                                                ? const ListInventory()
+                                                : const ImportInventory();
 
     return Scaffold(
       appBar: AppBar(
@@ -146,26 +154,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
             )),
       ),
       body: PageStorage(bucket: bucket, child: currentScreen),
-      // body: PageStorage(
-      //     bucket: bucket,
-      //     child: SafeArea(
-      //       child: Stack(
-      //         children: [
-      //           currentScreen,
-      //           Positioned(
-      //             left: 10,
-      //             top: 20,
-      //             child: Builder(
-      //               builder: (context) => // Ensure Scaffold is in context
-      //                   IconButton(
-      //                       icon: Icon(Icons.menu),
-      //                       onPressed: () => Scaffold.of(context).openDrawer()),
-      //             ),
-      //           ),
-      //         ],
-      //       ),
-      //     )),
-
       drawer: Drawer(
         child: ListView(
           children: [
@@ -397,6 +385,60 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                 currentIndex = 8;
                               });
                               Navigator.pop(context);
+                            }),
+                      ],
+                      icon: Icons.person),
+                ),
+                SizedBox(
+                  height: 25.h,
+                ),
+                TextApp(
+                  text: 'Kho hàng',
+                  color: grey,
+                  fontsize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                SizedBox(
+                  height: 25.h,
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: ItemDrawer(
+                      isExpand: true,
+                      // item: DrawerItem.staff,
+                      text: 'Cửa hàng 1',
+                      iconColor: currentIndex == 10 || currentIndex == 11
+                          ? Colors.white
+                          : Colors.black,
+                      backgroundIconColor:
+                          currentIndex == 10 || currentIndex == 11
+                              ? Colors.blue
+                              : const Color.fromRGBO(233, 236, 239, 1),
+                      subItem: [
+                        SubItemDrawer(
+                            text: "Danh sách tồn kho",
+                            textColor:
+                                currentIndex == 10 ? Colors.blue : Colors.black,
+                            event: () {
+                              setState(() {
+                                currentScreen = const ListInventory();
+                                currentIndex = 10;
+                              });
+                              Navigator.pop(context);
+                            }),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        SubItemDrawer(
+                            text: "Nhập kho",
+                            textColor:
+                                currentIndex == 11 ? Colors.blue : Colors.black,
+                            event: () {
+                              setState(() {
+                                currentScreen = const ListInventory();
+                                currentIndex = 11;
+                              });
+                              Navigator.pop(context);
                             })
                       ],
                       icon: Icons.person),
@@ -472,7 +514,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
           ],
         ),
       ),
-
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {

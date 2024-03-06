@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void showConfirmDialog(context, Function confirmEvent) {
   AwesomeDialog(
@@ -15,4 +16,11 @@ void showConfirmDialog(context, Function confirmEvent) {
           btnCancelOnPress: () {},
           btnCancelText: "Hủy")
       .show();
+}
+
+void launchURL() async {
+  final Uri url = Uri.parse('https://thuonghieuvietsol.com/');
+  if (!await launchUrl(url)) {
+    throw Exception('Could not launch $url');
+  }
 }

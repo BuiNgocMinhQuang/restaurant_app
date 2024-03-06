@@ -2,6 +2,7 @@ import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:app_restaurant/config/all_void.dart';
 
 class CopyRightText extends StatelessWidget {
   const CopyRightText({super.key});
@@ -19,7 +20,7 @@ class CopyRightText extends StatelessWidget {
           ),
         ),
         InkWell(
-          onTap: _launchURL,
+          onTap: launchURL,
           child: TextApp(
             text: "Thương Hiệu Việt",
             fontWeight: FontWeight.bold,
@@ -29,12 +30,5 @@ class CopyRightText extends StatelessWidget {
         )
       ],
     );
-  }
-}
-
-_launchURL() async {
-  final Uri url = Uri.parse('https://thuonghieuvietsol.com/');
-  if (!await launchUrl(url)) {
-    throw Exception('Could not launch $url');
   }
 }

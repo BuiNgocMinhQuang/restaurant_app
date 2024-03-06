@@ -535,7 +535,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                           event: () {
                             widget.eventSaveButton();
                           },
-                          text: "Lưu",
+                          text: save,
                           colorText: Colors.white,
                           backgroundColor: Color.fromRGBO(23, 193, 232, 1),
                           outlineColor: Color.fromRGBO(23, 193, 232, 1),
@@ -813,7 +813,7 @@ class MoveTableDialog extends StatelessWidget {
                       event: () {
                         eventSaveButton();
                       },
-                      text: "Lưu",
+                      text: save,
                       colorText: Colors.white,
                       backgroundColor: const Color.fromRGBO(23, 193, 232, 1),
                       outlineColor: const Color.fromRGBO(23, 193, 232, 1),
@@ -2361,6 +2361,7 @@ class PrintBillDialog extends StatelessWidget {
                             height: 1,
                             color: Colors.black,
                           ),
+                          space10H
                         ],
                       );
                     }),
@@ -2871,7 +2872,7 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
                       roomFieldController.clear();
                     }
                   },
-                  text: "Lưu",
+                  text: save,
                   colorText: Colors.white,
                   backgroundColor: const Color.fromRGBO(23, 193, 232, 1),
                   outlineColor: const Color.fromRGBO(23, 193, 232, 1),
@@ -3307,7 +3308,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                                                   widget.imageFileList![index]);
                                             },
                                             child: TextApp(
-                                              text: 'Xóa hình ảnh',
+                                              text: deleteImage,
                                               color: Colors.blue,
                                             ),
                                           )
@@ -3359,7 +3360,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                             addressStoreController.clear();
                           }
                         },
-                        text: "Lưu",
+                        text: save,
                         colorText: Colors.white,
                         backgroundColor: Color.fromRGBO(23, 193, 232, 1),
                         outlineColor: Color.fromRGBO(23, 193, 232, 1),
@@ -3758,7 +3759,7 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                             chairsOfTableController.clear();
                           }
                         },
-                        text: "Lưu",
+                        text: save,
                         colorText: Colors.white,
                         backgroundColor: Color.fromRGBO(23, 193, 232, 1),
                         outlineColor: Color.fromRGBO(23, 193, 232, 1),
@@ -3778,7 +3779,405 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
   }
 }
 
+class CreateItemDialog extends StatefulWidget {
+  final Function eventSaveButton;
+  const CreateItemDialog({
+    Key? key,
+    required this.eventSaveButton,
+  }) : super(key: key);
 
+  @override
+  State<CreateItemDialog> createState() => _CreateItemDialogState();
+}
+
+class _CreateItemDialogState extends State<CreateItemDialog>
+    with TickerProviderStateMixin {
+  File? selectedImage;
+  final _formField = GlobalKey<FormState>();
+  final _formField2 = GlobalKey<FormState>();
+  final nameItemController = TextEditingController();
+  final initalQuantityController = TextEditingController();
+  final minQuantityController = TextEditingController();
+  final ImagePicker imagePicker = ImagePicker();
+  QuillController _controllerQuill = QuillController.basic();
+  bool isHaveddddd = false;
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _controllerQuill;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    TabController _tabController = TabController(
+      length: 2,
+      vsync: this,
+    );
+    return AlertDialog(
+      content: SizedBox(
+        width: double.maxFinite,
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                    width: 1.sw,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      border: const Border(
+                          top: BorderSide(width: 0, color: Colors.grey),
+                          bottom: BorderSide(width: 1, color: Colors.grey),
+                          left: BorderSide(width: 0, color: Colors.grey),
+                          right: BorderSide(width: 0, color: Colors.grey)),
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15.w),
+                          topRight: Radius.circular(15.w)),
+                      // color: Colors.amber,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            TextApp(
+                              text: "Quản lý mặt hàng",
+                              fontsize: 18.sp,
+                              color: blueText,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ],
+                        ),
+                      ],
+                    )),
+                space15H,
+                TabBar(
+                    labelPadding: const EdgeInsets.only(left: 20, right: 20),
+                    labelColor: Colors.blue,
+                    unselectedLabelColor: Colors.black.withOpacity(0.5),
+                    labelStyle: const TextStyle(color: Colors.red),
+                    controller: _tabController,
+                    isScrollable: true,
+                    indicatorSize: TabBarIndicatorSize.label,
+                    tabs: [
+                      Tab(text: "Thông tin chung"),
+                      Tab(
+                        text: "Quy đổi đơn vị",
+                      ),
+                    ]),
+                Container(
+                  width: 1.sw,
+                  height: 400.h,
+                  child: TabBarView(controller: _tabController, children: [
+                    ListView(
+                      shrinkWrap: true,
+                      children: [
+                        Form(
+                          key: _formField,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ////////
+                              SizedBox(
+                                height: 30.h,
+                              ),
+                              //////
+                              TextApp(
+                                text: "Tên mặt hàng",
+                                fontsize: 12.sp,
+                                fontWeight: FontWeight.bold,
+                                color: blueText,
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+
+                              TextFormField(
+                                controller: nameItemController,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return canNotNull;
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                cursorColor:
+                                    const Color.fromRGBO(73, 80, 87, 1),
+                                decoration: InputDecoration(
+                                    fillColor: const Color.fromARGB(
+                                        255, 226, 104, 159),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          color:
+                                              Color.fromRGBO(214, 51, 123, 0.6),
+                                          width: 2.0),
+                                      borderRadius: BorderRadius.circular(8.r),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8.r),
+                                    ),
+                                    // hintText: storeName,
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.all(
+                                        1.sw > 600 ? 20.w : 15.w)),
+                              ),
+                              /////
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              TextApp(
+                                text: "Đơn vị",
+                                fontsize: 12.sp,
+                                fontWeight: FontWeight.bold,
+                                color: blueText,
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              DropdownSearch(
+                                validator: (value) {
+                                  if (value == "Nhập đơn vị") {
+                                    // setState(() {
+                                    //   isHaveddddd = false;
+                                    // });
+                                    return canNotNull;
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                items: listMeasure,
+                                dropdownDecoratorProps: DropDownDecoratorProps(
+                                  dropdownSearchDecoration: InputDecoration(
+                                    fillColor: const Color.fromARGB(
+                                        255, 226, 104, 159),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          color:
+                                              Color.fromRGBO(214, 51, 123, 0.6),
+                                          width: 2.0),
+                                      borderRadius: BorderRadius.circular(8.r),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8.r),
+                                    ),
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.all(15.w),
+                                    hintText: "Nhập đơn vị",
+                                  ),
+                                ),
+                                onChanged: print,
+                                selectedItem: "Nhập đơn vị",
+                              ),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              ////
+                              TextApp(
+                                text: "Số lượng ban đầu",
+                                fontsize: 12.sp,
+                                fontWeight: FontWeight.bold,
+                                color: blueText,
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              TextFormField(
+                                controller: initalQuantityController,
+                                cursorColor:
+                                    const Color.fromRGBO(73, 80, 87, 1),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return canNotNull;
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                decoration: InputDecoration(
+                                    fillColor: const Color.fromARGB(
+                                        255, 226, 104, 159),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          color:
+                                              Color.fromRGBO(214, 51, 123, 0.6),
+                                          width: 2.0),
+                                      borderRadius: BorderRadius.circular(8.r),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8.r),
+                                    ),
+                                    // hintText: storeAddress,
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.all(
+                                        1.sw > 600 ? 20.w : 15.w)),
+                              ),
+
+                              SizedBox(
+                                height: 30.h,
+                              ),
+                              ////
+                              TextApp(
+                                text: "Số lượng tối thiểu",
+                                fontsize: 12.sp,
+                                fontWeight: FontWeight.bold,
+                                color: blueText,
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              TextFormField(
+                                controller: minQuantityController,
+                                cursorColor:
+                                    const Color.fromRGBO(73, 80, 87, 1),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return canNotNull;
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                decoration: InputDecoration(
+                                    fillColor: const Color.fromARGB(
+                                        255, 226, 104, 159),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          color:
+                                              Color.fromRGBO(214, 51, 123, 0.6),
+                                          width: 2.0),
+                                      borderRadius: BorderRadius.circular(8.r),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8.r),
+                                    ),
+                                    // hintText: storeAddress,
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.all(
+                                        1.sw > 600 ? 20.w : 15.w)),
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+
+                              SizedBox(
+                                height: 30.h,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    // Tab2
+
+                    ListView(
+                      shrinkWrap: true,
+                      children: [
+                        Form(
+                          key: _formField2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ////////
+                              SizedBox(
+                                height: 30.h,
+                              ),
+                              //////
+                              isHaveddddd
+                                  ? TextApp(
+                                      text:
+                                          "* Lưu ý: Chỉ số nhập vào bé nhất là 1 và đơn vị quy đổi không được trùng lặp",
+                                      fontsize: 12.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red,
+                                    )
+                                  : Container(
+                                      width: 1.sw,
+                                      height: 50.h,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8.w),
+                                          color: Colors.red),
+                                      child: Center(
+                                        child: TextApp(
+                                          text: "Chưa chọn đơn vị quy đổi",
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontsize: 14.sp,
+                                        ),
+                                      ),
+                                    ),
+
+                              SizedBox(
+                                width: 20.w,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ]),
+                ),
+                space15H,
+                Container(
+                  width: 1.sw,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    border: const Border(
+                        top: BorderSide(width: 1, color: Colors.grey),
+                        bottom: BorderSide(width: 0, color: Colors.grey),
+                        left: BorderSide(width: 0, color: Colors.grey),
+                        right: BorderSide(width: 0, color: Colors.grey)),
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(15.w),
+                        bottomRight: Radius.circular(15.w)),
+                    // color: Colors.green,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ButtonApp(
+                        event: () {
+                          Navigator.of(context).pop();
+                        },
+                        text: "Đóng",
+                        colorText: Colors.white,
+                        backgroundColor: Color.fromRGBO(131, 146, 171, 1),
+                        outlineColor: Color.fromRGBO(131, 146, 171, 1),
+                      ),
+                      SizedBox(
+                        width: 20.w,
+                      ),
+                      ButtonApp(
+                        event: () {
+                          if (_formField.currentState!.validate() &&
+                              _formField2.currentState!.validate()) {
+                            widget.eventSaveButton();
+                            nameItemController.clear();
+                            initalQuantityController.clear();
+                            minQuantityController.clear();
+                          }
+                        },
+                        text: "Lưu mặt hàng",
+                        colorText: Colors.white,
+                        backgroundColor: Color.fromRGBO(23, 193, 232, 1),
+                        outlineColor: Color.fromRGBO(23, 193, 232, 1),
+                      ),
+                      SizedBox(
+                        width: 20.w,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 
                         // Navigator.of(context).pop();

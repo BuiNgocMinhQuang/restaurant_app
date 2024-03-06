@@ -13,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StaffUserInformation extends StatefulWidget {
   const StaffUserInformation({super.key});
@@ -44,6 +45,11 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
     setState(() {
       selectedImage = File(returndImage.path);
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override

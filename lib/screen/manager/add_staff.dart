@@ -1040,7 +1040,7 @@ class _AddStaffState extends State<AddStaff> {
                                     });
                                   }
                                 },
-                                text: "Lưu",
+                                text: save,
                                 fontSize: 12.sp,
                                 radius: 8.r,
                                 textColor: Colors.white,
@@ -1090,204 +1090,60 @@ class _AddStaffState extends State<AddStaff> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          SafeArea(
-            child: SingleChildScrollView(
-                child: Padding(
-              padding: EdgeInsets.all(20.w),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 40.w, right: 40.w),
-                    child: SizedBox(
-                        width: 1.sw,
-                        height: 100.h,
-                        // color: Colors.white,
-                        child: Theme(
-                          data: ThemeData(canvasColor: Colors.white),
-                          child: Stepper(
-                            currentStep: currentStep,
-                            type: StepperType.horizontal,
-                            steps: getStep(),
-                            onStepTapped: (step) {
-                              setState(() {
-                                currentStep = step;
-                                currentSection = step + 1;
-                              });
-                            },
-                            onStepContinue: () {
-                              final isLastStep =
-                                  currentStep == getStep().length - 1;
-                              if (isLastStep) {
-                              } else {
-                                setState(() {
-                                  currentStep += 1;
-                                });
-                              }
-                            },
-                            onStepCancel: () {
-                              currentStep == 0
-                                  ? null
-                                  : setState(() {
-                                      currentStep -= 1;
-                                    });
-                            },
-                          ),
-                        )),
-                  ),
-                  sectionController()
-                  // AboutStaffModal()
-                ],
-              ),
-            )),
-          ),
-        ],
-      ),
-      drawer: Drawer(
-        child: ListView(
+        backgroundColor: Colors.white,
+        body: Stack(
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 100.w,
-                  height: 100.w,
-                  child: Image.asset(
-                    "assets/images/logo-thv.png",
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                const Divider(
-                  color: Colors.black45,
-                ),
-                space10H,
-                TextApp(
-                  text: 'Tất cả cửa hàng',
-                  color: grey,
-                  fontsize: 20.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-                space25H,
-                ItemDrawer(
-                    // item: DrawerItem.stores,
-                    text: 'Cửa hàng 1',
-                    subItem: [
-                      SubItemDrawer(
-                          text: "Đặt bàn",
-                          event: () {
-                            Navigator.pop(context);
-                          }),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      SubItemDrawer(
-                          text: "Danh sách hóa đơn",
-                          event: () {
-                            Navigator.pop(context);
-                          }),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      SubItemDrawer(
-                          text: "Hóa đơn mang về",
-                          event: () {
-                            Navigator.pop(context);
-                          })
-                    ],
-                    icon: Icons.store),
-                space25H,
-                ItemDrawer(
-                    // item: DrawerItem.stores,
-                    text: 'Cửa hàng 2',
-                    subItem: [
-                      SubItemDrawer(
-                          text: "Đặt bàn",
-                          event: () {
-                            Navigator.pop(context);
-                          }),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      SubItemDrawer(
-                          text: "Danh sách hóa đơn",
-                          event: () {
-                            Navigator.pop(context);
-                          }),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      SubItemDrawer(
-                          text: "Hóa đơn mang về",
-                          event: () {
-                            Navigator.pop(context);
-                          })
-                    ],
-                    icon: Icons.store),
-              ],
-            ),
-            space20H,
-            Padding(
-                padding: EdgeInsets.all(15.w),
-                child: Stack(
+            SafeArea(
+              child: SingleChildScrollView(
+                  child: Padding(
+                padding: EdgeInsets.all(20.w),
+                child: Column(
                   children: [
-                    Container(
-                      width: double.infinity,
-                      height: 180.h,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.r),
-                          image: const DecorationImage(
-                            image: AssetImage("assets/images/curved9.jpg"),
-                            fit: BoxFit.fill,
+                    Padding(
+                      padding: EdgeInsets.only(left: 40.w, right: 40.w),
+                      child: SizedBox(
+                          width: 1.sw,
+                          height: 100.h,
+                          // color: Colors.white,
+                          child: Theme(
+                            data: ThemeData(canvasColor: Colors.white),
+                            child: Stepper(
+                              currentStep: currentStep,
+                              type: StepperType.horizontal,
+                              steps: getStep(),
+                              onStepTapped: (step) {
+                                setState(() {
+                                  currentStep = step;
+                                  currentSection = step + 1;
+                                });
+                              },
+                              onStepContinue: () {
+                                final isLastStep =
+                                    currentStep == getStep().length - 1;
+                                if (isLastStep) {
+                                } else {
+                                  setState(() {
+                                    currentStep += 1;
+                                  });
+                                }
+                              },
+                              onStepCancel: () {
+                                currentStep == 0
+                                    ? null
+                                    : setState(() {
+                                        currentStep -= 1;
+                                      });
+                              },
+                            ),
                           )),
                     ),
-                    Padding(
-                      padding: EdgeInsets.all(15.w),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 50.w,
-                            height: 50.w,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white),
-                            child:
-                                const Icon(Icons.power_settings_new_outlined),
-                          ),
-                          space15H,
-                          Center(
-                            child: TextApp(
-                              text: "Ten Chu Cua Hang",
-                              textAlign: TextAlign.center,
-                              color: Colors.white,
-                            ),
-                          ),
-                          Center(
-                            child: TextApp(
-                                text: "chucuahang@gmail.com",
-                                textAlign: TextAlign.center,
-                                color: Colors.white),
-                          ),
-                          space10H,
-                          ButtonGradient(
-                            color1: Colors.white,
-                            color2: Colors.white,
-                            event: () {},
-                            text: "Đăng xuất",
-                            textColor: Colors.black,
-                            radius: 8.r,
-                          )
-                        ],
-                      ),
-                    )
+                    sectionController()
+                    // AboutStaffModal()
                   ],
-                ))
+                ),
+              )),
+            ),
           ],
-        ),
-      ),
-    );
+        ));
   }
 }

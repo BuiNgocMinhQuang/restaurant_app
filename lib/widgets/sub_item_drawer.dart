@@ -28,7 +28,7 @@ class SubItemDrawer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SizedBox(
-            width: 100.w,
+            width: 25.w,
             height: 25.h,
           ),
           Icon(
