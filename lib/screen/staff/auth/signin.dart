@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:app_restaurant/bloc/staff_login_bloc.dart';
+import 'package:app_restaurant/bloc/staff/staff_login_bloc.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/utils/common.dart';
 import 'package:app_restaurant/widgets/background_welcome.dart';
@@ -93,6 +93,7 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
 
   bool light = false;
   bool passwordVisible = true;
+  bool isLoading = false;
   final _formField = GlobalKey<FormState>();
   final storeIdController = TextEditingController();
   final emailController = TextEditingController();
@@ -103,8 +104,18 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
       listener: (context, state) {
         if (state is LoginFailure) {
           _showFailedModal(context, state.message);
+          setState(() {
+            isLoading = false;
+          });
+        } else if (state is LoginLoading) {
+          setState(() {
+            isLoading = true;
+          });
         } else if (state is LoginSuccess) {
           // _showSuccesModal(context);
+          setState(() {
+            isLoading = false;
+          });
           context.go("/staff_home");
         }
       },
@@ -399,36 +410,58 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                           SizedBox(
                                             height: 20.h,
                                           ),
-                                          ButtonGradient(
-                                            color1: color1BlueButton,
-                                            color2: color2BlueButton,
-                                            event: () async {
-                                              if (_formField.currentState!
-                                                  .validate()) {
-                                                // context.go("/staff_home");
-                                                BlocProvider.of<LoginBloc>(
-                                                        context)
-                                                    .add(
-                                                  LoginButtonPressed(
-                                                    shopId:
-                                                        storeIdController.text,
-                                                    email: emailController.text,
-                                                    password:
-                                                        passworldController
+                                          !isLoading
+                                              ? ButtonGradient(
+                                                  color1: color1BlueButton,
+                                                  color2: color2BlueButton,
+                                                  event: () async {
+                                                    // if (_formField.currentState!
+                                                    //     .validate()) {
+                                                    //   // context.go("/staff_home");
+                                                    //   BlocProvider.of<
+                                                    //               LoginBloc>(
+                                                    //           context)
+                                                    //       .add(
+                                                    //     LoginButtonPressed(
+                                                    //       shopId:
+                                                    //           storeIdController
+                                                    //               .text,
+                                                    //       email: emailController
+                                                    //           .text,
+                                                    //       password:
+                                                    //           passworldController
+                                                    //               .text,
+                                                    //     ),
+                                                    //   );
+                                                    //   storeIdController.clear();
+                                                    //   emailController.clear();
+                                                    //   passworldController
+                                                    //       .clear();
+                                                    // }
+                                                    BlocProvider.of<LoginBloc>(
+                                                            context)
+                                                        .add(
+                                                      LoginButtonPressed(
+                                                        shopId:
+                                                            storeIdController
+                                                                .text,
+                                                        email: emailController
                                                             .text,
-                                                  ),
-                                                );
-                                                storeIdController.clear();
-                                                emailController.clear();
-                                                passworldController.clear();
-                                              }
-                                              //khong xoa
-                                            },
-                                            text: "Đăng nhập",
-                                            fontSize: 12.sp,
-                                            radius: 8.r,
-                                            textColor: Colors.white,
-                                          ),
+                                                        password:
+                                                            passworldController
+                                                                .text,
+                                                      ),
+                                                    );
+                                                    //khong xoa
+                                                  },
+                                                  text: "Đăng nhập",
+                                                  fontSize: 12.sp,
+                                                  radius: 8.r,
+                                                  textColor: Colors.white,
+                                                )
+                                              : Center(
+                                                  child:
+                                                      CircularProgressIndicator()),
                                           SizedBox(
                                             height: 20.h,
                                           ),

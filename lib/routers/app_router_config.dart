@@ -29,7 +29,7 @@ class NyAppRouter {
         name: AppRouterContants.managerHomeRouterName,
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return ManagerConfirmOTP();
+          return ListFoodStaff();
         }),
   ]);
   final GoRouter router = GoRouter(routes: <RouteBase>[

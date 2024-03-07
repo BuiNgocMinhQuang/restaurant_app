@@ -77,6 +77,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                     icon: Icon(
                       Icons.menu,
                       size: 25.w,
+                      color: Colors.white,
                     ),
                     onPressed: () => Scaffold.of(context).openDrawer()),
           ),
@@ -97,7 +98,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
         bottom: PreferredSize(
             preferredSize: Size.fromHeight(20.w),
             child: Container(
-              child: Padding(padding: EdgeInsets.only(left: 30, bottom: 20)),
+              child: Padding(padding: EdgeInsets.only(left: 30, bottom: 10.w)),
             )),
       ),
       drawer: Drawer(
@@ -315,10 +316,11 @@ class _StaffFabTabState extends State<StaffFabTab> {
         color: Colors.blue,
         shape: CircularNotchedRectangle(),
         child: Container(
-            height: 60.h,
+            height: 40.h,
+            // color: Colors.red,
             child: Padding(
               padding: EdgeInsets.only(
-                  top: 10.w, left: 20.w, right: 20.w, bottom: 0.w),
+                  top: 0.w, left: 20.w, right: 20.w, bottom: 0.w),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
