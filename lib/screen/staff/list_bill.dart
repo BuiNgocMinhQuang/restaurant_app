@@ -25,7 +25,6 @@ class _StaffListBillState extends State<StaffListBill>
     print("_tabController + ${_tabController.index}");
     return Scaffold(
         backgroundColor: Colors.white,
-        // drawer: StaffSileMenu(),
         body: SafeArea(
             child: Padding(
           padding:
@@ -35,7 +34,6 @@ class _StaffListBillState extends State<StaffListBill>
               SizedBox(
                 width: 1.sw,
                 height: 100,
-                // color: Colors.red,
                 child: SizedBox(
                     child: Align(
                         alignment: Alignment.centerLeft,

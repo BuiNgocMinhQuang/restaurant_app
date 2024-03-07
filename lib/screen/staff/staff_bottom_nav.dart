@@ -152,7 +152,6 @@ class _StaffFabTabState extends State<StaffFabTab> {
                   },
                   child: ItemDrawer(
                       isExpand: false,
-                      // item: DrawerItem.staff,
                       text: 'Danh sách món ăn',
                       iconColor:
                           currentIndex == 0 ? Colors.white : Colors.black,
@@ -175,7 +174,6 @@ class _StaffFabTabState extends State<StaffFabTab> {
                   },
                   child: ItemDrawer(
                       isExpand: false,
-                      // item: DrawerItem.staff,
                       text: 'Hóa đơn mang về',
                       iconColor:
                           currentIndex == 1 ? Colors.white : Colors.black,
@@ -198,7 +196,6 @@ class _StaffFabTabState extends State<StaffFabTab> {
                   },
                   child: ItemDrawer(
                       isExpand: false,
-                      // item: DrawerItem.staff,
                       text: 'Danh sách hóa đơn',
                       subItem: [],
                       iconColor:
@@ -221,7 +218,6 @@ class _StaffFabTabState extends State<StaffFabTab> {
                   },
                   child: ItemDrawer(
                       isExpand: false,
-                      // item: DrawerItem.staff,
                       text: 'Thông tin cá nhân',
                       iconColor:
                           currentIndex == 4 ? Colors.white : Colors.black,

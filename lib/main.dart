@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       },
       child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
-          routerConfig: NyAppRouter().testRouter),
+          routerConfig: NyAppRouter().router),
     );
   }
 }

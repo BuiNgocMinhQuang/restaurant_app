@@ -10,7 +10,6 @@ class ItemDrawer extends StatelessWidget {
   double iconSize;
   IconData icon;
 
-  // DrawerItem item;
   final String text;
   bool isExpand;
   List<Widget> subItem;
@@ -19,7 +18,6 @@ class ItemDrawer extends StatelessWidget {
       required this.text,
       required this.subItem,
       required this.icon,
-      // required this.item,
       this.isExpand = true,
       this.iconSize = 0,
       this.fontSize = 0,

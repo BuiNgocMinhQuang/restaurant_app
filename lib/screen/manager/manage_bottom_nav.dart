@@ -23,13 +23,13 @@ import 'package:go_router/go_router.dart';
 
 class ManagerFabTab extends StatefulWidget {
   ManagerFabTab({Key? key, required this.selectedIndex}) : super(key: key);
-  int selectedIndex = 10;
+  int selectedIndex = 0;
   @override
   State<ManagerFabTab> createState() => _ManagerFabTabState();
 }
 
 class _ManagerFabTabState extends State<ManagerFabTab> {
-  int currentIndex = 10;
+  int currentIndex = 0;
   bool isHaveNoti = true;
   @override
   void initState() {
@@ -206,7 +206,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                   onTap: () {},
                   child: ItemDrawer(
                       isExpand: true,
-                      // item: DrawerItem.staff,
                       text: 'Cửa hàng',
                       iconColor:
                           currentIndex == 1 ? Colors.white : Colors.black,
@@ -235,7 +234,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                   onTap: () {},
                   child: ItemDrawer(
                       isExpand: true,
-                      // item: DrawerItem.staff,
                       text: 'Nhân viên',
                       iconColor: currentIndex == 2 || currentIndex == 3
                           ? Colors.white
@@ -280,7 +278,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                   onTap: () {},
                   child: ItemDrawer(
                       isExpand: true,
-                      // item: DrawerItem.staff,
                       text: 'Thực đơn',
                       subItem: [
                         SubItemDrawer(
@@ -334,7 +331,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                   onTap: () {},
                   child: ItemDrawer(
                       isExpand: true,
-                      // item: DrawerItem.staff,
                       text: 'Cửa hàng 1',
                       iconColor: currentIndex == 6 ||
                               currentIndex == 7 ||
@@ -405,7 +401,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                   onTap: () {},
                   child: ItemDrawer(
                       isExpand: true,
-                      // item: DrawerItem.staff,
                       text: 'Cửa hàng 1',
                       iconColor: currentIndex == 10 || currentIndex == 11
                           ? Colors.white
