@@ -1,18 +1,20 @@
 import 'package:app_restaurant/routers/app_router_constant.dart';
 import 'package:app_restaurant/screen/manager/add_staff.dart';
+import 'package:app_restaurant/screen/manager/auth/change_password.dart';
+import 'package:app_restaurant/screen/manager/auth/confirm_otp.dart';
 import 'package:app_restaurant/screen/manager/auth/signin.dart';
 import 'package:app_restaurant/screen/manager/auth/sigup.dart';
 import 'package:app_restaurant/screen/manager/booking_table.dart';
 import 'package:app_restaurant/screen/manager/brought_receipt.dart';
 import 'package:app_restaurant/screen/manager/auth/forgot_password.dart';
-import 'package:app_restaurant/screen/manager/edit_food.dart';
 import 'package:app_restaurant/screen/manager/edit_staff_infor.dart';
-import 'package:app_restaurant/screen/manager/manage_room.dart';
 import 'package:app_restaurant/screen/manager/manage_store.dart';
 import 'package:app_restaurant/screen/manager/manage_bottom_nav.dart';
 import 'package:app_restaurant/screen/manager/list_bill.dart';
 import 'package:app_restaurant/screen/manager/list_staff.dart';
 import 'package:app_restaurant/screen/manager/list_stores.dart';
+import 'package:app_restaurant/screen/staff/auth/change_password.dart';
+import 'package:app_restaurant/screen/staff/auth/confirm_otp.dart';
 import 'package:app_restaurant/screen/staff/auth/forgot_password.dart';
 import 'package:app_restaurant/screen/staff/auth/signin.dart';
 import 'package:app_restaurant/screen/staff/list_food.dart';
@@ -27,9 +29,7 @@ class NyAppRouter {
         name: AppRouterContants.managerHomeRouterName,
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return ManagerFabTab(
-            selectedIndex: 0,
-          );
+          return ManagerConfirmOTP();
         }),
   ]);
   final GoRouter router = GoRouter(routes: <RouteBase>[
@@ -52,6 +52,18 @@ class NyAppRouter {
         path: '/manager_forgot_password',
         builder: (BuildContext context, GoRouterState state) {
           return const ManagerForgotPassword();
+        }),
+    GoRoute(
+        name: AppRouterContants.managerConfirmOtpRouterName,
+        path: '/manager_confirm_otp',
+        builder: (BuildContext context, GoRouterState state) {
+          return const ManagerConfirmOTP();
+        }),
+    GoRoute(
+        name: AppRouterContants.managerChangePasswordRouterName,
+        path: '/manager_change_password',
+        builder: (BuildContext context, GoRouterState state) {
+          return const ManagerChangePassword();
         }),
     GoRoute(
         name: AppRouterContants.managerHomeRouterName,
@@ -129,6 +141,18 @@ class NyAppRouter {
         path: '/staff_forgot_password',
         builder: (BuildContext context, GoRouterState state) {
           return const StaffForgotPassword();
+        }),
+    GoRoute(
+        name: AppRouterContants.staffConfirmOtpRouterName,
+        path: '/staff_confirm_otp',
+        builder: (BuildContext context, GoRouterState state) {
+          return const StaffConfirmOTP();
+        }),
+    GoRoute(
+        name: AppRouterContants.staffChangePasswordRouterName,
+        path: '/staff_change_password',
+        builder: (BuildContext context, GoRouterState state) {
+          return const StaffChangePassword();
         }),
     GoRoute(
         name: AppRouterContants.staffHomeRouterName,

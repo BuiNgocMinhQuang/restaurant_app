@@ -3,6 +3,8 @@ class AppRouterContants {
   static const String managerSignInRouterName = 'ManagerSignIn';
   static const String managerSignUpRouterName = 'ManagerSignUp';
   static const String managerForgotpasswordRouterName = 'ManagerForgotPassword';
+  static const String managerConfirmOtpRouterName = 'ManagerCofirmOtp';
+  static const String managerChangePasswordRouterName = 'ManagerChangePassword';
   static const String managerHomeRouterName = 'ManagerHome';
   static const String managerListStoresRouterName = 'ManagerListStores';
   static const String managerManageStoresRouterName = 'ManagerManageStores';
@@ -18,6 +20,8 @@ class AppRouterContants {
   //const of Staff
   static const String staffSignInRouterName = 'StaffSignIn';
   static const String staffForgotpasswordRouterName = 'StaffForgotPassword';
+  static const String staffConfirmOtpRouterName = 'StaffCofirmOtp';
+  static const String staffChangePasswordRouterName = 'StaffChangePassword';
   static const String staffHomeRouterName = 'StaffHome';
   static const String staffListFoodRouterName = 'StaffListFood';
 }

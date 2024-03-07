@@ -288,6 +288,8 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                   event: () {
                                                     if (_formField.currentState!
                                                         .validate()) {
+                                                      context.go(
+                                                          '/staff_confirm_otp');
                                                       storeIdController.clear();
                                                       emailController.clear();
                                                     }

@@ -60,3 +60,5 @@ const String deleteImage = "Xóa hình ảnh";
 const String content = "Nội dung";
 const String ui = "Giao diện";
 const String save = "Lưu";
+const String havenNotReceivedCodeYet = "Bạn chưa nhận được mã? ";
+const String sendNewOtp = "Gửi lại mã mới";

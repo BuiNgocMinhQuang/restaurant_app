@@ -222,6 +222,8 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                                     if (_formField.currentState!
                                                         .validate()) {
                                                       emailController.clear();
+                                                      context.go(
+                                                          "/manager_confirm_otp");
                                                     }
                                                   },
                                                   text: "Gửi",

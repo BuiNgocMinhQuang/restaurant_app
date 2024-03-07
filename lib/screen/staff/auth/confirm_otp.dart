@@ -1,8 +1,11 @@
 import 'dart:async';
+
 import 'package:app_restaurant/config/all_void.dart';
 import 'package:app_restaurant/config/colors.dart';
+import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
+import 'package:app_restaurant/widgets/background_welcome.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
@@ -12,15 +15,15 @@ import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-class ManagerConfirmOTP extends StatefulWidget {
+class StaffConfirmOTP extends StatefulWidget {
   final String? verificationId;
-  const ManagerConfirmOTP({Key? key, this.verificationId}) : super(key: key);
+  const StaffConfirmOTP({Key? key, this.verificationId}) : super(key: key);
 
   @override
-  State<ManagerConfirmOTP> createState() => _ManagerConfirmOTPState();
+  State<StaffConfirmOTP> createState() => _StaffConfirmOTPState();
 }
 
-class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
+class _StaffConfirmOTPState extends State<StaffConfirmOTP> {
   String otp = "";
   bool showButton = false;
   @override
@@ -68,10 +71,10 @@ class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
                                         color1: pupple,
                                         color2: red,
                                         event: () {
-                                          context.go("/");
+                                          context.go("/staff_sign_in");
                                         },
                                         fontSize: 12.sp,
-                                        text: signInAsManager,
+                                        text: signInAsStaff,
                                         textColor: Colors.white,
                                       ),
                                     ),
@@ -149,7 +152,6 @@ class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
                                               duration: Duration(minutes: 5),
                                               onFinish: () {
                                                 showExpiredOtpDialog(context);
-
                                                 // Code to execute when the timer finishes
                                               },
                                             ),
@@ -164,7 +166,7 @@ class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
                                                     showWrongOtpDialog(context);
                                                   } else {
                                                     context.go(
-                                                        "/manager_change_password");
+                                                        "/staff_change_password");
                                                   }
                                                 },
                                                 text: "Xác nhận",
@@ -172,9 +174,6 @@ class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
                                                 radius: 8.r,
                                                 textColor: Colors.white,
                                               ),
-                                            ),
-                                            SizedBox(
-                                              height: 20.h,
                                             ),
                                           ],
                                         ),

@@ -9,14 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-class ManagerChangePassword extends StatefulWidget {
-  const ManagerChangePassword({super.key});
+class StaffChangePassword extends StatefulWidget {
+  const StaffChangePassword({super.key});
 
   @override
-  State<ManagerChangePassword> createState() => _ManagerChangePasswordState();
+  State<StaffChangePassword> createState() => _StaffChangePasswordState();
 }
 
-class _ManagerChangePasswordState extends State<ManagerChangePassword> {
+class _StaffChangePasswordState extends State<StaffChangePassword> {
   bool passwordVisible = true;
   bool rePasswordVisible = true;
 
@@ -72,10 +72,10 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                             color1: pupple,
                                             color2: red,
                                             event: () {
-                                              context.go('/');
+                                              context.go('/staff_sign_in');
                                             },
                                             fontSize: 12.sp,
-                                            text: signInAsManager,
+                                            text: signInAsStaff,
                                             textColor: Colors.white,
                                           ),
                                         ),
@@ -284,7 +284,8 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                   event: () {
                                                     if (_formField.currentState!
                                                         .validate()) {
-                                                      context.go("/");
+                                                      context
+                                                          .go("/staff_sign_in");
                                                       showChangePasswordSuccessDialog(
                                                           context); //
                                                       passworldController
