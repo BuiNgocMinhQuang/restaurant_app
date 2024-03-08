@@ -110,6 +110,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                     icon: Icon(
                       Icons.menu,
                       size: 35.w,
+                      color: Colors.white,
                     ),
                     onPressed: () => Scaffold.of(context).openDrawer()),
           ),

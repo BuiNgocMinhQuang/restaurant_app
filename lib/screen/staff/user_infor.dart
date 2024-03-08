@@ -70,7 +70,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
     return Scaffold(
       body: SafeArea(
           child: !isLoading
-              ? ShimmerUserInfor()
+              ? const ShimmerUserInfor()
               : SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Column(

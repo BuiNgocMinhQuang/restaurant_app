@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
+//------------------------------STAFF------------------------------
 class ShimmerListFood extends StatelessWidget {
   const ShimmerListFood({super.key});
 
@@ -275,6 +276,64 @@ class ShimmerBookingTable extends StatelessWidget {
                 );
               }),
         )
+      ],
+    );
+  }
+}
+
+//------------------------------MANAGER------------------------------
+
+class ShimmerHomeManager extends StatelessWidget {
+  const ShimmerHomeManager({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        space20H,
+        space50H,
+        Expanded(
+            child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  return Shimmer.fromColors(
+                    baseColor: const Color.fromARGB(255, 221, 221, 221),
+                    highlightColor: lightGrey,
+                    child: Padding(
+                        padding: EdgeInsets.all(20.h),
+                        child: IntrinsicHeight(
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 100.w,
+                                color: Colors.amber,
+                              ),
+                              space20W,
+                              Expanded(
+                                  child: Column(
+                                children: [
+                                  Container(
+                                    height: 30.w,
+                                    color: Colors.amber,
+                                  ),
+                                  space10H,
+                                  Container(
+                                    height: 30.w,
+                                    color: Colors.amber,
+                                  ),
+                                  space10H,
+                                  Container(
+                                    height: 30.w,
+                                    color: Colors.amber,
+                                  ),
+                                ],
+                              ))
+                            ],
+                          ),
+                        )),
+                  );
+                }))
       ],
     );
   }

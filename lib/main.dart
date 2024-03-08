@@ -1,17 +1,41 @@
+import 'package:app_restaurant/bloc/network/network_cubit.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(BlocProvider<InternetCubit>(
+    create: (context) => InternetCubit(),
+    child: MyApp(),
+  ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late InternetCubit internetCubit;
+  @override
+  void initState() {
+    internetCubit = context.read<InternetCubit>();
+    internetCubit.checkConectivity();
+    internetCubit.trackConnectivityChange();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    internetCubit.disposeInternet();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // bool isLogin = true;
     return ScreenUtilInit(
       designSize: const Size(430, 932),
       builder: (BuildContext context, Widget? child) {
@@ -24,6 +48,26 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     // bool isLogin = true;
+//     return ScreenUtilInit(
+//       designSize: const Size(430, 932),
+//       builder: (BuildContext context, Widget? child) {
+//         print("Build lai Screen");
+//         return child!;
+//       },
+//       child: MaterialApp.router(
+//           debugShowCheckedModeBanner: false,
+//           routerConfig: NyAppRouter().router),
+//     );
+//   }
+// }
 
 
 
