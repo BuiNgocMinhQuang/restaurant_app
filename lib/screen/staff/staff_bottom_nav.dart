@@ -7,6 +7,7 @@ import 'package:app_restaurant/screen/staff/user_infor.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/item_drawer.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,19 +29,25 @@ class _StaffFabTabState extends State<StaffFabTab> {
     super.initState();
   }
 
-  // final List<Widget> pages = [
-  //   HomeScreen(),
-  //   TeamScreen(),
-  //   ProfileScreen(),
-  //   MoreScreen(),
-  // ];
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void tapDrawerChangeBotNav(int index) {
+    final CurvedNavigationBarState? navBarState =
+        bottomNavigationKey.currentState;
+    navBarState!.setPage(index);
+  }
+
   final List<Widget> pages = [
-    const ListFoodStaff(),
-    const StaffBroughtReceipt(),
-    StaffBookingTable(),
-    const StaffListBill(),
-    const StaffUserInformation()
+    const ListFoodStaff(), //index 0
+    const StaffBroughtReceipt(), //index 1
+    const StaffBookingTable(), //index 2
+    const StaffListBill(), //index 3
+    const StaffUserInformation() //index 4
   ];
+  GlobalKey<CurvedNavigationBarState> bottomNavigationKey = GlobalKey();
 
   final PageStorageBucket bucket = PageStorageBucket();
   @override
@@ -50,7 +57,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
         : currentIndex == 1
             ? const StaffBroughtReceipt()
             : currentIndex == 2
-                ? StaffBookingTable()
+                ? const StaffBookingTable()
                 : currentIndex == 3
                     ? const StaffListBill()
                     : const StaffUserInformation();
@@ -124,8 +131,8 @@ class _StaffFabTabState extends State<StaffFabTab> {
                 InkWell(
                   onTap: () {
                     setState(() {
-                      currentScreen = StaffBookingTable();
                       currentIndex = 2;
+                      tapDrawerChangeBotNav(2);
                     });
                     Navigator.pop(context);
                   },
@@ -146,8 +153,8 @@ class _StaffFabTabState extends State<StaffFabTab> {
                 InkWell(
                   onTap: () {
                     setState(() {
-                      currentScreen = ListFoodStaff();
                       currentIndex = 0;
+                      tapDrawerChangeBotNav(0);
                     });
                     Navigator.pop(context);
                   },
@@ -168,8 +175,8 @@ class _StaffFabTabState extends State<StaffFabTab> {
                 InkWell(
                   onTap: () {
                     setState(() {
-                      currentScreen = StaffBroughtReceipt();
                       currentIndex = 1;
+                      tapDrawerChangeBotNav(1);
                     });
                     Navigator.pop(context);
                   },
@@ -190,8 +197,8 @@ class _StaffFabTabState extends State<StaffFabTab> {
                 InkWell(
                   onTap: () {
                     setState(() {
-                      currentScreen = StaffListBill();
                       currentIndex = 3;
+                      tapDrawerChangeBotNav(3);
                     });
                     Navigator.pop(context);
                   },
@@ -212,8 +219,8 @@ class _StaffFabTabState extends State<StaffFabTab> {
                 InkWell(
                   onTap: () {
                     setState(() {
-                      currentScreen = StaffUserInformation();
                       currentIndex = 4;
+                      tapDrawerChangeBotNav(4);
                     });
                     Navigator.pop(context);
                   },
@@ -302,145 +309,47 @@ class _StaffFabTabState extends State<StaffFabTab> {
         bucket: bucket,
         child: currentScreen,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     setState(() {
+      //       currentScreen = StaffBookingTable();
+      //       currentIndex = 2;
+      //     });
+      //   },
+      //   child: Icon(Icons.home),
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: CurvedNavigationBar(
+        index: 2,
+        key: bottomNavigationKey,
+        // height: 150.h,
+        color: Colors.blue,
+        backgroundColor: Colors.transparent,
+        items: <Widget>[
+          Icon(
+            Icons.restaurant,
+            size: 30.h,
+            color: currentIndex == 0 ? Colors.white : Colors.black,
+          ),
+          Icon(Icons.delivery_dining,
+              size: 30.h,
+              color: currentIndex == 1 ? Colors.white : Colors.black),
+          Icon(Icons.home,
+              size: 30.h,
+              color: currentIndex == 2 ? Colors.white : Colors.black),
+          Icon(Icons.receipt,
+              size: 30.h,
+              color: currentIndex == 3 ? Colors.white : Colors.black),
+          Icon(Icons.person,
+              size: 30.h,
+              color: currentIndex == 4 ? Colors.white : Colors.black),
+        ],
+        onTap: (index) {
           setState(() {
-            currentScreen = StaffBookingTable();
-            currentIndex = 2;
+            currentIndex = index;
           });
         },
-        child: Icon(Icons.home),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.blue,
-        shape: CircularNotchedRectangle(),
-        child: Container(
-            height: 40.h,
-            // color: Colors.red,
-            child: Padding(
-              padding: EdgeInsets.only(
-                  top: 0.w, left: 20.w, right: 20.w, bottom: 0.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  //Left
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      MaterialButton(
-                        minWidth: 40,
-                        onPressed: () {
-                          setState(() {
-                            currentScreen = ListFoodStaff();
-                            currentIndex = 0;
-                          });
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.restaurant,
-                              size: 30,
-                              color: currentIndex == 0
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                            Text(
-                              "",
-                            )
-                          ],
-                        ),
-                      ),
-                      space20W,
-                      MaterialButton(
-                        minWidth: 40,
-                        onPressed: () {
-                          setState(() {
-                            currentScreen = StaffBroughtReceipt();
-                            currentIndex = 1;
-                          });
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.delivery_dining,
-                              size: 32,
-                              color: currentIndex == 1
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                            Text(
-                              "",
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-
-                  //Right
-
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      MaterialButton(
-                        minWidth: 40,
-                        onPressed: () {
-                          setState(() {
-                            currentScreen = StaffListBill();
-                            currentIndex = 3;
-                          });
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.receipt,
-                              size: 32,
-                              color: currentIndex == 3
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                            Text(
-                              "",
-                            )
-                          ],
-                        ),
-                      ),
-                      space20W,
-                      MaterialButton(
-                        minWidth: 40,
-                        onPressed: () {
-                          setState(() {
-                            currentScreen = StaffUserInformation();
-                            currentIndex = 4;
-                          });
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.person,
-                              size: 32,
-                              color: currentIndex == 4
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                            Text(
-                              "",
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-            )),
+        letIndexChange: (index) => true,
       ),
     );
   }

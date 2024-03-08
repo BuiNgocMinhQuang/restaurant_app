@@ -333,14 +333,15 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                   color1: color1BlueButton,
                                                   color2: color2BlueButton,
                                                   event: () {
-                                                    if (_formField.currentState!
-                                                        .validate()) {
-                                                      context
-                                                          .go('/manager_home');
-                                                      emailController.clear();
-                                                      passworldController
-                                                          .clear();
-                                                    }
+                                                    // if (_formField.currentState!
+                                                    //     .validate()) {
+                                                    //   context
+                                                    //       .go('/manager_home');
+                                                    //   emailController.clear();
+                                                    //   passworldController
+                                                    //       .clear();
+                                                    // }
+                                                    context.go('/manager_home');
                                                   },
                                                   text: "Đăng nhập",
                                                   fontSize: 12.sp,

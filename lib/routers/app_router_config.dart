@@ -70,7 +70,7 @@ class NyAppRouter {
         path: '/manager_home',
         builder: (BuildContext context, GoRouterState state) {
           return ManagerFabTab(
-            selectedIndex: 0,
+            selectedIndex: 2,
           );
         }),
     GoRoute(

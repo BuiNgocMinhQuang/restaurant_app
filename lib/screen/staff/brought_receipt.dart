@@ -21,7 +21,7 @@ class StaffBroughtReceipt extends StatefulWidget {
 
 class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
     with TickerProviderStateMixin {
-  bool isLoading = false;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -31,6 +31,11 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
     //   });
     // });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

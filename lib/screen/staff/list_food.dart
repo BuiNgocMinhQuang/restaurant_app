@@ -29,7 +29,7 @@ class ListFoodStaff extends StatefulWidget {
 
 class _ListFoodStaffState extends State<ListFoodStaff> {
   final searchController = TextEditingController();
-  bool isLoading = false;
+  bool isLoading = true;
   List<String> selectedCategories = [];
   List<ItemFood> currentFoodList = [];
   String query = '';
@@ -41,12 +41,17 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
 
   @override
   void initState() {
-    Timer(Duration(seconds: 3), () {
-      setState(() {
-        isLoading = true;
-      });
-    });
+    // Timer(Duration(seconds: 3), () {
+    //   setState(() {
+    //     isLoading = true;
+    //   });
+    // });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

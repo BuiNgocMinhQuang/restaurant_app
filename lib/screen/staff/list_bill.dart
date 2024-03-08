@@ -20,16 +20,21 @@ class StaffListBill extends StatefulWidget {
 
 class _StaffListBillState extends State<StaffListBill>
     with TickerProviderStateMixin {
-  bool isLoading = false;
+  bool isLoading = true;
 
   @override
   void initState() {
-    Timer(const Duration(seconds: 3), () {
-      setState(() {
-        isLoading = true;
-      });
-    });
+    // Timer(const Duration(seconds: 3), () {
+    //   setState(() {
+    //     isLoading = true;
+    //   });
+    // });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

@@ -17,19 +17,20 @@ import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/item_drawer.dart';
 import 'package:app_restaurant/widgets/sub_item_drawer.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 class ManagerFabTab extends StatefulWidget {
   ManagerFabTab({Key? key, required this.selectedIndex}) : super(key: key);
-  int selectedIndex = 0;
+  int selectedIndex = 2;
   @override
   State<ManagerFabTab> createState() => _ManagerFabTabState();
 }
 
 class _ManagerFabTabState extends State<ManagerFabTab> {
-  int currentIndex = 0;
+  int currentIndex = 2;
   bool isHaveNoti = true;
   @override
   void initState() {
@@ -37,45 +38,52 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
     super.initState();
   }
 
+  void tapDrawerChangeBotNav(int index) {
+    final CurvedNavigationBarState? navBarState =
+        bottomNavigationKey.currentState;
+    navBarState!.setPage(index);
+  }
+
   final List<Widget> pages = const [
-    ListStores(), //index = 1
-    ListStaff(), //index = 2
-    AddStaff(), //index = 3
-    ManagerHome(), //index = 0
-    ListFoodManager(), //index = 4
-    ManagerInformation(), //index = 5
-    ManagerBookingTable(), //index = 6
-    ManagerListBill(), //index = 7
-    ManagerBroughtReceipt(), //index = 8
-    ManagerAddFood(), //index 9
+    ListStores(), //index = 0
+    ListStaff(), //index = 1
+    ManagerHome(), //index = 2
+    ListFoodManager(), //index = 3
+    ManagerInformation(), //index = 4
+    AddStaff(), //index = 5
+    ManagerAddFood(), //index 6
+    ManagerBookingTable(), //index = 7
+    ManagerListBill(), //index = 8
+    ManagerBroughtReceipt(), //index = 9
     ListInventory(), //index 10
     ImportInventory() //11
   ];
   final ScrollController _scrollController = ScrollController();
 
   final PageStorageBucket bucket = PageStorageBucket();
+  GlobalKey<CurvedNavigationBarState> bottomNavigationKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     Widget currentScreen = currentIndex == 0
-        ? const ManagerHome()
+        ? const ListStores()
         : currentIndex == 1
-            ? const ListStores()
+            ? const ListStaff()
             : currentIndex == 2
-                ? const ListStaff()
+                ? const ManagerHome()
                 : currentIndex == 3
-                    ? const AddStaff()
+                    ? const ListFoodManager()
                     : currentIndex == 4
-                        ? const ListFoodManager()
+                        ? const ManagerInformation()
                         : currentIndex == 5
-                            ? const ManagerInformation()
+                            ? const AddStaff()
                             : currentIndex == 6
-                                ? const ManagerBookingTable()
+                                ? const ManagerAddFood()
                                 : currentIndex == 7
-                                    ? const ManagerListBill()
+                                    ? const ManagerBookingTable()
                                     : currentIndex == 8
-                                        ? const ManagerBroughtReceipt()
+                                        ? const ManagerListBill()
                                         : currentIndex == 9
-                                            ? const ManagerAddFood()
+                                            ? const ManagerBroughtReceipt()
                                             : currentIndex == 10
                                                 ? const ListInventory()
                                                 : const ImportInventory();
@@ -177,16 +185,17 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                 InkWell(
                   onTap: () {
                     setState(() {
-                      currentScreen = const ManagerHome();
-                      currentIndex = 0;
+                      // currentScreen = const ManagerHome();
+                      currentIndex = 2;
+                      tapDrawerChangeBotNav(2);
                     });
                     Navigator.pop(context);
                   },
                   child: ItemDrawer(
                     isExpand: false,
                     text: "Trang chủ",
-                    iconColor: currentIndex == 0 ? Colors.white : Colors.black,
-                    backgroundIconColor: currentIndex == 0
+                    iconColor: currentIndex == 2 ? Colors.white : Colors.black,
+                    backgroundIconColor: currentIndex == 2
                         ? Colors.blue
                         : const Color.fromRGBO(233, 236, 239, 1),
                     icon: Icons.home,
@@ -208,19 +217,21 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                       isExpand: true,
                       text: 'Cửa hàng',
                       iconColor:
-                          currentIndex == 1 ? Colors.white : Colors.black,
-                      backgroundIconColor: currentIndex == 1
+                          currentIndex == 0 ? Colors.white : Colors.black,
+                      backgroundIconColor: currentIndex == 0
                           ? Colors.blue
                           : const Color.fromRGBO(233, 236, 239, 1),
                       subItem: [
                         SubItemDrawer(
                             text: "Danh sách cửa hàng",
                             textColor:
-                                currentIndex == 1 ? Colors.blue : Colors.black,
+                                currentIndex == 0 ? Colors.blue : Colors.black,
                             event: () {
                               setState(() {
-                                currentScreen = const ListStores();
-                                currentIndex = 1;
+                                // currentScreen = const ListStores();
+                                currentIndex = 0;
+
+                                tapDrawerChangeBotNav(0);
                               });
                               Navigator.pop(context);
                             }),
@@ -235,22 +246,23 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                   child: ItemDrawer(
                       isExpand: true,
                       text: 'Nhân viên',
-                      iconColor: currentIndex == 2 || currentIndex == 3
+                      iconColor: currentIndex == 1 || currentIndex == 1
                           ? Colors.white
                           : Colors.black,
                       backgroundIconColor:
-                          currentIndex == 2 || currentIndex == 3
+                          currentIndex == 1 || currentIndex == 5
                               ? Colors.blue
                               : const Color.fromRGBO(233, 236, 239, 1),
                       subItem: [
                         SubItemDrawer(
                             text: "Danh sách nhân viên",
                             textColor:
-                                currentIndex == 2 ? Colors.blue : Colors.black,
+                                currentIndex == 1 ? Colors.blue : Colors.black,
                             event: () {
                               setState(() {
-                                currentScreen = const ListStaff();
-                                currentIndex = 2;
+                                // currentScreen = const ListStaff();
+                                currentIndex = 1;
+                                tapDrawerChangeBotNav(1);
                               });
                               Navigator.pop(context);
                             }),
@@ -260,11 +272,10 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                         SubItemDrawer(
                             text: "Thêm nhân viên",
                             textColor:
-                                currentIndex == 3 ? Colors.blue : Colors.black,
+                                currentIndex == 5 ? Colors.blue : Colors.black,
                             event: () {
                               setState(() {
-                                currentScreen = const AddStaff();
-                                currentIndex = 3;
+                                currentIndex = 5;
                               });
                               Navigator.pop(context);
                             })
@@ -283,11 +294,11 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                         SubItemDrawer(
                             text: "Danh sách món ăn",
                             textColor:
-                                currentIndex == 4 ? Colors.blue : Colors.black,
+                                currentIndex == 3 ? Colors.blue : Colors.black,
                             event: () {
                               setState(() {
-                                currentScreen = const ListFoodManager();
-                                currentIndex = 4;
+                                currentIndex = 3;
+                                tapDrawerChangeBotNav(3);
                               });
                               Navigator.pop(context);
                             }),
@@ -297,20 +308,19 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                         SubItemDrawer(
                             text: "Thêm món ăn",
                             textColor:
-                                currentIndex == 9 ? Colors.blue : Colors.black,
+                                currentIndex == 6 ? Colors.blue : Colors.black,
                             event: () {
                               setState(() {
-                                currentScreen = const ManagerAddFood();
-                                currentIndex = 9;
+                                currentIndex = 6;
                               });
                               Navigator.pop(context);
                             })
                       ],
-                      iconColor: currentIndex == 4 || currentIndex == 9
+                      iconColor: currentIndex == 3 || currentIndex == 6
                           ? Colors.white
                           : Colors.black,
                       backgroundIconColor:
-                          currentIndex == 4 || currentIndex == 9
+                          currentIndex == 3 || currentIndex == 6
                               ? Colors.blue
                               : const Color.fromRGBO(233, 236, 239, 1),
                       icon: Icons.restaurant),
@@ -332,25 +342,24 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                   child: ItemDrawer(
                       isExpand: true,
                       text: 'Cửa hàng 1',
-                      iconColor: currentIndex == 6 ||
-                              currentIndex == 7 ||
-                              currentIndex == 8
+                      iconColor: currentIndex == 7 ||
+                              currentIndex == 8 ||
+                              currentIndex == 9
                           ? Colors.white
                           : Colors.black,
-                      backgroundIconColor: currentIndex == 6 ||
-                              currentIndex == 7 ||
-                              currentIndex == 8
+                      backgroundIconColor: currentIndex == 7 ||
+                              currentIndex == 8 ||
+                              currentIndex == 9
                           ? Colors.blue
                           : const Color.fromRGBO(233, 236, 239, 1),
                       subItem: [
                         SubItemDrawer(
                             text: "Đặt bàn",
                             textColor:
-                                currentIndex == 6 ? Colors.blue : Colors.black,
+                                currentIndex == 7 ? Colors.blue : Colors.black,
                             event: () {
                               setState(() {
-                                currentScreen = const ManagerBookingTable();
-                                currentIndex = 6;
+                                currentIndex = 7;
                               });
                               Navigator.pop(context);
                             }),
@@ -360,11 +369,10 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                         SubItemDrawer(
                             text: "Danh sách hóa đơn",
                             textColor:
-                                currentIndex == 7 ? Colors.blue : Colors.black,
+                                currentIndex == 8 ? Colors.blue : Colors.black,
                             event: () {
                               setState(() {
-                                currentScreen = const ManagerListBill();
-                                currentIndex = 7;
+                                currentIndex = 8;
                               });
                               Navigator.pop(context);
                             }),
@@ -374,11 +382,10 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                         SubItemDrawer(
                             text: "Hóa đơn mang về",
                             textColor:
-                                currentIndex == 8 ? Colors.blue : Colors.black,
+                                currentIndex == 9 ? Colors.blue : Colors.black,
                             event: () {
                               setState(() {
-                                currentScreen = const ManagerBroughtReceipt();
-                                currentIndex = 8;
+                                currentIndex = 9;
                               });
                               Navigator.pop(context);
                             }),
@@ -416,7 +423,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                 currentIndex == 10 ? Colors.blue : Colors.black,
                             event: () {
                               setState(() {
-                                currentScreen = const ListInventory();
                                 currentIndex = 10;
                               });
                               Navigator.pop(context);
@@ -430,7 +436,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                 currentIndex == 11 ? Colors.blue : Colors.black,
                             event: () {
                               setState(() {
-                                currentScreen = const ListInventory();
                                 currentIndex = 11;
                               });
                               Navigator.pop(context);
@@ -509,144 +514,37 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
+      bottomNavigationBar: CurvedNavigationBar(
+        index: 2,
+        key: bottomNavigationKey,
+        // height: 150.h,
+        color: Colors.blue,
+        backgroundColor: Colors.transparent,
+        items: <Widget>[
+          Icon(
+            Icons.store,
+            size: 30.h,
+            color: currentIndex == 0 ? Colors.white : Colors.black,
+          ),
+          Icon(Icons.group,
+              size: 30.h,
+              color: currentIndex == 1 ? Colors.white : Colors.black),
+          Icon(Icons.home,
+              size: 30.h,
+              color: currentIndex == 2 ? Colors.white : Colors.black),
+          Icon(Icons.restaurant,
+              size: 30.h,
+              color: currentIndex == 3 ? Colors.white : Colors.black),
+          Icon(Icons.person,
+              size: 30.h,
+              color: currentIndex == 4 ? Colors.white : Colors.black),
+        ],
+        onTap: (index) {
           setState(() {
-            currentScreen = const ManagerHome();
-            currentIndex = 0;
+            currentIndex = index;
           });
         },
-        child: const Icon(Icons.home),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.blue,
-        shape: const CircularNotchedRectangle(),
-        child: SizedBox(
-            height: 60.h,
-            child: Padding(
-              padding: EdgeInsets.only(
-                  top: 10.w, left: 20.w, right: 20.w, bottom: 0.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  //Left
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      MaterialButton(
-                        minWidth: 40,
-                        onPressed: () {
-                          setState(() {
-                            currentScreen = const ListStores();
-                            currentIndex = 1;
-                          });
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.store,
-                              size: 30,
-                              color: currentIndex == 1
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                            const Text(
-                              "",
-                            )
-                          ],
-                        ),
-                      ),
-                      space20W,
-                      MaterialButton(
-                        minWidth: 40,
-                        onPressed: () {
-                          setState(() {
-                            currentScreen = const ListStaff();
-                            currentIndex = 2;
-                          });
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.group,
-                              size: 32,
-                              color: currentIndex == 2 || currentIndex == 3
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                            const Text(
-                              "",
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-
-                  //Right
-
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      MaterialButton(
-                        minWidth: 40,
-                        onPressed: () {
-                          setState(() {
-                            currentScreen = const ListFoodManager();
-                            currentIndex = 4;
-                          });
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.restaurant,
-                              size: 32,
-                              color: currentIndex == 4
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                            const Text(
-                              "",
-                            )
-                          ],
-                        ),
-                      ),
-                      space20W,
-                      MaterialButton(
-                        minWidth: 40,
-                        onPressed: () {
-                          setState(() {
-                            currentScreen = const ManagerInformation();
-                            currentIndex = 5;
-                          });
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.person,
-                              size: 32,
-                              color: currentIndex == 5
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                            const Text(
-                              "",
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-            )),
+        letIndexChange: (index) => true,
       ),
     );
   }

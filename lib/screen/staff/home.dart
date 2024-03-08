@@ -18,7 +18,7 @@ class StaffBookingTable extends StatefulWidget {
 
 class _StaffBookingTableState extends State<StaffBookingTable>
     with TickerProviderStateMixin {
-  bool isLoading = false;
+  bool isLoading = true;
   void saveBookingModal() {}
 
   void saveMoveTableModal() {}
@@ -33,11 +33,16 @@ class _StaffBookingTableState extends State<StaffBookingTable>
     //   _showSuccesModal(context);
     // });
 
-    Timer(const Duration(seconds: 3), () {
-      setState(() {
-        isLoading = true;
-      });
-    });
+    // Timer(const Duration(seconds: 3), () {
+    //   setState(() {
+    //     isLoading = true;
+    //   });
+    // });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

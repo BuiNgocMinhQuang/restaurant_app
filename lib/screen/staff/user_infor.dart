@@ -39,7 +39,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
   final newPassworldController = TextEditingController();
   final reNewPassworldController = TextEditingController();
   File? selectedImage;
-  bool isLoading = false;
+  bool isLoading = true;
 
   void pickImage() async {
     final returndImage =
@@ -52,12 +52,17 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
 
   @override
   void initState() {
-    Timer(const Duration(seconds: 3), () {
-      setState(() {
-        isLoading = true;
-      });
-    });
+    // Timer(const Duration(seconds: 3), () {
+    //   setState(() {
+    //     isLoading = true;
+    //   });
+    // });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
