@@ -1,7 +1,7 @@
-import 'package:app_restaurant/config/all_void.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
-import 'package:app_restaurant/screen/manager/manage_room.dart';
+import 'package:app_restaurant/screen/manager/store/manage_room.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/list_custom_dialog.dart';

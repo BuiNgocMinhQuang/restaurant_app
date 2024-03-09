@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:app_restaurant/config/all_void.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
@@ -107,7 +107,7 @@ class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
                                         child: Column(
                                           children: [
                                             Text(
-                                              "Mã xác nhận",
+                                              confirmCode,
                                               style: TextStyle(
                                                 color: const Color.fromRGBO(
                                                     52, 71, 103, 1),
@@ -167,7 +167,7 @@ class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
                                                         "/manager_change_password");
                                                   }
                                                 },
-                                                text: "Xác nhận",
+                                                text: confirm,
                                                 fontSize: 12.sp,
                                                 radius: 8.r,
                                                 textColor: Colors.white,

@@ -1,18 +1,27 @@
 class AuthDataModel {
+  int? status;
+  String? message;
   String? token;
+  String? tokenExpiresAt;
   Data? data;
 
-  AuthDataModel({this.token, this.data});
+  AuthDataModel(
+      {this.status, this.message, this.token, this.tokenExpiresAt, this.data});
 
   AuthDataModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    message = json['message'];
     token = json['token'];
+    tokenExpiresAt = json['token_expires_at'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-
+    data['status'] = this.status;
+    data['message'] = this.message;
     data['token'] = this.token;
+    data['token_expires_at'] = this.tokenExpiresAt;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -36,8 +45,8 @@ class Data {
   Null? frontImageCccd;
   Null? backImageCccd;
   Null? holdImageCccd;
-  Null? staffAddress1;
-  Null? staffAddress2;
+  int? staffAddress1;
+  int? staffAddress2;
   Null? staffAddress3;
   Null? staffAddress4;
   Null? staffFullAddress;

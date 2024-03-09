@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
-import 'package:app_restaurant/screen/manager/manage_store.dart';
+import 'package:app_restaurant/screen/manager/store/manage_store.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
 import 'package:app_restaurant/widgets/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/shimmer/shimmer_list.dart';

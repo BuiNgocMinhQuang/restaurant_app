@@ -1,4 +1,4 @@
-import 'package:app_restaurant/screen/manager/list_inventory.dart';
+import 'package:app_restaurant/screen/manager/inventory/list_inventory.dart';
 import 'package:flutter/material.dart';
 
 List<String> listStore = [

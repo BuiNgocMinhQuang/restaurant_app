@@ -24,26 +24,6 @@ class _ManagerHomeState extends State<ManagerHome> {
     // });
   }
 
-  _showSuccesModal(context) {
-    AwesomeDialog(
-      context: context,
-      animType: AnimType.leftSlide,
-      headerAnimationLoop: false,
-      dialogType: DialogType.success,
-      showCloseIcon: true,
-      title: 'Thành công',
-      desc: 'Đăng nhập thành công!',
-      btnOkOnPress: () {
-        debugPrint('OnClcik');
-      },
-      btnOkText: 'OK',
-      // btnOkIcon: Icons.check_circle,
-      onDismissCallback: (type) {
-        debugPrint('Dialog Dissmiss from callback $type');
-      },
-    ).show();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

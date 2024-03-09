@@ -1,10 +1,14 @@
+import 'package:app_restaurant/bloc/bloc_provider.dart';
 import 'package:app_restaurant/bloc/network/network_cubit.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await StorageUtils.instance.init();
   runApp(BlocProvider<InternetCubit>(
     create: (context) => InternetCubit(),
     child: MyApp(),
@@ -39,12 +43,14 @@ class _MyAppState extends State<MyApp> {
     return ScreenUtilInit(
       designSize: const Size(430, 932),
       builder: (BuildContext context, Widget? child) {
-        print("Build lai Screen");
+        // print("Build lai Screen");
         return child!;
       },
-      child: MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          routerConfig: NyAppRouter().router),
+      child: AppBlocProvider(
+        child: MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            routerConfig: NyAppRouter().router),
+      ),
     );
   }
 }

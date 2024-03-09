@@ -68,8 +68,7 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                             event: () {
                                               context.go("/");
                                             },
-                                            text:
-                                                "Đăng nhập với tư cách chủ cửa hàng",
+                                            text: signInAsManager,
                                             textColor: Colors.white,
                                           ),
                                         ),
@@ -106,7 +105,7 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                             child: Column(
                                               children: [
                                                 GradientText(
-                                                  'Quên mật khẩu',
+                                                  forgotPassword,
                                                   style: TextStyle(
                                                     color: const Color.fromRGBO(
                                                         52, 71, 103, 1),
@@ -128,8 +127,7 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                                 ),
                                                 Center(
                                                   child: TextApp(
-                                                    text:
-                                                        "Chúng tôi sẽ gửi mã xác nhận về email của bạn trong vòng 60 giây",
+                                                    text: sendCodeIn60Sec,
                                                     textAlign: TextAlign.center,
                                                     fontsize: 12.sp,
                                                   ),
@@ -226,7 +224,7 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                                           "/manager_confirm_otp");
                                                     }
                                                   },
-                                                  text: "Gửi",
+                                                  text: send,
                                                   radius: 8.r,
                                                   textColor: Colors.white,
                                                 ),

@@ -1,9 +1,10 @@
 import 'package:app_restaurant/config/space.dart';
-import 'package:app_restaurant/screen/staff/brought_receipt.dart';
+import 'package:app_restaurant/screen/staff/receipt/brought_receipt.dart';
 import 'package:app_restaurant/screen/staff/home.dart';
-import 'package:app_restaurant/screen/staff/list_bill.dart';
-import 'package:app_restaurant/screen/staff/list_food.dart';
-import 'package:app_restaurant/screen/staff/user_infor.dart';
+import 'package:app_restaurant/screen/staff/receipt/list_bill.dart';
+import 'package:app_restaurant/screen/staff/food_menu/list_food.dart';
+import 'package:app_restaurant/screen/staff/user_infor/user_infor.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/item_drawer.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
@@ -291,6 +292,8 @@ class _StaffFabTabState extends State<StaffFabTab> {
                             color1: Colors.white,
                             color2: Colors.white,
                             event: () {
+                              StorageUtils.instance
+                                  .removeKey(key: 'auth_staff');
                               context.go("/staff_sign_in");
                             },
                             text: "Đăng xuất",

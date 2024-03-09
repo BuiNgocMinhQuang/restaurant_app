@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/background_welcome.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
@@ -9,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/all_void.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
 
 class ManagerSignUp extends StatefulWidget {
   const ManagerSignUp({super.key});
@@ -122,7 +120,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                             child: Column(
                                               children: [
                                                 Text(
-                                                  "Đăng ký",
+                                                  signIn,
                                                   style: TextStyle(
                                                     color: const Color.fromRGBO(
                                                         52, 71, 103, 1),
@@ -418,7 +416,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
-                                                      hintText: 'Số điện thoại',
+                                                      hintText: phoneNumber,
                                                       isDense: true,
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
@@ -492,7 +490,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
-                                                      hintText: 'Mật khẩu',
+                                                      hintText: password,
                                                       isDense: true,
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
@@ -568,8 +566,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
-                                                      hintText:
-                                                          'Nhập lại mật khẩu',
+                                                      hintText: reTypePassword,
                                                       isDense: true,
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
@@ -601,8 +598,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                       text: TextSpan(
                                                         children: [
                                                           TextSpan(
-                                                              text:
-                                                                  "Tôi đồng ý với các",
+                                                              text: iAgreeWith,
                                                               style: TextStyle(
                                                                 fontSize: 12.sp,
                                                                 color: const Color
@@ -619,7 +615,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                               )),
                                                           TextSpan(
                                                               text:
-                                                                  " Điều khoản và Điều kiện",
+                                                                  termsAndCondition,
                                                               recognizer:
                                                                   TapGestureRecognizer()
                                                                     ..onTap =
@@ -680,7 +676,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                     children: [
                                                       TextSpan(
                                                           text:
-                                                              "Bạn đã có tài khoản?",
+                                                              alreadyHaveAccount,
                                                           style: TextStyle(
                                                             fontSize: 12.sp,
                                                             color: const Color
@@ -693,7 +689,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                                 "OpenSans",
                                                           )),
                                                       TextSpan(
-                                                          text: " Đăng nhập",
+                                                          text: login,
                                                           recognizer:
                                                               TapGestureRecognizer()
                                                                 ..onTap = () {

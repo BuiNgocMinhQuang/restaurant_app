@@ -1,4 +1,4 @@
-import 'package:app_restaurant/config/all_void.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';

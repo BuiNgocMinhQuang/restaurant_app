@@ -19,6 +19,27 @@ void showConfirmDialog(context, Function confirmEvent) {
       .show();
 }
 
+void showFailedModal(context, String? desWhyFail) {
+  AwesomeDialog(
+    context: context,
+    animType: AnimType.leftSlide,
+    headerAnimationLoop: false,
+    dialogType: DialogType.error,
+    showCloseIcon: true,
+    title: 'Thất bại',
+    desc: desWhyFail,
+    btnOkColor: Colors.red,
+    btnOkOnPress: () {
+      debugPrint('OnClcik');
+    },
+    btnOkText: 'OK',
+    // btnOkIcon: Icons.check_circle,
+    onDismissCallback: (type) {
+      debugPrint('Dialog Dissmiss from callback $type');
+    },
+  ).show();
+}
+
 void showLoginSuccesDialog(context) {
   AwesomeDialog(
     context: context,

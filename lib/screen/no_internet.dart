@@ -1,5 +1,6 @@
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
+import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class NoInternetScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           TextApp(
-            text: "Không có kết nối mạng !",
+            text: noInternet,
             fontsize: 20.sp,
             fontWeight: FontWeight.bold,
           ),
@@ -46,7 +47,7 @@ class NoInternetScreen extends StatelessWidget {
                 // }
                 context.go('/staff_sign_in');
               },
-              text: "Quay về",
+              text: backToHome,
               fontSize: 12.sp,
               radius: 8.r,
               textColor: Colors.white,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:app_restaurant/bloc/staff/staff_login_bloc.dart';
+import 'package:app_restaurant/bloc/login/login_bloc.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/utils/common.dart';
 import 'package:app_restaurant/widgets/background_welcome.dart';
@@ -27,16 +28,13 @@ class _StaffSignInState extends State<StaffSignIn> {
   final _loginBloc = LoginBloc();
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<LoginBloc>(
-      create: (context) => _loginBloc,
-      child: Scaffold(
-        backgroundColor: const Color.fromRGBO(248, 249, 250, 1),
-        body: SafeArea(
-            child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: StaffSignInFrom(),
-        )),
-      ),
+    return const Scaffold(
+      backgroundColor: const Color.fromRGBO(248, 249, 250, 1),
+      body: SafeArea(
+          child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: StaffSignInFrom(),
+      )),
     );
   }
 }
@@ -49,76 +47,16 @@ class StaffSignInFrom extends StatefulWidget {
 }
 
 class _StaffSignInFromState extends State<StaffSignInFrom> {
-  _showSuccesModal(context) {
-    AwesomeDialog(
-      context: context,
-      animType: AnimType.leftSlide,
-      headerAnimationLoop: false,
-      dialogType: DialogType.success,
-      showCloseIcon: true,
-      title: 'Thành công',
-      desc: 'Đăng nhập thàng công!',
-      btnOkColor: Colors.green,
-      btnOkOnPress: () {
-        debugPrint('OnClcik');
-      },
-      btnOkText: 'OK',
-      // btnOkIcon: Icons.check_circle,
-      onDismissCallback: (type) {
-        debugPrint('Dialog Dissmiss from callback $type');
-      },
-    ).show();
-  }
-
-  _showFailedModal(context, String desWhyFail) {
-    AwesomeDialog(
-      context: context,
-      animType: AnimType.leftSlide,
-      headerAnimationLoop: false,
-      dialogType: DialogType.error,
-      showCloseIcon: true,
-      title: 'Thất bại',
-      desc: desWhyFail,
-      btnOkColor: Colors.red,
-      btnOkOnPress: () {
-        debugPrint('OnClcik');
-      },
-      btnOkText: 'OK',
-      // btnOkIcon: Icons.check_circle,
-      onDismissCallback: (type) {
-        debugPrint('Dialog Dissmiss from callback $type');
-      },
-    ).show();
-  }
-
   bool light = false;
   bool passwordVisible = true;
-  bool isLoading = false;
+  // bool isLoading = false;
   final _formField = GlobalKey<FormState>();
   final storeIdController = TextEditingController();
   final emailController = TextEditingController();
   final passworldController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<LoginBloc, LoginState>(
-      listener: (context, state) {
-        if (state is LoginFailure) {
-          _showFailedModal(context, state.message);
-          setState(() {
-            isLoading = false;
-          });
-        } else if (state is LoginLoading) {
-          setState(() {
-            isLoading = true;
-          });
-        } else if (state is LoginSuccess) {
-          // _showSuccesModal(context);
-          setState(() {
-            isLoading = false;
-          });
-          context.go("/staff_home");
-        }
-      },
+    return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return Form(
           key: _formField,
@@ -410,7 +348,8 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                           SizedBox(
                                             height: 20.h,
                                           ),
-                                          !isLoading
+                                          !(state.loginStatus ==
+                                                  LoginStatus.loading)
                                               ? ButtonGradient(
                                                   color1: color1BlueButton,
                                                   color2: color2BlueButton,
@@ -442,14 +381,10 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                                             context)
                                                         .add(
                                                       LoginButtonPressed(
-                                                        shopId:
-                                                            storeIdController
-                                                                .text,
-                                                        email: emailController
-                                                            .text,
-                                                        password:
-                                                            passworldController
-                                                                .text,
+                                                        shopId: "123456",
+                                                        email:
+                                                            "buingocminhquang1@gmail.com",
+                                                        password: "123456789",
                                                       ),
                                                     );
                                                     //khong xoa

@@ -1,4 +1,4 @@
-import 'package:app_restaurant/config/all_void.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
@@ -112,7 +112,7 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                             child: Column(
                                               children: [
                                                 Text(
-                                                  "Cập nhật mật khẩu",
+                                                  updatePassword,
                                                   style: TextStyle(
                                                     color: const Color.fromRGBO(
                                                         52, 71, 103, 1),
@@ -190,7 +190,7 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
-                                                      hintText: 'Mật khẩu',
+                                                      hintText: password,
                                                       isDense: true,
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
@@ -266,8 +266,7 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
-                                                      hintText:
-                                                          'Nhập lại mật khẩu',
+                                                      hintText: reTypePassword,
                                                       isDense: true,
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
@@ -293,7 +292,7 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                           .clear();
                                                     }
                                                   },
-                                                  text: "Xác nhận",
+                                                  text: confirm,
                                                   fontSize: 12.sp,
                                                   radius: 8.r,
                                                   textColor: Colors.white,

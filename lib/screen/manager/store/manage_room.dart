@@ -1,4 +1,4 @@
-import 'package:app_restaurant/config/all_void.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/list_custom_dialog.dart';

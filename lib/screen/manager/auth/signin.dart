@@ -123,7 +123,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                   child: Column(
                                                     children: [
                                                       Text(
-                                                        "Đăng nhập",
+                                                        login,
                                                         style: TextStyle(
                                                           color: const Color
                                                               .fromRGBO(
@@ -262,12 +262,12 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                         },
                                                         decoration:
                                                             InputDecoration(
-                                                                suffixIconColor:
-                                                                    const Color.fromARGB(
-                                                                        255,
-                                                                        226,
-                                                                        104,
-                                                                        159),
+                                                                suffixIconColor: const Color
+                                                                    .fromARGB(
+                                                                    255,
+                                                                    226,
+                                                                    104,
+                                                                    159),
                                                                 suffixIcon:
                                                                     IconButton(
                                                                         onPressed:
@@ -313,7 +313,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                                               8.r),
                                                                 ),
                                                                 hintText:
-                                                                    'Mật khẩu',
+                                                                    password,
                                                                 isDense: true,
                                                                 contentPadding:
                                                                     EdgeInsets
@@ -394,7 +394,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                           context.go(
                                                               '/manager_home');
                                                         },
-                                                        text: "Đăng nhập",
+                                                        text: login,
                                                         fontSize: 12.sp,
                                                         radius: 8.r,
                                                         textColor: Colors.white,
@@ -455,7 +455,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                           context.go(
                                                               "/manager_sign_up");
                                                         },
-                                                        text: "Đăng ký",
+                                                        text: signIn,
                                                         fontSize: 12.sp,
                                                         radius: 8.r,
                                                         textColor: Colors.white,

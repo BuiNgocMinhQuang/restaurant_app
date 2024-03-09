@@ -1,8 +1,8 @@
-import 'package:app_restaurant/config/all_void.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
-import 'package:app_restaurant/config/text.dart';
-import 'package:app_restaurant/screen/manager/edit_food.dart';
+import 'package:app_restaurant/screen/manager/staff/edit_staff_infor.dart';
+import 'package:app_restaurant/widgets/button/button_app.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/shimmer/shimmer_list.dart';
 import 'package:app_restaurant/widgets/status_box.dart';
@@ -13,17 +13,18 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 List<String> listState = ["Tất cả", "Đang hoạt động", "Đã chặn"];
 
-class ListFoodManager extends StatefulWidget {
-  const ListFoodManager({super.key});
+class ListStaff extends StatefulWidget {
+  const ListStaff({super.key});
 
   @override
-  State<ListFoodManager> createState() => _ListFoodManagerState();
+  State<ListStaff> createState() => _ListStaffState();
 }
 
-class _ListFoodManagerState extends State<ListFoodManager> {
+class _ListStaffState extends State<ListStaff> {
   TextEditingController _dateStartController = TextEditingController();
   TextEditingController _dateEndController = TextEditingController();
   String accountStatus = "isActive";
@@ -63,7 +64,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
     return Scaffold(
       body: SafeArea(
           child: !isLoading
-              ? ShimmerHomeManager()
+              ? const ShimmerHomeManager()
               : SingleChildScrollView(
                   child: Padding(
                     padding: EdgeInsets.all(20.w),
@@ -95,23 +96,6 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextApp(
-                                            text: "Tất cả món ăn",
-                                            fontsize: 18.sp,
-                                            fontWeight: FontWeight.bold,
-                                            color: blueText),
-                                        TextApp(
-                                          text: allYourFoodHere,
-                                          fontsize: 14.sp,
-                                          color: blueText.withOpacity(0.6),
-                                        ),
-                                      ],
-                                    ),
-                                    space40H,
                                     Row(
                                       children: [
                                         Flexible(
@@ -254,7 +238,12 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                 height: 10.h,
                                               ),
                                               DropdownSearch(
+                                                // popupProps: PopupProps.menu(
+                                                //   showSelectedItems: true,
+                                                //   disabledItemFn: (String s) => s.startsWith(''),
+                                                // ),
                                                 items: listState,
+
                                                 dropdownDecoratorProps:
                                                     DropDownDecoratorProps(
                                                   dropdownSearchDecoration:
@@ -358,21 +347,22 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                             DataTable(columns: const [
                                               DataColumn(
                                                 label: Center(
-                                                  child: Text('Món ăn',
+                                                  child: Text('Tên nhân viên',
                                                       textAlign:
                                                           TextAlign.center),
                                                 ),
                                               ),
                                               DataColumn(
                                                 label: Center(
-                                                  child: Text('Cửa hàng',
+                                                  child: Text('Chức vụ',
                                                       textAlign:
                                                           TextAlign.center),
                                                 ),
                                               ),
                                               DataColumn(
                                                 label: Center(
-                                                  child: Text('Giá tiền',
+                                                  child: Text(
+                                                      'Làm việc tại cửa hàng',
                                                       textAlign:
                                                           TextAlign.center),
                                                 ),
@@ -380,6 +370,20 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                               DataColumn(
                                                 label: Center(
                                                   child: Text('Trạng thái',
+                                                      textAlign:
+                                                          TextAlign.center),
+                                                ),
+                                              ),
+                                              DataColumn(
+                                                label: Center(
+                                                  child: Text('Số điện thoại',
+                                                      textAlign:
+                                                          TextAlign.center),
+                                                ),
+                                              ),
+                                              DataColumn(
+                                                label: Center(
+                                                  child: Text('Email',
                                                       textAlign:
                                                           TextAlign.center),
                                                 ),
@@ -397,43 +401,37 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                             ], rows: [
                                               DataRow(cells: [
                                                 DataCell(Center(
-                                                    child: IntrinsicHeight(
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Container(
-                                                        width: 80.w,
-                                                        height: 80.w,
-                                                        color: Colors.amber,
-                                                        child: Image.asset(
-                                                          "assets/images/banner1.png",
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      ),
-                                                      space10W,
-                                                      TextApp(text: "Mon an 1")
-                                                    ],
-                                                  ),
-                                                ))),
-                                                const DataCell(Center(
+                                                  child: Text('Nhan vien 1',
+                                                      textAlign:
+                                                          TextAlign.center),
+                                                )),
+                                                DataCell(Center(
+                                                  child: Text('Nhan vien',
+                                                      textAlign:
+                                                          TextAlign.center),
+                                                )),
+                                                DataCell(Center(
                                                   child: Text('shop 1',
                                                       textAlign:
                                                           TextAlign.center),
                                                 )),
-                                                const DataCell(Center(
-                                                  child: Text('2,000,000đ',
+                                                DataCell(Center(
+                                                  child: accountStatus ==
+                                                          "isActive"
+                                                      ? StatusBoxIsActive()
+                                                      : StatusBoxIsLock(),
+                                                )),
+                                                DataCell(Center(
+                                                  child: Text('0987653663',
                                                       textAlign:
                                                           TextAlign.center),
                                                 )),
-                                                const DataCell(Center(
-                                                    child:
-                                                        StatusBoxIsSelling())),
-                                                const DataCell(Center(
+                                                DataCell(Center(
+                                                  child: Text('Dang@gmail.com',
+                                                      textAlign:
+                                                          TextAlign.center),
+                                                )),
+                                                DataCell(Center(
                                                   child: Text(
                                                       '26/02/2024 11:35:12',
                                                       textAlign:
@@ -445,12 +443,12 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                       height: 30.h,
                                                       child: ButtonIcon(
                                                           isIconCircle: false,
-                                                          color1: const Color
-                                                              .fromRGBO(
-                                                              23, 193, 232, 1),
-                                                          color2: const Color
-                                                              .fromRGBO(
-                                                              23, 193, 232, 1),
+                                                          color1:
+                                                              Color.fromRGBO(23,
+                                                                  193, 232, 1),
+                                                          color2:
+                                                              Color.fromRGBO(23,
+                                                                  193, 232, 1),
                                                           event: () {
                                                             // context.go(
                                                             //     "/manager_edit_staff_info");
@@ -459,7 +457,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                               MaterialPageRoute(
                                                                   builder:
                                                                       (context) =>
-                                                                          EditFood()),
+                                                                          const EditStaffInformation()),
                                                             );
                                                           },
                                                           icon: Icons.edit),
@@ -470,19 +468,42 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                       child: ButtonIcon(
                                                           isIconCircle: false,
                                                           color1:
-                                                              const Color
-                                                                  .fromRGBO(
-                                                                  234, 6, 6, 1),
-                                                          color2: const Color
-                                                              .fromRGBO(
-                                                              234, 6, 6, 1),
+                                                              accountStatus ==
+                                                                      "isActive"
+                                                                  ? Color
+                                                                      .fromRGBO(
+                                                                          251,
+                                                                          207,
+                                                                          51,
+                                                                          1)
+                                                                  : Color
+                                                                      .fromRGBO(
+                                                                          103,
+                                                                          177,
+                                                                          8,
+                                                                          1),
+                                                          color2:
+                                                              accountStatus ==
+                                                                      "isActive"
+                                                                  ? Color
+                                                                      .fromRGBO(
+                                                                          251,
+                                                                          207,
+                                                                          51,
+                                                                          1)
+                                                                  : Color
+                                                                      .fromRGBO(
+                                                                          103,
+                                                                          177,
+                                                                          8,
+                                                                          1),
                                                           event: () {
                                                             showConfirmDialog(
                                                                 context, () {
                                                               print("ConFIRM");
                                                             });
                                                           },
-                                                          icon: Icons.delete),
+                                                          icon: Icons.lock),
                                                     )
                                                   ],
                                                 ))
@@ -494,7 +515,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                 ),
                               )),
                           space30H,
-                          const CopyRightText()
+                          CopyRightText()
                         ],
                       ),
                     ),
