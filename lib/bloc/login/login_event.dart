@@ -22,14 +22,12 @@ class LoginButtonPressed extends LoginEvent {
     required this.password,
   });
   @override
-  List<Object> get props => [shopId, email, password];
+  List<Object> get props => [];
 }
 
-class LoginStaffAuthData extends LoginEvent {
-  const LoginStaffAuthData(this.authDataModel);
-
-  final AuthDataModel authDataModel;
+class GetInforUser extends LoginEvent {
+  const GetInforUser();
 
   @override
-  List<Object> get props => [authDataModel];
+  List<Object> get props => [];
 }

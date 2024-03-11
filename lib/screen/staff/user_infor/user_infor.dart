@@ -7,7 +7,6 @@ import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/fake_data.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
-import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/shimmer/shimmer_list.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
@@ -18,7 +17,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class StaffUserInformation extends StatefulWidget {
   const StaffUserInformation({super.key});
@@ -35,13 +33,21 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
   bool reNewPasswordVisible = true;
   final shopIDController = TextEditingController();
   final surNameController = TextEditingController();
-  final nameController = TextEditingController();
+  final nameController = TextEditingController(); //
   final fullNameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
   final currentPassworldController = TextEditingController();
   final newPassworldController = TextEditingController();
   final reNewPassworldController = TextEditingController();
+  final roleController = TextEditingController();
+  final twitterController = TextEditingController();
+  final facebookController = TextEditingController();
+  final instagramController = TextEditingController();
+  final address1Controller = TextEditingController();
+  final address2Controller = TextEditingController();
+  final address3Controller = TextEditingController();
+  final address4Controller = TextEditingController();
   File? selectedImage;
   bool isLoading = true;
 
@@ -56,21 +62,116 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
 
   @override
   void initState() {
-    // Timer(const Duration(seconds: 3), () {
-    //   setState(() {
-    //     isLoading = true;
-    //   });
-    // });
     super.initState();
-
     init();
   }
 
   void init() async {
     await Future.delayed(const Duration(seconds: 0));
 
-    shopIDController.text =
-        context.read<LoginBloc>().state.authDataModel?.data?.shopId ?? '';
+    mounted
+        ? shopIDController.text =
+            context.read<LoginBloc>().state.authDataModel?.data?.shopId ?? ''
+        : null;
+    mounted
+        ? fullNameController.text = context
+                .read<LoginBloc>()
+                .state
+                .authDataModel
+                ?.data
+                ?.staffFullName ??
+            ''
+        : null;
+    mounted
+        ? surNameController.text = context
+                .read<LoginBloc>()
+                .state
+                .authDataModel
+                ?.data
+                ?.staffFirstName ??
+            ''
+        : null;
+
+    mounted
+        ? nameController.text = context
+                .read<LoginBloc>()
+                .state
+                .authDataModel
+                ?.data
+                ?.staffLastName ??
+            ''
+        : null;
+    mounted
+        ? emailController.text =
+            context.read<LoginBloc>().state.authDataModel?.data?.staffEmail ??
+                ''
+        : null;
+    mounted
+        ? phoneController.text =
+            context.read<LoginBloc>().state.authDataModel?.data?.staffPhone ??
+                ''
+        : null;
+    roleController.text =
+        context.read<LoginBloc>().state.authDataModel?.data?.staffPosition == 1
+            ? 'Nhân viên'
+            : context
+                        .read<LoginBloc>()
+                        .state
+                        .authDataModel
+                        ?.data
+                        ?.staffPosition ==
+                    2
+                ? 'Trưởng nhóm'
+                : context
+                            .read<LoginBloc>()
+                            .state
+                            .authDataModel
+                            ?.data
+                            ?.staffPosition ==
+                        3
+                    ? 'Quản lý'
+                    : context
+                                .read<LoginBloc>()
+                                .state
+                                .authDataModel
+                                ?.data
+                                ?.staffPosition ==
+                            4
+                        ? 'Kế toán'
+                        : '';
+
+    mounted
+        ? address4Controller.text = context
+                .read<LoginBloc>()
+                .state
+                .authDataModel
+                ?.data
+                ?.staffAddress4 ??
+            ''
+        : null;
+    mounted
+        ? twitterController.text =
+            context.read<LoginBloc>().state.authDataModel?.data?.staffTwitter ??
+                ''
+        : null;
+    mounted
+        ? facebookController.text = context
+                .read<LoginBloc>()
+                .state
+                .authDataModel
+                ?.data
+                ?.staffFacebook ??
+            ''
+        : null;
+    mounted
+        ? instagramController.text = context
+                .read<LoginBloc>()
+                .state
+                .authDataModel
+                ?.data
+                ?.staffInstagram ??
+            ''
+        : null;
   }
 
   @override
@@ -80,12 +181,41 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<LoginBloc, LoginState>(listener: (context, state) {
+    return BlocBuilder<LoginBloc, LoginState>(builder: (content, state) {
       shopIDController.text = state.authDataModel?.data?.shopId ?? '';
-      var cuutui = shopIDController.text;
-      print('RA DDI $cuutui');
-    }, builder: (content, state) {
-      print("STATE ${state.authDataModel}");
+      fullNameController.text = state.authDataModel?.data?.staffFullName ?? '';
+      surNameController.text = state.authDataModel?.data?.staffFirstName ?? '';
+      nameController.text = state.authDataModel?.data?.staffLastName ?? '';
+      emailController.text = state.authDataModel?.data?.staffEmail ?? '';
+      phoneController.text = state.authDataModel?.data?.staffPhone ?? '';
+      roleController.text = state.authDataModel?.data?.staffPosition == 1
+          ? 'Nhân viên'
+          : state.authDataModel?.data?.staffPosition == 2
+              ? 'Trưởng nhóm'
+              : state.authDataModel?.data?.staffPosition == 3
+                  ? 'Quản lý'
+                  : state.authDataModel?.data?.staffPosition == 4
+                      ? 'Kế toán'
+                      : '';
+      address4Controller.text = state.authDataModel?.data?.staffAddress4 ?? '';
+      twitterController.text = state.authDataModel?.data?.staffTwitter ?? '';
+      facebookController.text = state.authDataModel?.data?.staffFacebook ?? '';
+      instagramController.text =
+          state.authDataModel?.data?.staffInstagram ?? '';
+      var userAvater = state.authDataModel?.data?.staffAvatar;
+      print("AVATARR $userAvater");
+      var userDataFullName = fullNameController.text;
+      var userDataRole = roleController.text;
+      if (userDataRole == '1') {
+        userDataRole = 'Nhân viên';
+      } else if (userDataRole == '2') {
+        userDataRole = 'Trưởng nhóm';
+      } else if (userDataRole == '3') {
+        userDataRole = 'Quản lý';
+      } else if (userDataRole == '4') {
+        userDataRole = 'Kế toán';
+      }
+
       return Scaffold(
         body: SafeArea(
             child: !isLoading
@@ -138,7 +268,10 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                   : Container(
                                                       // width: 100.w,
                                                       color: Colors.grey,
-                                                      child: Icon(Icons.person),
+                                                      child: Image.network(
+                                                        'https://shop.layoutwebdemo.com/assets/user/images/avt/no_image.png',
+                                                        fit: BoxFit.cover,
+                                                      ),
                                                     ),
                                             ),
                                             Positioned(
@@ -155,14 +288,12 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                           CrossAxisAlignment.center,
                                       children: [
                                         TextApp(
-                                          text: state.authDataModel?.data
-                                                  ?.staffFullName ??
-                                              '',
+                                          text: userDataFullName,
                                           fontWeight: FontWeight.bold,
                                           fontsize: 18.sp,
                                         ),
                                         TextApp(
-                                          text: "Nhan vien ",
+                                          text: userDataRole,
                                           fontsize: 14.sp,
                                         )
                                       ],
@@ -563,6 +694,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                       ),
                                                       TextFormField(
                                                         readOnly: true,
+                                                        controller:
+                                                            roleController,
                                                         keyboardType:
                                                             TextInputType.name,
                                                         style: TextStyle(
@@ -736,6 +869,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                           dropdownSearchDecoration:
                                                               InputDecoration(
                                                             // isCollapsed: true,
+
                                                             hintMaxLines: 1,
                                                             fillColor:
                                                                 const Color
@@ -972,6 +1106,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                         height: 10.h,
                                                       ),
                                                       TextFormField(
+                                                        controller:
+                                                            address4Controller,
                                                         keyboardType:
                                                             TextInputType.name,
                                                         style: TextStyle(
@@ -1109,6 +1245,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                 height: 10.h,
                                               ),
                                               TextField(
+                                                controller: twitterController,
                                                 style: TextStyle(
                                                     fontSize: 14.sp,
                                                     color: grey),
@@ -1161,6 +1298,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                 height: 10.h,
                                               ),
                                               TextField(
+                                                controller: facebookController,
                                                 style: TextStyle(
                                                     fontSize: 14.sp,
                                                     color: grey),
@@ -1213,6 +1351,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                 height: 10.h,
                                               ),
                                               TextField(
+                                                controller: instagramController,
                                                 style: TextStyle(
                                                     fontSize: 14.sp,
                                                     color: grey),
@@ -1275,6 +1414,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                       emailController.clear();
                                                       phoneController.clear();
                                                     }
+                                                    // BlocProvider.of<LoginBloc>(
+                                                    //         context)
+                                                    //     .add(GetInforUser());
                                                   },
                                                   text: "Cập nhật thông tin",
                                                   fontSize: 12.sp,

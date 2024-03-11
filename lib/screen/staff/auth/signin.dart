@@ -1,21 +1,15 @@
-import 'dart:convert';
-
 import 'package:app_restaurant/bloc/login/login_bloc.dart';
-import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/text.dart';
-import 'package:app_restaurant/utils/common.dart';
 import 'package:app_restaurant/widgets/background_welcome.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:http/http.dart' as http;
 
 class StaffSignIn extends StatefulWidget {
   const StaffSignIn({super.key});
@@ -49,7 +43,6 @@ class StaffSignInFrom extends StatefulWidget {
 class _StaffSignInFromState extends State<StaffSignInFrom> {
   bool light = false;
   bool passwordVisible = true;
-  // bool isLoading = false;
   final _formField = GlobalKey<FormState>();
   final storeIdController = TextEditingController();
   final emailController = TextEditingController();
@@ -394,7 +387,7 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                                   radius: 8.r,
                                                   textColor: Colors.white,
                                                 )
-                                              : Center(
+                                              : const Center(
                                                   child:
                                                       CircularProgressIndicator()),
                                           SizedBox(

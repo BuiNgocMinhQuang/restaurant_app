@@ -1,64 +1,32 @@
 part of 'login_bloc.dart';
 
-// abstract class LoginState extends Equatable {
-//   const LoginState();
-//   @override
-//   List<Object> get props => [];
-// }
-
-// class LoginInitial extends LoginState {}
-
-// class LoginLoading extends LoginState {}
-
-// class LoginSuccess extends LoginState {}
-
-// class AuthenticationSuccess extends LoginState {
-//   final String token;
-
-//   const AuthenticationSuccess(this.token);
-
-//   @override
-//   List<Object> get props => [token];
-// }
-
-// class LoginFailure extends LoginState {
-//   final String message;
-
-//   LoginFailure(this.message);
-// }
-
 class LoginState extends Equatable {
-  const LoginState({
-    this.authDataModel,
-    this.loginStatus,
-    this.errorText,
-  });
+  const LoginState(
+      {this.authDataModel,
+      this.loginStatus,
+      this.errorText,
+      this.staffInforDataModel});
 
   final AuthDataModel? authDataModel;
   final LoginStatus? loginStatus;
   final String? errorText;
+  final StaffInfor? staffInforDataModel;
 
   LoginState copyWith(
       {LoginStatus? loginStatus,
       AuthDataModel? authDataModel,
-      String? errorText}) {
+      String? errorText,
+      StaffInfor? staffInforDataModel}) {
     return LoginState(
-      authDataModel: authDataModel ?? this.authDataModel,
-      loginStatus: loginStatus ?? this.loginStatus,
-      errorText: errorText ?? this.errorText,
-    );
+        authDataModel: authDataModel ?? this.authDataModel,
+        loginStatus: loginStatus ?? this.loginStatus,
+        errorText: errorText ?? this.errorText,
+        staffInforDataModel: staffInforDataModel ?? this.staffInforDataModel);
   }
 
   @override
-  List<Object?> get props => [
-        authDataModel,
-        loginStatus,
-        errorText,
-      ];
+  List<Object?> get props =>
+      [authDataModel, loginStatus, errorText, staffInforDataModel];
 }
 
-enum LoginStatus {
-  loading,
-  success,
-  failed,
-}
+enum LoginStatus { loading, success, failed, logged }
