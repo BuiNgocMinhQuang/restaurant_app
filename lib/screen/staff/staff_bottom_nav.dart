@@ -294,6 +294,8 @@ class _StaffFabTabState extends State<StaffFabTab> {
                             event: () {
                               StorageUtils.instance
                                   .removeKey(key: 'auth_staff');
+                              StorageUtils.instance
+                                  .removeKey(key: 'staff_infor_data');
                               context.go("/staff_sign_in");
                             },
                             text: "Đăng xuất",

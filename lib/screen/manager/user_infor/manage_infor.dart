@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_restaurant/bloc/login/login_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
@@ -9,6 +10,7 @@ import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -33,8 +35,14 @@ class _ManagerInformationState extends State<ManagerInformation> {
   final currentPassworldController = TextEditingController();
   final newPassworldController = TextEditingController();
   final reNewPassworldController = TextEditingController();
+  final twitterController = TextEditingController();
+  final facebookController = TextEditingController();
+  final instagramController = TextEditingController();
+  final address1Controller = TextEditingController();
+  final address2Controller = TextEditingController();
+  final address3Controller = TextEditingController();
+  final address4Controller = TextEditingController();
   File? selectedImage;
-  bool isLoading = true;
   void pickImage() async {
     final returndImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -45,12 +53,119 @@ class _ManagerInformationState extends State<ManagerInformation> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  void init() async {
+    await Future.delayed(const Duration(seconds: 0));
+
+    mounted
+        ? fullNameController.text = context
+                .read<LoginBloc>()
+                .state
+                .managerInforModel
+                ?.data
+                ?.userFullName ??
+            ''
+        : null;
+    mounted
+        ? surNameController.text = context
+                .read<LoginBloc>()
+                .state
+                .managerInforModel
+                ?.data
+                ?.userFirstName ??
+            ''
+        : null;
+
+    mounted
+        ? nameController.text = context
+                .read<LoginBloc>()
+                .state
+                .managerInforModel
+                ?.data
+                ?.userLastName ??
+            ''
+        : null;
+    mounted
+        ? emailController.text = context
+                .read<LoginBloc>()
+                .state
+                .managerInforModel
+                ?.data
+                ?.userEmail ??
+            ''
+        : null;
+    mounted
+        ? phoneController.text = context
+                .read<LoginBloc>()
+                .state
+                .managerInforModel
+                ?.data
+                ?.userPhone ??
+            ''
+        : null;
+    mounted
+        ? address4Controller.text = context
+                .read<LoginBloc>()
+                .state
+                .managerInforModel
+                ?.data
+                ?.userAddress4 ??
+            ''
+        : null;
+    // mounted
+    //     ? twitterController.text = context
+    //             .read<LoginBloc>()
+    //             .state
+    //             .staffInforDataModel
+    //             ?.data
+    //             ?.staffTwitter ??
+    //         ''
+    //     : null;
+    // mounted
+    //     ? facebookController.text = context
+    //             .read<LoginBloc>()
+    //             .state
+    //             .staffInforDataModel
+    //             ?.data
+    //             ?.staffFacebook ??
+    //         ''
+    //     : null;
+    // mounted
+    //     ? instagramController.text = context
+    //             .read<LoginBloc>()
+    //             .state
+    //             .staffInforDataModel
+    //             ?.data
+    //             ?.staffInstagram ??
+    //         ''
+    //     : null;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-          child: !isLoading
-              ? const ShimmerUserInfor()
-              : SingleChildScrollView(
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, state) {
+        fullNameController.text =
+            state.managerInforModel?.data?.userFullName ?? '';
+        surNameController.text =
+            state.managerInforModel?.data?.userFirstName ?? '';
+        nameController.text = state.managerInforModel?.data?.userLastName ?? '';
+        emailController.text = state.managerInforModel?.data?.userEmail ?? '';
+        phoneController.text = state.managerInforModel?.data?.userPhone ?? '';
+        address4Controller.text =
+            state.managerInforModel?.data?.userAddress4 ?? '';
+        return Scaffold(
+          body: SafeArea(
+              child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
@@ -111,16 +226,18 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       TextApp(
-                                        text: "Ong chu",
+                                        text: fullNameController.text,
                                         fontWeight: FontWeight.bold,
                                         fontsize: 18.sp,
                                       ),
                                       TextApp(
-                                        text: "Chủ cửa hàng ",
+                                        text: "Tài khoản đã được xác nhận",
                                         fontsize: 14.sp,
+                                        color: Color.fromRGBO(130, 214, 22, 1),
+                                        fontWeight: FontWeight.bold,
                                       )
                                     ],
                                   )
@@ -677,6 +794,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                       height: 10.h,
                                                     ),
                                                     TextFormField(
+                                                      controller:
+                                                          address4Controller,
                                                       keyboardType:
                                                           TextInputType.name,
                                                       style: TextStyle(
@@ -791,155 +910,158 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                             ),
                                           ],
                                         ),
-                                        SizedBox(
-                                          height: 20.h,
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            TextApp(
-                                              text: " Twitter",
-                                              fontsize: 12.sp,
-                                              fontWeight: FontWeight.bold,
-                                              color: blueText,
-                                            ),
-                                            SizedBox(
-                                              height: 10.h,
-                                            ),
-                                            TextField(
-                                              style: TextStyle(
-                                                  fontSize: 14.sp, color: grey),
-                                              cursorColor: grey,
-                                              decoration: InputDecoration(
-                                                  fillColor:
-                                                      const Color.fromARGB(
-                                                          255, 226, 104, 159),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide:
-                                                        const BorderSide(
-                                                            color:
-                                                                Color.fromRGBO(
-                                                                    214,
-                                                                    51,
-                                                                    123,
-                                                                    0.6),
-                                                            width: 2.0),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.r),
-                                                  ),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.r),
-                                                  ),
-                                                  hintText: 'Twitter',
-                                                  isDense: true,
-                                                  contentPadding:
-                                                      EdgeInsets.all(15.w)),
-                                            ),
-                                          ],
-                                        ),
-                                        space20H,
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            TextApp(
-                                              text: " Facebook",
-                                              fontsize: 12.sp,
-                                              fontWeight: FontWeight.bold,
-                                              color: blueText,
-                                            ),
-                                            SizedBox(
-                                              height: 10.h,
-                                            ),
-                                            TextField(
-                                              style: TextStyle(
-                                                  fontSize: 14.sp, color: grey),
-                                              cursorColor: grey,
-                                              decoration: InputDecoration(
-                                                  fillColor:
-                                                      const Color.fromARGB(
-                                                          255, 226, 104, 159),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide:
-                                                        const BorderSide(
-                                                            color:
-                                                                Color.fromRGBO(
-                                                                    214,
-                                                                    51,
-                                                                    123,
-                                                                    0.6),
-                                                            width: 2.0),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.r),
-                                                  ),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.r),
-                                                  ),
-                                                  hintText: 'Facebook',
-                                                  isDense: true,
-                                                  contentPadding:
-                                                      EdgeInsets.all(15.w)),
-                                            ),
-                                          ],
-                                        ),
-                                        space20H,
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            TextApp(
-                                              text: " Instagram",
-                                              fontsize: 12.sp,
-                                              fontWeight: FontWeight.bold,
-                                              color: blueText,
-                                            ),
-                                            SizedBox(
-                                              height: 10.h,
-                                            ),
-                                            TextField(
-                                              style: TextStyle(
-                                                  fontSize: 14.sp, color: grey),
-                                              cursorColor: grey,
-                                              decoration: InputDecoration(
-                                                  fillColor:
-                                                      const Color.fromARGB(
-                                                          255, 226, 104, 159),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide:
-                                                        const BorderSide(
-                                                            color:
-                                                                Color.fromRGBO(
-                                                                    214,
-                                                                    51,
-                                                                    123,
-                                                                    0.6),
-                                                            width: 2.0),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.r),
-                                                  ),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.r),
-                                                  ),
-                                                  hintText: 'Instagram',
-                                                  isDense: true,
-                                                  contentPadding:
-                                                      EdgeInsets.all(15.w)),
-                                            ),
-                                          ],
-                                        ),
+                                        // SizedBox(
+                                        //   height: 20.h,
+                                        // ),
+                                        // Column(
+                                        //   crossAxisAlignment:
+                                        //       CrossAxisAlignment.start,
+                                        //   children: [
+                                        //     TextApp(
+                                        //       text: " Twitter",
+                                        //       fontsize: 12.sp,
+                                        //       fontWeight: FontWeight.bold,
+                                        //       color: blueText,
+                                        //     ),
+                                        //     SizedBox(
+                                        //       height: 10.h,
+                                        //     ),
+                                        //     TextField(
+                                        //       controller: twitterController,
+                                        //       style: TextStyle(
+                                        //           fontSize: 14.sp, color: grey),
+                                        //       cursorColor: grey,
+                                        //       decoration: InputDecoration(
+                                        //           fillColor:
+                                        //               const Color.fromARGB(
+                                        //                   255, 226, 104, 159),
+                                        //           focusedBorder:
+                                        //               OutlineInputBorder(
+                                        //             borderSide:
+                                        //                 const BorderSide(
+                                        //                     color:
+                                        //                         Color.fromRGBO(
+                                        //                             214,
+                                        //                             51,
+                                        //                             123,
+                                        //                             0.6),
+                                        //                     width: 2.0),
+                                        //             borderRadius:
+                                        //                 BorderRadius.circular(
+                                        //                     8.r),
+                                        //           ),
+                                        //           border: OutlineInputBorder(
+                                        //             borderRadius:
+                                        //                 BorderRadius.circular(
+                                        //                     8.r),
+                                        //           ),
+                                        //           hintText: 'Twitter',
+                                        //           isDense: true,
+                                        //           contentPadding:
+                                        //               EdgeInsets.all(15.w)),
+                                        //     ),
+                                        //   ],
+                                        // ),
+                                        // space20H,
+                                        // Column(
+                                        //   crossAxisAlignment:
+                                        //       CrossAxisAlignment.start,
+                                        //   children: [
+                                        //     TextApp(
+                                        //       text: " Facebook",
+                                        //       fontsize: 12.sp,
+                                        //       fontWeight: FontWeight.bold,
+                                        //       color: blueText,
+                                        //     ),
+                                        //     SizedBox(
+                                        //       height: 10.h,
+                                        //     ),
+                                        //     TextField(
+                                        //       controller: facebookController,
+                                        //       style: TextStyle(
+                                        //           fontSize: 14.sp, color: grey),
+                                        //       cursorColor: grey,
+                                        //       decoration: InputDecoration(
+                                        //           fillColor:
+                                        //               const Color.fromARGB(
+                                        //                   255, 226, 104, 159),
+                                        //           focusedBorder:
+                                        //               OutlineInputBorder(
+                                        //             borderSide:
+                                        //                 const BorderSide(
+                                        //                     color:
+                                        //                         Color.fromRGBO(
+                                        //                             214,
+                                        //                             51,
+                                        //                             123,
+                                        //                             0.6),
+                                        //                     width: 2.0),
+                                        //             borderRadius:
+                                        //                 BorderRadius.circular(
+                                        //                     8.r),
+                                        //           ),
+                                        //           border: OutlineInputBorder(
+                                        //             borderRadius:
+                                        //                 BorderRadius.circular(
+                                        //                     8.r),
+                                        //           ),
+                                        //           hintText: 'Facebook',
+                                        //           isDense: true,
+                                        //           contentPadding:
+                                        //               EdgeInsets.all(15.w)),
+                                        //     ),
+                                        //   ],
+                                        // ),
+                                        // space20H,
+                                        // Column(
+                                        //   crossAxisAlignment:
+                                        //       CrossAxisAlignment.start,
+                                        //   children: [
+                                        //     TextApp(
+                                        //       text: " Instagram",
+                                        //       fontsize: 12.sp,
+                                        //       fontWeight: FontWeight.bold,
+                                        //       color: blueText,
+                                        //     ),
+                                        //     SizedBox(
+                                        //       height: 10.h,
+                                        //     ),
+                                        //     TextField(
+                                        //       controller: instagramController,
+                                        //       style: TextStyle(
+                                        //           fontSize: 14.sp, color: grey),
+                                        //       cursorColor: grey,
+                                        //       decoration: InputDecoration(
+                                        //           fillColor:
+                                        //               const Color.fromARGB(
+                                        //                   255, 226, 104, 159),
+                                        //           focusedBorder:
+                                        //               OutlineInputBorder(
+                                        //             borderSide:
+                                        //                 const BorderSide(
+                                        //                     color:
+                                        //                         Color.fromRGBO(
+                                        //                             214,
+                                        //                             51,
+                                        //                             123,
+                                        //                             0.6),
+                                        //                     width: 2.0),
+                                        //             borderRadius:
+                                        //                 BorderRadius.circular(
+                                        //                     8.r),
+                                        //           ),
+                                        //           border: OutlineInputBorder(
+                                        //             borderRadius:
+                                        //                 BorderRadius.circular(
+                                        //                     8.r),
+                                        //           ),
+                                        //           hintText: 'Instagram',
+                                        //           isDense: true,
+                                        //           contentPadding:
+                                        //               EdgeInsets.all(15.w)),
+                                        //     ),
+                                        //   ],
+                                        // ),
                                         space20H,
                                         Row(
                                           mainAxisAlignment:
@@ -1264,6 +1386,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
                       space35H,
                     ],
                   ))),
+        );
+      },
     );
   }
 }

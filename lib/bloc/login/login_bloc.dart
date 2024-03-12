@@ -1,6 +1,9 @@
 import 'dart:convert';
 
 import 'package:app_restaurant/config/void_show_dialog.dart';
+import 'package:app_restaurant/env/index.dart';
+import 'package:app_restaurant/constant/api/index.dart';
+import 'package:app_restaurant/model/manager_infor_model.dart';
 import 'package:app_restaurant/model/staff_infor_model.dart';
 import 'package:app_restaurant/model/user_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
@@ -17,48 +20,98 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(const LoginState()) {
     on<LoginAppInit>(_onLoginAppInit);
     on<LoginButtonPressed>(_onLoginButtonPressed);
-    // on<GetInforUser>(_onGetInforUser);
+    on<ManagerLoginButtonPressed>(_onManagerLoginButtonPressed);
   }
 
   void _onLoginAppInit(
     LoginAppInit event,
     Emitter<LoginState> emit,
   ) async {
-    var authDataString = StorageUtils.instance.getString(key: 'auth_staff');
-    if (authDataString != null && authDataString != "") {
-      var authDataRes = AuthDataModel.fromJson(jsonDecode(authDataString));
+    var staffInforDataString =
+        StorageUtils.instance.getString(key: 'staff_infor_data');
+    print("CO DATA STAFF $staffInforDataString");
 
-      emit(state.copyWith(authDataModel: authDataRes));
+    var managerInforDataString =
+        StorageUtils.instance.getString(key: 'manager_infor_data');
+    print("CO DATA MANAGER $managerInforDataString");
+    if (staffInforDataString != null && staffInforDataString != "") {
+      var staffInforDataRes =
+          StaffInfor.fromJson(jsonDecode(staffInforDataString));
+
+      emit(state.copyWith(staffInforDataModel: staffInforDataRes));
+    }
+    if (managerInforDataString != null && managerInforDataString != "") {
+      var managerInforDataRes =
+          ManagerInforModel.fromJson(jsonDecode(managerInforDataString));
+
+      emit(state.copyWith(managerInforModel: managerInforDataRes));
     }
   }
 
-  // void _onGetInforUser(
-  //   GetInforUser event,
-  //   Emitter<LoginState> emit,
-  // ) async {
-  //   // emit(state.copyWith(loginStatus: LoginStatus.loading));
-  //   try {
-  //     print("TOKEN22 ${StorageUtils.instance.getString(key: 'staff_token')}");
+  void _onManagerLoginButtonPressed(
+    ManagerLoginButtonPressed event,
+    Emitter<LoginState> emit,
+  ) async {
+    emit(state.copyWith(loginStatus: LoginStatus.loading));
+    final response = await http.post(
+      Uri.parse('$baseUrl$managerLoginApi'),
+      body: {
+        'email': event.email,
+        'password': event.password,
+      },
+    );
+    final data = jsonDecode(response.body);
+    var message = data['message'];
 
-  //     final response = await http.post(
-  //       Uri.parse('http://shop.layoutwebdemo.com/api/information'),
-  //       headers: {
-  //         'Content-type': 'application/json',
-  //         'Accept': 'application/json',
-  //         "Authorization":
-  //             "Bearer ${StorageUtils.instance.getString(key: 'staff_token')}"
-  //       },
-  //     );
-  //     final data = jsonDecode(response.body);
+    try {
+      if (data['status'] == 200) {
+        var authManagerDataRes = ManagerInforModel.fromJson(data);
+        var authManagerDataString = jsonEncode(authManagerDataRes);
+        var token = authManagerDataRes.token;
+        print("TOKEN NE $token");
 
-  //     print("DATA STAFF INFOR $data");
-  //   } catch (error) {
-  //     print("LOI GI DO");
+        StorageUtils.instance.setString(key: 'token', val: token ?? '');
+        //save Token
 
-  //     emit(state.copyWith(loginStatus: LoginStatus.failed));
-  //     emit(state.copyWith(errorText: "HET CUU!"));
-  //   }
-  // }
+        StorageUtils.instance
+            .setString(key: 'auth_manager', val: authManagerDataString);
+
+        try {
+          final response = await http.post(
+            Uri.parse('$baseUrl$userInformationApi'),
+            headers: {
+              'Content-type': 'application/json',
+              'Accept': 'application/json',
+              "Authorization": "Bearer ${authManagerDataRes.token}"
+            },
+          );
+          final dataManagerInfor = jsonDecode(response.body);
+          if (dataManagerInfor['status'] == 200) {
+            var managerInforDataRes =
+                ManagerInforModel.fromJson(dataManagerInfor);
+            var managerInforDataString = jsonEncode(managerInforDataRes);
+            StorageUtils.instance.setString(
+                key: 'manager_infor_data', val: managerInforDataString);
+            emit(state.copyWith(managerInforModel: managerInforDataRes));
+          }
+        } catch (error) {
+          print("LOI GI DO");
+        }
+        emit(state.copyWith(loginStatus: LoginStatus.success));
+        navigatorKey.currentContext?.go("/manager_home");
+      } else {
+        emit(state.copyWith(loginStatus: LoginStatus.failed));
+        emit(state.copyWith(errorText: message['text']));
+      }
+    } catch (error) {
+      emit(state.copyWith(loginStatus: LoginStatus.failed));
+      emit(state.copyWith(errorText: message['text']));
+    }
+
+    if (state.loginStatus == LoginStatus.failed) {
+      showFailedModal(navigatorKey.currentContext, state.errorText);
+    }
+  }
 
   void _onLoginButtonPressed(
     LoginButtonPressed event,
@@ -68,7 +121,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     try {
       final response = await http.post(
-        Uri.parse('https://shop.layoutwebdemo.com/api/staff/login'),
+        Uri.parse('$baseUrl$staffLoginApi'),
         body: {
           'shop_id': event.shopId,
           'email': event.email,
@@ -82,33 +135,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         var authDataString = jsonEncode(authDataRes);
         StorageUtils.instance.setString(key: 'auth_staff', val: authDataString);
 
-        // try {
+        try {
+          final response = await http.post(
+            Uri.parse('$baseUrl$userInformationApi'),
+            headers: {
+              'Content-type': 'application/json',
+              'Accept': 'application/json',
+              "Authorization": "Bearer ${authDataRes.token}"
+            },
+          );
+          final dataStaffInfor = jsonDecode(response.body);
+          if (dataStaffInfor['status'] == 200) {
+            var staffInforDataRes = StaffInfor.fromJson(dataStaffInfor);
+            var staffInforDataString = jsonEncode(staffInforDataRes);
+            print("DATA STAFF INFOR $staffInforDataString");
 
-        //   final response = await http.post(
-        //     Uri.parse('http://shop.layoutwebdemo.com/api/information'),
-        //     headers: {
-        //       'Content-type': 'application/json',
-        //       'Accept': 'application/json',
-        //       "Authorization": "Bearer ${authDataRes.token}"
-        //     },
-        //   );
-        //   final dataStaffInfor = jsonDecode(response.body);
-        //   if (dataStaffInfor['status'] == 200) {
-        //     var staffInforDataRes = StaffInfor.fromJson(dataStaffInfor);
-        //     var staffInforDataString = jsonEncode(staffInforDataRes);
-        // StorageUtils.instance.setString(key: 'staff_infor_data', val: staffInforDataString);
-        // emit(state.copyWith(staffInforDataModel: staffInforDataRes));
-
-        //   }
-
-        //   print("DATA STAFF INFOR $dataStaffInfor");
-        // } catch (error) {
-        //   print("LOI GI DO");
-
-        //   emit(state.copyWith(loginStatus: LoginStatus.failed));
-        //   emit(state.copyWith(errorText: "HET CUU!"));
-        // }
-        emit(state.copyWith(authDataModel: authDataRes));
+            StorageUtils.instance
+                .setString(key: 'staff_infor_data', val: staffInforDataString);
+            emit(state.copyWith(staffInforDataModel: staffInforDataRes));
+          }
+        } catch (error) {
+          print("LOI GI DO");
+        }
         emit(state.copyWith(loginStatus: LoginStatus.success));
         navigatorKey.currentContext?.go("/staff_home");
       } else {

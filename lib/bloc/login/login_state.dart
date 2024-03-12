@@ -5,28 +5,38 @@ class LoginState extends Equatable {
       {this.authDataModel,
       this.loginStatus,
       this.errorText,
-      this.staffInforDataModel});
+      this.staffInforDataModel,
+      this.managerInforModel});
 
   final AuthDataModel? authDataModel;
   final LoginStatus? loginStatus;
   final String? errorText;
   final StaffInfor? staffInforDataModel;
+  final ManagerInforModel? managerInforModel;
 
   LoginState copyWith(
       {LoginStatus? loginStatus,
       AuthDataModel? authDataModel,
       String? errorText,
-      StaffInfor? staffInforDataModel}) {
+      StaffInfor? staffInforDataModel,
+      ManagerInforModel? managerInforModel}) {
     return LoginState(
-        authDataModel: authDataModel ?? this.authDataModel,
-        loginStatus: loginStatus ?? this.loginStatus,
-        errorText: errorText ?? this.errorText,
-        staffInforDataModel: staffInforDataModel ?? this.staffInforDataModel);
+      authDataModel: authDataModel ?? this.authDataModel,
+      loginStatus: loginStatus ?? this.loginStatus,
+      errorText: errorText ?? this.errorText,
+      staffInforDataModel: staffInforDataModel ?? this.staffInforDataModel,
+      managerInforModel: managerInforModel ?? this.managerInforModel,
+    );
   }
 
   @override
-  List<Object?> get props =>
-      [authDataModel, loginStatus, errorText, staffInforDataModel];
+  List<Object?> get props => [
+        authDataModel,
+        loginStatus,
+        errorText,
+        staffInforDataModel,
+        managerInforModel
+      ];
 }
 
 enum LoginStatus { loading, success, failed, logged }

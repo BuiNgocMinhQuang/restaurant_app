@@ -71,13 +71,14 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
 
     mounted
         ? shopIDController.text =
-            context.read<LoginBloc>().state.authDataModel?.data?.shopId ?? ''
+            context.read<LoginBloc>().state.staffInforDataModel?.data?.shopId ??
+                ''
         : null;
     mounted
         ? fullNameController.text = context
                 .read<LoginBloc>()
                 .state
-                .authDataModel
+                .staffInforDataModel
                 ?.data
                 ?.staffFullName ??
             ''
@@ -86,7 +87,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
         ? surNameController.text = context
                 .read<LoginBloc>()
                 .state
-                .authDataModel
+                .staffInforDataModel
                 ?.data
                 ?.staffFirstName ??
             ''
@@ -96,69 +97,86 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
         ? nameController.text = context
                 .read<LoginBloc>()
                 .state
-                .authDataModel
+                .staffInforDataModel
                 ?.data
                 ?.staffLastName ??
             ''
         : null;
     mounted
-        ? emailController.text =
-            context.read<LoginBloc>().state.authDataModel?.data?.staffEmail ??
-                ''
+        ? emailController.text = context
+                .read<LoginBloc>()
+                .state
+                .staffInforDataModel
+                ?.data
+                ?.staffEmail ??
+            ''
         : null;
     mounted
-        ? phoneController.text =
-            context.read<LoginBloc>().state.authDataModel?.data?.staffPhone ??
-                ''
+        ? phoneController.text = context
+                .read<LoginBloc>()
+                .state
+                .staffInforDataModel
+                ?.data
+                ?.staffPhone ??
+            ''
         : null;
-    roleController.text =
-        context.read<LoginBloc>().state.authDataModel?.data?.staffPosition == 1
-            ? 'Nhân viên'
+    roleController.text = context
+                .read<LoginBloc>()
+                .state
+                .staffInforDataModel
+                ?.data
+                ?.staffPosition ==
+            1
+        ? 'Nhân viên'
+        : context
+                    .read<LoginBloc>()
+                    .state
+                    .staffInforDataModel
+                    ?.data
+                    ?.staffPosition ==
+                2
+            ? 'Trưởng nhóm'
             : context
                         .read<LoginBloc>()
                         .state
-                        .authDataModel
+                        .staffInforDataModel
                         ?.data
                         ?.staffPosition ==
-                    2
-                ? 'Trưởng nhóm'
+                    3
+                ? 'Quản lý'
                 : context
                             .read<LoginBloc>()
                             .state
-                            .authDataModel
+                            .staffInforDataModel
                             ?.data
                             ?.staffPosition ==
-                        3
-                    ? 'Quản lý'
-                    : context
-                                .read<LoginBloc>()
-                                .state
-                                .authDataModel
-                                ?.data
-                                ?.staffPosition ==
-                            4
-                        ? 'Kế toán'
-                        : '';
+                        4
+                    ? 'Kế toán'
+                    : '';
 
     mounted
         ? address4Controller.text = context
                 .read<LoginBloc>()
                 .state
-                .authDataModel
+                .staffInforDataModel
                 ?.data
                 ?.staffAddress4 ??
             ''
         : null;
     mounted
-        ? twitterController.text =
-            context.read<LoginBloc>().state.authDataModel?.data?.staffTwitter ??
-                ''
+        ? twitterController.text = context
+                .read<LoginBloc>()
+                .state
+                .staffInforDataModel
+                ?.data
+                ?.staffTwitter ??
+            ''
         : null;
     mounted
         ? facebookController.text = context
                 .read<LoginBloc>()
                 .state
-                .authDataModel
+                .staffInforDataModel
                 ?.data
                 ?.staffFacebook ??
             ''
@@ -167,7 +185,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
         ? instagramController.text = context
                 .read<LoginBloc>()
                 .state
-                .authDataModel
+                .staffInforDataModel
                 ?.data
                 ?.staffInstagram ??
             ''
@@ -182,27 +200,33 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(builder: (content, state) {
-      shopIDController.text = state.authDataModel?.data?.shopId ?? '';
-      fullNameController.text = state.authDataModel?.data?.staffFullName ?? '';
-      surNameController.text = state.authDataModel?.data?.staffFirstName ?? '';
-      nameController.text = state.authDataModel?.data?.staffLastName ?? '';
-      emailController.text = state.authDataModel?.data?.staffEmail ?? '';
-      phoneController.text = state.authDataModel?.data?.staffPhone ?? '';
-      roleController.text = state.authDataModel?.data?.staffPosition == 1
+      shopIDController.text = state.staffInforDataModel?.data?.shopId ?? '';
+      fullNameController.text =
+          state.staffInforDataModel?.data?.staffFullName ?? '';
+      surNameController.text =
+          state.staffInforDataModel?.data?.staffFirstName ?? '';
+      nameController.text =
+          state.staffInforDataModel?.data?.staffLastName ?? '';
+      emailController.text = state.staffInforDataModel?.data?.staffEmail ?? '';
+      phoneController.text = state.staffInforDataModel?.data?.staffPhone ?? '';
+      roleController.text = state.staffInforDataModel?.data?.staffPosition == 1
           ? 'Nhân viên'
-          : state.authDataModel?.data?.staffPosition == 2
+          : state.staffInforDataModel?.data?.staffPosition == 2
               ? 'Trưởng nhóm'
-              : state.authDataModel?.data?.staffPosition == 3
+              : state.staffInforDataModel?.data?.staffPosition == 3
                   ? 'Quản lý'
-                  : state.authDataModel?.data?.staffPosition == 4
+                  : state.staffInforDataModel?.data?.staffPosition == 4
                       ? 'Kế toán'
                       : '';
-      address4Controller.text = state.authDataModel?.data?.staffAddress4 ?? '';
-      twitterController.text = state.authDataModel?.data?.staffTwitter ?? '';
-      facebookController.text = state.authDataModel?.data?.staffFacebook ?? '';
+      address4Controller.text =
+          state.staffInforDataModel?.data?.staffAddress4 ?? '';
+      twitterController.text =
+          state.staffInforDataModel?.data?.staffTwitter ?? '';
+      facebookController.text =
+          state.staffInforDataModel?.data?.staffFacebook ?? '';
       instagramController.text =
-          state.authDataModel?.data?.staffInstagram ?? '';
-      var userAvater = state.authDataModel?.data?.staffAvatar;
+          state.staffInforDataModel?.data?.staffInstagram ?? '';
+      var userAvater = state.staffInforDataModel?.data?.staffAvatar;
       print("AVATARR $userAvater");
       var userDataFullName = fullNameController.text;
       var userDataRole = roleController.text;
@@ -1414,9 +1438,6 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                       emailController.clear();
                                                       phoneController.clear();
                                                     }
-                                                    // BlocProvider.of<LoginBloc>(
-                                                    //         context)
-                                                    //     .add(GetInforUser());
                                                   },
                                                   text: "Cập nhật thông tin",
                                                   fontSize: 12.sp,

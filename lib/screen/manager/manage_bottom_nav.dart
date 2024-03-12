@@ -13,6 +13,7 @@ import 'package:app_restaurant/screen/manager/store/list_stores.dart';
 import 'package:app_restaurant/screen/manager/user_infor/manage_infor.dart';
 import 'package:app_restaurant/screen/manager/inventory/list_inventory.dart';
 import 'package:app_restaurant/screen/manager/user_infor/notifications.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/item_drawer.dart';
 import 'package:app_restaurant/widgets/sub_item_drawer.dart';
@@ -501,6 +502,10 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             color1: Colors.white,
                             color2: Colors.white,
                             event: () {
+                              StorageUtils.instance
+                                  .removeKey(key: 'auth_manager');
+                              StorageUtils.instance
+                                  .removeKey(key: 'manager_infor_data');
                               context.go("/");
                             },
                             text: "Đăng xuất",
