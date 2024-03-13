@@ -15,12 +15,13 @@ class LoginButtonPressed extends LoginEvent {
   final String shopId;
   final String email;
   final String password;
+  final bool remember;
 
-  const LoginButtonPressed({
-    required this.shopId,
-    required this.email,
-    required this.password,
-  });
+  const LoginButtonPressed(
+      {required this.shopId,
+      required this.email,
+      required this.password,
+      required this.remember});
   @override
   List<Object> get props => [];
 }
@@ -33,6 +34,12 @@ class ManagerLoginButtonPressed extends LoginEvent {
     required this.email,
     required this.password,
   });
+  @override
+  List<Object> get props => [];
+}
+
+class LogoutStaff extends LoginEvent {
+  const LogoutStaff();
   @override
   List<Object> get props => [];
 }

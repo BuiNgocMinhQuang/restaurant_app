@@ -23,10 +23,10 @@ class _StaffSignInState extends State<StaffSignIn> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: const Color.fromRGBO(248, 249, 250, 1),
+      backgroundColor: Color.fromRGBO(248, 249, 250, 1),
       body: SafeArea(
           child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
+        physics: BouncingScrollPhysics(),
         child: StaffSignInFrom(),
       )),
     );
@@ -41,7 +41,7 @@ class StaffSignInFrom extends StatefulWidget {
 }
 
 class _StaffSignInFromState extends State<StaffSignInFrom> {
-  bool light = false;
+  bool isRemember = false;
   bool passwordVisible = true;
   final _formField = GlobalKey<FormState>();
   final storeIdController = TextEditingController();
@@ -314,13 +314,13 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                                 child: FittedBox(
                                                   fit: BoxFit.fill,
                                                   child: CupertinoSwitch(
-                                                    value: light,
+                                                    value: isRemember,
                                                     activeColor:
                                                         const Color.fromRGBO(
                                                             58, 65, 111, .95),
                                                     onChanged: (bool value) {
                                                       setState(() {
-                                                        light = value;
+                                                        isRemember = value;
                                                       });
                                                     },
                                                   ),
@@ -370,15 +370,17 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                                     //   passworldController
                                                     //       .clear();
                                                     // }
+                                                    print(
+                                                        "REMEBER ${isRemember}");
                                                     BlocProvider.of<LoginBloc>(
                                                             context)
                                                         .add(
                                                       LoginButtonPressed(
-                                                        shopId: "123456",
-                                                        email:
-                                                            "buingocminhquang1@gmail.com",
-                                                        password: "123456789",
-                                                      ),
+                                                          shopId: "123456",
+                                                          email:
+                                                              "buingocminhquang1@gmail.com",
+                                                          password: "123456789",
+                                                          remember: isRemember),
                                                     );
                                                     //khong xoa
                                                   },

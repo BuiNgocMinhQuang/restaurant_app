@@ -1,14 +1,14 @@
-class AuthDataModel {
+class StaffAuthData {
   int? status;
   String? message;
   String? token;
   String? tokenExpiresAt;
   Data? data;
 
-  AuthDataModel(
+  StaffAuthData(
       {this.status, this.message, this.token, this.tokenExpiresAt, this.data});
 
-  AuthDataModel.fromJson(Map<String, dynamic> json) {
+  StaffAuthData.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     token = json['token'];

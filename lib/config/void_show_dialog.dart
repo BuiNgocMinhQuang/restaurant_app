@@ -1,3 +1,5 @@
+import 'package:app_restaurant/bloc/login/login_bloc.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -106,6 +108,27 @@ void showExpiredOtpDialog(context) {
           // btnOkText: "Xác Nhận",
           btnCancelColor: Colors.blue,
           btnCancelOnPress: () {},
+          btnCancelText: "OK")
+      .show();
+}
+
+void showLoginSessionExpiredDialog(context, Function okEvent) {
+  AwesomeDialog(
+          dismissOnTouchOutside: false,
+          context: context,
+          dialogType: DialogType.info,
+          animType: AnimType.rightSlide,
+          headerAnimationLoop: true,
+          title: 'Hết thời gian đăng nhập',
+          desc: 'Phiên đăng nhập của bạn đã hết. Vui lòng đăng nhập lại!',
+          // btnOkOnPress: () {
+          //   confirmEvent();
+          // },
+          // btnOkText: "Xác Nhận",
+          btnCancelColor: Colors.blue,
+          btnCancelOnPress: () {
+            okEvent();
+          },
           btnCancelText: "OK")
       .show();
 }

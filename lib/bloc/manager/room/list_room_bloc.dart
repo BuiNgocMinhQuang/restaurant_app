@@ -26,8 +26,8 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
     Emitter<ListRoomState> emit,
   ) async {
     emit(state.copyWith(listRoomStatus: ListRoomStatus.loading));
-    var token = StorageUtils.instance.getString(key: 'token_manager');
-    print("TOKEN DAY R $token");
+    var token = StorageUtils.instance.getString(key: 'token');
+    print("TOKEN GET ROOM $token");
     final respons = await http.post(
       Uri.parse('$baseUrl$bookingApi'),
       headers: {
@@ -45,7 +45,7 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
     final data = jsonDecode(respons.body);
     var message = data['message'];
 
-    // print(" LIST ROOM $data");
+    print(" LIST ROOM $data");
     try {
       if (data['status'] == 200) {
         var roomDataRes = ListRoomModel.fromJson(data);
@@ -54,11 +54,12 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
         emit(state.copyWith(listRoomStatus: ListRoomStatus.succes));
       } else {
         emit(state.copyWith(listRoomStatus: ListRoomStatus.failed));
-        emit(state.copyWith(errorText: message['text']));
+        emit(state.copyWith(errorText: message));
       }
     } catch (error) {
+      print("ERROR GET LIST ROOM $error");
       emit(state.copyWith(listRoomStatus: ListRoomStatus.failed));
-      emit(state.copyWith(errorText: message['text']));
+      emit(state.copyWith(errorText: message));
     }
   }
 }

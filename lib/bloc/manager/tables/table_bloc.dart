@@ -22,7 +22,9 @@ class TableBloc extends Bloc<TableEvent, TableState> {
   ) async {
     emit(state.copyWith(tableStatus: TableStatus.loading));
 
-    var token = StorageUtils.instance.getString(key: 'token_manager');
+    var token = StorageUtils.instance.getString(key: 'token');
+    print("TOKEN GET TABLE $token");
+
     final respons = await http.post(
       Uri.parse('$baseUrl$tableApi'),
       headers: {
@@ -62,7 +64,9 @@ class TableBloc extends Bloc<TableEvent, TableState> {
     Emitter<TableState> emit,
   ) async {
     emit(state.copyWith(tableStatus: TableStatus.loading));
-    var token = StorageUtils.instance.getString(key: 'token_manager');
+    var token = StorageUtils.instance.getString(key: 'token');
+    print("TOKEN GET TABLE FOOD $token");
+
     final respons = await http.post(
       Uri.parse('$baseUrl$foodsTableApi'),
       headers: {

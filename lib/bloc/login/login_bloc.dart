@@ -21,6 +21,20 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginAppInit>(_onLoginAppInit);
     on<LoginButtonPressed>(_onLoginButtonPressed);
     on<ManagerLoginButtonPressed>(_onManagerLoginButtonPressed);
+    on<LogoutStaff>(_onLogout);
+  }
+
+  void _onLogout(
+    LogoutStaff event,
+    Emitter<LoginState> emit,
+  ) async {
+    print("LOGOUT HHHEHHE");
+
+    var token = StorageUtils.instance.getString(key: 'token');
+    await http.post(
+      Uri.parse('$baseUrl$staffLogout'),
+      headers: {"Authorization": "Bearer $token"},
+    );
   }
 
   void _onLoginAppInit(
@@ -70,7 +84,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         var token = authManagerDataRes.token;
         print("TOKEN MANAGER NE $token");
 
-        StorageUtils.instance.setString(key: 'token_manager', val: token ?? '');
+        StorageUtils.instance.setString(key: 'token', val: token ?? '');
         //save Token
 
         StorageUtils.instance
@@ -95,7 +109,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             emit(state.copyWith(managerInforModel: managerInforDataRes));
           }
         } catch (error) {
-          print("LOI GI DO");
+          print("ERROR LOGIN MANAGER $error");
         }
         emit(state.copyWith(loginStatus: LoginStatus.success));
         navigatorKey.currentContext?.go("/manager_home");
@@ -119,61 +133,43 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   ) async {
     emit(state.copyWith(loginStatus: LoginStatus.loading));
 
+    final response = await http.post(
+      Uri.parse('$baseUrl$staffLoginApi'),
+      body: {
+        'shop_id': event.shopId,
+        'email': event.email,
+        'password': event.password,
+        'remember': event.remember.toString() //sua cho nay
+      },
+    );
+    final data = jsonDecode(response.body);
+    print("DATAAAA $data");
     try {
-      final response = await http.post(
-        Uri.parse('$baseUrl$staffLoginApi'),
-        body: {
-          'shop_id': event.shopId,
-          'email': event.email,
-          'password': event.password,
-        },
-      );
-      final data = jsonDecode(response.body);
       if (data['status'] == 200) {
-        // print("DATA $data");
-        var authDataRes = AuthDataModel.fromJson(data);
+        print("DATA STAFF LOGIN $data");
+        var authDataRes = StaffAuthData.fromJson(data);
         var authDataString = jsonEncode(authDataRes);
         var token = authDataRes.token;
+        var token_expires_at = authDataRes.tokenExpiresAt;
         print("TOKEN STAFF NE $token");
+        print("TOKEN Expires At $token_expires_at");
 
-        StorageUtils.instance.setString(key: 'token_staff', val: token ?? '');
+        StorageUtils.instance.setString(key: 'token', val: token ?? '');
+        StorageUtils.instance
+            .setString(key: 'token_expires', val: token_expires_at ?? '');
         StorageUtils.instance.setString(key: 'auth_staff', val: authDataString);
 
-        try {
-          final response = await http.post(
-            Uri.parse('$baseUrl$userInformationApi'),
-            headers: {
-              'Content-type': 'application/json',
-              'Accept': 'application/json',
-              "Authorization": "Bearer ${authDataRes.token}"
-            },
-          );
-          final dataStaffInfor = jsonDecode(response.body);
-          if (dataStaffInfor['status'] == 200) {
-            var staffInforDataRes = StaffInfor.fromJson(dataStaffInfor);
-            var staffInforDataString = jsonEncode(staffInforDataRes);
-            print("DATA STAFF INFOR $staffInforDataString");
-
-            StorageUtils.instance
-                .setString(key: 'staff_infor_data', val: staffInforDataString);
-            emit(state.copyWith(staffInforDataModel: staffInforDataRes));
-          }
-        } catch (error) {
-          print("LOI GI DO");
-        }
         emit(state.copyWith(loginStatus: LoginStatus.success));
         navigatorKey.currentContext?.go("/staff_home");
       } else {
         print("LoginFailure2");
-        // print("DATA2 $data");
-
         emit(state.copyWith(loginStatus: LoginStatus.failed));
         emit(state.copyWith(errorText: data['message']));
       }
     } catch (error) {
-      print("LoginFailure2");
+      print("LoginFailure2 $error");
       emit(state.copyWith(loginStatus: LoginStatus.failed));
-      emit(state.copyWith(errorText: "Thông tin không tồn tại!"));
+      emit(state.copyWith(errorText: data['message']));
     }
 
     if (state.loginStatus == LoginStatus.failed) {

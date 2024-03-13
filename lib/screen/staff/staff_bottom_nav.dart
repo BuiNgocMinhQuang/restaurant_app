@@ -1,4 +1,6 @@
+import 'package:app_restaurant/bloc/login/login_bloc.dart';
 import 'package:app_restaurant/config/space.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/screen/staff/receipt/brought_receipt.dart';
 import 'package:app_restaurant/screen/staff/home.dart';
 import 'package:app_restaurant/screen/staff/receipt/list_bill.dart';
@@ -11,6 +13,7 @@ import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
@@ -26,7 +29,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    checkTokenExpires();
     super.initState();
   }
 
@@ -35,7 +38,41 @@ class _StaffFabTabState extends State<StaffFabTab> {
     super.dispose();
   }
 
+  void showTokenExpiredDialog() {
+    BlocProvider.of<LoginBloc>(context).add(const LogoutStaff());
+    StorageUtils.instance.removeKey(key: 'auth_staff');
+    StorageUtils.instance.removeKey(key: 'staff_infor_data');
+    context.go("/staff_sign_in");
+  }
+
+  void checkTokenExpires() {
+    var tokenExpiresTime =
+        StorageUtils.instance.getString(key: 'token_expires');
+    if (tokenExpiresTime != '') {
+      DateTime now = DateTime.now().toUtc();
+      print("TIME NOW $now");
+
+      var tokenExpires = DateTime.parse(tokenExpiresTime!);
+      print("TIME TOKEN $tokenExpires");
+      if (now.year >= tokenExpires.year &&
+          now.month >= tokenExpires.month &&
+          now.day >= tokenExpires.day &&
+          now.hour >= tokenExpires.hour &&
+          now.minute >= tokenExpires.minute &&
+          now.second >= tokenExpires.second) {
+        print("Het han token");
+        showLoginSessionExpiredDialog(context, showTokenExpiredDialog);
+      } else {
+        print("Giu phien dang nhap");
+      }
+    } else {
+      print("Dang nhap hoai luon");
+    }
+  }
+
   void tapDrawerChangeBotNav(int index) {
+    print("NHAN DRAWER TAB");
+    checkTokenExpires();
     final CurvedNavigationBarState? navBarState =
         bottomNavigationKey.currentState;
     navBarState!.setPage(index);
@@ -67,7 +104,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
       appBar: AppBar(
         backgroundColor: Colors.blue,
         centerTitle: true,
-        title: Container(
+        title: SizedBox(
           // width: 100.w,
           height: 50.w,
           child: Image.asset(
@@ -292,11 +329,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                             color1: Colors.white,
                             color2: Colors.white,
                             event: () {
-                              StorageUtils.instance
-                                  .removeKey(key: 'auth_staff');
-                              StorageUtils.instance
-                                  .removeKey(key: 'staff_infor_data');
-                              context.go("/staff_sign_in");
+                              showTokenExpiredDialog();
                             },
                             text: "Đăng xuất",
                             textColor: Colors.black,
@@ -352,6 +385,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
         onTap: (index) {
           setState(() {
             currentIndex = index;
+            checkTokenExpires();
           });
         },
         letIndexChange: (index) => true,

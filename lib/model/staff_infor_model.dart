@@ -40,17 +40,17 @@ class Data {
   Null? holdImageCccd;
   int? staffAddress1;
   int? staffAddress2;
-  Null? staffAddress3;
-  Null? staffAddress4;
-  Null? staffFullAddress;
-  Null? staffTwitter;
-  Null? staffFacebook;
-  Null? staffInstagram;
+  String? staffAddress3;
+  String? staffAddress4;
+  String? staffFullAddress;
+  String? staffTwitter;
+  String? staffFacebook;
+  String? staffInstagram;
   int? staffPosition;
   int? staffKind;
   int? activeFlg;
   int? deleteFlg;
-  Null? rememberToken;
+  String? rememberToken;
   String? createdAt;
   String? updatedAt;
 

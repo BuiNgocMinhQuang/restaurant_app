@@ -14,6 +14,7 @@ class ManagerHome extends StatefulWidget {
 class _ManagerHomeState extends State<ManagerHome> {
   bool showModal = true;
   bool isLoading = true;
+  String imageSrc = 'https://picsum.photos/200';
   final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
@@ -28,6 +29,14 @@ class _ManagerHomeState extends State<ManagerHome> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
+            child: RefreshIndicator(
+      color: Colors.blue,
+      onRefresh: () async {
+        await Future.delayed(Duration(seconds: 2));
+        setState(() {
+          imageSrc = "https://picsum.photos/250";
+        });
+      },
       child: !isLoading
           ? const ShimmerHomeManager()
           : SingleChildScrollView(
@@ -42,7 +51,7 @@ class _ManagerHomeState extends State<ManagerHome> {
                         return Card(
                           child: Row(
                             children: [
-                              Image.network("https://picsum.photos/200"),
+                              Image.network(imageSrc),
                               const SizedBox(
                                 width: 20,
                               ),
@@ -57,6 +66,6 @@ class _ManagerHomeState extends State<ManagerHome> {
                         );
                       })),
             ),
-    ));
+    )));
   }
 }

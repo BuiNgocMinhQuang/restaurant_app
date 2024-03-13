@@ -8,7 +8,7 @@ class LoginState extends Equatable {
       this.staffInforDataModel,
       this.managerInforModel});
 
-  final AuthDataModel? authDataModel;
+  final StaffAuthData? authDataModel;
   final LoginStatus? loginStatus;
   final String? errorText;
   final StaffInfor? staffInforDataModel;
@@ -16,7 +16,7 @@ class LoginState extends Equatable {
 
   LoginState copyWith(
       {LoginStatus? loginStatus,
-      AuthDataModel? authDataModel,
+      StaffAuthData? authDataModel,
       String? errorText,
       StaffInfor? staffInforDataModel,
       ManagerInforModel? managerInforModel}) {
