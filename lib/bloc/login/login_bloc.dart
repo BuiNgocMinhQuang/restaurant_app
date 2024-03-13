@@ -68,9 +68,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         var authManagerDataRes = ManagerInforModel.fromJson(data);
         var authManagerDataString = jsonEncode(authManagerDataRes);
         var token = authManagerDataRes.token;
-        print("TOKEN NE $token");
+        print("TOKEN MANAGER NE $token");
 
-        StorageUtils.instance.setString(key: 'token', val: token ?? '');
+        StorageUtils.instance.setString(key: 'token_manager', val: token ?? '');
         //save Token
 
         StorageUtils.instance
@@ -133,6 +133,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         // print("DATA $data");
         var authDataRes = AuthDataModel.fromJson(data);
         var authDataString = jsonEncode(authDataRes);
+        var token = authDataRes.token;
+        print("TOKEN STAFF NE $token");
+
+        StorageUtils.instance.setString(key: 'token_staff', val: token ?? '');
         StorageUtils.instance.setString(key: 'auth_staff', val: authDataString);
 
         try {

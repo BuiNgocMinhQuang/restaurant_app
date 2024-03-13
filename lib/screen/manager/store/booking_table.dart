@@ -1,4 +1,9 @@
 import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
+import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
+import 'package:app_restaurant/config/colors.dart';
+import 'package:app_restaurant/config/space.dart';
+import 'package:app_restaurant/model/list_room_model.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/shimmer/shimmer_list.dart';
@@ -17,7 +22,7 @@ class ManagerBookingTable extends StatefulWidget {
 
 class _ManagerBookingTableState extends State<ManagerBookingTable>
     with TickerProviderStateMixin {
-  void saveBookingModal() async {}
+  void saveBookingModal() {}
 
   void saveMoveTableModal() {}
 
@@ -25,44 +30,9 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
 
   @override
   void initState() {
-    print("INITT NE");
-
     _getDataNe();
     super.initState();
   }
-
-  // List<String> tabData = ["Tab 1", "Tab 2"];
-  List<dynamic> tabData = [
-    {
-      "status": 200,
-      "rooms": [
-        {
-          "store_room_id": 1,
-          "store_room_name": "phong1",
-          "tables": [
-            {
-              "booking_status": true,
-              "order_id": null,
-              "client_can_pay": 0,
-              "order_created_at": "",
-              "table_name": "ban 1",
-              "room_table_id": 1
-            },
-            {
-              "booking_status": true,
-              "order_id": null,
-              "client_can_pay": 0,
-              "order_created_at": "",
-              "table_name": "ban 2",
-              "room_table_id": 2
-            }
-          ]
-        },
-        {"store_room_id": 2, "store_room_name": "phong 2", "tables": []}
-      ]
-    }
-  ];
-  List<String> roomNames = [];
 
   void _getDataNe() async {
     await Future.delayed(const Duration(seconds: 0));
@@ -72,19 +42,30 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
     );
   }
 
+  void getDataTabIndex(String roomId) async {
+    await Future.delayed(const Duration(seconds: 0));
+    BlocProvider.of<ListRoomBloc>(context).add(
+      GetListRoom(
+          client: "user", shopId: "123456", isApi: true, roomId: roomId),
+    );
+  }
+
+  void getTableInfor(String roomId, String tableId) {
+    BlocProvider.of<TableBloc>(context).add(GetTableInfor(
+        client: "user", shopId: "123456", roomId: roomId, tableId: tableId));
+  }
+
   @override
   Widget build(BuildContext context) {
-    for (var room in tabData[0]['rooms']) {
-      roomNames.add(
-          room['store_room_name']); // add store_room_name to List roomNames
-    }
-
     TabController _tabController = TabController(
-      length: roomNames.length,
+      length: 2,
       vsync: this,
     );
 
-    return BlocBuilder<ListRoomBloc, ListRoomState>(
+    return BlocConsumer<ListRoomBloc, ListRoomState>(
+      listener: (context, state) {
+        // do stuff here based on BlocA's state
+      },
       builder: (context, state) {
         if (state.listRoomStatus == ListRoomStatus.succes) {
           return Scaffold(
@@ -104,6 +85,11 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                               height: 40.h,
                               color: Colors.white,
                               child: TabBar(
+                                onTap: (index) {
+                                  getDataTabIndex(state
+                                      .listRoomModel!.rooms![index].storeRoomId
+                                      .toString());
+                                },
                                 labelPadding:
                                     const EdgeInsets.only(left: 20, right: 20),
                                 labelColor: Colors.blue,
@@ -123,201 +109,201 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                               ),
                             ))),
                   ),
+                  space25H,
                   SizedBox(
-                    height: 10.h,
+                    width: 1.sw,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              width: 20,
+                              height: 20,
+                              color: grey,
+                            ),
+                            SizedBox(
+                              width: 5.w,
+                            ),
+                            TextApp(text: "Đang phục vụ")
+                          ],
+                        ),
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        Row(
+                          children: [
+                            Container(
+                              width: 20,
+                              height: 20,
+                              color: lightBlue,
+                            ),
+                            SizedBox(
+                              width: 5.w,
+                            ),
+                            TextApp(text: "Bàn trống")
+                          ],
+                        )
+                      ],
+                    ),
                   ),
+                  space15H,
                   Expanded(
                       child: Container(
-                    width: 1.sw,
+                    // width: 1.sw,
                     color: Colors.white,
                     child: TabBarView(
                       controller: _tabController,
                       children: state.listRoomModel!.rooms!
-                          .map((data) => Text(data.storeRoomName ?? ''))
+                          .map((data) => GridView.builder(
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3),
+                              itemCount: data.tables?.length ?? 0,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8.r),
+                                          color: data.tables?[index]
+                                                      .bookingStatus ==
+                                                  true
+                                              ? lightBlue
+                                              : grey,
+                                        ),
+                                        width: 50,
+                                        height: 50,
+                                        child: Stack(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    TextApp(
+                                                      text: data.tables?[index]
+                                                              .tableName ??
+                                                          '',
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                    if (data.tables?[index]
+                                                            .bookingStatus ==
+                                                        false)
+                                                      TextApp(
+                                                          text: data
+                                                                  .tables?[
+                                                                      index]
+                                                                  .clientCanPay
+                                                                  .toString() ??
+                                                              '',
+                                                          color: Colors.white),
+                                                    TextApp(
+                                                        text: data
+                                                                .tables?[index]
+                                                                .orderCreatedAt
+                                                                .toString() ??
+                                                            '',
+                                                        color: Colors.white)
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            Positioned(
+                                                top: 0,
+                                                right: 0,
+                                                child: data.tables?[index]
+                                                            .bookingStatus ==
+                                                        false
+                                                    ? PopUpMenuUsingTable(
+                                                        eventButton1: () {
+                                                        getTableInfor(
+                                                            data.storeRoomId
+                                                                .toString(),
+                                                            data.tables?[index]
+                                                                    .roomTableId
+                                                                    .toString() ??
+                                                                '');
+                                                        showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return BookingTableDialog(
+                                                                eventSaveButton:
+                                                                    saveBookingModal,
+                                                                isUsingTable:
+                                                                    true,
+                                                              );
+                                                            });
+                                                      }, eventButton2: () {
+                                                        showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return MoveTableDialog(
+                                                                eventSaveButton:
+                                                                    saveMoveTableModal,
+                                                              );
+                                                            });
+                                                      }, eventButton3: () {
+                                                        showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return const SeeBillDialog();
+                                                            });
+                                                      }, eventButton4: () {
+                                                        showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return PayBillDialog(
+                                                                eventSaveButton:
+                                                                    savePayBillModal,
+                                                              );
+                                                            });
+                                                      })
+                                                    : PopUpMenuUnUseTable(
+                                                        eventButton1: () {
+                                                        getTableInfor(
+                                                            data.storeRoomId
+                                                                .toString(),
+                                                            data.tables?[index]
+                                                                    .roomTableId
+                                                                    .toString() ??
+                                                                '');
+                                                        showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return BookingTableDialog(
+                                                                eventSaveButton:
+                                                                    () {},
+                                                                isUsingTable:
+                                                                    true,
+                                                              );
+                                                            });
+                                                      })),
+                                          ],
+                                        )));
+                              }))
                           .toList(),
-
-                      // [
-                      //   //Tab All
-                      //   SizedBox(
-                      //     width: 1.sw,
-                      //     // color: Colors.pink,
-                      //     height: 500.h,
-                      //     child: Column(
-                      //       children: [
-                      //         SizedBox(
-                      //           height: 20.h,
-                      //         ),
-                      //         Row(
-                      //           crossAxisAlignment: CrossAxisAlignment.center,
-                      //           mainAxisAlignment: MainAxisAlignment.center,
-                      //           children: [
-                      //             Row(
-                      //               children: [
-                      //                 Container(
-                      //                   width: 20,
-                      //                   height: 20,
-                      //                   color: Colors.green,
-                      //                 ),
-                      //                 SizedBox(
-                      //                   width: 5.w,
-                      //                 ),
-                      //                 TextApp(text: "Đang phục vụ")
-                      //               ],
-                      //             ),
-                      //             SizedBox(
-                      //               width: 10.w,
-                      //             ),
-                      //             Row(
-                      //               children: [
-                      //                 Container(
-                      //                   width: 20,
-                      //                   height: 20,
-                      //                   color: Colors.yellow,
-                      //                 ),
-                      //                 SizedBox(
-                      //                   width: 5.w,
-                      //                 ),
-                      //                 TextApp(text: "Bàn trống")
-                      //               ],
-                      //             )
-                      //           ],
-                      //         ),
-                      //         Expanded(
-                      //           child: GridView.builder(
-                      //               itemCount: state.listRoomModel?.rooms?[0]
-                      //                       .tables?.length ??
-                      //                   1,
-                      //               gridDelegate:
-                      //                   const SliverGridDelegateWithFixedCrossAxisCount(
-                      //                 crossAxisCount: 3,
-                      //               ),
-                      //               itemBuilder: (context, index) {
-                      //                 return Padding(
-                      //                   padding: EdgeInsets.all(10.w),
-                      //                   child: Container(
-                      //                       decoration: BoxDecoration(
-                      //                         borderRadius:
-                      //                             BorderRadius.circular(8.r),
-                      //                         color: Colors.blue,
-                      //                       ),
-                      //                       width: 50,
-                      //                       height: 50,
-                      //                       child: Stack(
-                      //                         children: [
-                      //                           Row(
-                      //                             mainAxisAlignment:
-                      //                                 MainAxisAlignment.center,
-                      //                             crossAxisAlignment:
-                      //                                 CrossAxisAlignment.center,
-                      //                             children: [
-                      //                               Column(
-                      //                                 mainAxisAlignment:
-                      //                                     MainAxisAlignment
-                      //                                         .center,
-                      //                                 crossAxisAlignment:
-                      //                                     CrossAxisAlignment
-                      //                                         .center,
-                      //                                 children: [
-                      //                                   TextApp(
-                      //                                     text: state
-                      //                                             .listRoomModel
-                      //                                             ?.rooms?[0]
-                      //                                             .tables?[
-                      //                                                 index]
-                      //                                             .tableName
-                      //                                             .toString()
-                      //                                             .toUpperCase() ??
-                      //                                         '',
-                      //                                     color: Colors.white,
-                      //                                     fontWeight:
-                      //                                         FontWeight.bold,
-                      //                                   ),
-                      //                                   TextApp(
-                      //                                       text: state
-                      //                                               .listRoomModel
-                      //                                               ?.rooms?[0]
-                      //                                               .tables?[
-                      //                                                   index]
-                      //                                               .clientCanPay
-                      //                                               .toString() ??
-                      //                                           '',
-                      //                                       color:
-                      //                                           Colors.white),
-                      //                                   TextApp(
-                      //                                       text: state
-                      //                                               .listRoomModel
-                      //                                               ?.rooms?[0]
-                      //                                               .tables?[
-                      //                                                   index]
-                      //                                               .orderCreatedAt
-                      //                                               .toString() ??
-                      //                                           "Giờ vào: 13:44",
-                      //                                       color: Colors.white)
-                      //                                 ],
-                      //                               ),
-                      //                             ],
-                      //                           ),
-                      //                           Positioned(
-                      //                               top: 0,
-                      //                               right: 0,
-                      //                               child: PopUpMenuUsingTable(
-                      //                                   eventButton1: () {
-                      //                                 showDialog(
-                      //                                     context: context,
-                      //                                     builder: (BuildContext
-                      //                                         context) {
-                      //                                       return BookingTableDialog(
-                      //                                         eventSaveButton:
-                      //                                             saveBookingModal,
-                      //                                         isUsingTable:
-                      //                                             true,
-                      //                                       );
-                      //                                     });
-                      //                               }, eventButton2: () {
-                      //                                 showDialog(
-                      //                                     context: context,
-                      //                                     builder: (BuildContext
-                      //                                         context) {
-                      //                                       return MoveTableDialog(
-                      //                                         eventSaveButton:
-                      //                                             saveMoveTableModal,
-                      //                                       );
-                      //                                     });
-                      //                               }, eventButton3: () {
-                      //                                 showDialog(
-                      //                                     context: context,
-                      //                                     builder: (BuildContext
-                      //                                         context) {
-                      //                                       return const SeeBillDialog();
-                      //                                     });
-                      //                               }, eventButton4: () {
-                      //                                 showDialog(
-                      //                                     context: context,
-                      //                                     builder: (BuildContext
-                      //                                         context) {
-                      //                                       return PayBillDialog(
-                      //                                         eventSaveButton:
-                      //                                             savePayBillModal,
-                      //                                       );
-                      //                                     });
-                      //                               })),
-                      //                         ],
-                      //                       )),
-                      //                 );
-                      //               }),
-                      //         )
-                      //       ],
-                      //     ),
-                      //   ),
-
-                      //   Container(
-                      //     width: 500,
-                      //     height: 500,
-                      //     color: Colors.amber,
-                      //   )
-
-                      //   //Tab Paid
-                      // ],
                     ),
                   )),
                   SizedBox(

@@ -101,6 +101,33 @@ class PopUpMenuUsingTable extends StatelessWidget {
   }
 }
 
+class PopUpMenuUnUseTable extends StatelessWidget {
+  final Function eventButton1;
+
+  const PopUpMenuUnUseTable({
+    Key? key,
+    required this.eventButton1,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+      icon: const Icon(
+        Icons.edit,
+        color: Colors.white,
+      ),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          onTap: () {
+            eventButton1();
+          },
+          child: const Text("Quản lý bàn"),
+        ),
+      ],
+    );
+  }
+}
+
 class PopUpMenuPrintBill extends StatelessWidget {
   final Function eventButton1;
 
