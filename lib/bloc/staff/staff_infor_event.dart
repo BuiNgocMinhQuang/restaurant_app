@@ -17,11 +17,11 @@ class GetStaffInfor extends StaffInforEvent {
   List<Object> get props => [];
 }
 
-// class ManagerLoginButtonPressed extends StaffInforEvent {
+// class ManagerStaffLoginButtonPressed extends StaffInforEvent {
 //   final String email;
 //   final String password;
 
-//   const ManagerLoginButtonPressed({
+//   const ManagerStaffLoginButtonPressed({
 //     required this.email,
 //     required this.password,
 //   });

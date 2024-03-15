@@ -25,32 +25,38 @@ class StaffInforBloc extends Bloc<StaffInforEvent, StaffInforState> {
     GetStaffInfor event,
     Emitter<StaffInforState> emit,
   ) async {
-    emit(state.copyWith(staffInforStatus: StaffInforStatus.loading));
-
-    var token = StorageUtils.instance.getString(key: 'token');
-    final response = await http.post(
-      Uri.parse('$baseUrl$userInformationApi'),
-      headers: {"Authorization": "Bearer $token"},
-    );
-    final data = jsonDecode(response.body);
-    var message = data['message'];
-
     try {
-      print("GET STAFF INFOR R NE ${data}");
+      emit(state.copyWith(staffInforStatus: StaffInforStatus.loading));
+      await Future.delayed(const Duration(seconds: 1));
 
-      if (data['status'] == 200) {
-        var staffInforDataRes = StaffInfor.fromJson(data);
-        emit(state.copyWith(staffInforDataModel: staffInforDataRes));
-        emit(state.copyWith(staffInforStatus: StaffInforStatus.success));
-      } else {
+      var token = StorageUtils.instance.getString(key: 'token');
+      final response = await http.post(
+        Uri.parse('$baseUrl$userInformationApi'),
+        headers: {"Authorization": "Bearer $token"},
+      );
+      final data = jsonDecode(response.body);
+      var message = data['message'];
+
+      try {
+        print("GET STAFF INFOR R NE ${data}");
+
+        if (data['status'] == 200) {
+          var staffInforDataRes = StaffInfor.fromJson(data);
+          emit(state.copyWith(staffInforDataModel: staffInforDataRes));
+          emit(state.copyWith(staffInforStatus: StaffInforStatus.success));
+        } else {
+          emit(state.copyWith(staffInforStatus: StaffInforStatus.failed));
+
+          emit(state.copyWith(errorText: message.toString()));
+        }
+      } catch (error) {
+        print("LOI GI DO $error");
         emit(state.copyWith(staffInforStatus: StaffInforStatus.failed));
-
         emit(state.copyWith(errorText: message.toString()));
       }
     } catch (error) {
-      print("LOI GI DO $error");
       emit(state.copyWith(staffInforStatus: StaffInforStatus.failed));
-      emit(state.copyWith(errorText: message.toString()));
+      emit(state.copyWith(errorText: "Đã có lỗi xảy ra !"));
     }
   }
 }

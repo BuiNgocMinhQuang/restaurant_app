@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/model/table_model.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:bloc/bloc.dart';
@@ -22,40 +23,47 @@ class TableBloc extends Bloc<TableEvent, TableState> {
   ) async {
     emit(state.copyWith(tableStatus: TableStatus.loading));
 
-    var token = StorageUtils.instance.getString(key: 'token');
-    print("TOKEN GET TABLE $token");
+    await Future.delayed(const Duration(seconds: 1));
 
-    final respons = await http.post(
-      Uri.parse('$baseUrl$tableApi'),
-      headers: {
-        // 'Content-type': 'application/json',
-        // 'Accept': 'application/json',
-        "Authorization": "Bearer $token"
-      },
-      body: {
-        'client': event.client,
-        'shop_id': event.shopId,
-        'is_api': event.isApi.toString(),
-        'room_id': event.roomId,
-        'table_id': event.tableId
-      },
-    );
-    final data = jsonDecode(respons.body);
-    var message = data['message'];
-    print("DATA ROOM $data");
     try {
-      if (data['status'] == 200) {
-        var tableDataRes = TableModel.fromJson(data);
-        emit(state.copyWith(tableModel: tableDataRes));
-        emit(state.copyWith(tableStatus: TableStatus.succes));
-      } else {
+      var token = StorageUtils.instance.getString(key: 'token');
+      print("TOKEN GET TABLE $token");
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$tableApi'),
+        headers: {
+          // 'Content-type': 'application/json',
+          // 'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: {
+          'client': event.client,
+          'shop_id': event.shopId,
+          'is_api': event.isApi.toString(),
+          'room_id': event.roomId,
+          'table_id': event.tableId
+        },
+      );
+      final data = jsonDecode(respons.body);
+      var message = data['message'];
+      print("DATA Table $data");
+      try {
+        if (data['status'] == 200) {
+          var tableDataRes = TableModel.fromJson(data);
+          emit(state.copyWith(tableModel: tableDataRes));
+          emit(state.copyWith(tableStatus: TableStatus.succes));
+        } else {
+          emit(state.copyWith(tableStatus: TableStatus.failed));
+          emit(state.copyWith(errorText: message['text']));
+        }
+      } catch (error) {
         emit(state.copyWith(tableStatus: TableStatus.failed));
-        emit(state.copyWith(errorText: message['text']));
+        emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
       print("ERROR TABLE INFOR $error");
       emit(state.copyWith(tableStatus: TableStatus.failed));
-      emit(state.copyWith(errorText: message['text']));
+      emit(state.copyWith(errorText: someThingWrong));
     }
   }
 
@@ -64,6 +72,8 @@ class TableBloc extends Bloc<TableEvent, TableState> {
     Emitter<TableState> emit,
   ) async {
     emit(state.copyWith(tableStatus: TableStatus.loading));
+    await Future.delayed(const Duration(seconds: 1));
+
     var token = StorageUtils.instance.getString(key: 'token');
     print("TOKEN GET TABLE FOOD $token");
 

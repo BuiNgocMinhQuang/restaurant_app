@@ -21,15 +21,8 @@ class StaffBroughtReceipt extends StatefulWidget {
 
 class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
     with TickerProviderStateMixin {
-  bool isLoading = true;
-
   @override
   void initState() {
-    // Timer(const Duration(seconds: 3), () {
-    //   setState(() {
-    //     isLoading = true;
-    //   });
-    // });
     super.initState();
   }
 
@@ -50,243 +43,225 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
             Padding(
               padding: EdgeInsets.only(
                   top: 10.h, left: 25.w, right: 25.w, bottom: 10.h),
-              child: !isLoading
-                  ? ShimmerListBill()
-                  : Column(
-                      children: [
-                        Container(
-                          width: 1.sw,
-                          height: 100,
-                          // color: Colors.red,
-                          child: Container(
-                              child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Container(
-                                    height: 40.h,
-                                    color: Colors.white,
-                                    child: TabBar(
-                                        labelPadding: EdgeInsets.only(
-                                            left: 20, right: 20),
-                                        labelColor: Colors.white,
-                                        unselectedLabelColor:
-                                            Colors.black.withOpacity(0.5),
-                                        labelStyle:
-                                            TextStyle(color: Colors.red),
-                                        controller: _tabController,
-                                        isScrollable: true,
-                                        indicatorSize:
-                                            TabBarIndicatorSize.label,
-                                        indicator: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            8.r,
-                                          ),
-                                          color: Colors.blue,
-                                          border:
-                                              Border.all(color: Colors.blue),
-                                        ),
-                                        tabs: [
-                                          CustomTab(
-                                              text: "Tất cả",
-                                              icon: Icons.list_alt),
-                                          CustomTab(
-                                            text: "Đã thanh toán",
-                                            icon: Icons.credit_score,
-                                          ),
-                                          CustomTab(
-                                              text: "Chưa thanh toán",
-                                              icon: Icons.credit_card),
-                                          CustomTab(
-                                              text: "Hóa đơn đã hủy",
-                                              icon: Icons.cancel_sharp),
+              child: Column(
+                children: [
+                  Container(
+                    width: 1.sw,
+                    height: 100,
+                    // color: Colors.red,
+                    child: Container(
+                        child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              height: 40.h,
+                              color: Colors.white,
+                              child: TabBar(
+                                  labelPadding:
+                                      EdgeInsets.only(left: 20, right: 20),
+                                  labelColor: Colors.white,
+                                  unselectedLabelColor:
+                                      Colors.black.withOpacity(0.5),
+                                  labelStyle: TextStyle(color: Colors.red),
+                                  controller: _tabController,
+                                  isScrollable: true,
+                                  indicatorSize: TabBarIndicatorSize.label,
+                                  indicator: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                      8.r,
+                                    ),
+                                    color: Colors.blue,
+                                    border: Border.all(color: Colors.blue),
+                                  ),
+                                  tabs: [
+                                    CustomTab(
+                                        text: "Tất cả", icon: Icons.list_alt),
+                                    CustomTab(
+                                      text: "Đã thanh toán",
+                                      icon: Icons.credit_score,
+                                    ),
+                                    CustomTab(
+                                        text: "Chưa thanh toán",
+                                        icon: Icons.credit_card),
+                                    CustomTab(
+                                        text: "Hóa đơn đã hủy",
+                                        icon: Icons.cancel_sharp),
 
-                                          // Tab(text: "Đã thanh toán"),
-                                          // Tab(text: "Chưa thanh toán"),
-                                          // Tab(text: "Hóa đơn đã hủy"),
-                                        ]),
-                                  ))),
+                                    // Tab(text: "Đã thanh toán"),
+                                    // Tab(text: "Chưa thanh toán"),
+                                    // Tab(text: "Hóa đơn đã hủy"),
+                                  ]),
+                            ))),
+                  ),
+                  Expanded(
+                    child: Container(
+                      width: 1.sw,
+                      // height: 500,
+                      color: Colors.white,
+                      child: TabBarView(controller: _tabController, children: [
+                        //Tab All
+                        RefreshIndicator(
+                          color: Colors.blue,
+                          onRefresh: () async {
+                            // Implement logic to refresh data for Tab 1
+                          },
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: 6,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Padding(
+                                  padding:
+                                      EdgeInsets.only(left: 5.w, right: 5.w),
+                                  child: BillInforContainer(
+                                      typePopMenu: PopUpMenuBroughtReceipt(
+                                        eventButton1: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return const ManageBroughtReceiptDialog();
+                                              });
+                                        },
+                                        eventButton2: () {
+                                          showConfirmDialog(context, () {});
+                                        },
+                                        eventButton3: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return const PrintBillDialog();
+                                              });
+                                        },
+                                        eventButton4: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return const CancleBillDialog();
+                                              });
+                                        },
+                                      ),
+                                      statusText: "Đang chế biến"),
+                                );
+                              }),
                         ),
-                        Expanded(
-                          child: Container(
-                            width: 1.sw,
-                            // height: 500,
-                            color: Colors.white,
-                            child: TabBarView(
-                                controller: _tabController,
-                                children: [
-                                  //Tab All
-                                  ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: 6,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 5.w, right: 5.w),
-                                          child: BillInforContainer(
-                                              typePopMenu:
-                                                  PopUpMenuBroughtReceipt(
-                                                eventButton1: () {
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return const ManageBroughtReceiptDialog();
-                                                      });
-                                                },
-                                                eventButton2: () {
-                                                  showConfirmDialog(
-                                                      context, () {});
-                                                },
-                                                eventButton3: () {
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return const PrintBillDialog();
-                                                      });
-                                                },
-                                                eventButton4: () {
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return const CancleBillDialog();
-                                                      });
-                                                },
-                                              ),
-                                              statusText: "Đang chế biến"),
-                                        );
-                                      }),
-                                  //Tab Paid
-                                  SizedBox(
-                                      width: 1.sw,
-                                      height: 30.h,
-                                      // color: Colors.amber,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.receipt_long_rounded,
-                                            size: 50.h,
-                                          ),
-                                          SizedBox(
-                                            height: 10.h,
-                                          ),
-                                          TextApp(
-                                              text: "Chưa có hoá đơn :(",
-                                              textAlign: TextAlign.center,
-                                              fontsize: 16.sp,
-                                              color: Colors.black),
-                                        ],
-                                      )),
-                                  // ListView.builder(
-                                  //     shrinkWrap: true,
-                                  //     itemCount: 4,
-                                  //     itemBuilder: (BuildContext context, int index) {
-                                  //       return Padding(
-                                  //         padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                                  //         child:
-                                  //             BillInforContainer(statusText: "Đã thanh toán"),
-                                  //       );
-                                  //     }),
-                                  //Tab Unpaid
-                                  ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: 4,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 5.w, right: 5.w),
-                                          child: BillInforContainer(
-                                            typePopMenu:
-                                                PopUpMenuBroughtReceipt(
-                                              eventButton1: () {
-                                                showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return const ManageBroughtReceiptDialog();
-                                                    });
-                                              },
-                                              eventButton2: () {
-                                                showConfirmDialog(
-                                                    context, () {});
-                                              },
-                                              eventButton3: () {
-                                                showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return const PrintBillDialog();
-                                                    });
-                                              },
-                                              eventButton4: () {
-                                                showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return const CancleBillDialog();
-                                                    });
-                                              },
-                                            ),
-                                            statusText: "Đang chế biến",
-                                          ),
-                                        );
-                                      }),
-                                  //Tab cancle
-                                  ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: 4,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 5.w, right: 5.w),
-                                          child: BillInforContainer(
-                                              typePopMenu:
-                                                  PopUpMenuBroughtReceipt(
-                                                eventButton1: () {
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return const ManageBroughtReceiptDialog();
-                                                      });
-                                                },
-                                                eventButton2: () {
-                                                  showConfirmDialog(
-                                                      context, () {});
-                                                },
-                                                eventButton3: () {
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return const PrintBillDialog();
-                                                      });
-                                                },
-                                                eventButton4: () {
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return const CancleBillDialog();
-                                                      });
-                                                },
-                                              ),
-                                              statusText: "Hóa đơn đã hủy"),
-                                        );
-                                      }),
-                                ]),
-                          ),
-                        ),
+                        //Tab Paid
                         SizedBox(
-                          height: 15.h,
+                            width: 1.sw,
+                            height: 30.h,
+                            // color: Colors.amber,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.receipt_long_rounded,
+                                  size: 50.h,
+                                ),
+                                SizedBox(
+                                  height: 10.h,
+                                ),
+                                TextApp(
+                                    text: "Chưa có hoá đơn :(",
+                                    textAlign: TextAlign.center,
+                                    fontsize: 16.sp,
+                                    color: Colors.black),
+                              ],
+                            )),
+
+                        //Tab Unpaid
+                        RefreshIndicator(
+                          color: Colors.blue,
+                          onRefresh: () async {
+                            // Implement logic to refresh data for Tab 1
+                          },
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: 4,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Padding(
+                                  padding:
+                                      EdgeInsets.only(left: 5.w, right: 5.w),
+                                  child: BillInforContainer(
+                                    typePopMenu: PopUpMenuBroughtReceipt(
+                                      eventButton1: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return const ManageBroughtReceiptDialog();
+                                            });
+                                      },
+                                      eventButton2: () {
+                                        showConfirmDialog(context, () {});
+                                      },
+                                      eventButton3: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return const PrintBillDialog();
+                                            });
+                                      },
+                                      eventButton4: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return const CancleBillDialog();
+                                            });
+                                      },
+                                    ),
+                                    statusText: "Đang chế biến",
+                                  ),
+                                );
+                              }),
                         ),
-                      ],
+                        //Tab cancle
+                        RefreshIndicator(
+                          color: Colors.blue,
+                          onRefresh: () async {
+                            // Implement logic to refresh data for Tab 1
+                          },
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: 4,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Padding(
+                                  padding:
+                                      EdgeInsets.only(left: 5.w, right: 5.w),
+                                  child: BillInforContainer(
+                                      typePopMenu: PopUpMenuBroughtReceipt(
+                                        eventButton1: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return const ManageBroughtReceiptDialog();
+                                              });
+                                        },
+                                        eventButton2: () {
+                                          showConfirmDialog(context, () {});
+                                        },
+                                        eventButton3: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return const PrintBillDialog();
+                                              });
+                                        },
+                                        eventButton4: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return const CancleBillDialog();
+                                              });
+                                        },
+                                      ),
+                                      statusText: "Hóa đơn đã hủy"),
+                                );
+                              }),
+                        ),
+                      ]),
                     ),
+                  ),
+                  SizedBox(
+                    height: 15.h,
+                  ),
+                ],
+              ),
             ),
             Positioned(
                 bottom: 50.h,

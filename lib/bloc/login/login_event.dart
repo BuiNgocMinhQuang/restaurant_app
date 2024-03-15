@@ -11,13 +11,13 @@ class LoginAppInit extends LoginEvent {
   List<Object> get props => [];
 }
 
-class LoginButtonPressed extends LoginEvent {
+class StaffLoginButtonPressed extends LoginEvent {
   final String shopId;
   final String email;
   final String password;
   final bool remember;
 
-  const LoginButtonPressed(
+  const StaffLoginButtonPressed(
       {required this.shopId,
       required this.email,
       required this.password,
@@ -26,11 +26,11 @@ class LoginButtonPressed extends LoginEvent {
   List<Object> get props => [];
 }
 
-class ManagerLoginButtonPressed extends LoginEvent {
+class ManagerStaffLoginButtonPressed extends LoginEvent {
   final String email;
   final String password;
 
-  const ManagerLoginButtonPressed({
+  const ManagerStaffLoginButtonPressed({
     required this.email,
     required this.password,
   });
@@ -40,6 +40,12 @@ class ManagerLoginButtonPressed extends LoginEvent {
 
 class LogoutStaff extends LoginEvent {
   const LogoutStaff();
+  @override
+  List<Object> get props => [];
+}
+
+class ConfirmLogged extends LoginEvent {
+  const ConfirmLogged();
   @override
   List<Object> get props => [];
 }

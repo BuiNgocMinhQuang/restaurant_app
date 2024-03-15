@@ -80,20 +80,20 @@ class Booking {
 class Order {
   int? orderId;
   int? userId;
-  Null? staffId;
+  String? staffId;
   int? storeId;
   int? storeRoomId;
-  Null? clientId;
-  Null? deposit;
-  Null? amount;
-  Null? paymentAmount;
-  Null? clientName;
-  Null? clientPhone;
-  Null? clientEmail;
-  Null? startBookedTableAt;
-  Null? endBookedTableAt;
-  Null? note;
-  Null? cancellationReason;
+  String? clientId;
+  String? deposit;
+  String? amount;
+  String? paymentAmount;
+  String? clientName;
+  String? clientPhone;
+  String? clientEmail;
+  String? startBookedTableAt;
+  String? endBookedTableAt;
+  String? note;
+  String? cancellationReason;
   int? discount;
   int? guestPay;
   int? payKind;
@@ -216,7 +216,7 @@ class TablesNoBooking {
   String? updatedAt;
   int? numberOfSeats;
   int? status;
-  Null? description;
+  String? description;
 
   TablesNoBooking(
       {this.roomTableId,

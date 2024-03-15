@@ -354,7 +354,7 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                                     //               LoginBloc>(
                                                     //           context)
                                                     //       .add(
-                                                    //     LoginButtonPressed(
+                                                    //     StaffLoginButtonPressed(
                                                     //       shopId:
                                                     //           storeIdController
                                                     //               .text,
@@ -375,7 +375,7 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                                     BlocProvider.of<LoginBloc>(
                                                             context)
                                                         .add(
-                                                      LoginButtonPressed(
+                                                      StaffLoginButtonPressed(
                                                           shopId: "123456",
                                                           email:
                                                               "buingocminhquang1@gmail.com",

@@ -261,3 +261,38 @@ List<String> listMeasure = [
   "Kg",
   "Gram",
 ];
+
+final List jsonData = [
+  {
+    "booking_status": false,
+    "order_id": 1,
+    "client_can_pay": "20,000,011,111",
+    "order_created_at": "13:55",
+    "table_name": "ban 1",
+    "room_table_id": 1
+  },
+  {
+    "booking_status": false,
+    "order_id": 1,
+    "client_can_pay": "20,000,011,111",
+    "order_created_at": "13:55",
+    "table_name": "ban so 2",
+    "room_table_id": 2
+  },
+  {
+    "booking_status": true,
+    "order_id": null,
+    "client_can_pay": 0,
+    "order_created_at": "",
+    "table_name": "ban so 3",
+    "room_table_id": 3
+  },
+  {
+    "booking_status": false,
+    "order_id": 2,
+    "client_can_pay": "0",
+    "order_created_at": "14:30",
+    "table_name": "ban so 4",
+    "room_table_id": 4
+  }
+];

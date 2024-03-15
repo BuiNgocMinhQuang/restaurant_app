@@ -78,3 +78,4 @@ const String sendCodeIn60Sec =
 const String iAgreeWith = "Tôi đồng ý với các";
 const String termsAndCondition = " Điều khoản và Điều kiện";
 const String alreadyHaveAccount = "Bạn đã có tài khoản?";
+const String someThingWrong = "Có lỗi xảy ra !";

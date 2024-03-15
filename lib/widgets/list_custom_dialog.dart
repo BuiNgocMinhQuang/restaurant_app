@@ -1,11 +1,15 @@
 import 'dart:io';
 
+import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/fake_data.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
+import 'package:app_restaurant/utils/share_getString.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
+import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/custom_tab.dart';
 import 'package:app_restaurant/widgets/dots_line.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
@@ -17,15 +21,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
 
 ///Modal quản lí bàn
 class BookingTableDialog extends StatefulWidget {
   final Function eventSaveButton;
   final bool isUsingTable;
-
+  final String nameTable;
+  final String? roomID; //nho chuyen qua requeid sau
+  final String? tableID; //nho chuyen qua requeid sau
+  final List? listNameTableJoined;
   const BookingTableDialog({
     Key? key,
     required this.eventSaveButton,
+    required this.nameTable,
+    this.roomID = '',
+    this.tableID = '',
+    this.listNameTableJoined,
     this.isUsingTable = false,
   }) : super(key: key);
 
@@ -107,7 +119,8 @@ class _BookingTableDialogState extends State<BookingTableDialog>
     _tabController = TabController(length: 3, vsync: this);
     _tabController!.addListener(_handleTabSelection);
     super.initState();
-    init();
+    getTableInfor(widget.roomID!, widget.tableID!);
+    // init();
   }
 
   _handleTabSelection() {
@@ -154,6 +167,14 @@ class _BookingTableDialogState extends State<BookingTableDialog>
         : null;
   }
 
+  void getTableInfor(String roomId, String tableId) {
+    BlocProvider.of<TableBloc>(context).add(GetTableInfor(
+        client: "staff",
+        shopId: getStaffShopID,
+        roomId: roomId,
+        tableId: tableId));
+  }
+
   @override
   Widget build(BuildContext context) {
     // final hours = dateTime.hour.toString().padLeft(2, '0');
@@ -173,7 +194,14 @@ class _BookingTableDialogState extends State<BookingTableDialog>
             state.tableModel?.booking?.order?.clientName ?? '';
         customerPhoneController.text =
             state.tableModel?.booking?.order?.clientPhone ?? '';
+        _dateStartController.text =
+            state.tableModel?.booking?.order?.endBookedTableAt ?? '';
+        noteController.text = state.tableModel?.booking?.order?.note ?? '';
         if (state.tableStatus == TableStatus.succes) {
+          var listTableCanJoin = state.tableModel!.tablesNoBooking!
+              .map((data) => data.tableName)
+              .toList();
+
           return AlertDialog(
               contentPadding: const EdgeInsets.all(0),
               surfaceTintColor: Colors.white,
@@ -189,7 +217,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         TextApp(
-                          text: "Quản lý bàn đặt: ",
+                          text: "Quản lý bàn đặt: ${widget.nameTable}",
                           fontsize: 18.sp,
                           color: blueText,
                           fontWeight: FontWeight.bold,
@@ -200,26 +228,17 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                           // color: Colors.green,
                           child: TabBar(
                               onTap: (index) {
-                                if (index == 0) {
-                                  BlocProvider.of<TableBloc>(context).add(
-                                      GetTableInfor(
-                                          client: "user",
-                                          shopId: "123456",
-                                          roomId: state.tableModel!.booking!
-                                              .order!.storeRoomId
-                                              .toString(),
-                                          tableId: state
-                                              .tableModel!.booking!.roomTableId
-                                              .toString()));
-                                }
-                                // if (index == 1) {
+                                // if (index == 0) {
                                 //   BlocProvider.of<TableBloc>(context).add(
-                                //       GetTableFoods(
+                                //       GetTableInfor(
                                 //           client: "user",
                                 //           shopId: "123456",
-                                //           roomId: '1',
-                                //           tableId: '1',
-                                //           limit: '1'));
+                                //           roomId: state.tableModel!.booking!
+                                //               .order!.storeRoomId
+                                //               .toString(),
+                                //           tableId: state
+                                //               .tableModel!.booking!.roomTableId
+                                //               .toString()));
                                 // }
                               },
                               labelPadding:
@@ -258,7 +277,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                         ),
                         SizedBox(
                           width: 1.sw,
-                          height: 600.h,
+                          height: 650.h,
                           child: TabBarView(
                             controller: _tabController,
                             children: [
@@ -394,35 +413,31 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                   SizedBox(
                                     height: 10.h,
                                   ),
-
-                                  SizedBox(
-                                    height: 50,
-                                    child: Column(
-                                      children: [
-                                        Expanded(
-                                          child: DropdownSearch.multiSelection(
-                                            key: _popupCustomValidationKey,
-                                            items: listTable,
-                                            popupProps:
-                                                PopupPropsMultiSelection.dialog(
-                                                    title: Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: 15.w, top: 10.h),
-                                              child: TextApp(
-                                                text: "Chọn bàn để ghép",
-                                                fontsize: 16.sp,
-                                                fontWeight: FontWeight.bold,
-                                                color: blueText,
-                                              ),
-                                            )),
+                                  Wrap(
+                                    children: [
+                                      DropdownSearch.multiSelection(
+                                        key: _popupCustomValidationKey,
+                                        items: listTableCanJoin,
+                                        // selectedItems:
+                                        //     widget.listNameTableJoined!,
+                                        popupProps:
+                                            PopupPropsMultiSelection.dialog(
+                                                title: Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 15.w, top: 10.h),
+                                          child: TextApp(
+                                            text: "Chọn bàn để ghép",
+                                            fontsize: 16.sp,
+                                            fontWeight: FontWeight.bold,
+                                            color: blueText,
                                           ),
-                                        ),
-                                      ],
-                                    ),
+                                        )),
+                                      ),
+                                    ],
                                   ),
 
                                   SizedBox(
-                                    height: 30.h,
+                                    height: 50.h,
                                   ),
                                   TextApp(
                                     text: "Ghi chú",
@@ -460,10 +475,6 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                             top: 0,
                                             left: 1.sw > 600 ? 20.w : 15.w,
                                             right: 1.sw > 600 ? 20.w : 15.w)),
-                                  ),
-
-                                  SizedBox(
-                                    height: 15.h,
                                   ),
                                 ],
                               ),
@@ -907,23 +918,63 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                   ),
                 ],
               ));
-        }
-        return const AlertDialog(
-          contentPadding: EdgeInsets.all(0),
-          surfaceTintColor: Colors.white,
-          backgroundColor: Colors.white,
-          content: SizedBox(
-              width: 300,
-              height: 600,
+        } else if (state.tableStatus == TableStatus.loading) {
+          return AlertDialog(
+            contentPadding: EdgeInsets.all(0),
+            surfaceTintColor: Colors.white,
+            backgroundColor: Colors.white,
+            content: Center(
               child: SizedBox(
-                height: 15,
-                width: 15,
-                child: Center(
-                    child: CircularProgressIndicator(
-                  color: Colors.blue,
-                )),
-              )),
-        );
+                width: 1.sw,
+                height: 200.w,
+                child: Lottie.asset('assets/lottie/loading_7_color.json'),
+              ),
+            ),
+          );
+        } else {
+          return AlertDialog(
+              contentPadding: EdgeInsets.all(0),
+              surfaceTintColor: Colors.white,
+              backgroundColor: Colors.white,
+              content: Center(
+                  child: SizedBox(
+                width: 1.sw,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      child: Lottie.asset('assets/lottie/error.json'),
+                    ),
+                    space30H,
+                    TextApp(
+                      text: state.errorText.toString(),
+                      textAlign: TextAlign.center,
+                      fontsize: 20.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    space30H,
+                    Container(
+                      width: 200,
+                      child: ButtonGradient(
+                        color1: color1BlueButton,
+                        color2: color2BlueButton,
+                        event: () {
+                          // getDataTabIndex("");
+                          getTableInfor(widget.roomID!, widget.tableID!);
+                        },
+                        text: 'Thử lại',
+                        fontSize: 12.sp,
+                        radius: 8.r,
+                        textColor: Colors.white,
+                      ),
+                    )
+                  ],
+                ),
+              )));
+        }
       },
     );
   }

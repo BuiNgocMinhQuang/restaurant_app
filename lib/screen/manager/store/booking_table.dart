@@ -149,163 +149,200 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                     ),
                   ),
                   space15H,
-                  Expanded(
-                      child: Container(
-                    // width: 1.sw,
-                    color: Colors.white,
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: state.listRoomModel!.rooms!
-                          .map((data) => GridView.builder(
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3),
-                              itemCount: data.tables?.length ?? 0,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(8.r),
-                                          color: data.tables?[index]
-                                                      .bookingStatus ==
-                                                  true
-                                              ? lightBlue
-                                              : grey,
-                                        ),
-                                        width: 50,
-                                        height: 50,
-                                        child: Stack(
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    TextApp(
-                                                      text: data.tables?[index]
-                                                              .tableName ??
-                                                          '',
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                    if (data.tables?[index]
+                  state.listRoomModel!.rooms!.isEmpty
+                      ? Container(
+                          width: 1.sw,
+                          height: 50,
+                          color: Colors.blue,
+                          child: Center(
+                            child: TextApp(
+                              text: "Phòng này không có bàn",
+                              color: Colors.white,
+                              fontsize: 14.sp,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        )
+                      : Expanded(
+                          child: Container(
+                          // width: 1.sw,
+                          color: Colors.white,
+                          child: TabBarView(
+                            controller: _tabController,
+                            children: state.listRoomModel!.rooms!
+                                .map((data) => GridView.builder(
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 3),
+                                    itemCount: data.tables?.length ?? 0,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                          padding: EdgeInsets.all(10),
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                                color: data.tables?[index]
                                                             .bookingStatus ==
-                                                        false)
-                                                      TextApp(
-                                                          text: data
+                                                        true
+                                                    ? lightBlue
+                                                    : grey,
+                                              ),
+                                              width: 50,
+                                              height: 50,
+                                              child: Stack(
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          TextApp(
+                                                            text: data
+                                                                    .tables?[
+                                                                        index]
+                                                                    .tableName ??
+                                                                '',
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                          if (data
                                                                   .tables?[
                                                                       index]
-                                                                  .clientCanPay
-                                                                  .toString() ??
-                                                              '',
-                                                          color: Colors.white),
-                                                    TextApp(
-                                                        text: data
-                                                                .tables?[index]
-                                                                .orderCreatedAt
-                                                                .toString() ??
-                                                            '',
-                                                        color: Colors.white)
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                            Positioned(
-                                                top: 0,
-                                                right: 0,
-                                                child: data.tables?[index]
-                                                            .bookingStatus ==
-                                                        false
-                                                    ? PopUpMenuUsingTable(
-                                                        eventButton1: () {
-                                                        getTableInfor(
-                                                            data.storeRoomId
-                                                                .toString(),
-                                                            data.tables?[index]
-                                                                    .roomTableId
-                                                                    .toString() ??
-                                                                '');
-                                                        showDialog(
-                                                            context: context,
-                                                            builder:
-                                                                (BuildContext
-                                                                    context) {
-                                                              return BookingTableDialog(
-                                                                eventSaveButton:
-                                                                    saveBookingModal,
-                                                                isUsingTable:
-                                                                    true,
-                                                              );
-                                                            });
-                                                      }, eventButton2: () {
-                                                        showDialog(
-                                                            context: context,
-                                                            builder:
-                                                                (BuildContext
-                                                                    context) {
-                                                              return MoveTableDialog(
-                                                                eventSaveButton:
-                                                                    saveMoveTableModal,
-                                                              );
-                                                            });
-                                                      }, eventButton3: () {
-                                                        showDialog(
-                                                            context: context,
-                                                            builder:
-                                                                (BuildContext
-                                                                    context) {
-                                                              return const SeeBillDialog();
-                                                            });
-                                                      }, eventButton4: () {
-                                                        showDialog(
-                                                            context: context,
-                                                            builder:
-                                                                (BuildContext
-                                                                    context) {
-                                                              return PayBillDialog(
-                                                                eventSaveButton:
-                                                                    savePayBillModal,
-                                                              );
-                                                            });
-                                                      })
-                                                    : PopUpMenuUnUseTable(
-                                                        eventButton1: () {
-                                                        getTableInfor(
-                                                            data.storeRoomId
-                                                                .toString(),
-                                                            data.tables?[index]
-                                                                    .roomTableId
-                                                                    .toString() ??
-                                                                '');
-                                                        showDialog(
-                                                            context: context,
-                                                            builder:
-                                                                (BuildContext
-                                                                    context) {
-                                                              return BookingTableDialog(
-                                                                eventSaveButton:
-                                                                    () {},
-                                                                isUsingTable:
-                                                                    true,
-                                                              );
-                                                            });
-                                                      })),
-                                          ],
-                                        )));
-                              }))
-                          .toList(),
-                    ),
-                  )),
+                                                                  .bookingStatus ==
+                                                              false)
+                                                            TextApp(
+                                                                text: data
+                                                                        .tables?[
+                                                                            index]
+                                                                        .clientCanPay
+                                                                        .toString() ??
+                                                                    '',
+                                                                color: Colors
+                                                                    .white),
+                                                          TextApp(
+                                                              text: data
+                                                                      .tables?[
+                                                                          index]
+                                                                      .orderCreatedAt
+                                                                      .toString() ??
+                                                                  '',
+                                                              color:
+                                                                  Colors.white)
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Positioned(
+                                                      top: 0,
+                                                      right: 0,
+                                                      child: data.tables?[index]
+                                                                  .bookingStatus ==
+                                                              false
+                                                          ? PopUpMenuUsingTable(
+                                                              eventButton1: () {
+                                                              getTableInfor(
+                                                                  data.storeRoomId
+                                                                      .toString(),
+                                                                  data.tables?[index]
+                                                                          .roomTableId
+                                                                          .toString() ??
+                                                                      '');
+                                                              showDialog(
+                                                                  context:
+                                                                      context,
+                                                                  builder:
+                                                                      (BuildContext
+                                                                          context) {
+                                                                    return BookingTableDialog(
+                                                                      nameTable:
+                                                                          'hehe',
+                                                                      eventSaveButton:
+                                                                          saveBookingModal,
+                                                                      isUsingTable:
+                                                                          true,
+                                                                    );
+                                                                  });
+                                                            }, eventButton2:
+                                                                  () {
+                                                              showDialog(
+                                                                  context:
+                                                                      context,
+                                                                  builder:
+                                                                      (BuildContext
+                                                                          context) {
+                                                                    return MoveTableDialog(
+                                                                      eventSaveButton:
+                                                                          saveMoveTableModal,
+                                                                    );
+                                                                  });
+                                                            }, eventButton3:
+                                                                  () {
+                                                              showDialog(
+                                                                  context:
+                                                                      context,
+                                                                  builder:
+                                                                      (BuildContext
+                                                                          context) {
+                                                                    return const SeeBillDialog();
+                                                                  });
+                                                            }, eventButton4:
+                                                                  () {
+                                                              showDialog(
+                                                                  context:
+                                                                      context,
+                                                                  builder:
+                                                                      (BuildContext
+                                                                          context) {
+                                                                    return PayBillDialog(
+                                                                      eventSaveButton:
+                                                                          savePayBillModal,
+                                                                    );
+                                                                  });
+                                                            })
+                                                          : PopUpMenuUnUseTable(
+                                                              eventButton1: () {
+                                                              getTableInfor(
+                                                                  data.storeRoomId
+                                                                      .toString(),
+                                                                  data.tables?[index]
+                                                                          .roomTableId
+                                                                          .toString() ??
+                                                                      '');
+                                                              showDialog(
+                                                                  context:
+                                                                      context,
+                                                                  builder:
+                                                                      (BuildContext
+                                                                          context) {
+                                                                    return BookingTableDialog(
+                                                                      nameTable:
+                                                                          'hehe',
+                                                                      eventSaveButton:
+                                                                          () {},
+                                                                      isUsingTable:
+                                                                          true,
+                                                                    );
+                                                                  });
+                                                            })),
+                                                ],
+                                              )));
+                                    }))
+                                .toList(),
+                          ),
+                        )),
                   SizedBox(
                     height: 15.h,
                   ),

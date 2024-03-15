@@ -100,296 +100,293 @@ class _StaffFabTabState extends State<StaffFabTab> {
                     ? const StaffListBill()
                     : const StaffUserInformation();
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        centerTitle: true,
-        title: SizedBox(
-          // width: 100.w,
-          height: 50.w,
-          child: Image.asset(
-            "assets/images/logo-thv.png",
-            fit: BoxFit.cover,
-          ),
-        ),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(35.w))),
-        leading: InkWell(
-          onTap: () {},
-          child: Builder(
-            builder: (context) => // Ensure Scaffold is in context
-                IconButton(
-                    icon: Icon(
-                      Icons.menu,
-                      size: 25.w,
-                      color: Colors.white,
-                    ),
-                    onPressed: () => Scaffold.of(context).openDrawer()),
-          ),
-        ),
-        actions: [
-          InkWell(
-            onTap: () {},
-            child: Padding(
-              padding: EdgeInsets.all(8.w),
-              child: Icon(
-                Icons.notifications,
-                size: 25.w,
-                color: Colors.white,
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.blue,
+            centerTitle: true,
+            title: SizedBox(
+              // width: 100.w,
+              height: 50.w,
+              child: Image.asset(
+                "assets/images/logo-thv.png",
+                fit: BoxFit.cover,
               ),
             ),
-          )
-        ],
-        bottom: PreferredSize(
-            preferredSize: Size.fromHeight(20.w),
-            child: Container(
-              child: Padding(padding: EdgeInsets.only(left: 30, bottom: 10.w)),
-            )),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.vertical(bottom: Radius.circular(35.w))),
+            leading: InkWell(
+              onTap: () {},
+              child: Builder(
+                builder: (context) => // Ensure Scaffold is in context
+                    IconButton(
+                        icon: Icon(
+                          Icons.menu,
+                          size: 25.w,
+                          color: Colors.white,
+                        ),
+                        onPressed: () => Scaffold.of(context).openDrawer()),
+              ),
+            ),
+            actions: [
+              InkWell(
+                onTap: () {},
+                child: Padding(
+                  padding: EdgeInsets.all(8.w),
+                  child: Icon(
+                    Icons.notifications,
+                    size: 25.w,
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            ],
+            bottom: PreferredSize(
+                preferredSize: Size.fromHeight(20.w),
+                child: Container(
+                  child:
+                      Padding(padding: EdgeInsets.only(left: 30, bottom: 10.w)),
+                )),
+          ),
+          drawer: Drawer(
+            child: ListView(
               children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 100.w,
+                      height: 100.w,
+                      child: Image.asset(
+                        "assets/images/logo-thv.png",
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    const Divider(
+                      color: Colors.black45,
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          currentIndex = 2;
+                          tapDrawerChangeBotNav(2);
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: ItemDrawer(
+                        isExpand: false,
+                        text: "Trang chủ",
+                        iconColor:
+                            currentIndex == 2 ? Colors.white : Colors.black,
+                        backgroundIconColor: currentIndex == 2
+                            ? Colors.blue
+                            : Color.fromRGBO(233, 236, 239, 1),
+                        icon: Icons.home,
+                        subItem: [],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 25.h,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          currentIndex = 0;
+                          tapDrawerChangeBotNav(0);
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: ItemDrawer(
+                          isExpand: false,
+                          text: 'Danh sách món ăn',
+                          iconColor:
+                              currentIndex == 0 ? Colors.white : Colors.black,
+                          backgroundIconColor: currentIndex == 0
+                              ? Colors.blue
+                              : Color.fromRGBO(233, 236, 239, 1),
+                          subItem: [],
+                          icon: Icons.dinner_dining),
+                    ),
+                    SizedBox(
+                      height: 25.h,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          currentIndex = 1;
+                          tapDrawerChangeBotNav(1);
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: ItemDrawer(
+                          isExpand: false,
+                          text: 'Hóa đơn mang về',
+                          iconColor:
+                              currentIndex == 1 ? Colors.white : Colors.black,
+                          backgroundIconColor: currentIndex == 1
+                              ? Colors.blue
+                              : Color.fromRGBO(233, 236, 239, 1),
+                          subItem: [],
+                          icon: Icons.receipt),
+                    ),
+                    SizedBox(
+                      height: 25.h,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          currentIndex = 3;
+                          tapDrawerChangeBotNav(3);
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: ItemDrawer(
+                          isExpand: false,
+                          text: 'Danh sách hóa đơn',
+                          subItem: [],
+                          iconColor:
+                              currentIndex == 3 ? Colors.white : Colors.black,
+                          backgroundIconColor: currentIndex == 3
+                              ? Colors.blue
+                              : Color.fromRGBO(233, 236, 239, 1),
+                          icon: Icons.shopping_bag),
+                    ),
+                    SizedBox(
+                      height: 25.h,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          currentIndex = 4;
+                          tapDrawerChangeBotNav(4);
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: ItemDrawer(
+                          isExpand: false,
+                          text: 'Thông tin cá nhân',
+                          iconColor:
+                              currentIndex == 4 ? Colors.white : Colors.black,
+                          backgroundIconColor: currentIndex == 4
+                              ? Colors.blue
+                              : Color.fromRGBO(233, 236, 239, 1),
+                          subItem: [],
+                          icon: Icons.person),
+                    ),
+                  ],
+                ),
                 SizedBox(
-                  width: 100.w,
-                  height: 100.w,
-                  child: Image.asset(
-                    "assets/images/logo-thv.png",
-                    fit: BoxFit.contain,
-                  ),
+                  height: 20.h,
                 ),
-                const Divider(
-                  color: Colors.black45,
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      currentIndex = 2;
-                      tapDrawerChangeBotNav(2);
-                    });
-                    Navigator.pop(context);
-                  },
-                  child: ItemDrawer(
-                    isExpand: false,
-                    text: "Trang chủ",
-                    iconColor: currentIndex == 2 ? Colors.white : Colors.black,
-                    backgroundIconColor: currentIndex == 2
-                        ? Colors.blue
-                        : Color.fromRGBO(233, 236, 239, 1),
-                    icon: Icons.home,
-                    subItem: [],
-                  ),
-                ),
-                SizedBox(
-                  height: 25.h,
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      currentIndex = 0;
-                      tapDrawerChangeBotNav(0);
-                    });
-                    Navigator.pop(context);
-                  },
-                  child: ItemDrawer(
-                      isExpand: false,
-                      text: 'Danh sách món ăn',
-                      iconColor:
-                          currentIndex == 0 ? Colors.white : Colors.black,
-                      backgroundIconColor: currentIndex == 0
-                          ? Colors.blue
-                          : Color.fromRGBO(233, 236, 239, 1),
-                      subItem: [],
-                      icon: Icons.dinner_dining),
-                ),
-                SizedBox(
-                  height: 25.h,
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      currentIndex = 1;
-                      tapDrawerChangeBotNav(1);
-                    });
-                    Navigator.pop(context);
-                  },
-                  child: ItemDrawer(
-                      isExpand: false,
-                      text: 'Hóa đơn mang về',
-                      iconColor:
-                          currentIndex == 1 ? Colors.white : Colors.black,
-                      backgroundIconColor: currentIndex == 1
-                          ? Colors.blue
-                          : Color.fromRGBO(233, 236, 239, 1),
-                      subItem: [],
-                      icon: Icons.receipt),
-                ),
-                SizedBox(
-                  height: 25.h,
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      currentIndex = 3;
-                      tapDrawerChangeBotNav(3);
-                    });
-                    Navigator.pop(context);
-                  },
-                  child: ItemDrawer(
-                      isExpand: false,
-                      text: 'Danh sách hóa đơn',
-                      subItem: [],
-                      iconColor:
-                          currentIndex == 3 ? Colors.white : Colors.black,
-                      backgroundIconColor: currentIndex == 3
-                          ? Colors.blue
-                          : Color.fromRGBO(233, 236, 239, 1),
-                      icon: Icons.shopping_bag),
-                ),
-                SizedBox(
-                  height: 25.h,
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      currentIndex = 4;
-                      tapDrawerChangeBotNav(4);
-                    });
-                    Navigator.pop(context);
-                  },
-                  child: ItemDrawer(
-                      isExpand: false,
-                      text: 'Thông tin cá nhân',
-                      iconColor:
-                          currentIndex == 4 ? Colors.white : Colors.black,
-                      backgroundIconColor: currentIndex == 4
-                          ? Colors.blue
-                          : Color.fromRGBO(233, 236, 239, 1),
-                      subItem: [],
-                      icon: Icons.person),
-                ),
+                Padding(
+                    padding: EdgeInsets.all(15.w),
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          height: 180.h,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: const DecorationImage(
+                                image: AssetImage("assets/images/curved9.jpg"),
+                                fit: BoxFit.fill,
+                              )),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(15.w),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white),
+                                child: Icon(Icons.power_settings_new_outlined),
+                              ),
+                              SizedBox(
+                                height: 15.h,
+                              ),
+                              Center(
+                                child: TextApp(
+                                  text: "Ten nhan vien",
+                                  textAlign: TextAlign.center,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Center(
+                                child: TextApp(
+                                    text: "nhanvien@gmail.com",
+                                    textAlign: TextAlign.center,
+                                    color: Colors.white),
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              ButtonGradient(
+                                color1: Colors.white,
+                                color2: Colors.white,
+                                event: () {
+                                  showTokenExpiredDialog();
+                                },
+                                text: "Đăng xuất",
+                                textColor: Colors.black,
+                                radius: 8.w,
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ))
               ],
             ),
-            SizedBox(
-              height: 20.h,
-            ),
-            Padding(
-                padding: EdgeInsets.all(15.w),
-                child: Stack(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: 180.h,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: const DecorationImage(
-                            image: AssetImage("assets/images/curved9.jpg"),
-                            fit: BoxFit.fill,
-                          )),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(15.w),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white),
-                            child: Icon(Icons.power_settings_new_outlined),
-                          ),
-                          SizedBox(
-                            height: 15.h,
-                          ),
-                          Center(
-                            child: TextApp(
-                              text: "Ten nhan vien",
-                              textAlign: TextAlign.center,
-                              color: Colors.white,
-                            ),
-                          ),
-                          Center(
-                            child: TextApp(
-                                text: "nhanvien@gmail.com",
-                                textAlign: TextAlign.center,
-                                color: Colors.white),
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          ButtonGradient(
-                            color1: Colors.white,
-                            color2: Colors.white,
-                            event: () {
-                              showTokenExpiredDialog();
-                            },
-                            text: "Đăng xuất",
-                            textColor: Colors.black,
-                            radius: 8.w,
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ))
-          ],
-        ),
-      ),
-      body: PageStorage(
-        bucket: bucket,
-        child: currentScreen,
-      ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     setState(() {
-      //       currentScreen = StaffBookingTable();
-      //       currentIndex = 2;
-      //     });
-      //   },
-      //   child: Icon(Icons.home),
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: CurvedNavigationBar(
-        index: 2,
-        key: bottomNavigationKey,
-        // height: 150.h,
-        color: Colors.blue,
-        backgroundColor: Colors.transparent,
-        items: <Widget>[
-          Icon(
-            Icons.restaurant,
-            size: 30.h,
-            color: currentIndex == 0 ? Colors.white : Colors.black,
           ),
-          Icon(Icons.delivery_dining,
-              size: 30.h,
-              color: currentIndex == 1 ? Colors.white : Colors.black),
-          Icon(Icons.home,
-              size: 30.h,
-              color: currentIndex == 2 ? Colors.white : Colors.black),
-          Icon(Icons.receipt,
-              size: 30.h,
-              color: currentIndex == 3 ? Colors.white : Colors.black),
-          Icon(Icons.person,
-              size: 30.h,
-              color: currentIndex == 4 ? Colors.white : Colors.black),
-        ],
-        onTap: (index) {
-          setState(() {
-            currentIndex = index;
-            checkTokenExpires();
-          });
-        },
-        letIndexChange: (index) => true,
-      ),
+          body: PageStorage(
+            bucket: bucket,
+            child: currentScreen,
+          ),
+          bottomNavigationBar: CurvedNavigationBar(
+            index: 2,
+            key: bottomNavigationKey,
+            // height: 150.h,
+            color: Colors.blue,
+            backgroundColor: Colors.transparent,
+            items: <Widget>[
+              Icon(
+                Icons.restaurant,
+                size: 30.h,
+                color: currentIndex == 0 ? Colors.white : Colors.black,
+              ),
+              Icon(Icons.delivery_dining,
+                  size: 30.h,
+                  color: currentIndex == 1 ? Colors.white : Colors.black),
+              Icon(Icons.home,
+                  size: 30.h,
+                  color: currentIndex == 2 ? Colors.white : Colors.black),
+              Icon(Icons.receipt,
+                  size: 30.h,
+                  color: currentIndex == 3 ? Colors.white : Colors.black),
+              Icon(Icons.person,
+                  size: 30.h,
+                  color: currentIndex == 4 ? Colors.white : Colors.black),
+            ],
+            onTap: (index) {
+              setState(() {
+                currentIndex = index;
+                checkTokenExpires();
+              });
+            },
+            letIndexChange: (index) => true,
+          ),
+        );
+      },
     );
   }
 }
