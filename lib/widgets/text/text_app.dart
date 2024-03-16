@@ -22,6 +22,7 @@ class TextApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      overflow: TextOverflow.ellipsis,
       textAlign: textAlign,
       style: TextStyle(
           fontSize: fontsize == 0 ? 12.sp : fontsize,

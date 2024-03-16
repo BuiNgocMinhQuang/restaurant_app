@@ -1,24 +1,18 @@
 import 'dart:async';
-import 'dart:convert';
-
-import 'package:app_restaurant/bloc/login/login_bloc.dart';
 import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/fake_data.dart';
 import 'package:app_restaurant/config/space.dart';
-import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/utils/share_getString.dart';
-import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
 class StaffBookingTable extends StatefulWidget {
@@ -38,18 +32,18 @@ class _StaffBookingTableState extends State<StaffBookingTable>
 
   void savePayBillModal() {}
 
-  void getDataTabIndex(String roomId) async {
+  void getDataTabIndex(String roomId, String role) async {
     await Future.delayed(const Duration(seconds: 0));
 
     BlocProvider.of<ListRoomBloc>(context).add(
       GetListRoom(
-          client: "user", shopId: getStaffShopID, isApi: true, roomId: roomId),
+          client: role, shopId: getStaffShopID, isApi: true, roomId: roomId),
     );
   }
 
-  void getTableInfor(String roomId, String tableId) {
+  void getTableInfor(String roomId, String tableId, String role) async {
     BlocProvider.of<TableBloc>(context).add(GetTableInfor(
-        client: "user",
+        client: role,
         shopId: getStaffShopID,
         roomId: roomId,
         tableId: tableId));
@@ -57,9 +51,11 @@ class _StaffBookingTableState extends State<StaffBookingTable>
 
   @override
   void initState() {
-    getDataTabIndex("");
+    getDataTabIndex("", "staff");
     super.initState();
   }
+
+  var indexRoomID = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -88,9 +84,12 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                   color: Colors.white,
                                   child: TabBar(
                                     onTap: (index) {
-                                      getDataTabIndex(state.listRoomModel!
-                                          .rooms![index].storeRoomId
-                                          .toString());
+                                      indexRoomID = index;
+                                      getDataTabIndex(
+                                          state.listRoomModel!.rooms![index]
+                                              .storeRoomId
+                                              .toString(),
+                                          "staff");
                                     },
                                     labelPadding: const EdgeInsets.only(
                                         left: 20, right: 20),
@@ -182,7 +181,12 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                   color: Colors.blue,
                                                   onRefresh: () async {
                                                     getDataTabIndex(
-                                                        ""); //get data table of firts room
+                                                        state
+                                                            .listRoomModel!
+                                                            .rooms![indexRoomID]
+                                                            .storeRoomId
+                                                            .toString(),
+                                                        "staff"); //get data table of firts room
                                                   },
                                                   child: GridView.builder(
                                                       gridDelegate:
@@ -199,11 +203,23 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                 .tableName
                                                                 .toString() ??
                                                             ''; //truyền tên bàn
+                                                        var roomName =
+                                                            data.storeRoomName ??
+                                                                '';
+
+                                                        var listRoomName = state
+                                                            .listRoomModel!
+                                                            .rooms!
+                                                            .map((data) => data
+                                                                .storeRoomName)
+                                                            .toList();
+
                                                         var listTableJoined =
                                                             data.tables!
                                                                 .map((data) =>
                                                                     data)
                                                                 .toList();
+
                                                         return Padding(
                                                             padding:
                                                                 const EdgeInsets
@@ -239,11 +255,16 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                           crossAxisAlignment:
                                                                               CrossAxisAlignment.center,
                                                                           children: [
-                                                                            TextApp(
-                                                                              text: data.tables?[index].tableName ?? '',
-                                                                              color: Colors.white,
-                                                                              fontWeight: FontWeight.bold,
-                                                                            ),
+                                                                            SizedBox(
+                                                                                width: 100.w,
+                                                                                child: Center(
+                                                                                  child: TextApp(
+                                                                                    textAlign: TextAlign.center,
+                                                                                    text: data.tables?[index].tableName ?? '',
+                                                                                    color: Colors.white,
+                                                                                    fontWeight: FontWeight.bold,
+                                                                                  ),
+                                                                                )),
                                                                             if (data.tables?[index].bookingStatus ==
                                                                                 false)
                                                                               TextApp(text: data.tables?[index].clientCanPay.toString() ?? '', color: Colors.white),
@@ -262,20 +283,37 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                 false
                                                                             ? PopUpMenuUsingTable(eventButton1:
                                                                                 () {
-                                                                                // getTableInfor(data.storeRoomId.toString(), data.tables?[index].roomTableId.toString() ?? '');
+                                                                                getDataTabIndex(state.listRoomModel!.rooms![indexRoomID].storeRoomId.toString(), "staff");
+                                                                                getTableInfor(data.storeRoomId.toString(), data.tables![index].roomTableId.toString(), "staff");
 
-                                                                                print("DATA TU DAY NE $listTableJoined");
                                                                                 showDialog(
-                                                                                    context: context,
-                                                                                    builder: (BuildContext context) {
-                                                                                      return BookingTableDialog(eventSaveButton: saveBookingModal, isUsingTable: true, nameTable: tableName, listNameTableJoined: listTableJoined, roomID: data.storeRoomId.toString(), tableID: data.tables?[index].roomTableId.toString());
-                                                                                    });
+                                                                                  context: context,
+                                                                                  builder: (BuildContext context) {
+                                                                                    return BookingTableDialog(
+                                                                                      eventSaveButton: saveBookingModal,
+                                                                                      isUsingTable: true,
+                                                                                      nameTable: tableName,
+                                                                                      listNameTableJoined: listTableJoined,
+                                                                                      indexRoomTruyenVao: data.storeRoomId,
+                                                                                      indexTableTruyenVao: data.tables![index].roomTableId,
+                                                                                      listTableTruyenVao: data.tables,
+                                                                                      currentTable: data.tables![index],
+                                                                                    );
+                                                                                  },
+                                                                                );
                                                                               }, eventButton2:
                                                                                 () {
+                                                                                getDataTabIndex(state.listRoomModel!.rooms![indexRoomID].storeRoomId.toString(), "staff");
+                                                                                getTableInfor(data.storeRoomId.toString(), data.tables![index].roomTableId.toString(), "staff");
+
                                                                                 showDialog(
                                                                                     context: context,
                                                                                     builder: (BuildContext context) {
                                                                                       return MoveTableDialog(
+                                                                                        listTable: [],
+                                                                                        listRoom: listRoomName,
+                                                                                        nameTable: tableName,
+                                                                                        nameRoom: roomName,
                                                                                         eventSaveButton: saveMoveTableModal,
                                                                                       );
                                                                                     });
@@ -298,13 +336,21 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                               })
                                                                             : PopUpMenuUnUseTable(eventButton1:
                                                                                 () {
-                                                                                // getTableInfor(data.storeRoomId.toString(), data.tables?[index].roomTableId.toString() ?? '');
-                                                                                var tableName = data.tables?[index].tableName.toString() ?? '';
-
+                                                                                getDataTabIndex(state.listRoomModel!.rooms![indexRoomID].storeRoomId.toString(), "staff");
+                                                                                getTableInfor(data.storeRoomId.toString(), data.tables![index].roomTableId.toString(), "staff");
                                                                                 showDialog(
                                                                                     context: context,
                                                                                     builder: (BuildContext context) {
-                                                                                      return BookingTableDialog(eventSaveButton: saveBookingModal, isUsingTable: true, nameTable: tableName, listNameTableJoined: listTableJoined, roomID: data.storeRoomId.toString(), tableID: data.tables?[index].roomTableId.toString());
+                                                                                      return BookingTableDialog(
+                                                                                        eventSaveButton: saveBookingModal,
+                                                                                        isUsingTable: true,
+                                                                                        nameTable: tableName,
+                                                                                        listNameTableJoined: listTableJoined,
+                                                                                        indexRoomTruyenVao: data.storeRoomId,
+                                                                                        indexTableTruyenVao: data.tables![index].roomTableId,
+                                                                                        listTableTruyenVao: data.tables,
+                                                                                        currentTable: data.tables![index],
+                                                                                      );
                                                                                     });
                                                                               })),
                                                                   ],
@@ -314,8 +360,13 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                               : RefreshIndicator(
                                                   color: Colors.blue,
                                                   onRefresh: () async {
-                                                    getDataTabIndex("");
-                                                    // Implement logic to refresh data for Tab 1
+                                                    getDataTabIndex(
+                                                        state
+                                                            .listRoomModel!
+                                                            .rooms![indexRoomID]
+                                                            .storeRoomId
+                                                            .toString(),
+                                                        "staff");
                                                   },
                                                   child: ListView.builder(
                                                       itemCount: 1,
@@ -389,7 +440,11 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                 color1: color1BlueButton,
                                 color2: color2BlueButton,
                                 event: () {
-                                  getDataTabIndex("");
+                                  getDataTabIndex(
+                                      state.listRoomModel!.rooms![indexRoomID]
+                                          .storeRoomId
+                                          .toString(),
+                                      "staff");
                                 },
                                 text: 'Thử lại',
                                 fontSize: 12.sp,

@@ -6,3 +6,5 @@ const String tableApi = 'booking/table';
 const String foodsTableApi = 'booking/table/foods';
 const String staffLogout = 'staff/logout';
 const String managerLogout = 'user/logout';
+const String cancleTable = 'booking/table/close';
+const String saveInforTable = 'booking/table/information';

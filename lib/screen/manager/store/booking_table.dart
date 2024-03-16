@@ -284,6 +284,12 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                       (BuildContext
                                                                           context) {
                                                                     return MoveTableDialog(
+                                                                      listTable: [],
+                                                                      listRoom: [],
+                                                                      nameTable:
+                                                                          'tableName',
+                                                                      nameRoom:
+                                                                          'roomName',
                                                                       eventSaveButton:
                                                                           saveMoveTableModal,
                                                                     );

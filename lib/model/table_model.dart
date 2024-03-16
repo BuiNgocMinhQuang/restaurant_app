@@ -80,7 +80,7 @@ class Booking {
 class Order {
   int? orderId;
   int? userId;
-  String? staffId;
+  int? staffId;
   int? storeId;
   int? storeRoomId;
   String? clientId;

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:app_restaurant/config/text.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/table_model.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:bloc/bloc.dart';
@@ -10,6 +11,63 @@ import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
 part 'table_state.dart';
 part 'table_event.dart';
+
+class TableCancleBloc extends Bloc<TableCancleEvent, TableCancleState> {
+  TableCancleBloc() : super(const TableCancleState()) {
+    on<CancleTable>(_onCancleTable);
+  }
+  void _onCancleTable(
+    CancleTable event,
+    Emitter<TableCancleState> emit,
+  ) async {
+    emit(state.copyWith(tableCancleStatus: TableCancleStatus.loading));
+
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$cancleTable'),
+        headers: {
+          // 'Content-type': 'application/json',
+          // 'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: {
+          'client': event.client,
+          'shop_id': event.shopId,
+          'is_api': event.isApi.toString(),
+          'room_id': event.roomId,
+          'table_id': event.tableId,
+          'cancellation_reason': event.cancellationReason
+        },
+      );
+      final data = jsonDecode(respons.body);
+      var message = data['message'];
+
+      try {
+        if (data['status'] == 200) {
+          // print("DATA Cancle Table $data");
+
+          emit(state.copyWith(tableCancleStatus: TableCancleStatus.succes));
+        } else {
+          print("ERROR Cancle Table 1");
+
+          emit(state.copyWith(tableCancleStatus: TableCancleStatus.failed));
+          emit(state.copyWith(errorText: message['text']));
+        }
+      } catch (error) {
+        print("ERROR Cancle Table 2 $error");
+
+        emit(state.copyWith(tableCancleStatus: TableCancleStatus.failed));
+        emit(state.copyWith(errorText: someThingWrong));
+      }
+    } catch (error) {
+      print("ERROR Cancle Table 3 $error");
+      emit(state.copyWith(tableCancleStatus: TableCancleStatus.failed));
+      emit(state.copyWith(errorText: someThingWrong));
+    }
+  }
+}
 
 class TableBloc extends Bloc<TableEvent, TableState> {
   TableBloc() : super(const TableState()) {
@@ -46,22 +104,28 @@ class TableBloc extends Bloc<TableEvent, TableState> {
       );
       final data = jsonDecode(respons.body);
       var message = data['message'];
-      print("DATA Table $data");
       try {
         if (data['status'] == 200) {
+          // print("DATA Table $data");
+
           var tableDataRes = TableModel.fromJson(data);
+
           emit(state.copyWith(tableModel: tableDataRes));
           emit(state.copyWith(tableStatus: TableStatus.succes));
         } else {
+          print("ERROR TABLE INFOR danhjdba");
+
           emit(state.copyWith(tableStatus: TableStatus.failed));
           emit(state.copyWith(errorText: message['text']));
         }
       } catch (error) {
+        print("ERROR TABLE INFOR1111 $error");
+
         emit(state.copyWith(tableStatus: TableStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      print("ERROR TABLE INFOR $error");
+      print("ERROR TABLE INFOR222 $error");
       emit(state.copyWith(tableStatus: TableStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }
@@ -96,5 +160,85 @@ class TableBloc extends Bloc<TableEvent, TableState> {
     final data = jsonDecode(respons.body);
     var message = data['message'];
     print("DATA MENU TABLE $data");
+  }
+}
+
+class TableSaveInforBloc
+    extends Bloc<TableSaveInforEvent, TableSaveInforState> {
+  TableSaveInforBloc() : super(const TableSaveInforState()) {
+    on<SaveTableInfor>(_onSaveInforTable);
+  }
+  void _onSaveInforTable(
+    SaveTableInfor event,
+    Emitter<TableSaveInforState> emit,
+  ) async {
+    emit(state.copyWith(tableSaveInforStatus: TableSaveInforStatus.loading));
+
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+
+      print('cccc ${{
+        'client': event.client,
+        'shop_id': event.shopId,
+        'is_api': event.isApi,
+        'room_id': event.roomId,
+        'table_id': event.tableId,
+        'client_name': event.clientName,
+        'client_phone': event.clientPhone,
+        'note': event.note,
+        'end_date': event.endDate,
+        'tables': event.tables,
+      }}');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$saveInforTable'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': event.client,
+          'shop_id': event.shopId,
+          'is_api': event.isApi,
+          'room_id': event.roomId,
+          'table_id': event.tableId,
+          'client_name': event.clientName,
+          'client_phone': event.clientPhone,
+          'note': event.note,
+          'end_date': event.endDate,
+          'tables': event.tables,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      var message = data['message'];
+      print("DAT $data");
+
+      try {
+        if (data['status'] == 200) {
+          print("DATA Save Infor Table $data");
+
+          emit(state.copyWith(
+              tableSaveInforStatus: TableSaveInforStatus.succes));
+        } else {
+          print("ERROR Save Infor Table 1");
+
+          emit(state.copyWith(
+              tableSaveInforStatus: TableSaveInforStatus.failed));
+
+          emit(state.copyWith(errorText: message['text']));
+        }
+      } catch (error) {
+        print("ERROR Save Infor Table 2 $error");
+
+        emit(state.copyWith(tableSaveInforStatus: TableSaveInforStatus.failed));
+        emit(state.copyWith(errorText: someThingWrong));
+      }
+    } catch (error) {
+      print("ERROR Save Infor Table 3 $error");
+      emit(state.copyWith(tableSaveInforStatus: TableSaveInforStatus.failed));
+
+      emit(state.copyWith(errorText: someThingWrong));
+    }
   }
 }

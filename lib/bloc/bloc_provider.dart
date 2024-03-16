@@ -30,6 +30,8 @@ class AppBlocProvider extends StatelessWidget {
         BlocProvider(
           create: (_) => TableBloc(),
         ),
+        BlocProvider(create: (_) => TableCancleBloc()),
+        BlocProvider(create: (_) => TableSaveInforBloc()),
         BlocProvider(
           create: (_) => InternetCubit(),
         ),
