@@ -1145,23 +1145,44 @@ class MoveTableDialog extends StatelessWidget {
   final Function eventSaveButton;
   final Tables? currentTable;
   final String nameRoom;
-  final Rooms listRoom;
-  final List listNameRoom;
+  final String orderID;
+  // final Rooms listRoom;
+  // final List listNameRoom;
   final List idRoom;
   const MoveTableDialog({
     Key? key,
     required this.eventSaveButton,
     required this.currentTable,
     required this.nameRoom,
-    required this.listRoom,
-    required this.listNameRoom,
+    required this.orderID,
+    // required this.listRoom,
+    // required this.listNameRoom,
     required this.idRoom,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TableBloc, TableState>(
-      builder: (context, state) {
+    return BlocBuilder<TableBloc, TableState>(builder: (context, state) {
+      if (state.tableStatus == TableStatus.succes) {
+        var listRoomInit =
+            state.switchTableDataModel?.rooms?.map((data) => data);
+        var listNameRoomFree = listRoomInit
+            ?.map((data) => data.storeRoomName)
+            .toList(); //list ten cua ban con trong
+        var listTableFree = listRoomInit
+            ?.map((e) => e.tables); //list tat ca ban cua phong (nhieu phong)
+        // debugPrint("listTableFree ${listTableFree}");
+
+        var listTableFreeOfCurrentRoom = listTableFree?.where(
+            (e) => e!.isNotEmpty); // list cac ban con trong cua phong hien tai
+        // debugPrint("CAC ${listTableFreeOfCurrentRoom}");
+        var currentRoom = listRoomInit?.where((element) =>
+            element.storeRoomId ==
+            (listTableFreeOfCurrentRoom?.first?[0].storeRoomId ??
+                '')); //check lay ten phong hien taij (check theo roomId)
+        var currentRoomName =
+            currentRoom?.first.storeRoomName; // lay ten phong hien tai
+        // debugPrint("currentRoom ${currentRoom?.first.storeRoomName}");
+
         return AlertDialog(
             contentPadding: const EdgeInsets.all(0),
             surfaceTintColor: Colors.white,
@@ -1239,14 +1260,33 @@ class MoveTableDialog extends StatelessWidget {
                               SizedBox(
                                 height: 10.h,
                               ),
-                              ButtonApp(
-                                event: () {},
-                                text: currentTable?.tableName.toString() ?? '',
-                                colorText: Colors.blue,
-                                backgroundColor: Colors.white,
-                                outlineColor: Colors.blue,
-                                radius: 8.r,
-                              ),
+                              GridView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: state.switchTableDataModel
+                                          ?.currentTables?.length ??
+                                      0,
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          mainAxisExtent: 65.h),
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: (content, index) {
+                                    return Padding(
+                                      padding: EdgeInsets.all(10.w),
+                                      child: ButtonApp(
+                                        event: () {},
+                                        text: state
+                                                .switchTableDataModel
+                                                ?.currentTables?[index]
+                                                .tableName ??
+                                            '',
+                                        colorText: Colors.blue,
+                                        backgroundColor: Colors.white,
+                                        outlineColor: Colors.blue,
+                                        radius: 8.r,
+                                      ),
+                                    );
+                                  }),
                               space10H,
                               TextApp(
                                 text: "Lưu ý: Bàn chỉ được ghép khi cùng phòng",
@@ -1271,19 +1311,21 @@ class MoveTableDialog extends StatelessWidget {
                                     fit: FlexFit.tight,
                                     child: DropdownSearch(
                                       onChanged: (changeRoom) {
+                                        print("ORDER ID ${orderID}");
                                         BlocProvider.of<TableBloc>(context).add(
-                                            GetTableInfor(
+                                            GetTableSwitchInfor(
                                                 client: "staff",
                                                 shopId: getStaffShopID,
-                                                roomId: idRoom[listNameRoom
+                                                roomId: idRoom[listNameRoomFree!
                                                         .indexOf(changeRoom)]
                                                     .toString(),
                                                 tableId: currentTable
                                                         ?.roomTableId
                                                         .toString() ??
-                                                    ''));
+                                                    '',
+                                                orderId: orderID));
                                       },
-                                      items: listNameRoom,
+                                      items: listNameRoomFree ?? [],
                                       dropdownButtonProps:
                                           const DropdownButtonProps(),
                                       dropdownDecoratorProps:
@@ -1308,7 +1350,7 @@ class MoveTableDialog extends StatelessWidget {
                                           contentPadding: EdgeInsets.all(15.w),
                                         ),
                                       ),
-                                      selectedItem: nameRoom,
+                                      selectedItem: currentRoomName,
                                     ),
                                   )
                                 ],
@@ -1358,85 +1400,31 @@ class MoveTableDialog extends StatelessWidget {
                                 ],
                               ),
                               space15H,
-                              BlocBuilder<TableBloc, TableState>(
-                                builder: (context, state) {
-                                  if (state.tableStatus == TableStatus.succes) {
-                                    var listBanne =
-                                        state.tableModel?.tablesNoBooking;
-
-                                    return GridView.builder(
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemCount: listBanne!.length,
-                                        gridDelegate:
-                                            SliverGridDelegateWithFixedCrossAxisCount(
-                                                crossAxisCount: 2,
-                                                mainAxisExtent: 65.h),
-                                        itemBuilder: (context, index) {
-                                          return Padding(
-                                            padding: EdgeInsets.all(10.w),
-                                            child: ButtonApp(
-                                              event: () {},
-                                              text:
-                                                  listBanne[index].tableName ??
-                                                      '',
-                                              colorText: Colors.blue,
-                                              backgroundColor: Colors.white,
-                                              outlineColor: Colors.blue,
-                                              radius: 8.r,
-                                            ),
-                                          );
-                                        });
-                                  } else if (state.tableStatus ==
-                                      TableStatus.loading) {
-                                    return Center(
-                                      child: SizedBox(
-                                        width: 200.w,
-                                        height: 120.w,
-                                        child: Lottie.asset(
-                                            'assets/lottie/loading_7_color.json'),
+                              GridView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: listTableFreeOfCurrentRoom
+                                          ?.first?.length ??
+                                      0,
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          mainAxisExtent: 65.h),
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: EdgeInsets.all(10.w),
+                                      child: ButtonApp(
+                                        event: () {},
+                                        text: listTableFreeOfCurrentRoom
+                                                ?.first![index].tableName ??
+                                            '',
+                                        colorText: Colors.blue,
+                                        backgroundColor: Colors.white,
+                                        outlineColor: Colors.blue,
+                                        radius: 8.r,
                                       ),
                                     );
-                                  } else {
-                                    return Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            width: 100,
-                                            height: 100,
-                                            child: Lottie.asset(
-                                                'assets/lottie/error.json'),
-                                          ),
-                                          space30H,
-                                          TextApp(
-                                            text: state.errorText.toString(),
-                                            fontsize: 20.sp,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          space30H,
-                                          Container(
-                                            width: 200,
-                                            child: ButtonGradient(
-                                              color1: color1BlueButton,
-                                              color2: color2BlueButton,
-                                              event: () {},
-                                              text: 'Thử lại',
-                                              fontSize: 12.sp,
-                                              radius: 8.r,
-                                              textColor: Colors.white,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
+                                  })
                             ],
                           ),
                         ),
@@ -1489,8 +1477,59 @@ class MoveTableDialog extends StatelessWidget {
                 ],
               ),
             ));
-      },
-    );
+      } else if (state.tableStatus == TableStatus.loading) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          surfaceTintColor: Colors.white,
+          backgroundColor: Colors.white,
+          content: Center(
+            child: SizedBox(
+              width: 1.sw,
+              height: 200.w,
+              child: Lottie.asset('assets/lottie/loading_7_color.json'),
+            ),
+          ),
+        );
+      } else {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          surfaceTintColor: Colors.white,
+          backgroundColor: Colors.white,
+          content: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 100,
+                  height: 100,
+                  child: Lottie.asset('assets/lottie/error.json'),
+                ),
+                space30H,
+                TextApp(
+                  text: state.errorText.toString(),
+                  fontsize: 20.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+                space30H,
+                Container(
+                  width: 200,
+                  child: ButtonGradient(
+                    color1: color1BlueButton,
+                    color2: color2BlueButton,
+                    event: () {},
+                    text: 'Thử lại',
+                    fontSize: 12.sp,
+                    radius: 8.r,
+                    textColor: Colors.white,
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      }
+    });
   }
 }
 
