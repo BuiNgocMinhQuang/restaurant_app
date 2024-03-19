@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:app_restaurant/bloc/bill/bill_bloc.dart';
 import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
@@ -57,6 +58,19 @@ class _StaffBookingTableState extends State<StaffBookingTable>
       required String role,
       required String orderID}) async {
     BlocProvider.of<TableBloc>(context).add(GetTableSwitchInfor(
+        client: role,
+        shopId: getStaffShopID,
+        roomId: roomId ?? '',
+        tableId: tableId,
+        orderId: orderID));
+  }
+
+  void getBillData(
+      {String? roomId,
+      required String tableId,
+      required String role,
+      required String orderID}) async {
+    BlocProvider.of<BillInforBloc>(context).add(GetBillInfor(
         client: role,
         shopId: getStaffShopID,
         roomId: roomId ?? '',
@@ -348,10 +362,14 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                     });
                                                                               }, eventButton3:
                                                                                 () {
+                                                                                getBillData(roomId: data.storeRoomId.toString(), tableId: data.tables![index].roomTableId.toString(), role: "staff", orderID: data.tables![index].orderId.toString());
                                                                                 showDialog(
                                                                                     context: context,
                                                                                     builder: (BuildContext context) {
-                                                                                      return const SeeBillDialog();
+                                                                                      return SeeBillDialog(
+                                                                                        currentTable: data.tables![index],
+                                                                                        nameRoom: roomName,
+                                                                                      );
                                                                                     });
                                                                               }, eventButton4:
                                                                                 () {

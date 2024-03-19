@@ -298,14 +298,14 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                               //     });
                                                             }, eventButton3:
                                                                   () {
-                                                              showDialog(
-                                                                  context:
-                                                                      context,
-                                                                  builder:
-                                                                      (BuildContext
-                                                                          context) {
-                                                                    return const SeeBillDialog();
-                                                                  });
+                                                              // showDialog(
+                                                              //     context:
+                                                              //         context,
+                                                              //     builder:
+                                                              //         (BuildContext
+                                                              //             context) {
+                                                              //       return const SeeBillDialog();
+                                                              //     });
                                                             }, eventButton4:
                                                                   () {
                                                               showDialog(

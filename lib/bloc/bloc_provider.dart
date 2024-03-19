@@ -1,3 +1,4 @@
+import 'package:app_restaurant/bloc/bill/bill_bloc.dart';
 import 'package:app_restaurant/bloc/login/login_bloc.dart';
 import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
@@ -32,6 +33,7 @@ class AppBlocProvider extends StatelessWidget {
         ),
         BlocProvider(create: (_) => TableCancleBloc()),
         BlocProvider(create: (_) => TableSaveInforBloc()),
+        BlocProvider(create: (_) => BillInforBloc()),
         BlocProvider(
           create: (_) => InternetCubit(),
         ),
