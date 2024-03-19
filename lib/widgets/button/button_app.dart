@@ -40,6 +40,7 @@ class ButtonApp extends StatelessWidget {
         event();
       },
       child: Text(
+        overflow: TextOverflow.ellipsis,
         text.toUpperCase(),
         style: TextStyle(
             fontSize: fontsize == 0 ? 14.sp : fontsize, color: colorText),

@@ -267,33 +267,35 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                       (BuildContext
                                                                           context) {
                                                                     return BookingTableDialog(
-                                                                        // nameTable:
-                                                                        //     'hehe',
-                                                                        // eventSaveButton:
-                                                                        //     saveBookingModal,
-                                                                        // isUsingTable:
-                                                                        //     true,
-                                                                        );
+                                                                      eventSaveButton:
+                                                                          () {},
+                                                                      // nameTable:
+                                                                      //     'hehe',
+                                                                      // eventSaveButton:
+                                                                      //     saveBookingModal,
+                                                                      // isUsingTable:
+                                                                      //     true,
+                                                                    );
                                                                   });
                                                             }, eventButton2:
                                                                   () {
-                                                              showDialog(
-                                                                  context:
-                                                                      context,
-                                                                  builder:
-                                                                      (BuildContext
-                                                                          context) {
-                                                                    return MoveTableDialog(
-                                                                      listTable: [],
-                                                                      listRoom: [],
-                                                                      nameTable:
-                                                                          'tableName',
-                                                                      nameRoom:
-                                                                          'roomName',
-                                                                      eventSaveButton:
-                                                                          saveMoveTableModal,
-                                                                    );
-                                                                  });
+                                                              // showDialog(
+                                                              //     context:
+                                                              //         context,
+                                                              //     builder:
+                                                              //         (BuildContext
+                                                              //             context) {
+                                                              //       return MoveTableDialog(
+                                                              //         listTable: [],
+                                                              //         listRoom: [],
+                                                              //         currentTable:Tables[]
+                                                              //             ,
+                                                              //         nameRoom:
+                                                              //             'roomName',
+                                                              //         eventSaveButton:
+                                                              //             saveMoveTableModal,
+                                                              //       );
+                                                              //     });
                                                             }, eventButton3:
                                                                   () {
                                                               showDialog(
@@ -334,13 +336,15 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                       (BuildContext
                                                                           context) {
                                                                     return BookingTableDialog(
-                                                                        // nameTable:
-                                                                        //     'hehe',
-                                                                        // eventSaveButton:
-                                                                        //     () {},
-                                                                        // isUsingTable:
-                                                                        //     true,
-                                                                        );
+                                                                      eventSaveButton:
+                                                                          () {},
+                                                                      // nameTable:
+                                                                      //     'hehe',
+                                                                      // eventSaveButton:
+                                                                      //     () {},
+                                                                      // isUsingTable:
+                                                                      //     true,
+                                                                    );
                                                                   });
                                                             })),
                                                 ],

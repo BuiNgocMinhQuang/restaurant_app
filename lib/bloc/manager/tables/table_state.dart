@@ -1,22 +1,33 @@
 part of 'table_bloc.dart';
 
 class TableState extends Equatable {
-  const TableState({this.errorText, this.tableStatus, this.tableModel});
+  const TableState(
+      {this.errorText,
+      this.tableStatus,
+      this.tableModel,
+      this.foodTableDataModel});
 
   final String? errorText;
   final TableStatus? tableStatus;
   final TableModel? tableModel;
+  final FoodTableDataModel? foodTableDataModel;
 
   TableState copyWith(
-      {String? errorText, TableStatus? tableStatus, TableModel? tableModel}) {
+      {String? errorText,
+      TableStatus? tableStatus,
+      TableModel? tableModel,
+      FoodTableDataModel? foodTableDataModel}) {
     return TableState(
-        errorText: errorText ?? this.errorText,
-        tableStatus: tableStatus ?? this.tableStatus,
-        tableModel: tableModel ?? this.tableModel);
+      errorText: errorText ?? this.errorText,
+      tableStatus: tableStatus ?? this.tableStatus,
+      tableModel: tableModel ?? this.tableModel,
+      foodTableDataModel: foodTableDataModel ?? this.foodTableDataModel,
+    );
   }
 
   @override
-  List<Object?> get props => [errorText, tableStatus, tableModel];
+  List<Object?> get props =>
+      [errorText, tableStatus, tableModel, foodTableDataModel];
 }
 
 enum TableStatus { loading, succes, failed }

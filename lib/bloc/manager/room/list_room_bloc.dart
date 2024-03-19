@@ -1,11 +1,15 @@
 import 'dart:convert';
+import 'package:app_restaurant/bloc/login/login_bloc.dart';
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/model/list_room_model.dart';
+import 'package:go_router/go_router.dart';
 
 part 'list_room_state.dart';
 part 'list_room_event.dart';
@@ -49,7 +53,7 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
 
       var message = data['message'];
 
-      print(" LIST ROOM $data");
+      // print(" LIST ROOM $data");
       try {
         if (data['status'] == 200) {
           var roomDataRes = ListRoomModel.fromJson(data);
@@ -59,6 +63,12 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
         } else {
           emit(state.copyWith(listRoomStatus: ListRoomStatus.failed));
           emit(state.copyWith(errorText: message));
+          //unauthor thi da ra ngoai dang nhap
+          BlocProvider.of<LoginBloc>(navigatorKey.currentContext!)
+              .add(const LogoutStaff());
+          StorageUtils.instance.removeKey(key: 'auth_staff');
+          StorageUtils.instance.removeKey(key: 'staff_infor_data');
+          navigatorKey.currentContext?.go("/staff_sign_in");
         }
       } catch (error) {
         print("ERROR GET LIST ROOM $error");

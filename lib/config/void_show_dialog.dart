@@ -68,6 +68,26 @@ void showLoginSuccesDialog() {
   ).show();
 }
 
+void showUpdateDataSuccesDialog() {
+  AwesomeDialog(
+    context: navigatorKey.currentContext!,
+    autoDismiss: false,
+    animType: AnimType.leftSlide,
+    headerAnimationLoop: false,
+    dialogType: DialogType.success,
+    showCloseIcon: true,
+    title: 'Thành công',
+    desc: 'Cập nhật dữ liệu thành công!',
+    btnOkOnPress: () {},
+    btnOkText: 'OK',
+    onDismissCallback: (type) {
+      if (type == DismissType.btnOk) {
+        Navigator.of(navigatorKey.currentContext!).pop();
+      }
+    },
+  ).show();
+}
+
 void showChangePasswordSuccessDialog(context) {
   AwesomeDialog(
           context: context,

@@ -19,7 +19,7 @@ class StaffSignIn extends StatefulWidget {
 }
 
 class _StaffSignInState extends State<StaffSignIn> {
-  final _loginBloc = LoginBloc();
+  // final _loginBloc = LoginBloc();
   @override
   Widget build(BuildContext context) {
     return const Scaffold(

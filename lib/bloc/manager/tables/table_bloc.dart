@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
+import 'package:app_restaurant/model/food_table_data_model.dart';
 import 'package:app_restaurant/model/table_model.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:bloc/bloc.dart';
@@ -137,29 +138,49 @@ class TableBloc extends Bloc<TableEvent, TableState> {
   ) async {
     emit(state.copyWith(tableStatus: TableStatus.loading));
     await Future.delayed(const Duration(seconds: 1));
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$foodsTableApi'),
+        headers: {
+          // 'Content-type': 'application/json',
+          // 'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: {
+          'client': event.client,
+          'shop_id': event.shopId,
+          'is_api': event.isApi.toString(),
+          'room_id': event.roomId,
+          'table_id': event.tableId,
+          'limit': event.limit,
+          'page': event.page
+        },
+      );
+      final data = jsonDecode(respons.body);
 
-    var token = StorageUtils.instance.getString(key: 'token');
-    print("TOKEN GET TABLE FOOD $token");
+      try {
+        if (data['status'] == 200) {
+          print("DATA FOOD TABLE ${data['booking']}");
+          var foodTableDataRes = FoodTableDataModel.fromJson(data);
 
-    final respons = await http.post(
-      Uri.parse('$baseUrl$foodsTableApi'),
-      headers: {
-        // 'Content-type': 'application/json',
-        // 'Accept': 'application/json',
-        "Authorization": "Bearer $token"
-      },
-      body: {
-        'client': event.client,
-        'shop_id': event.shopId,
-        'is_api': event.isApi.toString(),
-        'room_id': event.roomId,
-        'table_id': event.tableId,
-        'limit': event.limit
-      },
-    );
-    final data = jsonDecode(respons.body);
-    var message = data['message'];
-    print("DATA MENU TABLE $data");
+          emit(state.copyWith(foodTableDataModel: foodTableDataRes));
+          emit(state.copyWith(tableStatus: TableStatus.succes));
+        } else {
+          print("ERROR DATA FOOD TABLE 1 ${data}");
+
+          emit(state.copyWith(tableStatus: TableStatus.failed));
+        }
+      } catch (error) {
+        print("ERROR DATA FOOD TABLE 2 ${error}");
+
+        emit(state.copyWith(tableStatus: TableStatus.failed));
+      }
+    } catch (error) {
+      print("ERROR DATA FOOD TABLE 3 $error");
+
+      emit(state.copyWith(tableStatus: TableStatus.failed));
+    }
   }
 }
 
@@ -177,7 +198,7 @@ class TableSaveInforBloc
     try {
       var token = StorageUtils.instance.getString(key: 'token');
 
-      print('cccc ${{
+      print('DATA SEND ${{
         'client': event.client,
         'shop_id': event.shopId,
         'is_api': event.isApi,
@@ -212,11 +233,9 @@ class TableSaveInforBloc
       );
       final data = jsonDecode(respons.body);
       var message = data['message'];
-      print("DAT $data");
-
       try {
         if (data['status'] == 200) {
-          print("DATA Save Infor Table $data");
+          print("REQUESTTTT ${data}");
 
           emit(state.copyWith(
               tableSaveInforStatus: TableSaveInforStatus.succes));

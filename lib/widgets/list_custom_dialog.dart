@@ -28,26 +28,17 @@ import 'package:lottie/lottie.dart';
 
 ///Modal quản lí bàn
 class BookingTableDialog extends StatefulWidget {
-  // final Function eventSaveButton;
-  // final bool isUsingTable;
-  // final String nameTable;
-  // final List? listNameTableJoined;
   final int? idRoom;
-  // final int? indexTableTruyenVao;
   final List<Tables>? listTableOfRoom;
   final Tables? currentTable;
-
-  const BookingTableDialog({
-    Key? key,
-    // required this.eventSaveButton,
-    // required this.nameTable,
-    // this.listNameTableJoined,
-    // this.isUsingTable = false,
-    this.idRoom,
-    // this.indexTableTruyenVao,
-    this.listTableOfRoom,
-    this.currentTable,
-  }) : super(key: key);
+  final Function eventSaveButton;
+  const BookingTableDialog(
+      {Key? key,
+      this.idRoom,
+      this.listTableOfRoom,
+      this.currentTable,
+      required this.eventSaveButton})
+      : super(key: key);
 
   @override
   State<BookingTableDialog> createState() => _BookingTableDialogState();
@@ -81,8 +72,6 @@ class _BookingTableDialogState extends State<BookingTableDialog>
     setState(() {
       dateTime = newDateTime;
       _dateStartController.text = newDateTime.toString();
-      print(_dateStartController.text);
-      print("CHON R NGAY R");
     });
   }
 
@@ -123,7 +112,8 @@ class _BookingTableDialogState extends State<BookingTableDialog>
       listBanDaGhep = widget.listTableOfRoom
               ?.where((table) =>
                   table.orderId == widget.currentTable?.orderId &&
-                  table.roomTableId != widget.currentTable?.roomTableId)
+                  table.roomTableId != widget.currentTable?.roomTableId &&
+                  table.orderId != null)
               .toList() ??
           [];
     });
@@ -147,10 +137,6 @@ class _BookingTableDialogState extends State<BookingTableDialog>
               selectedCategories.contains(product.category)) &&
           foodTitle.contains(input);
     }).toList();
-
-    // print("ROMM TRUYEN VAO ${widget.idRoom}");
-    // print("TABLE TRUYEN VAO ${widget.indexTableTruyenVao}");
-
     return BlocBuilder<TableBloc, TableState>(
       builder: (context, state) {
         if (state.tableStatus == TableStatus.succes) {
@@ -162,9 +148,6 @@ class _BookingTableDialogState extends State<BookingTableDialog>
               state.tableModel?.booking?.order?.endBookedTableAt ??
                   _dateStartController.text;
           noteController.text = state.tableModel?.booking?.order?.note ?? '';
-          // var listTableCanJoin = state.tableModel!.tablesNoBooking!
-          //     .map((data) => data.tableName)
-          //     .toList();
           var listTableHaveSameOrderID = widget.listTableOfRoom
               ?.where((table) =>
                   table.orderId == widget.currentTable?.orderId &&
@@ -176,10 +159,6 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                   table.bookingStatus == true &&
                   table.roomTableId != widget.currentTable?.roomTableId))
               .toList();
-          // var listTableName =
-          //     listTableHaveSameOrderID?.map((e) => e.tableName).toList();
-          // var listTableIDToSent =
-          //     listTableHaveSameOrderID?.map((e) => e.roomTableId).toList();
 
           return BlocBuilder<TableCancleBloc, TableCancleState>(
               builder: (contextCancleTable, stateCancleTable) {
@@ -207,7 +186,6 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                           space15H,
                           SizedBox(
                             height: 50,
-                            // color: Colors.green,
                             child: TabBar(
                                 onTap: (index) {
                                   // if (index == 0) {
@@ -404,17 +382,14 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                           key: _popupCustomValidationKey,
                                           itemAsString: (item) =>
                                               item.tableName,
-                                          items: (listTableNoBooking ?? [])
+                                          items: (listTableNoBooking)
                                               as List<Tables>,
                                           selectedItems:
                                               listTableHaveSameOrderID ?? [],
                                           onChanged: (listSelectedTable) {
                                             setState(() {
                                               listBanDaGhep = listSelectedTable;
-                                              ;
                                             });
-                                            // print('saved------');
-                                            // print(value);
                                           },
                                           popupProps:
                                               PopupPropsMultiSelection.dialog(
@@ -524,14 +499,16 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                     [],
                                               ));
                                               Navigator.of(context).pop();
-                                              showLoginSuccesDialog();
+                                              showUpdateDataSuccesDialog();
+                                              widget.eventSaveButton();
                                             },
                                             text: save,
                                             colorText: Colors.white,
                                             backgroundColor:
-                                                Color.fromRGBO(23, 193, 232, 1),
-                                            outlineColor:
-                                                Color.fromRGBO(23, 193, 232, 1),
+                                                const Color.fromRGBO(
+                                                    23, 193, 232, 1),
+                                            outlineColor: const Color.fromRGBO(
+                                                23, 193, 232, 1),
                                           ),
                                           SizedBox(
                                             width: 20.w,
@@ -556,8 +533,9 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                               child: ListView(
                                                 scrollDirection:
                                                     Axis.horizontal,
-                                                children:
-                                                    categories.map((exercise) {
+                                                children: state
+                                                    .tableModel!.foodKinds!
+                                                    .map((lableFood) {
                                                   return Padding(
                                                     padding: EdgeInsets.only(
                                                         right: 5.w, left: 5.w),
@@ -591,12 +569,12 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                       labelStyle: TextStyle(
                                                           color: selectedCategories
                                                                   .contains(
-                                                                      exercise)
+                                                                      lableFood)
                                                               ? Colors.white
                                                               : Colors.black),
                                                       showCheckmark: false,
                                                       label: TextApp(
-                                                        text: exercise
+                                                        text: lableFood
                                                             .toUpperCase(),
                                                         fontsize: 14.sp,
                                                         color: blueText,
@@ -608,17 +586,17 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                       selected:
                                                           selectedCategories
                                                               .contains(
-                                                                  exercise),
+                                                                  lableFood),
                                                       onSelected:
                                                           (bool selected) {
                                                         setState(() {
                                                           if (selected) {
                                                             selectedCategories
-                                                                .add(exercise);
+                                                                .add(lableFood);
                                                           } else {
                                                             selectedCategories
                                                                 .remove(
-                                                                    exercise);
+                                                                    lableFood);
                                                           }
                                                         });
                                                       },
@@ -697,7 +675,11 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   TextApp(
-                                                    text: "1",
+                                                    text: state
+                                                            .foodTableDataModel
+                                                            ?.countOrderFoods
+                                                            .toString() ??
+                                                        "0",
                                                     color: Colors.white,
                                                     fontsize: 14.sp,
                                                     fontWeight: FontWeight.bold,
@@ -720,7 +702,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                             itemBuilder: (context, index) {
                                               final product =
                                                   filterProducts[index];
-                                              print("PRODUCT $filterProducts");
+                                              // print("PRODUCT $filterProducts");
                                               return Card(
                                                 elevation: 8.0,
                                                 margin: const EdgeInsets.all(8),
@@ -1017,7 +999,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                             ),
                                           ],
                                         ),
-                                        Container(
+                                        SizedBox(
                                           width: 1.sw,
                                           height: 80,
                                           child: Row(
@@ -1030,8 +1012,9 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                 },
                                                 text: "Đóng",
                                                 colorText: Colors.white,
-                                                backgroundColor: Color.fromRGBO(
-                                                    131, 146, 171, 1),
+                                                backgroundColor:
+                                                    const Color.fromRGBO(
+                                                        131, 146, 171, 1),
                                                 outlineColor: Color.fromRGBO(
                                                     131, 146, 171, 1),
                                               ),
@@ -1066,6 +1049,9 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                     cancleTableReasonController
                                                         .clear();
                                                     Navigator.of(context).pop();
+                                                    showUpdateDataSuccesDialog();
+
+                                                    widget.eventSaveButton();
                                                   }
                                                 },
                                                 text: save,
@@ -1157,349 +1143,354 @@ class _BookingTableDialogState extends State<BookingTableDialog>
 ///Modal chuyển bàn
 class MoveTableDialog extends StatelessWidget {
   final Function eventSaveButton;
-  final String nameTable;
+  final Tables? currentTable;
   final String nameRoom;
-  final List listRoom;
-  final List listTable;
-
-  const MoveTableDialog(
-      {Key? key,
-      required this.eventSaveButton,
-      required this.nameTable,
-      required this.nameRoom,
-      required this.listRoom,
-      required this.listTable})
-      : super(key: key);
+  final Rooms listRoom;
+  final List listNameRoom;
+  final List idRoom;
+  const MoveTableDialog({
+    Key? key,
+    required this.eventSaveButton,
+    required this.currentTable,
+    required this.nameRoom,
+    required this.listRoom,
+    required this.listNameRoom,
+    required this.idRoom,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-        contentPadding: const EdgeInsets.all(0),
-        surfaceTintColor: Colors.white,
-        backgroundColor: Colors.white,
-        content: SizedBox(
-          width: double.maxFinite,
-          child: ListView(
-            shrinkWrap: true,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.min,
+    return BlocBuilder<TableBloc, TableState>(
+      builder: (context, state) {
+        return AlertDialog(
+            contentPadding: const EdgeInsets.all(0),
+            surfaceTintColor: Colors.white,
+            backgroundColor: Colors.white,
+            content: SizedBox(
+              width: double.maxFinite,
+              child: ListView(
+                shrinkWrap: true,
                 children: [
-                  Padding(
-                      padding: EdgeInsets.all(8.w),
-                      child: Container(
-                          width: 1.sw,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(15.w),
-                                topRight: Radius.circular(15.w)),
-                            // color: Colors.amber,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 20.w),
-                                    child: TextApp(
-                                      text: nameTable,
-                                      fontsize: 18.sp,
-                                      color: blueText,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                ],
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                          padding: EdgeInsets.all(8.w),
+                          child: Container(
+                              width: 1.sw,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(15.w),
+                                    topRight: Radius.circular(15.w)),
+                                // color: Colors.amber,
                               ),
-                              Row(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 20.w),
-                                    child: TextApp(
-                                      text: nameRoom,
-                                      fontsize: 14.sp,
-                                      color: blueText,
-                                      fontWeight: FontWeight.normal,
-                                    ),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 20.w),
+                                        child: TextApp(
+                                          text: currentTable?.tableName
+                                                  .toString() ??
+                                              '',
+                                          fontsize: 18.sp,
+                                          color: blueText,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 20.w),
+                                        child: TextApp(
+                                          text: nameRoom,
+                                          fontsize: 14.sp,
+                                          color: blueText,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      )
+                                    ],
                                   )
                                 ],
-                              )
-                            ],
-                          ))),
-                  const Divider(
-                    height: 1,
-                    color: Colors.black,
-                  ),
-                  SingleChildScrollView(
-                    child: Padding(
-                      padding: EdgeInsets.all(20.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          TextApp(
-                            text: "Bàn hiện tại",
-                            fontsize: 12.sp,
-                            fontWeight: FontWeight.bold,
-                            color: blueText,
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          ButtonApp(
-                            event: () {},
-                            text: "Table 1",
-                            colorText: Colors.blue,
-                            backgroundColor: Colors.white,
-                            outlineColor: Colors.blue,
-                            radius: 8.r,
-                          ),
-                          space10H,
-                          TextApp(
-                            text: "Lưu ý: Bàn chỉ được ghép khi cùng phòng",
-                            fontsize: 12.sp,
-                            fontWeight: FontWeight.normal,
-                            color: grey,
-                          ),
-                          space10H,
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                              ))),
+                      const Divider(
+                        height: 1,
+                        color: Colors.black,
+                      ),
+                      SingleChildScrollView(
+                        child: Padding(
+                          padding: EdgeInsets.all(20.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               TextApp(
-                                text: "Bàn có thể đổi:",
+                                text: "Bàn hiện tại",
                                 fontsize: 12.sp,
                                 fontWeight: FontWeight.bold,
                                 color: blueText,
                               ),
                               SizedBox(
-                                width: 20.w,
+                                height: 10.h,
                               ),
-                              // state.listRoomModel!.rooms!
-                              //           .map((data) =>
-                              //               Tab(text: data.storeRoomName))
-                              //           .toList()
-                              Flexible(
-                                fit: FlexFit.tight,
-                                child: DropdownSearch(
-                                  // onChanged: (){},
-                                  // validator: (value) {
-                                  //   if (value == "Chọn phòng") {
-                                  //     return canNotNull;
-                                  //   }
-                                  //   return null;
-                                  // },
-
-                                  items: listRoom,
-                                  dropdownButtonProps: DropdownButtonProps(),
-                                  dropdownDecoratorProps:
-                                      DropDownDecoratorProps(
-                                    dropdownSearchDecoration: InputDecoration(
-                                      fillColor: const Color.fromARGB(
-                                          255, 226, 104, 159),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: Color.fromRGBO(
-                                                214, 51, 123, 0.6),
-                                            width: 2.0),
-                                        borderRadius:
-                                            BorderRadius.circular(8.r),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8.r),
-                                      ),
-                                      isDense: true,
-                                      contentPadding: EdgeInsets.all(15.w),
-                                    ),
-                                  ),
-                                  selectedItem: nameRoom,
-                                ),
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                              ButtonApp(
+                                event: () {},
+                                text: currentTable?.tableName.toString() ?? '',
+                                colorText: Colors.blue,
+                                backgroundColor: Colors.white,
+                                outlineColor: Colors.blue,
+                                radius: 8.r,
+                              ),
+                              space10H,
+                              TextApp(
+                                text: "Lưu ý: Bàn chỉ được ghép khi cùng phòng",
+                                fontsize: 12.sp,
+                                fontWeight: FontWeight.normal,
+                                color: grey,
+                              ),
+                              space10H,
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Container(
-                                    width: 20,
-                                    height: 20,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors
-                                              .blue, //                   <--- border color
-                                          width: 1.w,
-                                        ),
-                                        color: Colors.white),
+                                  TextApp(
+                                    text: "Bàn có thể đổi:",
+                                    fontsize: 12.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: blueText,
                                   ),
                                   SizedBox(
-                                    width: 5.w,
+                                    width: 20.w,
                                   ),
-                                  TextApp(text: "Đang phục vụ")
+                                  Flexible(
+                                    fit: FlexFit.tight,
+                                    child: DropdownSearch(
+                                      onChanged: (changeRoom) {
+                                        BlocProvider.of<TableBloc>(context).add(
+                                            GetTableInfor(
+                                                client: "staff",
+                                                shopId: getStaffShopID,
+                                                roomId: idRoom[listNameRoom
+                                                        .indexOf(changeRoom)]
+                                                    .toString(),
+                                                tableId: currentTable
+                                                        ?.roomTableId
+                                                        .toString() ??
+                                                    ''));
+                                      },
+                                      items: listNameRoom,
+                                      dropdownButtonProps:
+                                          const DropdownButtonProps(),
+                                      dropdownDecoratorProps:
+                                          DropDownDecoratorProps(
+                                        dropdownSearchDecoration:
+                                            InputDecoration(
+                                          fillColor: const Color.fromARGB(
+                                              255, 226, 104, 159),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: Color.fromRGBO(
+                                                    214, 51, 123, 0.6),
+                                                width: 2.0),
+                                            borderRadius:
+                                                BorderRadius.circular(8.r),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.r),
+                                          ),
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.all(15.w),
+                                        ),
+                                      ),
+                                      selectedItem: nameRoom,
+                                    ),
+                                  )
                                 ],
                               ),
                               SizedBox(
-                                width: 10.w,
+                                height: 10.h,
                               ),
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Container(
-                                    width: 20,
-                                    height: 20,
-                                    color: Colors.blue,
-                                  ),
-                                  SizedBox(
-                                    width: 5.w,
-                                  ),
-                                  TextApp(text: "Bàn trống")
-                                ],
-                              )
-                            ],
-                          ),
-                          space15H,
-                          BlocBuilder<TableBloc, TableState>(
-                            builder: (context, state) {
-                              if (state.tableStatus == TableStatus.succes) {
-                                var listBanne =
-                                    state.tableModel?.tablesNoBooking;
-
-                                return GridView.builder(
-                                    shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    itemCount: listBanne!.length,
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                    ),
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                          padding: EdgeInsets.all(10.w),
-                                          child: InkWell(
-                                            onTap: () {},
-                                            child: Container(
-                                              width: 100,
-                                              height: 30,
-                                              color: Colors.amber,
-                                              child: SizedBox(
-                                                width: 100.w,
-                                                child: Center(
-                                                  child: TextApp(
-                                                    text: listBanne[index]
-                                                            .tableName ??
-                                                        '',
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ));
-                                    });
-                              } else if (state.tableStatus ==
-                                  TableStatus.loading) {
-                                return Center(
-                                  child: SizedBox(
-                                    width: 200.w,
-                                    height: 120.w,
-                                    child: Lottie.asset(
-                                        'assets/lottie/loading_7_color.json'),
-                                  ),
-                                );
-                              } else {
-                                return Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                  Row(
                                     children: [
                                       Container(
-                                        width: 100,
-                                        height: 100,
-                                        child: Lottie.asset(
-                                            'assets/lottie/error.json'),
+                                        width: 20,
+                                        height: 20,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Colors
+                                                  .blue, //                   <--- border color
+                                              width: 1.w,
+                                            ),
+                                            color: Colors.white),
                                       ),
-                                      space30H,
-                                      TextApp(
-                                        text: state.errorText.toString(),
-                                        fontsize: 20.sp,
-                                        fontWeight: FontWeight.bold,
+                                      SizedBox(
+                                        width: 5.w,
                                       ),
-                                      space30H,
-                                      Container(
-                                        width: 200,
-                                        child: ButtonGradient(
-                                          color1: color1BlueButton,
-                                          color2: color2BlueButton,
-                                          event: () {},
-                                          text: 'Thử lại',
-                                          fontSize: 12.sp,
-                                          radius: 8.r,
-                                          textColor: Colors.white,
-                                        ),
-                                      )
+                                      TextApp(text: "Đang phục vụ")
                                     ],
                                   ),
-                                );
-                              }
-                            },
+                                  SizedBox(
+                                    width: 10.w,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: 20,
+                                        height: 20,
+                                        color: Colors.blue,
+                                      ),
+                                      SizedBox(
+                                        width: 5.w,
+                                      ),
+                                      TextApp(text: "Bàn trống")
+                                    ],
+                                  )
+                                ],
+                              ),
+                              space15H,
+                              BlocBuilder<TableBloc, TableState>(
+                                builder: (context, state) {
+                                  if (state.tableStatus == TableStatus.succes) {
+                                    var listBanne =
+                                        state.tableModel?.tablesNoBooking;
+
+                                    return GridView.builder(
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount: listBanne!.length,
+                                        gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 2,
+                                                mainAxisExtent: 65.h),
+                                        itemBuilder: (context, index) {
+                                          return Padding(
+                                            padding: EdgeInsets.all(10.w),
+                                            child: ButtonApp(
+                                              event: () {},
+                                              text:
+                                                  listBanne[index].tableName ??
+                                                      '',
+                                              colorText: Colors.blue,
+                                              backgroundColor: Colors.white,
+                                              outlineColor: Colors.blue,
+                                              radius: 8.r,
+                                            ),
+                                          );
+                                        });
+                                  } else if (state.tableStatus ==
+                                      TableStatus.loading) {
+                                    return Center(
+                                      child: SizedBox(
+                                        width: 200.w,
+                                        height: 120.w,
+                                        child: Lottie.asset(
+                                            'assets/lottie/loading_7_color.json'),
+                                      ),
+                                    );
+                                  } else {
+                                    return Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 100,
+                                            height: 100,
+                                            child: Lottie.asset(
+                                                'assets/lottie/error.json'),
+                                          ),
+                                          space30H,
+                                          TextApp(
+                                            text: state.errorText.toString(),
+                                            fontsize: 20.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          space30H,
+                                          Container(
+                                            width: 200,
+                                            child: ButtonGradient(
+                                              color1: color1BlueButton,
+                                              color2: color2BlueButton,
+                                              event: () {},
+                                              text: 'Thử lại',
+                                              fontSize: 12.sp,
+                                              radius: 8.r,
+                                              textColor: Colors.white,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                  Container(
-                    width: 1.sw,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(15.w),
-                          bottomRight: Radius.circular(15.w)),
-                      // color: Colors.green,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ButtonApp(
-                          event: () {
-                            Navigator.of(context).pop();
-                          },
-                          text: "Đóng",
-                          colorText: Colors.white,
-                          backgroundColor:
-                              const Color.fromRGBO(131, 146, 171, 1),
-                          outlineColor: const Color.fromRGBO(131, 146, 171, 1),
+                      Container(
+                        width: 1.sw,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(15.w),
+                              bottomRight: Radius.circular(15.w)),
+                          // color: Colors.green,
                         ),
-                        SizedBox(
-                          width: 20.w,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ButtonApp(
+                              event: () {
+                                Navigator.of(context).pop();
+                              },
+                              text: "Đóng",
+                              colorText: Colors.white,
+                              backgroundColor:
+                                  const Color.fromRGBO(131, 146, 171, 1),
+                              outlineColor:
+                                  const Color.fromRGBO(131, 146, 171, 1),
+                            ),
+                            SizedBox(
+                              width: 20.w,
+                            ),
+                            ButtonApp(
+                              event: () {
+                                eventSaveButton();
+                              },
+                              text: save,
+                              colorText: Colors.white,
+                              backgroundColor:
+                                  const Color.fromRGBO(23, 193, 232, 1),
+                              outlineColor:
+                                  const Color.fromRGBO(23, 193, 232, 1),
+                            ),
+                            SizedBox(
+                              width: 20.w,
+                            ),
+                          ],
                         ),
-                        ButtonApp(
-                          event: () {
-                            eventSaveButton();
-                          },
-                          text: save,
-                          colorText: Colors.white,
-                          backgroundColor:
-                              const Color.fromRGBO(23, 193, 232, 1),
-                          outlineColor: const Color.fromRGBO(23, 193, 232, 1),
-                        ),
-                        SizedBox(
-                          width: 20.w,
-                        ),
-                      ],
-                    ),
-                  ),
+                      ),
+                    ],
+                  )
                 ],
-              )
-            ],
-          ),
-        ));
+              ),
+            ));
+      },
+    );
   }
 }
 
@@ -4807,8 +4798,8 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                         },
                         text: "Đóng",
                         colorText: Colors.white,
-                        backgroundColor: Color.fromRGBO(131, 146, 171, 1),
-                        outlineColor: Color.fromRGBO(131, 146, 171, 1),
+                        backgroundColor: const Color.fromRGBO(131, 146, 171, 1),
+                        outlineColor: const Color.fromRGBO(131, 146, 171, 1),
                       ),
                       SizedBox(
                         width: 20.w,
@@ -4825,8 +4816,8 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                         },
                         text: "Lưu mặt hàng",
                         colorText: Colors.white,
-                        backgroundColor: Color.fromRGBO(23, 193, 232, 1),
-                        outlineColor: Color.fromRGBO(23, 193, 232, 1),
+                        backgroundColor: const Color.fromRGBO(23, 193, 232, 1),
+                        outlineColor: const Color.fromRGBO(23, 193, 232, 1),
                       ),
                       SizedBox(
                         width: 20.w,
@@ -4844,5 +4835,3 @@ class _CreateItemDialogState extends State<CreateItemDialog>
 }
 
 // Navigator.of(context).pop();
-
-

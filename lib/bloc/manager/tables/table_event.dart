@@ -38,15 +38,16 @@ class GetTableFoods extends TableEvent {
   final String roomId;
   final String tableId;
   final String limit; //phan trang
+  final String page;
 
-  const GetTableFoods({
-    required this.client,
-    required this.shopId,
-    this.isApi = true,
-    required this.roomId,
-    required this.tableId,
-    required this.limit,
-  });
+  const GetTableFoods(
+      {required this.client,
+      required this.shopId,
+      this.isApi = true,
+      required this.roomId,
+      required this.tableId,
+      required this.limit,
+      required this.page});
 
   @override
   List<Object> get props => [];
