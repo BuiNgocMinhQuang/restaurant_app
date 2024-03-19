@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/food_table_data_model.dart';
+import 'package:app_restaurant/model/switch_table_model.dart';
 import 'package:app_restaurant/model/table_model.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:bloc/bloc.dart';
@@ -74,6 +75,63 @@ class TableBloc extends Bloc<TableEvent, TableState> {
   TableBloc() : super(const TableState()) {
     on<GetTableInfor>(_onGetTableInfor);
     on<GetTableFoods>(_onGetTableFoods);
+    on<GetTableSwitchInfor>(_onGetSwitchTableInfor);
+  }
+
+  void _onGetSwitchTableInfor(
+    GetTableSwitchInfor event,
+    Emitter<TableState> emit,
+  ) async {
+    emit(state.copyWith(tableStatus: TableStatus.loading));
+    await Future.delayed(const Duration(seconds: 1));
+
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      print("TOKEN GET TABLE $token");
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$getSwitchTable'),
+        headers: {
+          // 'Content-type': 'application/json',
+          // 'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: {
+          'client': event.client,
+          'shop_id': event.shopId,
+          'is_api': event.isApi.toString(),
+          'room_id': event.roomId,
+          'table_id': event.tableId,
+          'order_id': event.orderId
+        },
+      );
+      final data = jsonDecode(respons.body);
+      print("DATA SWITCH $data");
+      var message = data['message'];
+      try {
+        if (data['status'] == 200) {
+          // print("DATA Table $data");
+
+          var switchTableDataRes = SwitchTableDataModel.fromJson(data);
+          emit(state.copyWith(switchTableDataModel: switchTableDataRes));
+          emit(state.copyWith(tableStatus: TableStatus.succes));
+        } else {
+          print("ERROR TABLE INFOR danhjdba");
+
+          emit(state.copyWith(tableStatus: TableStatus.failed));
+          emit(state.copyWith(errorText: message['text']));
+        }
+      } catch (error) {
+        print("ERROR TABLE INFOR1111 $error");
+
+        emit(state.copyWith(tableStatus: TableStatus.failed));
+        emit(state.copyWith(errorText: someThingWrong));
+      }
+    } catch (error) {
+      print("ERROR TABLE INFOR222 $error");
+      emit(state.copyWith(tableStatus: TableStatus.failed));
+      emit(state.copyWith(errorText: someThingWrong));
+    }
   }
 
   void _onGetTableInfor(

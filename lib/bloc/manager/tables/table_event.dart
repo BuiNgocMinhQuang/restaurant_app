@@ -31,6 +31,27 @@ class GetTableInfor extends TableEvent {
   List<Object> get props => [];
 }
 
+class GetTableSwitchInfor extends TableEvent {
+  final String client;
+  final String shopId;
+  final bool isApi;
+  final String roomId;
+  final String tableId;
+  final String orderId;
+
+  const GetTableSwitchInfor({
+    required this.client,
+    required this.shopId,
+    this.isApi = true,
+    required this.roomId,
+    required this.tableId,
+    required this.orderId,
+  });
+
+  @override
+  List<Object> get props => [];
+}
+
 class GetTableFoods extends TableEvent {
   final String client;
   final String shopId;

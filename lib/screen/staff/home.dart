@@ -51,6 +51,19 @@ class _StaffBookingTableState extends State<StaffBookingTable>
         tableId: tableId));
   }
 
+  void getSwitchTableInfor(
+      {String? roomId,
+      required String tableId,
+      required String role,
+      required String orderId}) async {
+    BlocProvider.of<TableBloc>(context).add(GetTableSwitchInfor(
+        client: role,
+        shopId: getStaffShopID,
+        roomId: roomId ?? '',
+        tableId: tableId,
+        orderId: orderId));
+  }
+
   void getFoodTableData(String roomId, String tableId, String role) async {
     BlocProvider.of<TableBloc>(context).add(GetTableFoods(
         client: role,
@@ -211,6 +224,11 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                               1,
                                                       itemBuilder:
                                                           (context, index) {
+                                                        var tableName = data
+                                                                .tables?[index]
+                                                                .tableName
+                                                                .toString() ??
+                                                            ''; //truyền tên bàn
                                                         var roomName =
                                                             data.storeRoomName ??
                                                                 '';
@@ -314,20 +332,29 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                               }, eventButton2:
                                                                                 () {
                                                                                 // getDataTabIndex(roomId: state.listRoomModel!.rooms![indexRoomID].storeRoomId.toString(), role: "staff");
-                                                                                getTableInfor(
+                                                                                // getTableInfor(
+                                                                                //   roomId: data.storeRoomId.toString(),
+                                                                                //   tableId: data.tables![index].roomTableId.toString(),
+                                                                                //   role: "staff",
+                                                                                // );
+                                                                                getSwitchTableInfor(
                                                                                   roomId: data.storeRoomId.toString(),
                                                                                   tableId: data.tables![index].roomTableId.toString(),
                                                                                   role: "staff",
+                                                                                  orderId: data.tables![index].orderId.toString(),
                                                                                 );
                                                                                 showDialog(
                                                                                     context: context,
                                                                                     builder: (BuildContext context) {
                                                                                       return MoveTableDialog(
-                                                                                        listRoom: state.listRoomModel!.rooms![index],
-                                                                                        listNameRoom: listRoomName,
-                                                                                        currentTable: data.tables![index],
+                                                                                        nameTable: tableName,
+                                                                                        listRoom: listRoomID,
+                                                                                        listTable: [],
+                                                                                        // listNameRoom: listRoomName,
+                                                                                        // orderID: data.tables![index].orderId.toString(),
+                                                                                        // currentTable: data.tables![index],
                                                                                         nameRoom: roomName,
-                                                                                        idRoom: listRoomID,
+                                                                                        // idRoom: listRoomID,
                                                                                         eventSaveButton: saveMoveTableModal,
                                                                                       );
                                                                                     });

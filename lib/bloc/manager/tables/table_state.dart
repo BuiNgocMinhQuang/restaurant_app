@@ -5,29 +5,38 @@ class TableState extends Equatable {
       {this.errorText,
       this.tableStatus,
       this.tableModel,
-      this.foodTableDataModel});
+      this.foodTableDataModel,
+      this.switchTableDataModel});
 
   final String? errorText;
   final TableStatus? tableStatus;
   final TableModel? tableModel;
   final FoodTableDataModel? foodTableDataModel;
+  final SwitchTableDataModel? switchTableDataModel;
 
   TableState copyWith(
       {String? errorText,
       TableStatus? tableStatus,
       TableModel? tableModel,
-      FoodTableDataModel? foodTableDataModel}) {
+      FoodTableDataModel? foodTableDataModel,
+      SwitchTableDataModel? switchTableDataModel}) {
     return TableState(
-      errorText: errorText ?? this.errorText,
-      tableStatus: tableStatus ?? this.tableStatus,
-      tableModel: tableModel ?? this.tableModel,
-      foodTableDataModel: foodTableDataModel ?? this.foodTableDataModel,
-    );
+        errorText: errorText ?? this.errorText,
+        tableStatus: tableStatus ?? this.tableStatus,
+        tableModel: tableModel ?? this.tableModel,
+        foodTableDataModel: foodTableDataModel ?? this.foodTableDataModel,
+        switchTableDataModel:
+            switchTableDataModel ?? this.switchTableDataModel);
   }
 
   @override
-  List<Object?> get props =>
-      [errorText, tableStatus, tableModel, foodTableDataModel];
+  List<Object?> get props => [
+        errorText,
+        tableStatus,
+        tableModel,
+        foodTableDataModel,
+        switchTableDataModel
+      ];
 }
 
 enum TableStatus { loading, succes, failed }

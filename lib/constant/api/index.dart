@@ -8,3 +8,4 @@ const String staffLogout = 'staff/logout';
 const String managerLogout = 'user/logout';
 const String cancleTable = 'booking/table/close';
 const String saveInforTable = 'booking/table/information';
+const String getSwitchTable = 'booking/table/switch';

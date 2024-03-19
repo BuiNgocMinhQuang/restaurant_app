@@ -1143,354 +1143,349 @@ class _BookingTableDialogState extends State<BookingTableDialog>
 ///Modal chuyển bàn
 class MoveTableDialog extends StatelessWidget {
   final Function eventSaveButton;
-  final Tables? currentTable;
+  final String nameTable;
   final String nameRoom;
-  final Rooms listRoom;
-  final List listNameRoom;
-  final List idRoom;
-  const MoveTableDialog({
-    Key? key,
-    required this.eventSaveButton,
-    required this.currentTable,
-    required this.nameRoom,
-    required this.listRoom,
-    required this.listNameRoom,
-    required this.idRoom,
-  }) : super(key: key);
+  final List listRoom;
+  final List listTable;
+
+  const MoveTableDialog(
+      {Key? key,
+      required this.eventSaveButton,
+      required this.nameTable,
+      required this.nameRoom,
+      required this.listRoom,
+      required this.listTable})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TableBloc, TableState>(
-      builder: (context, state) {
-        return AlertDialog(
-            contentPadding: const EdgeInsets.all(0),
-            surfaceTintColor: Colors.white,
-            backgroundColor: Colors.white,
-            content: SizedBox(
-              width: double.maxFinite,
-              child: ListView(
-                shrinkWrap: true,
+    return AlertDialog(
+        contentPadding: const EdgeInsets.all(0),
+        surfaceTintColor: Colors.white,
+        backgroundColor: Colors.white,
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                          padding: EdgeInsets.all(8.w),
-                          child: Container(
-                              width: 1.sw,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(15.w),
-                                    topRight: Radius.circular(15.w)),
-                                // color: Colors.amber,
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                  Padding(
+                      padding: EdgeInsets.all(8.w),
+                      child: Container(
+                          width: 1.sw,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(15.w),
+                                topRight: Radius.circular(15.w)),
+                            // color: Colors.amber,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
                                 children: [
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 20.w),
-                                        child: TextApp(
-                                          text: currentTable?.tableName
-                                                  .toString() ??
-                                              '',
-                                          fontsize: 18.sp,
-                                          color: blueText,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 20.w),
-                                        child: TextApp(
-                                          text: nameRoom,
-                                          fontsize: 14.sp,
-                                          color: blueText,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                      )
-                                    ],
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 20.w),
+                                    child: TextApp(
+                                      text: nameTable,
+                                      fontsize: 18.sp,
+                                      color: blueText,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   )
                                 ],
-                              ))),
-                      const Divider(
-                        height: 1,
-                        color: Colors.black,
-                      ),
-                      SingleChildScrollView(
-                        child: Padding(
-                          padding: EdgeInsets.all(20.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
+                              ),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 20.w),
+                                    child: TextApp(
+                                      text: nameRoom,
+                                      fontsize: 14.sp,
+                                      color: blueText,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ))),
+                  const Divider(
+                    height: 1,
+                    color: Colors.black,
+                  ),
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.all(20.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          TextApp(
+                            text: "Bàn hiện tại",
+                            fontsize: 12.sp,
+                            fontWeight: FontWeight.bold,
+                            color: blueText,
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          ButtonApp(
+                            event: () {},
+                            text: "Table 1",
+                            colorText: Colors.blue,
+                            backgroundColor: Colors.white,
+                            outlineColor: Colors.blue,
+                            radius: 8.r,
+                          ),
+                          space10H,
+                          TextApp(
+                            text: "Lưu ý: Bàn chỉ được ghép khi cùng phòng",
+                            fontsize: 12.sp,
+                            fontWeight: FontWeight.normal,
+                            color: grey,
+                          ),
+                          space10H,
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               TextApp(
-                                text: "Bàn hiện tại",
+                                text: "Bàn có thể đổi:",
                                 fontsize: 12.sp,
                                 fontWeight: FontWeight.bold,
                                 color: blueText,
                               ),
                               SizedBox(
-                                height: 10.h,
+                                width: 20.w,
                               ),
-                              ButtonApp(
-                                event: () {},
-                                text: currentTable?.tableName.toString() ?? '',
-                                colorText: Colors.blue,
-                                backgroundColor: Colors.white,
-                                outlineColor: Colors.blue,
-                                radius: 8.r,
-                              ),
-                              space10H,
-                              TextApp(
-                                text: "Lưu ý: Bàn chỉ được ghép khi cùng phòng",
-                                fontsize: 12.sp,
-                                fontWeight: FontWeight.normal,
-                                color: grey,
-                              ),
-                              space10H,
+                              // state.listRoomModel!.rooms!
+                              //           .map((data) =>
+                              //               Tab(text: data.storeRoomName))
+                              //           .toList()
+                              Flexible(
+                                fit: FlexFit.tight,
+                                child: DropdownSearch(
+                                  // onChanged: (){},
+                                  // validator: (value) {
+                                  //   if (value == "Chọn phòng") {
+                                  //     return canNotNull;
+                                  //   }
+                                  //   return null;
+                                  // },
+
+                                  items: listRoom,
+                                  dropdownButtonProps: DropdownButtonProps(),
+                                  dropdownDecoratorProps:
+                                      DropDownDecoratorProps(
+                                    dropdownSearchDecoration: InputDecoration(
+                                      fillColor: const Color.fromARGB(
+                                          255, 226, 104, 159),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(
+                                            color: Color.fromRGBO(
+                                                214, 51, 123, 0.6),
+                                            width: 2.0),
+                                        borderRadius:
+                                            BorderRadius.circular(8.r),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(8.r),
+                                      ),
+                                      isDense: true,
+                                      contentPadding: EdgeInsets.all(15.w),
+                                    ),
+                                  ),
+                                  selectedItem: nameRoom,
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
                               Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  TextApp(
-                                    text: "Bàn có thể đổi:",
-                                    fontsize: 12.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: blueText,
+                                  Container(
+                                    width: 20,
+                                    height: 20,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors
+                                              .blue, //                   <--- border color
+                                          width: 1.w,
+                                        ),
+                                        color: Colors.white),
                                   ),
                                   SizedBox(
-                                    width: 20.w,
+                                    width: 5.w,
                                   ),
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    child: DropdownSearch(
-                                      onChanged: (changeRoom) {
-                                        BlocProvider.of<TableBloc>(context).add(
-                                            GetTableInfor(
-                                                client: "staff",
-                                                shopId: getStaffShopID,
-                                                roomId: idRoom[listNameRoom
-                                                        .indexOf(changeRoom)]
-                                                    .toString(),
-                                                tableId: currentTable
-                                                        ?.roomTableId
-                                                        .toString() ??
-                                                    ''));
-                                      },
-                                      items: listNameRoom,
-                                      dropdownButtonProps:
-                                          const DropdownButtonProps(),
-                                      dropdownDecoratorProps:
-                                          DropDownDecoratorProps(
-                                        dropdownSearchDecoration:
-                                            InputDecoration(
-                                          fillColor: const Color.fromARGB(
-                                              255, 226, 104, 159),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    214, 51, 123, 0.6),
-                                                width: 2.0),
-                                            borderRadius:
-                                                BorderRadius.circular(8.r),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8.r),
-                                          ),
-                                          isDense: true,
-                                          contentPadding: EdgeInsets.all(15.w),
-                                        ),
-                                      ),
-                                      selectedItem: nameRoom,
-                                    ),
-                                  )
+                                  TextApp(text: "Đang phục vụ")
                                 ],
                               ),
                               SizedBox(
-                                height: 10.h,
+                                width: 10.w,
                               ),
                               Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: 20,
-                                        height: 20,
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: Colors
-                                                  .blue, //                   <--- border color
-                                              width: 1.w,
-                                            ),
-                                            color: Colors.white),
-                                      ),
-                                      SizedBox(
-                                        width: 5.w,
-                                      ),
-                                      TextApp(text: "Đang phục vụ")
-                                    ],
+                                  Container(
+                                    width: 20,
+                                    height: 20,
+                                    color: Colors.blue,
                                   ),
                                   SizedBox(
-                                    width: 10.w,
+                                    width: 5.w,
                                   ),
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: 20,
-                                        height: 20,
-                                        color: Colors.blue,
-                                      ),
-                                      SizedBox(
-                                        width: 5.w,
-                                      ),
-                                      TextApp(text: "Bàn trống")
-                                    ],
-                                  )
+                                  TextApp(text: "Bàn trống")
                                 ],
-                              ),
-                              space15H,
-                              BlocBuilder<TableBloc, TableState>(
-                                builder: (context, state) {
-                                  if (state.tableStatus == TableStatus.succes) {
-                                    var listBanne =
-                                        state.tableModel?.tablesNoBooking;
-
-                                    return GridView.builder(
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemCount: listBanne!.length,
-                                        gridDelegate:
-                                            SliverGridDelegateWithFixedCrossAxisCount(
-                                                crossAxisCount: 2,
-                                                mainAxisExtent: 65.h),
-                                        itemBuilder: (context, index) {
-                                          return Padding(
-                                            padding: EdgeInsets.all(10.w),
-                                            child: ButtonApp(
-                                              event: () {},
-                                              text:
-                                                  listBanne[index].tableName ??
-                                                      '',
-                                              colorText: Colors.blue,
-                                              backgroundColor: Colors.white,
-                                              outlineColor: Colors.blue,
-                                              radius: 8.r,
-                                            ),
-                                          );
-                                        });
-                                  } else if (state.tableStatus ==
-                                      TableStatus.loading) {
-                                    return Center(
-                                      child: SizedBox(
-                                        width: 200.w,
-                                        height: 120.w,
-                                        child: Lottie.asset(
-                                            'assets/lottie/loading_7_color.json'),
-                                      ),
-                                    );
-                                  } else {
-                                    return Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            width: 100,
-                                            height: 100,
-                                            child: Lottie.asset(
-                                                'assets/lottie/error.json'),
-                                          ),
-                                          space30H,
-                                          TextApp(
-                                            text: state.errorText.toString(),
-                                            fontsize: 20.sp,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          space30H,
-                                          Container(
-                                            width: 200,
-                                            child: ButtonGradient(
-                                              color1: color1BlueButton,
-                                              color2: color2BlueButton,
-                                              event: () {},
-                                              text: 'Thử lại',
-                                              fontSize: 12.sp,
-                                              radius: 8.r,
-                                              textColor: Colors.white,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
+                              )
                             ],
                           ),
-                        ),
+                          space15H,
+                          BlocBuilder<TableBloc, TableState>(
+                            builder: (context, state) {
+                              if (state.tableStatus == TableStatus.succes) {
+                                var listBanne =
+                                    state.tableModel?.tablesNoBooking;
+
+                                return GridView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount: listBanne!.length ?? 1,
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                    ),
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                          padding: EdgeInsets.all(10.w),
+                                          child: InkWell(
+                                            onTap: () {},
+                                            child: Container(
+                                              width: 100,
+                                              height: 30,
+                                              color: Colors.amber,
+                                              child: SizedBox(
+                                                width: 100.w,
+                                                child: Center(
+                                                  child: TextApp(
+                                                    text: listBanne[index]
+                                                            .tableName ??
+                                                        '',
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ));
+                                    });
+                              } else if (state.tableStatus ==
+                                  TableStatus.loading) {
+                                return Center(
+                                  child: SizedBox(
+                                    width: 200.w,
+                                    height: 120.w,
+                                    child: Lottie.asset(
+                                        'assets/lottie/loading_7_color.json'),
+                                  ),
+                                );
+                              } else {
+                                return Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 100,
+                                        height: 100,
+                                        child: Lottie.asset(
+                                            'assets/lottie/error.json'),
+                                      ),
+                                      space30H,
+                                      TextApp(
+                                        text: state.errorText.toString(),
+                                        fontsize: 20.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      space30H,
+                                      Container(
+                                        width: 200,
+                                        child: ButtonGradient(
+                                          color1: color1BlueButton,
+                                          color2: color2BlueButton,
+                                          event: () {},
+                                          text: 'Thử lại',
+                                          fontSize: 12.sp,
+                                          radius: 8.r,
+                                          textColor: Colors.white,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ],
                       ),
-                      Container(
-                        width: 1.sw,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(15.w),
-                              bottomRight: Radius.circular(15.w)),
-                          // color: Colors.green,
+                    ),
+                  ),
+                  Container(
+                    width: 1.sw,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(15.w),
+                          bottomRight: Radius.circular(15.w)),
+                      // color: Colors.green,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ButtonApp(
+                          event: () {
+                            Navigator.of(context).pop();
+                          },
+                          text: "Đóng",
+                          colorText: Colors.white,
+                          backgroundColor:
+                              const Color.fromRGBO(131, 146, 171, 1),
+                          outlineColor: const Color.fromRGBO(131, 146, 171, 1),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            ButtonApp(
-                              event: () {
-                                Navigator.of(context).pop();
-                              },
-                              text: "Đóng",
-                              colorText: Colors.white,
-                              backgroundColor:
-                                  const Color.fromRGBO(131, 146, 171, 1),
-                              outlineColor:
-                                  const Color.fromRGBO(131, 146, 171, 1),
-                            ),
-                            SizedBox(
-                              width: 20.w,
-                            ),
-                            ButtonApp(
-                              event: () {
-                                eventSaveButton();
-                              },
-                              text: save,
-                              colorText: Colors.white,
-                              backgroundColor:
-                                  const Color.fromRGBO(23, 193, 232, 1),
-                              outlineColor:
-                                  const Color.fromRGBO(23, 193, 232, 1),
-                            ),
-                            SizedBox(
-                              width: 20.w,
-                            ),
-                          ],
+                        SizedBox(
+                          width: 20.w,
                         ),
-                      ),
-                    ],
-                  )
+                        ButtonApp(
+                          event: () {
+                            eventSaveButton();
+                          },
+                          text: save,
+                          colorText: Colors.white,
+                          backgroundColor:
+                              const Color.fromRGBO(23, 193, 232, 1),
+                          outlineColor: const Color.fromRGBO(23, 193, 232, 1),
+                        ),
+                        SizedBox(
+                          width: 20.w,
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
-              ),
-            ));
-      },
-    );
+              )
+            ],
+          ),
+        ));
   }
 }
 
