@@ -267,13 +267,13 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                       (BuildContext
                                                                           context) {
                                                                     return BookingTableDialog(
-                                                                      nameTable:
-                                                                          'hehe',
-                                                                      eventSaveButton:
-                                                                          saveBookingModal,
-                                                                      isUsingTable:
-                                                                          true,
-                                                                    );
+                                                                        // nameTable:
+                                                                        //     'hehe',
+                                                                        // eventSaveButton:
+                                                                        //     saveBookingModal,
+                                                                        // isUsingTable:
+                                                                        //     true,
+                                                                        );
                                                                   });
                                                             }, eventButton2:
                                                                   () {
@@ -334,13 +334,13 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                       (BuildContext
                                                                           context) {
                                                                     return BookingTableDialog(
-                                                                      nameTable:
-                                                                          'hehe',
-                                                                      eventSaveButton:
-                                                                          () {},
-                                                                      isUsingTable:
-                                                                          true,
-                                                                    );
+                                                                        // nameTable:
+                                                                        //     'hehe',
+                                                                        // eventSaveButton:
+                                                                        //     () {},
+                                                                        // isUsingTable:
+                                                                        //     true,
+                                                                        );
                                                                   });
                                                             })),
                                                 ],

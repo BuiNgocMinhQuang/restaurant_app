@@ -165,7 +165,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               .setString(key: 'auth_staff', val: authDataString);
 
           emit(state.copyWith(loginStatus: LoginStatus.success));
+
           navigatorKey.currentContext?.go("/staff_home");
+
+          Future.delayed(Duration(milliseconds: 500), () {
+            print("DANG NHAP THNAH CONG");
+            showLoginSuccesDialog();
+          });
         } else {
           print("LoginFailure2");
           emit(state.copyWith(loginStatus: LoginStatus.failed));

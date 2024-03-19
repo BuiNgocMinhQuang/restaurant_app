@@ -8,6 +8,7 @@ import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/list_room_model.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/share_getString.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
@@ -27,24 +28,24 @@ import 'package:lottie/lottie.dart';
 
 ///Modal quản lí bàn
 class BookingTableDialog extends StatefulWidget {
-  final Function eventSaveButton;
-  final bool isUsingTable;
-  final String nameTable;
-  final List? listNameTableJoined;
-  final int? indexRoomTruyenVao;
-  final int? indexTableTruyenVao;
-  final List<Tables>? listTableTruyenVao;
+  // final Function eventSaveButton;
+  // final bool isUsingTable;
+  // final String nameTable;
+  // final List? listNameTableJoined;
+  final int? idRoom;
+  // final int? indexTableTruyenVao;
+  final List<Tables>? listTableOfRoom;
   final Tables? currentTable;
 
   const BookingTableDialog({
     Key? key,
-    required this.eventSaveButton,
-    required this.nameTable,
-    this.listNameTableJoined,
-    this.isUsingTable = false,
-    this.indexRoomTruyenVao,
-    this.indexTableTruyenVao,
-    this.listTableTruyenVao,
+    // required this.eventSaveButton,
+    // required this.nameTable,
+    // this.listNameTableJoined,
+    // this.isUsingTable = false,
+    this.idRoom,
+    // this.indexTableTruyenVao,
+    this.listTableOfRoom,
     this.currentTable,
   }) : super(key: key);
 
@@ -119,7 +120,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
     _tabController!.addListener(_handleTabSelection);
     //
     setState(() {
-      listBanDaGhep = widget.listTableTruyenVao
+      listBanDaGhep = widget.listTableOfRoom
               ?.where((table) =>
                   table.orderId == widget.currentTable?.orderId &&
                   table.roomTableId != widget.currentTable?.roomTableId)
@@ -135,7 +136,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext buildContext) {
     // final hours = dateTime.hour.toString().padLeft(2, '0');
     // final minute = dateTime.minute.toString().padLeft(2, '0');
     final filterProducts = listFood.where((product) {
@@ -147,7 +148,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
           foodTitle.contains(input);
     }).toList();
 
-    // print("ROMM TRUYEN VAO ${widget.indexRoomTruyenVao}");
+    // print("ROMM TRUYEN VAO ${widget.idRoom}");
     // print("TABLE TRUYEN VAO ${widget.indexTableTruyenVao}");
 
     return BlocBuilder<TableBloc, TableState>(
@@ -161,26 +162,27 @@ class _BookingTableDialogState extends State<BookingTableDialog>
               state.tableModel?.booking?.order?.endBookedTableAt ??
                   _dateStartController.text;
           noteController.text = state.tableModel?.booking?.order?.note ?? '';
-          var listTableCanJoin = state.tableModel!.tablesNoBooking!
-              .map((data) => data.tableName)
-              .toList();
-          var listTableCoChungOrderID = widget.listTableTruyenVao
+          // var listTableCanJoin = state.tableModel!.tablesNoBooking!
+          //     .map((data) => data.tableName)
+          //     .toList();
+          var listTableHaveSameOrderID = widget.listTableOfRoom
               ?.where((table) =>
                   table.orderId == widget.currentTable?.orderId &&
-                  table.roomTableId != widget.currentTable?.roomTableId)
+                  table.roomTableId != widget.currentTable?.roomTableId &&
+                  table.orderId != null)
               .toList();
-          var listTableTrong = widget.listTableTruyenVao
-              ?.where(((table) => table.bookingStatus == true))
+          var listTableNoBooking = widget.listTableOfRoom
+              ?.where(((table) =>
+                  table.bookingStatus == true &&
+                  table.roomTableId != widget.currentTable?.roomTableId))
               .toList();
-          var listTableName =
-              listTableCoChungOrderID?.map((e) => e.tableName).toList();
-          var listTableIDToSent =
-              listTableCoChungOrderID?.map((e) => e.roomTableId).toList();
-
-          print("DU MAAAA ${listTableCoChungOrderID?.length}");
+          // var listTableName =
+          //     listTableHaveSameOrderID?.map((e) => e.tableName).toList();
+          // var listTableIDToSent =
+          //     listTableHaveSameOrderID?.map((e) => e.roomTableId).toList();
 
           return BlocBuilder<TableCancleBloc, TableCancleState>(
-              builder: (context, stateCancleTable) {
+              builder: (contextCancleTable, stateCancleTable) {
             return AlertDialog(
                 contentPadding: const EdgeInsets.all(0),
                 surfaceTintColor: Colors.white,
@@ -196,7 +198,8 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           TextApp(
-                            text: "Quản lý bàn đặt: ${widget.nameTable}",
+                            text:
+                                "Quản lý bàn đặt: ${widget.currentTable?.tableName.toString() ?? ''}",
                             fontsize: 18.sp,
                             color: blueText,
                             fontWeight: FontWeight.bold,
@@ -401,10 +404,10 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                           key: _popupCustomValidationKey,
                                           itemAsString: (item) =>
                                               item.tableName,
-                                          items: (listTableTrong ?? [])
+                                          items: (listTableNoBooking ?? [])
                                               as List<Tables>,
                                           selectedItems:
-                                              listTableCoChungOrderID ?? [],
+                                              listTableHaveSameOrderID ?? [],
                                           onChanged: (listSelectedTable) {
                                             setState(() {
                                               listBanDaGhep = listSelectedTable;
@@ -501,11 +504,10 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                   .add(SaveTableInfor(
                                                 client: "staff",
                                                 shopId: getStaffShopID,
-                                                roomId: widget
-                                                    .indexRoomTruyenVao
-                                                    .toString(),
+                                                roomId:
+                                                    widget.idRoom.toString(),
                                                 tableId: widget
-                                                    .indexTableTruyenVao
+                                                    .currentTable!.roomTableId
                                                     .toString(),
                                                 clientName:
                                                     customerNameController.text,
@@ -521,6 +523,8 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                         .toList() ??
                                                     [],
                                               ));
+                                              Navigator.of(context).pop();
+                                              showLoginSuccesDialog();
                                             },
                                             text: save,
                                             colorText: Colors.white,

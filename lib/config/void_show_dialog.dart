@@ -1,4 +1,5 @@
 import 'package:app_restaurant/bloc/login/login_bloc.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
@@ -42,15 +43,17 @@ void showFailedModal(context, String? desWhyFail) {
   ).show();
 }
 
-void showLoginSuccesDialog(context) {
+void showLoginSuccesDialog() {
   AwesomeDialog(
-    context: context,
+    context: navigatorKey.currentContext!,
+    autoDismiss: false,
     animType: AnimType.leftSlide,
     headerAnimationLoop: false,
     dialogType: DialogType.success,
     showCloseIcon: true,
     title: 'Thành công',
     desc: 'Đăng nhập thành công!',
+
     btnOkOnPress: () {
       debugPrint('OnClcik');
     },
@@ -58,6 +61,9 @@ void showLoginSuccesDialog(context) {
     // btnOkIcon: Icons.check_circle,
     onDismissCallback: (type) {
       debugPrint('Dialog Dissmiss from callback $type');
+      if (type == DismissType.btnOk) {
+        Navigator.of(navigatorKey.currentContext!).pop();
+      }
     },
   ).show();
 }
