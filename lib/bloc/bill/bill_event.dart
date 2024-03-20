@@ -23,3 +23,47 @@ class GetBillInfor extends BillInforEvent {
   @override
   List<Object> get props => [];
 }
+
+class AddFoodToBill extends BillInforEvent {
+  final String client;
+  final String shopId;
+  final bool isApi;
+  final String roomId;
+  final String tableId;
+  final String? orderId;
+  final String foodId;
+
+  const AddFoodToBill(
+      {required this.client,
+      required this.shopId,
+      this.isApi = true,
+      required this.roomId,
+      required this.tableId,
+      required this.orderId,
+      required this.foodId});
+
+  @override
+  List<Object> get props => [];
+}
+
+class RemoveFoodToBill extends BillInforEvent {
+  final String client;
+  final String shopId;
+  final bool isApi;
+  final String roomId;
+  final String tableId;
+  final String? orderId;
+  final String foodId;
+
+  const RemoveFoodToBill(
+      {required this.client,
+      required this.shopId,
+      this.isApi = true,
+      required this.roomId,
+      required this.tableId,
+      required this.orderId,
+      required this.foodId});
+
+  @override
+  List<Object> get props => [];
+}

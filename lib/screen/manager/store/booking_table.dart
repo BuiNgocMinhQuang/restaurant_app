@@ -308,17 +308,17 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                               //     });
                                                             }, eventButton4:
                                                                   () {
-                                                              showDialog(
-                                                                  context:
-                                                                      context,
-                                                                  builder:
-                                                                      (BuildContext
-                                                                          context) {
-                                                                    return PayBillDialog(
-                                                                      eventSaveButton:
-                                                                          savePayBillModal,
-                                                                    );
-                                                                  });
+                                                              // showDialog(
+                                                              //     context:
+                                                              //         context,
+                                                              //     builder:
+                                                              //         (BuildContext
+                                                              //             context) {
+                                                              //       return PayBillDialog(
+                                                              //         eventSaveButton:
+                                                              //             savePayBillModal,
+                                                              //       );
+                                                              //     });
                                                             })
                                                           : PopUpMenuUnUseTable(
                                                               eventButton1: () {

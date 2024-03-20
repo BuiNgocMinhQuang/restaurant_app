@@ -37,6 +37,7 @@ dependencies:
   connectivity_plus: ^5.0.2
   lottie: ^3.1.0
   money_formatter: ^0.0.5
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

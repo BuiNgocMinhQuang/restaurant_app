@@ -1,21 +1,18 @@
 import 'dart:io';
-
 import 'package:app_restaurant/bloc/bill/bill_bloc.dart';
-import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
+import 'package:app_restaurant/bloc/payment/payment_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
+import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/config/fake_data.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/list_room_model.dart';
-import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/share_getString.dart';
-import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/custom_tab.dart';
-import 'package:app_restaurant/widgets/dots_line.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
@@ -1611,9 +1608,19 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
 class SeeBillDialog extends StatelessWidget {
   final Tables? currentTable;
   final String nameRoom;
-  const SeeBillDialog(
-      {Key? key, required this.currentTable, required this.nameRoom})
-      : super(key: key);
+  final String role;
+  final String shopID;
+  final String? orderID;
+  final String roomID;
+  const SeeBillDialog({
+    Key? key,
+    required this.currentTable,
+    required this.nameRoom,
+    required this.role,
+    required this.shopID,
+    required this.orderID,
+    required this.roomID,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -1761,12 +1768,12 @@ class SeeBillDialog extends StatelessWidget {
                                                         MainAxisAlignment.end,
                                                     children: [
                                                       TextApp(
-                                                          text: state
+                                                          text: formatDateTime(state
                                                                   .billInforModel
                                                                   ?.order
                                                                   ?.createdAt
                                                                   .toString() ??
-                                                              '',
+                                                              ''),
                                                           fontsize: 14.sp),
                                                       SizedBox(
                                                         width: 5.w,
@@ -1889,137 +1896,253 @@ class SeeBillDialog extends StatelessWidget {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,
                                                   children: [
-                                                    Flexible(
-                                                      child: ListView.builder(
-                                                          itemCount: 10,
-                                                          itemBuilder:
-                                                              (context, index) {
-                                                            return Column(
-                                                              children: [
-                                                                Padding(
-                                                                  padding: EdgeInsets
-                                                                      .only(
-                                                                          bottom:
-                                                                              10.h),
-                                                                  child: SizedBox(
-                                                                      width: 1.sw,
-                                                                      child: Padding(
-                                                                        padding:
-                                                                            EdgeInsets.all(20.w),
+                                                    (state.billInforModel
+                                                                    ?.data ==
+                                                                null ||
+                                                            state
+                                                                .billInforModel!
+                                                                .data!
+                                                                .isEmpty)
+                                                        ? Flexible(
+                                                            child: ListView
+                                                                .builder(
+                                                                    itemCount:
+                                                                        1,
+                                                                    itemBuilder:
+                                                                        (context,
+                                                                            index) {
+                                                                      return Padding(
+                                                                        padding: EdgeInsets.only(
+                                                                            top:
+                                                                                30.h,
+                                                                            left: 20.w,
+                                                                            right: 20.w),
                                                                         child:
-                                                                            Column(
-                                                                          children: [
-                                                                            Row(
-                                                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                                                              mainAxisAlignment: MainAxisAlignment.start,
-                                                                              children: [
-                                                                                SizedBox(
-                                                                                  width: 50.w,
-                                                                                  height: 50.w,
-                                                                                  child: Image.asset(
-                                                                                    "assets/images/banner1.png",
-                                                                                    fit: BoxFit.cover,
-                                                                                  ),
-                                                                                ),
-                                                                                space50W,
-                                                                                Column(
-                                                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                  children: [
-                                                                                    TextApp(text: "Ten mon an"),
-                                                                                    TextApp(text: "Gia mon an")
-                                                                                  ],
-                                                                                )
-                                                                              ],
-                                                                            ),
-                                                                            SizedBox(
-                                                                              height: 15.h,
-                                                                            ),
                                                                             Container(
-                                                                                width: 1.sw,
-                                                                                decoration: BoxDecoration(
-                                                                                  borderRadius: BorderRadius.all(Radius.circular(8.r)),
+                                                                          width:
+                                                                              1.sw,
+                                                                          height:
+                                                                              50,
+                                                                          color:
+                                                                              Colors.blue,
+                                                                          child:
+                                                                              Center(
+                                                                            child:
+                                                                                TextApp(
+                                                                              text: "Chưa có món được chọn",
+                                                                              color: Colors.white,
+                                                                              fontsize: 14.sp,
+                                                                              textAlign: TextAlign.center,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      );
+                                                                    }),
+                                                          )
+                                                        : Flexible(
+                                                            child: ListView
+                                                                .builder(
+                                                                    itemCount: state
+                                                                            .billInforModel
+                                                                            ?.data
+                                                                            ?.length ??
+                                                                        0,
+                                                                    itemBuilder:
+                                                                        (context,
+                                                                            index) {
+                                                                      void
+                                                                          addFodd() {
+                                                                        BlocProvider.of<BillInforBloc>(context)
+                                                                            .add(AddFoodToBill(
+                                                                          client:
+                                                                              role,
+                                                                          shopId:
+                                                                              shopID,
+                                                                          roomId:
+                                                                              roomID,
+                                                                          tableId:
+                                                                              currentTable?.roomTableId.toString() ?? '',
+                                                                          orderId:
+                                                                              orderID,
+                                                                          foodId:
+                                                                              state.billInforModel?.data?[index].foodId.toString() ?? '',
+                                                                        ));
 
-                                                                                  // color:
-                                                                                  //     Colors.pink,
-                                                                                ),
-                                                                                child: IntrinsicHeight(
-                                                                                  child: Row(
-                                                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                                        BlocProvider.of<BillInforBloc>(context)
+                                                                            .add(GetBillInfor(
+                                                                          client:
+                                                                              role,
+                                                                          shopId:
+                                                                              shopID,
+                                                                          roomId:
+                                                                              roomID,
+                                                                          tableId:
+                                                                              currentTable?.roomTableId.toString() ?? '',
+                                                                          orderId:
+                                                                              orderID ?? '',
+                                                                        ));
+                                                                      }
+
+                                                                      void
+                                                                          removeFood() {
+                                                                        BlocProvider.of<BillInforBloc>(context)
+                                                                            .add(RemoveFoodToBill(
+                                                                          client:
+                                                                              role,
+                                                                          shopId:
+                                                                              shopID,
+                                                                          roomId:
+                                                                              roomID,
+                                                                          tableId:
+                                                                              currentTable?.roomTableId.toString() ?? '',
+                                                                          orderId:
+                                                                              orderID,
+                                                                          foodId:
+                                                                              state.billInforModel?.data?[index].foodId.toString() ?? '',
+                                                                        ));
+
+                                                                        BlocProvider.of<BillInforBloc>(context)
+                                                                            .add(GetBillInfor(
+                                                                          client:
+                                                                              role,
+                                                                          shopId:
+                                                                              shopID,
+                                                                          roomId:
+                                                                              roomID,
+                                                                          tableId:
+                                                                              currentTable?.roomTableId.toString() ?? '',
+                                                                          orderId:
+                                                                              orderID ?? '',
+                                                                        ));
+                                                                      }
+
+                                                                      return Column(
+                                                                        children: [
+                                                                          Padding(
+                                                                            padding:
+                                                                                EdgeInsets.only(bottom: 10.h),
+                                                                            child: SizedBox(
+                                                                                width: 1.sw,
+                                                                                child: Padding(
+                                                                                  padding: EdgeInsets.all(20.w),
+                                                                                  child: Column(
                                                                                     children: [
-                                                                                      InkWell(
-                                                                                        onTap: () {},
-                                                                                        child: Container(
-                                                                                          width: 50.w,
-                                                                                          height: 25.w,
-                                                                                          decoration: BoxDecoration(
-                                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(8.r), bottomLeft: Radius.circular(8.r)),
-                                                                                              gradient: const LinearGradient(
-                                                                                                begin: Alignment.topRight,
-                                                                                                end: Alignment.bottomLeft,
-                                                                                                colors: [
-                                                                                                  Color.fromRGBO(33, 82, 255, 1),
-                                                                                                  Color.fromRGBO(33, 212, 253, 1)
-                                                                                                ],
-                                                                                              )),
-                                                                                          child: Center(
-                                                                                            child: TextApp(text: "-", textAlign: TextAlign.center, color: Colors.white, fontsize: 14.sp),
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                      Expanded(
-                                                                                          child: Container(
-                                                                                        decoration: BoxDecoration(
-                                                                                          border: Border.all(width: 0.4, color: Colors.grey),
-                                                                                        ),
-                                                                                        child: Center(
-                                                                                          child: TextApp(
-                                                                                            text: "1",
-                                                                                            textAlign: TextAlign.center,
-                                                                                          ),
-                                                                                        ),
-                                                                                      )),
-                                                                                      InkWell(
-                                                                                        onTap: () {},
-                                                                                        child: Container(
-                                                                                          width: 50.w,
-                                                                                          height: 25.w,
-                                                                                          decoration: BoxDecoration(
-                                                                                              borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), bottomRight: Radius.circular(8.r)),
-                                                                                              gradient: const LinearGradient(
-                                                                                                begin: Alignment.topRight,
-                                                                                                end: Alignment.bottomLeft,
-                                                                                                colors: [
-                                                                                                  Color.fromRGBO(33, 82, 255, 1),
-                                                                                                  Color.fromRGBO(33, 212, 253, 1)
-                                                                                                ],
-                                                                                              )),
-                                                                                          child: Center(
-                                                                                            child: TextApp(
-                                                                                              text: "+",
-                                                                                              textAlign: TextAlign.center,
-                                                                                              color: Colors.white,
-                                                                                              fontsize: 14.sp,
+                                                                                      Row(
+                                                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                                                        children: [
+                                                                                          SizedBox(
+                                                                                            width: 50.w,
+                                                                                            height: 50.w,
+                                                                                            child: Image.asset(
+                                                                                              "assets/images/banner1.png",
+                                                                                              fit: BoxFit.cover,
                                                                                             ),
                                                                                           ),
-                                                                                        ),
-                                                                                      )
+                                                                                          space50W,
+                                                                                          Column(
+                                                                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                            children: [
+                                                                                              TextApp(text: state.billInforModel?.data?[index].foodName ?? ''),
+                                                                                              TextApp(text: "${MoneyFormatter(amount: (state.billInforModel?.data?[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ")
+                                                                                            ],
+                                                                                          )
+                                                                                        ],
+                                                                                      ),
+                                                                                      SizedBox(
+                                                                                        height: 15.h,
+                                                                                      ),
+                                                                                      Container(
+                                                                                          width: 1.sw,
+                                                                                          decoration: BoxDecoration(
+                                                                                            borderRadius: BorderRadius.all(Radius.circular(8.r)),
+
+                                                                                            // color:
+                                                                                            //     Colors.pink,
+                                                                                          ),
+                                                                                          child: IntrinsicHeight(
+                                                                                            child: Row(
+                                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                                                              children: [
+                                                                                                InkWell(
+                                                                                                  onTap: () {
+                                                                                                    removeFood();
+                                                                                                  },
+                                                                                                  child: Container(
+                                                                                                    width: 50.w,
+                                                                                                    height: 25.w,
+                                                                                                    decoration: BoxDecoration(
+                                                                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(8.r), bottomLeft: Radius.circular(8.r)),
+                                                                                                        gradient: const LinearGradient(
+                                                                                                          begin: Alignment.topRight,
+                                                                                                          end: Alignment.bottomLeft,
+                                                                                                          colors: [
+                                                                                                            Color.fromRGBO(33, 82, 255, 1),
+                                                                                                            Color.fromRGBO(33, 212, 253, 1)
+                                                                                                          ],
+                                                                                                        )),
+                                                                                                    child: Center(
+                                                                                                      child: TextApp(text: "-", textAlign: TextAlign.center, color: Colors.white, fontsize: 14.sp),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(
+                                                                                                    child: Container(
+                                                                                                  decoration: BoxDecoration(
+                                                                                                    border: Border.all(width: 0.4, color: Colors.grey),
+                                                                                                  ),
+                                                                                                  child: Center(
+                                                                                                    child: TextApp(
+                                                                                                      text: state.billInforModel?.data?[index].quantityFood.toString() ?? '1',
+                                                                                                      textAlign: TextAlign.center,
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                )),
+                                                                                                InkWell(
+                                                                                                  onTap: () {
+                                                                                                    addFodd();
+                                                                                                  },
+                                                                                                  child: Container(
+                                                                                                    width: 50.w,
+                                                                                                    height: 25.w,
+                                                                                                    decoration: BoxDecoration(
+                                                                                                        borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), bottomRight: Radius.circular(8.r)),
+                                                                                                        gradient: const LinearGradient(
+                                                                                                          begin: Alignment.topRight,
+                                                                                                          end: Alignment.bottomLeft,
+                                                                                                          colors: [
+                                                                                                            Color.fromRGBO(33, 82, 255, 1),
+                                                                                                            Color.fromRGBO(33, 212, 253, 1)
+                                                                                                          ],
+                                                                                                        )),
+                                                                                                    child: Center(
+                                                                                                      child: TextApp(
+                                                                                                        text: "+",
+                                                                                                        textAlign: TextAlign.center,
+                                                                                                        color: Colors.white,
+                                                                                                        fontsize: 14.sp,
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                )
+                                                                                              ],
+                                                                                            ),
+                                                                                          )),
                                                                                     ],
                                                                                   ),
                                                                                 )),
-                                                                          ],
-                                                                        ),
-                                                                      )),
-                                                                ),
-                                                                const Divider(
-                                                                  height: 1,
-                                                                  color: Colors
-                                                                      .grey,
-                                                                )
-                                                              ],
-                                                            );
-                                                          }),
-                                                    )
+                                                                          ),
+                                                                          const Divider(
+                                                                            height:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          )
+                                                                        ],
+                                                                      );
+                                                                    }),
+                                                          )
                                                   ],
                                                 ),
                                               ),
@@ -2126,9 +2249,23 @@ class SeeBillDialog extends StatelessWidget {
 
 //Modal thanh toán hoá đơn
 class PayBillDialog extends StatefulWidget {
+  final Tables? currentTable;
+  final String nameRoom;
+  final String role;
+  final String shopID;
+  final String? orderID;
+  final String roomID;
   final Function eventSaveButton;
-  const PayBillDialog({Key? key, required this.eventSaveButton})
-      : super(key: key);
+  const PayBillDialog({
+    Key? key,
+    required this.eventSaveButton,
+    required this.currentTable,
+    required this.nameRoom,
+    required this.role,
+    required this.shopID,
+    required this.orderID,
+    required this.roomID,
+  }) : super(key: key);
 
   @override
   State<PayBillDialog> createState() => _PayBillDialogState();
@@ -2141,150 +2278,188 @@ class _PayBillDialogState extends State<PayBillDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      contentPadding: const EdgeInsets.all(0),
-      surfaceTintColor: Colors.white,
-      backgroundColor: Colors.white,
-      content: Container(
-          width: 1.sw,
-          // height: 1.sh,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.r),
-            color: Colors.white,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: EdgeInsets.all(8.w),
-                child: Container(
-                    width: 1.sw,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15.w),
-                          topRight: Radius.circular(15.w)),
-                      // color: Colors.amber,
+    return BlocBuilder<PaymentInforBloc, PaymentInforState>(
+      builder: (context, state) {
+        if (state.paymentStatus == PaymentInforStateStatus.succes) {
+          return AlertDialog(
+            contentPadding: const EdgeInsets.all(0),
+            surfaceTintColor: Colors.white,
+            backgroundColor: Colors.white,
+            content: Container(
+                width: 1.sw,
+                // height: 1.sh,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.r),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(8.w),
+                      child: Container(
+                          width: 1.sw,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(15.w),
+                                topRight: Radius.circular(15.w)),
+                            // color: Colors.amber,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 20.w),
+                                    child: TextApp(
+                                      text:
+                                          widget.currentTable?.tableName ?? '',
+                                      fontsize: 18.sp,
+                                      color: blueText,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 20.w),
+                                    child: TextApp(
+                                      text: widget.nameRoom,
+                                      fontsize: 14.sp,
+                                      color: blueText,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          )),
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 20.w),
-                              child: TextApp(
-                                text: "Table 1",
-                                fontsize: 18.sp,
-                                color: blueText,
-                                fontWeight: FontWeight.bold,
+                    Divider(height: 1, color: Colors.black),
+                    Flexible(
+                        fit: FlexFit.tight,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(10.w),
+                                child: Container(
+                                  width: 1.sw,
+                                  // height: 100.h,
+                                  // color: Colors.green,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                          width: 1.sw,
+                                          height: 40.h,
+                                          color: Colors.grey,
+                                          child: Padding(
+                                              padding:
+                                                  EdgeInsets.only(left: 5.h),
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  TextApp(
+                                                    text: "Hóa đơn",
+                                                    color: Colors.white,
+                                                    fontsize: 14.sp,
+                                                  ),
+                                                ],
+                                              ))),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              TextApp(
+                                                text: "Tên món ăn",
+                                                color: Colors.black,
+                                                fontsize: 14.sp,
+                                              ),
+                                              TextApp(
+                                                text: "thit heo nuong",
+                                                color: Colors.black,
+                                                fontsize: 14.sp,
+                                              ),
+                                            ],
+                                          ),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              TextApp(
+                                                text: "Số lượng",
+                                                color: Colors.black,
+                                                fontsize: 14.sp,
+                                              ),
+                                              TextApp(
+                                                text: "3",
+                                                color: Colors.black,
+                                                fontsize: 14.sp,
+                                              ),
+                                            ],
+                                          ),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              TextApp(
+                                                text: "Giá",
+                                                color: Colors.black,
+                                                fontsize: 14.sp,
+                                              ),
+                                              TextApp(
+                                                text: "200,000",
+                                                color: Colors.black,
+                                                fontsize: 14.sp,
+                                              ),
+                                            ],
+                                          ),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              TextApp(
+                                                text: "Tổng",
+                                                color: Colors.black,
+                                                fontsize: 14.sp,
+                                              ),
+                                              TextApp(
+                                                text: "600,000",
+                                                color: Colors.black,
+                                                fontsize: 14.sp,
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 20.w),
-                              child: TextApp(
-                                text: "Room 1",
-                                fontsize: 14.sp,
-                                color: blueText,
-                                fontWeight: FontWeight.normal,
+                              Divider(
+                                height: 1,
+                                color: Colors.black,
                               ),
-                            )
-                          ],
-                        )
-                      ],
-                    )),
-              ),
-              Divider(height: 1, color: Colors.black),
-              Flexible(
-                  fit: FlexFit.tight,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(10.w),
-                          child: Container(
-                            width: 1.sw,
-                            // height: 100.h,
-                            // color: Colors.green,
-                            child: Column(
-                              children: [
-                                Container(
-                                    width: 1.sw,
-                                    height: 40.h,
-                                    color: Colors.grey,
-                                    child: Padding(
-                                        padding: EdgeInsets.only(left: 5.h),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            TextApp(
-                                              text: "Hóa đơn",
-                                              color: Colors.white,
-                                              fontsize: 14.sp,
-                                            ),
-                                          ],
-                                        ))),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                              Padding(
+                                padding: EdgeInsets.all(10.w),
+                                child: Column(
                                   children: [
-                                    Column(
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        TextApp(
-                                          text: "Tên món ăn",
-                                          color: Colors.black,
-                                          fontsize: 14.sp,
-                                        ),
-                                        TextApp(
-                                          text: "thit heo nuong",
-                                          color: Colors.black,
-                                          fontsize: 14.sp,
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        TextApp(
-                                          text: "Số lượng",
-                                          color: Colors.black,
-                                          fontsize: 14.sp,
-                                        ),
-                                        TextApp(
-                                          text: "3",
-                                          color: Colors.black,
-                                          fontsize: 14.sp,
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        TextApp(
-                                          text: "Giá",
-                                          color: Colors.black,
-                                          fontsize: 14.sp,
-                                        ),
-                                        TextApp(
-                                          text: "200,000",
-                                          color: Colors.black,
-                                          fontsize: 14.sp,
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         TextApp(
                                           text: "Tổng",
@@ -2298,292 +2473,336 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                         ),
                                       ],
                                     ),
+                                    space20H,
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        TextApp(
+                                            text: "22-02-2024 13:44:51",
+                                            fontsize: 14.sp),
+                                        space5W,
+                                        Icon(
+                                          Icons.access_time_filled,
+                                          size: 14.sp,
+                                          color: Colors.grey,
+                                        )
+                                      ],
+                                    ),
+                                    space20H,
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        TextApp(
+                                          text: "Tổng tiền món",
+                                          color: Colors.black,
+                                          fontsize: 14.sp,
+                                        ),
+                                        TextApp(
+                                          text: '600000',
+                                          color: Colors.black,
+                                          fontsize: 14.sp,
+                                        ),
+                                      ],
+                                    ),
+                                    space20H,
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        TextApp(
+                                          text: "Giảm giá",
+                                          color: Colors.black,
+                                          fontsize: 14.sp,
+                                        ),
+                                        // space35W,
+                                        Container(
+                                          width: 120.w,
+                                          child: TextField(
+                                            style: TextStyle(
+                                                fontSize: 12.sp, color: grey),
+                                            controller: moneySaleController,
+                                            onEditingComplete: () {},
+                                            cursorColor: grey,
+                                            decoration: InputDecoration(
+                                                fillColor: const Color.fromARGB(
+                                                    255, 226, 104, 159),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Color.fromRGBO(
+                                                          214, 51, 123, 0.6),
+                                                      width: 2.0),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.r),
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.r),
+                                                ),
+                                                hintText: '',
+                                                isDense: true,
+                                                contentPadding:
+                                                    EdgeInsets.all(15.w)),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    space20H,
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        TextApp(
+                                          text: "Khách cần trả",
+                                          color: Colors.black,
+                                          fontsize: 14.sp,
+                                        ),
+                                        TextApp(
+                                          text: '600000',
+                                          color: Colors.black,
+                                          fontsize: 14.sp,
+                                        ),
+                                      ],
+                                    ),
+                                    space20H,
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        TextApp(
+                                          text: "Khách thanh toán",
+                                          color: Colors.black,
+                                          fontsize: 14.sp,
+                                        ),
+                                        // space15W,
+                                        Container(
+                                          width: 120.w,
+                                          child: TextField(
+                                            style: TextStyle(
+                                                fontSize: 12.sp, color: grey),
+                                            cursorColor: grey,
+                                            decoration: InputDecoration(
+                                                fillColor: const Color.fromARGB(
+                                                    255, 226, 104, 159),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Color.fromRGBO(
+                                                          214, 51, 123, 0.6),
+                                                      width: 2.0),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.r),
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.r),
+                                                ),
+                                                hintText: '',
+                                                isDense: true,
+                                                contentPadding:
+                                                    EdgeInsets.all(15.w)),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    space20H,
+                                    Wrap(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Radio(
+                                              activeColor: Colors.black,
+                                              value: optionsPayment[0],
+                                              groupValue: currentOptions,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  currentOptions =
+                                                      value.toString();
+                                                });
+                                              },
+                                            ),
+                                            TextApp(
+                                              text: optionsPayment[0],
+                                              color: Colors.black,
+                                              fontsize: 14.sp,
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Radio(
+                                              activeColor: Colors.black,
+                                              value: optionsPayment[1],
+                                              groupValue: currentOptions,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  currentOptions =
+                                                      value.toString();
+                                                });
+                                              },
+                                            ),
+                                            TextApp(
+                                              text: optionsPayment[1],
+                                              color: Colors.black,
+                                              fontsize: 14.sp,
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Radio(
+                                              activeColor: Colors.black,
+                                              value: optionsPayment[2],
+                                              groupValue: currentOptions,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  currentOptions =
+                                                      value.toString();
+                                                });
+                                              },
+                                            ),
+                                            TextApp(
+                                              text: optionsPayment[2],
+                                              color: Colors.black,
+                                              fontsize: 14.sp,
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                    space20H,
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        TextApp(
+                                          text: "Tiền thừa trả khách",
+                                          color: Colors.black,
+                                          fontsize: 14.sp,
+                                        ),
+                                        TextApp(
+                                          text: "600,000",
+                                          color: Colors.black,
+                                          fontsize: 14.sp,
+                                        ),
+                                      ],
+                                    ),
                                   ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Divider(
-                          height: 1,
-                          color: Colors.black,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(10.w),
-                          child: Column(
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  TextApp(
-                                    text: "Tổng",
-                                    color: Colors.black,
-                                    fontsize: 14.sp,
-                                  ),
-                                  TextApp(
-                                    text: "600,000",
-                                    color: Colors.black,
-                                    fontsize: 14.sp,
-                                  ),
-                                ],
-                              ),
-                              space20H,
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  TextApp(
-                                      text: "22-02-2024 13:44:51",
-                                      fontsize: 14.sp),
-                                  space5W,
-                                  Icon(
-                                    Icons.access_time_filled,
-                                    size: 14.sp,
-                                    color: Colors.grey,
-                                  )
-                                ],
-                              ),
-                              space20H,
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  TextApp(
-                                    text: "Tổng tiền món",
-                                    color: Colors.black,
-                                    fontsize: 14.sp,
-                                  ),
-                                  TextApp(
-                                    text: '600000',
-                                    color: Colors.black,
-                                    fontsize: 14.sp,
-                                  ),
-                                ],
-                              ),
-                              space20H,
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  TextApp(
-                                    text: "Giảm giá",
-                                    color: Colors.black,
-                                    fontsize: 14.sp,
-                                  ),
-                                  // space35W,
-                                  Container(
-                                    width: 120.w,
-                                    child: TextField(
-                                      style: TextStyle(
-                                          fontSize: 12.sp, color: grey),
-                                      controller: moneySaleController,
-                                      onEditingComplete: () {},
-                                      cursorColor: grey,
-                                      decoration: InputDecoration(
-                                          fillColor: const Color.fromARGB(
-                                              255, 226, 104, 159),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    214, 51, 123, 0.6),
-                                                width: 2.0),
-                                            borderRadius:
-                                                BorderRadius.circular(8.r),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8.r),
-                                          ),
-                                          hintText: '',
-                                          isDense: true,
-                                          contentPadding: EdgeInsets.all(15.w)),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              space20H,
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  TextApp(
-                                    text: "Khách cần trả",
-                                    color: Colors.black,
-                                    fontsize: 14.sp,
-                                  ),
-                                  TextApp(
-                                    text: '600000',
-                                    color: Colors.black,
-                                    fontsize: 14.sp,
-                                  ),
-                                ],
-                              ),
-                              space20H,
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  TextApp(
-                                    text: "Khách thanh toán",
-                                    color: Colors.black,
-                                    fontsize: 14.sp,
-                                  ),
-                                  // space15W,
-                                  Container(
-                                    width: 120.w,
-                                    child: TextField(
-                                      style: TextStyle(
-                                          fontSize: 12.sp, color: grey),
-                                      cursorColor: grey,
-                                      decoration: InputDecoration(
-                                          fillColor: const Color.fromARGB(
-                                              255, 226, 104, 159),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    214, 51, 123, 0.6),
-                                                width: 2.0),
-                                            borderRadius:
-                                                BorderRadius.circular(8.r),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8.r),
-                                          ),
-                                          hintText: '',
-                                          isDense: true,
-                                          contentPadding: EdgeInsets.all(15.w)),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              space20H,
-                              Wrap(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Radio(
-                                        activeColor: Colors.black,
-                                        value: optionsPayment[0],
-                                        groupValue: currentOptions,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            currentOptions = value.toString();
-                                          });
-                                        },
-                                      ),
-                                      TextApp(
-                                        text: optionsPayment[0],
-                                        color: Colors.black,
-                                        fontsize: 14.sp,
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Radio(
-                                        activeColor: Colors.black,
-                                        value: optionsPayment[1],
-                                        groupValue: currentOptions,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            currentOptions = value.toString();
-                                          });
-                                        },
-                                      ),
-                                      TextApp(
-                                        text: optionsPayment[1],
-                                        color: Colors.black,
-                                        fontsize: 14.sp,
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Radio(
-                                        activeColor: Colors.black,
-                                        value: optionsPayment[2],
-                                        groupValue: currentOptions,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            currentOptions = value.toString();
-                                          });
-                                        },
-                                      ),
-                                      TextApp(
-                                        text: optionsPayment[2],
-                                        color: Colors.black,
-                                        fontsize: 14.sp,
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                              space20H,
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  TextApp(
-                                    text: "Tiền thừa trả khách",
-                                    color: Colors.black,
-                                    fontsize: 14.sp,
-                                  ),
-                                  TextApp(
-                                    text: "600,000",
-                                    color: Colors.black,
-                                    fontsize: 14.sp,
-                                  ),
-                                ],
-                              ),
+                                ),
+                              )
                             ],
                           ),
-                        )
-                      ],
-                    ),
-                  )),
-              Container(
-                width: 1.sw,
-                height: 80,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(15.w),
-                      bottomRight: Radius.circular(15.w)),
-                  // color: Colors.green,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ButtonApp(
-                      event: () {
-                        Navigator.of(context).pop();
-                      },
-                      text: "Đóng",
-                      colorText: Colors.white,
-                      backgroundColor: Color.fromRGBO(131, 146, 171, 1),
-                      outlineColor: Color.fromRGBO(131, 146, 171, 1),
-                    ),
-                    space15W,
-                    ButtonApp(
-                      event: () {
-                        widget.eventSaveButton();
-                      },
-                      text: "Thanh toán",
-                      colorText: Colors.white,
-                      backgroundColor: Color.fromRGBO(23, 173, 55, 1),
-                      outlineColor: Color.fromRGBO(152, 236, 45, 1),
+                        )),
+                    Container(
+                      width: 1.sw,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(15.w),
+                            bottomRight: Radius.circular(15.w)),
+                        // color: Colors.green,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ButtonApp(
+                            event: () {
+                              Navigator.of(context).pop();
+                            },
+                            text: "Đóng",
+                            colorText: Colors.white,
+                            backgroundColor: Color.fromRGBO(131, 146, 171, 1),
+                            outlineColor: Color.fromRGBO(131, 146, 171, 1),
+                          ),
+                          space15W,
+                          ButtonApp(
+                            event: () {
+                              widget.eventSaveButton();
+                            },
+                            text: "Thanh toán",
+                            colorText: Colors.white,
+                            backgroundColor: Color.fromRGBO(23, 173, 55, 1),
+                            outlineColor: Color.fromRGBO(152, 236, 45, 1),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
-                ),
+                )),
+          );
+        } else if (state.paymentStatus == PaymentInforStateStatus.loading) {
+          return AlertDialog(
+            contentPadding: EdgeInsets.all(0),
+            surfaceTintColor: Colors.white,
+            backgroundColor: Colors.white,
+            content: Center(
+              child: SizedBox(
+                width: 1.sw,
+                height: 200.w,
+                child: Lottie.asset('assets/lottie/loading_7_color.json'),
               ),
-            ],
-          )),
+            ),
+          );
+        } else {
+          return AlertDialog(
+              contentPadding: EdgeInsets.all(0),
+              surfaceTintColor: Colors.white,
+              backgroundColor: Colors.white,
+              content: Center(
+                  child: SizedBox(
+                width: 1.sw,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      child: Lottie.asset('assets/lottie/error.json'),
+                    ),
+                    space30H,
+                    TextApp(
+                      text: state.errorText.toString(),
+                      textAlign: TextAlign.center,
+                      fontsize: 20.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    space30H,
+                    Container(
+                      width: 200,
+                      child: ButtonGradient(
+                        color1: color1BlueButton,
+                        color2: color2BlueButton,
+                        event: () {
+                          // getDataTabIndex("");
+                          Navigator.pop(context);
+                        },
+                        text: 'Thử lại',
+                        fontSize: 12.sp,
+                        radius: 8.r,
+                        textColor: Colors.white,
+                      ),
+                    )
+                  ],
+                ),
+              )));
+        }
+      },
     );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:app_restaurant/bloc/bill/bill_bloc.dart';
 import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
+import 'package:app_restaurant/bloc/payment/payment_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/utils/share_getString.dart';
@@ -73,6 +74,18 @@ class _StaffBookingTableState extends State<StaffBookingTable>
       required String tableId,
       required String orderID}) async {
     BlocProvider.of<BillInforBloc>(context).add(GetBillInfor(
+        client: currentRole,
+        shopId: getStaffShopID,
+        roomId: roomId ?? '',
+        tableId: tableId,
+        orderId: orderID));
+  }
+
+  void getPaymentData(
+      {String? roomId,
+      required String tableId,
+      required String orderID}) async {
+    BlocProvider.of<PaymentInforBloc>(context).add(GetPaymentInfor(
         client: currentRole,
         shopId: getStaffShopID,
         roomId: roomId ?? '',
@@ -364,16 +377,32 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                     context: context,
                                                                                     builder: (BuildContext context) {
                                                                                       return SeeBillDialog(
+                                                                                        role: currentRole,
+                                                                                        shopID: currentShopId,
+                                                                                        orderID: data.tables?[index].orderId.toString(),
+                                                                                        roomID: data.storeRoomId.toString(),
                                                                                         currentTable: data.tables![index],
                                                                                         nameRoom: roomName,
                                                                                       );
                                                                                     });
                                                                               }, eventButton4:
                                                                                 () {
+                                                                                print("ODER ID NE ${data.tables![index].orderId.toString()}");
+                                                                                print("TABLE ID NE ${data.tables![index].roomTableId.toString()}");
+                                                                                getPaymentData(
+                                                                                  tableId: data.tables![index].roomTableId.toString(),
+                                                                                  orderID: data.tables![index].orderId.toString(),
+                                                                                );
                                                                                 showDialog(
                                                                                     context: context,
                                                                                     builder: (BuildContext context) {
                                                                                       return PayBillDialog(
+                                                                                        role: currentRole,
+                                                                                        shopID: currentShopId,
+                                                                                        orderID: data.tables?[index].orderId.toString(),
+                                                                                        roomID: data.storeRoomId.toString(),
+                                                                                        currentTable: data.tables![index],
+                                                                                        nameRoom: roomName,
                                                                                         eventSaveButton: savePayBillModal,
                                                                                       );
                                                                                     });
