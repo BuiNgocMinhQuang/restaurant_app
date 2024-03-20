@@ -61,6 +61,7 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
     return InkWell(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: SafeArea(
             child: RefreshIndicator(
           color: Colors.blue,

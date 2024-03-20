@@ -71,7 +71,6 @@ class _StaffFabTabState extends State<StaffFabTab> {
   }
 
   void tapDrawerChangeBotNav(int index) {
-    print("NHAN DRAWER TAB");
     checkTokenExpires();
     final CurvedNavigationBarState? navBarState =
         bottomNavigationKey.currentState;
@@ -104,7 +103,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.white,
             centerTitle: true,
             title: SizedBox(
               // width: 100.w,
@@ -124,8 +123,8 @@ class _StaffFabTabState extends State<StaffFabTab> {
                     IconButton(
                         icon: Icon(
                           Icons.menu,
-                          size: 25.w,
-                          color: Colors.white,
+                          size: 30.w,
+                          color: Colors.black,
                         ),
                         onPressed: () => Scaffold.of(context).openDrawer()),
               ),
@@ -136,9 +135,9 @@ class _StaffFabTabState extends State<StaffFabTab> {
                 child: Padding(
                   padding: EdgeInsets.all(8.w),
                   child: Icon(
-                    Icons.notifications,
-                    size: 25.w,
-                    color: Colors.white,
+                    Icons.notifications_active_outlined,
+                    size: 30.w,
+                    color: Colors.black,
                   ),
                 ),
               )

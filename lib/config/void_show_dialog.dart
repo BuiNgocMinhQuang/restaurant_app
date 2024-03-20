@@ -88,6 +88,30 @@ void showUpdateDataSuccesDialog() {
   ).show();
 }
 
+void showDoYouWantPrintBillDialog(Function printEvent) {
+  AwesomeDialog(
+    context: navigatorKey.currentContext!,
+    autoDismiss: false,
+    animType: AnimType.leftSlide,
+    headerAnimationLoop: false,
+    dialogType: DialogType.question,
+    showCloseIcon: true,
+    title: 'Thanh toán hoàn tất',
+    desc: 'Bạn có muốn in hoá đơn này ?',
+    btnOkOnPress: () {
+      printEvent();
+    },
+    btnCancelOnPress: () {},
+    btnOkText: 'IN',
+    btnCancelText: 'ĐÓNG',
+    onDismissCallback: (type) {
+      if (type == DismissType.btnOk || type == DismissType.btnCancel) {
+        Navigator.of(navigatorKey.currentContext!).pop();
+      }
+    },
+  ).show();
+}
+
 void showSomthingWrongDialog() {
   AwesomeDialog(
     context: navigatorKey.currentContext!,

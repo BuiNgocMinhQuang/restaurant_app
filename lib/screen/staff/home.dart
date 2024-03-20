@@ -343,6 +343,8 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                           roomId: data.storeRoomId.toString(),
                                                                                         );
                                                                                       },
+                                                                                      role: currentRole,
+                                                                                      shopID: currentShopId,
                                                                                       idRoom: data.storeRoomId,
                                                                                       listTableOfRoom: data.tables,
                                                                                       currentTable: data.tables![index],
@@ -403,7 +405,11 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                         roomID: data.storeRoomId.toString(),
                                                                                         currentTable: data.tables![index],
                                                                                         nameRoom: roomName,
-                                                                                        eventSaveButton: savePayBillModal,
+                                                                                        eventSaveButton: () {
+                                                                                          getDataTabIndex(
+                                                                                            roomId: data.storeRoomId.toString(),
+                                                                                          );
+                                                                                        },
                                                                                       );
                                                                                     });
                                                                               })
@@ -419,12 +425,14 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                     context: context,
                                                                                     builder: (BuildContext context) {
                                                                                       return BookingTableDialog(
+                                                                                        role: currentRole,
+                                                                                        shopID: currentShopId,
+                                                                                        idRoom: data.storeRoomId,
                                                                                         eventSaveButton: () {
                                                                                           getDataTabIndex(
                                                                                             roomId: data.storeRoomId.toString(),
                                                                                           );
                                                                                         },
-                                                                                        idRoom: data.storeRoomId,
                                                                                         listTableOfRoom: data.tables,
                                                                                         currentTable: data.tables![index],
                                                                                       );

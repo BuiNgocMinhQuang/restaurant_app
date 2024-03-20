@@ -48,6 +48,8 @@ class _MyAppState extends State<MyApp> {
       },
       child: AppBlocProvider(
         child: MaterialApp.router(
+            theme:
+                new ThemeData(scaffoldBackgroundColor: const Color(0xFFEFEFEF)),
             debugShowCheckedModeBanner: false,
             routerConfig: NyAppRouter().router),
       ),

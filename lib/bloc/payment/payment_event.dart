@@ -23,3 +23,45 @@ class GetPaymentInfor extends PaymentInforEvent {
   @override
   List<Object> get props => [];
 }
+
+class UpdatePaymentInfor extends PaymentInforEvent {
+  final String client;
+  final String shopId;
+  final bool isApi;
+  final String orderId;
+  final String orderTotal;
+  final String discount;
+  final String guestPay;
+  final int payKind;
+
+  const UpdatePaymentInfor({
+    required this.client,
+    required this.shopId,
+    this.isApi = true,
+    required this.orderId,
+    required this.orderTotal,
+    required this.discount,
+    required this.guestPay,
+    required this.payKind,
+  });
+
+  @override
+  List<Object> get props => [];
+}
+
+class ConfirmPayment extends PaymentInforEvent {
+  final String client;
+  final String shopId;
+  final bool isApi;
+  final String orderId;
+
+  const ConfirmPayment({
+    required this.client,
+    required this.shopId,
+    this.isApi = true,
+    required this.orderId,
+  });
+
+  @override
+  List<Object> get props => [];
+}

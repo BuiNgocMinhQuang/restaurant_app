@@ -253,30 +253,30 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                               false
                                                           ? PopUpMenuUsingTable(
                                                               eventButton1: () {
-                                                              getTableInfor(
-                                                                  data.storeRoomId
-                                                                      .toString(),
-                                                                  data.tables?[index]
-                                                                          .roomTableId
-                                                                          .toString() ??
-                                                                      '');
-                                                              showDialog(
-                                                                  context:
-                                                                      context,
-                                                                  builder:
-                                                                      (BuildContext
-                                                                          context) {
-                                                                    return BookingTableDialog(
-                                                                      eventSaveButton:
-                                                                          () {},
-                                                                      // nameTable:
-                                                                      //     'hehe',
-                                                                      // eventSaveButton:
-                                                                      //     saveBookingModal,
-                                                                      // isUsingTable:
-                                                                      //     true,
-                                                                    );
-                                                                  });
+                                                              // getTableInfor(
+                                                              //     data.storeRoomId
+                                                              //         .toString(),
+                                                              //     data.tables?[index]
+                                                              //             .roomTableId
+                                                              //             .toString() ??
+                                                              //         '');
+                                                              // showDialog(
+                                                              //     context:
+                                                              //         context,
+                                                              //     builder:
+                                                              //         (BuildContext
+                                                              //             context) {
+                                                              //       return BookingTableDialog(
+                                                              //         eventSaveButton:
+                                                              //             () {},
+                                                              //         // nameTable:
+                                                              //         //     'hehe',
+                                                              //         // eventSaveButton:
+                                                              //         //     saveBookingModal,
+                                                              //         // isUsingTable:
+                                                              //         //     true,
+                                                              //       );
+                                                              //     });
                                                             }, eventButton2:
                                                                   () {
                                                               // showDialog(
@@ -329,23 +329,23 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                           .roomTableId
                                                                           .toString() ??
                                                                       '');
-                                                              showDialog(
-                                                                  context:
-                                                                      context,
-                                                                  builder:
-                                                                      (BuildContext
-                                                                          context) {
-                                                                    return BookingTableDialog(
-                                                                      eventSaveButton:
-                                                                          () {},
-                                                                      // nameTable:
-                                                                      //     'hehe',
-                                                                      // eventSaveButton:
-                                                                      //     () {},
-                                                                      // isUsingTable:
-                                                                      //     true,
-                                                                    );
-                                                                  });
+                                                              // showDialog(
+                                                              //     context:
+                                                              //         context,
+                                                              //     builder:
+                                                              //         (BuildContext
+                                                              //             context) {
+                                                              //       return BookingTableDialog(
+                                                              //         eventSaveButton:
+                                                              //             () {},
+                                                              //         // nameTable:
+                                                              //         //     'hehe',
+                                                              //         // eventSaveButton:
+                                                              //         //     () {},
+                                                              //         // isUsingTable:
+                                                              //         //     true,
+                                                              //       );
+                                                              //     });
                                                             })),
                                                 ],
                                               )));

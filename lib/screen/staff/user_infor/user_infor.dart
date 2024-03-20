@@ -113,6 +113,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
       instagramController.text =
           state.staffInforDataModel?.data?.staffInstagram ?? '';
       return Scaffold(
+        backgroundColor: Colors.white,
         body: SafeArea(
             child: state.staffInforStatus == StaffInforStatus.success
                 ? RefreshIndicator(
