@@ -88,6 +88,27 @@ void showUpdateDataSuccesDialog() {
   ).show();
 }
 
+void showSomthingWrongDialog() {
+  AwesomeDialog(
+    context: navigatorKey.currentContext!,
+    autoDismiss: false,
+    animType: AnimType.leftSlide,
+    headerAnimationLoop: false,
+    dialogType: DialogType.error,
+    showCloseIcon: true,
+    title: 'Thất bại',
+    desc: 'Có lỗi xảy ra, vui lòng thử lại sau!',
+    btnOkOnPress: () {},
+    btnOkText: 'OK',
+    btnOkColor: Colors.red,
+    onDismissCallback: (type) {
+      if (type == DismissType.btnOk) {
+        Navigator.of(navigatorKey.currentContext!).pop();
+      }
+    },
+  ).show();
+}
+
 void showChangePasswordSuccessDialog(context) {
   AwesomeDialog(
           context: context,

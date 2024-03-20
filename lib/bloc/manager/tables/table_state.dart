@@ -90,3 +90,28 @@ class TableSaveInforState extends Equatable {
 }
 
 enum TableSaveInforStatus { loading, succes, failed }
+
+class SwitchTableState extends Equatable {
+  const SwitchTableState({
+    this.errorText,
+    this.switchtableStatus,
+  });
+
+  final String? errorText;
+  final SwitchTableStatus? switchtableStatus;
+
+  SwitchTableState copyWith({
+    String? errorText,
+    SwitchTableStatus? switchtableStatus,
+  }) {
+    return SwitchTableState(
+      errorText: errorText ?? this.errorText,
+      switchtableStatus: switchtableStatus ?? this.switchtableStatus,
+    );
+  }
+
+  @override
+  List<Object?> get props => [errorText, switchtableStatus];
+}
+
+enum SwitchTableStatus { loading, succes, failed }

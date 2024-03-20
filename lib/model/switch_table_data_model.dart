@@ -127,7 +127,7 @@ class Tables {
   String? updatedAt;
   int? numberOfSeats;
   int? status;
-  Null? description;
+  String? description;
 
   Tables(
       {this.roomTableId,

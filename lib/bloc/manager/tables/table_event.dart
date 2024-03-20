@@ -8,6 +8,10 @@ abstract class TableCancleEvent extends Equatable {
   const TableCancleEvent();
 }
 
+abstract class SwitchTableEvent extends Equatable {
+  const SwitchTableEvent();
+}
+
 abstract class TableSaveInforEvent extends Equatable {
   const TableSaveInforEvent();
 }
@@ -89,6 +93,29 @@ class CancleTable extends TableCancleEvent {
     required this.roomId,
     required this.tableId,
     required this.cancellationReason,
+  });
+
+  @override
+  List<Object> get props => [];
+}
+
+class HandleSwitchTable extends SwitchTableEvent {
+  final String client;
+  final String shopId;
+  final bool isApi;
+  final String roomId;
+  final String tableId;
+  final String orderId;
+  final List<int> selectedTableId;
+
+  const HandleSwitchTable({
+    required this.client,
+    required this.shopId,
+    this.isApi = true,
+    required this.roomId,
+    required this.tableId,
+    required this.orderId,
+    required this.selectedTableId,
   });
 
   @override

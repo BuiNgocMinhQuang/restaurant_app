@@ -500,6 +500,8 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                         .toList() ??
                                                     [],
                                               ));
+
+                                              ///check dieu kien succes cho nay
                                               Navigator.of(context).pop();
                                               showUpdateDataSuccesDialog();
                                               widget.eventSaveButton();
@@ -1143,24 +1145,36 @@ class _BookingTableDialogState extends State<BookingTableDialog>
 }
 
 ///Modal chuyển bàn
-class MoveTableDialog extends StatelessWidget {
+///
+///
+
+class MoveTableDialog extends StatefulWidget {
   final Function eventSaveButton;
   final Tables? currentTable;
   final String nameRoom;
   final String orderID;
-  // final Rooms listRoom;
-  // final List listNameRoom;
-  final List idRoom;
+  final String role;
+  final String shopID;
+  final String roomID;
+  final List listIdRoom;
   const MoveTableDialog({
     Key? key,
     required this.eventSaveButton,
     required this.currentTable,
     required this.nameRoom,
     required this.orderID,
-    // required this.listRoom,
-    // required this.listNameRoom,
-    required this.idRoom,
+    required this.listIdRoom,
+    required this.role,
+    required this.shopID,
+    required this.roomID,
   }) : super(key: key);
+  State<MoveTableDialog> createState() => _MoveTableDialogState();
+}
+
+class _MoveTableDialogState extends State<MoveTableDialog> {
+  // int selectedTable = -1;
+  final Set<int> selectedTable = {};
+  final Set<int> selectedTableId = {};
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TableBloc, TableState>(builder: (context, state) {
@@ -1176,309 +1190,367 @@ class MoveTableDialog extends StatelessWidget {
 
         var listTableFreeOfCurrentRoom = listTableFree?.where(
             (e) => e!.isNotEmpty); // list cac ban con trong cua phong hien tai
-        // debugPrint("CAC ${listTableFreeOfCurrentRoom}");
+
         var currentRoom = listRoomInit?.where((element) =>
             element.storeRoomId ==
             (listTableFreeOfCurrentRoom?.first?[0].storeRoomId ??
                 '')); //check lay ten phong hien taij (check theo roomId)
-        var currentRoomName =
-            currentRoom?.first.storeRoomName; // lay ten phong hien tai
-        // debugPrint("currentRoom ${currentRoom?.first.storeRoomName}");
+        var currentRoomName = currentRoom?.first
+            .storeRoomName; // lay ten phong hien tai dung cho dropdown menu
 
-        return AlertDialog(
-            contentPadding: const EdgeInsets.all(0),
-            surfaceTintColor: Colors.white,
-            backgroundColor: Colors.white,
-            content: SizedBox(
-              width: double.maxFinite,
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.min,
+        return BlocBuilder<SwitchTableBloc, SwitchTableState>(
+          builder: (context, stateSwitchTable) {
+            return AlertDialog(
+                contentPadding: const EdgeInsets.all(0),
+                surfaceTintColor: Colors.white,
+                backgroundColor: Colors.white,
+                content: SizedBox(
+                  width: double.maxFinite,
+                  child: ListView(
+                    shrinkWrap: true,
                     children: [
-                      Padding(
-                          padding: EdgeInsets.all(8.w),
-                          child: Container(
-                              width: 1.sw,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(15.w),
-                                    topRight: Radius.circular(15.w)),
-                                // color: Colors.amber,
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 20.w),
-                                        child: TextApp(
-                                          text: currentTable?.tableName
-                                                  .toString() ??
-                                              '',
-                                          fontsize: 18.sp,
-                                          color: blueText,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      )
-                                    ],
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.all(8.w),
+                              child: Container(
+                                  width: 1.sw,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(15.w),
+                                        topRight: Radius.circular(15.w)),
+                                    // color: Colors.amber,
                                   ),
-                                  Row(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 20.w),
-                                        child: TextApp(
-                                          text: nameRoom,
-                                          fontsize: 14.sp,
-                                          color: blueText,
-                                          fontWeight: FontWeight.normal,
-                                        ),
+                                      Row(
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 20.w),
+                                            child: TextApp(
+                                              text: widget
+                                                      .currentTable?.tableName
+                                                      .toString() ??
+                                                  '',
+                                              fontsize: 18.sp,
+                                              color: blueText,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 20.w),
+                                            child: TextApp(
+                                              text: widget.nameRoom,
+                                              fontsize: 14.sp,
+                                              color: blueText,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          )
+                                        ],
                                       )
                                     ],
-                                  )
-                                ],
-                              ))),
-                      const Divider(
-                        height: 1,
-                        color: Colors.black,
-                      ),
-                      SingleChildScrollView(
-                        child: Padding(
-                          padding: EdgeInsets.all(20.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              TextApp(
-                                text: "Bàn hiện tại",
-                                fontsize: 12.sp,
-                                fontWeight: FontWeight.bold,
-                                color: blueText,
-                              ),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              GridView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: state.switchTableDataModel
-                                          ?.currentTables?.length ??
-                                      0,
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          mainAxisExtent: 65.h),
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemBuilder: (content, index) {
-                                    return Padding(
-                                      padding: EdgeInsets.all(10.w),
-                                      child: ButtonApp(
-                                        event: () {},
-                                        text: state
-                                                .switchTableDataModel
-                                                ?.currentTables?[index]
-                                                .tableName ??
-                                            '',
-                                        colorText: Colors.blue,
-                                        backgroundColor: Colors.white,
-                                        outlineColor: Colors.blue,
-                                        radius: 8.r,
-                                      ),
-                                    );
-                                  }),
-                              space10H,
-                              TextApp(
-                                text: "Lưu ý: Bàn chỉ được ghép khi cùng phòng",
-                                fontsize: 12.sp,
-                                fontWeight: FontWeight.normal,
-                                color: grey,
-                              ),
-                              space10H,
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                                  ))),
+                          const Divider(
+                            height: 1,
+                            color: Colors.black,
+                          ),
+                          SingleChildScrollView(
+                            child: Padding(
+                              padding: EdgeInsets.all(20.w),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   TextApp(
-                                    text: "Bàn có thể đổi:",
+                                    text: "Bàn hiện tại",
                                     fontsize: 12.sp,
                                     fontWeight: FontWeight.bold,
                                     color: blueText,
                                   ),
                                   SizedBox(
-                                    width: 20.w,
+                                    height: 10.h,
                                   ),
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    child: DropdownSearch(
-                                      onChanged: (changeRoom) {
-                                        print("ORDER ID ${orderID}");
-                                        BlocProvider.of<TableBloc>(context).add(
-                                            GetTableSwitchInfor(
-                                                client: "staff",
-                                                shopId: getStaffShopID,
-                                                roomId: idRoom[listNameRoomFree!
-                                                        .indexOf(changeRoom)]
-                                                    .toString(),
-                                                tableId: currentTable
-                                                        ?.roomTableId
-                                                        .toString() ??
-                                                    '',
-                                                orderId: orderID));
-                                      },
-                                      items: listNameRoomFree ?? [],
-                                      dropdownButtonProps:
-                                          const DropdownButtonProps(),
-                                      dropdownDecoratorProps:
-                                          DropDownDecoratorProps(
-                                        dropdownSearchDecoration:
-                                            InputDecoration(
-                                          fillColor: const Color.fromARGB(
-                                              255, 226, 104, 159),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    214, 51, 123, 0.6),
-                                                width: 2.0),
-                                            borderRadius:
-                                                BorderRadius.circular(8.r),
+                                  GridView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: state.switchTableDataModel
+                                              ?.currentTables?.length ??
+                                          0,
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 2,
+                                              mainAxisExtent: 65.h),
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemBuilder: (content, index) {
+                                        return Padding(
+                                          padding: EdgeInsets.all(10.w),
+                                          child: ButtonApp(
+                                            event: () {},
+                                            text: state
+                                                    .switchTableDataModel
+                                                    ?.currentTables?[index]
+                                                    .tableName ??
+                                                '',
+                                            colorText: Colors.blue,
+                                            backgroundColor: Colors.white,
+                                            outlineColor: Colors.blue,
+                                            radius: 8.r,
                                           ),
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8.r),
-                                          ),
-                                          isDense: true,
-                                          contentPadding: EdgeInsets.all(15.w),
-                                        ),
-                                      ),
-                                      selectedItem: currentRoomName,
-                                    ),
-                                  )
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
+                                        );
+                                      }),
+                                  space10H,
+                                  TextApp(
+                                    text:
+                                        "Lưu ý: Bàn chỉ được ghép khi cùng phòng",
+                                    fontsize: 12.sp,
+                                    fontWeight: FontWeight.normal,
+                                    color: grey,
+                                  ),
+                                  space10H,
                                   Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
-                                      Container(
-                                        width: 20,
-                                        height: 20,
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: Colors
-                                                  .blue, //                   <--- border color
-                                              width: 1.w,
-                                            ),
-                                            color: Colors.white),
+                                      TextApp(
+                                        text: "Bàn có thể đổi:",
+                                        fontsize: 12.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: blueText,
                                       ),
                                       SizedBox(
-                                        width: 5.w,
+                                        width: 20.w,
                                       ),
-                                      TextApp(text: "Đang phục vụ")
+                                      Flexible(
+                                        fit: FlexFit.tight,
+                                        child: DropdownSearch(
+                                          onChanged: (changeRoom) {
+                                            BlocProvider.of<TableBloc>(context)
+                                                .add(GetTableSwitchInfor(
+                                                    client: widget.role,
+                                                    shopId: widget.shopID,
+                                                    roomId: widget.listIdRoom[
+                                                            listNameRoomFree!
+                                                                .indexOf(
+                                                                    changeRoom)]
+                                                        .toString(),
+                                                    tableId: widget.currentTable
+                                                            ?.roomTableId
+                                                            .toString() ??
+                                                        '',
+                                                    orderId: widget.orderID));
+                                          },
+                                          items: listNameRoomFree ?? [],
+                                          dropdownButtonProps:
+                                              const DropdownButtonProps(),
+                                          dropdownDecoratorProps:
+                                              DropDownDecoratorProps(
+                                            dropdownSearchDecoration:
+                                                InputDecoration(
+                                              fillColor: const Color.fromARGB(
+                                                  255, 226, 104, 159),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color.fromRGBO(
+                                                        214, 51, 123, 0.6),
+                                                    width: 2.0),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              isDense: true,
+                                              contentPadding:
+                                                  EdgeInsets.all(15.w),
+                                            ),
+                                          ),
+                                          selectedItem: currentRoomName,
+                                        ),
+                                      )
                                     ],
                                   ),
                                   SizedBox(
-                                    width: 10.w,
+                                    height: 10.h,
                                   ),
                                   Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Container(
-                                        width: 20,
-                                        height: 20,
-                                        color: Colors.blue,
+                                      Row(
+                                        children: [
+                                          Container(
+                                            width: 20,
+                                            height: 20,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors
+                                                      .blue, //                   <--- border color
+                                                  width: 1.w,
+                                                ),
+                                                color: Colors.white),
+                                          ),
+                                          SizedBox(
+                                            width: 5.w,
+                                          ),
+                                          TextApp(text: "Đang phục vụ")
+                                        ],
                                       ),
                                       SizedBox(
-                                        width: 5.w,
+                                        width: 10.w,
                                       ),
-                                      TextApp(text: "Bàn trống")
+                                      Row(
+                                        children: [
+                                          Container(
+                                            width: 20,
+                                            height: 20,
+                                            color: Colors.blue,
+                                          ),
+                                          SizedBox(
+                                            width: 5.w,
+                                          ),
+                                          TextApp(text: "Bàn trống")
+                                        ],
+                                      )
                                     ],
-                                  )
+                                  ),
+                                  space15H,
+                                  GridView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: listTableFreeOfCurrentRoom
+                                              ?.first?.length ??
+                                          0,
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 2,
+                                              mainAxisExtent: 65.h),
+                                      itemBuilder: (context, index) {
+                                        final isSelected =
+                                            selectedTable.contains(index);
+                                        return Padding(
+                                          padding: EdgeInsets.all(10.w),
+                                          child: ButtonApp(
+                                            event: () {
+                                              setState(() {
+                                                if (isSelected) {
+                                                  selectedTable.remove(index);
+                                                  selectedTableId.remove(
+                                                      listTableFreeOfCurrentRoom
+                                                          ?.first?[index]
+                                                          .roomTableId);
+                                                } else {
+                                                  selectedTable.add(index);
+                                                  selectedTableId.add(
+                                                      (listTableFreeOfCurrentRoom
+                                                              ?.first?[index]
+                                                              .roomTableId) ??
+                                                          0);
+                                                }
+                                              });
+                                            },
+                                            text: listTableFreeOfCurrentRoom
+                                                    ?.first![index].tableName ??
+                                                '',
+                                            colorText: isSelected
+                                                ? Colors.white
+                                                : Colors.blue,
+                                            backgroundColor: isSelected
+                                                ? Colors.blue
+                                                : Colors.white,
+                                            outlineColor: Colors.blue,
+                                            radius: 8.r,
+                                          ),
+                                        );
+                                      })
                                 ],
                               ),
-                              space15H,
-                              GridView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: listTableFreeOfCurrentRoom
-                                          ?.first?.length ??
-                                      0,
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          mainAxisExtent: 65.h),
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: EdgeInsets.all(10.w),
-                                      child: ButtonApp(
-                                        event: () {},
-                                        text: listTableFreeOfCurrentRoom
-                                                ?.first![index].tableName ??
-                                            '',
-                                        colorText: Colors.blue,
-                                        backgroundColor: Colors.white,
-                                        outlineColor: Colors.blue,
-                                        radius: 8.r,
-                                      ),
-                                    );
-                                  })
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                      Container(
-                        width: 1.sw,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(15.w),
-                              bottomRight: Radius.circular(15.w)),
-                          // color: Colors.green,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            ButtonApp(
-                              event: () {
-                                Navigator.of(context).pop();
-                              },
-                              text: "Đóng",
-                              colorText: Colors.white,
-                              backgroundColor:
-                                  const Color.fromRGBO(131, 146, 171, 1),
-                              outlineColor:
-                                  const Color.fromRGBO(131, 146, 171, 1),
+                          Container(
+                            width: 1.sw,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(15.w),
+                                  bottomRight: Radius.circular(15.w)),
+                              // color: Colors.green,
                             ),
-                            SizedBox(
-                              width: 20.w,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                ButtonApp(
+                                  event: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  text: "Đóng",
+                                  colorText: Colors.white,
+                                  backgroundColor:
+                                      const Color.fromRGBO(131, 146, 171, 1),
+                                  outlineColor:
+                                      const Color.fromRGBO(131, 146, 171, 1),
+                                ),
+                                SizedBox(
+                                  width: 20.w,
+                                ),
+                                ButtonApp(
+                                  event: () {
+                                    print(
+                                        "LIST ID TABLE NE ${selectedTableId.toList()}");
+                                    BlocProvider.of<SwitchTableBloc>(context)
+                                        .add(HandleSwitchTable(
+                                            client: widget.role,
+                                            shopId: widget.shopID,
+                                            roomId: widget.roomID,
+                                            tableId: widget
+                                                    .currentTable?.roomTableId
+                                                    .toString() ??
+                                                '',
+                                            orderId: widget.orderID,
+                                            selectedTableId:
+                                                selectedTableId.toList()));
+                                    if (stateSwitchTable.switchtableStatus ==
+                                        SwitchTableStatus.succes) {
+                                      Navigator.of(context).pop();
+                                      showUpdateDataSuccesDialog();
+                                      widget.eventSaveButton();
+                                    } else {
+                                      Navigator.of(context).pop();
+                                      showSomthingWrongDialog();
+                                    }
+                                  },
+                                  text: save,
+                                  colorText: Colors.white,
+                                  backgroundColor:
+                                      const Color.fromRGBO(23, 193, 232, 1),
+                                  outlineColor:
+                                      const Color.fromRGBO(23, 193, 232, 1),
+                                ),
+                                SizedBox(
+                                  width: 20.w,
+                                ),
+                              ],
                             ),
-                            ButtonApp(
-                              event: () {
-                                eventSaveButton();
-                              },
-                              text: save,
-                              colorText: Colors.white,
-                              backgroundColor:
-                                  const Color.fromRGBO(23, 193, 232, 1),
-                              outlineColor:
-                                  const Color.fromRGBO(23, 193, 232, 1),
-                            ),
-                            SizedBox(
-                              width: 20.w,
-                            ),
-                          ],
-                        ),
-                      ),
+                          ),
+                        ],
+                      )
                     ],
-                  )
-                ],
-              ),
-            ));
+                  ),
+                ));
+          },
+        );
       } else if (state.tableStatus == TableStatus.loading) {
         return AlertDialog(
           contentPadding: EdgeInsets.all(0),
