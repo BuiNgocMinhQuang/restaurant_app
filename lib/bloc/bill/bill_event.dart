@@ -67,3 +67,28 @@ class RemoveFoodToBill extends BillInforEvent {
   @override
   List<Object> get props => [];
 }
+
+class UpdateQuantytiFoodToBill extends BillInforEvent {
+  final String client;
+  final String shopId;
+  final bool isApi;
+  final String roomId;
+  final String tableId;
+  final String? orderId;
+  final String foodId;
+  final String value;
+
+  const UpdateQuantytiFoodToBill({
+    required this.client,
+    required this.shopId,
+    this.isApi = true,
+    required this.roomId,
+    required this.tableId,
+    required this.orderId,
+    required this.foodId,
+    required this.value,
+  });
+
+  @override
+  List<Object> get props => [];
+}

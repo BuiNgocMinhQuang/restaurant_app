@@ -104,6 +104,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.white,
+            foregroundColor: Colors.white,
             centerTitle: true,
             title: SizedBox(
               // width: 100.w,
@@ -113,9 +114,9 @@ class _StaffFabTabState extends State<StaffFabTab> {
                 fit: BoxFit.cover,
               ),
             ),
-            shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.vertical(bottom: Radius.circular(35.w))),
+            // shape: RoundedRectangleBorder(
+            //     borderRadius:
+            //         BorderRadius.vertical(bottom: Radius.circular(35.w))),
             leading: InkWell(
               onTap: () {},
               child: Builder(
@@ -356,7 +357,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
             key: bottomNavigationKey,
             // height: 150.h,
             color: Colors.blue,
-            backgroundColor: Colors.transparent,
+            backgroundColor: Colors.white,
             items: <Widget>[
               Icon(
                 Icons.restaurant,

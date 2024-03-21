@@ -23,6 +23,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final ValueNotifier<ThemeMode> _notifier = ValueNotifier(ThemeMode.light);
   late InternetCubit internetCubit;
   @override
   void initState() {
@@ -47,11 +48,17 @@ class _MyAppState extends State<MyApp> {
         return child!;
       },
       child: AppBlocProvider(
-        child: MaterialApp.router(
-            theme:
-                new ThemeData(scaffoldBackgroundColor: const Color(0xFFEFEFEF)),
-            debugShowCheckedModeBanner: false,
-            routerConfig: NyAppRouter().router),
+        child: ValueListenableBuilder(
+          valueListenable: _notifier,
+          builder: (_, mode, __) {
+            return MaterialApp.router(
+                theme: ThemeData.light(),
+                darkTheme: ThemeData.dark(),
+                themeMode: mode, // Decides which theme to show, light or dark.
+                debugShowCheckedModeBanner: false,
+                routerConfig: NyAppRouter().router);
+          },
+        ),
       ),
     );
   }

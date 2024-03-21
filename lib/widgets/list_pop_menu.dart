@@ -20,6 +20,7 @@ class PopUpMenuBroughtReceipt extends StatelessWidget {
       //   Icons.edit,
       //   color: Colors.black,
       // ),
+      color: Colors.white,
 
       itemBuilder: (context) => [
         PopupMenuItem(
@@ -139,6 +140,7 @@ class PopUpMenuPrintBill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
+      color: Colors.white,
       icon: const Icon(
         Icons.more_horiz_outlined,
         color: Colors.black,

@@ -16,6 +16,57 @@ class BillInforBloc extends Bloc<BillInforEvent, BillInforState> {
     on<GetBillInfor>(_onGetBillInfor);
     on<AddFoodToBill>(_onAddFoodToBill);
     on<RemoveFoodToBill>(_onRemoveFoodToBill);
+    on<UpdateQuantytiFoodToBill>(_onUpdateQuantytiFoodToBill);
+  }
+  void _onUpdateQuantytiFoodToBill(
+    UpdateQuantytiFoodToBill event,
+    Emitter<BillInforState> emit,
+  ) async {
+    emit(state.copyWith(billStatus: BillInforStateStatus.loading));
+    await Future.delayed(const Duration(seconds: 1));
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$updateQuantityFoodTable'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': event.client,
+          'shop_id': event.shopId,
+          'is_api': event.isApi.toString(),
+          'room_id': event.roomId,
+          'table_id': event.tableId,
+          'order_id': event.orderId,
+          'food_id': event.foodId,
+          'value': event.value
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print("UPDATE QUANTYTI FODD TO BILL $data");
+      var message = data['message'];
+      try {
+        if (data['status'] == 200) {
+          emit(state.copyWith(billStatus: BillInforStateStatus.succes));
+        } else {
+          print("ERROR UPDATE QUANTYTI FODD TO BILL 1");
+
+          emit(state.copyWith(billStatus: BillInforStateStatus.failed));
+          emit(state.copyWith(errorText: message['text']));
+        }
+      } catch (error) {
+        print("ERROR UPDATE QUANTYTI FODD BILL 2 $error");
+
+        emit(state.copyWith(billStatus: BillInforStateStatus.failed));
+        emit(state.copyWith(errorText: someThingWrong));
+      }
+    } catch (error) {
+      print("ERROR UPDATE QUANTYTI FODD BILL 3 $error");
+      emit(state.copyWith(billStatus: BillInforStateStatus.failed));
+      emit(state.copyWith(errorText: someThingWrong));
+    }
   }
 
   void _onRemoveFoodToBill(
