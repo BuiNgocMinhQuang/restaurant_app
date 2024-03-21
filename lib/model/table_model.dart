@@ -83,7 +83,7 @@ class Order {
   int? staffId;
   int? storeId;
   int? storeRoomId;
-  String? clientId;
+  int? clientId;
   String? deposit;
   String? amount;
   String? paymentAmount;

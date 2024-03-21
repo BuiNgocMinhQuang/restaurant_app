@@ -123,6 +123,8 @@ class _BookingTableDialogState extends State<BookingTableDialog>
   final noteController = TextEditingController();
   final cancleTableReasonController = TextEditingController();
   final _formCancleTable = GlobalKey<FormState>();
+  final scrollListFoodController = ScrollController();
+  List itemNe = List.generate(10, (index) => index);
 
   @override
   void dispose() {
@@ -146,6 +148,20 @@ class _BookingTableDialogState extends State<BookingTableDialog>
               .toList() ??
           [];
     });
+    scrollListFoodController.addListener(() {
+      if (scrollListFoodController.position.maxScrollExtent ==
+          scrollListFoodController.offset) {
+        print("LOADD MORE FOOD");
+        loadMoreFood();
+      }
+    });
+  }
+
+  bool hasMore = true;
+  Future loadMoreFood() async {
+    setState(() {
+      itemNe.addAll(['', '']);
+    });
   }
 
   _handleTabSelection() {
@@ -160,15 +176,15 @@ class _BookingTableDialogState extends State<BookingTableDialog>
       builder: (context, state) {
         if (state.tableStatus == TableStatus.succes) {
           var listGetFood = state.foodTableDataModel?.foods?.data;
-          // List itemNe = List.generate(10, (index) => index);
-          final filterProducts = listGetFood?.where((product) {
-            final foodTitle = product.foodName?.toLowerCase() ?? '';
-            final input = query.toLowerCase();
+          List filterProducts = listGetFood?.where((product) {
+                final foodTitle = product.foodName?.toLowerCase() ?? '';
+                final input = query.toLowerCase();
 
-            return (selectedCategoriesIndex.isEmpty ||
-                    selectedCategoriesIndex.contains(product.foodKind)) &&
-                foodTitle.contains(input);
-          }).toList();
+                return (selectedCategoriesIndex.isEmpty ||
+                        selectedCategoriesIndex.contains(product.foodKind)) &&
+                    foodTitle.contains(input);
+              }).toList() ??
+              [];
           listAllCategoriesFood = state.tableModel?.foodKinds ??
               []; //add data category food vao mang nay de lay index category
 
@@ -785,199 +801,197 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                     const SizedBox(height: 10.0),
                                     Expanded(
                                         child: ListView.builder(
+                                            controller:
+                                                scrollListFoodController,
                                             itemCount:
-                                                filterProducts?.length ?? 0,
+                                                // itemNe.length + 1,
+                                                filterProducts.length,
                                             itemBuilder: (context, index) {
-                                              return Card(
-                                                elevation: 8.0,
-                                                margin: const EdgeInsets.all(8),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          15.r),
-                                                ),
-                                                child: Container(
-                                                    width: 1.sw,
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                    15.r)),
-                                                    child: Column(
-                                                      children: [
-                                                        // space15H,
-                                                        // SizedBox(
-                                                        //     height: 160.w,
-                                                        //     child: ClipRRect(
-                                                        //       borderRadius: BorderRadius.only(
-                                                        //           topLeft: Radius
-                                                        //               .circular(
-                                                        //                   15.r),
-                                                        //           topRight: Radius
-                                                        //               .circular(
-                                                        //                   15.r)),
-                                                        //       child:
-                                                        //           Image.asset(
-                                                        //         product.image,
-                                                        //         fit: BoxFit
-                                                        //             .cover,
-                                                        //       ),
-                                                        //     )),
-                                                        space10H,
-                                                        Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            TextApp(
-                                                                text: filterProducts?[
-                                                                            index]
-                                                                        .foodName ??
-                                                                    ''),
-                                                            TextApp(
-                                                              text: filterProducts?[
+                                              if (index <
+                                                  (filterProducts.length)) {
+                                                return Card(
+                                                  elevation: 8.0,
+                                                  margin:
+                                                      const EdgeInsets.all(8),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15.r),
+                                                  ),
+                                                  child: Container(
+                                                      width: 1.sw,
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      15.r)),
+                                                      child: Column(
+                                                        children: [
+                                                          // space15H,
+                                                          // SizedBox(
+                                                          //     height: 160.w,
+                                                          //     child: ClipRRect(
+                                                          //       borderRadius: BorderRadius.only(
+                                                          //           topLeft: Radius
+                                                          //               .circular(
+                                                          //                   15.r),
+                                                          //           topRight: Radius
+                                                          //               .circular(
+                                                          //                   15.r)),
+                                                          //       child:
+                                                          //           Image.asset(
+                                                          //         product.image,
+                                                          //         fit: BoxFit
+                                                          //             .cover,
+                                                          //       ),
+                                                          //     )),
+                                                          space10H,
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              TextApp(
+                                                                  text: filterProducts[
                                                                           index]
-                                                                      .foodPrice
-                                                                      .toString() ??
-                                                                  '',
-                                                              fontsize: 20.sp,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        const Divider(),
-                                                        Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  20.w),
-                                                          child: Container(
-                                                              width: 1.sw,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            8.r)),
+                                                                      .foodName),
+                                                              TextApp(
+                                                                text: filterProducts[
+                                                                        index]
+                                                                    .foodPrice
+                                                                    .toString(),
+                                                                fontsize: 20.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
                                                               ),
-                                                              child:
-                                                                  IntrinsicHeight(
-                                                                child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .stretch,
-                                                                  children: [
-                                                                    InkWell(
-                                                                      onTap:
-                                                                          () {},
-                                                                      child:
-                                                                          Container(
-                                                                        width:
-                                                                            70.w,
-                                                                        height:
-                                                                            35.w,
-                                                                        decoration: BoxDecoration(
-                                                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(8.r), bottomLeft: Radius.circular(8.r)),
-                                                                            gradient: const LinearGradient(
-                                                                              begin: Alignment.topRight,
-                                                                              end: Alignment.bottomLeft,
-                                                                              colors: [
-                                                                                Color.fromRGBO(33, 82, 255, 1),
-                                                                                Color.fromRGBO(33, 212, 253, 1)
-                                                                              ],
-                                                                            )),
-                                                                        child:
-                                                                            Center(
-                                                                          child:
-                                                                              TextApp(
-                                                                            text:
-                                                                                "-",
-                                                                            textAlign:
-                                                                                TextAlign.center,
-                                                                            color:
-                                                                                Colors.white,
-                                                                            fontsize:
-                                                                                18.sp,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Expanded(
+                                                            ],
+                                                          ),
+                                                          const Divider(),
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    20.w),
+                                                            child: Container(
+                                                                width: 1.sw,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              8.r)),
+                                                                ),
+                                                                child:
+                                                                    IntrinsicHeight(
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .stretch,
+                                                                    children: [
+                                                                      InkWell(
+                                                                        onTap:
+                                                                            () {},
                                                                         child:
                                                                             Container(
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        border: Border.all(
-                                                                            width:
-                                                                                0.4,
-                                                                            color:
-                                                                                Colors.grey),
-                                                                      ),
-                                                                      child:
-                                                                          Center(
-                                                                        child:
-                                                                            TextApp(
-                                                                          text:
-                                                                              "1",
-                                                                          textAlign:
-                                                                              TextAlign.center,
+                                                                          width:
+                                                                              70.w,
+                                                                          height:
+                                                                              35.w,
+                                                                          decoration: BoxDecoration(
+                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(8.r), bottomLeft: Radius.circular(8.r)),
+                                                                              gradient: const LinearGradient(
+                                                                                begin: Alignment.topRight,
+                                                                                end: Alignment.bottomLeft,
+                                                                                colors: [
+                                                                                  Color.fromRGBO(33, 82, 255, 1),
+                                                                                  Color.fromRGBO(33, 212, 253, 1)
+                                                                                ],
+                                                                              )),
+                                                                          child:
+                                                                              Center(
+                                                                            child:
+                                                                                TextApp(
+                                                                              text: "-",
+                                                                              textAlign: TextAlign.center,
+                                                                              color: Colors.white,
+                                                                              fontsize: 18.sp,
+                                                                              fontWeight: FontWeight.bold,
+                                                                            ),
+                                                                          ),
                                                                         ),
                                                                       ),
-                                                                    )),
-                                                                    InkWell(
-                                                                      onTap:
-                                                                          () {},
-                                                                      child:
-                                                                          Container(
-                                                                        width:
-                                                                            70.w,
-                                                                        height:
-                                                                            35.w,
-                                                                        decoration: BoxDecoration(
-                                                                            borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), bottomRight: Radius.circular(8.r)),
-                                                                            gradient: const LinearGradient(
-                                                                              begin: Alignment.topRight,
-                                                                              end: Alignment.bottomLeft,
-                                                                              colors: [
-                                                                                Color.fromRGBO(33, 82, 255, 1),
-                                                                                Color.fromRGBO(33, 212, 253, 1)
-                                                                              ],
-                                                                            )),
+                                                                      Expanded(
+                                                                          child:
+                                                                              Container(
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          border: Border.all(
+                                                                              width: 0.4,
+                                                                              color: Colors.grey),
+                                                                        ),
                                                                         child:
                                                                             Center(
                                                                           child:
                                                                               TextApp(
                                                                             text:
-                                                                                "+",
+                                                                                "1",
                                                                             textAlign:
                                                                                 TextAlign.center,
-                                                                            color:
-                                                                                Colors.white,
-                                                                            fontsize:
-                                                                                18.sp,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
                                                                           ),
                                                                         ),
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              )),
-                                                        )
-                                                      ],
-                                                    )),
-                                              );
+                                                                      )),
+                                                                      InkWell(
+                                                                        onTap:
+                                                                            () {},
+                                                                        child:
+                                                                            Container(
+                                                                          width:
+                                                                              70.w,
+                                                                          height:
+                                                                              35.w,
+                                                                          decoration: BoxDecoration(
+                                                                              borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), bottomRight: Radius.circular(8.r)),
+                                                                              gradient: const LinearGradient(
+                                                                                begin: Alignment.topRight,
+                                                                                end: Alignment.bottomLeft,
+                                                                                colors: [
+                                                                                  Color.fromRGBO(33, 82, 255, 1),
+                                                                                  Color.fromRGBO(33, 212, 253, 1)
+                                                                                ],
+                                                                              )),
+                                                                          child:
+                                                                              Center(
+                                                                            child:
+                                                                                TextApp(
+                                                                              text: "+",
+                                                                              textAlign: TextAlign.center,
+                                                                              color: Colors.white,
+                                                                              fontsize: 18.sp,
+                                                                              fontWeight: FontWeight.bold,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                )),
+                                                          )
+                                                        ],
+                                                      )),
+                                                );
+                                              } else {
+                                                return Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                );
+                                              }
                                             })),
                                     Container(
                                       width: 1.sw,
