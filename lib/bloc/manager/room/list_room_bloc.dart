@@ -74,12 +74,22 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
         print("ERROR GET LIST ROOM $error");
         emit(state.copyWith(listRoomStatus: ListRoomStatus.failed));
         emit(state.copyWith(errorText: message));
+        BlocProvider.of<LoginBloc>(navigatorKey.currentContext!)
+            .add(const LogoutStaff());
+        StorageUtils.instance.removeKey(key: 'auth_staff');
+        StorageUtils.instance.removeKey(key: 'staff_infor_data');
+        navigatorKey.currentContext?.go("/staff_sign_in");
       }
     } catch (error) {
       print("NO DATA ROOM $error");
 
       emit(state.copyWith(listRoomStatus: ListRoomStatus.failed));
       emit(state.copyWith(errorText: "Đã có lỗi xảy ra !"));
+      BlocProvider.of<LoginBloc>(navigatorKey.currentContext!)
+          .add(const LogoutStaff());
+      StorageUtils.instance.removeKey(key: 'auth_staff');
+      StorageUtils.instance.removeKey(key: 'staff_infor_data');
+      navigatorKey.currentContext?.go("/staff_sign_in");
     }
   }
 }

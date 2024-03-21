@@ -105,8 +105,8 @@ class _StaffBookingTableState extends State<StaffBookingTable>
 
   @override
   void initState() {
-    getDataTabIndex(roomId: "");
     super.initState();
+    getDataTabIndex(roomId: "");
   }
 
   var indexRoomID = 1;

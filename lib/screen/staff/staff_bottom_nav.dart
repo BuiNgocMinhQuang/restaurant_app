@@ -29,8 +29,10 @@ class _StaffFabTabState extends State<StaffFabTab> {
 
   @override
   void initState() {
-    checkTokenExpires();
     super.initState();
+    Future.delayed(Duration.zero, () {
+      checkTokenExpires();
+    });
   }
 
   @override
@@ -38,14 +40,14 @@ class _StaffFabTabState extends State<StaffFabTab> {
     super.dispose();
   }
 
-  void showTokenExpiredDialog() {
+  void showTokenExpiredDialog() async {
     BlocProvider.of<LoginBloc>(context).add(const LogoutStaff());
     StorageUtils.instance.removeKey(key: 'auth_staff');
     StorageUtils.instance.removeKey(key: 'staff_infor_data');
     context.go("/staff_sign_in");
   }
 
-  void checkTokenExpires() {
+  void checkTokenExpires() async {
     var tokenExpiresTime =
         StorageUtils.instance.getString(key: 'token_expires');
     if (tokenExpiresTime != '') {

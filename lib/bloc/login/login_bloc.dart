@@ -185,7 +185,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } catch (error) {
       print("NO CONNECT DATA $error");
       emit(state.copyWith(loginStatus: LoginStatus.failed));
-      emit(state.copyWith(errorText: "Đã có lỗi xảy ra"));
+      emit(state.copyWith(errorText: "Không thể kết nối với máy chủ !"));
     }
 
     if (state.loginStatus == LoginStatus.failed) {
