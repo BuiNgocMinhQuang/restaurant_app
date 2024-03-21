@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:app_restaurant/bloc/login/login_bloc.dart';
-import 'package:app_restaurant/bloc/staff/staff_infor_bloc.dart';
+import 'package:app_restaurant/bloc/staff/infor/staff_infor_bloc.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/fake_data.dart';

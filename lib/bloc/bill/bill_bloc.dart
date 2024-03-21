@@ -198,11 +198,9 @@ class BillInforBloc extends Bloc<BillInforEvent, BillInforState> {
       );
       final data = jsonDecode(respons.body);
       // print("BILL INFOR $data");
-      var message = data['message'];
+
       try {
         if (data['status'] == 200) {
-          print("DATA ORDER ${data['order']}");
-
           var billTableDataRes = BillInforModel.fromJson(data);
           emit(state.copyWith(billInforModel: billTableDataRes));
           emit(state.copyWith(billStatus: BillInforStateStatus.succes));
@@ -210,7 +208,7 @@ class BillInforBloc extends Bloc<BillInforEvent, BillInforState> {
           print("ERROR BILL INFOR 1");
 
           emit(state.copyWith(billStatus: BillInforStateStatus.failed));
-          emit(state.copyWith(errorText: message['text']));
+          emit(state.copyWith(errorText: someThingWrong));
         }
       } catch (error) {
         print("ERROR BILL INFOR 2 $error");

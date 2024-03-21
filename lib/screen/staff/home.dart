@@ -392,7 +392,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                                     return SeeBillDialog(
                                                                                                       role: currentRole,
                                                                                                       shopID: currentShopId,
-                                                                                                      orderID: data.tables?[index].orderId.toString(),
+                                                                                                      orderID: data.tables?[index].orderId.toString() ?? '',
                                                                                                       roomID: data.storeRoomId.toString(),
                                                                                                       currentTable: data.tables![index],
                                                                                                       nameRoom: roomName,

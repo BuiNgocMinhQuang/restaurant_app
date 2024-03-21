@@ -1,25 +1,21 @@
-import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class BillInforContainer extends StatelessWidget {
+class BroughtReceiptContainer extends StatelessWidget {
   final String statusText;
-  final String tableName;
-  final String roomName;
   final String dateTime;
   final String price;
   final Widget typePopMenu;
-  const BillInforContainer({
-    Key? key,
-    required this.typePopMenu,
-    required this.statusText,
-    required this.tableName,
-    required this.roomName,
-    required this.dateTime,
-    required this.price,
-  }) : super(key: key);
+
+  const BroughtReceiptContainer(
+      {Key? key,
+      required this.typePopMenu,
+      required this.statusText,
+      required this.dateTime,
+      required this.price})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,13 +46,17 @@ class BillInforContainer extends StatelessWidget {
                       Row(
                         children: [
                           TextApp(
-                            text: tableName,
+                            text: "Tên khách hàng: ",
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
                             fontsize: 14.sp,
                           ),
-                          TextApp(text: " | "),
-                          TextApp(text: roomName, fontsize: 14.sp)
+                          TextApp(
+                            text: "Khách lẻ",
+                            fontsize: 14.sp,
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                          )
                         ],
                       ),
                       typePopMenu

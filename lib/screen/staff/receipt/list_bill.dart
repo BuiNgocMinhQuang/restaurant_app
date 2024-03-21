@@ -100,6 +100,10 @@ class _StaffListBillState extends State<StaffListBill>
                           return Padding(
                             padding: EdgeInsets.only(left: 5.w, right: 5.w),
                             child: BillInforContainer(
+                                tableName: '',
+                                roomName: '',
+                                dateTime: '',
+                                price: '',
                                 typePopMenu: PopUpMenuPrintBill(
                                   eventButton1: () {
                                     showDialog(
@@ -126,6 +130,10 @@ class _StaffListBillState extends State<StaffListBill>
                           return Padding(
                             padding: EdgeInsets.only(left: 5.w, right: 5.w),
                             child: BillInforContainer(
+                                tableName: '',
+                                roomName: '',
+                                dateTime: '',
+                                price: '',
                                 typePopMenu: PopUpMenuPrintBill(
                                   eventButton1: () {
                                     showDialog(
@@ -152,6 +160,10 @@ class _StaffListBillState extends State<StaffListBill>
                           return Padding(
                             padding: EdgeInsets.only(left: 5.w, right: 5.w),
                             child: BillInforContainer(
+                              tableName: '',
+                              roomName: '',
+                              dateTime: '',
+                              price: '',
                               typePopMenu: PopUpMenuPrintBill(
                                 eventButton1: () {
                                   showDialog(
@@ -179,6 +191,10 @@ class _StaffListBillState extends State<StaffListBill>
                           return Padding(
                             padding: EdgeInsets.only(left: 5.w, right: 5.w),
                             child: BillInforContainer(
+                                tableName: '',
+                                roomName: '',
+                                dateTime: '',
+                                price: '',
                                 typePopMenu: PopUpMenuPrintBill(
                                   eventButton1: () {
                                     showDialog(

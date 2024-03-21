@@ -1,5 +1,6 @@
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/widgets/bill_infor_container.dart';
+import 'package:app_restaurant/widgets/brought_receipt_container.dart';
 import 'package:app_restaurant/widgets/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/shimmer/shimmer_list.dart';
@@ -97,7 +98,9 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                                         return Padding(
                                           padding: EdgeInsets.only(
                                               left: 5.w, right: 5.w),
-                                          child: BillInforContainer(
+                                          child: BroughtReceiptContainer(
+                                              dateTime: '',
+                                              price: '',
                                               typePopMenu:
                                                   PopUpMenuBroughtReceipt(
                                                 eventButton1: () {
@@ -165,7 +168,9 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                                         return Padding(
                                           padding: EdgeInsets.only(
                                               left: 5.w, right: 5.w),
-                                          child: BillInforContainer(
+                                          child: BroughtReceiptContainer(
+                                            dateTime: '',
+                                            price: '',
                                             typePopMenu:
                                                 PopUpMenuBroughtReceipt(
                                               eventButton1: () {
@@ -213,7 +218,9 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                                         return Padding(
                                           padding: EdgeInsets.only(
                                               left: 5.w, right: 5.w),
-                                          child: BillInforContainer(
+                                          child: BroughtReceiptContainer(
+                                              dateTime: '',
+                                              price: '',
                                               typePopMenu: PopUpMenuPrintBill(
                                                 eventButton1: () {
                                                   // setState(() {

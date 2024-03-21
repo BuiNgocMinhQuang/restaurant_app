@@ -1,17 +1,11 @@
 import 'dart:convert';
-
-import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
-import 'package:app_restaurant/model/manager_infor_model.dart';
 import 'package:app_restaurant/model/staff_infor_model.dart';
-import 'package:app_restaurant/model/user_model.dart';
-import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart' as http;
-import 'package:go_router/go_router.dart';
 
 part 'staff_infor_state.dart';
 part 'staff_infor_event.dart';
