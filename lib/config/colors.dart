@@ -18,3 +18,6 @@ const color2DarkButton = Color.fromRGBO(58, 65, 111, 1);
 
 const color1GreyButton = Color.fromRGBO(206, 212, 218, 1);
 const color2GreyButton = Color.fromRGBO(235, 239, 244, 1);
+
+const color1DarkGreyButton = Color.fromARGB(255, 186, 188, 189);
+const color2DarkGreyButton = Color.fromARGB(255, 87, 96, 116);

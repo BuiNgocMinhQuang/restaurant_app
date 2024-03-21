@@ -159,8 +159,9 @@ class _BookingTableDialogState extends State<BookingTableDialog>
     return BlocBuilder<TableBloc, TableState>(
       builder: (context, state) {
         if (state.tableStatus == TableStatus.succes) {
-          var listLayDoAn = state.foodTableDataModel?.foods?.data;
-          final filterProducts22 = listLayDoAn?.where((product) {
+          var listGetFood = state.foodTableDataModel?.foods?.data;
+          // List itemNe = List.generate(10, (index) => index);
+          final filterProducts = listGetFood?.where((product) {
             final foodTitle = product.foodName?.toLowerCase() ?? '';
             final input = query.toLowerCase();
 
@@ -239,7 +240,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                     .currentTable?.roomTableId
                                                     .toString() ??
                                                 '',
-                                            limit: 10.toString(),
+                                            limit: 1000.toString(),
                                             page: 1.toString()));
                                   }
                                 },
@@ -785,7 +786,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                     Expanded(
                                         child: ListView.builder(
                                             itemCount:
-                                                filterProducts22?.length ?? 0,
+                                                filterProducts?.length ?? 0,
                                             itemBuilder: (context, index) {
                                               return Card(
                                                 elevation: 8.0,
@@ -833,12 +834,12 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                   .center,
                                                           children: [
                                                             TextApp(
-                                                                text: filterProducts22?[
+                                                                text: filterProducts?[
                                                                             index]
                                                                         .foodName ??
                                                                     ''),
                                                             TextApp(
-                                                              text: filterProducts22?[
+                                                              text: filterProducts?[
                                                                           index]
                                                                       .foodPrice
                                                                       .toString() ??

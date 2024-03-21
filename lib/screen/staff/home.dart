@@ -178,7 +178,17 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                   Container(
                                     width: 20,
                                     height: 20,
-                                    color: grey,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(2.r),
+                                      gradient: const LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: <Color>[
+                                          color1DarkGreyButton,
+                                          color2DarkGreyButton
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                   SizedBox(
                                     width: 5.w,
@@ -194,7 +204,16 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                   Container(
                                     width: 20,
                                     height: 20,
-                                    color: lightBlue,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(2.r),
+                                      gradient: const LinearGradient(
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                          colors: <Color>[
+                                            color2BlueButton,
+                                            color1BlueButton
+                                          ]),
+                                    ),
                                   ),
                                   SizedBox(
                                     width: 5.w,
@@ -262,12 +281,6 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                           data.storeRoomName ??
                                                                               '';
 
-                                                                      var listRoomName = state
-                                                                          .listRoomModel!
-                                                                          .rooms!
-                                                                          .map((data) =>
-                                                                              data.storeRoomName)
-                                                                          .toList();
                                                                       var listRoomID = state
                                                                           .listRoomModel!
                                                                           .rooms!
@@ -282,7 +295,19 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                           child: Container(
                                                                               decoration: BoxDecoration(
                                                                                 borderRadius: BorderRadius.circular(8.r),
-                                                                                color: data.tables?[index].bookingStatus == true ? lightBlue : grey,
+                                                                                gradient: LinearGradient(
+                                                                                  begin: Alignment.topLeft,
+                                                                                  end: Alignment.bottomRight,
+                                                                                  colors: data.tables?[index].bookingStatus == true
+                                                                                      ? <Color>[
+                                                                                          color2BlueButton,
+                                                                                          color1BlueButton
+                                                                                        ]
+                                                                                      : <Color>[
+                                                                                          color1DarkGreyButton,
+                                                                                          color2DarkGreyButton
+                                                                                        ],
+                                                                                ),
                                                                               ),
                                                                               width: 50,
                                                                               height: 50,
@@ -374,8 +399,6 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                                     );
                                                                                                   });
                                                                                             }, eventButton4: () {
-                                                                                              print("ODER ID NE ${data.tables![index].orderId.toString()}");
-                                                                                              print("TABLE ID NE ${data.tables![index].roomTableId.toString()}");
                                                                                               getPaymentData(
                                                                                                 tableId: data.tables![index].roomTableId.toString(),
                                                                                                 orderID: data.tables![index].orderId.toString(),
@@ -399,7 +422,6 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                                   });
                                                                                             })
                                                                                           : PopUpMenuUnUseTable(eventButton1: () {
-                                                                                              // getDataTabIndex(roomId: state.listRoomModel!.rooms![indexRoomID].storeRoomId.toString(), role: "staff");
                                                                                               getTableInfor(
                                                                                                 roomId: data.storeRoomId.toString(),
                                                                                                 tableId: data.tables![index].roomTableId.toString(),
