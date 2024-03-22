@@ -79,19 +79,19 @@ class BroughtReceiptContainer extends StatelessWidget {
                         fontsize: 16.sp,
                         fontWeight: FontWeight.bold,
                       ),
-                      if (statusText == "Đã thanh toán")
+                      if (statusText == "Hoàn thành")
                         TextApp(
                           text: statusText,
                           color: Colors.green,
                           fontsize: 14.sp,
                         )
-                      else if (statusText == "Chưa thanh toán")
+                      else if (statusText == "Đang chế biến")
                         TextApp(
                           text: statusText,
                           color: Color.fromARGB(255, 215, 184, 6),
                           fontsize: 14.sp,
                         )
-                      else if (statusText == "Hóa đơn đã hủy")
+                      else if (statusText == "Đã huỷ")
                         TextApp(
                           text: statusText,
                           color: const Color.fromARGB(255, 207, 28, 15),

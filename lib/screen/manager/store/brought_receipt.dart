@@ -108,7 +108,11 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                                                       context: context,
                                                       builder: (BuildContext
                                                           context) {
-                                                        return const ManageBroughtReceiptDialog();
+                                                        return const ManageBroughtReceiptDialog(
+                                                          orderID: '',
+                                                          shopID: '',
+                                                          role: '',
+                                                        );
                                                       });
                                                 },
                                                 eventButton2: () {
@@ -178,7 +182,11 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                                                     context: context,
                                                     builder:
                                                         (BuildContext context) {
-                                                      return const ManageBroughtReceiptDialog();
+                                                      return const ManageBroughtReceiptDialog(
+                                                        role: '',
+                                                        orderID: '',
+                                                        shopID: '',
+                                                      );
                                                     });
                                               },
                                               eventButton2: () {

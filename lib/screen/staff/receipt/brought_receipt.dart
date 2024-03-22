@@ -1,7 +1,9 @@
 import 'package:app_restaurant/bloc/brought_receipt/brought_receipt_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
+import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
+import 'package:app_restaurant/model/brought_receipt/list_brought_receipt_model.dart';
 import 'package:app_restaurant/utils/share_getString.dart';
 import 'package:app_restaurant/widgets/bill_infor_container.dart';
 import 'package:app_restaurant/widgets/brought_receipt_container.dart';
@@ -15,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import 'package:money_formatter/money_formatter.dart';
 
 class StaffBroughtReceipt extends StatefulWidget {
   const StaffBroughtReceipt({super.key});
@@ -27,6 +30,8 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
     with TickerProviderStateMixin {
   final String currentRole = "staff";
   final String currentShopId = getStaffShopID;
+  final scrollListFoodController = ScrollController();
+
   void getBroughtReceiptData() async {
     BlocProvider.of<BroughtReceiptBloc>(context).add(GetListBroughtReceipt(
         client: currentRole,
@@ -36,12 +41,34 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
         filters: []));
   }
 
+  void getDetailsBroughtReceiptData({required String orderID}) async {
+    BlocProvider.of<ManageBroughtReceiptBloc>(context).add(
+        GetDetailsBroughtReceipt(
+            client: currentRole,
+            shopId: currentShopId,
+            limit: 15,
+            page: 1,
+            filters: [],
+            orderId: orderID));
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getBroughtReceiptData();
+    scrollListFoodController.addListener(() {
+      if (scrollListFoodController.position.maxScrollExtent ==
+          scrollListFoodController.offset) {
+        print("LOADD MORE FOOD");
+        loadMoreFood();
+      }
+    });
   }
+
+  bool hasMore = true;
+
+  Future loadMoreFood() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -123,79 +150,193 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                                         // Implement logic to refresh data for Tab 1
                                       },
                                       child: ListView.builder(
+                                          controller: scrollListFoodController,
                                           shrinkWrap: true,
                                           itemCount: statePage
-                                                  .broughtReceiptModel
+                                                  .listBroughtReceiptModel
                                                   ?.data
-                                                  ?.data
-                                                  ?.length ??
-                                              0,
+                                                  .data
+                                                  .length ??
+                                              0 + 1,
                                           itemBuilder: (BuildContext context,
                                               int index) {
+                                            var dataLength = statePage
+                                                    .listBroughtReceiptModel
+                                                    ?.data
+                                                    .data
+                                                    .length ??
+                                                0;
+                                            var statusTextBill = statePage
+                                                .listBroughtReceiptModel
+                                                ?.data
+                                                .data[index]
+                                                .payFlg
+                                                .toString();
+
+                                            switch (statusTextBill) {
+                                              case "0":
+                                                statusTextBill =
+                                                    "Đang chế biến";
+                                                break;
+
+                                              case "1":
+                                                statusTextBill = "Hoàn thành";
+                                                break;
+
+                                              case "2":
+                                                statusTextBill = "Đã huỷ";
+                                                break;
+                                            }
+                                            if (index < dataLength) {
+                                              return Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 5.w, right: 5.w),
+                                                child: BroughtReceiptContainer(
+                                                    dateTime: formatDateTime(
+                                                        statePage
+                                                                .listBroughtReceiptModel
+                                                                ?.data
+                                                                .data[index]
+                                                                .createdAt
+                                                                .toString() ??
+                                                            ''),
+                                                    price:
+                                                        "${MoneyFormatter(amount: (statePage.listBroughtReceiptModel?.data.data[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                    typePopMenu:
+                                                        PopUpMenuBroughtReceipt(
+                                                      eventButton1: () {
+                                                        getDetailsBroughtReceiptData(
+                                                            orderID: statePage
+                                                                    .listBroughtReceiptModel
+                                                                    ?.data
+                                                                    .data[index]
+                                                                    .orderId
+                                                                    .toString() ??
+                                                                '');
+                                                        showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return const ManageBroughtReceiptDialog(
+                                                                role: '',
+                                                                orderID: '',
+                                                                shopID: '',
+                                                              );
+                                                            });
+                                                      },
+                                                      eventButton2: () {
+                                                        showConfirmDialog(
+                                                            context, () {});
+                                                      },
+                                                      eventButton3: () {
+                                                        showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return const PrintBillDialog();
+                                                            });
+                                                      },
+                                                      eventButton4: () {
+                                                        showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return const CancleBillDialog();
+                                                            });
+                                                      },
+                                                    ),
+                                                    statusText:
+                                                        statusTextBill ?? ''),
+                                              );
+                                            } else {
+                                              return Center(
+                                                child: hasMore
+                                                    ? CircularProgressIndicator()
+                                                    : Text("HET R"),
+                                              );
+                                            }
+                                          }),
+                                    ),
+                                    //Tab Paid
+                                    RefreshIndicator(
+                                      color: Colors.blue,
+                                      onRefresh: () async {
+                                        // Implement logic to refresh data for Tab 1
+                                      },
+                                      child: ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount: statePage
+                                              .listBroughtReceiptModel
+                                              ?.data
+                                              .data
+                                              .where((element) =>
+                                                  element.payFlg == 1)
+                                              .length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            List<Datum> listReceipt = [];
+                                            listReceipt.addAll(statePage
+                                                    .listBroughtReceiptModel
+                                                    ?.data
+                                                    .data
+                                                    .where((element) =>
+                                                        element.payFlg == 1)
+                                                    .toList() ??
+                                                []);
+
                                             return Padding(
                                               padding: EdgeInsets.only(
                                                   left: 5.w, right: 5.w),
                                               child: BroughtReceiptContainer(
-                                                  dateTime: '',
-                                                  price: '',
-                                                  typePopMenu:
-                                                      PopUpMenuBroughtReceipt(
-                                                    eventButton1: () {
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext
-                                                              context) {
-                                                            return const ManageBroughtReceiptDialog();
-                                                          });
-                                                    },
-                                                    eventButton2: () {
-                                                      showConfirmDialog(
-                                                          context, () {});
-                                                    },
-                                                    eventButton3: () {
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext
-                                                              context) {
-                                                            return const PrintBillDialog();
-                                                          });
-                                                    },
-                                                    eventButton4: () {
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext
-                                                              context) {
-                                                            return const CancleBillDialog();
-                                                          });
-                                                    },
-                                                  ),
-                                                  statusText: "Đang chế biến"),
+                                                dateTime: formatDateTime(
+                                                    listReceipt[index]
+                                                        .createdAt
+                                                        .toString()),
+                                                price:
+                                                    "${MoneyFormatter(amount: (listReceipt[index].orderTotal).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                typePopMenu:
+                                                    PopUpMenuBroughtReceipt(
+                                                  eventButton1: () {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return const ManageBroughtReceiptDialog(
+                                                            role: '',
+                                                            orderID: '',
+                                                            shopID: '',
+                                                          );
+                                                        });
+                                                  },
+                                                  eventButton2: () {
+                                                    showConfirmDialog(
+                                                        context, () {});
+                                                  },
+                                                  eventButton3: () {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return const PrintBillDialog();
+                                                        });
+                                                  },
+                                                  eventButton4: () {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return const CancleBillDialog();
+                                                        });
+                                                  },
+                                                ),
+                                                statusText: "Hoàn thành",
+                                              ),
                                             );
                                           }),
                                     ),
-                                    //Tab Paid
-                                    SizedBox(
-                                        width: 1.sw,
-                                        height: 30.h,
-                                        // color: Colors.amber,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Icon(
-                                              Icons.receipt_long_rounded,
-                                              size: 50.h,
-                                            ),
-                                            SizedBox(
-                                              height: 10.h,
-                                            ),
-                                            TextApp(
-                                                text: "Chưa có hoá đơn :(",
-                                                textAlign: TextAlign.center,
-                                                fontsize: 16.sp,
-                                                color: Colors.black),
-                                          ],
-                                        )),
 
                                     //Tab Unpaid
                                     RefreshIndicator(
@@ -221,7 +362,11 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                                                         context: context,
                                                         builder: (BuildContext
                                                             context) {
-                                                          return const ManageBroughtReceiptDialog();
+                                                          return const ManageBroughtReceiptDialog(
+                                                            role: '',
+                                                            orderID: '',
+                                                            shopID: '',
+                                                          );
                                                         });
                                                   },
                                                   eventButton2: () {
@@ -274,7 +419,11 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                                                           context: context,
                                                           builder: (BuildContext
                                                               context) {
-                                                            return const ManageBroughtReceiptDialog();
+                                                            return const ManageBroughtReceiptDialog(
+                                                              role: '',
+                                                              orderID: '',
+                                                              shopID: '',
+                                                            );
                                                           });
                                                     },
                                                     eventButton2: () {
@@ -319,7 +468,11 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return const ManageBroughtReceiptDialog();
+                                  return const ManageBroughtReceiptDialog(
+                                    role: '',
+                                    orderID: '',
+                                    shopID: '',
+                                  );
                                 });
                           },
                           color: Colors.blue,

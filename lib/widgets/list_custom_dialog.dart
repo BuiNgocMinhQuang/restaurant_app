@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:app_restaurant/bloc/bill/bill_bloc.dart';
+import 'package:app_restaurant/bloc/brought_receipt/brought_receipt_bloc.dart';
 import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
 import 'package:app_restaurant/bloc/payment/payment_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
@@ -1738,557 +1739,590 @@ class SeeBillDialog extends StatelessWidget {
             backgroundColor: Colors.white,
             content: Container(
                 width: 1.sw,
-                height: 1.sh,
+                // height: 1.sh,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.r),
                   color: Colors.white,
                 ),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.all(8.w),
-                      child: Container(
-                          width: 1.sw,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(15.w),
-                                topRight: Radius.circular(15.w)),
-                            // color: Colors.amber,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 20.w),
-                                    child: TextApp(
-                                      text: currentTable?.tableName ?? '',
-                                      fontsize: 18.sp,
-                                      color: blueText,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                ],
+                    //cai nay con loi layout
+                    Expanded(
+                      child: SizedBox(
+                        height: double.infinity,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.w),
+                          child: Container(
+                              width: 1.sw,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(15.w),
+                                    topRight: Radius.circular(15.w)),
+                                // color: Colors.amber,
                               ),
-                              Row(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 20.w),
-                                    child: TextApp(
-                                      text: nameRoom,
-                                      fontsize: 14.sp,
-                                      color: blueText,
-                                      fontWeight: FontWeight.normal,
-                                    ),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 20.w),
+                                        child: TextApp(
+                                          text: currentTable?.tableName ?? '',
+                                          fontsize: 18.sp,
+                                          color: blueText,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 20.w),
+                                        child: TextApp(
+                                          text: nameRoom,
+                                          fontsize: 14.sp,
+                                          color: blueText,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      )
+                                    ],
                                   )
                                 ],
-                              )
-                            ],
-                          )),
+                              )),
+                        ),
+                      ),
                     ),
-                    Divider(
+                    const Divider(
                       height: 1,
                       color: Colors.black,
                     ),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: Padding(
-                        padding: EdgeInsets.all(20.w),
-                        child: Column(
-                          children: [
-                            Flexible(
-                              fit: FlexFit.tight,
-                              child: Column(
-                                children: [
-                                  Container(
-                                      width: 1.sw,
-                                      // height: 100.h,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(10.r),
-                                        color: Colors.white,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey.withOpacity(0.5),
-                                            spreadRadius: 2,
-                                            blurRadius: 4,
-                                            offset: const Offset(0,
-                                                3), // changes position of shadow
-                                          ),
-                                        ],
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            width: 1.sw,
-                                            // height: 30.h,
-                                            decoration: BoxDecoration(
-                                              gradient: const LinearGradient(
-                                                begin: Alignment.topRight,
-                                                end: Alignment.bottomLeft,
-                                                colors: [
-                                                  Color.fromRGBO(
-                                                      33, 82, 255, 1),
-                                                  Color.fromRGBO(
-                                                      33, 212, 253, 1),
-                                                ],
-                                              ),
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft:
-                                                      Radius.circular(10.r),
-                                                  topRight:
-                                                      Radius.circular(10.r)),
-                                              color: Colors.blue,
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsets.only(
-                                                  top: 10.h,
-                                                  left: 10.w,
-                                                  bottom: 10.h),
-                                              child: TextApp(
-                                                text: "Tổng quan",
-                                                fontsize: 18.sp,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 1.sw,
-                                            // height: 30.h,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(15.r),
-                                              color: Colors.white,
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsets.all(20.w),
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    children: [
-                                                      TextApp(
-                                                          text: formatDateTime(state
-                                                                  .billInforModel
-                                                                  ?.order
-                                                                  ?.createdAt
-                                                                  .toString() ??
-                                                              ''),
-                                                          fontsize: 14.sp),
-                                                      SizedBox(
-                                                        width: 5.w,
-                                                      ),
-                                                      Icon(
-                                                        Icons
-                                                            .access_time_filled,
-                                                        size: 14.sp,
-                                                        color: Colors.grey,
-                                                      )
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 15.h,
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      TextApp(
-                                                        text: "Tổng tiền",
-                                                        fontsize: 14.sp,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                      TextApp(
-                                                          text:
-                                                              "${MoneyFormatter(amount: (state.billInforModel?.order?.orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                          fontsize: 14.sp),
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      )),
-                                  SizedBox(
-                                    height: 20.h,
+                    ListView(
+                      shrinkWrap: true,
+                      children: [
+                        Container(
+                            width: 1.sw,
+                            // height: 100.h,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.r),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 2,
+                                  blurRadius: 4,
+                                  offset: const Offset(
+                                      0, 3), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: 1.sw,
+                                  // height: 30.h,
+                                  decoration: BoxDecoration(
+                                    gradient: const LinearGradient(
+                                      begin: Alignment.topRight,
+                                      end: Alignment.bottomLeft,
+                                      colors: [
+                                        Color.fromRGBO(33, 82, 255, 1),
+                                        Color.fromRGBO(33, 212, 253, 1),
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10.r),
+                                        topRight: Radius.circular(10.r)),
+                                    color: Colors.blue,
                                   ),
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    child: Container(
-                                        width: 1.sw,
-                                        // height: 100.h,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10.r),
-                                          color: Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                                  Colors.grey.withOpacity(0.5),
-                                              spreadRadius: 2,
-                                              blurRadius: 4,
-                                              offset: const Offset(0,
-                                                  3), // changes position of shadow
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 10.h, left: 10.w, bottom: 10.h),
+                                    child: TextApp(
+                                      text: "Tổng quan",
+                                      fontsize: 18.sp,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  width: 1.sw,
+                                  // height: 30.h,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15.r),
+                                    color: Colors.white,
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(20.w),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            TextApp(
+                                                text: formatDateTime(state
+                                                        .billInforModel
+                                                        ?.order
+                                                        ?.createdAt
+                                                        .toString() ??
+                                                    ''),
+                                                fontsize: 14.sp),
+                                            SizedBox(
+                                              width: 5.w,
                                             ),
+                                            Icon(
+                                              Icons.access_time_filled,
+                                              size: 14.sp,
+                                              color: Colors.grey,
+                                            )
                                           ],
                                         ),
-                                        child: Column(
+                                        SizedBox(
+                                          height: 15.h,
+                                        ),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Container(
-                                              width: 1.sw,
-                                              // height: 30.h,
-                                              decoration: BoxDecoration(
-                                                gradient: const LinearGradient(
-                                                  begin: Alignment.topRight,
-                                                  end: Alignment.bottomLeft,
-                                                  colors: [
-                                                    Color.fromRGBO(
-                                                        33, 82, 255, 1),
-                                                    Color.fromRGBO(
-                                                        33, 212, 253, 1),
-                                                  ],
-                                                ),
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(10.r),
-                                                    topRight:
-                                                        Radius.circular(10.r)),
-                                                color: Colors.blue,
-                                              ),
-                                              child: Padding(
-                                                padding: EdgeInsets.only(
-                                                    top: 10.h,
-                                                    left: 10.w,
-                                                    right: 10.w,
-                                                    bottom: 10.h),
-                                                child: TextApp(
-                                                  text: "Danh sách món ăn",
-                                                  fontsize: 18.sp,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
+                                            TextApp(
+                                              text: "Tổng tiền",
+                                              fontsize: 14.sp,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            TextApp(
+                                                text:
+                                                    "${MoneyFormatter(amount: (state.billInforModel?.order?.orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                fontsize: 14.sp),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Container(
+                          width: 1.sw,
+                          // height: 30.h,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: [
+                                Color.fromRGBO(33, 82, 255, 1),
+                                Color.fromRGBO(33, 212, 253, 1),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10.r),
+                                topRight: Radius.circular(10.r)),
+                            color: Colors.blue,
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                top: 10.h,
+                                left: 10.w,
+                                right: 10.w,
+                                bottom: 10.h),
+                            child: TextApp(
+                              text: "Danh sách món ăn",
+                              fontsize: 18.sp,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        //Fix cho nay, height layout
+
+                        Padding(
+                          padding: EdgeInsets.only(left: 20.w, right: 20.w),
+                          child:
+                              (state.billInforModel?.data == null ||
+                                      state.billInforModel!.data!.isEmpty)
+                                  ? ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: 1,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: EdgeInsets.only(
+                                              top: 30.h,
+                                              left: 20.w,
+                                              right: 20.w),
+                                          child: Container(
+                                            width: 1.sw,
+                                            height: 50,
+                                            color: Colors.blue,
+                                            child: Center(
+                                              child: TextApp(
+                                                text: "Chưa có món được chọn",
+                                                color: Colors.white,
+                                                fontsize: 14.sp,
+                                                textAlign: TextAlign.center,
                                               ),
                                             ),
-                                            Flexible(
-                                                fit: FlexFit.tight,
-                                                child: Container(
+                                          ),
+                                        );
+                                      })
+                                  : ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount:
+                                          state.billInforModel?.data?.length ??
+                                              0,
+                                      itemBuilder: (context, index) {
+                                        foodQuantityController.text = state
+                                                .billInforModel
+                                                ?.data?[index]
+                                                .quantityFood
+                                                .toString() ??
+                                            '1';
+                                        void addFodd() {
+                                          BlocProvider.of<BillInforBloc>(
+                                                  context)
+                                              .add(AddFoodToBill(
+                                            client: role,
+                                            shopId: shopID,
+                                            roomId: roomID,
+                                            tableId: currentTable?.roomTableId
+                                                    .toString() ??
+                                                '',
+                                            orderId: orderID,
+                                            foodId: state.billInforModel
+                                                    ?.data?[index].foodId
+                                                    .toString() ??
+                                                '',
+                                          ));
+
+                                          BlocProvider.of<BillInforBloc>(
+                                                  context)
+                                              .add(GetBillInfor(
+                                            client: role,
+                                            shopId: shopID,
+                                            roomId: roomID,
+                                            tableId: currentTable?.roomTableId
+                                                    .toString() ??
+                                                '',
+                                            orderId: orderID,
+                                          ));
+                                        }
+
+                                        void updateQuantytiFood() {
+                                          BlocProvider.of<BillInforBloc>(
+                                                  context)
+                                              .add(UpdateQuantytiFoodToBill(
+                                                  client: role,
+                                                  shopId: shopID,
+                                                  roomId: roomID,
+                                                  tableId: currentTable
+                                                          ?.roomTableId
+                                                          .toString() ??
+                                                      '',
+                                                  orderId: orderID,
+                                                  foodId: state.billInforModel
+                                                          ?.data?[index].foodId
+                                                          .toString() ??
+                                                      '',
+                                                  value: foodQuantityController
+                                                      .text));
+                                          BlocProvider.of<BillInforBloc>(
+                                                  context)
+                                              .add(GetBillInfor(
+                                            client: role,
+                                            shopId: shopID,
+                                            roomId: roomID,
+                                            tableId: currentTable?.roomTableId
+                                                    .toString() ??
+                                                '',
+                                            orderId: orderID,
+                                          ));
+                                        }
+
+                                        void removeFood() {
+                                          BlocProvider.of<BillInforBloc>(
+                                                  context)
+                                              .add(RemoveFoodToBill(
+                                            client: role,
+                                            shopId: shopID,
+                                            roomId: roomID,
+                                            tableId: currentTable?.roomTableId
+                                                    .toString() ??
+                                                '',
+                                            orderId: orderID,
+                                            foodId: state.billInforModel
+                                                    ?.data?[index].foodId
+                                                    .toString() ??
+                                                '',
+                                          ));
+
+                                          BlocProvider.of<BillInforBloc>(
+                                                  context)
+                                              .add(GetBillInfor(
+                                            client: role,
+                                            shopId: shopID,
+                                            roomId: roomID,
+                                            tableId: currentTable?.roomTableId
+                                                    .toString() ??
+                                                '',
+                                            orderId: orderID,
+                                          ));
+                                        }
+
+                                        return Column(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  EdgeInsets.only(bottom: 10.h),
+                                              child: SizedBox(
                                                   width: 1.sw,
-                                                  // height: 100.h,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius
-                                                        .only(
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    10.r),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    10.r)),
-                                                    color: Colors.white,
-                                                  ),
                                                   child: Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 20.w,
-                                                        right: 20.w),
+                                                    padding:
+                                                        EdgeInsets.all(10.w),
                                                     child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
                                                       children: [
-                                                        (state.billInforModel
-                                                                        ?.data ==
-                                                                    null ||
-                                                                state
-                                                                    .billInforModel!
-                                                                    .data!
-                                                                    .isEmpty)
-                                                            ? Flexible(
-                                                                child: ListView
-                                                                    .builder(
-                                                                        shrinkWrap:
-                                                                            true,
-                                                                        itemCount:
-                                                                            1,
-                                                                        itemBuilder:
-                                                                            (context,
-                                                                                index) {
-                                                                          return Padding(
-                                                                            padding: EdgeInsets.only(
-                                                                                top: 30.h,
-                                                                                left: 20.w,
-                                                                                right: 20.w),
-                                                                            child:
-                                                                                Container(
-                                                                              width: 1.sw,
-                                                                              height: 50,
-                                                                              color: Colors.blue,
-                                                                              child: Center(
-                                                                                child: TextApp(
-                                                                                  text: "Chưa có món được chọn",
-                                                                                  color: Colors.white,
-                                                                                  fontsize: 14.sp,
-                                                                                  textAlign: TextAlign.center,
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          );
-                                                                        }),
-                                                              )
-                                                            : Flexible(
-                                                                fit: FlexFit
-                                                                    .tight,
-                                                                child: ListView
-                                                                    .builder(
-                                                                        shrinkWrap:
-                                                                            true,
-                                                                        itemCount:
-                                                                            state.billInforModel?.data?.length ??
-                                                                                0,
-                                                                        itemBuilder:
-                                                                            (context,
-                                                                                index) {
-                                                                          foodQuantityController.text =
-                                                                              state.billInforModel?.data?[index].quantityFood.toString() ?? '1';
-                                                                          void
-                                                                              addFodd() {
-                                                                            BlocProvider.of<BillInforBloc>(context).add(AddFoodToBill(
-                                                                              client: role,
-                                                                              shopId: shopID,
-                                                                              roomId: roomID,
-                                                                              tableId: currentTable?.roomTableId.toString() ?? '',
-                                                                              orderId: orderID,
-                                                                              foodId: state.billInforModel?.data?[index].foodId.toString() ?? '',
-                                                                            ));
+                                                        Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            SizedBox(
+                                                              width: 80.w,
+                                                              height: 80.w,
+                                                              child:
+                                                                  Image.asset(
+                                                                "assets/images/banner1.png",
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
+                                                            ),
+                                                            space50W,
+                                                            Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                SizedBox(
+                                                                    width:
+                                                                        100.w,
+                                                                    child:
+                                                                        Center(
+                                                                      child:
+                                                                          TextApp(
+                                                                        text: state.billInforModel?.data?[index].foodName ??
+                                                                            '',
+                                                                        fontsize:
+                                                                            14.sp,
+                                                                      ),
+                                                                    )),
+                                                                TextApp(
+                                                                    text:
+                                                                        "${MoneyFormatter(amount: (state.billInforModel?.data?[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                                    fontsize:
+                                                                        14.sp)
+                                                              ],
+                                                            )
+                                                          ],
+                                                        ),
+                                                        SizedBox(
+                                                          height: 15.h,
+                                                        ),
+                                                        Container(
+                                                          width: 1.sw,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            8.r)),
 
-                                                                            BlocProvider.of<BillInforBloc>(context).add(GetBillInfor(
-                                                                              client: role,
-                                                                              shopId: shopID,
-                                                                              roomId: roomID,
-                                                                              tableId: currentTable?.roomTableId.toString() ?? '',
-                                                                              orderId: orderID,
-                                                                            ));
-                                                                          }
-
-                                                                          void
-                                                                              updateQuantytiFood() {
-                                                                            BlocProvider.of<BillInforBloc>(context).add(UpdateQuantytiFoodToBill(
-                                                                                client: role,
-                                                                                shopId: shopID,
-                                                                                roomId: roomID,
-                                                                                tableId: currentTable?.roomTableId.toString() ?? '',
-                                                                                orderId: orderID,
-                                                                                foodId: state.billInforModel?.data?[index].foodId.toString() ?? '',
-                                                                                value: foodQuantityController.text));
-                                                                            BlocProvider.of<BillInforBloc>(context).add(GetBillInfor(
-                                                                              client: role,
-                                                                              shopId: shopID,
-                                                                              roomId: roomID,
-                                                                              tableId: currentTable?.roomTableId.toString() ?? '',
-                                                                              orderId: orderID,
-                                                                            ));
-                                                                          }
-
-                                                                          void
-                                                                              removeFood() {
-                                                                            BlocProvider.of<BillInforBloc>(context).add(RemoveFoodToBill(
-                                                                              client: role,
-                                                                              shopId: shopID,
-                                                                              roomId: roomID,
-                                                                              tableId: currentTable?.roomTableId.toString() ?? '',
-                                                                              orderId: orderID,
-                                                                              foodId: state.billInforModel?.data?[index].foodId.toString() ?? '',
-                                                                            ));
-
-                                                                            BlocProvider.of<BillInforBloc>(context).add(GetBillInfor(
-                                                                              client: role,
-                                                                              shopId: shopID,
-                                                                              roomId: roomID,
-                                                                              tableId: currentTable?.roomTableId.toString() ?? '',
-                                                                              orderId: orderID,
-                                                                            ));
-                                                                          }
-
-                                                                          return Column(
-                                                                            children: [
-                                                                              Padding(
-                                                                                padding: EdgeInsets.only(bottom: 10.h),
-                                                                                child: SizedBox(
-                                                                                    width: 1.sw,
-                                                                                    child: Padding(
-                                                                                      padding: EdgeInsets.all(10.w),
-                                                                                      child: Column(
-                                                                                        children: [
-                                                                                          Row(
-                                                                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                            mainAxisAlignment: MainAxisAlignment.start,
-                                                                                            children: [
-                                                                                              SizedBox(
-                                                                                                width: 80.w,
-                                                                                                height: 80.w,
-                                                                                                child: Image.asset(
-                                                                                                  "assets/images/banner1.png",
-                                                                                                  fit: BoxFit.cover,
-                                                                                                ),
-                                                                                              ),
-                                                                                              space50W,
-                                                                                              Column(
-                                                                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                                children: [
-                                                                                                  SizedBox(
-                                                                                                      width: 100.w,
-                                                                                                      child: Center(
-                                                                                                        child: TextApp(
-                                                                                                          text: state.billInforModel?.data?[index].foodName ?? '',
-                                                                                                          fontsize: 14.sp,
-                                                                                                        ),
-                                                                                                      )),
-                                                                                                  TextApp(text: "${MoneyFormatter(amount: (state.billInforModel?.data?[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ", fontsize: 14.sp)
-                                                                                                ],
-                                                                                              )
-                                                                                            ],
-                                                                                          ),
-                                                                                          SizedBox(
-                                                                                            height: 15.h,
-                                                                                          ),
-                                                                                          Container(
-                                                                                              width: 1.sw,
-                                                                                              decoration: BoxDecoration(
-                                                                                                borderRadius: BorderRadius.all(Radius.circular(8.r)),
-
-                                                                                                // color:
-                                                                                                //     Colors.pink,
-                                                                                              ),
-                                                                                              child: IntrinsicHeight(
-                                                                                                child: Row(
-                                                                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                                                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                                                                                  children: [
-                                                                                                    InkWell(
-                                                                                                      onTap: () {
-                                                                                                        removeFood();
-                                                                                                      },
-                                                                                                      child: Container(
-                                                                                                        width: 50.w,
-                                                                                                        height: 25.w,
-                                                                                                        decoration: BoxDecoration(
-                                                                                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(8.r), bottomLeft: Radius.circular(8.r)),
-                                                                                                            gradient: const LinearGradient(
-                                                                                                              begin: Alignment.topRight,
-                                                                                                              end: Alignment.bottomLeft,
-                                                                                                              colors: [
-                                                                                                                Color.fromRGBO(33, 82, 255, 1),
-                                                                                                                Color.fromRGBO(33, 212, 253, 1)
-                                                                                                              ],
-                                                                                                            )),
-                                                                                                        child: Center(
-                                                                                                          child: TextApp(text: "-", textAlign: TextAlign.center, color: Colors.white, fontsize: 14.sp),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                    ),
-                                                                                                    Expanded(
-                                                                                                        child: Container(
-                                                                                                      decoration: BoxDecoration(
-                                                                                                        border: Border.all(width: 0.4, color: Colors.grey),
-                                                                                                      ),
-                                                                                                      child: Center(
-                                                                                                        child: TextField(
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          keyboardType: TextInputType.number,
-                                                                                                          inputFormatters: <TextInputFormatter>[
-                                                                                                            FilteringTextInputFormatter.allow(RegExp("[0-9]")),
-                                                                                                          ], // Only numbers can be entered,
-                                                                                                          style: TextStyle(fontSize: 12.sp, color: grey),
-                                                                                                          controller: foodQuantityController,
-
-                                                                                                          onTapOutside: (event) {
-                                                                                                            print('onTapOutside');
-                                                                                                            FocusManager.instance.primaryFocus?.unfocus();
-                                                                                                            updateQuantytiFood();
-                                                                                                          },
-                                                                                                          cursorColor: grey,
-                                                                                                          decoration: const InputDecoration(
-                                                                                                            fillColor: Color.fromARGB(255, 226, 104, 159),
-                                                                                                            focusedBorder: OutlineInputBorder(
-                                                                                                              borderSide: BorderSide(color: Color.fromRGBO(214, 51, 123, 0.6), width: 2.0),
-                                                                                                            ),
-
-                                                                                                            hintText: '',
-                                                                                                            isDense: true, // Added this
-                                                                                                            contentPadding: EdgeInsets.all(8), // Added this
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                    )),
-                                                                                                    InkWell(
-                                                                                                      onTap: () {
-                                                                                                        addFodd();
-                                                                                                      },
-                                                                                                      child: Container(
-                                                                                                        width: 50.w,
-                                                                                                        height: 25.w,
-                                                                                                        decoration: BoxDecoration(
-                                                                                                            borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), bottomRight: Radius.circular(8.r)),
-                                                                                                            gradient: const LinearGradient(
-                                                                                                              begin: Alignment.topRight,
-                                                                                                              end: Alignment.bottomLeft,
-                                                                                                              colors: [
-                                                                                                                Color.fromRGBO(33, 82, 255, 1),
-                                                                                                                Color.fromRGBO(33, 212, 253, 1)
-                                                                                                              ],
-                                                                                                            )),
-                                                                                                        child: Center(
-                                                                                                          child: TextApp(
-                                                                                                            text: "+",
-                                                                                                            textAlign: TextAlign.center,
-                                                                                                            color: Colors.white,
-                                                                                                            fontsize: 14.sp,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                    )
-                                                                                                  ],
-                                                                                                ),
-                                                                                              )),
-                                                                                        ],
-                                                                                      ),
-                                                                                    )),
-                                                                              ),
-                                                                              const Divider(
-                                                                                height: 1,
-                                                                                color: Colors.grey,
-                                                                              )
+                                                            // color:
+                                                            //     Colors.pink,
+                                                          ),
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .stretch,
+                                                            children: [
+                                                              InkWell(
+                                                                onTap: () {
+                                                                  removeFood();
+                                                                },
+                                                                child:
+                                                                    Container(
+                                                                  width: 50.w,
+                                                                  height: 25.w,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                          borderRadius: BorderRadius.only(
+                                                                              topLeft: Radius.circular(8.r),
+                                                                              bottomLeft: Radius.circular(8.r)),
+                                                                          gradient: const LinearGradient(
+                                                                            begin:
+                                                                                Alignment.topRight,
+                                                                            end:
+                                                                                Alignment.bottomLeft,
+                                                                            colors: [
+                                                                              Color.fromRGBO(33, 82, 255, 1),
+                                                                              Color.fromRGBO(33, 212, 253, 1)
                                                                             ],
-                                                                          );
-                                                                        }),
+                                                                          )),
+                                                                  child: Center(
+                                                                    child: TextApp(
+                                                                        text:
+                                                                            "-",
+                                                                        textAlign:
+                                                                            TextAlign
+                                                                                .center,
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontsize:
+                                                                            14.sp),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                  child:
+                                                                      Container(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  border: Border.all(
+                                                                      width:
+                                                                          0.4,
+                                                                      color: Colors
+                                                                          .grey),
+                                                                ),
+                                                                child: Center(
+                                                                  child:
+                                                                      TextField(
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    keyboardType:
+                                                                        TextInputType
+                                                                            .number,
+                                                                    inputFormatters: <TextInputFormatter>[
+                                                                      FilteringTextInputFormatter
+                                                                          .allow(
+                                                                              RegExp("[0-9]")),
+                                                                    ], // Only numbers can be entered,
+                                                                    style: TextStyle(
+                                                                        fontSize: 12
+                                                                            .sp,
+                                                                        color:
+                                                                            grey),
+                                                                    controller:
+                                                                        foodQuantityController,
+
+                                                                    onTapOutside:
+                                                                        (event) {
+                                                                      print(
+                                                                          'onTapOutside');
+                                                                      FocusManager
+                                                                          .instance
+                                                                          .primaryFocus
+                                                                          ?.unfocus();
+                                                                      updateQuantytiFood();
+                                                                    },
+                                                                    cursorColor:
+                                                                        grey,
+                                                                    decoration:
+                                                                        const InputDecoration(
+                                                                      fillColor: Color.fromARGB(
+                                                                          255,
+                                                                          226,
+                                                                          104,
+                                                                          159),
+                                                                      focusedBorder:
+                                                                          OutlineInputBorder(
+                                                                        borderSide: BorderSide(
+                                                                            color: Color.fromRGBO(
+                                                                                214,
+                                                                                51,
+                                                                                123,
+                                                                                0.6),
+                                                                            width:
+                                                                                2.0),
+                                                                      ),
+
+                                                                      hintText:
+                                                                          '',
+                                                                      isDense:
+                                                                          true, // Added this
+                                                                      contentPadding:
+                                                                          EdgeInsets.all(
+                                                                              8), // Added this
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              )),
+                                                              InkWell(
+                                                                onTap: () {
+                                                                  addFodd();
+                                                                },
+                                                                child:
+                                                                    Container(
+                                                                  width: 50.w,
+                                                                  height: 25.w,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                          borderRadius: BorderRadius.only(
+                                                                              topRight: Radius.circular(8.r),
+                                                                              bottomRight: Radius.circular(8.r)),
+                                                                          gradient: const LinearGradient(
+                                                                            begin:
+                                                                                Alignment.topRight,
+                                                                            end:
+                                                                                Alignment.bottomLeft,
+                                                                            colors: [
+                                                                              Color.fromRGBO(33, 82, 255, 1),
+                                                                              Color.fromRGBO(33, 212, 253, 1)
+                                                                            ],
+                                                                          )),
+                                                                  child: Center(
+                                                                    child:
+                                                                        TextApp(
+                                                                      text: "+",
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontsize:
+                                                                          14.sp,
+                                                                    ),
+                                                                  ),
+                                                                ),
                                                               )
+                                                            ],
+                                                          ),
+                                                        ),
                                                       ],
                                                     ),
-                                                  ),
-                                                ))
+                                                  )),
+                                            ),
+                                            const Divider(
+                                              height: 1,
+                                              color: Colors.grey,
+                                            )
                                           ],
-                                        )),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
+                                        );
+                                      }),
                         ),
-                      ),
+                      ],
                     ),
                     Container(
                       width: 1.sw,
@@ -3198,7 +3232,15 @@ class _PayBillDialogState extends State<PayBillDialog> {
 
 //Modal quản lí hoá đơn mang về
 class ManageBroughtReceiptDialog extends StatefulWidget {
-  const ManageBroughtReceiptDialog({super.key});
+  final String orderID;
+  final String role;
+  final String shopID;
+  const ManageBroughtReceiptDialog({
+    Key? key,
+    required this.orderID,
+    required this.role,
+    required this.shopID,
+  }) : super(key: key);
 
   @override
   State<ManageBroughtReceiptDialog> createState() =>
@@ -3228,372 +3270,436 @@ class _ManageBroughtReceiptDialogState
               selectedCategories.contains(product.category)) &&
           foodTitle.contains(input);
     }).toList();
-    return AlertDialog(
-      // contentPadding: const EdgeInsets.all(0),
-      surfaceTintColor: Colors.white,
-      backgroundColor: Colors.white,
-      content: InkWell(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: Container(
-          width: 1.sw,
-          child: Column(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return BlocBuilder<ManageBroughtReceiptBloc, BroughtReceiptState>(
+        builder: (context, state) {
+      if (state.broughtReceiptStatus == BroughtReceiptStatus.succes) {
+        return AlertDialog(
+          surfaceTintColor: Colors.white,
+          backgroundColor: Colors.white,
+          content: InkWell(
+            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+            child: Container(
+              width: 1.sw,
+              child: Column(
                 children: [
-                  TextApp(
-                    text: "Hóa đơn mang về",
-                    fontWeight: FontWeight.bold,
-                    fontsize: 18.sp,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Icon(Icons.close),
-                  )
-                ],
-              ),
-              space20H,
-              const Divider(
-                height: 1,
-                color: Colors.black,
-              ),
-              space10H,
-              Card(
-                  elevation: 8.w,
-                  margin: EdgeInsets.all(8.w),
-                  child: Container(
-                      width: 1.sw,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10.w)),
-                      child: Padding(
-                        padding: EdgeInsets.all(10.w),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                TextApp(
-                                  text: "Tên khách hàng: ",
-                                  fontWeight: FontWeight.bold,
-                                  fontsize: 14.sp,
-                                ),
-                                TextApp(
-                                  text: "Khách lẻ",
-                                  fontsize: 14.sp,
-                                ),
-                              ],
-                            ),
-                            space10H,
-                            Row(
-                              children: [
-                                TextApp(
-                                  text: "Tổng tiền món ăn: ",
-                                  fontWeight: FontWeight.bold,
-                                  fontsize: 14.sp,
-                                ),
-                                TextApp(
-                                  text: "28,000 đ",
-                                  fontsize: 14.sp,
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ))),
-              space30H,
-              SizedBox(
-                  height: 50,
-                  // color: Colors.red,
-                  child: Row(
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: categories.map((exercise) {
-                            return Padding(
-                              padding: EdgeInsets.only(right: 5.w, left: 5.w),
-                              child: FilterChip(
-                                labelPadding: EdgeInsets.only(
-                                    left: 15.w,
-                                    right: 15.w,
-                                    top: 8.w,
-                                    bottom: 8.w),
-                                disabledColor: Colors.grey,
-                                selectedColor: Colors.blue,
-                                backgroundColor: Colors.white,
-                                shadowColor: Colors.black,
-                                selectedShadowColor: Colors.blue,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.w),
-                                  side: BorderSide(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    width: 1.0,
-                                  ),
-                                ),
-                                labelStyle: TextStyle(
-                                    color: selectedCategories.contains(exercise)
-                                        ? Colors.white
-                                        : Colors.black),
-                                showCheckmark: false,
-                                label: TextApp(
-                                  text: exercise.toUpperCase(),
-                                  fontsize: 14.sp,
-                                  color: blueText,
-                                  fontWeight: FontWeight.bold,
-                                  textAlign: TextAlign.center,
-                                ),
-                                selected: selectedCategories.contains(exercise),
-                                onSelected: (bool selected) {
-                                  setState(() {
-                                    if (selected) {
-                                      selectedCategories.add(exercise);
-                                    } else {
-                                      selectedCategories.remove(exercise);
-                                    }
-                                  });
-                                },
-                              ),
-                            );
-                          }).toList(),
-                        ),
+                      TextApp(
+                        text: "Hóa đơn mang về",
+                        fontWeight: FontWeight.bold,
+                        fontsize: 18.sp,
                       ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(Icons.close),
+                      )
                     ],
-                  )),
-              space30H,
-              IntrinsicHeight(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        onChanged: searchProduct,
-                        controller: searchController,
-                        style:
-                            const TextStyle(fontSize: 12, color: Colors.grey),
-                        cursorColor: Colors.black,
-                        decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Color.fromRGBO(214, 51, 123, 0.6),
-                                  width: 2.0),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            isDense: true,
-                            hintText: "Nhập nội dung bạn muốn tìm kiếm",
-                            contentPadding: const EdgeInsets.all(15)),
-                      ),
-                    ),
-                    space20W,
-                    Container(
-                        width: 80.w,
-                        height: 45.w,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.r),
-                            gradient: const LinearGradient(
-                              begin: Alignment.topRight,
-                              end: Alignment.bottomLeft,
-                              colors: [
-                                Color.fromRGBO(33, 82, 255, 1),
-                                Color.fromRGBO(33, 212, 253, 1)
+                  ),
+                  space20H,
+                  const Divider(
+                    height: 1,
+                    color: Colors.black,
+                  ),
+                  space10H,
+                  Card(
+                      elevation: 8.w,
+                      margin: EdgeInsets.all(8.w),
+                      child: Container(
+                          width: 1.sw,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10.w)),
+                          child: Padding(
+                            padding: EdgeInsets.all(10.w),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    TextApp(
+                                      text: "Tên khách hàng: ",
+                                      fontWeight: FontWeight.bold,
+                                      fontsize: 14.sp,
+                                    ),
+                                    TextApp(
+                                      text: "Khách lẻ",
+                                      fontsize: 14.sp,
+                                    ),
+                                  ],
+                                ),
+                                space10H,
+                                Row(
+                                  children: [
+                                    TextApp(
+                                      text: "Tổng tiền món ăn: ",
+                                      fontWeight: FontWeight.bold,
+                                      fontsize: 14.sp,
+                                    ),
+                                    TextApp(
+                                      text: state.manageBroughtReceiptModel
+                                              ?.orderTotal
+                                              .toString() ??
+                                          '',
+                                      fontsize: 14.sp,
+                                    ),
+                                  ],
+                                )
                               ],
-                            )),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextApp(
-                              text: "1",
-                              color: Colors.white,
-                              fontsize: 14.sp,
-                              fontWeight: FontWeight.bold,
                             ),
-                            space5W,
-                            const Icon(
-                              Icons.shopping_cart,
-                              color: Colors.white,
-                            )
-                          ],
-                        ))
-                  ],
-                ),
-              ),
-              const SizedBox(height: 5.0),
-              const SizedBox(height: 10.0),
-              Expanded(
-                  child: ListView.builder(
-                      itemCount: filterProducts.length,
-                      itemBuilder: (context, index) {
-                        final product = filterProducts[index];
-                        return Card(
-                          elevation: 8.0,
-                          margin: const EdgeInsets.all(8),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.r),
-                          ),
-                          child: Container(
-                              width: 1.sw,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(15.r)),
-                              child: Column(
-                                children: [
-                                  // space15H,
-                                  SizedBox(
-                                      height: 160.w,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(15.r),
-                                            topRight: Radius.circular(15.r)),
-                                        child: Image.asset(
-                                          product.image,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      )),
-                                  space10H,
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      TextApp(text: product.name),
-                                      TextApp(
-                                        text: product.price,
-                                        fontsize: 20.sp,
-                                        fontWeight: FontWeight.bold,
+                          ))),
+                  space30H,
+                  SizedBox(
+                      height: 50,
+                      // color: Colors.red,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: categories.map((exercise) {
+                                return Padding(
+                                  padding:
+                                      EdgeInsets.only(right: 5.w, left: 5.w),
+                                  child: FilterChip(
+                                    labelPadding: EdgeInsets.only(
+                                        left: 15.w,
+                                        right: 15.w,
+                                        top: 8.w,
+                                        bottom: 8.w),
+                                    disabledColor: Colors.grey,
+                                    selectedColor: Colors.blue,
+                                    backgroundColor: Colors.white,
+                                    shadowColor: Colors.black,
+                                    selectedShadowColor: Colors.blue,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.w),
+                                      side: BorderSide(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        width: 1.0,
                                       ),
-                                    ],
+                                    ),
+                                    labelStyle: TextStyle(
+                                        color: selectedCategories
+                                                .contains(exercise)
+                                            ? Colors.white
+                                            : Colors.black),
+                                    showCheckmark: false,
+                                    label: TextApp(
+                                      text: exercise.toUpperCase(),
+                                      fontsize: 14.sp,
+                                      color: blueText,
+                                      fontWeight: FontWeight.bold,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    selected:
+                                        selectedCategories.contains(exercise),
+                                    onSelected: (bool selected) {
+                                      setState(() {
+                                        if (selected) {
+                                          selectedCategories.add(exercise);
+                                        } else {
+                                          selectedCategories.remove(exercise);
+                                        }
+                                      });
+                                    },
                                   ),
-                                  const Divider(),
-                                  Padding(
-                                    padding: EdgeInsets.all(20.w),
-                                    child: Container(
-                                        width: 1.sw,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(8.r)),
-                                        ),
-                                        child: IntrinsicHeight(
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.stretch,
-                                            children: [
-                                              InkWell(
-                                                onTap: () {},
-                                                child: Container(
-                                                  width: 70.w,
-                                                  height: 35.w,
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                              topLeft: Radius
-                                                                  .circular(
-                                                                      8.r),
-                                                              bottomLeft: Radius
-                                                                  .circular(
-                                                                      8.r)),
-                                                      gradient:
-                                                          const LinearGradient(
-                                                        begin:
-                                                            Alignment.topRight,
-                                                        end: Alignment
-                                                            .bottomLeft,
-                                                        colors: [
-                                                          Color.fromRGBO(
-                                                              33, 82, 255, 1),
-                                                          Color.fromRGBO(
-                                                              33, 212, 253, 1)
-                                                        ],
-                                                      )),
-                                                  child: Center(
-                                                    child: TextApp(
-                                                      text: "-",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      color: Colors.white,
-                                                      fontsize: 18.sp,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                  child: Container(
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      width: 0.4,
-                                                      color: Colors.grey),
-                                                ),
-                                                child: Center(
-                                                  child: TextApp(
-                                                    text: "1",
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                ),
-                                              )),
-                                              InkWell(
-                                                onTap: () {},
-                                                child: Container(
-                                                  width: 70.w,
-                                                  height: 35.w,
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                              topRight: Radius
-                                                                  .circular(
-                                                                      8.r),
-                                                              bottomRight:
-                                                                  Radius
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ],
+                      )),
+                  space30H,
+                  IntrinsicHeight(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            onChanged: searchProduct,
+                            controller: searchController,
+                            style: const TextStyle(
+                                fontSize: 12, color: Colors.grey),
+                            cursorColor: Colors.black,
+                            decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Color.fromRGBO(214, 51, 123, 0.6),
+                                      width: 2.0),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                isDense: true,
+                                hintText: "Nhập nội dung bạn muốn tìm kiếm",
+                                contentPadding: const EdgeInsets.all(15)),
+                          ),
+                        ),
+                        space20W,
+                        Container(
+                            width: 80.w,
+                            height: 45.w,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.r),
+                                gradient: const LinearGradient(
+                                  begin: Alignment.topRight,
+                                  end: Alignment.bottomLeft,
+                                  colors: [
+                                    Color.fromRGBO(33, 82, 255, 1),
+                                    Color.fromRGBO(33, 212, 253, 1)
+                                  ],
+                                )),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextApp(
+                                  text: "1",
+                                  color: Colors.white,
+                                  fontsize: 14.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                space5W,
+                                const Icon(
+                                  Icons.shopping_cart,
+                                  color: Colors.white,
+                                )
+                              ],
+                            ))
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 5.0),
+                  const SizedBox(height: 10.0),
+                  Expanded(
+                      child: ListView.builder(
+                          itemCount: filterProducts.length,
+                          itemBuilder: (context, index) {
+                            final product = filterProducts[index];
+                            return Card(
+                              elevation: 8.0,
+                              margin: const EdgeInsets.all(8),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.r),
+                              ),
+                              child: Container(
+                                  width: 1.sw,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius:
+                                          BorderRadius.circular(15.r)),
+                                  child: Column(
+                                    children: [
+                                      // space15H,
+                                      SizedBox(
+                                          height: 160.w,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(15.r),
+                                                topRight:
+                                                    Radius.circular(15.r)),
+                                            child: Image.asset(
+                                              product.image,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          )),
+                                      space10H,
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          TextApp(text: product.name),
+                                          TextApp(
+                                            text: product.price,
+                                            fontsize: 20.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ],
+                                      ),
+                                      const Divider(),
+                                      Padding(
+                                        padding: EdgeInsets.all(20.w),
+                                        child: Container(
+                                            width: 1.sw,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(8.r)),
+                                            ),
+                                            child: IntrinsicHeight(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.stretch,
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {},
+                                                    child: Container(
+                                                      width: 70.w,
+                                                      height: 35.w,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          8.r),
+                                                                  bottomLeft: Radius
                                                                       .circular(
                                                                           8.r)),
-                                                      gradient:
-                                                          const LinearGradient(
-                                                        begin:
-                                                            Alignment.topRight,
-                                                        end: Alignment
-                                                            .bottomLeft,
-                                                        colors: [
-                                                          Color.fromRGBO(
-                                                              33, 82, 255, 1),
-                                                          Color.fromRGBO(
-                                                              33, 212, 253, 1)
-                                                        ],
-                                                      )),
-                                                  child: Center(
-                                                    child: TextApp(
-                                                      text: "+",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      color: Colors.white,
-                                                      fontsize: 18.sp,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                                          gradient:
+                                                              const LinearGradient(
+                                                            begin: Alignment
+                                                                .topRight,
+                                                            end: Alignment
+                                                                .bottomLeft,
+                                                            colors: [
+                                                              Color.fromRGBO(33,
+                                                                  82, 255, 1),
+                                                              Color.fromRGBO(33,
+                                                                  212, 253, 1)
+                                                            ],
+                                                          )),
+                                                      child: Center(
+                                                        child: TextApp(
+                                                          text: "-",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          color: Colors.white,
+                                                          fontsize: 18.sp,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        )),
-                                  )
-                                ],
-                              )),
-                        );
-                      })),
-            ],
+                                                  Expanded(
+                                                      child: Container(
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          width: 0.4,
+                                                          color: Colors.grey),
+                                                    ),
+                                                    child: Center(
+                                                      child: TextApp(
+                                                        text: "1",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    ),
+                                                  )),
+                                                  InkWell(
+                                                    onTap: () {},
+                                                    child: Container(
+                                                      width: 70.w,
+                                                      height: 35.w,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          8.r),
+                                                                  bottomRight:
+                                                                      Radius.circular(
+                                                                          8.r)),
+                                                          gradient:
+                                                              const LinearGradient(
+                                                            begin: Alignment
+                                                                .topRight,
+                                                            end: Alignment
+                                                                .bottomLeft,
+                                                            colors: [
+                                                              Color.fromRGBO(33,
+                                                                  82, 255, 1),
+                                                              Color.fromRGBO(33,
+                                                                  212, 253, 1)
+                                                            ],
+                                                          )),
+                                                      child: Center(
+                                                        child: TextApp(
+                                                          text: "+",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          color: Colors.white,
+                                                          fontsize: 18.sp,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            )),
+                                      )
+                                    ],
+                                  )),
+                            );
+                          })),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        );
+      } else if (state.broughtReceiptStatus == BroughtReceiptStatus.loading) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          surfaceTintColor: Colors.white,
+          backgroundColor: Colors.white,
+          content: Center(
+            child: SizedBox(
+              width: 1.sw,
+              height: 200.w,
+              child: Lottie.asset('assets/lottie/loading_7_color.json'),
+            ),
+          ),
+        );
+      } else {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(0),
+          surfaceTintColor: Colors.white,
+          backgroundColor: Colors.white,
+          content: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 100,
+                  height: 100,
+                  child: Lottie.asset('assets/lottie/error.json'),
+                ),
+                space30H,
+                TextApp(
+                  text: state.errorText.toString(),
+                  fontsize: 20.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+                space30H,
+                Container(
+                  width: 200,
+                  child: ButtonGradient(
+                    color1: color1BlueButton,
+                    color2: color2BlueButton,
+                    event: () {},
+                    text: 'Thử lại',
+                    fontSize: 12.sp,
+                    radius: 8.r,
+                    textColor: Colors.white,
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      }
+    });
   }
 }
 
