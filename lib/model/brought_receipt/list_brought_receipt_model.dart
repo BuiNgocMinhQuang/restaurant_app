@@ -1,13 +1,13 @@
 // To parse this JSON data, do
 //
-//     final listBroughtReceiptModel = broughtReceiptModelFromJson(jsonString);
+//     final listBroughtReceiptModel = listBroughtReceiptModelFromJson(jsonString);
 
 import 'dart:convert';
 
-ListBroughtReceiptModel broughtReceiptModelFromJson(String str) =>
+ListBroughtReceiptModel listBroughtReceiptModelFromJson(String str) =>
     ListBroughtReceiptModel.fromJson(json.decode(str));
 
-String broughtReceiptModelToJson(ListBroughtReceiptModel data) =>
+String listBroughtReceiptModelToJson(ListBroughtReceiptModel data) =>
     json.encode(data.toJson());
 
 class ListBroughtReceiptModel {
@@ -98,7 +98,7 @@ class Data {
 class Datum {
   int orderId;
   int userId;
-  int staffId;
+  int? staffId;
   int storeId;
   dynamic storeRoomId;
   dynamic clientId;

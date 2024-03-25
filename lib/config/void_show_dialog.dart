@@ -1,8 +1,11 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:app_restaurant/bloc/login/login_bloc.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
+import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void showConfirmDialog(context, Function confirmEvent) {
@@ -202,6 +205,19 @@ void showLoginSessionExpiredDialog(context, Function okEvent) {
           },
           btnCancelText: "OK")
       .show();
+}
+
+showSnackBarTopUpdateSucces(context) async {
+  await Flushbar(
+    backgroundColor: Colors.green,
+    message: "Món ăn được cập nhật thành công",
+    duration: Duration(seconds: 2),
+    margin: EdgeInsets.only(bottom: 1.sh - 150.h, left: 25.w, right: 25.w),
+
+    flushbarPosition: FlushbarPosition.TOP,
+    // forwardAnimationCurve: ,
+    // reverseAnimationCurve: Curves.easeInOutCirc,
+  ).show(context);
 }
 
 void launchURL() async {

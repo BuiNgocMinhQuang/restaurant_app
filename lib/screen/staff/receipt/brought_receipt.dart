@@ -38,7 +38,7 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
         shopId: currentShopId,
         limit: 15,
         page: 1,
-        filters: []));
+        filters: const []));
   }
 
   void getDetailsBroughtReceiptData({required String orderID}) async {
@@ -218,10 +218,19 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                                                             builder:
                                                                 (BuildContext
                                                                     context) {
-                                                              return const ManageBroughtReceiptDialog(
-                                                                role: '',
-                                                                orderID: '',
-                                                                shopID: '',
+                                                              return ManageBroughtReceiptDialog(
+                                                                role:
+                                                                    currentRole,
+                                                                orderID: statePage
+                                                                        .listBroughtReceiptModel
+                                                                        ?.data
+                                                                        .data[
+                                                                            index]
+                                                                        .orderId
+                                                                        .toString() ??
+                                                                    '',
+                                                                shopID:
+                                                                    currentShopId,
                                                               );
                                                             });
                                                       },

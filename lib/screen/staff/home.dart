@@ -385,8 +385,13 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                                     );
                                                                                                   });
                                                                                             }, eventButton3: () {
-                                                                                              getBillData(roomId: data.storeRoomId.toString(), tableId: data.tables![index].roomTableId.toString(), orderID: data.tables![index].orderId.toString());
+                                                                                              getBillData(
+                                                                                                roomId: data.storeRoomId.toString(),
+                                                                                                tableId: data.tables![index].roomTableId.toString(),
+                                                                                                orderID: data.tables![index].orderId.toString(),
+                                                                                              );
                                                                                               showDialog(
+                                                                                                  useRootNavigator: false,
                                                                                                   context: context,
                                                                                                   builder: (BuildContext context) {
                                                                                                     return SeeBillDialog(

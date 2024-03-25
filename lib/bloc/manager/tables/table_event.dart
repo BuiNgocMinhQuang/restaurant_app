@@ -150,3 +150,72 @@ class SaveTableInfor extends TableSaveInforEvent {
   @override
   List<Object> get props => [];
 }
+
+class AddFoodToTable extends TableEvent {
+  final String client;
+  final String shopId;
+  final bool isApi;
+  final String roomId;
+  final String tableId;
+  final String? orderId;
+  final String foodId;
+
+  const AddFoodToTable(
+      {required this.client,
+      required this.shopId,
+      this.isApi = true,
+      required this.roomId,
+      required this.tableId,
+      required this.orderId,
+      required this.foodId});
+
+  @override
+  List<Object> get props => [];
+}
+
+class RemoveFoodToTable extends TableEvent {
+  final String client;
+  final String shopId;
+  final bool isApi;
+  final String roomId;
+  final String tableId;
+  final String? orderId;
+  final String foodId;
+
+  const RemoveFoodToTable(
+      {required this.client,
+      required this.shopId,
+      this.isApi = true,
+      required this.roomId,
+      required this.tableId,
+      required this.orderId,
+      required this.foodId});
+
+  @override
+  List<Object> get props => [];
+}
+
+class UpdateQuantytiFoodToTable extends TableEvent {
+  final String client;
+  final String shopId;
+  final bool isApi;
+  final String roomId;
+  final String tableId;
+  final String? orderId;
+  final String foodId;
+  final String value;
+
+  const UpdateQuantytiFoodToTable({
+    required this.client,
+    required this.shopId,
+    this.isApi = true,
+    required this.roomId,
+    required this.tableId,
+    required this.orderId,
+    required this.foodId,
+    required this.value,
+  });
+
+  @override
+  List<Object> get props => [];
+}

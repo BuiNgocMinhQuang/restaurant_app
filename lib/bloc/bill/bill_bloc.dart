@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:app_restaurant/config/text.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/bill_infor_model.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -50,6 +52,7 @@ class BillInforBloc extends Bloc<BillInforEvent, BillInforState> {
       try {
         if (data['status'] == 200) {
           emit(state.copyWith(billStatus: BillInforStateStatus.succes));
+          showSnackBarTopUpdateSucces(navigatorKey.currentContext);
         } else {
           print("ERROR UPDATE QUANTYTI FODD TO BILL 1");
 
@@ -100,6 +103,7 @@ class BillInforBloc extends Bloc<BillInforEvent, BillInforState> {
       try {
         if (data['status'] == 200) {
           emit(state.copyWith(billStatus: BillInforStateStatus.succes));
+          showSnackBarTopUpdateSucces(navigatorKey.currentContext);
         } else {
           print("ERROR REMOVE FOOD TO BILL 1");
 
@@ -150,6 +154,7 @@ class BillInforBloc extends Bloc<BillInforEvent, BillInforState> {
       try {
         if (data['status'] == 200) {
           emit(state.copyWith(billStatus: BillInforStateStatus.succes));
+          showSnackBarTopUpdateSucces(navigatorKey.currentContext);
         } else {
           print("ERROR ADD FOOD TO BILL 1");
 

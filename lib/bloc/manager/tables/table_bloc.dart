@@ -77,6 +77,160 @@ class TableBloc extends Bloc<TableEvent, TableState> {
     on<GetTableInfor>(_onGetTableInfor);
     on<GetTableFoods>(_onGetTableFoods);
     on<GetTableSwitchInfor>(_onGetSwitchTableInfor);
+    on<AddFoodToTable>(_onAddFoodToTable);
+    on<RemoveFoodToTable>(_onRemoveFoodToTable);
+    on<UpdateQuantytiFoodToTable>(_onUpdateQuantytiFoodToTable);
+  }
+
+  void _onAddFoodToTable(
+    AddFoodToTable event,
+    Emitter<TableState> emit,
+  ) async {
+    emit(state.copyWith(tableStatus: TableStatus.loading));
+    await Future.delayed(const Duration(seconds: 1));
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$addFoodTable'),
+        headers: {
+          // 'Content-type': 'application/json',
+          // 'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: {
+          'client': event.client,
+          'shop_id': event.shopId,
+          'is_api': event.isApi.toString(),
+          'room_id': event.roomId,
+          'table_id': event.tableId,
+          'order_id': event.orderId,
+          'food_id': event.foodId
+        },
+      );
+      final data = jsonDecode(respons.body);
+      print(" DATA ADD FOOD TO TABLE $data");
+      var message = data['message'];
+      try {
+        if (data['status'] == 200) {
+          emit(state.copyWith(tableStatus: TableStatus.succes));
+        } else {
+          print("ERROR ADD FOOD TO TABLE 1");
+
+          emit(state.copyWith(tableStatus: TableStatus.failed));
+          emit(state.copyWith(errorText: message['text']));
+        }
+      } catch (error) {
+        print("ERROR ADD FOOD TO TABLE 2 $error");
+
+        emit(state.copyWith(tableStatus: TableStatus.failed));
+        emit(state.copyWith(errorText: someThingWrong));
+      }
+    } catch (error) {
+      print("ERROR ADD FOOD TO TABLE 3 $error");
+      emit(state.copyWith(tableStatus: TableStatus.failed));
+      emit(state.copyWith(errorText: someThingWrong));
+    }
+  }
+
+  void _onRemoveFoodToTable(
+    RemoveFoodToTable event,
+    Emitter<TableState> emit,
+  ) async {
+    emit(state.copyWith(tableStatus: TableStatus.loading));
+    await Future.delayed(const Duration(seconds: 1));
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$removeFoodTable'),
+        headers: {
+          // 'Content-type': 'application/json',
+          // 'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: {
+          'client': event.client,
+          'shop_id': event.shopId,
+          'is_api': event.isApi.toString(),
+          'room_id': event.roomId,
+          'table_id': event.tableId,
+          'order_id': event.orderId,
+          'food_id': event.foodId
+        },
+      );
+      final data = jsonDecode(respons.body);
+      print(" DATA ADD FOOD TO TABLE $data");
+      var message = data['message'];
+      try {
+        if (data['status'] == 200) {
+          emit(state.copyWith(tableStatus: TableStatus.succes));
+        } else {
+          print("ERROR ADD FOOD TO TABLE 1");
+
+          emit(state.copyWith(tableStatus: TableStatus.failed));
+          emit(state.copyWith(errorText: message['text']));
+        }
+      } catch (error) {
+        print("ERROR ADD FOOD TO TABLE 2 $error");
+
+        emit(state.copyWith(tableStatus: TableStatus.failed));
+        emit(state.copyWith(errorText: someThingWrong));
+      }
+    } catch (error) {
+      print("ERROR ADD FOOD TO TABLE 3 $error");
+      emit(state.copyWith(tableStatus: TableStatus.failed));
+      emit(state.copyWith(errorText: someThingWrong));
+    }
+  }
+
+  void _onUpdateQuantytiFoodToTable(
+    UpdateQuantytiFoodToTable event,
+    Emitter<TableState> emit,
+  ) async {
+    emit(state.copyWith(tableStatus: TableStatus.loading));
+    await Future.delayed(const Duration(seconds: 1));
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$updateQuantityFoodTable'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': event.client,
+          'shop_id': event.shopId,
+          'is_api': event.isApi.toString(),
+          'room_id': event.roomId,
+          'table_id': event.tableId,
+          'order_id': event.orderId,
+          'food_id': event.foodId,
+          'value': event.value
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print("UPDATE QUANTYTI FODD TO BILL $data");
+      var message = data['message'];
+      try {
+        if (data['status'] == 200) {
+          emit(state.copyWith(tableStatus: TableStatus.succes));
+        } else {
+          print("ERROR UPDATE QUANTYTI FODD TO BILL 1");
+
+          emit(state.copyWith(tableStatus: TableStatus.failed));
+          emit(state.copyWith(errorText: message['text']));
+        }
+      } catch (error) {
+        print("ERROR UPDATE QUANTYTI FODD BILL 2 $error");
+
+        emit(state.copyWith(tableStatus: TableStatus.failed));
+        emit(state.copyWith(errorText: someThingWrong));
+      }
+    } catch (error) {
+      print("ERROR UPDATE QUANTYTI FODD BILL 3 $error");
+      emit(state.copyWith(tableStatus: TableStatus.failed));
+      emit(state.copyWith(errorText: someThingWrong));
+    }
   }
 
   void _onGetSwitchTableInfor(
@@ -171,6 +325,10 @@ class TableBloc extends Bloc<TableEvent, TableState> {
           var tableDataRes = TableModel.fromJson(data);
 
           emit(state.copyWith(tableModel: tableDataRes));
+          StorageUtils.instance.setStringList(
+              key: 'food_kinds_list',
+              val: tableDataRes.foodKinds ?? []); //luu danh muc thuc an
+
           emit(state.copyWith(tableStatus: TableStatus.succes));
         } else {
           print("ERROR TABLE INFOR danhjdba");

@@ -47,59 +47,63 @@ class GetDetailsBroughtReceipt extends BroughtReceiptEvent {
   List<Object> get props => [];
 }
 
-// class AddFoodToBill extends BroughtReceiptEvent {
-//   final String client;
-//   final String shopId;
-//   final bool isApi;
-//   final String orderId;
-//   final String foodId;
+class AddFoodToBroughtReceipt extends BroughtReceiptEvent {
+  final String client;
+  final String shopId;
+  final bool isApi;
+  final String orderId;
+  final String foodId;
 
-//   const AddFoodToBill(
-//       {required this.client,
-//       required this.shopId,
-//       this.isApi = true,
-//       required this.orderId,
-//       required this.foodId});
+  const AddFoodToBroughtReceipt(
+      {required this.client,
+      required this.shopId,
+      this.isApi = true,
+      required this.orderId,
+      required this.foodId});
 
-//   @override
-//   List<Object> get props => [];
-// }
+  @override
+  List<Object> get props => [];
+}
 
-// class RemoveFoodToBill extends BroughtReceiptEvent {
-//   final String client;
-//   final String shopId;
-//   final bool isApi;
-//   final String orderId;
-//   final String foodId;
+class RemoveFoodToBroughtReceipt extends BroughtReceiptEvent {
+  final String client;
+  final String shopId;
+  final bool isApi;
+  final String orderId;
+  final String foodId;
 
-//   const RemoveFoodToBill(
-//       {required this.client,
-//       required this.shopId,
-//       this.isApi = true,
-//       required this.orderId,
-//       required this.foodId});
+  const RemoveFoodToBroughtReceipt(
+      {required this.client,
+      required this.shopId,
+      this.isApi = true,
+      required this.orderId,
+      required this.foodId});
 
-//   @override
-//   List<Object> get props => [];
-// }
+  @override
+  List<Object> get props => [];
+}
 
-// class UpdateQuantytiFoodToBill extends BroughtReceiptEvent {
-//   final String client;
-//   final String shopId;
-//   final bool isApi;
-//   final String orderId;
-//   final String foodId;
-//   final String value;
+class UpdateQuantytiFoodToBroughtReceipt extends BroughtReceiptEvent {
+  final String client;
+  final String shopId;
+  final bool isApi;
+  final String roomId;
+  final String tableId;
+  final String? orderId;
+  final String foodId;
+  final String value;
 
-//   const UpdateQuantytiFoodToBill({
-//     required this.client,
-//     required this.shopId,
-//     this.isApi = true,
-//     required this.orderId,
-//     required this.foodId,
-//     required this.value,
-//   });
+  const UpdateQuantytiFoodToBroughtReceipt({
+    required this.client,
+    required this.shopId,
+    this.isApi = true,
+    required this.roomId,
+    required this.tableId,
+    required this.orderId,
+    required this.foodId,
+    required this.value,
+  });
 
-//   @override
-//   List<Object> get props => [];
-// }
+  @override
+  List<Object> get props => [];
+}
