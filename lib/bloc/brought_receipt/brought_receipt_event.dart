@@ -30,7 +30,7 @@ class GetDetailsBroughtReceipt extends BroughtReceiptEvent {
   final bool isApi;
   final int limit;
   final int page;
-  final String orderId;
+  final int? orderId;
   final List filters;
 
   const GetDetailsBroughtReceipt({
@@ -51,7 +51,7 @@ class AddFoodToBroughtReceipt extends BroughtReceiptEvent {
   final String client;
   final String shopId;
   final bool isApi;
-  final String orderId;
+  final int? orderId;
   final String foodId;
 
   const AddFoodToBroughtReceipt(
@@ -69,7 +69,7 @@ class RemoveFoodToBroughtReceipt extends BroughtReceiptEvent {
   final String client;
   final String shopId;
   final bool isApi;
-  final String orderId;
+  final int? orderId;
   final String foodId;
 
   const RemoveFoodToBroughtReceipt(
@@ -87,7 +87,7 @@ class UpdateQuantytiFoodToBroughtReceipt extends BroughtReceiptEvent {
   final String client;
   final String shopId;
   final bool isApi;
-  final String? orderId;
+  final int? orderId;
   final String foodId;
   final String value;
 
@@ -98,6 +98,25 @@ class UpdateQuantytiFoodToBroughtReceipt extends BroughtReceiptEvent {
     required this.orderId,
     required this.foodId,
     required this.value,
+  });
+
+  @override
+  List<Object> get props => [];
+}
+
+class CancleBroughtReceipt extends BroughtReceiptEvent {
+  final String client;
+  final String shopId;
+  final bool isApi;
+  final int? orderId;
+  final String cancellationReason;
+
+  const CancleBroughtReceipt({
+    required this.client,
+    required this.shopId,
+    this.isApi = true,
+    required this.orderId,
+    required this.cancellationReason,
   });
 
   @override

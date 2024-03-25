@@ -220,6 +220,20 @@ showSnackBarTopUpdateSucces(context) async {
   ).show(context);
 }
 
+showSnackBarTopCustom(
+    {required context, required String mess, required Color color}) async {
+  await Flushbar(
+    backgroundColor: color,
+    message: mess,
+    duration: const Duration(seconds: 1),
+    margin: EdgeInsets.only(bottom: 1.sh - 150.h, left: 25.w, right: 25.w),
+
+    flushbarPosition: FlushbarPosition.TOP,
+    // forwardAnimationCurve: ,
+    // reverseAnimationCurve: Curves.easeInOutCirc,
+  ).show(context);
+}
+
 void launchURL() async {
   final Uri url = Uri.parse('https://thuonghieuvietsol.com/');
   if (!await launchUrl(url)) {

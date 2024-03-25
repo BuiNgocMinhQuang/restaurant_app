@@ -157,7 +157,7 @@ class AddFoodToTable extends TableEvent {
   final bool isApi;
   final String roomId;
   final String tableId;
-  final String? orderId;
+  final int? orderId;
   final String foodId;
 
   const AddFoodToTable(
@@ -179,7 +179,7 @@ class RemoveFoodToTable extends TableEvent {
   final bool isApi;
   final String roomId;
   final String tableId;
-  final String? orderId;
+  final int? orderId;
   final String foodId;
 
   const RemoveFoodToTable(
@@ -201,7 +201,7 @@ class UpdateQuantytiFoodToTable extends TableEvent {
   final bool isApi;
   final String roomId;
   final String tableId;
-  final String? orderId;
+  final int? orderId;
   final String foodId;
   final String value;
 

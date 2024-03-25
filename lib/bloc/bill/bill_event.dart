@@ -30,7 +30,7 @@ class AddFoodToBill extends BillInforEvent {
   final bool isApi;
   final String roomId;
   final String tableId;
-  final String? orderId;
+  final int? orderId;
   final String foodId;
 
   const AddFoodToBill(
@@ -52,7 +52,7 @@ class RemoveFoodToBill extends BillInforEvent {
   final bool isApi;
   final String roomId;
   final String tableId;
-  final String? orderId;
+  final int? orderId;
   final String foodId;
 
   const RemoveFoodToBill(
@@ -74,7 +74,7 @@ class UpdateQuantytiFoodToBill extends BillInforEvent {
   final bool isApi;
   final String roomId;
   final String tableId;
-  final String? orderId;
+  final int? orderId;
   final String foodId;
   final String value;
 

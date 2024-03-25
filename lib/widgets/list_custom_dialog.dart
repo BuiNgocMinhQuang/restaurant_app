@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:app_restaurant/bloc/bill/bill_bloc.dart';
 import 'package:app_restaurant/bloc/brought_receipt/brought_receipt_bloc.dart';
+import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
 import 'package:app_restaurant/bloc/payment/payment_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
@@ -11,6 +13,7 @@ import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/constant/api/index.dart';
+import 'package:app_restaurant/model/food_table_data_model.dart';
 import 'package:app_restaurant/model/list_room_model.dart';
 import 'package:app_restaurant/utils/share_getString.dart';
 import 'package:app_restaurant/utils/storage.dart';
@@ -27,9 +30,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:money_formatter/money_formatter.dart';
+import 'package:http/http.dart' as http;
 
 ///Modal quản lí bàn
 class BookingTableDialog extends StatefulWidget {
@@ -130,7 +135,8 @@ class _BookingTableDialogState extends State<BookingTableDialog>
   final _formCancleTable = GlobalKey<FormState>();
   final scrollListFoodController = ScrollController();
   List itemNe = List.generate(10, (index) => index);
-
+  final PagingController<int, FoodTableDataModel> _pagingController =
+      PagingController(firstPageKey: 1);
   @override
   void dispose() {
     _tabController!.dispose();
@@ -153,13 +159,56 @@ class _BookingTableDialogState extends State<BookingTableDialog>
               .toList() ??
           [];
     });
-    scrollListFoodController.addListener(() {
-      if (scrollListFoodController.position.maxScrollExtent ==
-          scrollListFoodController.offset) {
-        print("LOADD MORE FOOD");
-        loadMoreFood();
-      }
+    // scrollListFoodController.addListener(() {
+    //   if (scrollListFoodController.position.maxScrollExtent ==
+    //       scrollListFoodController.offset) {
+    //     print("LOADD MORE FOOD");
+    //     loadMoreFood();
+    //   }
+    // });
+    _pagingController.addPageRequestListener((pageKey) {
+      print('GET PAGE');
+      fetchData(pageKey);
     });
+  }
+
+  void fetchData(int pageCurrent) async {
+    try {
+      final respons = await http.post(
+        Uri.parse('http://127.0.0.1:8000/api/booking/table/foods'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization":
+              "Bearer 140|6pjeu8G0cWaVWUhvwl7xBSCjCnG9djxMbvfhNBjt33d1d5e4"
+        },
+        body: jsonEncode({
+          'client': "staff",
+          'shop_id': "123456",
+          'is_api': "true",
+          'room_id': "1",
+          'table_id': "1",
+          'limit': null,
+          'page': pageCurrent
+        }),
+      );
+      final data = jsonDecode(respons.body);
+
+      try {
+        if (data['status'] == 200) {
+          print("DATA FOOD TABLE ${data['booking']}");
+          // var data2 = FoodTableDataModel.fromJson(data);
+          _pagingController.appendPage(data, pageCurrent + 1);
+        } else {
+          print("ERROR DATA FOOD TABLE 1 ${data}");
+        }
+      } catch (error) {
+        print("ERROR DATA FOOD TABLE 2 ${error}");
+      }
+    } catch (error) {
+      print("ERROR DATA FOOD TABLE 3 $error");
+      _pagingController.error = error;
+    }
   }
 
   bool hasMore = true;
@@ -173,6 +222,18 @@ class _BookingTableDialogState extends State<BookingTableDialog>
     if (_tabController!.indexIsChanging) {
       setState(() {});
     }
+  }
+
+  void refeshHomePage() async {
+    await Future.delayed(const Duration(seconds: 0));
+
+    BlocProvider.of<ListRoomBloc>(context).add(
+      GetListRoom(
+          client: widget.role,
+          shopId: widget.shopID,
+          isApi: true,
+          roomId: widget.idRoom.toString()),
+    );
   }
 
   @override
@@ -826,9 +887,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                           .toString() ??
                                                       '',
                                                   orderId: widget
-                                                          .currentTable?.orderId
-                                                          .toString() ??
-                                                      '',
+                                                      .currentTable?.orderId,
                                                   foodId: filterProducts[index]
                                                       .foodId
                                                       .toString(),
@@ -846,6 +905,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                             '',
                                                         limit: 1000.toString(),
                                                         page: 1.toString()));
+                                                refeshHomePage();
                                               }
 
                                               void updateQuantytiFood() {
@@ -861,10 +921,8 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                 .toString() ??
                                                             '',
                                                         orderId: widget
-                                                                .currentTable
-                                                                ?.orderId
-                                                                .toString() ??
-                                                            '',
+                                                            .currentTable
+                                                            ?.orderId,
                                                         foodId: filterProducts[
                                                                 index]
                                                             .foodId
@@ -886,12 +944,13 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                             '',
                                                         limit: 1000.toString(),
                                                         page: 1.toString()));
+                                                refeshHomePage();
                                               }
 
                                               void removeFood() {
-                                                BlocProvider.of<BillInforBloc>(
+                                                BlocProvider.of<TableBloc>(
                                                         context)
-                                                    .add(RemoveFoodToBill(
+                                                    .add(RemoveFoodToTable(
                                                   client: widget.role,
                                                   shopId: widget.shopID,
                                                   roomId:
@@ -901,9 +960,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                           .toString() ??
                                                       '',
                                                   orderId: widget
-                                                          .currentTable?.orderId
-                                                          .toString() ??
-                                                      '',
+                                                      .currentTable?.orderId,
                                                   foodId: filterProducts[index]
                                                       .foodId
                                                       .toString(),
@@ -922,6 +979,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                             '',
                                                         limit: 1000.toString(),
                                                         page: 1.toString()));
+                                                refeshHomePage();
                                               }
 
                                               return Card(
@@ -1869,7 +1927,7 @@ class SeeBillDialog extends StatelessWidget {
   final String nameRoom;
   final String role;
   final String shopID;
-  final String orderID;
+  final int? orderID;
   final String roomID;
   SeeBillDialog({
     Key? key,
@@ -2214,7 +2272,8 @@ class SeeBillDialog extends StatelessWidget {
                                                                 ?.roomTableId
                                                                 .toString() ??
                                                             '',
-                                                        orderId: orderID,
+                                                        orderId:
+                                                            orderID.toString(),
                                                       ));
                                                     }
 
@@ -2253,7 +2312,8 @@ class SeeBillDialog extends StatelessWidget {
                                                                 ?.roomTableId
                                                                 .toString() ??
                                                             '',
-                                                        orderId: orderID,
+                                                        orderId:
+                                                            orderID.toString(),
                                                       ));
                                                     }
 
@@ -2289,7 +2349,8 @@ class SeeBillDialog extends StatelessWidget {
                                                                 ?.roomTableId
                                                                 .toString() ??
                                                             '',
-                                                        orderId: orderID,
+                                                        orderId:
+                                                            orderID.toString(),
                                                       ));
                                                     }
 
@@ -2589,7 +2650,7 @@ class PayBillDialog extends StatefulWidget {
   const PayBillDialog({
     Key? key,
     required this.eventSaveButton,
-    required this.currentTable,
+    this.currentTable,
     required this.nameRoom,
     required this.role,
     required this.shopID,
@@ -3395,7 +3456,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
 
 //Modal quản lí hoá đơn mang về
 class ManageBroughtReceiptDialog extends StatefulWidget {
-  final String orderID;
+  final int? orderID;
   final String role;
   final String shopID;
   const ManageBroughtReceiptDialog({
@@ -3428,7 +3489,7 @@ class _ManageBroughtReceiptDialogState
     });
   }
 
-  void getDetailsBroughtReceiptData({required String orderID}) async {
+  void getDetailsBroughtReceiptData({required int? orderID}) async {
     BlocProvider.of<ManageBroughtReceiptBloc>(context).add(
         GetDetailsBroughtReceipt(
             client: currentRole,
@@ -3446,6 +3507,13 @@ class _ManageBroughtReceiptDialogState
         limit: 15,
         page: 1,
         filters: const []));
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getDetailsBroughtReceiptData(orderID: widget.orderID);
   }
 
   @override
@@ -3700,9 +3768,12 @@ class _ManageBroughtReceiptDialogState
                               orderId: widget.orderID,
                               foodId: filterProducts[index].foodId.toString(),
                             ));
-                            getDetailsBroughtReceiptData(
-                                orderID: widget.orderID);
                             getBroughtReceiptData();
+                            print(
+                                "ID CUA NO ${state.quantityFoodBroughtReceiptModel?.orderId}");
+                            getDetailsBroughtReceiptData(
+                                orderID: state
+                                    .quantityFoodBroughtReceiptModel?.orderId);
                           }
 
                           void updateQuantytiFood() {
@@ -4397,7 +4468,18 @@ class PrintBillDialog extends StatelessWidget {
 
 // Modal huỷ hoá đơn
 class CancleBillDialog extends StatefulWidget {
-  const CancleBillDialog({super.key});
+  final String role;
+  final String shopID;
+  final int? orderID;
+  final Function eventSaveButton;
+
+  const CancleBillDialog({
+    Key? key,
+    required this.eventSaveButton,
+    required this.role,
+    required this.shopID,
+    required this.orderID,
+  }) : super(key: key);
 
   @override
   State<CancleBillDialog> createState() => _CancleBillDialogState();
@@ -4558,7 +4640,24 @@ class _CancleBillDialogState extends State<CancleBillDialog> {
                     ),
                     ButtonApp(
                       event: () {
-                        // widget.eventSaveButton();
+                        widget.eventSaveButton();
+                        BlocProvider.of<CancleBroughtReceiptBloc>(context).add(
+                            CancleBroughtReceipt(
+                                client: widget.role,
+                                shopId: widget.shopID,
+                                orderId: widget.orderID,
+                                cancellationReason: currentOptions));
+
+                        BlocBuilder<CancleBroughtReceiptBloc,
+                            CancleBroughtReceiptState>(
+                          builder: (context, state) {
+                            if (state.cancleBroughtReceiptStatus ==
+                                CancleBroughtReceiptStatus.succes) {
+                              showUpdateDataSuccesDialog();
+                            } else {}
+                            return Container();
+                          },
+                        );
                       },
                       text: "Xác nhận".toUpperCase(),
                       colorText: Colors.white,

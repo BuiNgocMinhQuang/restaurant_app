@@ -10,6 +10,7 @@ import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
@@ -89,37 +90,54 @@ class TableBloc extends Bloc<TableEvent, TableState> {
   ) async {
     emit(state.copyWith(tableStatus: TableStatus.loading));
     await Future.delayed(const Duration(seconds: 1));
+    print("DAT TRUYEN ${{
+      'client': event.client,
+      'shop_id': event.shopId,
+      'is_api': event.isApi.toString(),
+      'room_id': event.roomId,
+      'table_id': event.tableId,
+      'order_id': event.orderId,
+      'food_id': event.foodId
+    }}");
     try {
       var token = StorageUtils.instance.getString(key: 'token');
       final respons = await http.post(
         Uri.parse('$baseUrl$addFoodTable'),
         headers: {
-          // 'Content-type': 'application/json',
-          // 'Accept': 'application/json',
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
           "Authorization": "Bearer $token"
         },
-        body: {
+        body: jsonEncode({
           'client': event.client,
           'shop_id': event.shopId,
-          'is_api': event.isApi.toString(),
+          'is_api': event.isApi,
           'room_id': event.roomId,
           'table_id': event.tableId,
           'order_id': event.orderId,
           'food_id': event.foodId
-        },
+        }),
       );
       final data = jsonDecode(respons.body);
       print(" DATA ADD FOOD TO TABLE $data");
+      final message = data['message'];
 
       try {
         if (data['status'] == 200) {
           emit(state.copyWith(tableStatus: TableStatus.succes));
-          showSnackBarTopUpdateSucces(navigatorKey.currentContext);
+          showSnackBarTopCustom(
+              context: navigatorKey.currentContext,
+              mess: message['title'],
+              color: Colors.green);
         } else {
           print("ERROR ADD FOOD TO TABLE 1");
 
           emit(state.copyWith(tableStatus: TableStatus.failed));
           emit(state.copyWith(errorText: someThingWrong));
+          showSnackBarTopCustom(
+              context: navigatorKey.currentContext,
+              mess: message['text'],
+              color: Colors.red);
         }
       } catch (error) {
         print("ERROR ADD FOOD TO TABLE 2 $error");
@@ -145,11 +163,11 @@ class TableBloc extends Bloc<TableEvent, TableState> {
       final respons = await http.post(
         Uri.parse('$baseUrl$removeFoodTable'),
         headers: {
-          // 'Content-type': 'application/json',
-          // 'Accept': 'application/json',
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
           "Authorization": "Bearer $token"
         },
-        body: {
+        body: jsonEncode({
           'client': event.client,
           'shop_id': event.shopId,
           'is_api': event.isApi.toString(),
@@ -157,19 +175,28 @@ class TableBloc extends Bloc<TableEvent, TableState> {
           'table_id': event.tableId,
           'order_id': event.orderId,
           'food_id': event.foodId
-        },
+        }),
       );
       final data = jsonDecode(respons.body);
+      final message = data['message'];
       print(" DATA ADD FOOD TO TABLE $data");
       try {
         if (data['status'] == 200) {
           emit(state.copyWith(tableStatus: TableStatus.succes));
           showSnackBarTopUpdateSucces(navigatorKey.currentContext);
+          showSnackBarTopCustom(
+              context: navigatorKey.currentContext,
+              mess: message['title'],
+              color: Colors.green);
         } else {
           print("ERROR ADD FOOD TO TABLE 1");
 
           emit(state.copyWith(tableStatus: TableStatus.failed));
           emit(state.copyWith(errorText: someThingWrong));
+          showSnackBarTopCustom(
+              context: navigatorKey.currentContext,
+              mess: message['text'],
+              color: Colors.red);
         }
       } catch (error) {
         print("ERROR ADD FOOD TO TABLE 2 $error");
@@ -211,15 +238,23 @@ class TableBloc extends Bloc<TableEvent, TableState> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print("UPDATE QUANTYTI FODD TO BILL $data");
+      final message = data['message'];
+
       try {
         if (data['status'] == 200) {
           emit(state.copyWith(tableStatus: TableStatus.succes));
-          showSnackBarTopUpdateSucces(navigatorKey.currentContext);
+          showSnackBarTopCustom(
+              context: navigatorKey.currentContext,
+              mess: message['title'],
+              color: Colors.green);
         } else {
           print("ERROR UPDATE QUANTYTI FODD TO BILL 1");
           emit(state.copyWith(tableStatus: TableStatus.failed));
           emit(state.copyWith(errorText: someThingWrong));
+          showSnackBarTopCustom(
+              context: navigatorKey.currentContext,
+              mess: message['text'],
+              color: Colors.red);
         }
       } catch (error) {
         print("ERROR UPDATE QUANTYTI FODD BILL 2 $error");

@@ -1,11 +1,14 @@
 import 'dart:convert';
 
 import 'package:app_restaurant/config/text.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/bill_infor_model.dart';
 import 'package:app_restaurant/model/payment_infor_model.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
@@ -25,16 +28,6 @@ class PaymentInforBloc extends Bloc<PaymentInforEvent, PaymentInforState> {
   ) async {
     emit(state.copyWith(paymentStatus: PaymentInforStateStatus.loading));
     await Future.delayed(const Duration(seconds: 1));
-    print('DATA SEND ${{
-      'shop_id': event.client,
-      'client': event.shopId,
-      'is_api': event.isApi,
-      'order_total': event.orderTotal,
-      'order_id': event.orderId,
-      'discount': event.discount,
-      'guest_pay': event.guestPay,
-      'pay_kind': event.payKind,
-    }}');
 
     try {
       var token = StorageUtils.instance.getString(key: 'token');
@@ -89,16 +82,6 @@ class PaymentInforBloc extends Bloc<PaymentInforEvent, PaymentInforState> {
   ) async {
     emit(state.copyWith(paymentStatus: PaymentInforStateStatus.loading));
     await Future.delayed(const Duration(seconds: 1));
-    // print('DATA SEND ${{
-    //   'shop_id': event.client,
-    //   'client': event.shopId,
-    //   'is_api': event.isApi,
-    //   'order_total': event.orderTotal,
-    //   'order_id': event.orderId,
-    //   'discount': event.discount,
-    //   'guest_pay': event.guestPay,
-    //   'pay_kind': event.payKind,
-    // }}');
 
     try {
       var token = StorageUtils.instance.getString(key: 'token');
@@ -118,16 +101,24 @@ class PaymentInforBloc extends Bloc<PaymentInforEvent, PaymentInforState> {
       );
       final data = jsonDecode(respons.body);
       print("CONFIRM PAYMENT ${data}");
-
+      final message = data['message'];
       try {
         if (data['status'] == 200) {
           // print("UPDATE PAYMENT ${data}");
           emit(state.copyWith(paymentStatus: PaymentInforStateStatus.succes));
+          showSnackBarTopCustom(
+              context: navigatorKey.currentContext,
+              mess: message['title'],
+              color: Colors.green);
         } else {
           print("ERROR CONFIRM PAYMENT  1");
 
           emit(state.copyWith(paymentStatus: PaymentInforStateStatus.failed));
           emit(state.copyWith(errorText: someThingWrong));
+          showSnackBarTopCustom(
+              context: navigatorKey.currentContext,
+              mess: message['text'],
+              color: Colors.red);
         }
       } catch (error) {
         print("ERROR CONFIRM PAYMENT  2 $error");

@@ -43,6 +43,8 @@ class AppBlocProvider extends StatelessWidget {
         BlocProvider(
           create: (_) => InternetCubit(),
         ),
+        BlocProvider(create: (_) => CancleBroughtReceiptBloc()),
+        BlocProvider(create: (_) => QuantityBroughtReceiptBloc()),
       ],
       child: child,
     );

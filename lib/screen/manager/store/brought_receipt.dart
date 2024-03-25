@@ -109,7 +109,7 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                                                       builder: (BuildContext
                                                           context) {
                                                         return const ManageBroughtReceiptDialog(
-                                                          orderID: '',
+                                                          orderID: null,
                                                           shopID: '',
                                                           role: '',
                                                         );
@@ -132,7 +132,14 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                                                       context: context,
                                                       builder: (BuildContext
                                                           context) {
-                                                        return const CancleBillDialog();
+                                                        return CancleBillDialog(
+                                                          eventSaveButton:
+                                                              () {},
+                                                          role: '',
+                                                          shopID:
+                                                              'currentShopId',
+                                                          orderID: 0,
+                                                        );
                                                       });
                                                 },
                                               ),
@@ -184,7 +191,7 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                                                         (BuildContext context) {
                                                       return const ManageBroughtReceiptDialog(
                                                         role: '',
-                                                        orderID: '',
+                                                        orderID: null,
                                                         shopID: '',
                                                       );
                                                     });
@@ -209,7 +216,12 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                                                     context: context,
                                                     builder:
                                                         (BuildContext context) {
-                                                      return const CancleBillDialog();
+                                                      return CancleBillDialog(
+                                                        eventSaveButton: () {},
+                                                        role: 'currentRole',
+                                                        shopID: 'currentShopId',
+                                                        orderID: 0,
+                                                      );
                                                     });
                                               },
                                             ),

@@ -39,6 +39,7 @@ dependencies:
   money_formatter: ^0.0.5
   intl: ^0.18.1
   another_flushbar: ^1.12.30
+  infinite_scroll_pagination: ^4.0.0
 
 dev_dependencies:
   flutter_test:
