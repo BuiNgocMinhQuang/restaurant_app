@@ -6,6 +6,7 @@ import 'package:app_restaurant/model/food_table_data_model.dart';
 import 'package:app_restaurant/model/switch_table_data_model.dart';
 
 import 'package:app_restaurant/model/table_model.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -109,15 +110,16 @@ class TableBloc extends Bloc<TableEvent, TableState> {
       );
       final data = jsonDecode(respons.body);
       print(" DATA ADD FOOD TO TABLE $data");
-      var message = data['message'];
+
       try {
         if (data['status'] == 200) {
           emit(state.copyWith(tableStatus: TableStatus.succes));
+          showSnackBarTopUpdateSucces(navigatorKey.currentContext);
         } else {
           print("ERROR ADD FOOD TO TABLE 1");
 
           emit(state.copyWith(tableStatus: TableStatus.failed));
-          emit(state.copyWith(errorText: message['text']));
+          emit(state.copyWith(errorText: someThingWrong));
         }
       } catch (error) {
         print("ERROR ADD FOOD TO TABLE 2 $error");
@@ -159,15 +161,15 @@ class TableBloc extends Bloc<TableEvent, TableState> {
       );
       final data = jsonDecode(respons.body);
       print(" DATA ADD FOOD TO TABLE $data");
-      var message = data['message'];
       try {
         if (data['status'] == 200) {
           emit(state.copyWith(tableStatus: TableStatus.succes));
+          showSnackBarTopUpdateSucces(navigatorKey.currentContext);
         } else {
           print("ERROR ADD FOOD TO TABLE 1");
 
           emit(state.copyWith(tableStatus: TableStatus.failed));
-          emit(state.copyWith(errorText: message['text']));
+          emit(state.copyWith(errorText: someThingWrong));
         }
       } catch (error) {
         print("ERROR ADD FOOD TO TABLE 2 $error");
@@ -210,15 +212,14 @@ class TableBloc extends Bloc<TableEvent, TableState> {
       );
       final data = jsonDecode(respons.body);
       print("UPDATE QUANTYTI FODD TO BILL $data");
-      var message = data['message'];
       try {
         if (data['status'] == 200) {
           emit(state.copyWith(tableStatus: TableStatus.succes));
+          showSnackBarTopUpdateSucces(navigatorKey.currentContext);
         } else {
           print("ERROR UPDATE QUANTYTI FODD TO BILL 1");
-
           emit(state.copyWith(tableStatus: TableStatus.failed));
-          emit(state.copyWith(errorText: message['text']));
+          emit(state.copyWith(errorText: someThingWrong));
         }
       } catch (error) {
         print("ERROR UPDATE QUANTYTI FODD BILL 2 $error");

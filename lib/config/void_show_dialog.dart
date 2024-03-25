@@ -211,7 +211,7 @@ showSnackBarTopUpdateSucces(context) async {
   await Flushbar(
     backgroundColor: Colors.green,
     message: "Món ăn được cập nhật thành công",
-    duration: Duration(seconds: 2),
+    duration: const Duration(seconds: 1),
     margin: EdgeInsets.only(bottom: 1.sh - 150.h, left: 25.w, right: 25.w),
 
     flushbarPosition: FlushbarPosition.TOP,

@@ -87,8 +87,6 @@ class UpdateQuantytiFoodToBroughtReceipt extends BroughtReceiptEvent {
   final String client;
   final String shopId;
   final bool isApi;
-  final String roomId;
-  final String tableId;
   final String? orderId;
   final String foodId;
   final String value;
@@ -97,8 +95,6 @@ class UpdateQuantytiFoodToBroughtReceipt extends BroughtReceiptEvent {
     required this.client,
     required this.shopId,
     this.isApi = true,
-    required this.roomId,
-    required this.tableId,
     required this.orderId,
     required this.foodId,
     required this.value,

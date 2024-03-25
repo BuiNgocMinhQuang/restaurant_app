@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:app_restaurant/config/text.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/bill_infor_model.dart';
 import 'package:app_restaurant/model/brought_receipt/list_brought_receipt_model.dart';
 import 'package:app_restaurant/model/brought_receipt/manage_brought_receipt_model.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -88,6 +90,9 @@ class ManageBroughtReceiptBloc
   ManageBroughtReceiptBloc() : super(const BroughtReceiptState()) {
     on<GetDetailsBroughtReceipt>(_onGetDetailsBroughtReceipt);
     on<AddFoodToBroughtReceipt>(_onAddFoodToBroughtReceipt);
+    on<RemoveFoodToBroughtReceipt>(_onRemoveFoodToBroughtReceipt);
+    on<UpdateQuantytiFoodToBroughtReceipt>(
+        _onUpdateQuantytiFoodToBroughtReceipt);
   }
 
   void _onAddFoodToBroughtReceipt(
@@ -99,7 +104,7 @@ class ManageBroughtReceiptBloc
     print("DATA TRUYEN LEN ${{
       'client': event.client,
       'shop_id': event.shopId,
-      'is_api': event.isApi.toString(),
+      'is_api': event.isApi,
       'order_id': event.orderId,
       'food_id': event.foodId
     }}");
@@ -115,7 +120,7 @@ class ManageBroughtReceiptBloc
         body: jsonEncode({
           'client': event.client,
           'shop_id': event.shopId,
-          'is_api': event.isApi.toString(),
+          'is_api': event.isApi,
           'order_id': event.orderId,
           'food_id': event.foodId
         }),
@@ -127,6 +132,7 @@ class ManageBroughtReceiptBloc
         if (data['status'] == 200) {
           emit(state.copyWith(
               broughtReceiptStatus: BroughtReceiptStatus.succes));
+          showSnackBarTopUpdateSucces(navigatorKey.currentContext);
         } else {
           print("ERROR ADD FOOD TO TABLE 1");
 
@@ -147,7 +153,7 @@ class ManageBroughtReceiptBloc
     }
   }
 
-  void _onRemoveFoodToTable(
+  void _onRemoveFoodToBroughtReceipt(
     RemoveFoodToBroughtReceipt event,
     Emitter<BroughtReceiptState> emit,
   ) async {
@@ -177,6 +183,7 @@ class ManageBroughtReceiptBloc
         if (data['status'] == 200) {
           emit(state.copyWith(
               broughtReceiptStatus: BroughtReceiptStatus.succes));
+          showSnackBarTopUpdateSucces(navigatorKey.currentContext);
         } else {
           print("ERROR ADD FOOD TO TABLE 1");
 
@@ -197,7 +204,7 @@ class ManageBroughtReceiptBloc
     }
   }
 
-  void _onUpdateQuantytiFoodToTable(
+  void _onUpdateQuantytiFoodToBroughtReceipt(
     UpdateQuantytiFoodToBroughtReceipt event,
     Emitter<BroughtReceiptState> emit,
   ) async {
@@ -206,7 +213,7 @@ class ManageBroughtReceiptBloc
     try {
       var token = StorageUtils.instance.getString(key: 'token');
       final respons = await http.post(
-        Uri.parse('$baseUrl$updateQuantityFoodTable'),
+        Uri.parse('$baseUrl$updateQuantityFoodBroughtReceipt'),
         headers: {
           'Content-type': 'application/json',
           'Accept': 'application/json',
@@ -216,8 +223,6 @@ class ManageBroughtReceiptBloc
           'client': event.client,
           'shop_id': event.shopId,
           'is_api': event.isApi.toString(),
-          'room_id': event.roomId,
-          'table_id': event.tableId,
           'order_id': event.orderId,
           'food_id': event.foodId,
           'value': event.value
@@ -230,6 +235,7 @@ class ManageBroughtReceiptBloc
         if (data['status'] == 200) {
           emit(state.copyWith(
               broughtReceiptStatus: BroughtReceiptStatus.succes));
+          showSnackBarTopUpdateSucces(navigatorKey.currentContext);
         } else {
           print("ERROR UPDATE QUANTYTI FODD TO BILL 1");
 

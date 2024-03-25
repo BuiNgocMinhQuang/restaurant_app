@@ -306,25 +306,8 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                                                         .toString()),
                                                 price:
                                                     "${MoneyFormatter(amount: (listReceipt[index].orderTotal).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                typePopMenu:
-                                                    PopUpMenuBroughtReceipt(
+                                                typePopMenu: PopUpMenuPrintBill(
                                                   eventButton1: () {
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return const ManageBroughtReceiptDialog(
-                                                            role: '',
-                                                            orderID: '',
-                                                            shopID: '',
-                                                          );
-                                                        });
-                                                  },
-                                                  eventButton2: () {
-                                                    showConfirmDialog(
-                                                        context, () {});
-                                                  },
-                                                  eventButton3: () {
                                                     showDialog(
                                                         context: context,
                                                         builder: (BuildContext
@@ -332,15 +315,49 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                                                           return const PrintBillDialog();
                                                         });
                                                   },
-                                                  eventButton4: () {
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return const CancleBillDialog();
-                                                        });
-                                                  },
                                                 ),
+
+                                                //     PopUpMenuBroughtReceipt(
+                                                //   eventButton1: () {
+                                                //     showDialog(
+                                                //         context: context,
+                                                //         builder: (BuildContext
+                                                //             context) {
+                                                //           return ManageBroughtReceiptDialog(
+                                                //             role: currentRole,
+                                                //             orderID: statePage
+                                                //                     .listBroughtReceiptModel
+                                                //                     ?.data
+                                                //                     .data[index]
+                                                //                     .orderId
+                                                //                     .toString() ??
+                                                //                 '',
+                                                //             shopID:
+                                                //                 currentShopId,
+                                                //           );
+                                                //         });
+                                                //   },
+                                                //   eventButton2: () {
+                                                //     showConfirmDialog(
+                                                //         context, () {});
+                                                //   },
+                                                //   eventButton3: () {
+                                                //     showDialog(
+                                                //         context: context,
+                                                //         builder: (BuildContext
+                                                //             context) {
+                                                //           return const PrintBillDialog();
+                                                //         });
+                                                //   },
+                                                //   eventButton4: () {
+                                                //     showDialog(
+                                                //         context: context,
+                                                //         builder: (BuildContext
+                                                //             context) {
+                                                //           return const CancleBillDialog();
+                                                //         });
+                                                //   },
+                                                // ),
                                                 statusText: "Hoàn thành",
                                               ),
                                             );
@@ -355,15 +372,34 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                                       },
                                       child: ListView.builder(
                                           shrinkWrap: true,
-                                          itemCount: 4,
+                                          itemCount: statePage
+                                              .listBroughtReceiptModel
+                                              ?.data
+                                              .data
+                                              .where((element) =>
+                                                  element.payFlg == 0)
+                                              .length,
                                           itemBuilder: (BuildContext context,
                                               int index) {
+                                            List<Datum> listReceipt = [];
+                                            listReceipt.addAll(statePage
+                                                    .listBroughtReceiptModel
+                                                    ?.data
+                                                    .data
+                                                    .where((element) =>
+                                                        element.payFlg == 0)
+                                                    .toList() ??
+                                                []);
                                             return Padding(
                                               padding: EdgeInsets.only(
                                                   left: 5.w, right: 5.w),
                                               child: BroughtReceiptContainer(
-                                                dateTime: '',
-                                                price: '',
+                                                dateTime: formatDateTime(
+                                                    listReceipt[index]
+                                                        .createdAt
+                                                        .toString()),
+                                                price:
+                                                    "${MoneyFormatter(amount: (listReceipt[index].orderTotal).toDouble()).output.withoutFractionDigits.toString()} đ",
                                                 typePopMenu:
                                                     PopUpMenuBroughtReceipt(
                                                   eventButton1: () {
@@ -371,10 +407,17 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                                                         context: context,
                                                         builder: (BuildContext
                                                             context) {
-                                                          return const ManageBroughtReceiptDialog(
-                                                            role: '',
-                                                            orderID: '',
-                                                            shopID: '',
+                                                          return ManageBroughtReceiptDialog(
+                                                            role: currentRole,
+                                                            orderID: statePage
+                                                                    .listBroughtReceiptModel
+                                                                    ?.data
+                                                                    .data[index]
+                                                                    .orderId
+                                                                    .toString() ??
+                                                                '',
+                                                            shopID:
+                                                                currentShopId,
                                                           );
                                                         });
                                                   },
@@ -412,34 +455,38 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                                       },
                                       child: ListView.builder(
                                           shrinkWrap: true,
-                                          itemCount: 4,
+                                          itemCount: statePage
+                                              .listBroughtReceiptModel
+                                              ?.data
+                                              .data
+                                              .where((element) =>
+                                                  element.payFlg == 2)
+                                              .length,
                                           itemBuilder: (BuildContext context,
                                               int index) {
+                                            List<Datum> listReceipt = [];
+
+                                            listReceipt.addAll(statePage
+                                                    .listBroughtReceiptModel
+                                                    ?.data
+                                                    .data
+                                                    .where((element) =>
+                                                        element.payFlg == 2)
+                                                    .toList() ??
+                                                []);
                                             return Padding(
                                               padding: EdgeInsets.only(
                                                   left: 5.w, right: 5.w),
                                               child: BroughtReceiptContainer(
-                                                  dateTime: '',
-                                                  price: '',
+                                                  dateTime: formatDateTime(
+                                                      listReceipt[index]
+                                                          .createdAt
+                                                          .toString()),
+                                                  price:
+                                                      "${MoneyFormatter(amount: (listReceipt[index].orderTotal).toDouble()).output.withoutFractionDigits.toString()} đ",
                                                   typePopMenu:
-                                                      PopUpMenuBroughtReceipt(
+                                                      PopUpMenuPrintBill(
                                                     eventButton1: () {
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext
-                                                              context) {
-                                                            return const ManageBroughtReceiptDialog(
-                                                              role: '',
-                                                              orderID: '',
-                                                              shopID: '',
-                                                            );
-                                                          });
-                                                    },
-                                                    eventButton2: () {
-                                                      showConfirmDialog(
-                                                          context, () {});
-                                                    },
-                                                    eventButton3: () {
                                                       showDialog(
                                                           context: context,
                                                           builder: (BuildContext
@@ -447,16 +494,51 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                                                             return const PrintBillDialog();
                                                           });
                                                     },
-                                                    eventButton4: () {
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext
-                                                              context) {
-                                                            return const CancleBillDialog();
-                                                          });
-                                                    },
                                                   ),
-                                                  statusText: "Hóa đơn đã hủy"),
+
+                                                  //     PopUpMenuBroughtReceipt(
+                                                  //   eventButton1: () {
+                                                  //     showDialog(
+                                                  //         context: context,
+                                                  //         builder: (BuildContext
+                                                  //             context) {
+                                                  //           return ManageBroughtReceiptDialog(
+                                                  //             role: currentRole,
+                                                  //             orderID: statePage
+                                                  //                     .listBroughtReceiptModel
+                                                  //                     ?.data
+                                                  //                     .data[
+                                                  //                         index]
+                                                  //                     .orderId
+                                                  //                     .toString() ??
+                                                  //                 '',
+                                                  //             shopID:
+                                                  //                 currentShopId,
+                                                  //           );
+                                                  //         });
+                                                  //   },
+                                                  //   eventButton2: () {
+                                                  //     showConfirmDialog(
+                                                  //         context, () {});
+                                                  //   },
+                                                  //   eventButton3: () {
+                                                  //     showDialog(
+                                                  //         context: context,
+                                                  //         builder: (BuildContext
+                                                  //             context) {
+                                                  //           return const PrintBillDialog();
+                                                  //         });
+                                                  //   },
+                                                  //   eventButton4: () {
+                                                  //     showDialog(
+                                                  //         context: context,
+                                                  //         builder: (BuildContext
+                                                  //             context) {
+                                                  //           return const CancleBillDialog();
+                                                  //         });
+                                                  //   },
+                                                  // ),
+                                                  statusText: "Đã huỷ"),
                                             );
                                           }),
                                     ),

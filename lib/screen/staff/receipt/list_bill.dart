@@ -1,11 +1,6 @@
-import 'dart:async';
-
-import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/widgets/bill_infor_container.dart';
 import 'package:app_restaurant/widgets/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/list_pop_menu.dart';
-import 'package:app_restaurant/widgets/shimmer/shimmer_list.dart';
 import 'package:app_restaurant/widgets/custom_tab.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
