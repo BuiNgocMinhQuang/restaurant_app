@@ -87,6 +87,7 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                             // height: 500,
                             color: Colors.white,
                             child: TabBarView(
+                                physics: const NeverScrollableScrollPhysics(),
                                 controller: tabController,
                                 children: [
                                   //Tab All

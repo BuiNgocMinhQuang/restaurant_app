@@ -8,6 +8,7 @@ import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/fake_data.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
+import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/shimmer/shimmer_list.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
@@ -112,6 +113,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
           state.staffInforDataModel?.data?.staffFacebook ?? '';
       instagramController.text =
           state.staffInforDataModel?.data?.staffInstagram ?? '';
+      var imagePath1 = (state.staffInforDataModel?.data?.staffAvatar ?? '')
+          .replaceAll('["', '');
+      var imagePath2 = imagePath1.replaceAll('"]', '');
       return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -172,7 +176,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                           // width: 100.w,
                                                           color: Colors.grey,
                                                           child: Image.network(
-                                                            'https://shop.layoutwebdemo.com/assets/user/images/avt/no_image.png',
+                                                            httpImage +
+                                                                imagePath2,
                                                             fit: BoxFit.cover,
                                                           ),
                                                         ),

@@ -13,6 +13,7 @@ import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/constant/api/index.dart';
+import 'package:app_restaurant/model/brought_receipt/manage_brought_receipt_model.dart';
 import 'package:app_restaurant/model/food_table_data_model.dart';
 import 'package:app_restaurant/model/list_room_model.dart';
 import 'package:app_restaurant/utils/share_getString.dart';
@@ -35,6 +36,7 @@ import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:http/http.dart' as http;
+import 'package:app_restaurant/env/index.dart';
 
 ///Modal quản lí bàn
 class BookingTableDialog extends StatefulWidget {
@@ -3480,6 +3482,7 @@ class _ManageBroughtReceiptDialogState
   List<ItemFood> currentFoodList = [];
   List<String> listAllCategoriesFood = [];
   List<int> selectedCategoriesIndex = [];
+  List<int> selectedCategoriesIndex22 = [];
   List<TextEditingController> _foodQuantityController = [];
 
   String query = '';
@@ -3487,6 +3490,12 @@ class _ManageBroughtReceiptDialogState
     setState(() {
       this.query = query;
     });
+    print("SERACH NE ${selectedCategoriesIndex22}");
+    getListFood(
+      keywords: query,
+      foodKinds:
+          selectedCategoriesIndex22.isEmpty ? null : selectedCategoriesIndex22,
+    );
   }
 
   void getDetailsBroughtReceiptData({required int? orderID}) async {
@@ -3496,24 +3505,95 @@ class _ManageBroughtReceiptDialogState
             shopId: currentShopId,
             limit: 15,
             page: 1,
-            filters: [],
+            filters: null,
             orderId: orderID));
   }
 
-  void getBroughtReceiptData() async {
+  void getListBroughtReceiptData({required Map<String, int?> filtersFlg}) {
     BlocProvider.of<BroughtReceiptBloc>(context).add(GetListBroughtReceipt(
         client: currentRole,
         shopId: currentShopId,
         limit: 15,
         page: 1,
-        filters: const []));
+        filters: filtersFlg));
+  }
+
+  List lamchoichoi = [];
+
+  void getListFood(
+      {String? keywords, List<int>? foodKinds, int? payFlg}) async {
+    print("DATA TIM MON ${{
+      {
+        'client': widget.role,
+        'shop_id': widget.shopID,
+        'is_api': true,
+        'limit': 15,
+        'page': 1,
+        'filters': {
+          "keywords": keywords,
+          "food_kinds": foodKinds,
+          "pay_flg": payFlg
+        },
+        'order_id': widget.orderID
+      }
+    }}");
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$getListFoodBroughtReceipt'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': widget.role,
+          'shop_id': widget.shopID,
+          'is_api': true,
+          'limit': 15,
+          'page': 1,
+          'filters': {
+            "keywords": keywords,
+            "food_kinds": foodKinds,
+            "pay_flg": payFlg
+          },
+          'order_id': widget.orderID
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print("DATA ${data}");
+
+      try {
+        if (data['status'] == 200) {
+          setState(() {
+            var detailsBroughtReceiptRes =
+                ManageBroughtReceiptModel.fromJson(data);
+            lamchoichoi = detailsBroughtReceiptRes.data.data;
+          });
+          // print("DATA BACK ${data}");
+        } else {
+          print("ERROR BROUGHT RECEIPT PAGE 1");
+        }
+      } catch (error) {
+        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+    }
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getDetailsBroughtReceiptData(orderID: widget.orderID);
+    getListFood();
+    // getDetailsBroughtReceiptData(orderID: widget.orderID);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -3523,16 +3603,26 @@ class _ManageBroughtReceiptDialogState
       if (state.broughtReceiptStatus == BroughtReceiptStatus.succes) {
         List<String> foodKindOfShop =
             StorageUtils.instance.getStringList(key: 'food_kinds_list') ?? [];
-        var listGetFood = state.manageBroughtReceiptModel?.data.data;
-        List filterProducts = listGetFood?.where((product) {
-              final foodTitle = product.foodName.toLowerCase();
-              final input = query.toLowerCase();
+        //xoa cai filtter cu
+        // var listGetFood = state.manageBroughtReceiptModel?.data.data;
+        // List filterProducts = listGetFood?.where((product) {
+        //       final foodTitle = (product.foodName ?? '').toLowerCase();
+        //       final input = query.toLowerCase();
 
-              return (selectedCategoriesIndex.isEmpty ||
-                      selectedCategoriesIndex.contains(product.foodKind)) &&
-                  foodTitle.contains(input);
-            }).toList() ??
-            [];
+        //       return (selectedCategoriesIndex.isEmpty ||
+        //               selectedCategoriesIndex.contains(product.foodKind)) &&
+        //           foodTitle.contains(input);
+        //     }).toList() ??
+        //     [];
+        //xoa cai filtter cu
+
+        List filterProducts2 = lamchoichoi.where((product) {
+          final foodTitle = product.foodName.toLowerCase();
+          final input = query.toLowerCase();
+          return (selectedCategoriesIndex22.isEmpty ||
+                  selectedCategoriesIndex22.contains(product.foodKind)) &&
+              foodTitle.contains(input);
+        }).toList();
         listAllCategoriesFood = foodKindOfShop;
         return AlertDialog(
           surfaceTintColor: Colors.white,
@@ -3661,15 +3751,27 @@ class _ManageBroughtReceiptDialogState
                                             lableFood); //thêm tên category vào mảng
                                         int index = listAllCategoriesFood
                                             .indexOf(lableFood);
-                                        selectedCategoriesIndex.add(
+                                        selectedCategoriesIndex22.add(
                                             index); //thêm index category vào mảng
+                                        getListFood(
+                                            keywords: query,
+                                            foodKinds: selectedCategoriesIndex22
+                                                    .isEmpty
+                                                ? null
+                                                : selectedCategoriesIndex22);
                                       } else {
                                         selectedCategories.remove(
                                             lableFood); //xoá tên category vào mảng
                                         int index = listAllCategoriesFood
                                             .indexOf(lableFood);
-                                        selectedCategoriesIndex.remove(
+                                        selectedCategoriesIndex22.remove(
                                             index); //xoá index category vào mảng
+                                        getListFood(
+                                            keywords: query,
+                                            foodKinds: selectedCategoriesIndex22
+                                                    .isEmpty
+                                                ? null
+                                                : selectedCategoriesIndex22);
                                       }
                                     });
                                   },
@@ -3752,28 +3854,31 @@ class _ManageBroughtReceiptDialogState
                 const SizedBox(height: 10.0),
                 Expanded(
                     child: ListView.builder(
-                        itemCount: filterProducts.length,
+                        itemCount: filterProducts2.length,
                         // itemCount: listGetFood?.length ?? 0,
                         itemBuilder: (context, index) {
                           _foodQuantityController.add(TextEditingController());
-
                           _foodQuantityController[index].text =
-                              filterProducts[index].quantityFood.toString();
-
+                              filterProducts2[index].quantityFood.toString();
                           void addFodd() {
                             BlocProvider.of<ManageBroughtReceiptBloc>(context)
                                 .add(AddFoodToBroughtReceipt(
                               client: widget.role,
                               shopId: widget.shopID,
                               orderId: widget.orderID,
-                              foodId: filterProducts[index].foodId.toString(),
+                              foodId: filterProducts2[index].foodId.toString(),
                             ));
-                            getBroughtReceiptData();
+                            getListFood();
+
+                            getListBroughtReceiptData(
+                                filtersFlg: {"pay_flg": null});
+
                             print(
                                 "ID CUA NO ${state.quantityFoodBroughtReceiptModel?.orderId}");
                             getDetailsBroughtReceiptData(
-                                orderID: state
-                                    .quantityFoodBroughtReceiptModel?.orderId);
+                                orderID: widget.orderID);
+
+                            // state.manageBroughtReceiptModel.data
                           }
 
                           void updateQuantytiFood() {
@@ -3782,13 +3887,17 @@ class _ManageBroughtReceiptDialogState
                                     client: widget.role,
                                     shopId: widget.shopID,
                                     orderId: widget.orderID,
-                                    foodId:
-                                        filterProducts[index].foodId.toString(),
+                                    foodId: filterProducts2[index]
+                                        .foodId
+                                        .toString(),
                                     value:
                                         _foodQuantityController[index].text));
+                            getListFood();
+
                             getDetailsBroughtReceiptData(
                                 orderID: widget.orderID);
-                            getBroughtReceiptData();
+                            getListBroughtReceiptData(
+                                filtersFlg: {"pay_flg": null});
                           }
 
                           void removeFood() {
@@ -3797,14 +3906,20 @@ class _ManageBroughtReceiptDialogState
                               client: widget.role,
                               shopId: widget.shopID,
                               orderId: widget.orderID,
-                              foodId: filterProducts[index].foodId.toString(),
+                              foodId: filterProducts2[index].foodId.toString(),
                             ));
+                            getListFood();
 
                             getDetailsBroughtReceiptData(
                                 orderID: widget.orderID);
-                            getBroughtReceiptData();
+                            getListBroughtReceiptData(
+                                filtersFlg: {"pay_flg": null});
                           }
 
+                          var imagePath1 = filterProducts2[index]
+                              ?.foodImages
+                              .replaceAll('["', '');
+                          var imagePath2 = imagePath1.replaceAll('"]', '');
                           return Card(
                             elevation: 8.0,
                             margin: const EdgeInsets.all(8),
@@ -3818,24 +3933,18 @@ class _ManageBroughtReceiptDialogState
                                     borderRadius: BorderRadius.circular(15.r)),
                                 child: Column(
                                   children: [
-                                    // space15H,
-                                    // SizedBox(
-                                    //     height: 160.w,
-                                    //     child: ClipRRect(
-                                    //       borderRadius: BorderRadius.only(
-                                    //           topLeft: Radius
-                                    //               .circular(
-                                    //                   15.r),
-                                    //           topRight: Radius
-                                    //               .circular(
-                                    //                   15.r)),
-                                    //       child:
-                                    //           Image.asset(
-                                    //         product.image,
-                                    //         fit: BoxFit
-                                    //             .cover,
-                                    //       ),
-                                    //     )),
+                                    space15H,
+                                    SizedBox(
+                                        height: 160.w,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(15.r),
+                                              topRight: Radius.circular(15.r)),
+                                          child: Image.network(
+                                            httpImage + imagePath2,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )),
                                     space10H,
                                     Column(
                                       crossAxisAlignment:
@@ -3845,11 +3954,11 @@ class _ManageBroughtReceiptDialogState
                                       children: [
                                         TextApp(
                                             //fix day
-                                            text: filterProducts[index]
+                                            text: filterProducts2[index]
                                                     .foodName ??
                                                 ''),
                                         TextApp(
-                                          text: filterProducts[index]
+                                          text: filterProducts2[index]
                                               .foodPrice
                                               .toString(),
                                           fontsize: 20.sp,
@@ -4462,6 +4571,591 @@ class PrintBillDialog extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+//Modal in hoa dang mang ve
+
+class PrintBroughtReceiptDialog extends StatelessWidget {
+  final String role;
+  final String shopID;
+  final String orderID;
+  const PrintBroughtReceiptDialog({
+    Key? key,
+    required this.role,
+    required this.shopID,
+    required this.orderID,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<PrintBroughtReceiptBloc, PrintBroughtReceiptState>(
+      builder: (context, state) {
+        if (state.printBroughtReceiptStatus ==
+            PrintBroughtReceiptStatus.succes) {
+          var payKind =
+              state.printBroughtReceiptModel?.order.payKind.toString();
+          switch (payKind) {
+            case "0":
+              payKind = "Tiền mặt";
+              break;
+            case "1":
+              payKind = "Thẻ";
+            case "2":
+              payKind = "Chuyển khoản";
+          }
+          return AlertDialog(
+            surfaceTintColor: Colors.white,
+            backgroundColor: Colors.white,
+            content: SizedBox(
+              width: double.maxFinite,
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextApp(
+                                text: "In hoá đơn",
+                                fontsize: 18.sp,
+                                color: blueText,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      space10H,
+                      const Divider(
+                        height: 1,
+                        color: Colors.black,
+                      ),
+                      space10H,
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          TextApp(
+                            text: "Shop 1",
+                            fontsize: 18.sp,
+                            color: blueText,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          space5W,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              TextApp(
+                                text: "Địa chỉ: ",
+                                fontsize: 16.sp,
+                                color: blueText,
+                              ),
+                              space10W,
+                              TextApp(
+                                text: "123 duong abc",
+                                fontsize: 16.sp,
+                                color: blueText,
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      space5H,
+                      // CustomDotsLine(color: Colors.grey),
+                      const Divider(
+                        height: 1,
+                        color: Colors.black,
+                      ),
+                      space10H,
+                      Wrap(
+                        children: [
+                          Row(
+                            children: [
+                              TextApp(
+                                text: "Giờ vào: ",
+                                fontsize: 16.sp,
+                                color: blueText,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              TextApp(
+                                text: formatDateTime(state
+                                        .printBroughtReceiptModel
+                                        ?.order
+                                        .createdAt
+                                        .toString() ??
+                                    ''),
+                                fontsize: 16.sp,
+                                color: blueText,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              TextApp(
+                                text: "Giờ ra:  ",
+                                fontsize: 16.sp,
+                                color: blueText,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              TextApp(
+                                text: formatDateTime(state
+                                        .printBroughtReceiptModel
+                                        ?.order
+                                        .updatedAt
+                                        .toString() ??
+                                    ''),
+                                fontsize: 16.sp,
+                                color: blueText,
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      space5H,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              TextApp(
+                                text: "Tên khách hàng: ",
+                                fontsize: 16.sp,
+                                color: blueText,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              TextApp(
+                                text: "Khách lẻ",
+                                fontsize: 16.sp,
+                                color: blueText,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      space20H,
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextApp(
+                            text: "Tên hàng",
+                            fontsize: 16.sp,
+                            color: blueText,
+                          ),
+                          TextApp(
+                            text: "SL",
+                            fontsize: 16.sp,
+                            color: blueText,
+                          ),
+                          TextApp(
+                            text: "Đ.giá",
+                            fontsize: 16.sp,
+                            color: blueText,
+                          ),
+                          TextApp(
+                            text: "TT",
+                            fontsize: 16.sp,
+                            color: blueText,
+                          ),
+                        ],
+                      ),
+                      space5H,
+                      const Divider(
+                        height: 1,
+                        color: Colors.black,
+                      ),
+                      space10H,
+                      ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount:
+                              state.printBroughtReceiptModel?.data.length ?? 0,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    // SizedBox(
+                                    //   width: 80.w,
+                                    //   child: TextApp(
+                                    //     text: state.printBroughtReceiptModel
+                                    //             ?.data[index].foodName ??
+                                    //         '',
+                                    //     fontsize: 16.sp,
+                                    //     color: blueText,
+                                    //   ),
+                                    // ),
+                                    Wrap(
+                                      children: [
+                                        SizedBox(
+                                          width: 100.w,
+                                          child: TextApp(
+                                            isOverFlow: false,
+                                            softWrap: true,
+                                            text: state.printBroughtReceiptModel
+                                                    ?.data[index].foodName ??
+                                                '',
+                                            fontsize: 16.sp,
+                                            color: blueText,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
+                                      // color: Colors.red,
+                                      width: 20.w,
+                                      child: Center(
+                                        child: TextApp(
+                                          text: state.printBroughtReceiptModel
+                                                  ?.data[index].quantityFood
+                                                  .toString() ??
+                                              '',
+                                          fontsize: 16.sp,
+                                          color: blueText,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      // color: Colors.green,
+                                      width: 50.w,
+                                      child: TextApp(
+                                        text: MoneyFormatter(
+                                                amount: (state
+                                                            .printBroughtReceiptModel
+                                                            ?.data[index]
+                                                            .foodPrice ??
+                                                        0)
+                                                    .toDouble())
+                                            .output
+                                            .compactNonSymbol
+                                            .toString(),
+                                        fontsize: 16.sp,
+                                        color: blueText,
+                                      ),
+                                    ),
+                                    Container(
+                                      // color: Colors.yellow,
+                                      width: 50.w,
+                                      child: TextApp(
+                                        text: MoneyFormatter(
+                                                amount: ((state
+                                                            .printBroughtReceiptModel!
+                                                            .data[index]
+                                                            .foodPrice ??
+                                                        0 *
+                                                            state
+                                                                .printBroughtReceiptModel!
+                                                                .data[index]
+                                                                .quantityFood))
+                                                    .toDouble())
+                                            .output
+                                            .compactNonSymbol
+                                            .toString(),
+                                        fontsize: 16.sp,
+                                        color: blueText,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const Divider(
+                                  height: 1,
+                                  color: Colors.black,
+                                ),
+                                space10H
+                              ],
+                            );
+                          }),
+                      space35H,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextApp(
+                            text: "Tổng tiền món ",
+                            fontsize: 16.sp,
+                            color: blueText,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          TextApp(
+                            text: MoneyFormatter(
+                                    amount: (state.printBroughtReceiptModel
+                                                ?.order.orderTotal ??
+                                            0)
+                                        .toDouble())
+                                .output
+                                .compactNonSymbol
+                                .toString(),
+                            fontsize: 16.sp,
+                            color: blueText,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextApp(
+                            text: "Giảm giá ",
+                            fontsize: 16.sp,
+                            color: blueText,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          TextApp(
+                            text: MoneyFormatter(
+                                    amount: (state.printBroughtReceiptModel
+                                                ?.order.discount ??
+                                            0)
+                                        .toDouble())
+                                .output
+                                .compactNonSymbol
+                                .toString(),
+                            fontsize: 16.sp,
+                            color: blueText,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextApp(
+                            text: "Khách cần trả ",
+                            fontsize: 16.sp,
+                            color: blueText,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          TextApp(
+                            text: MoneyFormatter(
+                                    amount: (state.printBroughtReceiptModel
+                                                ?.order.clientCanPay ??
+                                            0)
+                                        .toDouble())
+                                .output
+                                .compactNonSymbol
+                                .toString(),
+                            fontsize: 16.sp,
+                            color: blueText,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextApp(
+                            text: "Khách thanh toán ",
+                            fontsize: 16.sp,
+                            color: blueText,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          TextApp(
+                            text: MoneyFormatter(
+                                    amount: (state.printBroughtReceiptModel
+                                                ?.order.guestPay ??
+                                            0)
+                                        .toDouble())
+                                .output
+                                .compactNonSymbol
+                                .toString(),
+                            fontsize: 16.sp,
+                            color: blueText,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextApp(
+                            text: "Loại thanh toán ",
+                            fontsize: 16.sp,
+                            color: blueText,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          TextApp(
+                            text: payKind ?? '',
+                            fontsize: 16.sp,
+                            color: blueText,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextApp(
+                            text: "Tiền thừa trả khách ",
+                            fontsize: 16.sp,
+                            color: blueText,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          TextApp(
+                            text: MoneyFormatter(
+                                    amount: (state.printBroughtReceiptModel
+                                                ?.order.guestPayClient ??
+                                            0)
+                                        .toDouble())
+                                .output
+                                .compactNonSymbol
+                                .toString(),
+                            fontsize: 16.sp,
+                            color: blueText,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ],
+                      ),
+                      space15H,
+                      const Divider(
+                        height: 1,
+                        color: Colors.black,
+                      ),
+                      space10H,
+
+                      state.printBroughtReceiptModel?.order
+                                  .cancellationReason !=
+                              null
+                          ? Column(
+                              children: [
+                                TextApp(
+                                  text: "Hoá đơn bị huỷ ",
+                                  fontsize: 16.sp,
+                                  color: red,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                space10H,
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    TextApp(
+                                      text: "Lý do huỷ: ",
+                                      fontsize: 16.sp,
+                                      color: blueText,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    TextApp(
+                                      text: state.printBroughtReceiptModel
+                                          ?.order.cancellationReason,
+                                      fontsize: 16.sp,
+                                      color: blueText,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ],
+                                )
+                              ],
+                            )
+                          : Container(),
+                      space15H,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ButtonApp(
+                            event: () {
+                              Navigator.of(context).pop();
+                            },
+                            text: "Đóng",
+                            colorText: Colors.white,
+                            backgroundColor:
+                                const Color.fromRGBO(131, 146, 171, 1),
+                            outlineColor:
+                                const Color.fromRGBO(131, 146, 171, 1),
+                          ),
+                          SizedBox(
+                            width: 20.w,
+                          ),
+                          ButtonApp(
+                            event: () {
+                              // widget.eventSaveButton();
+                            },
+                            text: "In",
+                            colorText: Colors.white,
+                            backgroundColor:
+                                const Color.fromRGBO(23, 193, 232, 1),
+                            outlineColor: const Color.fromRGBO(23, 193, 232, 1),
+                          ),
+                          SizedBox(
+                            width: 20.w,
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        } else if (state.printBroughtReceiptStatus ==
+            PrintBroughtReceiptStatus.loading) {
+          return AlertDialog(
+            contentPadding: EdgeInsets.all(0),
+            surfaceTintColor: Colors.white,
+            backgroundColor: Colors.white,
+            content: Center(
+              child: SizedBox(
+                width: 1.sw,
+                height: 200.w,
+                child: Lottie.asset('assets/lottie/loading_7_color.json'),
+              ),
+            ),
+          );
+        } else {
+          return AlertDialog(
+            contentPadding: EdgeInsets.all(0),
+            surfaceTintColor: Colors.white,
+            backgroundColor: Colors.white,
+            content: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 100,
+                    height: 100,
+                    child: Lottie.asset('assets/lottie/error.json'),
+                  ),
+                  space30H,
+                  TextApp(
+                    text: state.errorText.toString(),
+                    fontsize: 20.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  space30H,
+                  Container(
+                    width: 200,
+                    child: ButtonGradient(
+                      color1: color1BlueButton,
+                      color2: color2BlueButton,
+                      event: () {},
+                      text: 'Thử lại',
+                      fontSize: 12.sp,
+                      radius: 8.r,
+                      textColor: Colors.white,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        }
+      },
     );
   }
 }

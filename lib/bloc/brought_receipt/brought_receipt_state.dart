@@ -105,35 +105,35 @@ class CancleBroughtReceiptState extends Equatable {
 
 enum CancleBroughtReceiptStatus { loading, succes, failed }
 
-///STATE SO LUONG MON AN
-///
-class QuantityBroughtReceiptState extends Equatable {
-  const QuantityBroughtReceiptState(
-      {this.errorText,
-      this.quantityBroughtReceiptStatus,
-      this.quantityFoodBroughtReceiptModel});
+///STATE IN HOA DON
+class PrintBroughtReceiptState extends Equatable {
+  const PrintBroughtReceiptState({
+    this.errorText,
+    this.printBroughtReceiptStatus,
+    this.printBroughtReceiptModel,
+  });
 
   final String? errorText;
-  final QuantityBroughtReceiptStatus? quantityBroughtReceiptStatus;
-  final QuantityFoodBroughtReceiptModel? quantityFoodBroughtReceiptModel;
-  QuantityBroughtReceiptState copyWith(
-      {String? errorText,
-      QuantityBroughtReceiptStatus? quantityBroughtReceiptStatus,
-      QuantityFoodBroughtReceiptModel? quantityFoodBroughtReceiptModel}) {
-    return QuantityBroughtReceiptState(
-        errorText: errorText ?? this.errorText,
-        quantityBroughtReceiptStatus:
-            quantityBroughtReceiptStatus ?? this.quantityBroughtReceiptStatus,
-        quantityFoodBroughtReceiptModel: quantityFoodBroughtReceiptModel ??
-            this.quantityFoodBroughtReceiptModel);
+  final PrintBroughtReceiptStatus? printBroughtReceiptStatus;
+  final PrintBroughtReceiptModel? printBroughtReceiptModel;
+
+  PrintBroughtReceiptState copyWith({
+    String? errorText,
+    PrintBroughtReceiptStatus? printBroughtReceiptStatus,
+    PrintBroughtReceiptModel? printBroughtReceiptModel,
+  }) {
+    return PrintBroughtReceiptState(
+      errorText: errorText ?? this.errorText,
+      printBroughtReceiptStatus:
+          printBroughtReceiptStatus ?? this.printBroughtReceiptStatus,
+      printBroughtReceiptModel:
+          printBroughtReceiptModel ?? this.printBroughtReceiptModel,
+    );
   }
 
   @override
-  List<Object?> get props => [
-        errorText,
-        quantityBroughtReceiptStatus,
-        quantityFoodBroughtReceiptModel
-      ];
+  List<Object?> get props =>
+      [errorText, printBroughtReceiptStatus, printBroughtReceiptModel];
 }
 
-enum QuantityBroughtReceiptStatus { loading, succes, failed }
+enum PrintBroughtReceiptStatus { loading, succes, failed }

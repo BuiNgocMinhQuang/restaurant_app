@@ -10,7 +10,7 @@ class GetListBroughtReceipt extends BroughtReceiptEvent {
   final bool isApi;
   final int limit;
   final int page;
-  final List filters; //chua bit type
+  final Map<String, int?> filters; //chua bit type
 
   const GetListBroughtReceipt(
       {required this.client,
@@ -18,7 +18,7 @@ class GetListBroughtReceipt extends BroughtReceiptEvent {
       this.isApi = true,
       required this.limit,
       required this.page,
-      this.filters = const []});
+      required this.filters});
 
   @override
   List<Object> get props => [];
@@ -31,7 +31,7 @@ class GetDetailsBroughtReceipt extends BroughtReceiptEvent {
   final int limit;
   final int page;
   final int? orderId;
-  final List filters;
+  final List? filters;
 
   const GetDetailsBroughtReceipt({
     required this.client,
@@ -117,6 +117,23 @@ class CancleBroughtReceipt extends BroughtReceiptEvent {
     this.isApi = true,
     required this.orderId,
     required this.cancellationReason,
+  });
+
+  @override
+  List<Object> get props => [];
+}
+
+class PrintBroughtReceipt extends BroughtReceiptEvent {
+  final String client;
+  final String shopId;
+  final bool isApi;
+  final int orderId;
+
+  const PrintBroughtReceipt({
+    required this.client,
+    required this.shopId,
+    this.isApi = true,
+    required this.orderId,
   });
 
   @override

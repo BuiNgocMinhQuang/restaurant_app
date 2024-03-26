@@ -1,5 +1,6 @@
 import 'package:app_restaurant/bloc/bill/bill_bloc.dart';
 import 'package:app_restaurant/bloc/brought_receipt/brought_receipt_bloc.dart';
+import 'package:app_restaurant/bloc/food/menu_food_bloc.dart';
 import 'package:app_restaurant/bloc/login/login_bloc.dart';
 import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
@@ -44,7 +45,8 @@ class AppBlocProvider extends StatelessWidget {
           create: (_) => InternetCubit(),
         ),
         BlocProvider(create: (_) => CancleBroughtReceiptBloc()),
-        BlocProvider(create: (_) => QuantityBroughtReceiptBloc()),
+        BlocProvider(create: (_) => PrintBroughtReceiptBloc()),
+        BlocProvider(create: (_) => MenuFoodBloc()),
       ],
       child: child,
     );

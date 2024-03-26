@@ -13,8 +13,8 @@ String manageBroughtReceiptModelToJson(ManageBroughtReceiptModel data) =>
 class ManageBroughtReceiptModel {
   int status;
   Data data;
-  int countOrderFoods;
-  String orderTotal;
+  int? countOrderFoods;
+  String? orderTotal;
 
   ManageBroughtReceiptModel({
     required this.status,
@@ -40,19 +40,19 @@ class ManageBroughtReceiptModel {
 }
 
 class Data {
-  int currentPage;
+  int? currentPage;
   List<Datum> data;
-  String firstPageUrl;
-  int from;
-  int lastPage;
-  String lastPageUrl;
+  String? firstPageUrl;
+  int? from;
+  int? lastPage;
+  String? lastPageUrl;
   List<Link> links;
-  String nextPageUrl;
-  String path;
-  int perPage;
+  String? nextPageUrl;
+  String? path;
+  int? perPage;
   dynamic prevPageUrl;
-  int to;
-  int total;
+  int? to;
+  int? total;
 
   Data({
     required this.currentPage,
@@ -104,22 +104,22 @@ class Data {
 }
 
 class Datum {
-  int foodId;
-  int userId;
-  int storeId;
+  int? foodId;
+  int? userId;
+  int? storeId;
   dynamic storeRoomId;
-  String foodName;
-  String foodDescription;
+  String? foodName;
+  String? foodDescription;
   String? foodImages;
-  int foodPrice;
-  String foodContent;
+  int? foodPrice;
+  String? foodContent;
   int foodRate;
-  int foodKind;
-  int activeFlg;
-  int deleteFlg;
+  int? foodKind;
+  int? activeFlg;
+  int? deleteFlg;
   DateTime createdAt;
   DateTime updatedAt;
-  int quantityFood;
+  int? quantityFood;
   int? orderFoodId;
   int? orderId;
 
@@ -189,7 +189,7 @@ class Datum {
 
 class Link {
   String? url;
-  String label;
+  String? label;
   bool active;
 
   Link({

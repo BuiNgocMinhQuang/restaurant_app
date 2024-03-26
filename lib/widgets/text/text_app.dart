@@ -8,6 +8,8 @@ class TextApp extends StatelessWidget {
   Color color;
   FontWeight fontWeight;
   TextAlign textAlign;
+  bool softWrap;
+  bool isOverFlow;
   TextApp(
       {Key? key,
       required this.text,
@@ -15,14 +17,17 @@ class TextApp extends StatelessWidget {
       this.fontsize = 0,
       this.color = Colors.black,
       this.fontFamily = "OpenSans",
+      this.softWrap = false,
+      this.isOverFlow = true,
       this.fontWeight = FontWeight.normal})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Text(
+      softWrap: softWrap,
       text,
-      overflow: TextOverflow.ellipsis,
+      overflow: isOverFlow ? TextOverflow.ellipsis : null,
       textAlign: textAlign,
       style: TextStyle(
           fontSize: fontsize == 0 ? 12.sp : fontsize,

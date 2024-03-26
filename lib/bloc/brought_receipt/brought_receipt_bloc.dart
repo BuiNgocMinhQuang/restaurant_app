@@ -5,6 +5,7 @@ import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/brought_receipt/list_brought_receipt_model.dart';
 import 'package:app_restaurant/model/brought_receipt/manage_brought_receipt_model.dart';
 import 'package:app_restaurant/model/brought_receipt/quantity_food_brought_receipt_model.dart';
+import 'package:app_restaurant/model/brought_receipt/print_brought_receipt_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:bloc/bloc.dart';
@@ -28,7 +29,16 @@ class BroughtReceiptBloc
     emit(state.copyWith(
         broughtReceiptPageStatus: BroughtReceiptPageStatus.loading));
     await Future.delayed(const Duration(seconds: 1));
-
+    print("DAT LAY BILL ${{
+      {
+        'client': event.client,
+        'shop_id': event.shopId,
+        'is_api': event.isApi.toString(),
+        'limit': event.limit,
+        'page': event.page,
+        'filters': event.filters
+      }
+    }}");
     try {
       var token = StorageUtils.instance.getString(key: 'token');
       final respons = await http.post(
@@ -53,6 +63,8 @@ class BroughtReceiptBloc
         if (data['status'] == 200) {
           var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
           emit(state.copyWith(listBroughtReceiptModel: broughtReceiptPageRes));
+          print("LIST BILL ${broughtReceiptPageRes.data.data.length}");
+
           emit(state.copyWith(
               broughtReceiptPageStatus: BroughtReceiptPageStatus.succes));
         } else {
@@ -88,15 +100,6 @@ class CancleBroughtReceiptBloc
     Emitter<CancleBroughtReceiptState> emit,
   ) async {
     try {
-      print("DAT HUY ${{
-        {
-          'client': event.client,
-          'shop_id': event.shopId,
-          'is_api': event.isApi,
-          'cancellation_reason': event.cancellationReason,
-          'order_id': event.orderId
-        }
-      }}");
       var token = StorageUtils.instance.getString(key: 'token');
       final respons = await http.post(
         Uri.parse('$baseUrl$cancleBroughtReceipt'),
@@ -153,29 +156,22 @@ class CancleBroughtReceiptBloc
   }
 }
 
-class QuantityBroughtReceiptBloc
-    extends Bloc<BroughtReceiptEvent, QuantityBroughtReceiptState> {
-  QuantityBroughtReceiptBloc() : super(const QuantityBroughtReceiptState()) {
-    on<AddFoodToBroughtReceipt>(_onAddFoodToBroughtReceipt);
+class PrintBroughtReceiptBloc
+    extends Bloc<BroughtReceiptEvent, PrintBroughtReceiptState> {
+  PrintBroughtReceiptBloc() : super(const PrintBroughtReceiptState()) {
+    on<PrintBroughtReceipt>(_onPrintBroughtReceipt);
   }
-  void _onAddFoodToBroughtReceipt(
-    AddFoodToBroughtReceipt event,
-    Emitter<QuantityBroughtReceiptState> emit,
+  void _onPrintBroughtReceipt(
+    PrintBroughtReceipt event,
+    Emitter<PrintBroughtReceiptState> emit,
   ) async {
     emit(state.copyWith(
-        quantityBroughtReceiptStatus: QuantityBroughtReceiptStatus.loading));
+        printBroughtReceiptStatus: PrintBroughtReceiptStatus.loading));
     await Future.delayed(const Duration(seconds: 1));
-    print("DATA GET DETAIL LE1111N ${{
-      'client': event.client,
-      'shop_id': event.shopId,
-      'is_api': event.isApi,
-      'order_id': event.orderId,
-      'food_id': event.foodId
-    }}");
     try {
       var token = StorageUtils.instance.getString(key: 'token');
       final respons = await http.post(
-        Uri.parse('$baseUrl$addFoodToBroughtReceipt'),
+        Uri.parse('$baseUrl$printBroughtReceipt'),
         headers: {
           'Content-type': 'application/json',
           'Accept': 'application/json',
@@ -185,48 +181,37 @@ class QuantityBroughtReceiptBloc
           'client': event.client,
           'shop_id': event.shopId,
           'is_api': event.isApi,
-          'order_id': event.orderId,
-          'food_id': event.foodId
+          'order_id': event.orderId
         }),
       );
       final data = jsonDecode(respons.body);
+      print("PRINT BROUGHT RECEIPTTTTT $data");
 
-      var message = data['message'];
       try {
         if (data['status'] == 200) {
-          var quantityBroughtReceiptRes =
-              QuantityFoodBroughtReceiptModel.fromJson(data);
+          var printBroughtReceiptRes = PrintBroughtReceiptModel.fromJson(data);
+          emit(
+              state.copyWith(printBroughtReceiptModel: printBroughtReceiptRes));
           emit(state.copyWith(
-              quantityFoodBroughtReceiptModel: quantityBroughtReceiptRes));
-          emit(state.copyWith(
-              quantityBroughtReceiptStatus:
-                  QuantityBroughtReceiptStatus.succes));
-          showSnackBarTopCustom(
-              context: navigatorKey.currentContext,
-              mess: message['title'],
-              color: Colors.green);
+              printBroughtReceiptStatus: PrintBroughtReceiptStatus.succes));
         } else {
-          print("ERROR XXXX 1");
+          print("ERROR CANCLE BROUGHT RECEIPT 1");
 
           emit(state.copyWith(
-              quantityBroughtReceiptStatus:
-                  QuantityBroughtReceiptStatus.failed));
-          showSnackBarTopCustom(
-              context: navigatorKey.currentContext,
-              mess: message['text'],
-              color: Colors.red);
+              printBroughtReceiptStatus: PrintBroughtReceiptStatus.failed));
         }
       } catch (error) {
-        print("ERROR XXXX 2 $error");
+        print("ERROR CANCLE BROUGHT RECEIPT 2 $error");
 
         emit(state.copyWith(
-            quantityBroughtReceiptStatus: QuantityBroughtReceiptStatus.failed));
+            printBroughtReceiptStatus: PrintBroughtReceiptStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      print("ERROR XXX 3 $error");
+      print("ERROR CANCLE BROUGHT RECEIPT 3 $error");
+
       emit(state.copyWith(
-          quantityBroughtReceiptStatus: QuantityBroughtReceiptStatus.failed));
+          printBroughtReceiptStatus: PrintBroughtReceiptStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }
   }
@@ -248,7 +233,7 @@ class ManageBroughtReceiptBloc
   ) async {
     emit(state.copyWith(broughtReceiptStatus: BroughtReceiptStatus.loading));
     await Future.delayed(const Duration(seconds: 1));
-    print("DATA GET DETAIL LEN ${{
+    print("DATA GET DETAIL LEN  1${{
       'client': event.client,
       'shop_id': event.shopId,
       'is_api': event.isApi,
@@ -431,7 +416,7 @@ class ManageBroughtReceiptBloc
   ) async {
     emit(state.copyWith(broughtReceiptStatus: BroughtReceiptStatus.loading));
     await Future.delayed(const Duration(seconds: 1));
-    print("DATA GET DETAIL LEN ${{
+    print("DATA GET DETAIL LEN 2${{
       'client': event.client,
       'shop_id': event.shopId,
       'is_api': event.isApi.toString(),
