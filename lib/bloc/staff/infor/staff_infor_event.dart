@@ -9,3 +9,16 @@ class GetStaffInfor extends StaffInforEvent {
   @override
   List<Object> get props => [];
 }
+
+class GetAddressInfor extends StaffInforEvent {
+  final int? city;
+  final int? district;
+
+  const GetAddressInfor({
+    required this.city,
+    required this.district,
+  });
+
+  @override
+  List<Object> get props => [];
+}

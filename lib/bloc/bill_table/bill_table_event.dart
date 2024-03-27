@@ -1,4 +1,4 @@
-part of 'bill_bloc.dart';
+part of 'bill_table_bloc.dart';
 
 abstract class BillInforEvent extends Equatable {
   const BillInforEvent();

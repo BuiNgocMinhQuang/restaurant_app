@@ -33,26 +33,26 @@ class TableCancleBloc extends Bloc<TableCancleEvent, TableCancleState> {
       final respons = await http.post(
         Uri.parse('$baseUrl$cancleTable'),
         headers: {
-          // 'Content-type': 'application/json',
-          // 'Accept': 'application/json',
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
           "Authorization": "Bearer $token"
         },
-        body: {
+        body: jsonEncode({
           'client': event.client,
           'shop_id': event.shopId,
           'is_api': event.isApi.toString(),
           'room_id': event.roomId,
           'table_id': event.tableId,
+          'order_id': event.orderId,
           'cancellation_reason': event.cancellationReason
-        },
+        }),
       );
       final data = jsonDecode(respons.body);
       var message = data['message'];
+      print("DATA Cancle Table $data");
 
       try {
         if (data['status'] == 200) {
-          // print("DATA Cancle Table $data");
-
           emit(state.copyWith(tableCancleStatus: TableCancleStatus.succes));
         } else {
           print("ERROR Cancle Table 1");

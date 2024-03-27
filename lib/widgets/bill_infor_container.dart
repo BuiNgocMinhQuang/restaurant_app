@@ -91,7 +91,7 @@ class BillInforContainer extends StatelessWidget {
                           color: Color.fromARGB(255, 215, 184, 6),
                           fontsize: 14.sp,
                         )
-                      else if (statusText == "Hóa đơn đã hủy")
+                      else if (statusText == "Hoá đơn bị huỷ")
                         TextApp(
                           text: statusText,
                           color: const Color.fromARGB(255, 207, 28, 15),

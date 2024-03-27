@@ -13,6 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
+import 'package:money_formatter/money_formatter.dart';
 
 final List<String> categories = [
   "Combo",
@@ -37,6 +38,9 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
   List caidaubuoi = [];
   List<String> selectedCategories = [];
   List<ItemFood> currentFoodList = [];
+  List<int> selectedCategoriesIndex = [];
+  List<String> listAllCategoriesFood = [];
+
   String query = '';
   bool hasMore = true;
 
@@ -44,18 +48,31 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
     setState(() {
       this.query = query;
     });
+    loadMoreMenuFood(
+      page: currentPage,
+      keywords: query,
+      foodKinds:
+          selectedCategoriesIndex.isEmpty ? null : selectedCategoriesIndex,
+      filtersFlg: null,
+    );
   }
 
   @override
   void initState() {
     super.initState();
-    loadMoreMenuFood(page: 1, filtersFlg: {"pay_flg": null});
+    loadMoreMenuFood(page: 1, filtersFlg: null);
     scrollListFoodController.addListener(() {
       print("SCROLL END");
       if (scrollListFoodController.position.maxScrollExtent ==
           scrollListFoodController.offset) {
         print("LOADD MORE FOOD");
-        loadMoreMenuFood(page: currentPage, filtersFlg: {"pay_flg": null});
+        loadMoreMenuFood(
+            page: currentPage,
+            keywords: query,
+            foodKinds: selectedCategoriesIndex.isEmpty
+                ? null
+                : selectedCategoriesIndex,
+            filtersFlg: null);
       }
     });
   }
@@ -66,10 +83,28 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
     super.dispose();
   }
 
-  Future loadMoreMenuFood(
-      {required int page, required Map<String, int?> filtersFlg}) async {
+  Future loadMoreMenuFood({
+    required int page,
+    String? keywords,
+    List<int>? foodKinds,
+    int? filtersFlg,
+  }) async {
     try {
       var token = StorageUtils.instance.getString(key: 'token');
+      print("DATA TTTT ${{
+        {
+          'client': currentRole,
+          'shop_id': getStaffShopID,
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': {
+            "keywords": keywords,
+            "food_kinds": foodKinds,
+            "pay_flg": filtersFlg
+          },
+        }
+      }}");
       final respons = await http.post(
         Uri.parse('$baseUrl$foodList'),
         headers: {
@@ -83,7 +118,11 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
           'is_api': true,
           'limit': 15,
           'page': page,
-          'filters': filtersFlg,
+          'filters': {
+            "keywords": keywords,
+            "food_kinds": foodKinds,
+            "pay_flg": filtersFlg
+          },
         }),
       );
       final data = jsonDecode(respons.body);
@@ -112,12 +151,22 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
 
   @override
   Widget build(BuildContext context) {
-    final filterProducts = listFood.where((product) {
-      final foodTitle = product.name.toLowerCase();
-      final input = query.toLowerCase();
+    // final filterProducts = listFood.where((product) {
+    //   final foodTitle = product.name.toLowerCase();
+    //   final input = query.toLowerCase();
 
-      return (selectedCategories.isEmpty ||
-              selectedCategories.contains(product.category)) &&
+    //   return (selectedCategories.isEmpty ||
+    //           selectedCategories.contains(product.category)) &&
+    //       foodTitle.contains(input);
+    // }).toList();
+    List<String> foodKindOfShop =
+        StorageUtils.instance.getStringList(key: 'food_kinds_list') ?? [];
+    listAllCategoriesFood = foodKindOfShop;
+    List filterProducts = caidaubuoi.where((product) {
+      final foodTitle = product.foodName.toLowerCase();
+      final input = query.toLowerCase();
+      return (selectedCategoriesIndex.isEmpty ||
+              selectedCategoriesIndex.contains(product.foodKind)) &&
           foodTitle.contains(input);
     }).toList();
     return Scaffold(
@@ -135,7 +184,7 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                           child: ListView(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
-                            children: categories.map((exercise) {
+                            children: foodKindOfShop.map((lableFood) {
                               return Padding(
                                 padding: EdgeInsets.only(right: 5.w, left: 5.w),
                                 child: FilterChip(
@@ -158,25 +207,52 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                                   ),
                                   labelStyle: TextStyle(
                                       color:
-                                          selectedCategories.contains(exercise)
+                                          selectedCategories.contains(lableFood)
                                               ? Colors.white
                                               : Colors.black),
                                   showCheckmark: false,
                                   label: TextApp(
-                                    text: exercise.toUpperCase(),
+                                    text: lableFood.toUpperCase(),
                                     fontsize: 14.sp,
                                     color: blueText,
                                     fontWeight: FontWeight.bold,
                                     textAlign: TextAlign.center,
                                   ),
                                   selected:
-                                      selectedCategories.contains(exercise),
+                                      selectedCategories.contains(lableFood),
                                   onSelected: (bool selected) {
                                     setState(() {
                                       if (selected) {
-                                        selectedCategories.add(exercise);
+                                        selectedCategories.add(
+                                            lableFood); //thêm tên category vào mảng
+                                        int index = listAllCategoriesFood
+                                            .indexOf(lableFood);
+                                        selectedCategoriesIndex.add(
+                                            index); //thêm index category vào mảng
+
+                                        loadMoreMenuFood(
+                                            page: currentPage,
+                                            keywords: query,
+                                            foodKinds:
+                                                selectedCategoriesIndex.isEmpty
+                                                    ? null
+                                                    : selectedCategoriesIndex,
+                                            filtersFlg: null);
                                       } else {
-                                        selectedCategories.remove(exercise);
+                                        selectedCategories.remove(
+                                            lableFood); //xoá tên category vào mảng
+                                        int index = listAllCategoriesFood
+                                            .indexOf(lableFood);
+                                        selectedCategoriesIndex.remove(
+                                            index); //xoá index category vào mảng
+                                        loadMoreMenuFood(
+                                            page: currentPage,
+                                            keywords: query,
+                                            foodKinds:
+                                                selectedCategoriesIndex.isEmpty
+                                                    ? null
+                                                    : selectedCategoriesIndex,
+                                            filtersFlg: null);
                                       }
                                     });
                                   },
@@ -217,11 +293,16 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                       // physics: const ClampingScrollPhysics(),
                       controller: scrollListFoodController,
                       shrinkWrap: true,
-                      itemCount: caidaubuoi.length + 1,
+                      itemCount: filterProducts.length + 1,
                       itemBuilder: (BuildContext context, int index) {
-                        var dataLength = caidaubuoi.length;
+                        var dataLength = filterProducts.length;
+
                         if (index < dataLength) {
                           // final product = filterProducts[index];
+                          var imagePath1 = filterProducts[index]
+                              ?.foodImages
+                              .replaceAll('["', '');
+                          var imagePath2 = imagePath1.replaceAll('"]', '');
                           return Card(
                             elevation: 8.0,
                             margin: EdgeInsets.all(10.w),
@@ -234,17 +315,18 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                                 child: Row(
                                   children: [
                                     space20W,
-                                    // Container(
-                                    //     width: 80.w,
-                                    //     height: 80.w,
-                                    //     child: ClipRRect(
-                                    //       borderRadius:
-                                    //           BorderRadius.circular(8.0),
-                                    //       child: Image.asset(
-                                    //         product.image,
-                                    //         fit: BoxFit.cover,
-                                    //       ),
-                                    //     )),
+                                    SizedBox(
+                                        width: 100.w,
+                                        height: 60.w,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10.r),
+                                              topRight: Radius.circular(10.r)),
+                                          child: Image.network(
+                                            httpImage + imagePath2,
+                                            fit: BoxFit.contain,
+                                          ),
+                                        )),
                                     space50W,
                                     Column(
                                       crossAxisAlignment:
@@ -253,12 +335,12 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                                           MainAxisAlignment.center,
                                       children: [
                                         TextApp(
-                                            text: caidaubuoi[index].foodName ??
+                                            text: filterProducts[index]
+                                                    .foodName ??
                                                 ''),
                                         TextApp(
-                                          text: caidaubuoi[index]
-                                              .foodPrice
-                                              .toString(),
+                                          text:
+                                              "${MoneyFormatter(amount: (filterProducts[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                                           fontsize: 20.sp,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -271,7 +353,7 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                           return Center(
                             child: hasMore
                                 ? CircularProgressIndicator()
-                                : Text("Đã hết dữ liệu"),
+                                : Container(),
                           );
                         }
                       }),

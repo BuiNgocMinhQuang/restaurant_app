@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:another_flushbar/flushbar.dart';
-import 'package:app_restaurant/bloc/bill/bill_bloc.dart';
+import 'package:app_restaurant/bloc/bill_table/bill_table_bloc.dart';
 import 'package:app_restaurant/bloc/brought_receipt/brought_receipt_bloc.dart';
 import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
@@ -160,63 +160,6 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                   table.orderId != null)
               .toList() ??
           [];
-    });
-    // scrollListFoodController.addListener(() {
-    //   if (scrollListFoodController.position.maxScrollExtent ==
-    //       scrollListFoodController.offset) {
-    //     print("LOADD MORE FOOD");
-    //     loadMoreFood();
-    //   }
-    // });
-    _pagingController.addPageRequestListener((pageKey) {
-      print('GET PAGE');
-      fetchData(pageKey);
-    });
-  }
-
-  void fetchData(int pageCurrent) async {
-    try {
-      final respons = await http.post(
-        Uri.parse('http://127.0.0.1:8000/api/booking/table/foods'),
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          "Authorization":
-              "Bearer 140|6pjeu8G0cWaVWUhvwl7xBSCjCnG9djxMbvfhNBjt33d1d5e4"
-        },
-        body: jsonEncode({
-          'client': "staff",
-          'shop_id': "123456",
-          'is_api': "true",
-          'room_id': "1",
-          'table_id': "1",
-          'limit': null,
-          'page': pageCurrent
-        }),
-      );
-      final data = jsonDecode(respons.body);
-
-      try {
-        if (data['status'] == 200) {
-          print("DATA FOOD TABLE ${data['booking']}");
-          // var data2 = FoodTableDataModel.fromJson(data);
-          _pagingController.appendPage(data, pageCurrent + 1);
-        } else {
-          print("ERROR DATA FOOD TABLE 1 ${data}");
-        }
-      } catch (error) {
-        print("ERROR DATA FOOD TABLE 2 ${error}");
-      }
-    } catch (error) {
-      print("ERROR DATA FOOD TABLE 3 $error");
-      _pagingController.error = error;
-    }
-  }
-
-  bool hasMore = true;
-  Future loadMoreFood() async {
-    setState(() {
-      itemNe.addAll(['', '']);
     });
   }
 
@@ -984,6 +927,13 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                 refeshHomePage();
                                               }
 
+                                              var imagePath1 =
+                                                  filterProducts[index]
+                                                      ?.foodImages
+                                                      .replaceAll('["', '');
+                                              var imagePath2 = imagePath1
+                                                  .replaceAll('"]', '');
+
                                               return Card(
                                                 elevation: 8.0,
                                                 margin: const EdgeInsets.all(8),
@@ -1002,24 +952,26 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                     15.r)),
                                                     child: Column(
                                                       children: [
-                                                        // space15H,
-                                                        // SizedBox(
-                                                        //     height: 160.w,
-                                                        //     child: ClipRRect(
-                                                        //       borderRadius: BorderRadius.only(
-                                                        //           topLeft: Radius
-                                                        //               .circular(
-                                                        //                   15.r),
-                                                        //           topRight: Radius
-                                                        //               .circular(
-                                                        //                   15.r)),
-                                                        //       child:
-                                                        //           Image.asset(
-                                                        //         product.image,
-                                                        //         fit: BoxFit
-                                                        //             .cover,
-                                                        //       ),
-                                                        //     )),
+                                                        space15H,
+                                                        SizedBox(
+                                                            width: 1.sw,
+                                                            height: 160.w,
+                                                            child: ClipRRect(
+                                                              borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          15.r),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          15.r)),
+                                                              child:
+                                                                  Image.network(
+                                                                httpImage +
+                                                                    imagePath2,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
+                                                            )),
                                                         space10H,
                                                         Column(
                                                           crossAxisAlignment:
@@ -1046,7 +998,6 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                           ],
                                                         ),
                                                         const Divider(),
-
                                                         Padding(
                                                           padding:
                                                               EdgeInsets.all(
@@ -1346,26 +1297,29 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                   if (_formCancleTable
                                                       .currentState!
                                                       .validate()) {
-                                                    BlocProvider.of<TableCancleBloc>(
-                                                            context)
-                                                        .add(CancleTable(
-                                                            client: "staff",
-                                                            shopId:
-                                                                getStaffShopID,
-                                                            roomId: state
-                                                                .tableModel!
-                                                                .booking!
-                                                                .order!
-                                                                .storeRoomId
-                                                                .toString(),
-                                                            tableId: state
-                                                                .tableModel!
-                                                                .booking!
-                                                                .roomTableId
-                                                                .toString(),
-                                                            cancellationReason:
-                                                                cancleTableReasonController
-                                                                    .text));
+                                                    BlocProvider.of<TableCancleBloc>(context).add(CancleTable(
+                                                        orderId: state
+                                                                .tableModel
+                                                                ?.booking
+                                                                ?.orderId
+                                                                .toString() ??
+                                                            '',
+                                                        client: "staff",
+                                                        shopId: getStaffShopID,
+                                                        roomId: state
+                                                            .tableModel!
+                                                            .booking!
+                                                            .order!
+                                                            .storeRoomId
+                                                            .toString(),
+                                                        tableId: state
+                                                            .tableModel!
+                                                            .booking!
+                                                            .roomTableId
+                                                            .toString(),
+                                                        cancellationReason:
+                                                            cancleTableReasonController
+                                                                .text));
                                                     cancleTableReasonController
                                                         .clear();
                                                     Navigator.of(context).pop();
@@ -3483,28 +3437,32 @@ class _ManageBroughtReceiptDialogState
   List<String> listAllCategoriesFood = [];
   List<int> selectedCategoriesIndex = [];
   List<int> selectedCategoriesIndex22 = [];
-  List<TextEditingController> _foodQuantityController = [];
+  final List<TextEditingController> _foodQuantityController = [];
+  final scrollListFoodController = ScrollController();
+  bool hasMore = true;
+
+  int currentPage = 1;
 
   String query = '';
   void searchProduct(String query) {
     setState(() {
       this.query = query;
     });
-    print("SERACH NE ${selectedCategoriesIndex22}");
     getListFood(
+      page: currentPage,
       keywords: query,
       foodKinds:
           selectedCategoriesIndex22.isEmpty ? null : selectedCategoriesIndex22,
     );
   }
 
-  void getDetailsBroughtReceiptData({required int? orderID}) async {
+  void getDetailsBroughtReceiptData({required int? orderID}) {
     BlocProvider.of<ManageBroughtReceiptBloc>(context).add(
         GetDetailsBroughtReceipt(
             client: currentRole,
             shopId: currentShopId,
             limit: 15,
-            page: 1,
+            page: currentPage,
             filters: null,
             orderId: orderID));
   }
@@ -3514,29 +3472,27 @@ class _ManageBroughtReceiptDialogState
         client: currentRole,
         shopId: currentShopId,
         limit: 15,
-        page: 1,
+        page: currentPage,
         filters: filtersFlg));
   }
 
   List lamchoichoi = [];
 
-  void getListFood(
-      {String? keywords, List<int>? foodKinds, int? payFlg}) async {
-    print("DATA TIM MON ${{
-      {
-        'client': widget.role,
-        'shop_id': widget.shopID,
-        'is_api': true,
-        'limit': 15,
-        'page': 1,
-        'filters': {
-          "keywords": keywords,
-          "food_kinds": foodKinds,
-          "pay_flg": payFlg
-        },
-        'order_id': widget.orderID
-      }
-    }}");
+  void addNeEm({required String foodID}) async {
+    BlocProvider.of<ManageBroughtReceiptBloc>(context).add(
+        AddFoodToBroughtReceipt(
+            client: widget.role,
+            shopId: widget.shopID,
+            orderId: widget.orderID,
+            foodId: foodID));
+  }
+
+  void getListFood({
+    required int page,
+    String? keywords,
+    List<int>? foodKinds,
+    int? payFlg,
+  }) async {
     try {
       var token = StorageUtils.instance.getString(key: 'token');
       final respons = await http.post(
@@ -3551,7 +3507,7 @@ class _ManageBroughtReceiptDialogState
           'shop_id': widget.shopID,
           'is_api': true,
           'limit': 15,
-          'page': 1,
+          'page': page,
           'filters': {
             "keywords": keywords,
             "food_kinds": foodKinds,
@@ -3568,7 +3524,11 @@ class _ManageBroughtReceiptDialogState
           setState(() {
             var detailsBroughtReceiptRes =
                 ManageBroughtReceiptModel.fromJson(data);
-            lamchoichoi = detailsBroughtReceiptRes.data.data;
+            lamchoichoi.addAll(detailsBroughtReceiptRes.data.data);
+            currentPage++;
+            if (detailsBroughtReceiptRes.data.data.isEmpty) {
+              hasMore = false;
+            }
           });
           // print("DATA BACK ${data}");
         } else {
@@ -3584,14 +3544,30 @@ class _ManageBroughtReceiptDialogState
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    getListFood();
-    // getDetailsBroughtReceiptData(orderID: widget.orderID);
+    getListFood(page: currentPage);
+    scrollListFoodController.addListener(() {
+      print("SCROLL END");
+      if (scrollListFoodController.position.maxScrollExtent ==
+          scrollListFoodController.offset) {
+        print("LOADD MORE FOOD");
+        getListFood(
+          page: currentPage,
+          keywords: query,
+          foodKinds: selectedCategoriesIndex22.isEmpty
+              ? null
+              : selectedCategoriesIndex22,
+        );
+      }
+    });
+    getDetailsBroughtReceiptData(orderID: widget.orderID);
+    //here
   }
 
   @override
   void dispose() {
+    scrollListFoodController.dispose();
+
     // TODO: implement dispose
     super.dispose();
   }
@@ -3603,18 +3579,6 @@ class _ManageBroughtReceiptDialogState
       if (state.broughtReceiptStatus == BroughtReceiptStatus.succes) {
         List<String> foodKindOfShop =
             StorageUtils.instance.getStringList(key: 'food_kinds_list') ?? [];
-        //xoa cai filtter cu
-        // var listGetFood = state.manageBroughtReceiptModel?.data.data;
-        // List filterProducts = listGetFood?.where((product) {
-        //       final foodTitle = (product.foodName ?? '').toLowerCase();
-        //       final input = query.toLowerCase();
-
-        //       return (selectedCategoriesIndex.isEmpty ||
-        //               selectedCategoriesIndex.contains(product.foodKind)) &&
-        //           foodTitle.contains(input);
-        //     }).toList() ??
-        //     [];
-        //xoa cai filtter cu
 
         List filterProducts2 = lamchoichoi.where((product) {
           final foodTitle = product.foodName.toLowerCase();
@@ -3754,6 +3718,7 @@ class _ManageBroughtReceiptDialogState
                                         selectedCategoriesIndex22.add(
                                             index); //thêm index category vào mảng
                                         getListFood(
+                                            page: currentPage,
                                             keywords: query,
                                             foodKinds: selectedCategoriesIndex22
                                                     .isEmpty
@@ -3767,6 +3732,7 @@ class _ManageBroughtReceiptDialogState
                                         selectedCategoriesIndex22.remove(
                                             index); //xoá index category vào mảng
                                         getListFood(
+                                            page: currentPage,
                                             keywords: query,
                                             foodKinds: selectedCategoriesIndex22
                                                     .isEmpty
@@ -3854,286 +3820,302 @@ class _ManageBroughtReceiptDialogState
                 const SizedBox(height: 10.0),
                 Expanded(
                     child: ListView.builder(
-                        itemCount: filterProducts2.length,
+                        itemCount: filterProducts2.length + 1,
                         // itemCount: listGetFood?.length ?? 0,
+                        controller: scrollListFoodController,
                         itemBuilder: (context, index) {
-                          _foodQuantityController.add(TextEditingController());
-                          _foodQuantityController[index].text =
-                              filterProducts2[index].quantityFood.toString();
-                          void addFodd() {
-                            BlocProvider.of<ManageBroughtReceiptBloc>(context)
-                                .add(AddFoodToBroughtReceipt(
-                              client: widget.role,
-                              shopId: widget.shopID,
-                              orderId: widget.orderID,
-                              foodId: filterProducts2[index].foodId.toString(),
-                            ));
-                            getListFood();
+                          print("LENGHT LIST ${filterProducts2.length}");
+                          if (index < filterProducts2.length) {
+                            _foodQuantityController
+                                .add(TextEditingController());
+                            _foodQuantityController[index].text =
+                                filterProducts2[index].quantityFood.toString();
+                            var imagePath1 = filterProducts2[index]
+                                ?.foodImages
+                                .replaceAll('["', '');
+                            var imagePath2 = imagePath1.replaceAll('"]', '');
+                            void addFodd() {
+                              addNeEm(
+                                  foodID:
+                                      filterProducts2[index].foodId.toString());
 
-                            getListBroughtReceiptData(
-                                filtersFlg: {"pay_flg": null});
+                              getListBroughtReceiptData(
+                                  filtersFlg: {"pay_flg": null});
+                              getDetailsBroughtReceiptData(
+                                  orderID: widget.orderID);
+                              getListFood(page: currentPage);
+                            }
 
-                            print(
-                                "ID CUA NO ${state.quantityFoodBroughtReceiptModel?.orderId}");
-                            getDetailsBroughtReceiptData(
-                                orderID: widget.orderID);
+                            void updateQuantytiFood() {
+                              BlocProvider.of<ManageBroughtReceiptBloc>(context)
+                                  .add(UpdateQuantytiFoodToBroughtReceipt(
+                                      client: widget.role,
+                                      shopId: widget.shopID,
+                                      orderId: widget.orderID,
+                                      foodId: filterProducts2[index]
+                                          .foodId
+                                          .toString(),
+                                      value:
+                                          _foodQuantityController[index].text));
+                              getListFood(
+                                //check lai
+                                page: currentPage,
+                              );
 
-                            // state.manageBroughtReceiptModel.data
-                          }
+                              getDetailsBroughtReceiptData(
+                                  orderID: widget.orderID);
+                              getListBroughtReceiptData(
+                                  filtersFlg: {"pay_flg": null});
+                            }
 
-                          void updateQuantytiFood() {
-                            BlocProvider.of<ManageBroughtReceiptBloc>(context)
-                                .add(UpdateQuantytiFoodToBroughtReceipt(
-                                    client: widget.role,
-                                    shopId: widget.shopID,
-                                    orderId: widget.orderID,
-                                    foodId: filterProducts2[index]
-                                        .foodId
-                                        .toString(),
-                                    value:
-                                        _foodQuantityController[index].text));
-                            getListFood();
+                            Future<void> removeFood() async {
+                              BlocProvider.of<ManageBroughtReceiptBloc>(context)
+                                  .add(RemoveFoodToBroughtReceipt(
+                                client: widget.role,
+                                shopId: widget.shopID,
+                                orderId: widget.orderID,
+                                foodId:
+                                    filterProducts2[index].foodId.toString(),
+                              ));
+                              getListFood(
+                                //check lai
+                                page: 1,
+                              );
+                              // getDetailsBroughtReceiptData(
+                              //     orderID: widget.orderID);
+                              getListBroughtReceiptData(
+                                  filtersFlg: {"pay_flg": null});
+                              // Future.delayed(Duration(seconds: 1), () {
 
-                            getDetailsBroughtReceiptData(
-                                orderID: widget.orderID);
-                            getListBroughtReceiptData(
-                                filtersFlg: {"pay_flg": null});
-                          }
+                              // });
+                            }
 
-                          void removeFood() {
-                            BlocProvider.of<ManageBroughtReceiptBloc>(context)
-                                .add(RemoveFoodToBroughtReceipt(
-                              client: widget.role,
-                              shopId: widget.shopID,
-                              orderId: widget.orderID,
-                              foodId: filterProducts2[index].foodId.toString(),
-                            ));
-                            getListFood();
-
-                            getDetailsBroughtReceiptData(
-                                orderID: widget.orderID);
-                            getListBroughtReceiptData(
-                                filtersFlg: {"pay_flg": null});
-                          }
-
-                          var imagePath1 = filterProducts2[index]
-                              ?.foodImages
-                              .replaceAll('["', '');
-                          var imagePath2 = imagePath1.replaceAll('"]', '');
-                          return Card(
-                            elevation: 8.0,
-                            margin: const EdgeInsets.all(8),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.r),
-                            ),
-                            child: Container(
-                                width: 1.sw,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15.r)),
-                                child: Column(
-                                  children: [
-                                    space15H,
-                                    SizedBox(
-                                        height: 160.w,
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(15.r),
-                                              topRight: Radius.circular(15.r)),
-                                          child: Image.network(
-                                            httpImage + imagePath2,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        )),
-                                    space10H,
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        TextApp(
-                                            //fix day
-                                            text: filterProducts2[index]
-                                                    .foodName ??
-                                                ''),
-                                        TextApp(
-                                          text: filterProducts2[index]
-                                              .foodPrice
-                                              .toString(),
-                                          fontsize: 20.sp,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ],
-                                    ),
-                                    const Divider(),
-                                    Padding(
-                                      padding: EdgeInsets.all(20.w),
-                                      child: Container(
-                                          width: 1.sw,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(8.r)),
-                                          ),
-                                          child: IntrinsicHeight(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.stretch,
-                                              children: [
-                                                InkWell(
-                                                  onTap: () {
-                                                    removeFood();
-                                                  },
-                                                  child: Container(
-                                                    width: 70.w,
-                                                    height: 35.w,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        8.r),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        8.r)),
-                                                        gradient:
-                                                            const LinearGradient(
-                                                          begin: Alignment
-                                                              .topRight,
-                                                          end: Alignment
-                                                              .bottomLeft,
-                                                          colors: [
-                                                            Color.fromRGBO(
-                                                                33, 82, 255, 1),
-                                                            Color.fromRGBO(
-                                                                33, 212, 253, 1)
-                                                          ],
-                                                        )),
-                                                    child: Center(
-                                                      child: TextApp(
-                                                        text: "-",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        color: Colors.white,
-                                                        fontsize: 18.sp,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                    child: Container(
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        width: 0.4,
-                                                        color: Colors.grey),
-                                                  ),
-                                                  child: Center(
-                                                    child: TextField(
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      keyboardType:
-                                                          TextInputType.number,
-                                                      inputFormatters: <TextInputFormatter>[
-                                                        FilteringTextInputFormatter
-                                                            .allow(RegExp(
-                                                                "[0-9]")),
-                                                      ], // Only numbers can be entered,
-                                                      style: TextStyle(
-                                                          fontSize: 12.sp,
-                                                          color: grey),
-                                                      controller:
-                                                          _foodQuantityController[
-                                                              index],
-
-                                                      onTapOutside: (event) {
-                                                        print('onTapOutside');
-                                                        FocusManager.instance
-                                                            .primaryFocus
-                                                            ?.unfocus();
-                                                        updateQuantytiFood();
-                                                      },
-                                                      cursorColor: grey,
-                                                      decoration:
-                                                          const InputDecoration(
-                                                        fillColor:
-                                                            Color.fromARGB(255,
-                                                                226, 104, 159),
-                                                        focusedBorder:
-                                                            OutlineInputBorder(
-                                                          borderSide:
-                                                              BorderSide(
-                                                                  color: Color
-                                                                      .fromRGBO(
-                                                                          214,
-                                                                          51,
-                                                                          123,
-                                                                          0.6),
-                                                                  width: 2.0),
-                                                        ),
-
-                                                        hintText: '',
-                                                        isDense:
-                                                            true, // Added this
-                                                        contentPadding:
-                                                            EdgeInsets.all(
-                                                                8), // Added this
-                                                      ),
-                                                    ),
-                                                  ),
-                                                )),
-                                                InkWell(
-                                                  onTap: () {
-                                                    addFodd();
-                                                  },
-                                                  child: Container(
-                                                    width: 70.w,
-                                                    height: 35.w,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        8.r),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        8.r)),
-                                                        gradient:
-                                                            const LinearGradient(
-                                                          begin: Alignment
-                                                              .topRight,
-                                                          end: Alignment
-                                                              .bottomLeft,
-                                                          colors: [
-                                                            Color.fromRGBO(
-                                                                33, 82, 255, 1),
-                                                            Color.fromRGBO(
-                                                                33, 212, 253, 1)
-                                                          ],
-                                                        )),
-                                                    child: Center(
-                                                      child: TextApp(
-                                                        text: "+",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        color: Colors.white,
-                                                        fontsize: 18.sp,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
+                            return Card(
+                              elevation: 8.0,
+                              margin: const EdgeInsets.all(8),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.r),
+                              ),
+                              child: Container(
+                                  width: 1.sw,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius:
+                                          BorderRadius.circular(15.r)),
+                                  child: Column(
+                                    children: [
+                                      space15H,
+                                      SizedBox(
+                                          height: 160.w,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(15.r),
+                                                topRight:
+                                                    Radius.circular(15.r)),
+                                            child: Image.network(
+                                              httpImage + imagePath2,
+                                              fit: BoxFit.cover,
                                             ),
                                           )),
-                                    )
-                                  ],
-                                )),
-                          );
+                                      space10H,
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          TextApp(
+                                              //fix day
+                                              text: filterProducts2[index]
+                                                      .foodName ??
+                                                  ''),
+                                          TextApp(
+                                            text: filterProducts2[index]
+                                                .foodPrice
+                                                .toString(),
+                                            fontsize: 20.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ],
+                                      ),
+                                      const Divider(),
+                                      Padding(
+                                        padding: EdgeInsets.all(20.w),
+                                        child: Container(
+                                            width: 1.sw,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(8.r)),
+                                            ),
+                                            child: IntrinsicHeight(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.stretch,
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {
+                                                      removeFood();
+                                                    },
+                                                    child: Container(
+                                                      width: 70.w,
+                                                      height: 35.w,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          8.r),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          8.r)),
+                                                          gradient:
+                                                              const LinearGradient(
+                                                            begin: Alignment
+                                                                .topRight,
+                                                            end: Alignment
+                                                                .bottomLeft,
+                                                            colors: [
+                                                              Color.fromRGBO(33,
+                                                                  82, 255, 1),
+                                                              Color.fromRGBO(33,
+                                                                  212, 253, 1)
+                                                            ],
+                                                          )),
+                                                      child: Center(
+                                                        child: TextApp(
+                                                          text: "-",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          color: Colors.white,
+                                                          fontsize: 18.sp,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                      child: Container(
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          width: 0.4,
+                                                          color: Colors.grey),
+                                                    ),
+                                                    child: Center(
+                                                      child: TextField(
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        keyboardType:
+                                                            TextInputType
+                                                                .number,
+                                                        inputFormatters: <TextInputFormatter>[
+                                                          FilteringTextInputFormatter
+                                                              .allow(RegExp(
+                                                                  "[0-9]")),
+                                                        ], // Only numbers can be entered,
+                                                        style: TextStyle(
+                                                            fontSize: 12.sp,
+                                                            color: grey),
+                                                        controller:
+                                                            _foodQuantityController[
+                                                                index],
+
+                                                        onTapOutside: (event) {
+                                                          print('onTapOutside');
+                                                          FocusManager.instance
+                                                              .primaryFocus
+                                                              ?.unfocus();
+                                                          updateQuantytiFood();
+                                                        },
+                                                        cursorColor: grey,
+                                                        decoration:
+                                                            const InputDecoration(
+                                                          fillColor:
+                                                              Color.fromARGB(
+                                                                  255,
+                                                                  226,
+                                                                  104,
+                                                                  159),
+                                                          focusedBorder:
+                                                              OutlineInputBorder(
+                                                            borderSide: BorderSide(
+                                                                color: Color
+                                                                    .fromRGBO(
+                                                                        214,
+                                                                        51,
+                                                                        123,
+                                                                        0.6),
+                                                                width: 2.0),
+                                                          ),
+
+                                                          hintText: '',
+                                                          isDense:
+                                                              true, // Added this
+                                                          contentPadding:
+                                                              EdgeInsets.all(
+                                                                  8), // Added this
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      addFodd();
+                                                    },
+                                                    child: Container(
+                                                      width: 70.w,
+                                                      height: 35.w,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          8.r),
+                                                                  bottomRight:
+                                                                      Radius.circular(
+                                                                          8.r)),
+                                                          gradient:
+                                                              const LinearGradient(
+                                                            begin: Alignment
+                                                                .topRight,
+                                                            end: Alignment
+                                                                .bottomLeft,
+                                                            colors: [
+                                                              Color.fromRGBO(33,
+                                                                  82, 255, 1),
+                                                              Color.fromRGBO(33,
+                                                                  212, 253, 1)
+                                                            ],
+                                                          )),
+                                                      child: Center(
+                                                        child: TextApp(
+                                                          text: "+",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          color: Colors.white,
+                                                          fontsize: 18.sp,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            )),
+                                      )
+                                    ],
+                                  )),
+                            );
+                          } else {
+                            return Center(
+                              child: hasMore
+                                  ? CircularProgressIndicator()
+                                  : Container(),
+                            );
+                          }
                         })),
               ],
             ),

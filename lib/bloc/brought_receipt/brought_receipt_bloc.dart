@@ -300,7 +300,7 @@ class ManageBroughtReceiptBloc
     Emitter<BroughtReceiptState> emit,
   ) async {
     emit(state.copyWith(broughtReceiptStatus: BroughtReceiptStatus.loading));
-    await Future.delayed(const Duration(seconds: 1));
+    // await Future.delayed(const Duration(seconds: 1));
     try {
       var token = StorageUtils.instance.getString(key: 'token');
       final respons = await http.post(
@@ -319,7 +319,7 @@ class ManageBroughtReceiptBloc
         }),
       );
       final data = jsonDecode(respons.body);
-      print(" DATA ADD FOOD TO TABLE $data");
+      print(" DATA REMOVE FOOD TO TABLE $data");
       var message = data['message'];
       try {
         if (data['status'] == 200) {
@@ -330,7 +330,7 @@ class ManageBroughtReceiptBloc
               mess: message['title'],
               color: Colors.green);
         } else {
-          print("ERROR ADD FOOD TO TABLE 1");
+          print("ERROR REMOVE FOOD TO TABLE 1");
 
           emit(state.copyWith(
               broughtReceiptStatus: BroughtReceiptStatus.failed));
@@ -340,13 +340,13 @@ class ManageBroughtReceiptBloc
               color: Colors.red);
         }
       } catch (error) {
-        print("ERROR ADD FOOD TO TABLE 2 $error");
+        print("ERROR REMOVE FOOD TO TABLE 2 $error");
 
         emit(state.copyWith(broughtReceiptStatus: BroughtReceiptStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      print("ERROR ADD FOOD TO TABLE 3 $error");
+      print("ERROR REMOVE FOOD TO TABLE 3 $error");
       emit(state.copyWith(broughtReceiptStatus: BroughtReceiptStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }
@@ -377,7 +377,7 @@ class ManageBroughtReceiptBloc
         }),
       );
       final data = jsonDecode(respons.body);
-      print("UPDATE QUANTYTI FODD TO BILL $data");
+      // print("UPDATE QUANTYTI FODD TO BILL $data");
       var message = data['message'];
       try {
         if (data['status'] == 200) {

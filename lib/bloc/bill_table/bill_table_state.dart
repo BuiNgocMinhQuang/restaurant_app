@@ -1,4 +1,4 @@
-part of 'bill_bloc.dart';
+part of 'bill_table_bloc.dart';
 
 class BillInforState extends Equatable {
   const BillInforState({this.errorText, this.billStatus, this.billInforModel});

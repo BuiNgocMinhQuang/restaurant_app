@@ -5,11 +5,9 @@ import 'package:app_restaurant/bloc/payment/payment_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/config/space.dart';
-import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/brought_receipt/list_brought_receipt_model.dart';
 import 'package:app_restaurant/utils/share_getString.dart';
 import 'package:app_restaurant/utils/storage.dart';
-import 'package:app_restaurant/widgets/bill_infor_container.dart';
 import 'package:app_restaurant/widgets/brought_receipt_container.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/list_custom_dialog.dart';
@@ -253,7 +251,7 @@ class _AllWidgetState extends State<AllWidget>
     with AutomaticKeepAliveClientMixin {
   final scrollListFoodController = ScrollController();
   int currentPage = 1;
-  List caidaubuoi = [];
+  List newListFood = [];
   bool hasMore = true;
   @override
   bool get wantKeepAlive => true;
@@ -267,6 +265,8 @@ class _AllWidgetState extends State<AllWidget>
       if (scrollListFoodController.position.maxScrollExtent ==
           scrollListFoodController.offset) {
         print("LOADD MORE FOOD");
+        // await Future.delayed(const Duration(seconds: 1));
+
         loadMoreFood(page: currentPage, filtersFlg: {"pay_flg": null});
       }
     });
@@ -275,7 +275,6 @@ class _AllWidgetState extends State<AllWidget>
   @override
   void dispose() {
     scrollListFoodController.dispose();
-
     super.dispose();
   }
 
@@ -343,10 +342,9 @@ class _AllWidgetState extends State<AllWidget>
         if (data['status'] == 200) {
           setState(() {
             var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
-            caidaubuoi.addAll(broughtReceiptPageRes.data.data);
+            newListFood.addAll(broughtReceiptPageRes.data.data);
             currentPage++;
-            if (broughtReceiptPageRes.data.data.isEmpty ||
-                broughtReceiptPageRes.data.data.length <= 15) {
+            if (broughtReceiptPageRes.data.data.isEmpty) {
               hasMore = false;
             }
           });
@@ -371,12 +369,12 @@ class _AllWidgetState extends State<AllWidget>
       child: ListView.builder(
           controller: scrollListFoodController,
           shrinkWrap: true,
-          itemCount: caidaubuoi.length + 1,
+          itemCount: newListFood.length + 1,
           itemBuilder: (BuildContext context, int index) {
-            var dataLength = caidaubuoi.length;
+            var dataLength = newListFood.length;
 
             if (index < dataLength) {
-              var statusTextBill = caidaubuoi[index].payFlg.toString();
+              var statusTextBill = newListFood[index].payFlg.toString();
 
               switch (statusTextBill) {
                 case "0":
@@ -395,20 +393,20 @@ class _AllWidgetState extends State<AllWidget>
                 padding: EdgeInsets.only(left: 5.w, right: 5.w),
                 child: BroughtReceiptContainer(
                     dateTime:
-                        formatDateTime(caidaubuoi[index].createdAt.toString()),
+                        formatDateTime(newListFood[index].createdAt.toString()),
                     price:
-                        "${MoneyFormatter(amount: (caidaubuoi[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                        "${MoneyFormatter(amount: (newListFood[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                     typePopMenu: statusTextBill == "Đang chế biến"
                         ? PopUpMenuBroughtReceipt(
                             eventButton1: () {
                               getDetailsBroughtReceiptData(
-                                  orderID: caidaubuoi[index].orderId);
+                                  orderID: newListFood[index].orderId);
                               showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
                                     return ManageBroughtReceiptDialog(
                                       role: 'staff',
-                                      orderID: caidaubuoi[index].orderId,
+                                      orderID: newListFood[index].orderId,
                                       shopID: getStaffShopID,
                                     );
                                   });
@@ -416,7 +414,7 @@ class _AllWidgetState extends State<AllWidget>
                             eventButton2: () {
                               getPaymentData(
                                 tableId: '',
-                                orderID: caidaubuoi[index].orderId.toString(),
+                                orderID: newListFood[index].orderId.toString(),
                               );
                               showDialog(
                                   context: context,
@@ -425,7 +423,7 @@ class _AllWidgetState extends State<AllWidget>
                                       role: 'staff',
                                       shopID: getStaffShopID,
                                       orderID:
-                                          caidaubuoi[index].orderId.toString(),
+                                          newListFood[index].orderId.toString(),
                                       roomID: '',
                                       nameRoom: '',
                                       eventSaveButton: () {
@@ -441,7 +439,7 @@ class _AllWidgetState extends State<AllWidget>
                             },
                             eventButton3: () {
                               printBroughtReceipt(
-                                  orderID: caidaubuoi[index].orderId);
+                                  orderID: newListFood[index].orderId);
                               showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -449,7 +447,7 @@ class _AllWidgetState extends State<AllWidget>
                                       role: 'staff',
                                       shopID: getStaffShopID,
                                       orderID:
-                                          caidaubuoi[index].orderId.toString(),
+                                          newListFood[index].orderId.toString(),
                                     );
                                   });
                             },
@@ -465,7 +463,7 @@ class _AllWidgetState extends State<AllWidget>
                                       },
                                       role: 'staff',
                                       shopID: getStaffShopID,
-                                      orderID: caidaubuoi[index].orderId,
+                                      orderID: newListFood[index].orderId,
                                     );
                                   });
                             },
@@ -473,7 +471,7 @@ class _AllWidgetState extends State<AllWidget>
                         : PopUpMenuPrintBill(
                             eventButton1: () {
                               printBroughtReceipt(
-                                  orderID: caidaubuoi[index].orderId);
+                                  orderID: newListFood[index].orderId);
                               showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -481,7 +479,7 @@ class _AllWidgetState extends State<AllWidget>
                                       role: 'staff',
                                       shopID: getStaffShopID,
                                       orderID:
-                                          caidaubuoi[index].orderId.toString(),
+                                          newListFood[index].orderId.toString(),
                                     );
                                   });
                             },
@@ -490,9 +488,7 @@ class _AllWidgetState extends State<AllWidget>
               );
             } else {
               return Center(
-                child: hasMore
-                    ? CircularProgressIndicator()
-                    : Text("Đã hết dữ liệu"),
+                child: hasMore ? CircularProgressIndicator() : Container(),
               );
             }
           }),
@@ -567,7 +563,6 @@ class _CompleteWidgetState extends State<CompleteWidget>
               hasMoreComplete = false;
             }
           });
-          print("DATA BACK ${data}");
         } else {
           print("ERROR BROUGHT RECEIPT PAGE 1");
         }
@@ -621,7 +616,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
                   return Center(
                     child: hasMoreComplete
                         ? CircularProgressIndicator()
-                        : Text("Đã hết dữ liệu"),
+                        : Container(),
                   );
                 }
               })
@@ -753,7 +748,6 @@ class _PendingWidgetState extends State<PendingWidget>
               hasMoreComplete = false;
             }
           });
-          print("DATA BACK ${data}");
         } else {
           print("ERROR BROUGHT RECEIPT PAGE 1");
         }
@@ -859,9 +853,8 @@ class _PendingWidgetState extends State<PendingWidget>
               );
             } else {
               return Center(
-                child: hasMoreComplete
-                    ? CircularProgressIndicator()
-                    : Text("Đã hết dữ liệu"),
+                child:
+                    hasMoreComplete ? CircularProgressIndicator() : Container(),
               );
             }
           }),
@@ -900,9 +893,8 @@ class _CancleWidgetState extends State<CancleWidget>
 
   @override
   void dispose() {
-    scrollTabCancleController2.dispose();
-
     super.dispose();
+    scrollTabCancleController2.dispose();
   }
 
   Future loadMoreCancle(
@@ -989,9 +981,7 @@ class _CancleWidgetState extends State<CancleWidget>
               );
             } else {
               return Center(
-                child: hasMoreCanle
-                    ? CircularProgressIndicator()
-                    : Text("Đã hết dữ liệu"),
+                child: hasMoreCanle ? CircularProgressIndicator() : Container(),
               );
             }
           }),

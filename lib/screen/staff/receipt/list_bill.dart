@@ -1,11 +1,28 @@
+import 'dart:convert';
+
+import 'package:app_restaurant/bloc/list_bill_shop/list_bill_shop_bloc.dart';
+import 'package:app_restaurant/config/colors.dart';
+import 'package:app_restaurant/config/date_time_format.dart';
+import 'package:app_restaurant/config/space.dart';
+import 'package:app_restaurant/model/bill/list_bill_model.dart';
+import 'package:app_restaurant/utils/share_getString.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/bill_infor_container.dart';
+import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/custom_tab.dart';
+import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
+import 'package:http/http.dart' as http;
+import 'package:app_restaurant/env/index.dart';
+import 'package:app_restaurant/constant/api/index.dart';
+import 'package:money_formatter/money_formatter.dart';
 
 class StaffListBill extends StatefulWidget {
   const StaffListBill({super.key});
@@ -16,7 +33,23 @@ class StaffListBill extends StatefulWidget {
 
 class _StaffListBillState extends State<StaffListBill>
     with TickerProviderStateMixin {
-  bool isLoading = true;
+  final String currentRole = "staff";
+  final String currentShopId = getStaffShopID;
+  void getListBillShop({required Map<String, int?> filtersFlg}) async {
+    BlocProvider.of<ListBillShopBloc>(context).add(GetListBillShop(
+        client: currentRole,
+        shopId: currentShopId,
+        limit: 15,
+        page: 1,
+        filters: filtersFlg));
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getListBillShop(filtersFlg: {"pay_flg": null});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,192 +57,819 @@ class _StaffListBillState extends State<StaffListBill>
       length: 4,
       vsync: this,
     );
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-            child: Padding(
-          padding:
-              EdgeInsets.only(top: 10.h, left: 25.w, right: 25.w, bottom: 10.h),
-          child: Column(
-            children: [
-              SizedBox(
-                width: 1.sw,
-                height: 100,
-                child: SizedBox(
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          height: 40.h,
-                          color: Colors.white,
-                          child: TabBar(
-                              labelPadding:
-                                  EdgeInsets.only(left: 20, right: 20),
-                              labelColor: Colors.white,
-                              unselectedLabelColor:
-                                  Colors.black.withOpacity(0.5),
-                              labelStyle: TextStyle(color: Colors.red),
-                              controller: _tabController,
-                              isScrollable: true,
-                              indicatorSize: TabBarIndicatorSize.label,
-                              indicator: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                  8.r,
-                                ),
-                                color: Colors.blue,
-                                border: Border.all(color: Colors.blue),
-                              ),
-                              tabs: [
-                                CustomTab(text: "Tất cả", icon: Icons.list_alt),
-                                CustomTab(
-                                  text: "Đã thanh toán",
-                                  icon: Icons.credit_score,
-                                ),
-                                CustomTab(
-                                    text: "Chưa thanh toán",
-                                    icon: Icons.credit_card),
-                                CustomTab(
-                                    text: "Hóa đơn đã hủy",
-                                    icon: Icons.cancel_sharp),
+    return BlocBuilder<ListBillShopBloc, ListBillShopState>(
+      builder: (context, state) {
+        return Scaffold(
+            backgroundColor: Colors.white,
+            body: SafeArea(
+              child: state.listBillShopStatus == ListBillShopStatus.succes
+                  ? Padding(
+                      padding: EdgeInsets.only(
+                          top: 10.h, left: 25.w, right: 25.w, bottom: 10.h),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: 1.sw,
+                            height: 100,
+                            child: SizedBox(
+                                child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Container(
+                                      height: 40.h,
+                                      color: Colors.white,
+                                      child: TabBar(
+                                          onTap: (index) {
+                                            if (index == 0) {
+                                              getListBillShop(filtersFlg: {
+                                                "pay_flg": null
+                                              });
+                                            } else if (index == 1) {
+                                              getListBillShop(
+                                                  filtersFlg: {"pay_flg": 1});
+                                            } else if (index == 2) {
+                                              getListBillShop(
+                                                  filtersFlg: {"pay_flg": 0});
+                                            } else if (index == 3) {
+                                              getListBillShop(filtersFlg: {
+                                                "close_order": 1
+                                              });
+                                            }
+                                          },
+                                          labelPadding: EdgeInsets.only(
+                                              left: 20, right: 20),
+                                          labelColor: Colors.white,
+                                          unselectedLabelColor:
+                                              Colors.black.withOpacity(0.5),
+                                          labelStyle:
+                                              TextStyle(color: Colors.red),
+                                          controller: _tabController,
+                                          isScrollable: true,
+                                          indicatorSize:
+                                              TabBarIndicatorSize.label,
+                                          indicator: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              8.r,
+                                            ),
+                                            color: Colors.blue,
+                                            border:
+                                                Border.all(color: Colors.blue),
+                                          ),
+                                          tabs: [
+                                            CustomTab(
+                                                text: "Tất cả",
+                                                icon: Icons.list_alt),
+                                            CustomTab(
+                                              text: "Đã thanh toán",
+                                              icon: Icons.credit_score,
+                                            ),
+                                            CustomTab(
+                                                text: "Chưa thanh toán",
+                                                icon: Icons.credit_card),
+                                            CustomTab(
+                                                text: "Hóa đơn đã hủy",
+                                                icon: Icons.cancel_sharp),
+                                          ]),
+                                    ))),
+                          ),
+                          Expanded(
+                              child: Container(
+                            width: 1.sw,
+                            color: Colors.white,
+                            child: TabBarView(
+                                controller: _tabController,
+                                children: [
+                                  //Tab All
+                                  ListAllBillShop(),
+                                  //Tab Paid
+                                  ListCompleteBillShop(),
 
-                                // Tab(text: "Đã thanh toán"),
-                                // Tab(text: "Chưa thanh toán"),
-                                // Tab(text: "Hóa đơn đã hủy"),
-                              ]),
-                        ))),
-              ),
-              Expanded(
-                  child: Container(
-                width: 1.sw,
-                color: Colors.white,
-                child: TabBarView(controller: _tabController, children: [
-                  //Tab All
-                  RefreshIndicator(
-                    color: Colors.blue,
-                    onRefresh: () async {
-                      // Implement logic to refresh data for Tab 1
-                    },
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: 4,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                            child: BillInforContainer(
-                                tableName: '',
-                                roomName: '',
-                                dateTime: '',
-                                price: '',
-                                typePopMenu: PopUpMenuPrintBill(
-                                  eventButton1: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return const PrintBillDialog();
-                                        });
-                                  },
-                                ),
-                                statusText: "Đã thanh toán"),
-                          );
-                        }),
-                  ),
-                  //Tab Paid
-                  RefreshIndicator(
-                    color: Colors.blue,
-                    onRefresh: () async {
-                      // Implement logic to refresh data for Tab 1
-                    },
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: 4,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                            child: BillInforContainer(
-                                tableName: '',
-                                roomName: '',
-                                dateTime: '',
-                                price: '',
-                                typePopMenu: PopUpMenuPrintBill(
-                                  eventButton1: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return const PrintBillDialog();
-                                        });
-                                  },
-                                ),
-                                statusText: "Đã thanh toán"),
-                          );
-                        }),
-                  ),
-                  //Tab Unpaid
-                  RefreshIndicator(
-                    color: Colors.blue,
-                    onRefresh: () async {
-                      // Implement logic to refresh data for Tab 1
-                    },
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: 4,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                            child: BillInforContainer(
-                              tableName: '',
-                              roomName: '',
-                              dateTime: '',
-                              price: '',
-                              typePopMenu: PopUpMenuPrintBill(
-                                eventButton1: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return const PrintBillDialog();
-                                      });
-                                },
+                                  //Tab Unpaid
+                                  PendingWidget(),
+                                  //Tab Cancle
+                                  ListCancleBillShop(),
+                                ]),
+                          )),
+                          SizedBox(
+                            height: 15.h,
+                          ),
+                        ],
+                      ),
+                    )
+                  : state.listBillShopStatus == ListBillShopStatus.loading
+                      ? Center(
+                          child: SizedBox(
+                            width: 200.w,
+                            height: 200.w,
+                            child: Lottie.asset(
+                                'assets/lottie/loading_7_color.json'),
+                          ),
+                        )
+                      : Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 100,
+                                height: 100,
+                                child: Lottie.asset('assets/lottie/error.json'),
                               ),
-                              statusText: "Chưa thanh toán",
-                            ),
-                          );
-                        }),
-                  ),
-                  //Tab cancle
-                  RefreshIndicator(
-                    color: Colors.blue,
-                    onRefresh: () async {
-                      // Implement logic to refresh data for Tab 1
-                    },
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: 4,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                            child: BillInforContainer(
-                                tableName: '',
-                                roomName: '',
-                                dateTime: '',
-                                price: '',
-                                typePopMenu: PopUpMenuPrintBill(
-                                  eventButton1: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return const PrintBillDialog();
-                                        });
-                                  },
+                              space30H,
+                              TextApp(
+                                text: state.errorText.toString(),
+                                fontsize: 20.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              space30H,
+                              Container(
+                                width: 200,
+                                child: ButtonGradient(
+                                  color1: color1BlueButton,
+                                  color2: color2BlueButton,
+                                  event: () {},
+                                  text: 'Thử lại',
+                                  fontSize: 12.sp,
+                                  radius: 8.r,
+                                  textColor: Colors.white,
                                 ),
-                                statusText: "Hóa đơn đã hủy"),
-                          );
-                        }),
-                  ),
-                ]),
-              )),
-              SizedBox(
-                height: 15.h,
-              ),
-            ],
-          ),
-        )));
+                              )
+                            ],
+                          ),
+                        ),
+            ));
+      },
+    );
   }
+}
+
+class ListAllBillShop extends StatefulWidget {
+  const ListAllBillShop({super.key});
+
+  @override
+  State<ListAllBillShop> createState() => _ListAllBillShopState();
+}
+
+class _ListAllBillShopState extends State<ListAllBillShop>
+    with AutomaticKeepAliveClientMixin {
+  final scrollListBillController = ScrollController();
+  int currentPage = 1;
+  List newListAllBillShop = [];
+  bool hasMore = true;
+  @override
+  bool get wantKeepAlive => true;
+  Future loadMoreBill(
+      {required int page, required Map<String, int?> filtersFlg}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      // print("TRUYEN LEN CC GI Z ${{
+      //   {
+      //     'client': 'staff',
+      //     'shop_id': getStaffShopID,
+      //     'is_api': true,
+      //     'limit': 15,
+      //     'page': page,
+      //     'filters': filtersFlg,
+      //   }
+      // }}");
+      final respons = await http.post(
+        Uri.parse('$baseUrl$listBill'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': 'staff',
+          'shop_id': getStaffShopID,
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': filtersFlg,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      // print("DAT BACK LOAD MORE ${data}");
+      try {
+        if (data['status'] == 200) {
+          setState(() {
+            var listBillShopRes = ListBillShopModel.fromJson(data);
+            newListAllBillShop.addAll(listBillShopRes.data.data);
+            currentPage++;
+            // Map<dynamic, dynamic> data2 = jsonDecode(respons.body);
+            // List<String> tableNames = [];
+            // for (var order in data2['data']) {
+            //   for (var bookedTable in order['booked_tables']) {
+            //     if (bookedTable['room_table']['table_name'] != null) {
+            //       tableNames.add(bookedTable['room_table']['table_name']);
+            //     }
+            //   }
+            // }
+            // String allTableNames = tableNames.join(', ');
+
+            // print("DAY R WM OI $allTableNames");
+            if (listBillShopRes.data.data.isEmpty) {
+              hasMore = false;
+            }
+          });
+        } else {
+          print("ERROR BROUGHT RECEIPT PAGE 1");
+        }
+      } catch (error) {
+        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadMoreBill(page: 1, filtersFlg: {"pay_flg": null});
+
+    scrollListBillController.addListener(() {
+      if (scrollListBillController.position.maxScrollExtent ==
+          scrollListBillController.offset) {
+        // print("LOADD MORE FOOD");
+        // await Future.delayed(const Duration(seconds: 1));
+
+        loadMoreBill(page: currentPage, filtersFlg: {"pay_flg": null});
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    scrollListBillController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      color: Colors.blue,
+      onRefresh: () async {
+        // Implement logic to refresh data for Tab 1
+      },
+      child: ListView.builder(
+          controller: scrollListBillController,
+          shrinkWrap: true,
+          itemCount: newListAllBillShop.length + 1,
+          itemBuilder: (BuildContext context, int index) {
+            var dataLength = newListAllBillShop.length;
+            if (index < dataLength) {
+              var statusTextBill = newListAllBillShop[index].payFlg.toString();
+              var statusCloseBill =
+                  newListAllBillShop[index].closeOrder.toString();
+              switch (statusTextBill) {
+                case "0":
+                  statusTextBill = "Chưa thanh toán";
+                  break;
+
+                case "1":
+                  statusTextBill = "Đã thanh toán";
+                  break;
+              }
+              switch (statusCloseBill) {
+                case "1":
+                  statusTextBill = "Hoá đơn bị huỷ";
+                  break;
+              }
+
+              return Padding(
+                padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                child: BillInforContainer(
+                    tableName: newListAllBillShop[index]
+                            .bookedTables[0]
+                            .roomTable
+                            .tableName ??
+                        '', //check ghep ban cho nay
+                    roomName:
+                        newListAllBillShop[index]?.room?.storeRoomName ?? '',
+                    dateTime: formatDateTime(
+                        newListAllBillShop[index].createdAt.toString()),
+                    price:
+                        "${MoneyFormatter(amount: (newListAllBillShop[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                    typePopMenu: PopUpMenuPrintBill(
+                      eventButton1: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const PrintBillDialog();
+                            });
+                      },
+                    ),
+                    statusText: statusTextBill),
+              );
+            } else {
+              return Center(
+                child: hasMore ? CircularProgressIndicator() : Container(),
+              );
+            }
+          }),
+    );
+  }
+}
+
+class ListCompleteBillShop extends StatefulWidget {
+  const ListCompleteBillShop({super.key});
+
+  @override
+  State<ListCompleteBillShop> createState() => _CompleteWidgetState();
+}
+
+class _CompleteWidgetState extends State<ListCompleteBillShop>
+    with AutomaticKeepAliveClientMixin {
+  int currentPageComplete = 1;
+  List listBillComplete = [];
+  bool hasMoreComplete = true;
+
+  final scrollTabCompleteController = ScrollController();
+  @override
+  void initState() {
+    super.initState();
+    loadMoreCompleteBill(page: 1, filtersFlg: {"pay_flg": 1});
+    scrollTabCompleteController.addListener(() {
+      if (scrollTabCompleteController.position.maxScrollExtent ==
+          scrollTabCompleteController.offset) {
+        loadMoreCompleteBill(
+            page: currentPageComplete, filtersFlg: {"pay_flg": 1});
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    scrollTabCompleteController.dispose();
+
+    super.dispose();
+  }
+
+  Future loadMoreCompleteBill(
+      {required int page, required Map<String, int?> filtersFlg}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$listBill'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': 'staff',
+          'shop_id': getStaffShopID,
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': filtersFlg,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      // print("DAT BACK LOAD MORE ${data}");
+      try {
+        if (data['status'] == 200) {
+          setState(() {
+            var listBillShopRes = ListBillShopModel.fromJson(data);
+            listBillComplete.addAll(listBillShopRes.data.data);
+            currentPageComplete++;
+            if (listBillShopRes.data.data.isEmpty ||
+                listBillShopRes.data.data.length <= 15) {
+              hasMoreComplete = false;
+            }
+          });
+        } else {
+          print("ERROR BROUGHT RECEIPT PAGE 1");
+        }
+      } catch (error) {
+        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      color: Colors.blue,
+      onRefresh: () async {
+        // Implement logic to refresh data for Tab 1
+      },
+      child: listBillComplete.isNotEmpty
+          ? ListView.builder(
+              controller: scrollTabCompleteController,
+              shrinkWrap: true,
+              itemCount: listBillComplete.length + 1,
+              itemBuilder: (BuildContext context, int index) {
+                var dataLength = listBillComplete.length;
+                if (index < dataLength) {
+                  var statusTextBill =
+                      listBillComplete[index].payFlg.toString();
+                  var statusCloseBill =
+                      listBillComplete[index].closeOrder.toString();
+                  switch (statusTextBill) {
+                    case "0":
+                      statusTextBill = "Chưa thanh toán";
+                      break;
+
+                    case "1":
+                      statusTextBill = "Đã thanh toán";
+                      break;
+                  }
+
+                  return Padding(
+                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                    child: BillInforContainer(
+                        tableName: listBillComplete[index]
+                            .bookedTables[0]
+                            .roomTable
+                            .tableName
+                            .toString(), //check ghep ban cho nay
+                        roomName:
+                            listBillComplete[index]?.room?.storeRoomName ?? '',
+                        dateTime: formatDateTime(
+                            listBillComplete[index].createdAt.toString()),
+                        price:
+                            "${MoneyFormatter(amount: (listBillComplete[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                        typePopMenu: PopUpMenuPrintBill(
+                          eventButton1: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const PrintBillDialog();
+                                });
+                          },
+                        ),
+                        statusText: statusCloseBill == "1"
+                            ? "Hoá đơn bị huỷ"
+                            : statusTextBill),
+                  );
+                } else {
+                  return Center(
+                    child: hasMoreComplete
+                        ? CircularProgressIndicator()
+                        : Container(),
+                  );
+                }
+              })
+          : Center(
+              child: SizedBox(
+                  width: 1.sw,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.receipt_long_rounded,
+                        size: 50.h,
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      TextApp(
+                          text: "Chưa có hoá đơn :(",
+                          textAlign: TextAlign.center,
+                          fontsize: 16.sp,
+                          color: Colors.black),
+                    ],
+                  )),
+            ),
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class PendingWidget extends StatefulWidget {
+  const PendingWidget({super.key});
+
+  @override
+  State<PendingWidget> createState() => _PendingWidgetState();
+}
+
+class _PendingWidgetState extends State<PendingWidget>
+    with AutomaticKeepAliveClientMixin {
+  int currentPagePending = 1;
+  List listBillPending = [];
+  bool hasMoreComplete = true;
+
+  final scrollTabPendingController = ScrollController();
+  @override
+  void initState() {
+    super.initState();
+    loadMorePending(page: 1, filtersFlg: {"pay_flg": 0});
+    scrollTabPendingController.addListener(() {
+      if (scrollTabPendingController.position.maxScrollExtent ==
+          scrollTabPendingController.offset) {
+        loadMorePending(page: currentPagePending, filtersFlg: {"pay_flg": 0});
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    scrollTabPendingController.dispose();
+    super.dispose();
+  }
+
+  Future loadMorePending(
+      {required int page, required Map<String, int?> filtersFlg}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      print("TRUYEN LEN CC GI Z ${{
+        {
+          'client': 'staff',
+          'shop_id': getStaffShopID,
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': filtersFlg,
+        }
+      }}");
+      final respons = await http.post(
+        Uri.parse('$baseUrl$listBill'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': 'staff',
+          'shop_id': getStaffShopID,
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': filtersFlg,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print("CCCCCCC $data");
+      try {
+        if (data['status'] == 200) {
+          setState(() {
+            var listBillShopRes = ListBillShopModel.fromJson(data);
+            listBillPending.addAll(listBillShopRes.data.data);
+            currentPagePending++;
+
+            if (listBillShopRes.data.data.isEmpty ||
+                listBillShopRes.data.data.length <= 15) {
+              hasMoreComplete = false;
+            }
+          });
+        } else {
+          print("ERROR BROUGHT RECEIPT PAGE 1");
+        }
+      } catch (error) {
+        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      color: Colors.blue,
+      onRefresh: () async {
+        // Implement logic to refresh data for Tab 1
+      },
+      child: listBillPending.isNotEmpty
+          ? ListView.builder(
+              controller: scrollTabPendingController,
+              shrinkWrap: true,
+              itemCount: listBillPending.length + 1,
+              itemBuilder: (BuildContext context, int index) {
+                var dataLength = listBillPending.length;
+                if (index < dataLength) {
+                  // var statusTextBill = listBillPending[index].payFlg.toString();
+                  // var statusCloseBill =
+                  //     listBillPending[index].closeOrder.toString();
+                  // switch (statusTextBill) {
+                  //   case "0":
+                  //     statusTextBill = "Chưa thanh toán";
+                  //     break;
+
+                  //   case "1":
+                  //     statusTextBill = "Đã thanh toán";
+                  //     break;
+                  // }
+
+                  return Padding(
+                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                    child: BillInforContainer(
+                        tableName: listBillPending[index]
+                            .bookedTables[0]
+                            .roomTable
+                            .tableName
+                            .toString(), //check ghep ban cho nay
+                        roomName:
+                            listBillPending[index]?.room?.storeRoomName ?? '',
+                        dateTime: formatDateTime(
+                            listBillPending[index].createdAt.toString()),
+                        price:
+                            "${MoneyFormatter(amount: (listBillPending[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                        typePopMenu: PopUpMenuPrintBill(
+                          eventButton1: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const PrintBillDialog();
+                                });
+                          },
+                        ),
+                        statusText: "Chưa thanh toán"),
+                  );
+                } else {
+                  return Center(
+                    child: hasMoreComplete
+                        ? CircularProgressIndicator()
+                        : Container(),
+                  );
+                }
+              })
+          : Center(
+              child: SizedBox(
+                  width: 1.sw,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.receipt_long_rounded,
+                        size: 50.h,
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      TextApp(
+                          text: "Chưa có hoá đơn :(",
+                          textAlign: TextAlign.center,
+                          fontsize: 16.sp,
+                          color: Colors.black),
+                    ],
+                  )),
+            ),
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class ListCancleBillShop extends StatefulWidget {
+  const ListCancleBillShop({super.key});
+
+  @override
+  State<ListCancleBillShop> createState() => _ListCancleBillShopState();
+}
+
+class _ListCancleBillShopState extends State<ListCancleBillShop>
+    with AutomaticKeepAliveClientMixin {
+  int currentPageCancle = 1;
+  List listBillCancle = [];
+  bool hasMoreCancle = true;
+
+  final scrollTabCancleController = ScrollController();
+  @override
+  void initState() {
+    super.initState();
+    loadMoreCompleteBill(page: 1, filtersFlg: {"close_order": 1});
+    scrollTabCancleController.addListener(() {
+      if (scrollTabCancleController.position.maxScrollExtent ==
+          scrollTabCancleController.offset) {
+        loadMoreCompleteBill(
+            page: currentPageCancle, filtersFlg: {"close_order": 1});
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    scrollTabCancleController.dispose();
+
+    super.dispose();
+  }
+
+  Future loadMoreCompleteBill(
+      {required int page, required Map<String, int?> filtersFlg}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$listBill'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': 'staff',
+          'shop_id': getStaffShopID,
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': filtersFlg,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      // print("DAT BACK LOAD MORE ${data}");
+      try {
+        if (data['status'] == 200) {
+          setState(() {
+            var listBillShopRes = ListBillShopModel.fromJson(data);
+            listBillCancle.addAll(listBillShopRes.data.data);
+            currentPageCancle++;
+            if (listBillShopRes.data.data.isEmpty ||
+                listBillShopRes.data.data.length <= 15) {
+              hasMoreCancle = false;
+            }
+          });
+        } else {
+          print("ERROR BROUGHT RECEIPT PAGE 1");
+        }
+      } catch (error) {
+        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      color: Colors.blue,
+      onRefresh: () async {
+        // Implement logic to refresh data for Tab 1
+      },
+      child: listBillCancle.isNotEmpty
+          ? ListView.builder(
+              controller: scrollTabCancleController,
+              shrinkWrap: true,
+              itemCount: listBillCancle.length + 1,
+              itemBuilder: (BuildContext context, int index) {
+                var dataLength = listBillCancle.length;
+                if (index < dataLength) {
+                  return Padding(
+                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                    child: BillInforContainer(
+                        tableName: listBillCancle[index]
+                            .bookedTables[0]
+                            .roomTable
+                            .tableName
+                            .toString(), //check ghep ban cho nay
+                        roomName:
+                            listBillCancle[index]?.room?.storeRoomName ?? '',
+                        dateTime: formatDateTime(
+                            listBillCancle[index].createdAt.toString()),
+                        price:
+                            "${MoneyFormatter(amount: (listBillCancle[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                        typePopMenu: PopUpMenuPrintBill(
+                          eventButton1: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const PrintBillDialog();
+                                });
+                          },
+                        ),
+                        statusText: "Hoá đơn bị huỷ"),
+                  );
+                } else {
+                  return Center(
+                    child: hasMoreCancle
+                        ? CircularProgressIndicator()
+                        : Container(),
+                  );
+                }
+              })
+          : Center(
+              child: SizedBox(
+                  width: 1.sw,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.receipt_long_rounded,
+                        size: 50.h,
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      TextApp(
+                          text: "Chưa có hoá đơn :(",
+                          textAlign: TextAlign.center,
+                          fontsize: 16.sp,
+                          color: Colors.black),
+                    ],
+                  )),
+            ),
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }

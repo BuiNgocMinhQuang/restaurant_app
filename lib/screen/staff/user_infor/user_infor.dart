@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:app_restaurant/bloc/login/login_bloc.dart';
@@ -20,6 +21,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
+import 'package:http/http.dart' as http;
+import 'package:app_restaurant/constant/api/index.dart';
 
 class StaffUserInformation extends StatefulWidget {
   const StaffUserInformation({super.key});
@@ -66,10 +69,62 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
   void initState() {
     super.initState();
     init();
+    // getAddress(city: 1, district: null);
   }
 
   void getInfor() {
     BlocProvider.of<StaffInforBloc>(context).add(GetStaffInfor());
+  }
+
+  // void getAddress({required int? city, required int? district}) {
+  //   BlocProvider.of<StaffInforBloc>(context)
+  //       .add(GetAddressInfor(city: city, district: district));
+  // }
+
+  List cityList = [];
+  List quanList = [];
+  List xaList = [];
+
+  void laythongitn({required int? city, required int? district}) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl$areas'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          'city': city,
+          'district': district,
+        }),
+      );
+      final data = jsonDecode(response.body);
+
+      try {
+        print("GET areas ${data}");
+
+        if (response.statusCode == 200) {
+          cityList.clear();
+          quanList.clear();
+          xaList.clear();
+          cityList.addAll(data['cities']);
+          quanList.addAll(data['districts']);
+          xaList.addAll(data['wards']);
+          // print("============");
+          // print(cityList);
+          // print("============");
+          // print(quanList);
+          // print("============");
+          // print(xaList);
+        } else {
+          print("LOI GI DO dadadadadadadada");
+        }
+      } catch (error) {
+        print("LOI GI DO $error");
+      }
+    } catch (error) {
+      print("LOI GI DO $error");
+    }
   }
 
   void init() async {
@@ -105,17 +160,44 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                   : state.staffInforDataModel?.data?.staffPosition == 4
                       ? 'Kế toán'
                       : '';
+      address1Controller.text =
+          state.staffInforDataModel?.data?.staffAddress1.toString() ?? '';
+      address2Controller.text =
+          state.staffInforDataModel?.data?.staffAddress2.toString() ?? '';
+      address3Controller.text =
+          state.staffInforDataModel?.data?.staffAddress3.toString() ?? '';
       address4Controller.text =
-          state.staffInforDataModel?.data?.staffAddress4 ?? '';
+          state.staffInforDataModel?.data?.staffAddress4.toString() ?? '';
       twitterController.text =
           state.staffInforDataModel?.data?.staffTwitter ?? '';
       facebookController.text =
           state.staffInforDataModel?.data?.staffFacebook ?? '';
       instagramController.text =
           state.staffInforDataModel?.data?.staffInstagram ?? '';
+
+//get city
+      final cityListMap = cityList.asMap();
+      final myCity =
+          cityListMap[state.staffInforDataModel?.data?.staffAddress1];
+      var currentCity = myCity;
+      //get Quan
+
+      final districrsListMap = quanList.asMap();
+      final myDistrics =
+          districrsListMap[state.staffInforDataModel?.data?.staffAddress2];
+      var currentDistricts = myDistrics;
+      //Get phuong xa
+      final wardsListMap = xaList.asMap();
+      final myWard =
+          wardsListMap[state.staffInforDataModel?.data?.staffAddress3];
+      var currentWards = myWard;
+
       var imagePath1 = (state.staffInforDataModel?.data?.staffAvatar ?? '')
           .replaceAll('["', '');
       var imagePath2 = imagePath1.replaceAll('"]', '');
+      laythongitn(
+          city: state.staffInforDataModel?.data?.staffAddress1,
+          district: state.staffInforDataModel?.data?.staffAddress2);
       return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -775,8 +857,24 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                                 return canNotNull;
                                                               }
                                                             },
-                                                            items:
-                                                                listProvinces,
+                                                            selectedItem:
+                                                                currentCity,
+                                                            items: cityList,
+                                                            onChanged:
+                                                                (changeProvince) {
+                                                              laythongitn(
+                                                                  city: cityList
+                                                                      .indexOf(
+                                                                          changeProvince),
+                                                                  district:
+                                                                      null);
+                                                              currentDistricts =
+                                                                  null;
+                                                              // setState(() {
+                                                              //   currentDistricts =
+                                                              //       null;
+                                                              // });
+                                                            },
                                                             dropdownDecoratorProps:
                                                                 DropDownDecoratorProps(
                                                               dropdownSearchDecoration:
@@ -826,7 +924,6 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                                     "Chọn tỉnh/thành phố",
                                                               ),
                                                             ),
-                                                            onChanged: print,
                                                           ),
                                                         ],
                                                       ),
@@ -858,8 +955,20 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                                 return canNotNull;
                                                               }
                                                             },
-                                                            items:
-                                                                listDistricts,
+                                                            selectedItem:
+                                                                currentDistricts,
+                                                            items: quanList,
+                                                            onChanged:
+                                                                (changeQuan) {
+                                                              print(
+                                                                  "HHEHEHEHmxmnxn");
+                                                              laythongitn(
+                                                                  city:
+                                                                      currentCity,
+                                                                  district: cityList
+                                                                      .indexOf(
+                                                                          changeQuan));
+                                                            },
                                                             dropdownDecoratorProps:
                                                                 DropDownDecoratorProps(
                                                               dropdownSearchDecoration:
@@ -907,7 +1016,6 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                                     "Chọn quận/huyện",
                                                               ),
                                                             ),
-                                                            onChanged: print,
                                                             // selectedItem:
                                                             //     "Chọn quận/huyện",
                                                           ),
@@ -947,6 +1055,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                                 return canNotNull;
                                                               }
                                                             },
+                                                            selectedItem:
+                                                                currentWards,
                                                             items: listwards,
                                                             dropdownDecoratorProps:
                                                                 DropDownDecoratorProps(

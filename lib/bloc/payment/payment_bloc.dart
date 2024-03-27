@@ -106,19 +106,19 @@ class PaymentInforBloc extends Bloc<PaymentInforEvent, PaymentInforState> {
         if (data['status'] == 200) {
           // print("UPDATE PAYMENT ${data}");
           emit(state.copyWith(paymentStatus: PaymentInforStateStatus.succes));
-          showSnackBarTopCustom(
-              context: navigatorKey.currentContext,
-              mess: message['title'],
-              color: Colors.green);
+          // showSnackBarTopCustom(
+          //     context: navigatorKey.currentContext,
+          //     mess: message['title'],
+          //     color: Colors.green);
         } else {
           print("ERROR CONFIRM PAYMENT  1");
 
           emit(state.copyWith(paymentStatus: PaymentInforStateStatus.failed));
           emit(state.copyWith(errorText: someThingWrong));
-          showSnackBarTopCustom(
-              context: navigatorKey.currentContext,
-              mess: message['text'],
-              color: Colors.red);
+          // showSnackBarTopCustom(
+          //     context: navigatorKey.currentContext,
+          //     mess: message['text'],
+          //     color: Colors.red);
         }
       } catch (error) {
         print("ERROR CONFIRM PAYMENT  2 $error");

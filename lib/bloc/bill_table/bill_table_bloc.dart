@@ -11,8 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
-part 'bill_state.dart';
-part 'bill_event.dart';
+part 'bill_table_state.dart';
+part 'bill_table_event.dart';
 
 class BillInforBloc extends Bloc<BillInforEvent, BillInforState> {
   BillInforBloc() : super(const BillInforState()) {
@@ -48,7 +48,7 @@ class BillInforBloc extends Bloc<BillInforEvent, BillInforState> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print("UPDATE QUANTYTI FODD TO BILL $data");
+      // print("UPDATE QUANTYTI FODD TO BILL $data");
       var message = data['message'];
       try {
         if (data['status'] == 200) {

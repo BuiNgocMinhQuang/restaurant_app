@@ -26,3 +26,5 @@ const String updateQuantityFoodBroughtReceipt = 'take-away/foods/quantity';
 const String cancleBroughtReceipt = 'take-away/close';
 const String printBroughtReceipt = 'print-bill';
 const String foodList = 'foods/list';
+const String listBill = 'bills/list';
+const String areas = 'areas';

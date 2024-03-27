@@ -83,6 +83,7 @@ class CancleTable extends TableCancleEvent {
   final String shopId;
   final bool isApi;
   final String roomId;
+  final String orderId;
   final String tableId;
   final String cancellationReason; //phan trang
 
@@ -92,6 +93,7 @@ class CancleTable extends TableCancleEvent {
     this.isApi = true,
     required this.roomId,
     required this.tableId,
+    required this.orderId,
     required this.cancellationReason,
   });
 
