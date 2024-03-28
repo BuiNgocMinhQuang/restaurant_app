@@ -225,21 +225,23 @@ class ManageBroughtReceiptBloc
     on<RemoveFoodToBroughtReceipt>(_onRemoveFoodToBroughtReceipt);
     on<UpdateQuantytiFoodToBroughtReceipt>(
         _onUpdateQuantytiFoodToBroughtReceipt);
+    on<ResetOrderID>(_onResetOrderID);
+  }
+
+  void _onResetOrderID(
+    ResetOrderID event,
+    Emitter<BroughtReceiptState> emit,
+  ) async {
+    emit(state.copyWith(orderIdNewBill: -1));
   }
 
   void _onAddFoodToBroughtReceipt(
     AddFoodToBroughtReceipt event,
     Emitter<BroughtReceiptState> emit,
   ) async {
-    emit(state.copyWith(broughtReceiptStatus: BroughtReceiptStatus.loading));
+    emit(state.copyWith(
+        quantytibroughtReceiptStatus: BroughtReceiptStatus.loading));
     await Future.delayed(const Duration(seconds: 1));
-    print("DATA GET DETAIL LEN  1${{
-      'client': event.client,
-      'shop_id': event.shopId,
-      'is_api': event.isApi,
-      'order_id': event.orderId,
-      'food_id': event.foodId
-    }}");
     try {
       var token = StorageUtils.instance.getString(key: 'token');
       final respons = await http.post(
@@ -253,7 +255,7 @@ class ManageBroughtReceiptBloc
           'client': event.client,
           'shop_id': event.shopId,
           'is_api': event.isApi,
-          'order_id': event.orderId,
+          'order_id': event.orderId == -1 ? null : event.orderId,
           'food_id': event.foodId
         }),
       );
@@ -262,12 +264,15 @@ class ManageBroughtReceiptBloc
       var message = data['message'];
       try {
         if (data['status'] == 200) {
-          var quantityBroughtReceiptRes =
-              QuantityFoodBroughtReceiptModel.fromJson(data);
+          var newOrderId = data['order_id'];
+          print("ODER ID NEW ${data['order_id']}");
+
+          print(newOrderId.runtimeType);
           emit(state.copyWith(
-              quantityFoodBroughtReceiptModel: quantityBroughtReceiptRes));
-          emit(state.copyWith(
-              broughtReceiptStatus: BroughtReceiptStatus.succes));
+              orderIdNewBill: newOrderId,
+              quantytibroughtReceiptStatus: BroughtReceiptStatus.succes));
+
+          ///tach bloc nay ra
           showSnackBarTopCustom(
               context: navigatorKey.currentContext,
               mess: message['title'],
@@ -276,7 +281,7 @@ class ManageBroughtReceiptBloc
           print("ERROR ADD FOOD TO TABLE 1");
 
           emit(state.copyWith(
-              broughtReceiptStatus: BroughtReceiptStatus.failed));
+              quantytibroughtReceiptStatus: BroughtReceiptStatus.failed));
           showSnackBarTopCustom(
               context: navigatorKey.currentContext,
               mess: message['text'],
@@ -285,12 +290,14 @@ class ManageBroughtReceiptBloc
       } catch (error) {
         print("ERROR ADD FOOD TO TABLE 2 $error");
 
-        emit(state.copyWith(broughtReceiptStatus: BroughtReceiptStatus.failed));
+        emit(state.copyWith(
+            quantytibroughtReceiptStatus: BroughtReceiptStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
       print("ERROR ADD FOOD TO TABLE 3 $error");
-      emit(state.copyWith(broughtReceiptStatus: BroughtReceiptStatus.failed));
+      emit(state.copyWith(
+          quantytibroughtReceiptStatus: BroughtReceiptStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }
   }
@@ -299,8 +306,9 @@ class ManageBroughtReceiptBloc
     RemoveFoodToBroughtReceipt event,
     Emitter<BroughtReceiptState> emit,
   ) async {
-    emit(state.copyWith(broughtReceiptStatus: BroughtReceiptStatus.loading));
-    // await Future.delayed(const Duration(seconds: 1));
+    emit(state.copyWith(
+        quantytibroughtReceiptStatus: BroughtReceiptStatus.loading));
+    await Future.delayed(const Duration(seconds: 1));
     try {
       var token = StorageUtils.instance.getString(key: 'token');
       final respons = await http.post(
@@ -314,17 +322,21 @@ class ManageBroughtReceiptBloc
           'client': event.client,
           'shop_id': event.shopId,
           'is_api': event.isApi.toString(),
-          'order_id': event.orderId,
+          'order_id': event.orderId == -1 ? null : event.orderId,
           'food_id': event.foodId
         }),
       );
       final data = jsonDecode(respons.body);
-      print(" DATA REMOVE FOOD TO TABLE $data");
       var message = data['message'];
       try {
         if (data['status'] == 200) {
+          var newOrderId = data['order_id'];
+          print("ODER ID NEW ${data['order_id']}");
+
+          print(newOrderId.runtimeType);
           emit(state.copyWith(
-              broughtReceiptStatus: BroughtReceiptStatus.succes));
+              orderIdNewBill: newOrderId,
+              quantytibroughtReceiptStatus: BroughtReceiptStatus.succes));
           showSnackBarTopCustom(
               context: navigatorKey.currentContext,
               mess: message['title'],
@@ -333,7 +345,7 @@ class ManageBroughtReceiptBloc
           print("ERROR REMOVE FOOD TO TABLE 1");
 
           emit(state.copyWith(
-              broughtReceiptStatus: BroughtReceiptStatus.failed));
+              quantytibroughtReceiptStatus: BroughtReceiptStatus.failed));
           showSnackBarTopCustom(
               context: navigatorKey.currentContext,
               mess: message['text'],
@@ -342,12 +354,14 @@ class ManageBroughtReceiptBloc
       } catch (error) {
         print("ERROR REMOVE FOOD TO TABLE 2 $error");
 
-        emit(state.copyWith(broughtReceiptStatus: BroughtReceiptStatus.failed));
+        emit(state.copyWith(
+            quantytibroughtReceiptStatus: BroughtReceiptStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
       print("ERROR REMOVE FOOD TO TABLE 3 $error");
-      emit(state.copyWith(broughtReceiptStatus: BroughtReceiptStatus.failed));
+      emit(state.copyWith(
+          quantytibroughtReceiptStatus: BroughtReceiptStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }
   }
@@ -356,9 +370,18 @@ class ManageBroughtReceiptBloc
     UpdateQuantytiFoodToBroughtReceipt event,
     Emitter<BroughtReceiptState> emit,
   ) async {
-    emit(state.copyWith(broughtReceiptStatus: BroughtReceiptStatus.loading));
+    emit(state.copyWith(
+        quantytibroughtReceiptStatus: BroughtReceiptStatus.loading));
     await Future.delayed(const Duration(seconds: 1));
     try {
+      print("TRUYEN PAYLOAD ${{
+        'client': event.client,
+        'shop_id': event.shopId,
+        'is_api': event.isApi.toString(),
+        'order_id': event.orderId == -1 ? null : event.orderId,
+        'food_id': event.foodId,
+        'value': event.value
+      }}");
       var token = StorageUtils.instance.getString(key: 'token');
       final respons = await http.post(
         Uri.parse('$baseUrl$updateQuantityFoodBroughtReceipt'),
@@ -371,18 +394,23 @@ class ManageBroughtReceiptBloc
           'client': event.client,
           'shop_id': event.shopId,
           'is_api': event.isApi.toString(),
-          'order_id': event.orderId,
+          'order_id': event.orderId == -1 ? null : event.orderId,
           'food_id': event.foodId,
           'value': event.value
         }),
       );
       final data = jsonDecode(respons.body);
-      // print("UPDATE QUANTYTI FODD TO BILL $data");
       var message = data['message'];
+      print("GI V $data");
       try {
         if (data['status'] == 200) {
+          var newOrderId = data['order_id'];
+          print("ODER ID NEW ${data['order_id']}");
+
+          print(newOrderId.runtimeType);
           emit(state.copyWith(
-              broughtReceiptStatus: BroughtReceiptStatus.succes));
+              orderIdNewBill: newOrderId,
+              quantytibroughtReceiptStatus: BroughtReceiptStatus.succes));
           showSnackBarTopCustom(
               context: navigatorKey.currentContext,
               mess: message['title'],
@@ -391,7 +419,7 @@ class ManageBroughtReceiptBloc
           print("ERROR UPDATE QUANTYTI FODD TO BILL 1");
 
           emit(state.copyWith(
-              broughtReceiptStatus: BroughtReceiptStatus.failed));
+              quantytibroughtReceiptStatus: BroughtReceiptStatus.failed));
           showSnackBarTopCustom(
               context: navigatorKey.currentContext,
               mess: message['text'],
@@ -400,12 +428,14 @@ class ManageBroughtReceiptBloc
       } catch (error) {
         print("ERROR UPDATE QUANTYTI FODD BILL 2 $error");
 
-        emit(state.copyWith(broughtReceiptStatus: BroughtReceiptStatus.failed));
+        emit(state.copyWith(
+            quantytibroughtReceiptStatus: BroughtReceiptStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
       print("ERROR UPDATE QUANTYTI FODD BILL 3 $error");
-      emit(state.copyWith(broughtReceiptStatus: BroughtReceiptStatus.failed));
+      emit(state.copyWith(
+          quantytibroughtReceiptStatus: BroughtReceiptStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }
   }
@@ -441,10 +471,12 @@ class ManageBroughtReceiptBloc
           'limit': event.limit,
           'page': event.page,
           'filters': event.filters,
-          'order_id': event.orderId
+          'order_id': event.orderId == -1 ? null : event.orderId
         }),
       );
+
       final data = jsonDecode(respons.body);
+      print("DATAE !!! $data");
       var message = data['message'];
       try {
         if (data['status'] == 200) {

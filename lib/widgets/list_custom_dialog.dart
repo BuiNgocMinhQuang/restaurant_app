@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:app_restaurant/bloc/bill_table/bill_table_bloc.dart';
@@ -16,6 +17,7 @@ import 'package:app_restaurant/constant/api/index.dart';
 import 'package:app_restaurant/model/brought_receipt/manage_brought_receipt_model.dart';
 import 'package:app_restaurant/model/food_table_data_model.dart';
 import 'package:app_restaurant/model/list_room_model.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/share_getString.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
@@ -3442,12 +3444,15 @@ class _ManageBroughtReceiptDialogState
   bool hasMore = true;
 
   int currentPage = 1;
+  List lamchoichoi = [];
 
   String query = '';
   void searchProduct(String query) {
-    setState(() {
-      this.query = query;
-    });
+    if (mounted) {
+      setState(() {
+        this.query = query;
+      });
+    }
     getListFood(
       page: currentPage,
       keywords: query,
@@ -3476,15 +3481,33 @@ class _ManageBroughtReceiptDialogState
         filters: filtersFlg));
   }
 
-  List lamchoichoi = [];
-
-  void addNeEm({required String foodID}) async {
+  Future<void> plusQuantytiFood({required String foodID, int? orderID}) async {
     BlocProvider.of<ManageBroughtReceiptBloc>(context).add(
         AddFoodToBroughtReceipt(
             client: widget.role,
             shopId: widget.shopID,
-            orderId: widget.orderID,
+            orderId: orderID ?? widget.orderID,
             foodId: foodID));
+  }
+
+  Future<void> minusQuantytiFood({required String foodID, int? orderID}) async {
+    BlocProvider.of<ManageBroughtReceiptBloc>(context).add(
+        RemoveFoodToBroughtReceipt(
+            client: widget.role,
+            shopId: widget.shopID,
+            orderId: orderID ?? widget.orderID,
+            foodId: foodID));
+  }
+
+  Future<void> updateNewQuantytiFood(
+      {required String foodID, int? orderID, String? quantityFood}) async {
+    BlocProvider.of<ManageBroughtReceiptBloc>(context).add(
+        UpdateQuantytiFoodToBroughtReceipt(
+            client: widget.role,
+            shopId: widget.shopID,
+            orderId: orderID ?? widget.orderID,
+            foodId: foodID,
+            value: quantityFood ?? '0'));
   }
 
   void getListFood({
@@ -3516,21 +3539,75 @@ class _ManageBroughtReceiptDialogState
           'order_id': widget.orderID
         }),
       );
+
       final data = jsonDecode(respons.body);
-      print("DATA ${data}");
 
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var detailsBroughtReceiptRes =
-                ManageBroughtReceiptModel.fromJson(data);
-            lamchoichoi.addAll(detailsBroughtReceiptRes.data.data);
-            currentPage++;
-            if (detailsBroughtReceiptRes.data.data.isEmpty) {
-              hasMore = false;
-            }
-          });
+          if (mounted) {
+            setState(() {
+              var detailsBroughtReceiptRes =
+                  ManageBroughtReceiptModel.fromJson(data);
+              lamchoichoi.addAll(detailsBroughtReceiptRes.data.data);
+              currentPage++;
+              if (detailsBroughtReceiptRes.data.data.isEmpty) {
+                hasMore = false;
+              }
+            });
+          }
+
           // print("DATA BACK ${data}");
+        } else {
+          print("ERROR BROUGHT RECEIPT PAGE 1");
+        }
+      } catch (error) {
+        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+    }
+  }
+
+  void getListFoodRefesh(
+      {required int page,
+      String? keywords,
+      List<int>? foodKinds,
+      int? payFlg,
+      int? orderID}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$getListFoodBroughtReceipt'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': widget.role,
+          'shop_id': widget.shopID,
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': {
+            "keywords": keywords,
+            "food_kinds": foodKinds,
+            "pay_flg": payFlg
+          },
+          'order_id': orderID ?? widget.orderID
+        }),
+      );
+      final data = jsonDecode(respons.body);
+
+      try {
+        if (data['status'] == 200) {
+          if (mounted) {
+            setState(() {
+              var detailsBroughtReceiptRes =
+                  ManageBroughtReceiptModel.fromJson(data);
+              lamchoichoi = detailsBroughtReceiptRes.data.data;
+            });
+          }
         } else {
           print("ERROR BROUGHT RECEIPT PAGE 1");
         }
@@ -3545,12 +3622,10 @@ class _ManageBroughtReceiptDialogState
   @override
   void initState() {
     super.initState();
-    getListFood(page: currentPage);
+    getListFood(page: 1);
     scrollListFoodController.addListener(() {
-      print("SCROLL END");
       if (scrollListFoodController.position.maxScrollExtent ==
           scrollListFoodController.offset) {
-        print("LOADD MORE FOOD");
         getListFood(
           page: currentPage,
           keywords: query,
@@ -3560,7 +3635,12 @@ class _ManageBroughtReceiptDialogState
         );
       }
     });
-    getDetailsBroughtReceiptData(orderID: widget.orderID);
+    if (widget.orderID == null) {
+      getDetailsBroughtReceiptData(orderID: widget.orderID);
+      BlocProvider.of<ManageBroughtReceiptBloc>(navigatorKey.currentContext!)
+          .add(const ResetOrderID());
+    }
+
     //here
   }
 
@@ -3568,612 +3648,672 @@ class _ManageBroughtReceiptDialogState
   void dispose() {
     scrollListFoodController.dispose();
 
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ManageBroughtReceiptBloc, BroughtReceiptState>(
+    return BlocConsumer<ManageBroughtReceiptBloc, BroughtReceiptState>(
+        listenWhen: (previous, current) =>
+            previous.quantytibroughtReceiptStatus !=
+            current.quantytibroughtReceiptStatus,
+        listener: (context, state) {
+          if (state.quantytibroughtReceiptStatus ==
+              BroughtReceiptStatus.succes) {
+            getDetailsBroughtReceiptData(orderID: state.orderIdNewBill);
+            getListFoodRefesh(page: 1, orderID: state.orderIdNewBill);
+          }
+        },
         builder: (context, state) {
-      if (state.broughtReceiptStatus == BroughtReceiptStatus.succes) {
-        List<String> foodKindOfShop =
-            StorageUtils.instance.getStringList(key: 'food_kinds_list') ?? [];
+          log(state.orderIdNewBill.toString());
+          bool isEmty = widget.orderID == null &&
+              (state.orderIdNewBill == null || state.orderIdNewBill == -1);
 
-        List filterProducts2 = lamchoichoi.where((product) {
-          final foodTitle = product.foodName.toLowerCase();
-          final input = query.toLowerCase();
-          return (selectedCategoriesIndex22.isEmpty ||
-                  selectedCategoriesIndex22.contains(product.foodKind)) &&
-              foodTitle.contains(input);
-        }).toList();
-        listAllCategoriesFood = foodKindOfShop;
-        return AlertDialog(
-          surfaceTintColor: Colors.white,
-          backgroundColor: Colors.white,
-          content: Container(
-            width: 1.sw,
-            child: Column(
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          if (state.broughtReceiptStatus == BroughtReceiptStatus.succes) {
+            List<String> foodKindOfShop =
+                StorageUtils.instance.getStringList(key: 'food_kinds_list') ??
+                    [];
+
+            List filterProducts2 = lamchoichoi.where((product) {
+              final foodTitle = product.foodName.toLowerCase();
+              final input = query.toLowerCase();
+              return (selectedCategoriesIndex22.isEmpty ||
+                      selectedCategoriesIndex22.contains(product.foodKind)) &&
+                  foodTitle.contains(input);
+            }).toList();
+            listAllCategoriesFood = foodKindOfShop;
+            return AlertDialog(
+              surfaceTintColor: Colors.white,
+              backgroundColor: Colors.white,
+              content: Container(
+                width: 1.sw,
+                child: Column(
                   children: [
-                    TextApp(
-                      text: "Hóa đơn mang về",
-                      fontWeight: FontWeight.bold,
-                      fontsize: 18.sp,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextApp(
+                          text: "Hóa đơn mang về",
+                          fontWeight: FontWeight.bold,
+                          fontsize: 18.sp,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Icon(Icons.close),
+                        )
+                      ],
                     ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Icon(Icons.close),
+                    space20H,
+                    const Divider(
+                      height: 1,
+                      color: Colors.black,
+                    ),
+                    space10H,
+                    Card(
+                        elevation: 8.w,
+                        margin: EdgeInsets.all(8.w),
+                        child: Container(
+                            width: 1.sw,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.w)),
+                            child: Padding(
+                              padding: EdgeInsets.all(10.w),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      TextApp(
+                                        text: "Tên khách hàng: ",
+                                        fontWeight: FontWeight.bold,
+                                        fontsize: 14.sp,
+                                      ),
+                                      TextApp(
+                                        text: "Khách lẻ",
+                                        fontsize: 14.sp,
+                                      ),
+                                    ],
+                                  ),
+                                  space10H,
+                                  Row(
+                                    children: [
+                                      TextApp(
+                                        text: "Tổng tiền món ăn: ",
+                                        fontWeight: FontWeight.bold,
+                                        fontsize: 14.sp,
+                                      ),
+                                      TextApp(
+                                        text: isEmty
+                                            ? '0'
+                                            : state.manageBroughtReceiptModel
+                                                    ?.orderTotal
+                                                    .toString() ??
+                                                '',
+                                        fontsize: 14.sp,
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ))),
+                    space30H,
+                    SizedBox(
+                        height: 50,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: foodKindOfShop.map((lableFood) {
+                                  return Padding(
+                                    padding:
+                                        EdgeInsets.only(right: 5.w, left: 5.w),
+                                    child: FilterChip(
+                                      labelPadding: EdgeInsets.only(
+                                          left: 15.w,
+                                          right: 15.w,
+                                          top: 8.w,
+                                          bottom: 8.w),
+                                      disabledColor: Colors.grey,
+                                      selectedColor: Colors.blue,
+                                      backgroundColor: Colors.white,
+                                      shadowColor: Colors.black,
+                                      selectedShadowColor: Colors.blue,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.w),
+                                        side: BorderSide(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          width: 1.0,
+                                        ),
+                                      ),
+                                      labelStyle: TextStyle(
+                                          color: selectedCategories
+                                                  .contains(lableFood)
+                                              ? Colors.white
+                                              : Colors.black),
+                                      showCheckmark: false,
+                                      label: TextApp(
+                                        text: lableFood.toUpperCase(),
+                                        fontsize: 14.sp,
+                                        color: blueText,
+                                        fontWeight: FontWeight.bold,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      selected: selectedCategories
+                                          .contains(lableFood),
+                                      onSelected: (bool selected) {
+                                        if (mounted) {
+                                          setState(() {
+                                            if (selected) {
+                                              selectedCategories.add(
+                                                  lableFood); //thêm tên category vào mảng
+                                              int index = listAllCategoriesFood
+                                                  .indexOf(lableFood);
+                                              selectedCategoriesIndex22.add(
+                                                  index); //thêm index category vào mảng
+                                              getListFood(
+                                                  page: currentPage,
+                                                  keywords: query,
+                                                  foodKinds:
+                                                      selectedCategoriesIndex22
+                                                              .isEmpty
+                                                          ? null
+                                                          : selectedCategoriesIndex22);
+                                            } else {
+                                              selectedCategories.remove(
+                                                  lableFood); //xoá tên category vào mảng
+                                              int index = listAllCategoriesFood
+                                                  .indexOf(lableFood);
+                                              selectedCategoriesIndex22.remove(
+                                                  index); //xoá index category vào mảng
+                                              getListFood(
+                                                  page: currentPage,
+                                                  keywords: query,
+                                                  foodKinds:
+                                                      selectedCategoriesIndex22
+                                                              .isEmpty
+                                                          ? null
+                                                          : selectedCategoriesIndex22);
+                                            }
+                                          });
+                                        }
+                                      },
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ],
+                        )),
+                    space30H,
+                    IntrinsicHeight(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              onTapOutside: (event) {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
+                              onChanged: searchProduct,
+                              controller: searchController,
+                              style: const TextStyle(
+                                  fontSize: 12, color: Colors.grey),
+                              cursorColor: Colors.black,
+                              decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color:
+                                            Color.fromRGBO(214, 51, 123, 0.6),
+                                        width: 2.0),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  isDense: true,
+                                  hintText: "Nhập nội dung bạn muốn tìm kiếm",
+                                  contentPadding: const EdgeInsets.all(15)),
+                            ),
+                          ),
+                          space20W,
+                          Container(
+                              width: 80.w,
+                              height: 45.w,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  gradient: const LinearGradient(
+                                    begin: Alignment.topRight,
+                                    end: Alignment.bottomLeft,
+                                    colors: [
+                                      Color.fromRGBO(33, 82, 255, 1),
+                                      Color.fromRGBO(33, 212, 253, 1)
+                                    ],
+                                  )),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  TextApp(
+                                    text: isEmty
+                                        ? '0'
+                                        : state.manageBroughtReceiptModel
+                                                ?.countOrderFoods
+                                                .toString() ??
+                                            "0",
+                                    color: Colors.white,
+                                    fontsize: 14.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  space5W,
+                                  const Icon(
+                                    Icons.shopping_cart,
+                                    color: Colors.white,
+                                  )
+                                ],
+                              ))
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 5.0),
+                    const SizedBox(height: 10.0),
+                    Expanded(
+                        child: ListView.builder(
+                            itemCount: filterProducts2.length + 1,
+                            controller: scrollListFoodController,
+                            itemBuilder: (context, index) {
+                              if (index < filterProducts2.length) {
+                                _foodQuantityController
+                                    .add(TextEditingController());
+                                _foodQuantityController[index].text =
+                                    filterProducts2[index]
+                                        .quantityFood
+                                        .toString();
+
+                                var imagePath1 = filterProducts2[index]
+                                    ?.foodImages
+                                    .replaceAll('["', '');
+                                var imagePath2 =
+                                    imagePath1.replaceAll('"]', '');
+                                void addFodd() {
+                                  plusQuantytiFood(
+                                      orderID: widget.orderID ??
+                                          state.orderIdNewBill,
+                                      foodID: filterProducts2[index]
+                                          .foodId
+                                          .toString());
+
+                                  getListBroughtReceiptData(
+                                      filtersFlg: {"pay_flg": null});
+                                  getDetailsBroughtReceiptData(
+                                      orderID: widget.orderID ??
+                                          state.orderIdNewBill);
+                                  // getListFood(page: 1);
+                                }
+
+                                void updateQuantytiFood() {
+                                  updateNewQuantytiFood(
+                                    orderID:
+                                        widget.orderID ?? state.orderIdNewBill,
+                                    foodID: filterProducts2[index]
+                                        .foodId
+                                        .toString(),
+                                    quantityFood:
+                                        _foodQuantityController[index].text,
+                                  );
+
+                                  getListBroughtReceiptData(
+                                      filtersFlg: {"pay_flg": null});
+                                  getDetailsBroughtReceiptData(
+                                      orderID: widget.orderID ??
+                                          state.orderIdNewBill);
+                                }
+
+                                removeFood() {
+                                  minusQuantytiFood(
+                                      orderID: widget.orderID ??
+                                          state.orderIdNewBill,
+                                      foodID: filterProducts2[index]
+                                          .foodId
+                                          .toString());
+                                  getListBroughtReceiptData(
+                                      filtersFlg: {"pay_flg": null});
+                                  getDetailsBroughtReceiptData(
+                                      orderID: widget.orderID ??
+                                          state.orderIdNewBill);
+                                }
+
+                                return Card(
+                                  elevation: 8.0,
+                                  margin: const EdgeInsets.all(8),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.r),
+                                  ),
+                                  child: Container(
+                                      width: 1.sw,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(15.r)),
+                                      child: Column(
+                                        children: [
+                                          space15H,
+                                          SizedBox(
+                                              height: 160.w,
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(15.r),
+                                                    topRight:
+                                                        Radius.circular(15.r)),
+                                                child: Image.network(
+                                                  httpImage + imagePath2,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              )),
+                                          space10H,
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              TextApp(
+                                                  //fix day
+                                                  text: filterProducts2[index]
+                                                          .foodName ??
+                                                      ''),
+                                              TextApp(
+                                                text: filterProducts2[index]
+                                                    .foodPrice
+                                                    .toString(),
+                                                fontsize: 20.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ],
+                                          ),
+                                          const Divider(),
+                                          Padding(
+                                            padding: EdgeInsets.all(20.w),
+                                            child: Container(
+                                                width: 1.sw,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(8.r)),
+                                                ),
+                                                child: IntrinsicHeight(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .stretch,
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () {
+                                                          if (filterProducts2[
+                                                                      index]
+                                                                  .quantityFood !=
+                                                              0) {
+                                                            removeFood();
+                                                          } else {
+                                                            showSnackBarTopCustom(
+                                                                context:
+                                                                    navigatorKey
+                                                                        .currentContext,
+                                                                mess:
+                                                                    "Thao tác không thể thực hiện",
+                                                                color:
+                                                                    Colors.red);
+                                                          }
+                                                        },
+                                                        child: Container(
+                                                          width: 70.w,
+                                                          height: 35.w,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                                  borderRadius: BorderRadius.only(
+                                                                      topLeft: Radius
+                                                                          .circular(8
+                                                                              .r),
+                                                                      bottomLeft:
+                                                                          Radius.circular(8
+                                                                              .r)),
+                                                                  gradient:
+                                                                      const LinearGradient(
+                                                                    begin: Alignment
+                                                                        .topRight,
+                                                                    end: Alignment
+                                                                        .bottomLeft,
+                                                                    colors: [
+                                                                      Color.fromRGBO(
+                                                                          33,
+                                                                          82,
+                                                                          255,
+                                                                          1),
+                                                                      Color.fromRGBO(
+                                                                          33,
+                                                                          212,
+                                                                          253,
+                                                                          1)
+                                                                    ],
+                                                                  )),
+                                                          child: Center(
+                                                            child: TextApp(
+                                                              text: "-",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              color:
+                                                                  Colors.white,
+                                                              fontsize: 18.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                          child: Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          border: Border.all(
+                                                              width: 0.4,
+                                                              color:
+                                                                  Colors.grey),
+                                                        ),
+                                                        child: Center(
+                                                          child: TextField(
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            inputFormatters: <TextInputFormatter>[
+                                                              FilteringTextInputFormatter
+                                                                  .allow(RegExp(
+                                                                      "[0-9]")),
+                                                            ], // Only numbers can be entered,
+                                                            style: TextStyle(
+                                                                fontSize: 12.sp,
+                                                                color: grey),
+                                                            controller:
+                                                                _foodQuantityController[
+                                                                    index],
+
+                                                            onTapOutside:
+                                                                (event) {
+                                                              print(
+                                                                  'onTapOutside');
+                                                              FocusManager
+                                                                  .instance
+                                                                  .primaryFocus
+                                                                  ?.unfocus();
+                                                              updateQuantytiFood();
+                                                            },
+                                                            cursorColor: grey,
+                                                            decoration:
+                                                                const InputDecoration(
+                                                              fillColor: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      226,
+                                                                      104,
+                                                                      159),
+                                                              focusedBorder:
+                                                                  OutlineInputBorder(
+                                                                borderSide: BorderSide(
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            214,
+                                                                            51,
+                                                                            123,
+                                                                            0.6),
+                                                                    width: 2.0),
+                                                              ),
+
+                                                              hintText: '',
+                                                              isDense:
+                                                                  true, // Added this
+                                                              contentPadding:
+                                                                  EdgeInsets.all(
+                                                                      8), // Added this
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )),
+                                                      InkWell(
+                                                        onTap: () {
+                                                          addFodd();
+                                                        },
+                                                        child: Container(
+                                                          width: 70.w,
+                                                          height: 35.w,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                                  borderRadius: BorderRadius.only(
+                                                                      topRight:
+                                                                          Radius.circular(8
+                                                                              .r),
+                                                                      bottomRight:
+                                                                          Radius.circular(8
+                                                                              .r)),
+                                                                  gradient:
+                                                                      const LinearGradient(
+                                                                    begin: Alignment
+                                                                        .topRight,
+                                                                    end: Alignment
+                                                                        .bottomLeft,
+                                                                    colors: [
+                                                                      Color.fromRGBO(
+                                                                          33,
+                                                                          82,
+                                                                          255,
+                                                                          1),
+                                                                      Color.fromRGBO(
+                                                                          33,
+                                                                          212,
+                                                                          253,
+                                                                          1)
+                                                                    ],
+                                                                  )),
+                                                          child: Center(
+                                                            child: TextApp(
+                                                              text: "+",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              color:
+                                                                  Colors.white,
+                                                              fontsize: 18.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                )),
+                                          )
+                                        ],
+                                      )),
+                                );
+                              } else {
+                                return Center(
+                                  child: hasMore
+                                      ? CircularProgressIndicator()
+                                      : Container(),
+                                );
+                              }
+                            })),
+                  ],
+                ),
+              ),
+            );
+          } else if (state.broughtReceiptStatus ==
+              BroughtReceiptStatus.loading) {
+            return AlertDialog(
+              contentPadding: EdgeInsets.all(0),
+              surfaceTintColor: Colors.white,
+              backgroundColor: Colors.white,
+              content: Center(
+                child: SizedBox(
+                  width: 1.sw,
+                  height: 200.w,
+                  child: Lottie.asset('assets/lottie/loading_7_color.json'),
+                ),
+              ),
+            );
+          } else {
+            return AlertDialog(
+              contentPadding: EdgeInsets.all(0),
+              surfaceTintColor: Colors.white,
+              backgroundColor: Colors.white,
+              content: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      child: Lottie.asset('assets/lottie/error.json'),
+                    ),
+                    space30H,
+                    TextApp(
+                      text: state.errorText.toString(),
+                      fontsize: 20.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    space30H,
+                    Container(
+                      width: 200,
+                      child: ButtonGradient(
+                        color1: color1BlueButton,
+                        color2: color2BlueButton,
+                        event: () {},
+                        text: 'Thử lại',
+                        fontSize: 12.sp,
+                        radius: 8.r,
+                        textColor: Colors.white,
+                      ),
                     )
                   ],
                 ),
-                space20H,
-                const Divider(
-                  height: 1,
-                  color: Colors.black,
-                ),
-                space10H,
-                Card(
-                    elevation: 8.w,
-                    margin: EdgeInsets.all(8.w),
-                    child: Container(
-                        width: 1.sw,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10.w)),
-                        child: Padding(
-                          padding: EdgeInsets.all(10.w),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  TextApp(
-                                    text: "Tên khách hàng: ",
-                                    fontWeight: FontWeight.bold,
-                                    fontsize: 14.sp,
-                                  ),
-                                  TextApp(
-                                    text: "Khách lẻ",
-                                    fontsize: 14.sp,
-                                  ),
-                                ],
-                              ),
-                              space10H,
-                              Row(
-                                children: [
-                                  TextApp(
-                                    text: "Tổng tiền món ăn: ",
-                                    fontWeight: FontWeight.bold,
-                                    fontsize: 14.sp,
-                                  ),
-                                  TextApp(
-                                    text: state.manageBroughtReceiptModel
-                                            ?.orderTotal
-                                            .toString() ??
-                                        '',
-                                    fontsize: 14.sp,
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ))),
-                space30H,
-                SizedBox(
-                    height: 50,
-                    // color: Colors.red,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: foodKindOfShop.map((lableFood) {
-                              return Padding(
-                                padding: EdgeInsets.only(right: 5.w, left: 5.w),
-                                child: FilterChip(
-                                  labelPadding: EdgeInsets.only(
-                                      left: 15.w,
-                                      right: 15.w,
-                                      top: 8.w,
-                                      bottom: 8.w),
-                                  disabledColor: Colors.grey,
-                                  selectedColor: Colors.blue,
-                                  backgroundColor: Colors.white,
-                                  shadowColor: Colors.black,
-                                  selectedShadowColor: Colors.blue,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.w),
-                                    side: BorderSide(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                  labelStyle: TextStyle(
-                                      color:
-                                          selectedCategories.contains(lableFood)
-                                              ? Colors.white
-                                              : Colors.black),
-                                  showCheckmark: false,
-                                  label: TextApp(
-                                    text: lableFood.toUpperCase(),
-                                    fontsize: 14.sp,
-                                    color: blueText,
-                                    fontWeight: FontWeight.bold,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  selected:
-                                      selectedCategories.contains(lableFood),
-                                  onSelected: (bool selected) {
-                                    setState(() {
-                                      if (selected) {
-                                        selectedCategories.add(
-                                            lableFood); //thêm tên category vào mảng
-                                        int index = listAllCategoriesFood
-                                            .indexOf(lableFood);
-                                        selectedCategoriesIndex22.add(
-                                            index); //thêm index category vào mảng
-                                        getListFood(
-                                            page: currentPage,
-                                            keywords: query,
-                                            foodKinds: selectedCategoriesIndex22
-                                                    .isEmpty
-                                                ? null
-                                                : selectedCategoriesIndex22);
-                                      } else {
-                                        selectedCategories.remove(
-                                            lableFood); //xoá tên category vào mảng
-                                        int index = listAllCategoriesFood
-                                            .indexOf(lableFood);
-                                        selectedCategoriesIndex22.remove(
-                                            index); //xoá index category vào mảng
-                                        getListFood(
-                                            page: currentPage,
-                                            keywords: query,
-                                            foodKinds: selectedCategoriesIndex22
-                                                    .isEmpty
-                                                ? null
-                                                : selectedCategoriesIndex22);
-                                      }
-                                    });
-                                  },
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      ],
-                    )),
-                space30H,
-                IntrinsicHeight(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          onTapOutside: (event) {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                          },
-                          onChanged: searchProduct,
-                          controller: searchController,
-                          style:
-                              const TextStyle(fontSize: 12, color: Colors.grey),
-                          cursorColor: Colors.black,
-                          decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    color: Color.fromRGBO(214, 51, 123, 0.6),
-                                    width: 2.0),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              isDense: true,
-                              hintText: "Nhập nội dung bạn muốn tìm kiếm",
-                              contentPadding: const EdgeInsets.all(15)),
-                        ),
-                      ),
-                      space20W,
-                      Container(
-                          width: 80.w,
-                          height: 45.w,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.r),
-                              gradient: const LinearGradient(
-                                begin: Alignment.topRight,
-                                end: Alignment.bottomLeft,
-                                colors: [
-                                  Color.fromRGBO(33, 82, 255, 1),
-                                  Color.fromRGBO(33, 212, 253, 1)
-                                ],
-                              )),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              TextApp(
-                                text: state.manageBroughtReceiptModel
-                                        ?.countOrderFoods
-                                        .toString() ??
-                                    "0",
-                                color: Colors.white,
-                                fontsize: 14.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              space5W,
-                              const Icon(
-                                Icons.shopping_cart,
-                                color: Colors.white,
-                              )
-                            ],
-                          ))
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 5.0),
-                const SizedBox(height: 10.0),
-                Expanded(
-                    child: ListView.builder(
-                        itemCount: filterProducts2.length + 1,
-                        // itemCount: listGetFood?.length ?? 0,
-                        controller: scrollListFoodController,
-                        itemBuilder: (context, index) {
-                          print("LENGHT LIST ${filterProducts2.length}");
-                          if (index < filterProducts2.length) {
-                            _foodQuantityController
-                                .add(TextEditingController());
-                            _foodQuantityController[index].text =
-                                filterProducts2[index].quantityFood.toString();
-                            var imagePath1 = filterProducts2[index]
-                                ?.foodImages
-                                .replaceAll('["', '');
-                            var imagePath2 = imagePath1.replaceAll('"]', '');
-                            void addFodd() {
-                              addNeEm(
-                                  foodID:
-                                      filterProducts2[index].foodId.toString());
-
-                              getListBroughtReceiptData(
-                                  filtersFlg: {"pay_flg": null});
-                              getDetailsBroughtReceiptData(
-                                  orderID: widget.orderID);
-                              getListFood(page: currentPage);
-                            }
-
-                            void updateQuantytiFood() {
-                              BlocProvider.of<ManageBroughtReceiptBloc>(context)
-                                  .add(UpdateQuantytiFoodToBroughtReceipt(
-                                      client: widget.role,
-                                      shopId: widget.shopID,
-                                      orderId: widget.orderID,
-                                      foodId: filterProducts2[index]
-                                          .foodId
-                                          .toString(),
-                                      value:
-                                          _foodQuantityController[index].text));
-                              getListFood(
-                                //check lai
-                                page: currentPage,
-                              );
-
-                              getDetailsBroughtReceiptData(
-                                  orderID: widget.orderID);
-                              getListBroughtReceiptData(
-                                  filtersFlg: {"pay_flg": null});
-                            }
-
-                            Future<void> removeFood() async {
-                              BlocProvider.of<ManageBroughtReceiptBloc>(context)
-                                  .add(RemoveFoodToBroughtReceipt(
-                                client: widget.role,
-                                shopId: widget.shopID,
-                                orderId: widget.orderID,
-                                foodId:
-                                    filterProducts2[index].foodId.toString(),
-                              ));
-                              getListFood(
-                                //check lai
-                                page: 1,
-                              );
-                              // getDetailsBroughtReceiptData(
-                              //     orderID: widget.orderID);
-                              getListBroughtReceiptData(
-                                  filtersFlg: {"pay_flg": null});
-                              // Future.delayed(Duration(seconds: 1), () {
-
-                              // });
-                            }
-
-                            return Card(
-                              elevation: 8.0,
-                              margin: const EdgeInsets.all(8),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.r),
-                              ),
-                              child: Container(
-                                  width: 1.sw,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius:
-                                          BorderRadius.circular(15.r)),
-                                  child: Column(
-                                    children: [
-                                      space15H,
-                                      SizedBox(
-                                          height: 160.w,
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(15.r),
-                                                topRight:
-                                                    Radius.circular(15.r)),
-                                            child: Image.network(
-                                              httpImage + imagePath2,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          )),
-                                      space10H,
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          TextApp(
-                                              //fix day
-                                              text: filterProducts2[index]
-                                                      .foodName ??
-                                                  ''),
-                                          TextApp(
-                                            text: filterProducts2[index]
-                                                .foodPrice
-                                                .toString(),
-                                            fontsize: 20.sp,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ],
-                                      ),
-                                      const Divider(),
-                                      Padding(
-                                        padding: EdgeInsets.all(20.w),
-                                        child: Container(
-                                            width: 1.sw,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(8.r)),
-                                            ),
-                                            child: IntrinsicHeight(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.stretch,
-                                                children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      removeFood();
-                                                    },
-                                                    child: Container(
-                                                      width: 70.w,
-                                                      height: 35.w,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          8.r),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          8.r)),
-                                                          gradient:
-                                                              const LinearGradient(
-                                                            begin: Alignment
-                                                                .topRight,
-                                                            end: Alignment
-                                                                .bottomLeft,
-                                                            colors: [
-                                                              Color.fromRGBO(33,
-                                                                  82, 255, 1),
-                                                              Color.fromRGBO(33,
-                                                                  212, 253, 1)
-                                                            ],
-                                                          )),
-                                                      child: Center(
-                                                        child: TextApp(
-                                                          text: "-",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          color: Colors.white,
-                                                          fontsize: 18.sp,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                      child: Container(
-                                                    decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                          width: 0.4,
-                                                          color: Colors.grey),
-                                                    ),
-                                                    child: Center(
-                                                      child: TextField(
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        inputFormatters: <TextInputFormatter>[
-                                                          FilteringTextInputFormatter
-                                                              .allow(RegExp(
-                                                                  "[0-9]")),
-                                                        ], // Only numbers can be entered,
-                                                        style: TextStyle(
-                                                            fontSize: 12.sp,
-                                                            color: grey),
-                                                        controller:
-                                                            _foodQuantityController[
-                                                                index],
-
-                                                        onTapOutside: (event) {
-                                                          print('onTapOutside');
-                                                          FocusManager.instance
-                                                              .primaryFocus
-                                                              ?.unfocus();
-                                                          updateQuantytiFood();
-                                                        },
-                                                        cursorColor: grey,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          fillColor:
-                                                              Color.fromARGB(
-                                                                  255,
-                                                                  226,
-                                                                  104,
-                                                                  159),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color: Color
-                                                                    .fromRGBO(
-                                                                        214,
-                                                                        51,
-                                                                        123,
-                                                                        0.6),
-                                                                width: 2.0),
-                                                          ),
-
-                                                          hintText: '',
-                                                          isDense:
-                                                              true, // Added this
-                                                          contentPadding:
-                                                              EdgeInsets.all(
-                                                                  8), // Added this
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      addFodd();
-                                                    },
-                                                    child: Container(
-                                                      width: 70.w,
-                                                      height: 35.w,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.only(
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          8.r),
-                                                                  bottomRight:
-                                                                      Radius.circular(
-                                                                          8.r)),
-                                                          gradient:
-                                                              const LinearGradient(
-                                                            begin: Alignment
-                                                                .topRight,
-                                                            end: Alignment
-                                                                .bottomLeft,
-                                                            colors: [
-                                                              Color.fromRGBO(33,
-                                                                  82, 255, 1),
-                                                              Color.fromRGBO(33,
-                                                                  212, 253, 1)
-                                                            ],
-                                                          )),
-                                                      child: Center(
-                                                        child: TextApp(
-                                                          text: "+",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          color: Colors.white,
-                                                          fontsize: 18.sp,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            )),
-                                      )
-                                    ],
-                                  )),
-                            );
-                          } else {
-                            return Center(
-                              child: hasMore
-                                  ? CircularProgressIndicator()
-                                  : Container(),
-                            );
-                          }
-                        })),
-              ],
-            ),
-          ),
-        );
-      } else if (state.broughtReceiptStatus == BroughtReceiptStatus.loading) {
-        return AlertDialog(
-          contentPadding: EdgeInsets.all(0),
-          surfaceTintColor: Colors.white,
-          backgroundColor: Colors.white,
-          content: Center(
-            child: SizedBox(
-              width: 1.sw,
-              height: 200.w,
-              child: Lottie.asset('assets/lottie/loading_7_color.json'),
-            ),
-          ),
-        );
-      } else {
-        return AlertDialog(
-          contentPadding: EdgeInsets.all(0),
-          surfaceTintColor: Colors.white,
-          backgroundColor: Colors.white,
-          content: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 100,
-                  height: 100,
-                  child: Lottie.asset('assets/lottie/error.json'),
-                ),
-                space30H,
-                TextApp(
-                  text: state.errorText.toString(),
-                  fontsize: 20.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-                space30H,
-                Container(
-                  width: 200,
-                  child: ButtonGradient(
-                    color1: color1BlueButton,
-                    color2: color2BlueButton,
-                    event: () {},
-                    text: 'Thử lại',
-                    fontSize: 12.sp,
-                    radius: 8.r,
-                    textColor: Colors.white,
-                  ),
-                )
-              ],
-            ),
-          ),
-        );
-      }
-    });
+              ),
+            );
+          }
+        });
   }
 }
 
@@ -5222,9 +5362,11 @@ class _CancleBillDialogState extends State<CancleBillDialog> {
                           value: optionsCancle[0],
                           groupValue: currentOptions,
                           onChanged: (value) {
-                            setState(() {
-                              currentOptions = value.toString();
-                            });
+                            if (mounted) {
+                              setState(() {
+                                currentOptions = value.toString();
+                              });
+                            }
                           },
                         ),
                         TextApp(
@@ -5241,9 +5383,11 @@ class _CancleBillDialogState extends State<CancleBillDialog> {
                           value: optionsCancle[1],
                           groupValue: currentOptions,
                           onChanged: (value) {
-                            setState(() {
-                              currentOptions = value.toString();
-                            });
+                            if (mounted) {
+                              setState(() {
+                                currentOptions = value.toString();
+                              });
+                            }
                           },
                         ),
                         TextApp(
@@ -5260,9 +5404,11 @@ class _CancleBillDialogState extends State<CancleBillDialog> {
                           value: optionsCancle[2],
                           groupValue: currentOptions,
                           onChanged: (value) {
-                            setState(() {
-                              currentOptions = value.toString();
-                            });
+                            if (mounted) {
+                              setState(() {
+                                currentOptions = value.toString();
+                              });
+                            }
                           },
                         ),
                         TextApp(
@@ -5279,9 +5425,11 @@ class _CancleBillDialogState extends State<CancleBillDialog> {
                           value: optionsCancle[3],
                           groupValue: currentOptions,
                           onChanged: (value) {
-                            setState(() {
-                              currentOptions = value.toString();
-                            });
+                            if (mounted) {
+                              setState(() {
+                                currentOptions = value.toString();
+                              });
+                            }
                           },
                         ),
                         TextApp(
@@ -5483,9 +5631,11 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
                         value: light,
                         activeColor: const Color.fromRGBO(58, 65, 111, .95),
                         onChanged: (bool value) {
-                          setState(() {
-                            light = value;
-                          });
+                          if (mounted) {
+                            setState(() {
+                              light = value;
+                            });
+                          }
                         },
                       ),
                     ),
@@ -5776,9 +5926,11 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                             value: light,
                             activeColor: const Color.fromRGBO(58, 65, 111, .95),
                             onChanged: (bool value) {
-                              setState(() {
-                                light = value;
-                              });
+                              if (mounted) {
+                                setState(() {
+                                  light = value;
+                                });
+                              }
                             },
                           ),
                         ),

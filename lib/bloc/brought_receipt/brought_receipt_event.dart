@@ -47,6 +47,13 @@ class GetDetailsBroughtReceipt extends BroughtReceiptEvent {
   List<Object> get props => [];
 }
 
+class ResetOrderID extends BroughtReceiptEvent {
+  const ResetOrderID();
+
+  @override
+  List<Object> get props => [];
+}
+
 class AddFoodToBroughtReceipt extends BroughtReceiptEvent {
   final String client;
   final String shopId;

@@ -6,6 +6,7 @@ import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/model/brought_receipt/list_brought_receipt_model.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/share_getString.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/brought_receipt_container.dart';
@@ -168,8 +169,8 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                       bottom: 50.h,
                       right: 50.w,
                       child: MaterialButton(
-                        onPressed: () {
-                          showDialog(
+                        onPressed: () async {
+                          await showDialog(
                               context: context,
                               builder: (
                                 BuildContext context,
@@ -180,6 +181,11 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                                   orderID: null,
                                 );
                               });
+                          if (mounted) {
+                            print("CLEAR ID");
+                            BlocProvider.of<ManageBroughtReceiptBloc>(context)
+                                .add(ResetOrderID());
+                          }
                         },
                         color: Colors.blue,
                         textColor: Colors.white,
@@ -264,9 +270,6 @@ class _AllWidgetState extends State<AllWidget>
     scrollListFoodController.addListener(() {
       if (scrollListFoodController.position.maxScrollExtent ==
           scrollListFoodController.offset) {
-        print("LOADD MORE FOOD");
-        // await Future.delayed(const Duration(seconds: 1));
-
         loadMoreFood(page: currentPage, filtersFlg: {"pay_flg": null});
       }
     });
@@ -342,6 +345,7 @@ class _AllWidgetState extends State<AllWidget>
         if (data['status'] == 200) {
           setState(() {
             var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
+            print("DATA ADD LENGHT ${broughtReceiptPageRes.data.data.length}");
             newListFood.addAll(broughtReceiptPageRes.data.data);
             currentPage++;
             if (broughtReceiptPageRes.data.data.isEmpty) {
@@ -366,132 +370,188 @@ class _AllWidgetState extends State<AllWidget>
       onRefresh: () async {
         // Implement logic to refresh data for Tab 1
       },
-      child: ListView.builder(
-          controller: scrollListFoodController,
-          shrinkWrap: true,
-          itemCount: newListFood.length + 1,
-          itemBuilder: (BuildContext context, int index) {
-            var dataLength = newListFood.length;
+      child: newListFood.isNotEmpty
+          ? ListView.builder(
+              controller: scrollListFoodController,
+              shrinkWrap: true,
+              itemCount: newListFood.length + 1,
+              itemBuilder: (BuildContext context, int index) {
+                print("LIST LOAD MORE ${newListFood.length}");
+                var dataLength = newListFood.length;
 
-            if (index < dataLength) {
-              var statusTextBill = newListFood[index].payFlg.toString();
+                if (index < dataLength) {
+                  var statusTextBill = newListFood[index].payFlg.toString();
 
-              switch (statusTextBill) {
-                case "0":
-                  statusTextBill = "Đang chế biến";
-                  break;
+                  switch (statusTextBill) {
+                    case "0":
+                      statusTextBill = "Đang chế biến";
+                      break;
 
-                case "1":
-                  statusTextBill = "Hoàn thành";
-                  break;
+                    case "1":
+                      statusTextBill = "Hoàn thành";
+                      break;
 
-                case "2":
-                  statusTextBill = "Đã huỷ";
-                  break;
-              }
-              return Padding(
-                padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                child: BroughtReceiptContainer(
-                    dateTime:
-                        formatDateTime(newListFood[index].createdAt.toString()),
-                    price:
-                        "${MoneyFormatter(amount: (newListFood[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                    typePopMenu: statusTextBill == "Đang chế biến"
-                        ? PopUpMenuBroughtReceipt(
-                            eventButton1: () {
-                              getDetailsBroughtReceiptData(
-                                  orderID: newListFood[index].orderId);
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return ManageBroughtReceiptDialog(
-                                      role: 'staff',
-                                      orderID: newListFood[index].orderId,
-                                      shopID: getStaffShopID,
-                                    );
-                                  });
-                            },
-                            eventButton2: () {
-                              getPaymentData(
-                                tableId: '',
-                                orderID: newListFood[index].orderId.toString(),
-                              );
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return PayBillDialog(
-                                      role: 'staff',
-                                      shopID: getStaffShopID,
-                                      orderID:
-                                          newListFood[index].orderId.toString(),
-                                      roomID: '',
-                                      nameRoom: '',
-                                      eventSaveButton: () {
-                                        getListBroughtReceiptData(
-                                            filtersFlg: {"pay_flg": null});
+                    case "2":
+                      statusTextBill = "Đã huỷ";
+                      break;
+                  }
+                  return Padding(
+                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                    child: BroughtReceiptContainer(
+                        dateTime: formatDateTime(
+                            newListFood[index].createdAt.toString()),
+                        price:
+                            "${MoneyFormatter(amount: (newListFood[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                        typePopMenu: statusTextBill == "Đang chế biến"
+                            ? PopUpMenuBroughtReceipt(
+                                eventButton1: () async {
+                                  getDetailsBroughtReceiptData(
+                                      orderID: newListFood[index].orderId);
+                                  await showDialog(
+                                      context: navigatorKey.currentContext!,
+                                      builder: (BuildContext context) {
+                                        return ManageBroughtReceiptDialog(
+                                          role: 'staff',
+                                          orderID: newListFood[index].orderId,
+                                          shopID: getStaffShopID,
+                                        );
+                                      });
+                                  if (mounted) {
+                                    BlocProvider.of<ManageBroughtReceiptBloc>(
+                                            navigatorKey.currentContext!)
+                                        .add(const ResetOrderID());
+                                  }
+                                },
+                                eventButton2: () async {
+                                  getPaymentData(
+                                    tableId: '',
+                                    orderID:
+                                        newListFood[index].orderId.toString(),
+                                  );
+                                  await showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return PayBillDialog(
+                                          role: 'staff',
+                                          shopID: getStaffShopID,
+                                          orderID: newListFood[index]
+                                              .orderId
+                                              .toString(),
+                                          roomID: '',
+                                          nameRoom: '',
+                                          eventSaveButton: () {
+                                            getListBroughtReceiptData(
+                                                filtersFlg: {"pay_flg": null});
 
-                                        // getDataTabIndex(
-                                        //   roomId: data.storeRoomId.toString(),
-                                        // );
-                                      },
-                                    );
-                                  });
-                            },
-                            eventButton3: () {
-                              printBroughtReceipt(
-                                  orderID: newListFood[index].orderId);
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return PrintBroughtReceiptDialog(
-                                      role: 'staff',
-                                      shopID: getStaffShopID,
-                                      orderID:
-                                          newListFood[index].orderId.toString(),
-                                    );
-                                  });
-                            },
-                            eventButton4: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return CancleBillDialog(
-                                      eventSaveButton: () {
-                                        Navigator.of(context).pop();
-                                        getListBroughtReceiptData(
-                                            filtersFlg: {"pay_flg": null});
-                                      },
-                                      role: 'staff',
-                                      shopID: getStaffShopID,
-                                      orderID: newListFood[index].orderId,
-                                    );
-                                  });
-                            },
-                          )
-                        : PopUpMenuPrintBill(
-                            eventButton1: () {
-                              printBroughtReceipt(
-                                  orderID: newListFood[index].orderId);
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return PrintBroughtReceiptDialog(
-                                      role: 'staff',
-                                      shopID: getStaffShopID,
-                                      orderID:
-                                          newListFood[index].orderId.toString(),
-                                    );
-                                  });
-                            },
-                          ),
-                    statusText: statusTextBill),
-              );
-            } else {
-              return Center(
-                child: hasMore ? CircularProgressIndicator() : Container(),
-              );
-            }
-          }),
+                                            // getDataTabIndex(
+                                            //   roomId: data.storeRoomId.toString(),
+                                            // );
+                                          },
+                                        );
+                                      });
+                                  if (mounted) {
+                                    print("CLEAR ID");
+                                    BlocProvider.of<ManageBroughtReceiptBloc>(
+                                            context)
+                                        .add(ResetOrderID());
+                                  }
+                                },
+                                eventButton3: () async {
+                                  printBroughtReceipt(
+                                      orderID: newListFood[index].orderId);
+                                  await showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return PrintBroughtReceiptDialog(
+                                          role: 'staff',
+                                          shopID: getStaffShopID,
+                                          orderID: newListFood[index]
+                                              .orderId
+                                              .toString(),
+                                        );
+                                      });
+                                  if (mounted) {
+                                    print("CLEAR ID");
+                                    BlocProvider.of<ManageBroughtReceiptBloc>(
+                                            context)
+                                        .add(ResetOrderID());
+                                  }
+                                },
+                                eventButton4: () async {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return CancleBillDialog(
+                                          eventSaveButton: () {
+                                            Navigator.of(context).pop();
+                                            getListBroughtReceiptData(
+                                                filtersFlg: {"pay_flg": null});
+                                          },
+                                          role: 'staff',
+                                          shopID: getStaffShopID,
+                                          orderID: newListFood[index].orderId,
+                                        );
+                                      });
+                                  if (mounted) {
+                                    print("CLEAR ID");
+                                    BlocProvider.of<ManageBroughtReceiptBloc>(
+                                            context)
+                                        .add(ResetOrderID());
+                                  }
+                                },
+                              )
+                            : PopUpMenuPrintBill(
+                                eventButton1: () async {
+                                  printBroughtReceipt(
+                                      orderID: newListFood[index].orderId);
+                                  await showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return PrintBroughtReceiptDialog(
+                                          role: 'staff',
+                                          shopID: getStaffShopID,
+                                          orderID: newListFood[index]
+                                              .orderId
+                                              .toString(),
+                                        );
+                                      });
+                                  if (mounted) {
+                                    print("CLEAR ID");
+                                    BlocProvider.of<ManageBroughtReceiptBloc>(
+                                            context)
+                                        .add(ResetOrderID());
+                                  }
+                                },
+                              ),
+                        statusText: statusTextBill),
+                  );
+                } else {
+                  return Center(
+                    child: hasMore ? CircularProgressIndicator() : Container(),
+                  );
+                }
+              })
+          : Center(
+              child: SizedBox(
+                  width: 1.sw,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.receipt_long_rounded,
+                        size: 50.h,
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      TextApp(
+                          text: "Chưa có hoá đơn :(",
+                          textAlign: TextAlign.center,
+                          fontsize: 16.sp,
+                          color: Colors.black),
+                    ],
+                  )),
+            ),
     );
   }
 }
@@ -596,8 +656,8 @@ class _CompleteWidgetState extends State<CompleteWidget>
                         price:
                             "${MoneyFormatter(amount: (listBillComplete[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                         typePopMenu: PopUpMenuPrintBill(
-                          eventButton1: () {
-                            showDialog(
+                          eventButton1: () async {
+                            await showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
                                   return PrintBroughtReceiptDialog(
@@ -608,6 +668,11 @@ class _CompleteWidgetState extends State<CompleteWidget>
                                         .toString(),
                                   );
                                 });
+                            if (mounted) {
+                              print("CLEAR ID");
+                              BlocProvider.of<ManageBroughtReceiptBloc>(context)
+                                  .add(ResetOrderID());
+                            }
                           },
                         ),
                         statusText: "Hoàn thành"),
@@ -766,98 +831,144 @@ class _PendingWidgetState extends State<PendingWidget>
       onRefresh: () async {
         // Implement logic to refresh data for Tab 1
       },
-      child: ListView.builder(
-          controller: scrollTabPendingController,
-          shrinkWrap: true,
-          itemCount: listBillPending.length + 1,
-          itemBuilder: (BuildContext context, int index) {
-            if (index < listBillPending.length) {
-              return Padding(
-                padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                child: BroughtReceiptContainer(
-                    dateTime: formatDateTime(
-                        listBillPending[index].createdAt.toString()),
-                    price:
-                        "${MoneyFormatter(amount: (listBillPending[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                    typePopMenu: PopUpMenuBroughtReceipt(
-                      eventButton1: () {
-                        getDetailsBroughtReceiptData(
-                            orderID: listBillPending[index].orderId);
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return ManageBroughtReceiptDialog(
-                                role: 'staff',
-                                orderID: listBillPending[index].orderId,
-                                shopID: getStaffShopID,
-                              );
-                            });
-                      },
-                      eventButton2: () {
-                        getPaymentData(
-                          tableId: '',
-                          orderID: listBillPending[index].orderId.toString(),
-                        );
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return PayBillDialog(
-                                role: 'staff',
-                                shopID: getStaffShopID,
-                                orderID:
-                                    listBillPending[index].orderId.toString(),
-                                roomID: '',
-                                nameRoom: '',
-                                eventSaveButton: () {
-                                  getListBroughtReceiptData(
-                                      filtersFlg: {"pay_flg": null});
+      child: listBillPending.isNotEmpty
+          ? ListView.builder(
+              controller: scrollTabPendingController,
+              shrinkWrap: true,
+              itemCount: listBillPending.length + 1,
+              itemBuilder: (BuildContext context, int index) {
+                if (index < listBillPending.length) {
+                  return Padding(
+                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                    child: BroughtReceiptContainer(
+                        dateTime: formatDateTime(
+                            listBillPending[index].createdAt.toString()),
+                        price:
+                            "${MoneyFormatter(amount: (listBillPending[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                        typePopMenu: PopUpMenuBroughtReceipt(
+                          eventButton1: () async {
+                            getDetailsBroughtReceiptData(
+                                orderID: listBillPending[index].orderId);
+                            await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return ManageBroughtReceiptDialog(
+                                    role: 'staff',
+                                    orderID: listBillPending[index].orderId,
+                                    shopID: getStaffShopID,
+                                  );
+                                });
+                            if (mounted) {
+                              print("CLEAR ID");
+                              BlocProvider.of<ManageBroughtReceiptBloc>(context)
+                                  .add(ResetOrderID());
+                            }
+                          },
+                          eventButton2: () async {
+                            getPaymentData(
+                              tableId: '',
+                              orderID:
+                                  listBillPending[index].orderId.toString(),
+                            );
+                            await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return PayBillDialog(
+                                    role: 'staff',
+                                    shopID: getStaffShopID,
+                                    orderID: listBillPending[index]
+                                        .orderId
+                                        .toString(),
+                                    roomID: '',
+                                    nameRoom: '',
+                                    eventSaveButton: () {
+                                      getListBroughtReceiptData(
+                                          filtersFlg: {"pay_flg": null});
 
-                                  // getDataTabIndex(
-                                  //   roomId: data.storeRoomId.toString(),
-                                  // );
-                                },
-                              );
-                            });
-                      },
-                      eventButton3: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return PrintBroughtReceiptDialog(
-                                role: 'staff',
-                                shopID: getStaffShopID,
-                                orderID:
-                                    listBillPending[index].orderId.toString(),
-                              );
-                            });
-                      },
-                      eventButton4: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return CancleBillDialog(
-                                eventSaveButton: () {
-                                  Navigator.of(context).pop();
+                                      // getDataTabIndex(
+                                      //   roomId: data.storeRoomId.toString(),
+                                      // );
+                                    },
+                                  );
+                                });
+                            if (mounted) {
+                              print("CLEAR ID");
+                              BlocProvider.of<ManageBroughtReceiptBloc>(context)
+                                  .add(ResetOrderID());
+                            }
+                          },
+                          eventButton3: () async {
+                            await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return PrintBroughtReceiptDialog(
+                                    role: 'staff',
+                                    shopID: getStaffShopID,
+                                    orderID: listBillPending[index]
+                                        .orderId
+                                        .toString(),
+                                  );
+                                });
+                            if (mounted) {
+                              print("CLEAR ID");
+                              BlocProvider.of<ManageBroughtReceiptBloc>(context)
+                                  .add(ResetOrderID());
+                            }
+                          },
+                          eventButton4: () async {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return CancleBillDialog(
+                                    eventSaveButton: () {
+                                      Navigator.of(context).pop();
 
-                                  getListBroughtReceiptData(
-                                      filtersFlg: {"pay_flg": 0});
-                                },
-                                role: 'staff',
-                                shopID: getStaffShopID,
-                                orderID: listBillPending[index].orderId,
-                              );
-                            });
-                      },
-                    ),
-                    statusText: "Đang chế biến"),
-              );
-            } else {
-              return Center(
-                child:
-                    hasMoreComplete ? CircularProgressIndicator() : Container(),
-              );
-            }
-          }),
+                                      getListBroughtReceiptData(
+                                          filtersFlg: {"pay_flg": 0});
+                                    },
+                                    role: 'staff',
+                                    shopID: getStaffShopID,
+                                    orderID: listBillPending[index].orderId,
+                                  );
+                                });
+                            if (mounted) {
+                              print("CLEAR ID");
+                              BlocProvider.of<ManageBroughtReceiptBloc>(context)
+                                  .add(ResetOrderID());
+                            }
+                          },
+                        ),
+                        statusText: "Đang chế biến"),
+                  );
+                } else {
+                  return Center(
+                    child: hasMoreComplete
+                        ? CircularProgressIndicator()
+                        : Container(),
+                  );
+                }
+              })
+          : Center(
+              child: SizedBox(
+                  width: 1.sw,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.receipt_long_rounded,
+                        size: 50.h,
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      TextApp(
+                          text: "Chưa có hoá đơn :(",
+                          textAlign: TextAlign.center,
+                          fontsize: 16.sp,
+                          color: Colors.black),
+                    ],
+                  )),
+            ),
     );
   }
 
@@ -950,41 +1061,71 @@ class _CancleWidgetState extends State<CancleWidget>
       onRefresh: () async {
         // Implement logic to refresh data for Tab 1
       },
-      child: ListView.builder(
-          controller: scrollTabCancleController2,
-          shrinkWrap: true,
-          itemCount: listBillCancle.length + 1,
-          itemBuilder: (BuildContext context, int index) {
-            if (index < listBillCancle.length) {
-              return Padding(
-                padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                child: BroughtReceiptContainer(
-                    dateTime: formatDateTime(
-                        listBillCancle[index].createdAt.toString()),
-                    price:
-                        "${MoneyFormatter(amount: (listBillCancle[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                    typePopMenu: PopUpMenuPrintBill(
-                      eventButton1: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return PrintBroughtReceiptDialog(
-                                role: 'staff',
-                                shopID: getStaffShopID,
-                                orderID:
-                                    listBillCancle[index].orderId.toString(),
-                              );
-                            });
-                      },
-                    ),
-                    statusText: "Đã huỷ"),
-              );
-            } else {
-              return Center(
-                child: hasMoreCanle ? CircularProgressIndicator() : Container(),
-              );
-            }
-          }),
+      child: listBillCancle.isNotEmpty
+          ? ListView.builder(
+              controller: scrollTabCancleController2,
+              shrinkWrap: true,
+              itemCount: listBillCancle.length + 1,
+              itemBuilder: (BuildContext context, int index) {
+                if (index < listBillCancle.length) {
+                  return Padding(
+                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                    child: BroughtReceiptContainer(
+                        dateTime: formatDateTime(
+                            listBillCancle[index].createdAt.toString()),
+                        price:
+                            "${MoneyFormatter(amount: (listBillCancle[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                        typePopMenu: PopUpMenuPrintBill(
+                          eventButton1: () async {
+                            await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return PrintBroughtReceiptDialog(
+                                    role: 'staff',
+                                    shopID: getStaffShopID,
+                                    orderID: listBillCancle[index]
+                                        .orderId
+                                        .toString(),
+                                  );
+                                });
+                            if (mounted) {
+                              print("CLEAR ID");
+                              BlocProvider.of<ManageBroughtReceiptBloc>(context)
+                                  .add(ResetOrderID());
+                            }
+                          },
+                        ),
+                        statusText: "Đã huỷ"),
+                  );
+                } else {
+                  return Center(
+                    child: hasMoreCanle
+                        ? CircularProgressIndicator()
+                        : Container(),
+                  );
+                }
+              })
+          : Center(
+              child: SizedBox(
+                  width: 1.sw,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.receipt_long_rounded,
+                        size: 50.h,
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      TextApp(
+                          text: "Chưa có hoá đơn :(",
+                          textAlign: TextAlign.center,
+                          fontsize: 16.sp,
+                          color: Colors.black),
+                    ],
+                  )),
+            ),
     );
   }
 

@@ -137,7 +137,7 @@ class _StaffListBillState extends State<StaffListBill>
                             color: Colors.white,
                             child: TabBarView(
                                 controller: _tabController,
-                                children: [
+                                children: const [
                                   //Tab All
                                   ListAllBillShop(),
                                   //Tab Paid
@@ -221,16 +221,7 @@ class _ListAllBillShopState extends State<ListAllBillShop>
       {required int page, required Map<String, int?> filtersFlg}) async {
     try {
       var token = StorageUtils.instance.getString(key: 'token');
-      // print("TRUYEN LEN CC GI Z ${{
-      //   {
-      //     'client': 'staff',
-      //     'shop_id': getStaffShopID,
-      //     'is_api': true,
-      //     'limit': 15,
-      //     'page': page,
-      //     'filters': filtersFlg,
-      //   }
-      // }}");
+
       final respons = await http.post(
         Uri.parse('$baseUrl$listBill'),
         headers: {
@@ -291,9 +282,6 @@ class _ListAllBillShopState extends State<ListAllBillShop>
     scrollListBillController.addListener(() {
       if (scrollListBillController.position.maxScrollExtent ==
           scrollListBillController.offset) {
-        // print("LOADD MORE FOOD");
-        // await Future.delayed(const Duration(seconds: 1));
-
         loadMoreBill(page: currentPage, filtersFlg: {"pay_flg": null});
       }
     });
@@ -312,62 +300,86 @@ class _ListAllBillShopState extends State<ListAllBillShop>
       onRefresh: () async {
         // Implement logic to refresh data for Tab 1
       },
-      child: ListView.builder(
-          controller: scrollListBillController,
-          shrinkWrap: true,
-          itemCount: newListAllBillShop.length + 1,
-          itemBuilder: (BuildContext context, int index) {
-            var dataLength = newListAllBillShop.length;
-            if (index < dataLength) {
-              var statusTextBill = newListAllBillShop[index].payFlg.toString();
-              var statusCloseBill =
-                  newListAllBillShop[index].closeOrder.toString();
-              switch (statusTextBill) {
-                case "0":
-                  statusTextBill = "Chưa thanh toán";
-                  break;
+      child: newListAllBillShop.isNotEmpty
+          ? ListView.builder(
+              controller: scrollListBillController,
+              shrinkWrap: true,
+              itemCount: newListAllBillShop.length + 1,
+              itemBuilder: (BuildContext context, int index) {
+                var dataLength = newListAllBillShop.length;
+                if (index < dataLength) {
+                  var statusTextBill =
+                      newListAllBillShop[index].payFlg.toString();
+                  var statusCloseBill =
+                      newListAllBillShop[index].closeOrder.toString();
+                  switch (statusTextBill) {
+                    case "0":
+                      statusTextBill = "Chưa thanh toán";
+                      break;
 
-                case "1":
-                  statusTextBill = "Đã thanh toán";
-                  break;
-              }
-              switch (statusCloseBill) {
-                case "1":
-                  statusTextBill = "Hoá đơn bị huỷ";
-                  break;
-              }
+                    case "1":
+                      statusTextBill = "Đã thanh toán";
+                      break;
+                  }
+                  switch (statusCloseBill) {
+                    case "1":
+                      statusTextBill = "Hoá đơn bị huỷ";
+                      break;
+                  }
 
-              return Padding(
-                padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                child: BillInforContainer(
-                    tableName: newListAllBillShop[index]
-                            .bookedTables[0]
-                            .roomTable
-                            .tableName ??
-                        '', //check ghep ban cho nay
-                    roomName:
-                        newListAllBillShop[index]?.room?.storeRoomName ?? '',
-                    dateTime: formatDateTime(
-                        newListAllBillShop[index].createdAt.toString()),
-                    price:
-                        "${MoneyFormatter(amount: (newListAllBillShop[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                    typePopMenu: PopUpMenuPrintBill(
-                      eventButton1: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return const PrintBillDialog();
-                            });
-                      },
-                    ),
-                    statusText: statusTextBill),
-              );
-            } else {
-              return Center(
-                child: hasMore ? CircularProgressIndicator() : Container(),
-              );
-            }
-          }),
+                  return Padding(
+                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                    child: BillInforContainer(
+                        tableName: newListAllBillShop[index]
+                                .bookedTables[0]
+                                .roomTable
+                                .tableName ??
+                            '', //check ghep ban cho nay
+                        roomName:
+                            newListAllBillShop[index]?.room?.storeRoomName ??
+                                '',
+                        dateTime: formatDateTime(
+                            newListAllBillShop[index].createdAt.toString()),
+                        price:
+                            "${MoneyFormatter(amount: (newListAllBillShop[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                        typePopMenu: PopUpMenuPrintBill(
+                          eventButton1: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const PrintBillDialog();
+                                });
+                          },
+                        ),
+                        statusText: statusTextBill),
+                  );
+                } else {
+                  return Center(
+                    child: hasMore ? CircularProgressIndicator() : Container(),
+                  );
+                }
+              })
+          : Center(
+              child: SizedBox(
+                  width: 1.sw,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.receipt_long_rounded,
+                        size: 50.h,
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      TextApp(
+                          text: "Chưa có hoá đơn :(",
+                          textAlign: TextAlign.center,
+                          fontsize: 16.sp,
+                          color: Colors.black),
+                    ],
+                  )),
+            ),
     );
   }
 }
@@ -466,19 +478,8 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
               itemBuilder: (BuildContext context, int index) {
                 var dataLength = listBillComplete.length;
                 if (index < dataLength) {
-                  var statusTextBill =
-                      listBillComplete[index].payFlg.toString();
                   var statusCloseBill =
                       listBillComplete[index].closeOrder.toString();
-                  switch (statusTextBill) {
-                    case "0":
-                      statusTextBill = "Chưa thanh toán";
-                      break;
-
-                    case "1":
-                      statusTextBill = "Đã thanh toán";
-                      break;
-                  }
 
                   return Padding(
                     padding: EdgeInsets.only(left: 5.w, right: 5.w),
@@ -505,7 +506,7 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                         ),
                         statusText: statusCloseBill == "1"
                             ? "Hoá đơn bị huỷ"
-                            : statusTextBill),
+                            : "Đã thanh toán"),
                   );
                 } else {
                   return Center(
@@ -579,16 +580,7 @@ class _PendingWidgetState extends State<PendingWidget>
       {required int page, required Map<String, int?> filtersFlg}) async {
     try {
       var token = StorageUtils.instance.getString(key: 'token');
-      print("TRUYEN LEN CC GI Z ${{
-        {
-          'client': 'staff',
-          'shop_id': getStaffShopID,
-          'is_api': true,
-          'limit': 15,
-          'page': page,
-          'filters': filtersFlg,
-        }
-      }}");
+
       final respons = await http.post(
         Uri.parse('$baseUrl$listBill'),
         headers: {
@@ -606,7 +598,7 @@ class _PendingWidgetState extends State<PendingWidget>
         }),
       );
       final data = jsonDecode(respons.body);
-      print("CCCCCCC $data");
+
       try {
         if (data['status'] == 200) {
           setState(() {
@@ -645,19 +637,6 @@ class _PendingWidgetState extends State<PendingWidget>
               itemBuilder: (BuildContext context, int index) {
                 var dataLength = listBillPending.length;
                 if (index < dataLength) {
-                  // var statusTextBill = listBillPending[index].payFlg.toString();
-                  // var statusCloseBill =
-                  //     listBillPending[index].closeOrder.toString();
-                  // switch (statusTextBill) {
-                  //   case "0":
-                  //     statusTextBill = "Chưa thanh toán";
-                  //     break;
-
-                  //   case "1":
-                  //     statusTextBill = "Đã thanh toán";
-                  //     break;
-                  // }
-
                   return Padding(
                     padding: EdgeInsets.only(left: 5.w, right: 5.w),
                     child: BillInforContainer(
@@ -775,7 +754,6 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
         }),
       );
       final data = jsonDecode(respons.body);
-      // print("DAT BACK LOAD MORE ${data}");
       try {
         if (data['status'] == 200) {
           setState(() {

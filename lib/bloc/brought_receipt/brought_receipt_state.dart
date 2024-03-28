@@ -34,25 +34,35 @@ enum BroughtReceiptPageStatus { loading, succes, failed }
 ///STATE của trang hoá đơn mang về
 
 class BroughtReceiptState extends Equatable {
-  const BroughtReceiptState(
-      {this.errorText,
-      this.broughtReceiptStatus,
-      this.manageBroughtReceiptModel,
-      this.quantityFoodBroughtReceiptModel});
+  const BroughtReceiptState({
+    this.errorText,
+    this.broughtReceiptStatus,
+    this.manageBroughtReceiptModel,
+    this.quantityFoodBroughtReceiptModel,
+    this.quantytibroughtReceiptStatus,
+    this.orderIdNewBill,
+  });
 
   final String? errorText;
   final BroughtReceiptStatus? broughtReceiptStatus;
+  final BroughtReceiptStatus? quantytibroughtReceiptStatus;
+  final int? orderIdNewBill;
   final ManageBroughtReceiptModel? manageBroughtReceiptModel;
   final QuantityFoodBroughtReceiptModel? quantityFoodBroughtReceiptModel;
 
   BroughtReceiptState copyWith(
       {String? errorText,
       BroughtReceiptStatus? broughtReceiptStatus,
+      BroughtReceiptStatus? quantytibroughtReceiptStatus,
+      int? orderIdNewBill,
       ManageBroughtReceiptModel? manageBroughtReceiptModel,
       QuantityFoodBroughtReceiptModel? quantityFoodBroughtReceiptModel}) {
     return BroughtReceiptState(
         errorText: errorText ?? this.errorText,
         broughtReceiptStatus: broughtReceiptStatus ?? this.broughtReceiptStatus,
+        orderIdNewBill: orderIdNewBill ?? this.orderIdNewBill,
+        quantytibroughtReceiptStatus:
+            quantytibroughtReceiptStatus ?? this.quantytibroughtReceiptStatus,
         manageBroughtReceiptModel:
             manageBroughtReceiptModel ?? this.manageBroughtReceiptModel,
         quantityFoodBroughtReceiptModel: quantityFoodBroughtReceiptModel ??
@@ -63,6 +73,8 @@ class BroughtReceiptState extends Equatable {
   List<Object?> get props => [
         errorText,
         broughtReceiptStatus,
+        quantytibroughtReceiptStatus,
+        orderIdNewBill,
         manageBroughtReceiptModel,
         quantityFoodBroughtReceiptModel
       ];
