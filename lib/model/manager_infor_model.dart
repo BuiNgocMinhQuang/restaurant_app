@@ -41,11 +41,11 @@ class Data {
   Null? frontImageCccd;
   Null? backImageCccd;
   Null? holdImageCccd;
-  Null? userAddress1;
-  Null? userAddress2;
-  Null? userAddress3;
-  Null? userAddress4;
-  Null? userFullAddress;
+  int? userAddress1;
+  int? userAddress2;
+  int? userAddress3;
+  String? userAddress4;
+  String? userFullAddress;
   int? userKind;
   int? managerFlg;
   int? activeFlg;

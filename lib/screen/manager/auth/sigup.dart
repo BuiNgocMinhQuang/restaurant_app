@@ -1,13 +1,18 @@
+import 'dart:convert';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/background_welcome.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
+import 'package:http/http.dart' as http;
+import 'package:app_restaurant/env/index.dart';
+import 'package:app_restaurant/constant/api/index.dart';
 
 class ManagerSignUp extends StatefulWidget {
   const ManagerSignUp({super.key});
@@ -28,6 +33,146 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
   final phoneController = TextEditingController();
   final passworldController = TextEditingController();
   final rePassworldController = TextEditingController();
+  String? errorsPhoneField;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    surNameController.dispose();
+    nameController.dispose();
+    fullNameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    passworldController.dispose();
+    rePassworldController.dispose();
+    super.dispose();
+  }
+
+  void dangki({
+    required String firstName,
+    required String lastName,
+    required String fullName,
+    required String email,
+    required String phone,
+    required String password,
+    required String confirmPassword,
+    required bool agreeConditon,
+  }) async {
+    try {
+      final response = await http.post(Uri.parse('$baseUrl$managerRegister'),
+          headers: {
+            'Content-type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: jsonEncode({
+            "first_name": firstName,
+            "last_name": lastName,
+            "full_name": fullName,
+            "email": email,
+            "phone": phone,
+            "password": password,
+            "confirm_password": confirmPassword,
+            "agree_conditon": agreeConditon
+          }));
+      final data = jsonDecode(response.body);
+      // var message = data['message'];
+      print("DANG KI RES $data");
+      print("DANG KI RES ${data['errors']['phone']}");
+      // print("DANG KI RES $data");
+      // print("DANG KI RES $data");
+      // print("DANG KI RES $data");
+      if (data['status'] == 200) {
+        print("DANG KI OK");
+      } else {
+        print("ZO ELSE");
+        var toStringError = data['errors']['phone'].toString();
+        setState(() {
+          errorsPhoneField = toStringError.replaceAll("[", "");
+        });
+        pressButton();
+      }
+    } catch (error) {
+      print("ZO ELSE $error");
+    }
+  }
+
+  void pressButton() {
+    print("PRESS BUTOON");
+    print("STATE FORM ${_formField.currentState}");
+    if (_formField.currentState!.validate()) {
+      print("THONG TIN DANG KI ${{
+        "Ho": surNameController.text,
+        "Ten": nameController.text,
+        "Ho va ten": fullNameController.text,
+        "Email": emailController.text,
+        "So dien thoai": phoneController.text,
+        "Pass": passworldController.text,
+        "RePass": rePassworldController.text,
+        "AgreeConditon": isChecked,
+      }}");
+      dangki(
+        firstName: surNameController.text,
+        lastName: nameController.text,
+        fullName: fullNameController.text,
+        email: emailController.text,
+        phone: phoneController.text.toString(),
+        password: passworldController.text,
+        confirmPassword: rePassworldController.text,
+        agreeConditon: isChecked,
+      );
+      // BlocProvider.of<
+      //             ManagerRegisterBloc>(
+      //         context)
+      //     .add(
+      //   ManagerRegisterButtonPressed(
+      //     firstName:
+      //         surNameController
+      //             .text
+      //             .toString(),
+      //     lastName:
+      //         nameController
+      //             .text
+      //             .toString(),
+      //     fullName:
+      //         fullNameController
+      //             .text
+      //             .toString(),
+      //     email: emailController
+      //         .text
+      //         .toString(),
+      //     phone: phoneController
+      //         .text
+      //         .toString(),
+      //     password:
+      //         passworldController
+      //             .text
+      //             .toString(),
+      //     confirmPassword:
+      //         rePassworldController
+      //             .text
+      //             .toString(),
+      //     agreeConditon:
+      //         isChecked,
+      //   ),
+      // );
+      // surNameController.clear();
+      // nameController.clear();
+      // fullNameController
+      //     .clear();
+      // emailController.clear();
+      // phoneController.clear();
+      // passworldController
+      //     .clear();
+      // rePassworldController
+      //     .clear();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     //style checkbox
@@ -137,6 +282,11 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                     Expanded(
                                                       flex: 1,
                                                       child: TextFormField(
+                                                        onTapOutside: (event) {
+                                                          FocusManager.instance
+                                                              .primaryFocus
+                                                              ?.unfocus();
+                                                        },
                                                         keyboardType:
                                                             TextInputType.name,
                                                         controller:
@@ -197,6 +347,11 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                     Expanded(
                                                       flex: 1,
                                                       child: TextFormField(
+                                                        onTapOutside: (event) {
+                                                          FocusManager.instance
+                                                              .primaryFocus
+                                                              ?.unfocus();
+                                                        },
                                                         controller:
                                                             nameController,
                                                         keyboardType:
@@ -257,6 +412,11 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                   height: 20.h,
                                                 ),
                                                 TextFormField(
+                                                  onTapOutside: (event) {
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
+                                                  },
                                                   controller:
                                                       fullNameController,
                                                   keyboardType:
@@ -309,6 +469,11 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                   height: 20.h,
                                                 ),
                                                 TextFormField(
+                                                  onTapOutside: (event) {
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
+                                                  },
                                                   controller: emailController,
                                                   keyboardType: TextInputType
                                                       .emailAddress,
@@ -367,6 +532,15 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                   height: 20.h,
                                                 ),
                                                 TextFormField(
+                                                  onTapOutside: (event) {
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
+                                                  },
+                                                  inputFormatters: <TextInputFormatter>[
+                                                    FilteringTextInputFormatter
+                                                        .allow(RegExp("[0-9]")),
+                                                  ],
                                                   controller: phoneController,
                                                   keyboardType:
                                                       TextInputType.phone,
@@ -378,6 +552,11 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                     if (value!.isEmpty) {
                                                       return phoneIsRequied;
                                                     }
+                                                    if (errorsPhoneField !=
+                                                        null) {
+                                                      return errorsPhoneField;
+                                                    }
+
                                                     bool phoneValid = RegExp(
                                                             r'^(?:[+0]9)?[0-9]{10}$')
                                                         .hasMatch(value);
@@ -425,6 +604,11 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                   height: 20.h,
                                                 ),
                                                 TextFormField(
+                                                  onTapOutside: (event) {
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
+                                                  },
                                                   controller:
                                                       passworldController,
                                                   obscureText: passwordVisible,
@@ -499,6 +683,11 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                   height: 20.h,
                                                 ),
                                                 TextFormField(
+                                                  onTapOutside: (event) {
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
+                                                  },
                                                   controller:
                                                       rePassworldController,
                                                   obscureText:
@@ -649,19 +838,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                   color1: color1DarkButton,
                                                   color2: color2DarkButton,
                                                   event: () {
-                                                    if (_formField.currentState!
-                                                        .validate()) {
-                                                      surNameController.clear();
-                                                      nameController.clear();
-                                                      fullNameController
-                                                          .clear();
-                                                      emailController.clear();
-                                                      phoneController.clear();
-                                                      passworldController
-                                                          .clear();
-                                                      rePassworldController
-                                                          .clear();
-                                                    }
+                                                    pressButton();
                                                   },
                                                   text: "Đăng ký",
                                                   fontSize: 12.sp,

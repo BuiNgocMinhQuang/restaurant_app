@@ -37,6 +37,7 @@ class _StaffListBillState extends State<StaffListBill>
   final String currentShopId = getStaffShopID;
   void getListBillShop({required Map<String, int?> filtersFlg}) async {
     BlocProvider.of<ListBillShopBloc>(context).add(GetListBillShop(
+        token: StorageUtils.instance.getString(key: 'token'),
         client: currentRole,
         shopId: currentShopId,
         limit: 15,
@@ -246,18 +247,6 @@ class _ListAllBillShopState extends State<ListAllBillShop>
             var listBillShopRes = ListBillShopModel.fromJson(data);
             newListAllBillShop.addAll(listBillShopRes.data.data);
             currentPage++;
-            // Map<dynamic, dynamic> data2 = jsonDecode(respons.body);
-            // List<String> tableNames = [];
-            // for (var order in data2['data']) {
-            //   for (var bookedTable in order['booked_tables']) {
-            //     if (bookedTable['room_table']['table_name'] != null) {
-            //       tableNames.add(bookedTable['room_table']['table_name']);
-            //     }
-            //   }
-            // }
-            // String allTableNames = tableNames.join(', ');
-
-            // print("DAY R WM OI $allTableNames");
             if (listBillShopRes.data.data.isEmpty) {
               hasMore = false;
             }

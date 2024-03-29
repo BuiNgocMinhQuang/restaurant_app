@@ -5,7 +5,7 @@ import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
 import 'package:app_restaurant/model/manager_infor_model.dart';
 import 'package:app_restaurant/model/staff_infor_model.dart';
-import 'package:app_restaurant/model/user_model.dart';
+import 'package:app_restaurant/model/staff_auth_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:bloc/bloc.dart';

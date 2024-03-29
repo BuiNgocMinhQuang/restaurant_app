@@ -1,7 +1,5 @@
-import 'package:app_restaurant/bloc/login/login_bloc.dart';
-import 'package:app_restaurant/bloc/network/network_cubit.dart';
+import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
 import 'package:app_restaurant/config/text.dart';
-import 'package:app_restaurant/screen/no_internet.dart';
 import 'package:app_restaurant/widgets/background_welcome.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
@@ -28,7 +26,8 @@ class _ManagerSignInState extends State<ManagerSignIn> {
   final passworldController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+    return BlocBuilder<ManagerLoginBloc, ManagerLoginState>(
+        builder: (context, state) {
       return Scaffold(
           resizeToAvoidBottomInset: true,
           backgroundColor: const Color.fromRGBO(248, 249, 250, 1),
@@ -351,20 +350,32 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                     color1: color1BlueButton,
                                                     color2: color2BlueButton,
                                                     event: () {
-                                                      // if (_formField.currentState!
+                                                      // if (_formField
+                                                      //     .currentState!
                                                       //     .validate()) {
-                                                      //   context
-                                                      //       .go('/manager_home');
-                                                      //   emailController.clear();
-                                                      //   passworldController
-                                                      //       .clear();
+                                                      //   BlocProvider.of<
+                                                      //               ManagerLoginBloc>(
+                                                      //           context)
+                                                      //       .add(
+                                                      //     ManagerLoginButtonPressed(
+                                                      //       email:
+                                                      //           emailController
+                                                      //               .text,
+                                                      //       password:
+                                                      //           passworldController
+                                                      //               .text,
+                                                      //     ),
+                                                      //   );
+                                                      //   // emailController.clear();
+                                                      //   // passworldController
+                                                      //   //     .clear();
                                                       // }
 
                                                       BlocProvider.of<
-                                                                  LoginBloc>(
+                                                                  ManagerLoginBloc>(
                                                               context)
                                                           .add(
-                                                        const ManagerStaffLoginButtonPressed(
+                                                        const ManagerLoginButtonPressed(
                                                           email:
                                                               "buingocminhquang@gmail.com",
                                                           password: "123456789",

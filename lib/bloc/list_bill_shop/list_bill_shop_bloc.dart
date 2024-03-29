@@ -32,7 +32,7 @@ class ListBillShopBloc extends Bloc<ListBillShopEvent, ListBillShopState> {
         headers: {
           'Content-type': 'application/json',
           'Accept': 'application/json',
-          "Authorization": "Bearer $token"
+          "Authorization": "Bearer ${event.token}"
         },
         body: jsonEncode({
           'client': event.client,

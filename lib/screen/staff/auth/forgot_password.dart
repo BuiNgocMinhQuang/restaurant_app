@@ -130,8 +130,9 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                 ),
                                                 Center(
                                                   child: TextApp(
-                                                    text:
-                                                        "Chúng tôi sẽ gửi mã xác nhận về email của bạn trong vòng 60 giây",
+                                                    softWrap: true,
+                                                    isOverFlow: false,
+                                                    text: sendCodeIn60Sec,
                                                     textAlign: TextAlign.center,
                                                   ),
                                                 ),

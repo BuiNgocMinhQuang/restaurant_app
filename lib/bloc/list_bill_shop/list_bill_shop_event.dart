@@ -11,14 +11,15 @@ class GetListBillShop extends ListBillShopEvent {
   final int limit;
   final int page;
   final Map<String, int?> filters; //chua bit type
-
+  final String? token;
   const GetListBillShop(
       {required this.client,
       required this.shopId,
       this.isApi = true,
       required this.limit,
       required this.page,
-      required this.filters});
+      required this.filters,
+      required this.token});
 
   @override
   List<Object> get props => [];

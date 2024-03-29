@@ -1,5 +1,6 @@
+import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/space.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/screen/manager/food_menu/add_food.dart';
 import 'package:app_restaurant/screen/manager/staff/add_staff.dart';
 import 'package:app_restaurant/screen/manager/store/booking_table.dart';
@@ -20,6 +21,7 @@ import 'package:app_restaurant/widgets/sub_item_drawer.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
@@ -37,13 +39,51 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    // Future.delayed(Duration.zero, () {
+    //   checkTokenExpires();
+    // });
   }
 
   void tapDrawerChangeBotNav(int index) {
+    // checkTokenExpires();
+
     final CurvedNavigationBarState? navBarState =
         bottomNavigationKey.currentState;
     navBarState!.setPage(index);
   }
+
+  void hanldeLogOut() async {
+    BlocProvider.of<ManagerLoginBloc>(context).add(const ManagerLogout());
+    StorageUtils.instance.removeKey(key: 'auth_manager');
+    StorageUtils.instance.removeKey(key: 'manager_infor_data');
+    StorageUtils.instance.removeKey(key: 'token_manager');
+    context.go("/");
+  }
+
+  // void checkTokenExpires() async {
+  //   var tokenExpiresTime =
+  //       StorageUtils.instance.getString(key: 'token_expires_manager');
+  //   if (tokenExpiresTime != '') {
+  //     DateTime now = DateTime.now().toUtc();
+  //     print("TIME NOW $now");
+
+  //     var tokenExpires = DateTime.parse(tokenExpiresTime!);
+  //     print("TIME TOKEN $tokenExpires");
+  //     if (now.year >= tokenExpires.year &&
+  //         now.month >= tokenExpires.month &&
+  //         now.day >= tokenExpires.day &&
+  //         now.hour >= tokenExpires.hour &&
+  //         now.minute >= tokenExpires.minute &&
+  //         now.second >= tokenExpires.second) {
+  //       print("Het han token");
+  //       showLoginSessionExpiredDialog(context, hanldeLogOut);
+  //     } else {
+  //       print("Giu phien dang nhap");
+  //     }
+  //   } else {
+  //     print("Dang nhap hoai luon");
+  //   }
+  // }
 
   final List<Widget> pages = const [
     ListStores(), //index = 0
@@ -502,11 +542,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             color1: Colors.white,
                             color2: Colors.white,
                             event: () {
-                              StorageUtils.instance
-                                  .removeKey(key: 'auth_manager');
-                              StorageUtils.instance
-                                  .removeKey(key: 'manager_infor_data');
-                              context.go("/");
+                              hanldeLogOut();
                             },
                             text: "Đăng xuất",
                             textColor: Colors.black,
@@ -548,6 +584,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
         onTap: (index) {
           setState(() {
             currentIndex = index;
+            // checkTokenExpires();
           });
         },
         letIndexChange: (index) => true,
