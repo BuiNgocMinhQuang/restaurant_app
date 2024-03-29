@@ -446,15 +446,15 @@ class ManageBroughtReceiptBloc
   ) async {
     emit(state.copyWith(broughtReceiptStatus: BroughtReceiptStatus.loading));
     await Future.delayed(const Duration(seconds: 1));
-    print("DATA GET DETAIL LEN 2${{
-      'client': event.client,
-      'shop_id': event.shopId,
-      'is_api': event.isApi.toString(),
-      'limit': event.limit,
-      'page': event.page,
-      'filters': event.filters,
-      'order_id': event.orderId
-    }}");
+    // print("DATA GET DETAIL LEN 2${{
+    //   'client': event.client,
+    //   'shop_id': event.shopId,
+    //   'is_api': event.isApi.toString(),
+    //   'limit': event.limit,
+    //   'page': event.page,
+    //   'filters': event.filters,
+    //   'order_id': event.orderId
+    // }}");
     try {
       var token = StorageUtils.instance.getString(key: 'token');
       final respons = await http.post(

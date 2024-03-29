@@ -39,10 +39,10 @@ class GetTableFoods extends TableEvent {
   final String client;
   final String shopId;
   final bool isApi;
-  final String roomId;
-  final String tableId;
-  final String limit; //phan trang
-  final String page;
+  final int? roomId;
+  final int? tableId;
+  final int limit; //phan trang
+  final int page;
 
   const GetTableFoods(
       {required this.client,
@@ -153,71 +153,71 @@ class SaveTableInfor extends TableSaveInforEvent {
   List<Object> get props => [];
 }
 
-class AddFoodToTable extends TableEvent {
-  final String client;
-  final String shopId;
-  final bool isApi;
-  final String roomId;
-  final String tableId;
-  final int? orderId;
-  final String foodId;
+// class AddFoodToTable extends TableEvent {
+//   final String client;
+//   final String shopId;
+//   final bool isApi;
+//   final String roomId;
+//   final String tableId;
+//   final int? orderId;
+//   final int foodId;
 
-  const AddFoodToTable(
-      {required this.client,
-      required this.shopId,
-      this.isApi = true,
-      required this.roomId,
-      required this.tableId,
-      required this.orderId,
-      required this.foodId});
+//   const AddFoodToTable(
+//       {required this.client,
+//       required this.shopId,
+//       this.isApi = true,
+//       required this.roomId,
+//       required this.tableId,
+//       required this.orderId,
+//       required this.foodId});
 
-  @override
-  List<Object> get props => [];
-}
+//   @override
+//   List<Object> get props => [];
+// }
 
-class RemoveFoodToTable extends TableEvent {
-  final String client;
-  final String shopId;
-  final bool isApi;
-  final String roomId;
-  final String tableId;
-  final int? orderId;
-  final String foodId;
+// class RemoveFoodToTable extends TableEvent {
+//   final String client;
+//   final String shopId;
+//   final bool isApi;
+//   final String roomId;
+//   final String tableId;
+//   final int? orderId;
+//   final String foodId;
 
-  const RemoveFoodToTable(
-      {required this.client,
-      required this.shopId,
-      this.isApi = true,
-      required this.roomId,
-      required this.tableId,
-      required this.orderId,
-      required this.foodId});
+//   const RemoveFoodToTable(
+//       {required this.client,
+//       required this.shopId,
+//       this.isApi = true,
+//       required this.roomId,
+//       required this.tableId,
+//       required this.orderId,
+//       required this.foodId});
 
-  @override
-  List<Object> get props => [];
-}
+//   @override
+//   List<Object> get props => [];
+// }
 
-class UpdateQuantytiFoodToTable extends TableEvent {
-  final String client;
-  final String shopId;
-  final bool isApi;
-  final String roomId;
-  final String tableId;
-  final int? orderId;
-  final String foodId;
-  final String value;
+// class UpdateQuantytiFoodToTable extends TableEvent {
+//   final String client;
+//   final String shopId;
+//   final bool isApi;
+//   final String roomId;
+//   final String tableId;
+//   final int? orderId;
+//   final String foodId;
+//   final String value;
 
-  const UpdateQuantytiFoodToTable({
-    required this.client,
-    required this.shopId,
-    this.isApi = true,
-    required this.roomId,
-    required this.tableId,
-    required this.orderId,
-    required this.foodId,
-    required this.value,
-  });
+//   const UpdateQuantytiFoodToTable({
+//     required this.client,
+//     required this.shopId,
+//     this.isApi = true,
+//     required this.roomId,
+//     required this.tableId,
+//     required this.orderId,
+//     required this.foodId,
+//     required this.value,
+//   });
 
-  @override
-  List<Object> get props => [];
-}
+//   @override
+//   List<Object> get props => [];
+// }

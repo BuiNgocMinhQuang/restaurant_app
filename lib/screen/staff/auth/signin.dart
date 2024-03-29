@@ -355,6 +355,7 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                                     //           context)
                                                     //       .add(
                                                     //     StaffLoginButtonPressed(
+                                                    //       remember: isRemember,
                                                     //       shopId:
                                                     //           storeIdController
                                                     //               .text,
@@ -378,8 +379,9 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                                       StaffLoginButtonPressed(
                                                           shopId: "123456",
                                                           email:
-                                                              "buingocminhquang1@gmail.com",
-                                                          password: "123456789",
+                                                              "buingocminhquang2@gmail.com",
+                                                          password:
+                                                              "1234567890",
                                                           remember: isRemember),
                                                     );
                                                     //khong xoa

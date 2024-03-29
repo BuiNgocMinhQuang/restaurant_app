@@ -1,3 +1,4 @@
+import 'package:app_restaurant/config/colors.dart';
 import 'package:flutter/material.dart';
 
 class PopUpMenuBroughtReceipt extends StatelessWidget {
@@ -97,6 +98,41 @@ class PopUpMenuUsingTable extends StatelessWidget {
           },
           child: const Text("Thanh toán"),
         )
+      ],
+    );
+  }
+}
+
+class PopUpSettingAvatar extends StatelessWidget {
+  final Function eventButton1;
+  final Function eventButton2;
+
+  const PopUpSettingAvatar({
+    Key? key,
+    required this.eventButton1,
+    required this.eventButton2,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+      icon: const Icon(
+        Icons.edit,
+        color: grey,
+      ),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          onTap: () {
+            eventButton1();
+          },
+          child: const Text("Thay đổi ảnh đại diện"),
+        ),
+        PopupMenuItem(
+          onTap: () {
+            eventButton2();
+          },
+          child: const Text("Xoá ảnh đại diện"),
+        ),
       ],
     );
   }

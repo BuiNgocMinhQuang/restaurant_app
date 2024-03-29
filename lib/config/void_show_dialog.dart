@@ -223,6 +223,7 @@ showSnackBarTopUpdateSucces(context) async {
 showSnackBarTopCustom(
     {required context, required String mess, required Color color}) async {
   await Flushbar(
+    isDismissible: false,
     backgroundColor: color,
     message: mess,
     duration: const Duration(seconds: 1),

@@ -6,10 +6,12 @@ class TableState extends Equatable {
       this.tableStatus,
       this.tableModel,
       this.foodTableDataModel,
-      this.switchTableDataModel});
+      this.switchTableDataModel,
+      this.quantityFoodTableState});
 
   final String? errorText;
   final TableStatus? tableStatus;
+  final TableStatus? quantityFoodTableState;
   final TableModel? tableModel;
   final FoodTableDataModel? foodTableDataModel;
   final SwitchTableDataModel? switchTableDataModel;
@@ -17,12 +19,15 @@ class TableState extends Equatable {
   TableState copyWith(
       {String? errorText,
       TableStatus? tableStatus,
+      TableStatus? quantityFoodTableState,
       TableModel? tableModel,
       FoodTableDataModel? foodTableDataModel,
       SwitchTableDataModel? switchTableDataModel}) {
     return TableState(
         errorText: errorText ?? this.errorText,
         tableStatus: tableStatus ?? this.tableStatus,
+        quantityFoodTableState:
+            quantityFoodTableState ?? this.quantityFoodTableState,
         tableModel: tableModel ?? this.tableModel,
         foodTableDataModel: foodTableDataModel ?? this.foodTableDataModel,
         switchTableDataModel:
@@ -35,7 +40,8 @@ class TableState extends Equatable {
         tableStatus,
         tableModel,
         foodTableDataModel,
-        switchTableDataModel
+        switchTableDataModel,
+        quantityFoodTableState
       ];
 }
 

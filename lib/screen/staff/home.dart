@@ -93,15 +93,15 @@ class _StaffBookingTableState extends State<StaffBookingTable>
         orderId: orderID));
   }
 
-  void getFoodTableData(String roomId, String tableId) async {
-    BlocProvider.of<TableBloc>(context).add(GetTableFoods(
-        client: currentRole,
-        shopId: getStaffShopID,
-        roomId: roomId,
-        tableId: tableId,
-        limit: 1.toString(),
-        page: 1.toString()));
-  }
+  // void getFoodTableData(String roomId, String tableId) async {
+  //   BlocProvider.of<TableBloc>(context).add(GetTableFoods(
+  //       client: currentRole,
+  //       shopId: getStaffShopID,
+  //       roomId: roomId,
+  //       tableId: tableId,
+  //       limit: 1.toString(),
+  //       page: 1.toString()));
+  // }
 
   @override
   void initState() {

@@ -330,11 +330,7 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                   return Padding(
                     padding: EdgeInsets.only(left: 5.w, right: 5.w),
                     child: BillInforContainer(
-                        tableName: newListAllBillShop[index]
-                                .bookedTables[0]
-                                .roomTable
-                                .tableName ??
-                            '', //check ghep ban cho nay
+                        tableName: "TEN BAN", //check ghep ban cho nay
                         roomName:
                             newListAllBillShop[index]?.room?.storeRoomName ??
                                 '',
@@ -484,11 +480,7 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                   return Padding(
                     padding: EdgeInsets.only(left: 5.w, right: 5.w),
                     child: BillInforContainer(
-                        tableName: listBillComplete[index]
-                            .bookedTables[0]
-                            .roomTable
-                            .tableName
-                            .toString(), //check ghep ban cho nay
+                        tableName: "TEN BAN", //check ghep ban cho nay
                         roomName:
                             listBillComplete[index]?.room?.storeRoomName ?? '',
                         dateTime: formatDateTime(
@@ -640,11 +632,7 @@ class _PendingWidgetState extends State<PendingWidget>
                   return Padding(
                     padding: EdgeInsets.only(left: 5.w, right: 5.w),
                     child: BillInforContainer(
-                        tableName: listBillPending[index]
-                            .bookedTables[0]
-                            .roomTable
-                            .tableName
-                            .toString(), //check ghep ban cho nay
+                        tableName: "TEN BAN", //check ghep ban cho nay
                         roomName:
                             listBillPending[index]?.room?.storeRoomName ?? '',
                         dateTime: formatDateTime(
@@ -794,11 +782,7 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                   return Padding(
                     padding: EdgeInsets.only(left: 5.w, right: 5.w),
                     child: BillInforContainer(
-                        tableName: listBillCancle[index]
-                            .bookedTables[0]
-                            .roomTable
-                            .tableName
-                            .toString(), //check ghep ban cho nay
+                        tableName: "TEN BAN", //check ghep ban cho nay
                         roomName:
                             listBillCancle[index]?.room?.storeRoomName ?? '',
                         dateTime: formatDateTime(

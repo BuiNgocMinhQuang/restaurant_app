@@ -348,7 +348,8 @@ class _AllWidgetState extends State<AllWidget>
             print("DATA ADD LENGHT ${broughtReceiptPageRes.data.data.length}");
             newListFood.addAll(broughtReceiptPageRes.data.data);
             currentPage++;
-            if (broughtReceiptPageRes.data.data.isEmpty) {
+            if (broughtReceiptPageRes.data.data.isEmpty ||
+                broughtReceiptPageRes.data.data.length <= 15) {
               hasMore = false;
             }
           });

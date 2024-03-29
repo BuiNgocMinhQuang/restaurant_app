@@ -44,7 +44,7 @@ class ListBillShopBloc extends Bloc<ListBillShopEvent, ListBillShopState> {
         }),
       );
       final data = jsonDecode(respons.body);
-      // print("UPDATE QUANTYTI FODD TO BILL $data");
+      print("LIST BILL $data");
 
       try {
         if (data['status'] == 200) {
@@ -57,7 +57,7 @@ class ListBillShopBloc extends Bloc<ListBillShopEvent, ListBillShopState> {
           //     mess: someThingWrong,
           //     color: Colors.green);
         } else {
-          print("ERROR UPDATE QUANTYTI FODD TO BILL 1");
+          print("ERROR LIST BILL 1");
 
           emit(state.copyWith(listBillShopStatus: ListBillShopStatus.failed));
           showSnackBarTopCustom(
@@ -66,13 +66,13 @@ class ListBillShopBloc extends Bloc<ListBillShopEvent, ListBillShopState> {
               color: Colors.red);
         }
       } catch (error) {
-        print("ERROR UPDATE QUANTYTI FODD BILL 2 $error");
+        print("ERROR LIST BILL 2 $error");
 
         emit(state.copyWith(listBillShopStatus: ListBillShopStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      print("ERROR UPDATE QUANTYTI FODD BILL 3 $error");
+      print("ERROR LIST BILL 3 $error");
       emit(state.copyWith(listBillShopStatus: ListBillShopStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }

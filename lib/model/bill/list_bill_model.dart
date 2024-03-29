@@ -28,17 +28,17 @@
 // }
 
 // class Data {
-//   int? currentPage;
+//   int currentPage;
 //   List<Datum> data;
-//   String? firstPageUrl;
+//   String firstPageUrl;
 //   int? from;
 //   int? lastPage;
-//   String? lastPageUrl;
+//   String lastPageUrl;
 //   List<Link> links;
-//   String? nextPageUrl;
-//   String? path;
+//   dynamic nextPageUrl;
+//   String path;
 //   int? perPage;
-//   String? prevPageUrl;
+//   dynamic prevPageUrl;
 //   int? to;
 //   int? total;
 
@@ -107,7 +107,7 @@
 //   dynamic startBookedTableAt;
 //   dynamic endBookedTableAt;
 //   dynamic note;
-//   String? cancellationReason;
+//   dynamic cancellationReason;
 //   int? discount;
 //   int? guestPay;
 //   int? payKind;
@@ -122,7 +122,7 @@
 //   DateTime createdAt;
 //   DateTime updatedAt;
 //   List<BookedTable> bookedTables;
-//   Room? room;
+//   Room room;
 
 //   Datum({
 //     required this.orderId,
@@ -190,7 +190,7 @@
 //         updatedAt: DateTime.parse(json["updated_at"]),
 //         bookedTables: List<BookedTable>.from(
 //             json["booked_tables"].map((x) => BookedTable.fromJson(x))),
-//         room: json["room"] == null ? null : Room.fromJson(json["room"]),
+//         room: Room.fromJson(json["room"]),
 //       );
 
 //   Map<String, dynamic> toJson() => {
@@ -225,7 +225,7 @@
 //         "updated_at": updatedAt.toIso8601String(),
 //         "booked_tables":
 //             List<dynamic>.from(bookedTables.map((x) => x.toJson())),
-//         "room": room?.toJson(),
+//         "room": room.toJson(),
 //       };
 // }
 
@@ -272,7 +272,7 @@
 // class RoomTable {
 //   int? roomTableId;
 //   int? storeRoomId;
-//   String? tableName;
+//   String tableName;
 //   int? activeFlg;
 //   int? deleteFlg;
 //   DateTime createdAt;
@@ -325,13 +325,13 @@
 //   int? storeRoomId;
 //   int? userId;
 //   int? storeId;
-//   String? storeRoomName;
+//   String storeRoomName;
 //   int? activeFlg;
 //   int? deleteFlg;
 //   DateTime createdAt;
 //   DateTime updatedAt;
-//   String? slug;
-//   String? images;
+//   String slug;
+//   String images;
 
 //   Room({
 //     required this.storeRoomId,
@@ -373,18 +373,6 @@
 //       };
 // }
 
-// // enum Slug { PHONG_SO_1, PHONG_SO_2 }
-
-// // final slugValues =
-// //     EnumValues({"phong-so-1": Slug.PHONG_SO_1, "phong-so-2": Slug.PHONG_SO_2});
-
-// // enum StoreRoomName { PHONG_SO_1, PHONG_SO_2 }
-
-// // final storeRoomNameValues = EnumValues({
-// //   "phong so 1": StoreRoomName.PHONG_SO_1,
-// //   "phong so 2": StoreRoomName.PHONG_SO_2
-// // });
-
 // class Link {
 //   String? url;
 //   String? label;
@@ -408,19 +396,6 @@
 //         "active": active,
 //       };
 // }
-
-// class EnumValues<T> {
-//   Map<String, T> map;
-//   late Map<T, String> reverseMap;
-
-//   EnumValues(this.map);
-
-//   Map<T, String> get reverse {
-//     reverseMap = map.map((k, v) => MapEntry(v, k));
-//     return reverseMap;
-//   }
-// }
-
 // To parse this JSON data, do
 //
 //     final listBillShopModel = listBillShopModelFromJson(jsonString);
@@ -455,7 +430,7 @@ class ListBillShopModel {
 }
 
 class Data {
-  int currentPage;
+  int? currentPage;
   List<Datum> data;
   String firstPageUrl;
   int? from;
@@ -663,7 +638,7 @@ class BookedTable {
   int? activeFlg;
   DateTime createdAt;
   DateTime updatedAt;
-  RoomTable roomTable;
+  RoomTable? roomTable;
 
   BookedTable({
     required this.bookedTableId,
@@ -682,7 +657,9 @@ class BookedTable {
         activeFlg: json["active_flg"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
-        roomTable: RoomTable.fromJson(json["room_table"]),
+        roomTable: json["room_table"] == null
+            ? null
+            : RoomTable.fromJson(json["room_table"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -692,7 +669,7 @@ class BookedTable {
         "active_flg": activeFlg,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
-        "room_table": roomTable.toJson(),
+        "room_table": roomTable?.toJson(),
       };
 }
 
@@ -706,7 +683,7 @@ class RoomTable {
   DateTime updatedAt;
   int? numberOfSeats;
   int? status;
-  String? description;
+  dynamic description;
 
   RoomTable({
     required this.roomTableId,

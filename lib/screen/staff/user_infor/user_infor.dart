@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
-
-import 'package:app_restaurant/bloc/login/login_bloc.dart';
+import 'dart:typed_data';
 import 'package:app_restaurant/bloc/staff/infor/staff_infor_bloc.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
@@ -10,8 +10,10 @@ import 'package:app_restaurant/config/fake_data.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/env/index.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
-import 'package:app_restaurant/widgets/shimmer/shimmer_list.dart';
+import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -56,6 +58,13 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
   final address4Controller = TextEditingController();
   File? selectedImage;
 
+  List cityList = [];
+  List quanList = [];
+  List xaList = [];
+
+  int? thanhphoIndex = null;
+  int? quanIndex = null;
+  int? xaIndex = null;
   void pickImage() async {
     final returndImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -63,29 +72,244 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
     setState(() {
       selectedImage = File(returndImage.path);
     });
+    openImage();
+  }
+
+  void deletedAvatarStaff() async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$deleteAvatarStaff'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+      );
+      final data = jsonDecode(respons.body);
+      print("DATA DELETED AVATAR STAFF  ${data}}");
+
+      try {
+        if (data['status'] == 200) {
+          print("DELETED AVATAR STAFF  OK");
+          getInfor();
+
+          showSnackBarTopCustom(
+              context: navigatorKey.currentContext,
+              mess: "Xoá ảnh đại diện thành công",
+              color: Colors.green);
+        } else {
+          print("ERROR DELETED AVATAR STAFF  1");
+          showSnackBarTopCustom(
+              context: navigatorKey.currentContext,
+              mess: "Thao tác thất bại",
+              color: Colors.red);
+        }
+      } catch (error) {
+        print("ERROR DELETED AVATAR STAFF  2 ${error}");
+      }
+    } catch (error) {
+      print("ERROR DELETED AVATAR STAFF  3 $error");
+    }
+  }
+
+  openImage() async {
+    try {
+      if (selectedImage != null) {
+        Uint8List imagebytes =
+            await selectedImage!.readAsBytes(); //convert to bytes
+        String base64string =
+            base64.encode(imagebytes); //convert bytes to base64 string
+        print(base64string);
+
+        setState(() {});
+        try {
+          print("TRUYEN NNNN ${{
+            "d]staff_avatar": base64string,
+          }}");
+          var token = StorageUtils.instance.getString(key: 'token');
+          final respons = await http.post(
+            Uri.parse('$baseUrl$updateAvatarStaffApi'),
+            headers: {
+              'Content-type': 'application/json',
+              'Accept': 'application/json',
+              "Authorization": "Bearer $token"
+            },
+            body: jsonEncode({
+              "staff_avatar": base64string,
+            }),
+          );
+          final data = jsonDecode(respons.body);
+          print("DATA CHANGE AVATAR STAFF  ${data}}");
+
+          try {
+            if (data['status'] == 200) {
+              print("CHANGE AVATAR STAFF  OK");
+              showSnackBarTopCustom(
+                  context: navigatorKey.currentContext,
+                  mess: "Cập nhật ảnh đại diện thành công",
+                  color: Colors.green);
+            } else {
+              print("ERROR CHANGE AVATAR STAFF  1");
+              showSnackBarTopCustom(
+                  context: navigatorKey.currentContext,
+                  mess: "Thao tác thất bại",
+                  color: Colors.red);
+            }
+          } catch (error) {
+            print("ERROR CHANGE AVATAR STAFF  2 ${error}");
+          }
+        } catch (error) {
+          print("ERROR CHANGE AVATAR STAFF  3 $error");
+        }
+      } else {
+        print("No image is selected.");
+      }
+    } catch (e) {
+      print("error while picking file.");
+    }
   }
 
   @override
   void initState() {
     super.initState();
     init();
-    // getAddress(city: 1, district: null);
   }
 
   void getInfor() {
     BlocProvider.of<StaffInforBloc>(context).add(GetStaffInfor());
   }
 
-  // void getAddress({required int? city, required int? district}) {
-  //   BlocProvider.of<StaffInforBloc>(context)
-  //       .add(GetAddressInfor(city: city, district: district));
-  // }
+  void init() async {
+    await Future.delayed(const Duration(seconds: 0));
 
-  List cityList = [];
-  List quanList = [];
-  List xaList = [];
+    getInfor();
+  }
+
+  void updateInforStaff({
+    required String? firstName,
+    required String? lastName,
+    required String? fullName,
+    required String? email,
+    required String? phone,
+    required String? twitter,
+    required String? facebook,
+    required String? instagram,
+    required int? address1,
+    required int? address2,
+    required int? address3,
+    required String? address4,
+  }) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$updateStaffInfor'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          "first_name": firstName,
+          "last_name": lastName,
+          "full_name": fullName,
+          "email": email,
+          "phone": phone,
+          "address_1": address1,
+          "address_2": address2,
+          "address_3": address3,
+          "address_4": address4,
+          "twitter": twitter,
+          "facebook": facebook,
+          "instagram": instagram
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print("DATA UPDATE INFOR  ${data}}");
+      final messText = data['message'];
+
+      try {
+        if (data['status'] == 200) {
+          print("UPDATE INFOR  OK");
+          getInfor();
+          showSnackBarTopCustom(
+              context: navigatorKey.currentContext,
+              mess: messText['text'],
+              color: Colors.green);
+        } else {
+          print("ERROR UPDATE INFOR  1");
+          showSnackBarTopCustom(
+              context: navigatorKey.currentContext,
+              mess: messText['text'],
+              color: Colors.red);
+        }
+      } catch (error) {
+        print("ERROR UPDATE INFOR  2 ${error}");
+      }
+    } catch (error) {
+      print("ERROR UPDATE INFOR  3 $error");
+    }
+  }
+
+  void changePasswordStaff({
+    required String? currentPassword,
+    required String? newPassword,
+    required String? confirmNewPassword,
+  }) async {
+    try {
+      print("TRUYEN NNNN ${{
+        "password": currentPassword,
+        "password_new": newPassword,
+        "confirm_password_new": confirmNewPassword
+      }}");
+      var token = StorageUtils.instance.getString(key: 'token');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$changePasswordStaffApi'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          "password": currentPassword,
+          "password_new": newPassword,
+          "confirm_password_new": confirmNewPassword
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print("DATA CHANGE PASS STAFF  ${data}}");
+      final messText = data['message'];
+      try {
+        if (data['status'] == 200) {
+          print("CHANGE PASS STAFF  OK");
+          currentPassworldController.clear();
+          newPassworldController.clear();
+          reNewPassworldController.clear();
+          getInfor();
+          showSnackBarTopCustom(
+              context: navigatorKey.currentContext,
+              mess: messText['text'],
+              color: Colors.green);
+        } else {
+          print("ERROR CHANGE PASS STAFF  1");
+          showSnackBarTopCustom(
+              context: navigatorKey.currentContext,
+              mess: messText['text'],
+              color: Colors.red);
+        }
+      } catch (error) {
+        print("ERROR CHANGE PASS STAFF  2 ${error}");
+      }
+    } catch (error) {
+      print("ERROR CHANGE PASS STAFF  3 $error");
+    }
+  }
 
   void laythongitn({required int? city, required int? district}) async {
+    print("DATA TRUYEN NN ${{
+      'city': city,
+      'district': district,
+    }}");
     try {
       final response = await http.post(
         Uri.parse('$baseUrl$areas'),
@@ -99,10 +323,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
         }),
       );
       final data = jsonDecode(response.body);
+      print("DATA HHHHHHH ${data}");
 
       try {
-        print("GET areas ${data}");
-
         if (response.statusCode == 200) {
           cityList.clear();
           quanList.clear();
@@ -110,6 +333,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
           cityList.addAll(data['cities']);
           quanList.addAll(data['districts']);
           xaList.addAll(data['wards']);
+
           // print("============");
           // print(cityList);
           // print("============");
@@ -125,12 +349,6 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
     } catch (error) {
       print("LOI GI DO $error");
     }
-  }
-
-  void init() async {
-    await Future.delayed(const Duration(seconds: 0));
-
-    getInfor();
   }
 
   @override
@@ -160,6 +378,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                   : state.staffInforDataModel?.data?.staffPosition == 4
                       ? 'Kế toán'
                       : '';
+
       address1Controller.text =
           state.staffInforDataModel?.data?.staffAddress1.toString() ?? '';
       address2Controller.text =
@@ -174,17 +393,24 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
           state.staffInforDataModel?.data?.staffFacebook ?? '';
       instagramController.text =
           state.staffInforDataModel?.data?.staffInstagram ?? '';
-
+      laythongitn(
+          city: state.staffInforDataModel?.data?.staffAddress1,
+          district: state.staffInforDataModel?.data?.staffAddress2);
 //get city
       final cityListMap = cityList.asMap();
       final myCity =
           cityListMap[state.staffInforDataModel?.data?.staffAddress1];
+      // log(cityListMap.toString());
+
       var currentCity = myCity;
+
       //get Quan
 
       final districrsListMap = quanList.asMap();
       final myDistrics =
           districrsListMap[state.staffInforDataModel?.data?.staffAddress2];
+      // log(districrsListMap.toString());
+
       var currentDistricts = myDistrics;
       //Get phuong xa
       final wardsListMap = xaList.asMap();
@@ -195,9 +421,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
       var imagePath1 = (state.staffInforDataModel?.data?.staffAvatar ?? '')
           .replaceAll('["', '');
       var imagePath2 = imagePath1.replaceAll('"]', '');
-      laythongitn(
-          city: state.staffInforDataModel?.data?.staffAddress1,
-          district: state.staffInforDataModel?.data?.staffAddress2);
+
       return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -239,37 +463,47 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        InkWell(
-                                            onTap: () {
-                                              pickImage();
-                                            },
-                                            child: Stack(
-                                              children: [
-                                                Container(
-                                                  width: 100.w,
-                                                  height: 150.w,
-                                                  color: Colors.grey,
-                                                  child: selectedImage != null
-                                                      ? Image.file(
-                                                          selectedImage!,
-                                                          fit: BoxFit.cover,
-                                                        )
-                                                      : Container(
-                                                          // width: 100.w,
-                                                          color: Colors.grey,
-                                                          child: Image.network(
-                                                            httpImage +
-                                                                imagePath2,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                        ),
-                                                ),
-                                                Positioned(
-                                                    top: 5.w,
-                                                    right: 5.w,
-                                                    child: Icon(Icons.edit))
-                                              ],
-                                            )),
+                                        Stack(
+                                          children: [
+                                            Container(
+                                              width: 100.w,
+                                              height: 150.w,
+                                              color: Colors.grey,
+                                              // child: Container(
+                                              //   // width: 100.w,
+                                              //   color: Colors.grey,
+                                              //   child: Image.network(
+                                              //     httpImage + imagePath2,
+                                              //     fit: BoxFit.cover,
+                                              //   ),
+                                              // ),
+                                              child: selectedImage != null
+                                                  ? Image.file(
+                                                      selectedImage!,
+                                                      fit: BoxFit.cover,
+                                                    )
+                                                  : Container(
+                                                      // width: 100.w,
+                                                      color: Colors.grey,
+                                                      child: Image.network(
+                                                        httpImage + imagePath2,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                            ),
+                                            Positioned(
+                                                top: 0.w,
+                                                right: 0.w,
+                                                child: PopUpSettingAvatar(
+                                                  eventButton1: () {
+                                                    pickImage();
+                                                  },
+                                                  eventButton2: () {
+                                                    deletedAvatarStaff();
+                                                  },
+                                                ))
+                                          ],
+                                        ),
                                         space25W,
                                         Column(
                                           mainAxisAlignment:
@@ -363,6 +597,13 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                           ),
                                                           TextFormField(
                                                             // enabled: false,
+                                                            onTapOutside:
+                                                                (event) {
+                                                              FocusManager
+                                                                  .instance
+                                                                  .primaryFocus
+                                                                  ?.unfocus();
+                                                            },
                                                             controller:
                                                                 shopIDController,
                                                             readOnly: true,
@@ -434,6 +675,13 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                             height: 10.h,
                                                           ),
                                                           TextFormField(
+                                                            onTapOutside:
+                                                                (event) {
+                                                              FocusManager
+                                                                  .instance
+                                                                  .primaryFocus
+                                                                  ?.unfocus();
+                                                            },
                                                             controller:
                                                                 fullNameController,
                                                             keyboardType:
@@ -520,6 +768,13 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                             height: 10.h,
                                                           ),
                                                           TextFormField(
+                                                            onTapOutside:
+                                                                (event) {
+                                                              FocusManager
+                                                                  .instance
+                                                                  .primaryFocus
+                                                                  ?.unfocus();
+                                                            },
                                                             keyboardType:
                                                                 TextInputType
                                                                     .name,
@@ -599,6 +854,13 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                             height: 10.h,
                                                           ),
                                                           TextFormField(
+                                                            onTapOutside:
+                                                                (event) {
+                                                              FocusManager
+                                                                  .instance
+                                                                  .primaryFocus
+                                                                  ?.unfocus();
+                                                            },
                                                             keyboardType:
                                                                 TextInputType
                                                                     .name,
@@ -685,6 +947,13 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                             height: 10.h,
                                                           ),
                                                           TextFormField(
+                                                            onTapOutside:
+                                                                (event) {
+                                                              FocusManager
+                                                                  .instance
+                                                                  .primaryFocus
+                                                                  ?.unfocus();
+                                                            },
                                                             readOnly: true,
                                                             controller:
                                                                 roleController,
@@ -758,6 +1027,13 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                             height: 10.h,
                                                           ),
                                                           TextFormField(
+                                                            onTapOutside:
+                                                                (event) {
+                                                              FocusManager
+                                                                  .instance
+                                                                  .primaryFocus
+                                                                  ?.unfocus();
+                                                            },
                                                             controller:
                                                                 phoneController,
                                                             keyboardType:
@@ -868,12 +1144,16 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                                           changeProvince),
                                                                   district:
                                                                       null);
-                                                              currentDistricts =
-                                                                  null;
-                                                              // setState(() {
-                                                              //   currentDistricts =
-                                                              //       null;
-                                                              // });
+
+                                                              setState(() {
+                                                                thanhphoIndex =
+                                                                    cityList.indexOf(
+                                                                        changeProvince);
+                                                                // quanIndex =
+                                                                //     null;
+                                                                // currentDistricts =
+                                                                //     null;
+                                                              });
                                                             },
                                                             dropdownDecoratorProps:
                                                                 DropDownDecoratorProps(
@@ -955,19 +1235,33 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                                 return canNotNull;
                                                               }
                                                             },
+                                                            // selectedItem:
+                                                            //     currentDistricts,
                                                             selectedItem:
-                                                                currentDistricts,
+                                                                thanhphoIndex ==
+                                                                        null
+                                                                    ? currentDistricts
+                                                                    : null,
                                                             items: quanList,
                                                             onChanged:
                                                                 (changeQuan) {
-                                                              print(
-                                                                  "HHEHEHEHmxmnxn");
+                                                              var myInt =
+                                                                  int.tryParse(
+                                                                      address1Controller
+                                                                          .text);
                                                               laythongitn(
-                                                                  city:
-                                                                      currentCity,
-                                                                  district: cityList
+                                                                  city: thanhphoIndex ==
+                                                                          null
+                                                                      ? myInt
+                                                                      : thanhphoIndex,
+                                                                  district: quanList
                                                                       .indexOf(
                                                                           changeQuan));
+                                                              setState(() {
+                                                                quanIndex = quanList
+                                                                    .indexOf(
+                                                                        changeQuan);
+                                                              });
                                                             },
                                                             dropdownDecoratorProps:
                                                                 DropDownDecoratorProps(
@@ -1055,9 +1349,28 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                                 return canNotNull;
                                                               }
                                                             },
-                                                            selectedItem:
-                                                                currentWards,
-                                                            items: listwards,
+                                                            // selectedItem:
+                                                            //     currentWards,
+                                                            selectedItem: (thanhphoIndex ==
+                                                                        null &&
+                                                                    quanIndex ==
+                                                                        null)
+                                                                ? currentWards
+                                                                : null,
+
+                                                            items: xaList,
+                                                            onChanged:
+                                                                (changeWard) {
+                                                              // var xamoi = xaList
+                                                              //     .indexOf(
+                                                              //         changeWard);
+
+                                                              setState(() {
+                                                                xaIndex = xaList
+                                                                    .indexOf(
+                                                                        changeWard);
+                                                              });
+                                                            },
                                                             dropdownDecoratorProps:
                                                                 DropDownDecoratorProps(
                                                               dropdownSearchDecoration:
@@ -1105,7 +1418,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                                     "Chọn phường/xã",
                                                               ),
                                                             ),
-                                                            onChanged: print,
+
                                                             // selectedItem:
                                                             //     "Chọn phường/xã",
                                                           ),
@@ -1134,6 +1447,13 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                             height: 10.h,
                                                           ),
                                                           TextFormField(
+                                                            onTapOutside:
+                                                                (event) {
+                                                              FocusManager
+                                                                  .instance
+                                                                  .primaryFocus
+                                                                  ?.unfocus();
+                                                            },
                                                             controller:
                                                                 address4Controller,
                                                             keyboardType:
@@ -1203,6 +1523,11 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                     height: 10.h,
                                                   ),
                                                   TextFormField(
+                                                    onTapOutside: (event) {
+                                                      FocusManager
+                                                          .instance.primaryFocus
+                                                          ?.unfocus();
+                                                    },
                                                     controller: emailController,
                                                     keyboardType: TextInputType
                                                         .emailAddress,
@@ -1276,6 +1601,11 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                     height: 10.h,
                                                   ),
                                                   TextField(
+                                                    onTapOutside: (event) {
+                                                      FocusManager
+                                                          .instance.primaryFocus
+                                                          ?.unfocus();
+                                                    },
                                                     controller:
                                                         twitterController,
                                                     style: TextStyle(
@@ -1334,6 +1664,11 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                     height: 10.h,
                                                   ),
                                                   TextField(
+                                                    onTapOutside: (event) {
+                                                      FocusManager
+                                                          .instance.primaryFocus
+                                                          ?.unfocus();
+                                                    },
                                                     controller:
                                                         facebookController,
                                                     style: TextStyle(
@@ -1392,6 +1727,11 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                     height: 10.h,
                                                   ),
                                                   TextField(
+                                                    onTapOutside: (event) {
+                                                      FocusManager
+                                                          .instance.primaryFocus
+                                                          ?.unfocus();
+                                                    },
                                                     controller:
                                                         instagramController,
                                                     style: TextStyle(
@@ -1451,18 +1791,68 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                             .validate()) {
                                                           showConfirmDialog(
                                                               context, () {
-                                                            print("ConFIRM");
+                                                            updateInforStaff(
+                                                              firstName:
+                                                                  surNameController
+                                                                      .text,
+                                                              lastName:
+                                                                  nameController
+                                                                      .text,
+                                                              fullName:
+                                                                  fullNameController
+                                                                      .text,
+                                                              email:
+                                                                  emailController
+                                                                      .text,
+                                                              phone:
+                                                                  phoneController
+                                                                      .text,
+                                                              twitter:
+                                                                  twitterController
+                                                                      .text,
+                                                              facebook:
+                                                                  facebookController
+                                                                      .text,
+                                                              instagram:
+                                                                  instagramController
+                                                                      .text,
+                                                              address1: thanhphoIndex ==
+                                                                      null
+                                                                  ? state
+                                                                      .staffInforDataModel
+                                                                      ?.data
+                                                                      ?.staffAddress1
+                                                                  : thanhphoIndex,
+                                                              address2: quanIndex ==
+                                                                      null
+                                                                  ? state
+                                                                      .staffInforDataModel
+                                                                      ?.data
+                                                                      ?.staffAddress2
+                                                                  : quanIndex,
+                                                              address3: xaIndex,
+                                                              address4:
+                                                                  address4Controller
+                                                                      .text,
+                                                            );
+                                                            getInfor();
+                                                            setState(() {
+                                                              thanhphoIndex =
+                                                                  null;
+                                                              quanIndex = null;
+                                                              xaIndex = null;
+                                                            });
                                                           });
-                                                          surNameController
-                                                              .clear();
-                                                          nameController
-                                                              .clear();
-                                                          fullNameController
-                                                              .clear();
-                                                          emailController
-                                                              .clear();
-                                                          phoneController
-                                                              .clear();
+                                                          // surNameController
+                                                          //     .clear();
+                                                          // nameController
+                                                          //     .clear();
+                                                          // fullNameController
+                                                          //     .clear();
+                                                          // emailController
+                                                          //     .clear();
+                                                          // phoneController
+                                                          //     .clear();
                                                         }
                                                       },
                                                       text:
@@ -1539,6 +1929,11 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                 height: 10.h,
                                               ),
                                               TextFormField(
+                                                onTapOutside: (event) {
+                                                  FocusManager
+                                                      .instance.primaryFocus
+                                                      ?.unfocus();
+                                                },
                                                 controller:
                                                     currentPassworldController,
                                                 obscureText:
@@ -1626,6 +2021,11 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                 height: 10.h,
                                               ),
                                               TextFormField(
+                                                onTapOutside: (event) {
+                                                  FocusManager
+                                                      .instance.primaryFocus
+                                                      ?.unfocus();
+                                                },
                                                 controller:
                                                     newPassworldController,
                                                 obscureText: newPasswordVisible,
@@ -1711,6 +2111,11 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                 height: 10.h,
                                               ),
                                               TextFormField(
+                                                onTapOutside: (event) {
+                                                  FocusManager
+                                                      .instance.primaryFocus
+                                                      ?.unfocus();
+                                                },
                                                 controller:
                                                     reNewPassworldController,
                                                 obscureText:
@@ -1804,13 +2209,17 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                       showConfirmDialog(context,
                                                           () {
                                                         print("ConFIRM");
+                                                        changePasswordStaff(
+                                                            currentPassword:
+                                                                currentPassworldController
+                                                                    .text,
+                                                            newPassword:
+                                                                newPassworldController
+                                                                    .text,
+                                                            confirmNewPassword:
+                                                                reNewPassworldController
+                                                                    .text);
                                                       });
-                                                      currentPassworldController
-                                                          .clear();
-                                                      newPassworldController
-                                                          .clear();
-                                                      reNewPassworldController
-                                                          .clear();
                                                     }
                                                   },
                                                   text: "Cập nhật mật khẩu",

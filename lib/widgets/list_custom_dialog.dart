@@ -121,12 +121,22 @@ class _BookingTableDialogState extends State<BookingTableDialog>
   List<int> selectedCategoriesIndex = [];
   List<ItemFood> currentFoodList = [];
   final List<TextEditingController> _foodQuantityController = [];
+  bool hasMore = true;
 
+  int currentPage = 1;
+  int? currentCart;
+  List listFoodTableCurrent = [];
   String query = '';
   void searchProduct(String query) {
     setState(() {
       this.query = query;
     });
+    getListFoodTable(
+      page: currentPage,
+      keywords: query,
+      foodKinds:
+          selectedCategoriesIndex.isEmpty ? null : selectedCategoriesIndex,
+    );
   }
 
   TabController? _tabController;
@@ -138,11 +148,10 @@ class _BookingTableDialogState extends State<BookingTableDialog>
   final cancleTableReasonController = TextEditingController();
   final _formCancleTable = GlobalKey<FormState>();
   final scrollListFoodController = ScrollController();
-  List itemNe = List.generate(10, (index) => index);
-  final PagingController<int, FoodTableDataModel> _pagingController =
-      PagingController(firstPageKey: 1);
+
   @override
   void dispose() {
+    scrollListFoodController.dispose();
     _tabController!.dispose();
     super.dispose();
   }
@@ -154,6 +163,17 @@ class _BookingTableDialogState extends State<BookingTableDialog>
     _tabController = TabController(length: 3, vsync: this);
     _tabController!.addListener(_handleTabSelection);
     //
+    scrollListFoodController.addListener(() {
+      if (scrollListFoodController.position.maxScrollExtent ==
+          scrollListFoodController.offset) {
+        getListFoodTable(
+          page: currentPage,
+          keywords: query,
+          foodKinds:
+              selectedCategoriesIndex.isEmpty ? null : selectedCategoriesIndex,
+        );
+      }
+    });
     setState(() {
       listBanDaGhep = widget.listTableOfRoom
               ?.where((table) =>
@@ -171,9 +191,298 @@ class _BookingTableDialogState extends State<BookingTableDialog>
     }
   }
 
-  void refeshHomePage() async {
-    await Future.delayed(const Duration(seconds: 0));
+  void getListFoodTable({
+    required int page,
+    String? keywords,
+    List<int>? foodKinds,
+    int? payFlg,
+  }) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$foodsTableApi'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': widget.role,
+          'shop_id': widget.shopID,
+          'is_api': true,
+          'room_id': widget.idRoom.toString(),
+          'table_id': widget.currentTable?.roomTableId.toString() ?? '',
+          'limit': 15,
+          'page': page,
+          'filters': {
+            "keywords": keywords,
+            "food_kinds": foodKinds,
+            "pay_flg": payFlg
+          },
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      // print("DATA ddanda TABLE ${data}}");
 
+      try {
+        if (data['status'] == 200) {
+          if (mounted) {
+            setState(() {
+              var foodTableDataRes = FoodTableDataModel.fromJson(data);
+              listFoodTableCurrent.addAll(foodTableDataRes.foods.data);
+              currentPage++;
+              if (foodTableDataRes.foods.data.isEmpty) {
+                hasMore = false;
+              }
+            });
+          }
+        } else {
+          print("ERROR DATA FOOD TABLE 1 ${data}");
+        }
+      } catch (error) {
+        print("ERROR DATA FOOD TABLE 2 ${error}");
+      }
+    } catch (error) {
+      print("ERROR DATA FOOD TABLE 3 $error");
+    }
+  }
+
+  void getListFoodTableRefesh({
+    required int page,
+    String? keywords,
+    List<int>? foodKinds,
+    int? payFlg,
+  }) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$foodsTableApi'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': widget.role,
+          'shop_id': widget.shopID,
+          'is_api': true,
+          'room_id': widget.idRoom.toString(),
+          'table_id': widget.currentTable?.roomTableId.toString() ?? '',
+          'limit': 15,
+          'page': page,
+          'filters': {
+            "keywords": keywords,
+            "food_kinds": foodKinds,
+            "pay_flg": payFlg
+          },
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print("DATA ddanda TABLE ${data}}");
+
+      try {
+        if (data['status'] == 200) {
+          if (mounted) {
+            setState(() {
+              var foodTableDataRes = FoodTableDataModel.fromJson(data);
+              listFoodTableCurrent.addAll(foodTableDataRes.foods.data);
+            });
+          }
+        } else {
+          print("ERROR DATA FOOD TABLE 1 ${data}");
+        }
+      } catch (error) {
+        print("ERROR DATA FOOD TABLE 2 ${error}");
+      }
+    } catch (error) {
+      print("ERROR DATA FOOD TABLE 3 $error");
+    }
+  }
+
+  void getDetailFoodTable() async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$foodsTableApi'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': widget.role,
+          'shop_id': widget.shopID,
+          'is_api': true,
+          'room_id': widget.idRoom,
+          'table_id': widget.currentTable?.roomTableId,
+          'limit': 15,
+          'page': 1,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      try {
+        if (data['status'] == 200) {
+          var foodTableDataRes = FoodTableDataModel.fromJson(data);
+          setState(() {
+            listFoodTableCurrent.clear();
+            currentCart = foodTableDataRes.countOrderFoods;
+            listFoodTableCurrent.addAll(foodTableDataRes.foods.data);
+          });
+        } else {
+          print("ERROR DATA FOOD TABLE 1 ${data}");
+        }
+      } catch (error) {
+        print("ERROR DATA FOOD TABLE 2 ${error}");
+      }
+    } catch (error) {
+      print("ERROR DATA FOOD TABLE 3 $error");
+    }
+  }
+
+  void plusQuantytiFoodToTable({required int foodID}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$addFoodTable'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': widget.role,
+          'shop_id': widget.shopID,
+          'is_api': true,
+          'room_id': widget.idRoom.toString(),
+          'table_id': widget.currentTable?.roomTableId.toString() ?? '',
+          'order_id': widget.currentTable?.orderId,
+          'food_id': foodID
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print(" DATA ADD FOOD TO TABLE $data");
+      final message = data['message'];
+
+      try {
+        if (data['status'] == 200) {
+          showSnackBarTopCustom(
+              context: navigatorKey.currentContext,
+              mess: message['title'],
+              color: Colors.green);
+        } else {
+          print("ERROR ADD FOOD TO TABLE 1");
+          showSnackBarTopCustom(
+              context: navigatorKey.currentContext,
+              mess: message['text'],
+              color: Colors.red);
+        }
+      } catch (error) {
+        print("ERROR ADD FOOD TO TABLE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR ADD FOOD TO TABLE 3 $error");
+    }
+    refeshHomePage();
+    getDetailFoodTable();
+  }
+
+  void minusQuantytiFoodToTable({required int foodID}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$removeFoodTable'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': widget.role,
+          'shop_id': widget.shopID,
+          'is_api': true,
+          'room_id': widget.idRoom.toString(),
+          'table_id': widget.currentTable?.roomTableId.toString() ?? '',
+          'order_id': widget.currentTable?.orderId,
+          'food_id': foodID
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print(" DATA ADD FOOD TO TABLE $data");
+      final message = data['message'];
+
+      try {
+        if (data['status'] == 200) {
+          showSnackBarTopCustom(
+              context: navigatorKey.currentContext,
+              mess: message['title'],
+              color: Colors.green);
+        } else {
+          print("ERROR ADD FOOD TO TABLE 1");
+          showSnackBarTopCustom(
+              context: navigatorKey.currentContext,
+              mess: message['text'],
+              color: Colors.red);
+        }
+      } catch (error) {
+        print("ERROR ADD FOOD TO TABLE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR ADD FOOD TO TABLE 3 $error");
+    }
+    refeshHomePage();
+    getDetailFoodTable();
+  }
+
+  void updateQuantytiFoodToTable(
+      {required int foodID, required String quantityFood}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$updateQuantityFoodTable'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': widget.role,
+          'shop_id': widget.shopID,
+          'is_api': true,
+          'room_id': widget.idRoom.toString(),
+          'table_id': widget.currentTable?.roomTableId.toString() ?? '',
+          'order_id': widget.currentTable?.orderId,
+          'food_id': foodID,
+          'value': quantityFood
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print(" DATA ADD FOOD TO TABLE $data");
+      final message = data['message'];
+
+      try {
+        if (data['status'] == 200) {
+          showSnackBarTopCustom(
+              context: navigatorKey.currentContext,
+              mess: message['title'],
+              color: Colors.green);
+        } else {
+          print("ERROR ADD FOOD TO TABLE 1");
+          showSnackBarTopCustom(
+              context: navigatorKey.currentContext,
+              mess: message['text'],
+              color: Colors.red);
+        }
+      } catch (error) {
+        print("ERROR ADD FOOD TO TABLE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR ADD FOOD TO TABLE 3 $error");
+    }
+    refeshHomePage();
+    getDetailFoodTable();
+  }
+
+  void refeshHomePage() async {
     BlocProvider.of<ListRoomBloc>(context).add(
       GetListRoom(
           client: widget.role,
@@ -190,17 +499,14 @@ class _BookingTableDialogState extends State<BookingTableDialog>
         if (state.tableStatus == TableStatus.succes) {
           List<String> foodKindOfShop =
               StorageUtils.instance.getStringList(key: 'food_kinds_list') ?? [];
+          List filterProducts = listFoodTableCurrent.where((product) {
+            final foodTitle = product.foodName?.toLowerCase() ?? '';
+            final input = query.toLowerCase();
 
-          var listGetFood = state.foodTableDataModel?.foods?.data;
-          List filterProducts = listGetFood?.where((product) {
-                final foodTitle = product.foodName?.toLowerCase() ?? '';
-                final input = query.toLowerCase();
-
-                return (selectedCategoriesIndex.isEmpty ||
-                        selectedCategoriesIndex.contains(product.foodKind)) &&
-                    foodTitle.contains(input);
-              }).toList() ??
-              [];
+            return (selectedCategoriesIndex.isEmpty ||
+                    selectedCategoriesIndex.contains(product.foodKind)) &&
+                foodTitle.contains(input);
+          }).toList();
           listAllCategoriesFood =
               foodKindOfShop; //add data category food vao mang nay de lay index category
 
@@ -224,395 +530,425 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                   table.roomTableId != widget.currentTable?.roomTableId))
               .toList();
 
-          return BlocBuilder<TableCancleBloc, TableCancleState>(
-              builder: (contextCancleTable, stateCancleTable) {
-            return AlertDialog(
-                contentPadding: const EdgeInsets.all(0),
-                surfaceTintColor: Colors.white,
-                backgroundColor: Colors.white,
-                content: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                        child: SingleChildScrollView(
-                            child: Padding(
-                      padding: EdgeInsets.all(20.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          TextApp(
-                            text:
-                                "Quản lý bàn đặt: ${widget.currentTable?.tableName.toString() ?? ''}",
-                            fontsize: 18.sp,
-                            color: blueText,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          space15H,
-                          SizedBox(
-                            height: 50,
-                            child: TabBar(
-                                onTap: (index) {
-                                  if (index == 0) {
-                                    BlocProvider.of<TableBloc>(context)
-                                        .add(GetTableInfor(
-                                      client: widget.role,
-                                      shopId: widget.shopID,
-                                      roomId: widget.idRoom.toString(),
-                                      tableId: widget.currentTable?.roomTableId
-                                              .toString() ??
-                                          '',
-                                    ));
-                                  } else if (index == 1) {
-                                    BlocProvider.of<TableBloc>(context).add(
-                                        GetTableFoods(
-                                            client: widget.role,
-                                            shopId: widget.shopID,
-                                            roomId: widget.idRoom.toString(),
-                                            tableId: widget
-                                                    .currentTable?.roomTableId
-                                                    .toString() ??
-                                                '',
-                                            limit: 1000.toString(),
-                                            page: 1.toString()));
-                                  }
-                                },
-                                labelPadding:
-                                    EdgeInsets.only(left: 20.w, right: 20.w),
-                                labelColor: Colors.black,
-                                unselectedLabelColor:
-                                    Colors.black.withOpacity(0.5),
-                                labelStyle: const TextStyle(color: Colors.red),
-                                controller: _tabController,
-                                isScrollable: true,
-                                indicatorSize: TabBarIndicatorSize.label,
-                                indicator: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                    8.r,
-                                  ),
-                                  color: Colors.blue,
-                                  border: Border.all(color: Colors.blue),
+          return AlertDialog(
+              contentPadding: const EdgeInsets.all(0),
+              surfaceTintColor: Colors.white,
+              backgroundColor: Colors.white,
+              content: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                      child: SingleChildScrollView(
+                          child: Padding(
+                    padding: EdgeInsets.all(20.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        TextApp(
+                          text:
+                              "Quản lý bàn đặt: ${widget.currentTable?.tableName.toString() ?? ''}",
+                          fontsize: 18.sp,
+                          color: blueText,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        space15H,
+                        SizedBox(
+                          height: 50,
+                          child: TabBar(
+                              onTap: (index) {
+                                if (index == 0) {
+                                  BlocProvider.of<TableBloc>(context)
+                                      .add(GetTableInfor(
+                                    client: widget.role,
+                                    shopId: widget.shopID,
+                                    roomId: widget.idRoom.toString(),
+                                    tableId: widget.currentTable?.roomTableId
+                                            .toString() ??
+                                        '',
+                                  ));
+                                } else if (index == 1) {
+                                  // getListFoodTable(page: 1);
+                                  BlocProvider.of<TableBloc>(context).add(
+                                      GetTableFoods(
+                                          client: widget.role,
+                                          shopId: widget.shopID,
+                                          roomId: widget.idRoom,
+                                          tableId:
+                                              widget.currentTable?.roomTableId,
+                                          limit: 15,
+                                          page: 1));
+                                  getDetailFoodTable();
+                                }
+                                // else if (index == 2) {
+                                //   // getListFoodTable(page: 1);
+                                //   BlocProvider.of<TableBloc>(context).add(
+                                //       GetTableFoods(
+                                //           client: widget.role,
+                                //           shopId: widget.shopID,
+                                //           roomId: widget.idRoom,
+                                //           tableId:
+                                //               widget.currentTable?.roomTableId,
+                                //           limit: 15,
+                                //           page: 1));
+                                //   getDetailFoodTable();
+                                // }
+                              },
+                              tabAlignment: TabAlignment.center,
+                              labelPadding:
+                                  EdgeInsets.only(left: 20.w, right: 20.w),
+                              labelColor: Colors.black,
+                              unselectedLabelColor:
+                                  Colors.black.withOpacity(0.5),
+                              labelStyle: const TextStyle(color: Colors.red),
+                              controller: _tabController,
+                              isScrollable: true,
+                              indicatorSize: TabBarIndicatorSize.label,
+                              indicator: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                  8.r,
                                 ),
-                                tabs: [
-                                  CustomTab(
-                                      text: "Đặt bàn",
-                                      icon: Icons.group_add_outlined),
-                                  CustomTab(
+                                color: Colors.blue,
+                                border: Border.all(color: Colors.blue),
+                              ),
+                              tabs: [
+                                CustomTab(
+                                    text: "Đặt bàn",
+                                    icon: Icons.group_add_outlined),
+                                Visibility(
+                                  visible: state.tableModel?.booking != null,
+                                  child: CustomTab(
                                       text: "Đặt món",
                                       icon: Icons.dinner_dining_outlined),
-                                  Visibility(
-                                    visible: state.tableModel?.booking != null,
-                                    child: CustomTab(
-                                        text: "Huỷ bàn",
-                                        icon: Icons.group_add_outlined),
-                                  )
-                                ]),
-                          ),
-                          SizedBox(
-                            height: 20.h,
-                          ),
-                          SizedBox(
-                            width: 1.sw,
-                            height: 650.h,
-                            child: TabBarView(
-                              controller: _tabController,
-                              children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                        child: ListView(
-                                      shrinkWrap: true,
-                                      children: [
-                                        TextApp(
-                                          text: " Thời gian kết thúc",
+                                ),
+                                Visibility(
+                                  visible: state.tableModel?.booking != null,
+                                  child: CustomTab(
+                                      text: "Huỷ bàn",
+                                      icon: Icons.group_add_outlined),
+                                )
+                              ]),
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        SizedBox(
+                          width: 1.sw,
+                          height: 650.h,
+                          child: TabBarView(
+                            controller: _tabController,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                      child: ListView(
+                                    shrinkWrap: true,
+                                    children: [
+                                      Visibility(
+                                        visible:
+                                            state.tableModel?.booking == null,
+                                        child: TextApp(
+                                          textAlign: TextAlign.center,
+                                          text: "Bàn chưa có thông tin",
+                                          fontsize: 14.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                      space10H,
+                                      Visibility(
+                                        visible:
+                                            state.tableModel?.booking == null,
+                                        child: TextApp(
+                                          textAlign: TextAlign.center,
+                                          text: "Mở bàn để đặt món",
                                           fontsize: 12.sp,
                                           fontWeight: FontWeight.bold,
-                                          color: blueText,
+                                          color: red,
                                         ),
-                                        SizedBox(
-                                          height: 10.h,
-                                        ),
-                                        TextField(
-                                          readOnly: true,
-                                          controller: _dateStartController,
-                                          onTap: pickDateAndTime,
-                                          cursorColor: const Color.fromRGBO(
-                                              73, 80, 87, 1),
-                                          decoration: InputDecoration(
-                                              fillColor: const Color.fromARGB(
-                                                  255, 226, 104, 159),
-                                              focusedBorder:
-                                                  const OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Color.fromRGBO(
-                                                        214, 51, 123, 0.6),
-                                                    width: 2.0),
-                                              ),
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8.r),
-                                              ),
-                                              isDense: true,
-                                              contentPadding: EdgeInsets.all(
-                                                  1.sw > 600 ? 20.w : 15.w)),
-                                        ),
-                                        ////////
-                                        SizedBox(
-                                          height: 30.h,
-                                        ),
-                                        //////
-                                        TextApp(
-                                          text: 'Tên khách hàng',
-                                          fontsize: 12.sp,
-                                          fontWeight: FontWeight.bold,
-                                          color: blueText,
-                                        ),
+                                      ),
+                                      space10H,
 
-                                        SizedBox(
-                                          height: 10.h,
-                                        ),
-                                        TextField(
-                                          controller: customerNameController,
-                                          cursorColor: const Color.fromRGBO(
-                                              73, 80, 87, 1),
-                                          decoration: InputDecoration(
-                                              fillColor: const Color.fromARGB(
-                                                  255, 226, 104, 159),
-                                              focusedBorder:
-                                                  const OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Color.fromRGBO(
-                                                        214, 51, 123, 0.6),
-                                                    width: 2.0),
-                                              ),
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8.r),
-                                              ),
-                                              hintText: 'Tên khách hàng',
-                                              isDense: true,
-                                              contentPadding: EdgeInsets.all(
-                                                  1.sw > 600 ? 20.w : 15.w)),
-                                        ),
-                                        /////
-                                        SizedBox(
-                                          height: 30.h,
-                                        ),
-                                        ////
-                                        TextApp(
-                                          text: " Số điện thoại",
-                                          fontsize: 12.sp,
-                                          fontWeight: FontWeight.bold,
-                                          color: blueText,
-                                        ),
-                                        SizedBox(
-                                          height: 10.h,
-                                        ),
-                                        TextField(
-                                          controller: customerPhoneController,
-                                          cursorColor: const Color.fromRGBO(
-                                              73, 80, 87, 1),
-                                          decoration: InputDecoration(
-                                              fillColor: const Color.fromARGB(
-                                                  255, 226, 104, 159),
-                                              focusedBorder:
-                                                  const OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Color.fromRGBO(
-                                                        214, 51, 123, 0.6),
-                                                    width: 2.0),
-                                              ),
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8.r),
-                                              ),
-                                              hintText: 'Số điện thoại',
-                                              isDense: true,
-                                              contentPadding: EdgeInsets.all(
-                                                  1.sw > 600 ? 20.w : 15.w)),
-                                        ),
-                                        /////
-                                        SizedBox(
-                                          height: 30.h,
-                                        ),
-                                        ////
-
-                                        TextApp(
-                                          text:
-                                              "Các bàn đang còn trống của phòng",
-                                          fontsize: 12.sp,
-                                          fontWeight: FontWeight.normal,
-                                          color: blueText,
-                                        ),
-
-                                        ////
-                                        TextApp(
-                                          text: "Ghép bàn",
-                                          fontsize: 12.sp,
-                                          fontWeight: FontWeight.bold,
-                                          color: blueText,
-                                        ),
-                                        SizedBox(
-                                          height: 10.h,
-                                        ),
-                                        Wrap(
-                                          children: [
-                                            DropdownSearch.multiSelection(
-                                              // dropdownBuilder: (context, selectedItems) => ,
-                                              key: _popupCustomValidationKey,
-                                              itemAsString: (item) =>
-                                                  item.tableName,
-                                              items: (listTableNoBooking)
-                                                  as List<Tables>,
-                                              selectedItems:
-                                                  listTableHaveSameOrderID ??
-                                                      [],
-                                              onChanged: (listSelectedTable) {
-                                                setState(() {
-                                                  listBanDaGhep =
-                                                      listSelectedTable;
-                                                });
-                                              },
-                                              popupProps:
-                                                  PopupPropsMultiSelection
-                                                      .dialog(
-                                                          title: Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 15.w, top: 10.h),
-                                                child: TextApp(
-                                                  text: "Chọn bàn để ghép",
-                                                  fontsize: 16.sp,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: blueText,
-                                                ),
-                                              )),
+                                      TextApp(
+                                        text: " Thời gian kết thúc",
+                                        fontsize: 12.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: blueText,
+                                      ),
+                                      space10H,
+                                      TextField(
+                                        readOnly: true,
+                                        controller: _dateStartController,
+                                        onTap: pickDateAndTime,
+                                        cursorColor:
+                                            const Color.fromRGBO(73, 80, 87, 1),
+                                        decoration: InputDecoration(
+                                            fillColor: const Color.fromARGB(
+                                                255, 226, 104, 159),
+                                            focusedBorder:
+                                                const OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Color.fromRGBO(
+                                                      214, 51, 123, 0.6),
+                                                  width: 2.0),
                                             ),
-                                          ],
-                                        ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            isDense: true,
+                                            contentPadding: EdgeInsets.all(
+                                                1.sw > 600 ? 20.w : 15.w)),
+                                      ),
+                                      ////////
+                                      SizedBox(
+                                        height: 30.h,
+                                      ),
+                                      //////
+                                      TextApp(
+                                        text: 'Tên khách hàng',
+                                        fontsize: 12.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: blueText,
+                                      ),
 
-                                        SizedBox(
-                                          height: 30.h,
-                                        ),
-                                        TextApp(
-                                          text: "Ghi chú",
-                                          fontsize: 12.sp,
-                                          fontWeight: FontWeight.bold,
-                                          color: blueText,
-                                        ),
-                                        SizedBox(
-                                          height: 10.h,
-                                        ),
-                                        TextField(
-                                          controller: noteController,
-                                          keyboardType: TextInputType.multiline,
-                                          minLines: 1,
-                                          maxLines: 3,
-                                          cursorColor: const Color.fromRGBO(
-                                              73, 80, 87, 1),
-                                          decoration: InputDecoration(
-                                              fillColor: const Color.fromARGB(
-                                                  255, 226, 104, 159),
-                                              focusedBorder:
-                                                  const OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Color.fromRGBO(
-                                                        214, 51, 123, 0.6),
-                                                    width: 2.0),
-                                              ),
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8.r),
-                                              ),
-                                              hintText: '',
-                                              isDense: true,
-                                              contentPadding: EdgeInsets.only(
-                                                  bottom:
-                                                      1.sw > 600 ? 50.w : 40.w,
-                                                  top: 0,
-                                                  left:
-                                                      1.sw > 600 ? 20.w : 15.w,
-                                                  right: 1.sw > 600
-                                                      ? 20.w
-                                                      : 15.w)),
-                                        ),
-                                      ],
-                                    )),
-                                    Container(
-                                      width: 1.sw,
-                                      height: 80,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                      TextField(
+                                        controller: customerNameController,
+                                        cursorColor:
+                                            const Color.fromRGBO(73, 80, 87, 1),
+                                        decoration: InputDecoration(
+                                            fillColor: const Color.fromARGB(
+                                                255, 226, 104, 159),
+                                            focusedBorder:
+                                                const OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Color.fromRGBO(
+                                                      214, 51, 123, 0.6),
+                                                  width: 2.0),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            hintText: 'Tên khách hàng',
+                                            isDense: true,
+                                            contentPadding: EdgeInsets.all(
+                                                1.sw > 600 ? 20.w : 15.w)),
+                                      ),
+                                      /////
+                                      SizedBox(
+                                        height: 30.h,
+                                      ),
+                                      ////
+                                      TextApp(
+                                        text: " Số điện thoại",
+                                        fontsize: 12.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: blueText,
+                                      ),
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                      TextField(
+                                        controller: customerPhoneController,
+                                        cursorColor:
+                                            const Color.fromRGBO(73, 80, 87, 1),
+                                        decoration: InputDecoration(
+                                            fillColor: const Color.fromARGB(
+                                                255, 226, 104, 159),
+                                            focusedBorder:
+                                                const OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Color.fromRGBO(
+                                                      214, 51, 123, 0.6),
+                                                  width: 2.0),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            hintText: 'Số điện thoại',
+                                            isDense: true,
+                                            contentPadding: EdgeInsets.all(
+                                                1.sw > 600 ? 20.w : 15.w)),
+                                      ),
+                                      /////
+                                      SizedBox(
+                                        height: 30.h,
+                                      ),
+                                      ////
+
+                                      TextApp(
+                                        text:
+                                            "Các bàn đang còn trống của phòng",
+                                        fontsize: 12.sp,
+                                        fontWeight: FontWeight.normal,
+                                        color: blueText,
+                                      ),
+
+                                      ////
+                                      TextApp(
+                                        text: "Ghép bàn",
+                                        fontsize: 12.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: blueText,
+                                      ),
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                      Wrap(
                                         children: [
-                                          ButtonApp(
-                                            event: () {
-                                              Navigator.of(context).pop();
+                                          DropdownSearch.multiSelection(
+                                            // dropdownBuilder: (context, selectedItems) => ,
+                                            key: _popupCustomValidationKey,
+                                            itemAsString: (item) =>
+                                                item.tableName,
+                                            items: (listTableNoBooking)
+                                                as List<Tables>,
+                                            selectedItems:
+                                                listTableHaveSameOrderID ?? [],
+                                            onChanged: (listSelectedTable) {
+                                              setState(() {
+                                                listBanDaGhep =
+                                                    listSelectedTable;
+                                              });
                                             },
-                                            text: "Đóng",
-                                            colorText: Colors.white,
-                                            backgroundColor: Color.fromRGBO(
-                                                131, 146, 171, 1),
-                                            outlineColor: Color.fromRGBO(
-                                                131, 146, 171, 1),
-                                          ),
-                                          SizedBox(
-                                            width: 20.w,
-                                          ),
-                                          ButtonApp(
-                                            event: () {
-                                              //Save infor table
-
-                                              BlocProvider.of<
-                                                          TableSaveInforBloc>(
-                                                      context)
-                                                  .add(SaveTableInfor(
-                                                client: "staff",
-                                                shopId: getStaffShopID,
-                                                roomId:
-                                                    widget.idRoom.toString(),
-                                                tableId: widget
-                                                    .currentTable!.roomTableId
-                                                    .toString(),
-                                                clientName:
-                                                    customerNameController.text,
-                                                clientPhone:
-                                                    customerPhoneController
-                                                        .text,
-                                                note: noteController.text,
-                                                endDate:
-                                                    _dateStartController.text,
-                                                tables: listBanDaGhep
-                                                        .map((e) =>
-                                                            e.roomTableId)
-                                                        .toList() ??
-                                                    [],
-                                              ));
-
-                                              ///check dieu kien succes cho nay
-                                              Navigator.of(context).pop();
-                                              showUpdateDataSuccesDialog();
-                                              widget.eventSaveButton();
-                                            },
-                                            text: save,
-                                            colorText: Colors.white,
-                                            backgroundColor:
-                                                const Color.fromRGBO(
-                                                    23, 193, 232, 1),
-                                            outlineColor: const Color.fromRGBO(
-                                                23, 193, 232, 1),
-                                          ),
-                                          SizedBox(
-                                            width: 20.w,
+                                            popupProps:
+                                                PopupPropsMultiSelection.dialog(
+                                                    title: Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 15.w, top: 10.h),
+                                              child: TextApp(
+                                                text: "Chọn bàn để ghép",
+                                                fontsize: 16.sp,
+                                                fontWeight: FontWeight.bold,
+                                                color: blueText,
+                                              ),
+                                            )),
                                           ),
                                         ],
                                       ),
-                                    ),
-                                  ],
-                                ),
 
-                                ////Tab2
-                                Column(
+                                      SizedBox(
+                                        height: 30.h,
+                                      ),
+                                      TextApp(
+                                        text: "Ghi chú",
+                                        fontsize: 12.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: blueText,
+                                      ),
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                      TextField(
+                                        controller: noteController,
+                                        keyboardType: TextInputType.multiline,
+                                        minLines: 1,
+                                        maxLines: 3,
+                                        cursorColor:
+                                            const Color.fromRGBO(73, 80, 87, 1),
+                                        decoration: InputDecoration(
+                                            fillColor: const Color.fromARGB(
+                                                255, 226, 104, 159),
+                                            focusedBorder:
+                                                const OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Color.fromRGBO(
+                                                      214, 51, 123, 0.6),
+                                                  width: 2.0),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            hintText: '',
+                                            isDense: true,
+                                            contentPadding: EdgeInsets.only(
+                                                bottom:
+                                                    1.sw > 600 ? 50.w : 40.w,
+                                                top: 0,
+                                                left: 1.sw > 600 ? 20.w : 15.w,
+                                                right:
+                                                    1.sw > 600 ? 20.w : 15.w)),
+                                      ),
+                                    ],
+                                  )),
+                                  Container(
+                                    width: 1.sw,
+                                    height: 80,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        ButtonApp(
+                                          event: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          text: "Đóng",
+                                          colorText: Colors.white,
+                                          backgroundColor:
+                                              Color.fromRGBO(131, 146, 171, 1),
+                                          outlineColor:
+                                              Color.fromRGBO(131, 146, 171, 1),
+                                        ),
+                                        SizedBox(
+                                          width: 20.w,
+                                        ),
+                                        ButtonApp(
+                                          event: () {
+                                            //Save infor table
+
+                                            BlocProvider.of<TableSaveInforBloc>(
+                                                    context)
+                                                .add(SaveTableInfor(
+                                              client: "staff",
+                                              shopId: getStaffShopID,
+                                              roomId: widget.idRoom.toString(),
+                                              tableId: widget
+                                                  .currentTable!.roomTableId
+                                                  .toString(),
+                                              clientName:
+                                                  customerNameController.text,
+                                              clientPhone:
+                                                  customerPhoneController.text,
+                                              note: noteController.text,
+                                              endDate:
+                                                  _dateStartController.text,
+                                              tables: listBanDaGhep
+                                                      .map((e) => e.roomTableId)
+                                                      .toList() ??
+                                                  [],
+                                            ));
+
+                                            ///check dieu kien succes cho nay
+                                            Navigator.of(context).pop();
+                                            showUpdateDataSuccesDialog();
+                                            widget.eventSaveButton();
+                                          },
+                                          text: save,
+                                          colorText: Colors.white,
+                                          backgroundColor: const Color.fromRGBO(
+                                              23, 193, 232, 1),
+                                          outlineColor: const Color.fromRGBO(
+                                              23, 193, 232, 1),
+                                        ),
+                                        SizedBox(
+                                          width: 20.w,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              ////Tab2
+                              Visibility(
+                                visible: state.tableModel?.booking != null,
+                                child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -691,6 +1027,15 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                             selectedCategoriesIndex
                                                                 .add(
                                                                     index); //thêm index category vào mảng
+                                                            getListFoodTable(
+                                                              page: 1,
+                                                              keywords: query,
+                                                              foodKinds:
+                                                                  selectedCategoriesIndex
+                                                                          .isEmpty
+                                                                      ? null
+                                                                      : selectedCategoriesIndex,
+                                                            );
                                                           } else {
                                                             selectedCategories
                                                                 .remove(
@@ -702,6 +1047,15 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                             selectedCategoriesIndex
                                                                 .remove(
                                                                     index); //xoá index category vào mảng
+                                                            getListFoodTable(
+                                                              page: 1,
+                                                              keywords: query,
+                                                              foodKinds:
+                                                                  selectedCategoriesIndex
+                                                                          .isEmpty
+                                                                      ? null
+                                                                      : selectedCategoriesIndex,
+                                                            );
                                                           }
                                                         });
                                                       },
@@ -785,11 +1139,8 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   TextApp(
-                                                    text: state
-                                                            .foodTableDataModel
-                                                            ?.countOrderFoods
-                                                            .toString() ??
-                                                        "0",
+                                                    text:
+                                                        currentCart.toString(),
                                                     color: Colors.white,
                                                     fontsize: 14.sp,
                                                     fontWeight: FontWeight.bold,
@@ -812,355 +1163,293 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                 scrollListFoodController,
                                             itemCount:
                                                 // itemNe.length + 1,
-                                                filterProducts.length,
+                                                filterProducts.length + 1,
                                             itemBuilder: (context, index) {
-                                              _foodQuantityController
-                                                  .add(TextEditingController());
-                                              _foodQuantityController[index]
-                                                      .text =
-                                                  filterProducts[index]
-                                                      .quantityFood
-                                                      .toString();
-                                              void addFodd() {
-                                                BlocProvider.of<TableBloc>(
-                                                        context)
-                                                    .add(AddFoodToTable(
-                                                  client: widget.role,
-                                                  shopId: widget.shopID,
-                                                  roomId:
-                                                      widget.idRoom.toString(),
-                                                  tableId: widget.currentTable
-                                                          ?.roomTableId
-                                                          .toString() ??
-                                                      '',
-                                                  orderId: widget
-                                                      .currentTable?.orderId,
-                                                  foodId: filterProducts[index]
-                                                      .foodId
-                                                      .toString(),
-                                                ));
-                                                BlocProvider.of<TableBloc>(context)
-                                                    .add(GetTableFoods(
-                                                        client: widget.role,
-                                                        shopId: widget.shopID,
-                                                        roomId: widget.idRoom
-                                                            .toString(),
-                                                        tableId: widget
-                                                                .currentTable
-                                                                ?.roomTableId
-                                                                .toString() ??
-                                                            '',
-                                                        limit: 1000.toString(),
-                                                        page: 1.toString()));
-                                                refeshHomePage();
-                                              }
+                                              if (index <
+                                                  filterProducts.length) {
+                                                log(filterProducts[0]
+                                                    .quantityFood
+                                                    .toString());
 
-                                              void updateQuantytiFood() {
-                                                BlocProvider.of<TableBloc>(context)
-                                                    .add(UpdateQuantytiFoodToTable(
-                                                        client: widget.role,
-                                                        shopId: widget.shopID,
-                                                        roomId: widget.idRoom
-                                                            .toString(),
-                                                        tableId: widget
-                                                                .currentTable
-                                                                ?.roomTableId
-                                                                .toString() ??
-                                                            '',
-                                                        orderId: widget
-                                                            .currentTable
-                                                            ?.orderId,
-                                                        foodId: filterProducts[
-                                                                index]
-                                                            .foodId
-                                                            .toString(),
-                                                        value:
-                                                            _foodQuantityController[
-                                                                    index]
-                                                                .text));
-                                                BlocProvider.of<TableBloc>(context)
-                                                    .add(GetTableFoods(
-                                                        client: widget.role,
-                                                        shopId: widget.shopID,
-                                                        roomId: widget.idRoom
-                                                            .toString(),
-                                                        tableId: widget
-                                                                .currentTable
-                                                                ?.roomTableId
-                                                                .toString() ??
-                                                            '',
-                                                        limit: 1000.toString(),
-                                                        page: 1.toString()));
-                                                refeshHomePage();
-                                              }
+                                                _foodQuantityController.add(
+                                                    TextEditingController());
+                                                _foodQuantityController[index]
+                                                        .text =
+                                                    filterProducts[index]
+                                                        .quantityFood
+                                                        .toString();
 
-                                              void removeFood() {
-                                                BlocProvider.of<TableBloc>(
-                                                        context)
-                                                    .add(RemoveFoodToTable(
-                                                  client: widget.role,
-                                                  shopId: widget.shopID,
-                                                  roomId:
-                                                      widget.idRoom.toString(),
-                                                  tableId: widget.currentTable
-                                                          ?.roomTableId
-                                                          .toString() ??
-                                                      '',
-                                                  orderId: widget
-                                                      .currentTable?.orderId,
-                                                  foodId: filterProducts[index]
-                                                      .foodId
-                                                      .toString(),
-                                                ));
+                                                // void updateQuantytiFood() {
+                                                //   BlocProvider.of<TableBloc>(context).add(
+                                                //       UpdateQuantytiFoodToTable(
+                                                //           client: widget.role,
+                                                //           shopId: widget.shopID,
+                                                //           roomId: widget.idRoom
+                                                //               .toString(),
+                                                //           tableId: widget
+                                                //                   .currentTable
+                                                //                   ?.roomTableId
+                                                //                   .toString() ??
+                                                //               '',
+                                                //           orderId: widget
+                                                //               .currentTable
+                                                //               ?.orderId,
+                                                //           foodId:
+                                                //               filterProducts[
+                                                //                       index]
+                                                //                   .foodId
+                                                //                   .toString(),
+                                                //           value:
+                                                //               _foodQuantityController[
+                                                //                       index]
+                                                //                   .text));
+                                                //   getListFoodTable(
+                                                //     page: 1,
+                                                //     keywords: query,
+                                                //     foodKinds:
+                                                //         selectedCategoriesIndex
+                                                //                 .isEmpty
+                                                //             ? null
+                                                //             : selectedCategoriesIndex,
+                                                //   );
 
-                                                BlocProvider.of<TableBloc>(context)
-                                                    .add(GetTableFoods(
-                                                        client: widget.role,
-                                                        shopId: widget.shopID,
-                                                        roomId: widget.idRoom
-                                                            .toString(),
-                                                        tableId: widget
-                                                                .currentTable
-                                                                ?.roomTableId
-                                                                .toString() ??
-                                                            '',
-                                                        limit: 1000.toString(),
-                                                        page: 1.toString()));
-                                                refeshHomePage();
-                                              }
+                                                //   refeshHomePage();
+                                                // }
 
-                                              var imagePath1 =
-                                                  filterProducts[index]
-                                                      ?.foodImages
-                                                      .replaceAll('["', '');
-                                              var imagePath2 = imagePath1
-                                                  .replaceAll('"]', '');
+                                                var imagePath1 =
+                                                    filterProducts[index]
+                                                        ?.foodImages
+                                                        .replaceAll('["', '');
+                                                var imagePath2 = imagePath1
+                                                    .replaceAll('"]', '');
 
-                                              return Card(
-                                                elevation: 8.0,
-                                                margin: const EdgeInsets.all(8),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          15.r),
-                                                ),
-                                                child: Container(
-                                                    width: 1.sw,
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                    15.r)),
-                                                    child: Column(
-                                                      children: [
-                                                        space15H,
-                                                        SizedBox(
-                                                            width: 1.sw,
-                                                            height: 160.w,
-                                                            child: ClipRRect(
-                                                              borderRadius: BorderRadius.only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          15.r),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          15.r)),
-                                                              child:
-                                                                  Image.network(
-                                                                httpImage +
-                                                                    imagePath2,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              ),
-                                                            )),
-                                                        space10H,
-                                                        Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            TextApp(
+                                                return Card(
+                                                  elevation: 8.0,
+                                                  margin:
+                                                      const EdgeInsets.all(8),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15.r),
+                                                  ),
+                                                  child: Container(
+                                                      width: 1.sw,
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      15.r)),
+                                                      child: Column(
+                                                        children: [
+                                                          space15H,
+                                                          SizedBox(
+                                                              width: 1.sw,
+                                                              height: 160.w,
+                                                              child: ClipRRect(
+                                                                borderRadius: BorderRadius.only(
+                                                                    topLeft: Radius
+                                                                        .circular(15
+                                                                            .r),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            15.r)),
+                                                                child: Image
+                                                                    .network(
+                                                                  httpImage +
+                                                                      imagePath2,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                              )),
+                                                          space10H,
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              TextApp(
+                                                                  text: filterProducts[
+                                                                          index]
+                                                                      .foodName),
+                                                              TextApp(
                                                                 text: filterProducts[
                                                                         index]
-                                                                    .foodName),
-                                                            TextApp(
-                                                              text: filterProducts[
-                                                                      index]
-                                                                  .foodPrice
-                                                                  .toString(),
-                                                              fontsize: 20.sp,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        const Divider(),
-                                                        Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  20.w),
-                                                          child: Container(
-                                                            width: 1.sw,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              borderRadius: BorderRadius
-                                                                  .all(Radius
-                                                                      .circular(
-                                                                          8.r)),
-                                                            ),
-                                                            child: SizedBox(
-                                                              width: 250.w,
-                                                              height: 30.h,
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .stretch,
-                                                                children: [
-                                                                  InkWell(
-                                                                    onTap: () {
-                                                                      removeFood();
-                                                                    },
-                                                                    child:
-                                                                        Container(
-                                                                      width:
-                                                                          70.w,
-                                                                      height:
-                                                                          35.w,
-                                                                      decoration: BoxDecoration(
-                                                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(8.r), bottomLeft: Radius.circular(8.r)),
-                                                                          gradient: const LinearGradient(
-                                                                            begin:
-                                                                                Alignment.topRight,
-                                                                            end:
-                                                                                Alignment.bottomLeft,
-                                                                            colors: [
-                                                                              Color.fromRGBO(33, 82, 255, 1),
-                                                                              Color.fromRGBO(33, 212, 253, 1)
-                                                                            ],
-                                                                          )),
-                                                                      child:
-                                                                          Center(
-                                                                        child:
-                                                                            TextApp(
-                                                                          text:
-                                                                              "-",
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          color:
-                                                                              Colors.white,
-                                                                          fontsize:
-                                                                              18.sp,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Flexible(
-                                                                      fit: FlexFit
-                                                                          .tight,
+                                                                    .foodPrice
+                                                                    .toString(),
+                                                                fontsize: 20.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          const Divider(),
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    20.w),
+                                                            child: Container(
+                                                              width: 1.sw,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius: BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            8.r)),
+                                                              ),
+                                                              child: SizedBox(
+                                                                width: 250.w,
+                                                                height: 30.h,
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .stretch,
+                                                                  children: [
+                                                                    InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        minusQuantytiFoodToTable(
+                                                                            foodID:
+                                                                                filterProducts[index].foodId);
+                                                                      },
                                                                       child:
                                                                           Container(
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          border: Border.all(
-                                                                              width: 0.4,
-                                                                              color: Colors.grey),
-                                                                        ),
+                                                                        width:
+                                                                            70.w,
+                                                                        height:
+                                                                            35.w,
+                                                                        decoration: BoxDecoration(
+                                                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(8.r), bottomLeft: Radius.circular(8.r)),
+                                                                            gradient: const LinearGradient(
+                                                                              begin: Alignment.topRight,
+                                                                              end: Alignment.bottomLeft,
+                                                                              colors: [
+                                                                                Color.fromRGBO(33, 82, 255, 1),
+                                                                                Color.fromRGBO(33, 212, 253, 1)
+                                                                              ],
+                                                                            )),
                                                                         child:
                                                                             Center(
                                                                           child:
-                                                                              TextField(
+                                                                              TextApp(
+                                                                            text:
+                                                                                "-",
                                                                             textAlign:
                                                                                 TextAlign.center,
-                                                                            keyboardType:
-                                                                                TextInputType.number,
-                                                                            inputFormatters: <TextInputFormatter>[
-                                                                              FilteringTextInputFormatter.allow(RegExp("[0-9]")),
-                                                                            ], // Only numbers can be entered,
-                                                                            style:
-                                                                                TextStyle(fontSize: 12.sp, color: grey),
-                                                                            controller:
-                                                                                _foodQuantityController[index],
-
-                                                                            onTapOutside:
-                                                                                (event) {
-                                                                              print('onTapOutside');
-                                                                              FocusManager.instance.primaryFocus?.unfocus();
-                                                                              updateQuantytiFood();
-                                                                            },
-                                                                            cursorColor:
-                                                                                grey,
-                                                                            decoration:
-                                                                                const InputDecoration(
-                                                                              fillColor: Color.fromARGB(255, 226, 104, 159),
-                                                                              focusedBorder: OutlineInputBorder(
-                                                                                borderSide: BorderSide(color: Color.fromRGBO(214, 51, 123, 0.6), width: 2.0),
-                                                                              ),
-
-                                                                              hintText: '',
-                                                                              isDense: true, // Added this
-                                                                              contentPadding: EdgeInsets.all(8), // Added this
-                                                                            ),
+                                                                            color:
+                                                                                Colors.white,
+                                                                            fontsize:
+                                                                                18.sp,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
                                                                           ),
-                                                                        ),
-                                                                      )),
-                                                                  InkWell(
-                                                                    onTap: () {
-                                                                      addFodd();
-                                                                    },
-                                                                    child:
-                                                                        Container(
-                                                                      width:
-                                                                          70.w,
-                                                                      height:
-                                                                          35.w,
-                                                                      decoration: BoxDecoration(
-                                                                          borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), bottomRight: Radius.circular(8.r)),
-                                                                          gradient: const LinearGradient(
-                                                                            begin:
-                                                                                Alignment.topRight,
-                                                                            end:
-                                                                                Alignment.bottomLeft,
-                                                                            colors: [
-                                                                              Color.fromRGBO(33, 82, 255, 1),
-                                                                              Color.fromRGBO(33, 212, 253, 1)
-                                                                            ],
-                                                                          )),
-                                                                      child:
-                                                                          Center(
-                                                                        child:
-                                                                            TextApp(
-                                                                          text:
-                                                                              "+",
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          color:
-                                                                              Colors.white,
-                                                                          fontsize:
-                                                                              18.sp,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
                                                                         ),
                                                                       ),
                                                                     ),
-                                                                  )
-                                                                ],
+                                                                    Flexible(
+                                                                        fit: FlexFit
+                                                                            .tight,
+                                                                        child:
+                                                                            Container(
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            border:
+                                                                                Border.all(width: 0.4, color: Colors.grey),
+                                                                          ),
+                                                                          child:
+                                                                              Center(
+                                                                            child:
+                                                                                TextField(
+                                                                              textAlign: TextAlign.center,
+                                                                              keyboardType: TextInputType.number,
+                                                                              inputFormatters: <TextInputFormatter>[
+                                                                                FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                                                                              ], // Only numbers can be entered,
+                                                                              style: TextStyle(fontSize: 12.sp, color: grey),
+                                                                              controller: _foodQuantityController[index],
+
+                                                                              onTapOutside: (event) {
+                                                                                FocusManager.instance.primaryFocus?.unfocus();
+
+                                                                                updateQuantytiFoodToTable(foodID: filterProducts[index].foodId, quantityFood: _foodQuantityController[index].text);
+                                                                              },
+                                                                              cursorColor: grey,
+                                                                              decoration: const InputDecoration(
+                                                                                fillColor: Color.fromARGB(255, 226, 104, 159),
+                                                                                focusedBorder: OutlineInputBorder(
+                                                                                  borderSide: BorderSide(color: Color.fromRGBO(214, 51, 123, 0.6), width: 2.0),
+                                                                                ),
+
+                                                                                hintText: '',
+                                                                                isDense: true, // Added this
+                                                                                contentPadding: EdgeInsets.all(8), // Added this
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        )),
+                                                                    InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        plusQuantytiFoodToTable(
+                                                                            foodID:
+                                                                                filterProducts[index].foodId);
+                                                                      },
+                                                                      child:
+                                                                          Container(
+                                                                        width:
+                                                                            70.w,
+                                                                        height:
+                                                                            35.w,
+                                                                        decoration: BoxDecoration(
+                                                                            borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), bottomRight: Radius.circular(8.r)),
+                                                                            gradient: const LinearGradient(
+                                                                              begin: Alignment.topRight,
+                                                                              end: Alignment.bottomLeft,
+                                                                              colors: [
+                                                                                Color.fromRGBO(33, 82, 255, 1),
+                                                                                Color.fromRGBO(33, 212, 253, 1)
+                                                                              ],
+                                                                            )),
+                                                                        child:
+                                                                            Center(
+                                                                          child:
+                                                                              TextApp(
+                                                                            text:
+                                                                                "+",
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            color:
+                                                                                Colors.white,
+                                                                            fontsize:
+                                                                                18.sp,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        )
-                                                      ],
-                                                    )),
-                                              );
+                                                          )
+                                                        ],
+                                                      )),
+                                                );
+                                              } else {
+                                                return Center(
+                                                  child: hasMore
+                                                      ? CircularProgressIndicator()
+                                                      : Container(),
+                                                );
+                                              }
                                             })),
                                     Container(
                                       width: 1.sw,
@@ -1190,170 +1479,166 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                     ),
                                   ],
                                 ),
+                              ),
 
-                                ///Tab3
-                                Visibility(
-                                    visible: state.tableModel?.booking != null,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                              ///Tab3
+                              Visibility(
+                                  visible: state.tableModel?.booking != null,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          TextApp(
+                                            text: "Lý do hủy bàn",
+                                            fontsize: 12.sp,
+                                            fontWeight: FontWeight.bold,
+                                            color: blueText,
+                                          ),
+                                          SizedBox(
+                                            height: 10.h,
+                                          ),
+                                          Form(
+                                            key: _formCancleTable,
+                                            child: TextFormField(
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
+                                                  return canNotNull;
+                                                } else {
+                                                  return null;
+                                                }
+                                              },
+                                              controller:
+                                                  cancleTableReasonController,
+                                              keyboardType:
+                                                  TextInputType.multiline,
+                                              minLines: 1,
+                                              maxLines: 5,
+                                              cursorColor: const Color.fromRGBO(
+                                                  73, 80, 87, 1),
+                                              decoration: InputDecoration(
+                                                  fillColor: const Color
+                                                      .fromARGB(
+                                                      255, 226, 104, 159),
+                                                  focusedBorder:
+                                                      const OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color: Color.fromRGBO(
+                                                            214, 51, 123, 0.6),
+                                                        width: 2.0),
+                                                  ),
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8.r),
+                                                  ),
+                                                  hintText: '',
+                                                  isDense: true,
+                                                  contentPadding: EdgeInsets
+                                                      .only(
+                                                          bottom: 1.sw > 600
+                                                              ? 50.w
+                                                              : 40.w,
+                                                          top: 0,
+                                                          left: 1.sw >
+                                                                  600
+                                                              ? 20.w
+                                                              : 15.w,
+                                                          right: 1.sw > 600
+                                                              ? 20.w
+                                                              : 15.w)),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        width: 1.sw,
+                                        height: 80,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
                                           children: [
-                                            TextApp(
-                                              text: "Lý do hủy bàn",
-                                              fontsize: 12.sp,
-                                              fontWeight: FontWeight.bold,
-                                              color: blueText,
+                                            ButtonApp(
+                                              event: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              text: "Đóng",
+                                              colorText: Colors.white,
+                                              backgroundColor:
+                                                  const Color.fromRGBO(
+                                                      131, 146, 171, 1),
+                                              outlineColor: Color.fromRGBO(
+                                                  131, 146, 171, 1),
                                             ),
                                             SizedBox(
-                                              height: 10.h,
+                                              width: 20.w,
                                             ),
-                                            Form(
-                                              key: _formCancleTable,
-                                              child: TextFormField(
-                                                validator: (value) {
-                                                  if (value!.isEmpty) {
-                                                    return canNotNull;
-                                                  } else {
-                                                    return null;
-                                                  }
-                                                },
-                                                controller:
-                                                    cancleTableReasonController,
-                                                keyboardType:
-                                                    TextInputType.multiline,
-                                                minLines: 1,
-                                                maxLines: 5,
-                                                cursorColor:
-                                                    const Color.fromRGBO(
-                                                        73, 80, 87, 1),
-                                                decoration: InputDecoration(
-                                                    fillColor: const Color
-                                                        .fromARGB(
-                                                        255, 226, 104, 159),
-                                                    focusedBorder:
-                                                        const OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: Color.fromRGBO(
-                                                              214,
-                                                              51,
-                                                              123,
-                                                              0.6),
-                                                          width: 2.0),
-                                                    ),
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.r),
-                                                    ),
-                                                    hintText: '',
-                                                    isDense: true,
-                                                    contentPadding: EdgeInsets
-                                                        .only(
-                                                            bottom: 1.sw >
-                                                                    600
-                                                                ? 50.w
-                                                                : 40.w,
-                                                            top: 0,
-                                                            left: 1
-                                                                        .sw >
-                                                                    600
-                                                                ? 20.w
-                                                                : 15.w,
-                                                            right: 1.sw > 600
-                                                                ? 20.w
-                                                                : 15.w)),
-                                              ),
+                                            ButtonApp(
+                                              event: () {
+                                                if (_formCancleTable
+                                                    .currentState!
+                                                    .validate()) {
+                                                  BlocProvider.of<TableCancleBloc>(context)
+                                                      .add(CancleTable(
+                                                          orderId: state
+                                                                  .tableModel
+                                                                  ?.booking
+                                                                  ?.orderId
+                                                                  .toString() ??
+                                                              '',
+                                                          client: "staff",
+                                                          shopId:
+                                                              getStaffShopID,
+                                                          roomId: state
+                                                              .tableModel!
+                                                              .booking!
+                                                              .order!
+                                                              .storeRoomId
+                                                              .toString(),
+                                                          tableId: state
+                                                              .tableModel!
+                                                              .booking!
+                                                              .roomTableId
+                                                              .toString(),
+                                                          cancellationReason:
+                                                              cancleTableReasonController
+                                                                  .text));
+                                                  cancleTableReasonController
+                                                      .clear();
+                                                  Navigator.of(context).pop();
+                                                  showUpdateDataSuccesDialog();
+
+                                                  widget.eventSaveButton();
+                                                }
+                                              },
+                                              text: save,
+                                              colorText: Colors.white,
+                                              backgroundColor: Color.fromRGBO(
+                                                  23, 193, 232, 1),
+                                              outlineColor: Color.fromRGBO(
+                                                  23, 193, 232, 1),
+                                            ),
+                                            SizedBox(
+                                              width: 20.w,
                                             ),
                                           ],
                                         ),
-                                        SizedBox(
-                                          width: 1.sw,
-                                          height: 80,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              ButtonApp(
-                                                event: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                text: "Đóng",
-                                                colorText: Colors.white,
-                                                backgroundColor:
-                                                    const Color.fromRGBO(
-                                                        131, 146, 171, 1),
-                                                outlineColor: Color.fromRGBO(
-                                                    131, 146, 171, 1),
-                                              ),
-                                              SizedBox(
-                                                width: 20.w,
-                                              ),
-                                              ButtonApp(
-                                                event: () {
-                                                  if (_formCancleTable
-                                                      .currentState!
-                                                      .validate()) {
-                                                    BlocProvider.of<TableCancleBloc>(context).add(CancleTable(
-                                                        orderId: state
-                                                                .tableModel
-                                                                ?.booking
-                                                                ?.orderId
-                                                                .toString() ??
-                                                            '',
-                                                        client: "staff",
-                                                        shopId: getStaffShopID,
-                                                        roomId: state
-                                                            .tableModel!
-                                                            .booking!
-                                                            .order!
-                                                            .storeRoomId
-                                                            .toString(),
-                                                        tableId: state
-                                                            .tableModel!
-                                                            .booking!
-                                                            .roomTableId
-                                                            .toString(),
-                                                        cancellationReason:
-                                                            cancleTableReasonController
-                                                                .text));
-                                                    cancleTableReasonController
-                                                        .clear();
-                                                    Navigator.of(context).pop();
-                                                    showUpdateDataSuccesDialog();
-
-                                                    widget.eventSaveButton();
-                                                  }
-                                                },
-                                                text: save,
-                                                colorText: Colors.white,
-                                                backgroundColor: Color.fromRGBO(
-                                                    23, 193, 232, 1),
-                                                outlineColor: Color.fromRGBO(
-                                                    23, 193, 232, 1),
-                                              ),
-                                              SizedBox(
-                                                width: 20.w,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ))
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ))),
-                  ],
-                ));
-          });
+                                      ),
+                                    ],
+                                  ))
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ))),
+                ],
+              ));
         } else if (state.tableStatus == TableStatus.loading) {
           return AlertDialog(
             contentPadding: EdgeInsets.all(0),
@@ -1466,7 +1751,7 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
         var currentRoom = listRoomInit?.where((element) =>
             element.storeRoomId ==
             (listTableFreeOfCurrentRoom?.first?[0].storeRoomId ??
-                '')); //check lay ten phong hien taij (check theo roomId)
+                '')); //check lay ten phong hien taij (check theo roomId) //CHO NAY CO LOI
         var currentRoomName = currentRoom?.first
             .storeRoomName; // lay ten phong hien tai dung cho dropdown menu
 
@@ -3467,7 +3752,7 @@ class _ManageBroughtReceiptDialogState
             client: currentRole,
             shopId: currentShopId,
             limit: 15,
-            page: currentPage,
+            page: 1,
             filters: null,
             orderId: orderID));
   }
@@ -3928,6 +4213,7 @@ class _ManageBroughtReceiptDialogState
                             controller: scrollListFoodController,
                             itemBuilder: (context, index) {
                               if (index < filterProducts2.length) {
+                                log(filterProducts2[0].quantityFood.toString());
                                 _foodQuantityController
                                     .add(TextEditingController());
                                 _foodQuantityController[index].text =

@@ -79,8 +79,6 @@ class StaffInforBloc extends Bloc<StaffInforEvent, StaffInforState> {
       var message = data['message'];
 
       try {
-        print("GET STAFF INFOR R NE ${data}");
-
         if (data['status'] == 200) {
           var staffInforDataRes = StaffInfor.fromJson(data);
           emit(state.copyWith(staffInforDataModel: staffInforDataRes));

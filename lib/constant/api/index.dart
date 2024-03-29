@@ -28,3 +28,7 @@ const String printBroughtReceipt = 'print-bill';
 const String foodList = 'foods/list';
 const String listBill = 'bills/list';
 const String areas = 'areas';
+const String updateStaffInfor = 'staff/update-profile';
+const String changePasswordStaffApi = 'staff/update-password';
+const String updateAvatarStaffApi = 'staff/update-avatar';
+const String deleteAvatarStaff = 'staff/delete-avatar';

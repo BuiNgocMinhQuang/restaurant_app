@@ -79,195 +79,195 @@ class TableBloc extends Bloc<TableEvent, TableState> {
     on<GetTableInfor>(_onGetTableInfor);
     on<GetTableFoods>(_onGetTableFoods);
     on<GetTableSwitchInfor>(_onGetSwitchTableInfor);
-    on<AddFoodToTable>(_onAddFoodToTable);
-    on<RemoveFoodToTable>(_onRemoveFoodToTable);
-    on<UpdateQuantytiFoodToTable>(_onUpdateQuantytiFoodToTable);
+    // on<AddFoodToTable>(_onAddFoodToTable);
+    // on<RemoveFoodToTable>(_onRemoveFoodToTable);
+    // on<UpdateQuantytiFoodToTable>(_onUpdateQuantytiFoodToTable);
   }
 
-  void _onAddFoodToTable(
-    AddFoodToTable event,
-    Emitter<TableState> emit,
-  ) async {
-    emit(state.copyWith(tableStatus: TableStatus.loading));
-    await Future.delayed(const Duration(seconds: 1));
-    print("DAT TRUYEN ${{
-      'client': event.client,
-      'shop_id': event.shopId,
-      'is_api': event.isApi.toString(),
-      'room_id': event.roomId,
-      'table_id': event.tableId,
-      'order_id': event.orderId,
-      'food_id': event.foodId
-    }}");
-    try {
-      var token = StorageUtils.instance.getString(key: 'token');
-      final respons = await http.post(
-        Uri.parse('$baseUrl$addFoodTable'),
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          "Authorization": "Bearer $token"
-        },
-        body: jsonEncode({
-          'client': event.client,
-          'shop_id': event.shopId,
-          'is_api': event.isApi,
-          'room_id': event.roomId,
-          'table_id': event.tableId,
-          'order_id': event.orderId,
-          'food_id': event.foodId
-        }),
-      );
-      final data = jsonDecode(respons.body);
-      print(" DATA ADD FOOD TO TABLE $data");
-      final message = data['message'];
+  // void _onAddFoodToTable(
+  //   AddFoodToTable event,
+  //   Emitter<TableState> emit,
+  // ) async {
+  //   emit(state.copyWith(quantityFoodTableState: TableStatus.loading));
+  //   await Future.delayed(const Duration(seconds: 1));
+  //   // print("DAT TRUYEN ${{
+  //   //   'client': event.client,
+  //   //   'shop_id': event.shopId,
+  //   //   'is_api': event.isApi.toString(),
+  //   //   'room_id': event.roomId,
+  //   //   'table_id': event.tableId,
+  //   //   'order_id': event.orderId,
+  //   //   'food_id': event.foodId
+  //   // }}");
+  //   try {
+  //     var token = StorageUtils.instance.getString(key: 'token');
+  //     final respons = await http.post(
+  //       Uri.parse('$baseUrl$addFoodTable'),
+  //       headers: {
+  //         'Content-type': 'application/json',
+  //         'Accept': 'application/json',
+  //         "Authorization": "Bearer $token"
+  //       },
+  //       body: jsonEncode({
+  //         'client': event.client,
+  //         'shop_id': event.shopId,
+  //         'is_api': event.isApi,
+  //         'room_id': event.roomId,
+  //         'table_id': event.tableId,
+  //         'order_id': event.orderId,
+  //         'food_id': event.foodId
+  //       }),
+  //     );
+  //     final data = jsonDecode(respons.body);
+  //     print(" DATA ADD FOOD TO TABLE $data");
+  //     final message = data['message'];
 
-      try {
-        if (data['status'] == 200) {
-          emit(state.copyWith(tableStatus: TableStatus.succes));
-          showSnackBarTopCustom(
-              context: navigatorKey.currentContext,
-              mess: message['title'],
-              color: Colors.green);
-        } else {
-          print("ERROR ADD FOOD TO TABLE 1");
+  //     try {
+  //       if (data['status'] == 200) {
+  //         emit(state.copyWith(quantityFoodTableState: TableStatus.succes));
+  //         showSnackBarTopCustom(
+  //             context: navigatorKey.currentContext,
+  //             mess: message['title'],
+  //             color: Colors.green);
+  //       } else {
+  //         print("ERROR ADD FOOD TO TABLE 1");
 
-          emit(state.copyWith(tableStatus: TableStatus.failed));
-          emit(state.copyWith(errorText: someThingWrong));
-          showSnackBarTopCustom(
-              context: navigatorKey.currentContext,
-              mess: message['text'],
-              color: Colors.red);
-        }
-      } catch (error) {
-        print("ERROR ADD FOOD TO TABLE 2 $error");
+  //         emit(state.copyWith(quantityFoodTableState: TableStatus.failed));
+  //         emit(state.copyWith(errorText: someThingWrong));
+  //         showSnackBarTopCustom(
+  //             context: navigatorKey.currentContext,
+  //             mess: message['text'],
+  //             color: Colors.red);
+  //       }
+  //     } catch (error) {
+  //       print("ERROR ADD FOOD TO TABLE 2 $error");
 
-        emit(state.copyWith(tableStatus: TableStatus.failed));
-        emit(state.copyWith(errorText: someThingWrong));
-      }
-    } catch (error) {
-      print("ERROR ADD FOOD TO TABLE 3 $error");
-      emit(state.copyWith(tableStatus: TableStatus.failed));
-      emit(state.copyWith(errorText: someThingWrong));
-    }
-  }
+  //       emit(state.copyWith(quantityFoodTableState: TableStatus.failed));
+  //       emit(state.copyWith(errorText: someThingWrong));
+  //     }
+  //   } catch (error) {
+  //     print("ERROR ADD FOOD TO TABLE 3 $error");
+  //     emit(state.copyWith(quantityFoodTableState: TableStatus.failed));
+  //     emit(state.copyWith(errorText: someThingWrong));
+  //   }
+  // }
 
-  void _onRemoveFoodToTable(
-    RemoveFoodToTable event,
-    Emitter<TableState> emit,
-  ) async {
-    emit(state.copyWith(tableStatus: TableStatus.loading));
-    await Future.delayed(const Duration(seconds: 1));
-    try {
-      var token = StorageUtils.instance.getString(key: 'token');
-      final respons = await http.post(
-        Uri.parse('$baseUrl$removeFoodTable'),
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          "Authorization": "Bearer $token"
-        },
-        body: jsonEncode({
-          'client': event.client,
-          'shop_id': event.shopId,
-          'is_api': event.isApi.toString(),
-          'room_id': event.roomId,
-          'table_id': event.tableId,
-          'order_id': event.orderId,
-          'food_id': event.foodId
-        }),
-      );
-      final data = jsonDecode(respons.body);
-      final message = data['message'];
-      print(" DATA ADD FOOD TO TABLE $data");
-      try {
-        if (data['status'] == 200) {
-          emit(state.copyWith(tableStatus: TableStatus.succes));
-          showSnackBarTopUpdateSucces(navigatorKey.currentContext);
-          showSnackBarTopCustom(
-              context: navigatorKey.currentContext,
-              mess: message['title'],
-              color: Colors.green);
-        } else {
-          print("ERROR ADD FOOD TO TABLE 1");
+  // void _onRemoveFoodToTable(
+  //   RemoveFoodToTable event,
+  //   Emitter<TableState> emit,
+  // ) async {
+  //   emit(state.copyWith(tableStatus: TableStatus.loading));
+  //   await Future.delayed(const Duration(seconds: 1));
+  //   try {
+  //     var token = StorageUtils.instance.getString(key: 'token');
+  //     final respons = await http.post(
+  //       Uri.parse('$baseUrl$removeFoodTable'),
+  //       headers: {
+  //         'Content-type': 'application/json',
+  //         'Accept': 'application/json',
+  //         "Authorization": "Bearer $token"
+  //       },
+  //       body: jsonEncode({
+  //         'client': event.client,
+  //         'shop_id': event.shopId,
+  //         'is_api': event.isApi.toString(),
+  //         'room_id': event.roomId,
+  //         'table_id': event.tableId,
+  //         'order_id': event.orderId,
+  //         'food_id': event.foodId
+  //       }),
+  //     );
+  //     final data = jsonDecode(respons.body);
+  //     final message = data['message'];
+  //     print(" DATA ADD FOOD TO TABLE $data");
+  //     try {
+  //       if (data['status'] == 200) {
+  //         emit(state.copyWith(tableStatus: TableStatus.succes));
+  //         showSnackBarTopUpdateSucces(navigatorKey.currentContext);
+  //         showSnackBarTopCustom(
+  //             context: navigatorKey.currentContext,
+  //             mess: message['title'],
+  //             color: Colors.green);
+  //       } else {
+  //         print("ERROR ADD FOOD TO TABLE 1");
 
-          emit(state.copyWith(tableStatus: TableStatus.failed));
-          emit(state.copyWith(errorText: someThingWrong));
-          showSnackBarTopCustom(
-              context: navigatorKey.currentContext,
-              mess: message['text'],
-              color: Colors.red);
-        }
-      } catch (error) {
-        print("ERROR ADD FOOD TO TABLE 2 $error");
+  //         emit(state.copyWith(tableStatus: TableStatus.failed));
+  //         emit(state.copyWith(errorText: someThingWrong));
+  //         showSnackBarTopCustom(
+  //             context: navigatorKey.currentContext,
+  //             mess: message['text'],
+  //             color: Colors.red);
+  //       }
+  //     } catch (error) {
+  //       print("ERROR ADD FOOD TO TABLE 2 $error");
 
-        emit(state.copyWith(tableStatus: TableStatus.failed));
-        emit(state.copyWith(errorText: someThingWrong));
-      }
-    } catch (error) {
-      print("ERROR ADD FOOD TO TABLE 3 $error");
-      emit(state.copyWith(tableStatus: TableStatus.failed));
-      emit(state.copyWith(errorText: someThingWrong));
-    }
-  }
+  //       emit(state.copyWith(tableStatus: TableStatus.failed));
+  //       emit(state.copyWith(errorText: someThingWrong));
+  //     }
+  //   } catch (error) {
+  //     print("ERROR ADD FOOD TO TABLE 3 $error");
+  //     emit(state.copyWith(tableStatus: TableStatus.failed));
+  //     emit(state.copyWith(errorText: someThingWrong));
+  //   }
+  // }
 
-  void _onUpdateQuantytiFoodToTable(
-    UpdateQuantytiFoodToTable event,
-    Emitter<TableState> emit,
-  ) async {
-    emit(state.copyWith(tableStatus: TableStatus.loading));
-    await Future.delayed(const Duration(seconds: 1));
-    try {
-      var token = StorageUtils.instance.getString(key: 'token');
-      final respons = await http.post(
-        Uri.parse('$baseUrl$updateQuantityFoodTable'),
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          "Authorization": "Bearer $token"
-        },
-        body: jsonEncode({
-          'client': event.client,
-          'shop_id': event.shopId,
-          'is_api': event.isApi.toString(),
-          'room_id': event.roomId,
-          'table_id': event.tableId,
-          'order_id': event.orderId,
-          'food_id': event.foodId,
-          'value': event.value
-        }),
-      );
-      final data = jsonDecode(respons.body);
-      final message = data['message'];
+  // void _onUpdateQuantytiFoodToTable(
+  //   UpdateQuantytiFoodToTable event,
+  //   Emitter<TableState> emit,
+  // ) async {
+  //   emit(state.copyWith(tableStatus: TableStatus.loading));
+  //   await Future.delayed(const Duration(seconds: 1));
+  //   try {
+  //     var token = StorageUtils.instance.getString(key: 'token');
+  //     final respons = await http.post(
+  //       Uri.parse('$baseUrl$updateQuantityFoodTable'),
+  //       headers: {
+  //         'Content-type': 'application/json',
+  //         'Accept': 'application/json',
+  //         "Authorization": "Bearer $token"
+  //       },
+  //       body: jsonEncode({
+  //         'client': event.client,
+  //         'shop_id': event.shopId,
+  //         'is_api': event.isApi.toString(),
+  //         'room_id': event.roomId,
+  //         'table_id': event.tableId,
+  //         'order_id': event.orderId,
+  //         'food_id': event.foodId,
+  //         'value': event.value
+  //       }),
+  //     );
+  //     final data = jsonDecode(respons.body);
+  //     final message = data['message'];
 
-      try {
-        if (data['status'] == 200) {
-          emit(state.copyWith(tableStatus: TableStatus.succes));
-          showSnackBarTopCustom(
-              context: navigatorKey.currentContext,
-              mess: message['title'],
-              color: Colors.green);
-        } else {
-          print("ERROR UPDATE QUANTYTI FODD TO BILL 1");
-          emit(state.copyWith(tableStatus: TableStatus.failed));
-          emit(state.copyWith(errorText: someThingWrong));
-          showSnackBarTopCustom(
-              context: navigatorKey.currentContext,
-              mess: message['text'],
-              color: Colors.red);
-        }
-      } catch (error) {
-        print("ERROR UPDATE QUANTYTI FODD BILL 2 $error");
+  //     try {
+  //       if (data['status'] == 200) {
+  //         emit(state.copyWith(tableStatus: TableStatus.succes));
+  //         showSnackBarTopCustom(
+  //             context: navigatorKey.currentContext,
+  //             mess: message['title'],
+  //             color: Colors.green);
+  //       } else {
+  //         print("ERROR UPDATE QUANTYTI FODD TO BILL 1");
+  //         emit(state.copyWith(tableStatus: TableStatus.failed));
+  //         emit(state.copyWith(errorText: someThingWrong));
+  //         showSnackBarTopCustom(
+  //             context: navigatorKey.currentContext,
+  //             mess: message['text'],
+  //             color: Colors.red);
+  //       }
+  //     } catch (error) {
+  //       print("ERROR UPDATE QUANTYTI FODD BILL 2 $error");
 
-        emit(state.copyWith(tableStatus: TableStatus.failed));
-        emit(state.copyWith(errorText: someThingWrong));
-      }
-    } catch (error) {
-      print("ERROR UPDATE QUANTYTI FODD BILL 3 $error");
-      emit(state.copyWith(tableStatus: TableStatus.failed));
-      emit(state.copyWith(errorText: someThingWrong));
-    }
-  }
+  //       emit(state.copyWith(tableStatus: TableStatus.failed));
+  //       emit(state.copyWith(errorText: someThingWrong));
+  //     }
+  //   } catch (error) {
+  //     print("ERROR UPDATE QUANTYTI FODD BILL 3 $error");
+  //     emit(state.copyWith(tableStatus: TableStatus.failed));
+  //     emit(state.copyWith(errorText: someThingWrong));
+  //   }
+  // }
 
   void _onGetSwitchTableInfor(
     GetTableSwitchInfor event,
@@ -396,11 +396,11 @@ class TableBloc extends Bloc<TableEvent, TableState> {
       final respons = await http.post(
         Uri.parse('$baseUrl$foodsTableApi'),
         headers: {
-          // 'Content-type': 'application/json',
-          // 'Accept': 'application/json',
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
           "Authorization": "Bearer $token"
         },
-        body: {
+        body: jsonEncode({
           'client': event.client,
           'shop_id': event.shopId,
           'is_api': event.isApi.toString(),
@@ -408,13 +408,13 @@ class TableBloc extends Bloc<TableEvent, TableState> {
           'table_id': event.tableId,
           'limit': event.limit,
           'page': event.page
-        },
+        }),
       );
       final data = jsonDecode(respons.body);
-
+      print("HINE DATA MOIW ${data}}");
       try {
         if (data['status'] == 200) {
-          print("DATA FOOD TABLE ${data['booking']}");
+          // print("DATA FOOD TABLE ${data['booking']}");
           var foodTableDataRes = FoodTableDataModel.fromJson(data);
 
           emit(state.copyWith(foodTableDataModel: foodTableDataRes));
@@ -527,16 +527,6 @@ class SwitchTableBloc extends Bloc<SwitchTableEvent, SwitchTableState> {
 
     try {
       var token = StorageUtils.instance.getString(key: 'token');
-      print("CAI DONG TRUYEN ZO");
-      print("${{
-        'client': event.client,
-        'shop_id': event.shopId,
-        'is_api': event.isApi.toString(),
-        'room_id': event.roomId,
-        'table_id': event.tableId,
-        'order_id': event.orderId,
-        'select_tables': event.selectedTableId
-      }}");
 
       final respons = await http.post(
         Uri.parse('$baseUrl$handleSwitchTable'),

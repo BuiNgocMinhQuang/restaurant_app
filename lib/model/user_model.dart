@@ -47,7 +47,7 @@ class Data {
   String? holdImageCccd;
   int? staffAddress1;
   int? staffAddress2;
-  String? staffAddress3;
+  int? staffAddress3;
   String? staffAddress4;
   String? staffFullAddress;
   String? staffTwitter;
