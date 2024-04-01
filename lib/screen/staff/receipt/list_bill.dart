@@ -316,10 +316,23 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                       break;
                   }
 
+                  // print(newListAllBillShop[index]
+                  //     ?.booked_tables
+                  //     ?.map((table) => table?.room_table?.table_name)
+                  //     ?.toList());
+                  print(newListAllBillShop[index]
+                      ?.bookedTables
+                      ?.map((table) => table?.roomTable?.tableName)
+                      ?.join(','));
+                  var tableNameBill = newListAllBillShop[index]
+                      ?.bookedTables
+                      ?.map((table) => table?.roomTable?.tableName)
+                      ?.join(',');
+
                   return Padding(
                     padding: EdgeInsets.only(left: 5.w, right: 5.w),
                     child: BillInforContainer(
-                        tableName: "TEN BAN", //check ghep ban cho nay
+                        tableName: tableNameBill, //check ghep ban cho nay
                         roomName:
                             newListAllBillShop[index]?.room?.storeRoomName ??
                                 '',

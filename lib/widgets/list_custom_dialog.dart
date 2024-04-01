@@ -1745,15 +1745,16 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
             ?.map((e) => e.tables); //list tat ca ban cua phong (nhieu phong)
         // debugPrint("listTableFree ${listTableFree}");
 
-        var listTableFreeOfCurrentRoom = listTableFree?.where(
-            (e) => e!.isNotEmpty); // list cac ban con trong cua phong hien tai
+        var currentRoom = listRoomInit
+            ?.where(
+                (room) => room.storeRoomId?.toString() == state.currentRoomId)
+            .firstOrNull;
 
-        var currentRoom = listRoomInit?.where((element) =>
-            element.storeRoomId ==
-            (listTableFreeOfCurrentRoom?.first?[0].storeRoomId ??
-                '')); //check lay ten phong hien taij (check theo roomId) //CHO NAY CO LOI
-        var currentRoomName = currentRoom?.first
-            .storeRoomName; // lay ten phong hien tai dung cho dropdown menu
+        var currentRoomName = currentRoom?.storeRoomName;
+
+        //  var listTableFreeOfCurrentRoom = listTableFree?.where(
+        //     (e) => e!.isNotEmpty); // list cac ban con trong cua phong hien tai
+        // var listTableFreeOfCurrentRoom = currentRoom.tables
 
         return BlocBuilder<SwitchTableBloc, SwitchTableState>(
           builder: (context, stateSwitchTable) {
@@ -1895,11 +1896,14 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
                                                 .add(GetTableSwitchInfor(
                                                     client: widget.role,
                                                     shopId: widget.shopID,
-                                                    roomId: widget.listIdRoom[
-                                                            listNameRoomFree!
-                                                                .indexOf(
-                                                                    changeRoom)]
-                                                        .toString(),
+                                                    roomId: listRoomInit!
+                                                            .firstWhere((element) =>
+                                                                element
+                                                                    .storeRoomName ==
+                                                                changeRoom)
+                                                            ?.storeRoomId
+                                                            ?.toString() ??
+                                                        '',
                                                     tableId: widget.currentTable
                                                             ?.roomTableId
                                                             .toString() ??
@@ -1987,9 +1991,8 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
                                       shrinkWrap: true,
                                       physics:
                                           const NeverScrollableScrollPhysics(),
-                                      itemCount: listTableFreeOfCurrentRoom
-                                              ?.first?.length ??
-                                          0,
+                                      itemCount:
+                                          currentRoom?.tables?.length ?? 0,
                                       gridDelegate:
                                           SliverGridDelegateWithFixedCrossAxisCount(
                                               crossAxisCount: 2,
@@ -2005,21 +2008,24 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
                                                 if (isSelected) {
                                                   selectedTable.remove(index);
                                                   selectedTableId.remove(
-                                                      listTableFreeOfCurrentRoom
-                                                          ?.first?[index]
-                                                          .roomTableId);
+                                                    // listTableFreeOfCurrentRoom
+                                                    //     ?.first?[index]
+                                                    //     .roomTableId,
+                                                    currentRoom?.tables?[index]
+                                                        .roomTableId,
+                                                  );
                                                 } else {
                                                   selectedTable.add(index);
                                                   selectedTableId.add(
-                                                      (listTableFreeOfCurrentRoom
-                                                              ?.first?[index]
-                                                              .roomTableId) ??
+                                                      currentRoom
+                                                              ?.tables?[index]
+                                                              .roomTableId ??
                                                           0);
                                                 }
                                               });
                                             },
-                                            text: listTableFreeOfCurrentRoom
-                                                    ?.first![index].tableName ??
+                                            text: currentRoom?.tables?[index]
+                                                    .tableName ??
                                                 '',
                                             colorText: isSelected
                                                 ? Colors.white
@@ -2064,8 +2070,6 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
                                 ),
                                 ButtonApp(
                                   event: () {
-                                    print(
-                                        "LIST ID TABLE NE ${selectedTableId.toList()}");
                                     BlocProvider.of<SwitchTableBloc>(context)
                                         .add(HandleSwitchTable(
                                             client: widget.role,
@@ -2083,7 +2087,9 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
                                       Navigator.of(context).pop();
                                       showUpdateDataSuccesDialog();
                                       widget.eventSaveButton();
-                                    } else {
+                                    } else if (stateSwitchTable
+                                            .switchtableStatus ==
+                                        SwitchTableStatus.failed) {
                                       Navigator.of(context).pop();
                                       showSomthingWrongDialog();
                                     }

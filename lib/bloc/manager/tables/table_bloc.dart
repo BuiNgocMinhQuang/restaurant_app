@@ -297,9 +297,11 @@ class TableBloc extends Bloc<TableEvent, TableState> {
         },
       );
       final data = jsonDecode(respons.body);
+      print(event.roomId);
       print("DATA SWITCH $data");
       var message = data['message'];
       try {
+        emit(state.copyWith(currentRoomId: event.roomId));
         if (data['status'] == 200) {
           print("DATA SWITCH $data");
 

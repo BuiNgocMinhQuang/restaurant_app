@@ -305,11 +305,15 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
     }
   }
 
-  void laythongitn({required int? city, required int? district}) async {
-    print("DATA TRUYEN NN ${{
-      'city': city,
-      'district': district,
-    }}");
+  void laythongitn({
+    required int? city,
+    required int? district,
+    Function? callback,
+  }) async {
+    // print("DATA TRUYEN NN ${{
+    //   'city': city,
+    //   'district': district,
+    // }}");
     try {
       final response = await http.post(
         Uri.parse('$baseUrl$areas'),
@@ -333,6 +337,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
           cityList.addAll(data['cities']);
           quanList.addAll(data['districts']);
           xaList.addAll(data['wards']);
+
+          callback?.call(cityList);
 
           // print("============");
           // print(cityList);
@@ -379,12 +385,16 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                       ? 'Kế toán'
                       : '';
 
-      address1Controller.text =
-          state.staffInforDataModel?.data?.staffAddress1.toString() ?? '';
-      address2Controller.text =
-          state.staffInforDataModel?.data?.staffAddress2.toString() ?? '';
-      address3Controller.text =
-          state.staffInforDataModel?.data?.staffAddress3.toString() ?? '';
+      // log(state.staffInforDataModel?.data?.staffAddress1.toString() ?? '');
+      // log(state.staffInforDataModel?.data?.staffAddress2.toString() ?? '');
+      // log(state.staffInforDataModel?.data?.staffAddress3.toString() ?? '');
+      // address1Controller.text =
+      //     state.staffInforDataModel?.data?.staffAddress1.toString() ?? '';
+      // address2Controller.text =
+      //     state.staffInforDataModel?.data?.staffAddress2.toString() ?? '';
+      // address3Controller.text =
+      //     state.staffInforDataModel?.data?.staffAddress3.toString() ?? '';
+
       address4Controller.text =
           state.staffInforDataModel?.data?.staffAddress4.toString() ?? '';
       twitterController.text =
@@ -396,7 +406,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
       laythongitn(
           city: state.staffInforDataModel?.data?.staffAddress1,
           district: state.staffInforDataModel?.data?.staffAddress2);
-//get city
+
+      ///cho nay cut nha, ko dung bloc
+      print('%% ${quanList.length}'); //get city
       final cityListMap = cityList.asMap();
       final myCity =
           cityListMap[state.staffInforDataModel?.data?.staffAddress1];
@@ -417,10 +429,19 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
       final myWard =
           wardsListMap[state.staffInforDataModel?.data?.staffAddress3];
       var currentWards = myWard;
-
+      log(currentCity.toString());
+      log(currentDistricts.toString());
+      log(currentWards.toString());
       var imagePath1 = (state.staffInforDataModel?.data?.staffAvatar ?? '')
           .replaceAll('["', '');
       var imagePath2 = imagePath1.replaceAll('"]', '');
+
+      address1Controller.text =
+          state.staffInforDataModel?.data?.staffAddress1.toString() ?? '';
+      address2Controller.text =
+          state.staffInforDataModel?.data?.staffAddress2.toString() ?? '';
+      address3Controller.text =
+          state.staffInforDataModel?.data?.staffAddress3.toString() ?? '';
 
       return Scaffold(
         backgroundColor: Colors.white,

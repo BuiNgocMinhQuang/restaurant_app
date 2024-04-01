@@ -1,13 +1,15 @@
 part of 'table_bloc.dart';
 
 class TableState extends Equatable {
-  const TableState(
-      {this.errorText,
-      this.tableStatus,
-      this.tableModel,
-      this.foodTableDataModel,
-      this.switchTableDataModel,
-      this.quantityFoodTableState});
+  const TableState({
+    this.errorText,
+    this.tableStatus,
+    this.tableModel,
+    this.foodTableDataModel,
+    this.switchTableDataModel,
+    this.quantityFoodTableState,
+    this.currentRoomId,
+  });
 
   final String? errorText;
   final TableStatus? tableStatus;
@@ -15,23 +17,27 @@ class TableState extends Equatable {
   final TableModel? tableModel;
   final FoodTableDataModel? foodTableDataModel;
   final SwitchTableDataModel? switchTableDataModel;
+  final String? currentRoomId;
 
-  TableState copyWith(
-      {String? errorText,
-      TableStatus? tableStatus,
-      TableStatus? quantityFoodTableState,
-      TableModel? tableModel,
-      FoodTableDataModel? foodTableDataModel,
-      SwitchTableDataModel? switchTableDataModel}) {
+  TableState copyWith({
+    String? errorText,
+    TableStatus? tableStatus,
+    TableStatus? quantityFoodTableState,
+    TableModel? tableModel,
+    FoodTableDataModel? foodTableDataModel,
+    SwitchTableDataModel? switchTableDataModel,
+    String? currentRoomId,
+  }) {
     return TableState(
-        errorText: errorText ?? this.errorText,
-        tableStatus: tableStatus ?? this.tableStatus,
-        quantityFoodTableState:
-            quantityFoodTableState ?? this.quantityFoodTableState,
-        tableModel: tableModel ?? this.tableModel,
-        foodTableDataModel: foodTableDataModel ?? this.foodTableDataModel,
-        switchTableDataModel:
-            switchTableDataModel ?? this.switchTableDataModel);
+      errorText: errorText ?? this.errorText,
+      tableStatus: tableStatus ?? this.tableStatus,
+      quantityFoodTableState:
+          quantityFoodTableState ?? this.quantityFoodTableState,
+      tableModel: tableModel ?? this.tableModel,
+      foodTableDataModel: foodTableDataModel ?? this.foodTableDataModel,
+      switchTableDataModel: switchTableDataModel ?? this.switchTableDataModel,
+      currentRoomId: currentRoomId ?? this.currentRoomId,
+    );
   }
 
   @override
@@ -41,7 +47,8 @@ class TableState extends Equatable {
         tableModel,
         foodTableDataModel,
         switchTableDataModel,
-        quantityFoodTableState
+        quantityFoodTableState,
+        currentRoomId,
       ];
 }
 

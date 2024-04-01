@@ -38,16 +38,16 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
       final respons = await http.post(
         Uri.parse('$baseUrl$bookingApi'),
         headers: {
-          // 'Content-type': 'application/json',
-          // 'Accept': 'application/json',
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
           "Authorization": "Bearer $token"
         },
-        body: {
+        body: jsonEncode({
           'client': event.client,
           'shop_id': event.shopId,
           'is_api': event.isApi.toString(),
           'room_id': event.roomId,
-        },
+        }),
       );
       final data = jsonDecode(respons.body);
 
