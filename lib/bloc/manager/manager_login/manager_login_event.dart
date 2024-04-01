@@ -7,10 +7,12 @@ abstract class ManagerLoginEvent extends Equatable {
 class ManagerLoginButtonPressed extends ManagerLoginEvent {
   final String email;
   final String password;
+  final bool remember;
 
   const ManagerLoginButtonPressed({
     required this.email,
     required this.password,
+    required this.remember,
   });
   @override
   List<Object> get props => [];

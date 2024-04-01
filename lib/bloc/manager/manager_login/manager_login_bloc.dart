@@ -36,14 +36,30 @@ class ManagerLoginBloc extends Bloc<ManagerLoginEvent, ManagerLoginState> {
     ManagerLoginButtonPressed event,
     Emitter<ManagerLoginState> emit,
   ) async {
+    print("TRUYEN CC GI V");
+    print("${{
+      'email': event.email,
+      'password': event.password,
+      'remember': event.remember,
+    }}");
     emit(state.copyWith(loginStatus: ManagerLoginStatus.loading));
+    print("111");
+
     final response = await http.post(
       Uri.parse('$baseUrl$managerLoginApi'),
-      body: {
+      headers: {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: jsonEncode({
         'email': event.email,
         'password': event.password,
-      },
+        'remember': event.remember,
+      }),
     );
+    print("???");
+    print("${response.body}");
+
     final data = jsonDecode(response.body);
     var message = data['message'];
 
@@ -51,12 +67,20 @@ class ManagerLoginBloc extends Bloc<ManagerLoginEvent, ManagerLoginState> {
       if (data['status'] == 200) {
         var authManagerDataRes = ManagerInforModel.fromJson(data);
         // var authManagerDataString = jsonEncode(authManagerDataRes);
+        var authMangerDataString = jsonEncode(authManagerDataRes);
+
         var token = authManagerDataRes.token;
         print("TOKEN MANAGER NE $token");
 
         StorageUtils.instance.setString(key: 'token_manager', val: token ?? '');
-        //save Token
-
+        StorageUtils.instance
+            .setString(key: 'auth_manager', val: authMangerDataString);
+        emit(state.copyWith(loginStatus: ManagerLoginStatus.success));
+        navigatorKey.currentContext?.go("/manager_home");
+        Future.delayed(Duration(milliseconds: 500), () {
+          print("DANG NHAP THNAH CONG");
+          showLoginSuccesDialog();
+        });
         // StorageUtils.instance
         //     .setString(key: 'auth_manager', val: authManagerDataString);
 
@@ -82,8 +106,6 @@ class ManagerLoginBloc extends Bloc<ManagerLoginEvent, ManagerLoginState> {
         // } catch (error) {
         //   print("ERROR LOGIN MANAGER $error");
         // }
-        emit(state.copyWith(loginStatus: ManagerLoginStatus.success));
-        navigatorKey.currentContext?.go("/manager_home");
       } else {
         emit(state.copyWith(loginStatus: ManagerLoginStatus.failed));
         emit(state.copyWith(errorText: message['text']));

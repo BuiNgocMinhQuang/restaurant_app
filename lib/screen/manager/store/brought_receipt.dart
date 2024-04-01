@@ -121,12 +121,12 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                                                       context, () {});
                                                 },
                                                 eventButton3: () {
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return const PrintBillDialog();
-                                                      });
+                                                  // showDialog(
+                                                  //     context: context,
+                                                  //     builder: (BuildContext
+                                                  //         context) {
+                                                  //       return const PrintBillDialog();
+                                                  //     });
                                                 },
                                                 eventButton4: () {
                                                   showDialog(
@@ -202,15 +202,12 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                                                     context, () {});
                                               },
                                               eventButton3: () {
-                                                // setState(() {
-                                                //   isShowPrintBillModal = true;
-                                                // });
-                                                showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return const PrintBillDialog();
-                                                    });
+                                                // showDialog(
+                                                //     context: context,
+                                                //     builder:
+                                                //         (BuildContext context) {
+                                                //       return const PrintBillDialog();
+                                                //     });
                                               },
                                               eventButton4: () {
                                                 showDialog(
@@ -244,15 +241,12 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                                               price: '',
                                               typePopMenu: PopUpMenuPrintBill(
                                                 eventButton1: () {
-                                                  // setState(() {
-                                                  //   isShowPrintBillModal = true;
-                                                  // });
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return const PrintBillDialog();
-                                                      });
+                                                  // showDialog(
+                                                  //     context: context,
+                                                  //     builder: (BuildContext
+                                                  //         context) {
+                                                  //       return const PrintBillDialog();
+                                                  //     });
                                                 },
                                               ),
                                               statusText: "Hóa đơn đã hủy"),

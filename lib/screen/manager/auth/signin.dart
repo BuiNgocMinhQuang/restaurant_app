@@ -375,11 +375,12 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                                   ManagerLoginBloc>(
                                                               context)
                                                           .add(
-                                                        const ManagerLoginButtonPressed(
-                                                          email:
-                                                              "buingocminhquang@gmail.com",
-                                                          password: "123456789",
-                                                        ),
+                                                        ManagerLoginButtonPressed(
+                                                            email:
+                                                                "buingocminhquang@gmail.com",
+                                                            password:
+                                                                "123456789",
+                                                            remember: light),
                                                       );
                                                     },
                                                     text: login,

@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/text.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/gradient_text.dart';
@@ -8,6 +12,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
+import 'package:app_restaurant/env/index.dart';
+import 'package:app_restaurant/constant/api/index.dart';
 
 class StaffForgotPassword extends StatefulWidget {
   const StaffForgotPassword({super.key});
@@ -21,6 +28,44 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
   final _formField = GlobalKey<FormState>();
   final storeIdController = TextEditingController();
   final emailController = TextEditingController();
+  void handleForgotPassword({
+    required String? shopID,
+    required String? email,
+  }) async {
+    try {
+      final respons = await http.post(
+        Uri.parse('$baseUrl$forgotPasswordStaff'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          "shop_id": shopID.toString(),
+          "email": email,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print("DADATATA $data");
+      if (data['status'] == 200) {
+        showSnackBarTopCustom(
+            context: navigatorKey.currentContext,
+            mess: "Thành công",
+            color: Colors.green);
+        print("HANLDE FOGOT PASSWORD OK");
+        navigatorKey.currentContext?.go('/staff_confirm_otp');
+      } else {
+        showFailedModal(navigatorKey.currentContext, "That bai");
+        // showSnackBarTopCustom(
+        //     context: navigatorKey.currentContext,
+        //     mess: messText['text'],
+        //     color: Colors.red);
+        print("FOGOT PASSWORD ERROR 1");
+      }
+    } catch (error) {
+      print("FOGOT PASSWORD ERROR ${error}");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -289,10 +334,16 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                   event: () {
                                                     if (_formField.currentState!
                                                         .validate()) {
-                                                      context.go(
-                                                          '/staff_confirm_otp');
-                                                      storeIdController.clear();
-                                                      emailController.clear();
+                                                      handleForgotPassword(
+                                                        shopID:
+                                                            storeIdController
+                                                                .text,
+                                                        email: emailController
+                                                            .text,
+                                                      );
+
+                                                      // storeIdController.clear();
+                                                      // emailController.clear();
                                                     }
                                                   },
                                                   text: "Gửi",

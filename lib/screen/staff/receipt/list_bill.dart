@@ -345,7 +345,14 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return const PrintBillDialog();
+                                  return PrintBillDialog(
+                                    orderID: newListAllBillShop[index].orderId,
+                                    roomName: newListAllBillShop[index]
+                                            ?.room
+                                            ?.storeRoomName ??
+                                        '',
+                                    tableName: tableNameBill,
+                                  );
                                 });
                           },
                         ),
@@ -478,11 +485,14 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                 if (index < dataLength) {
                   var statusCloseBill =
                       listBillComplete[index].closeOrder.toString();
-
+                  var tableNameBill = listBillComplete[index]
+                      ?.bookedTables
+                      ?.map((table) => table?.roomTable?.tableName)
+                      ?.join(',');
                   return Padding(
                     padding: EdgeInsets.only(left: 5.w, right: 5.w),
                     child: BillInforContainer(
-                        tableName: "TEN BAN", //check ghep ban cho nay
+                        tableName: tableNameBill, //check ghep ban cho nay
                         roomName:
                             listBillComplete[index]?.room?.storeRoomName ?? '',
                         dateTime: formatDateTime(
@@ -494,7 +504,14 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return const PrintBillDialog();
+                                  return PrintBillDialog(
+                                    orderID: listBillComplete[index].orderId,
+                                    roomName: listBillComplete[index]
+                                            ?.room
+                                            ?.storeRoomName ??
+                                        '',
+                                    tableName: tableNameBill,
+                                  );
                                 });
                           },
                         ),
@@ -631,10 +648,14 @@ class _PendingWidgetState extends State<PendingWidget>
               itemBuilder: (BuildContext context, int index) {
                 var dataLength = listBillPending.length;
                 if (index < dataLength) {
+                  var tableNameBill = listBillPending[index]
+                      ?.bookedTables
+                      ?.map((table) => table?.roomTable?.tableName)
+                      ?.join(',');
                   return Padding(
                     padding: EdgeInsets.only(left: 5.w, right: 5.w),
                     child: BillInforContainer(
-                        tableName: "TEN BAN", //check ghep ban cho nay
+                        tableName: tableNameBill, //check ghep ban cho nay
                         roomName:
                             listBillPending[index]?.room?.storeRoomName ?? '',
                         dateTime: formatDateTime(
@@ -646,7 +667,14 @@ class _PendingWidgetState extends State<PendingWidget>
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return const PrintBillDialog();
+                                  return PrintBillDialog(
+                                    orderID: listBillPending[index].orderId,
+                                    roomName: listBillPending[index]
+                                            ?.room
+                                            ?.storeRoomName ??
+                                        '',
+                                    tableName: tableNameBill,
+                                  );
                                 });
                           },
                         ),
@@ -781,10 +809,14 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
               itemBuilder: (BuildContext context, int index) {
                 var dataLength = listBillCancle.length;
                 if (index < dataLength) {
+                  var tableNameBill = listBillCancle[index]
+                      ?.bookedTables
+                      ?.map((table) => table?.roomTable?.tableName)
+                      ?.join(',');
                   return Padding(
                     padding: EdgeInsets.only(left: 5.w, right: 5.w),
                     child: BillInforContainer(
-                        tableName: "TEN BAN", //check ghep ban cho nay
+                        tableName: tableNameBill, //check ghep ban cho nay
                         roomName:
                             listBillCancle[index]?.room?.storeRoomName ?? '',
                         dateTime: formatDateTime(
@@ -796,7 +828,14 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return const PrintBillDialog();
+                                  return PrintBillDialog(
+                                    orderID: listBillCancle[index].orderId,
+                                    roomName: listBillCancle[index]
+                                            ?.room
+                                            ?.storeRoomName ??
+                                        '',
+                                    tableName: tableNameBill,
+                                  );
                                 });
                           },
                         ),

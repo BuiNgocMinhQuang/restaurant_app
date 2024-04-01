@@ -26,18 +26,6 @@ class StaffLoginButtonPressed extends LoginEvent {
   List<Object> get props => [];
 }
 
-class ManagerStaffLoginButtonPressed extends LoginEvent {
-  final String email;
-  final String password;
-
-  const ManagerStaffLoginButtonPressed({
-    required this.email,
-    required this.password,
-  });
-  @override
-  List<Object> get props => [];
-}
-
 class LogoutStaff extends LoginEvent {
   const LogoutStaff();
   @override

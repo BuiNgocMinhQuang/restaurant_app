@@ -330,11 +330,11 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                             "${MoneyFormatter(amount: (newListAllBillShop[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                         typePopMenu: PopUpMenuPrintBill(
                           eventButton1: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const PrintBillDialog();
-                                });
+                            // showDialog(
+                            //     context: context,
+                            //     builder: (BuildContext context) {
+                            //       return const PrintBillDialog();
+                            //     });
                           },
                         ),
                         statusText: statusTextBill),
@@ -479,11 +479,11 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                             "${MoneyFormatter(amount: (listBillComplete[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                         typePopMenu: PopUpMenuPrintBill(
                           eventButton1: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const PrintBillDialog();
-                                });
+                            // showDialog(
+                            //     context: context,
+                            //     builder: (BuildContext context) {
+                            //       return const PrintBillDialog();
+                            //     });
                           },
                         ),
                         statusText: statusCloseBill == "1"
@@ -631,11 +631,11 @@ class _PendingWidgetState extends State<PendingWidget>
                             "${MoneyFormatter(amount: (listBillPending[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                         typePopMenu: PopUpMenuPrintBill(
                           eventButton1: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const PrintBillDialog();
-                                });
+                            // showDialog(
+                            //     context: context,
+                            //     builder: (BuildContext context) {
+                            //       return const PrintBillDialog();
+                            //     });
                           },
                         ),
                         statusText: "Chưa thanh toán"),
@@ -781,11 +781,11 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                             "${MoneyFormatter(amount: (listBillCancle[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                         typePopMenu: PopUpMenuPrintBill(
                           eventButton1: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return const PrintBillDialog();
-                                });
+                            // showDialog(
+                            //     context: context,
+                            //     builder: (BuildContext context) {
+                            //       return const PrintBillDialog();
+                            //     });
                           },
                         ),
                         statusText: "Hoá đơn bị huỷ"),

@@ -22,6 +22,8 @@ class BackgroundWelcome extends StatelessWidget {
           padding: EdgeInsets.only(top: 15.w, left: 15.w, right: 15.w),
           child: Center(
             child: TextApp(
+              isOverFlow: false,
+              softWrap: true,
               textAlign: TextAlign.center,
               text:
                   "Sử dụng các biểu mẫu tuyệt vời này để đăng nhập hoặc tạo tài khoản mới trong cửa hàng của bạn.",
