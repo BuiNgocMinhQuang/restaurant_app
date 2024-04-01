@@ -38,53 +38,36 @@ class BroughtReceiptState extends Equatable {
     this.errorText,
     this.broughtReceiptStatus,
     this.manageBroughtReceiptModel,
-    this.quantityFoodBroughtReceiptModel,
-    this.quantytibroughtReceiptStatus,
-    this.orderIdNewBill,
   });
 
   final String? errorText;
   final BroughtReceiptStatus? broughtReceiptStatus;
-  final BroughtReceiptStatus? quantytibroughtReceiptStatus;
-  final int? orderIdNewBill;
   final ManageBroughtReceiptModel? manageBroughtReceiptModel;
-  final QuantityFoodBroughtReceiptModel? quantityFoodBroughtReceiptModel;
 
-  BroughtReceiptState copyWith(
-      {String? errorText,
-      BroughtReceiptStatus? broughtReceiptStatus,
-      BroughtReceiptStatus? quantytibroughtReceiptStatus,
-      int? orderIdNewBill,
-      ManageBroughtReceiptModel? manageBroughtReceiptModel,
-      QuantityFoodBroughtReceiptModel? quantityFoodBroughtReceiptModel}) {
+  BroughtReceiptState copyWith({
+    String? errorText,
+    BroughtReceiptStatus? broughtReceiptStatus,
+    ManageBroughtReceiptModel? manageBroughtReceiptModel,
+  }) {
     return BroughtReceiptState(
-        errorText: errorText ?? this.errorText,
-        broughtReceiptStatus: broughtReceiptStatus ?? this.broughtReceiptStatus,
-        orderIdNewBill: orderIdNewBill ?? this.orderIdNewBill,
-        quantytibroughtReceiptStatus:
-            quantytibroughtReceiptStatus ?? this.quantytibroughtReceiptStatus,
-        manageBroughtReceiptModel:
-            manageBroughtReceiptModel ?? this.manageBroughtReceiptModel,
-        quantityFoodBroughtReceiptModel: quantityFoodBroughtReceiptModel ??
-            this.quantityFoodBroughtReceiptModel);
+      errorText: errorText ?? this.errorText,
+      broughtReceiptStatus: broughtReceiptStatus ?? this.broughtReceiptStatus,
+      manageBroughtReceiptModel:
+          manageBroughtReceiptModel ?? this.manageBroughtReceiptModel,
+    );
   }
 
   @override
   List<Object?> get props => [
         errorText,
         broughtReceiptStatus,
-        quantytibroughtReceiptStatus,
-        orderIdNewBill,
         manageBroughtReceiptModel,
-        quantityFoodBroughtReceiptModel
       ];
 }
 
 enum BroughtReceiptStatus { loading, succes, failed }
 
 ///STATE của dialog hoá đơn mang về
-///
-///
 ///
 ///
 ///STATE HUY HOA DON

@@ -30,10 +30,6 @@ class _StaffBookingTableState extends State<StaffBookingTable>
     with TickerProviderStateMixin {
   final String currentRole = "staff";
   final String currentShopId = getStaffShopID;
-  void saveMoveTableModal() {}
-
-  void savePayBillModal() {}
-
   void getDataTabIndex({String? roomId}) async {
     await Future.delayed(const Duration(seconds: 0));
 
@@ -92,16 +88,6 @@ class _StaffBookingTableState extends State<StaffBookingTable>
         tableId: tableId,
         orderId: orderID));
   }
-
-  // void getFoodTableData(String roomId, String tableId) async {
-  //   BlocProvider.of<TableBloc>(context).add(GetTableFoods(
-  //       client: currentRole,
-  //       shopId: getStaffShopID,
-  //       roomId: roomId,
-  //       tableId: tableId,
-  //       limit: 1.toString(),
-  //       page: 1.toString()));
-  // }
 
   @override
   void initState() {
@@ -346,7 +332,6 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                                 roomId: data.storeRoomId.toString(),
                                                                                                 tableId: data.tables![index].roomTableId.toString(),
                                                                                               );
-                                                                                              // getFoodTableData(data.storeRoomId.toString(), data.tables![index].roomTableId.toString());
                                                                                               showDialog(
                                                                                                 context: context,
                                                                                                 builder: (BuildContext context) {

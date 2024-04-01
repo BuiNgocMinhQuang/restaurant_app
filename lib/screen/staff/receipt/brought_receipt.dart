@@ -181,11 +181,6 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                                   orderID: null,
                                 );
                               });
-                          if (mounted) {
-                            print("CLEAR ID");
-                            BlocProvider.of<ManageBroughtReceiptBloc>(context)
-                                .add(ResetOrderID());
-                          }
                         },
                         color: Colors.blue,
                         textColor: Colors.white,
@@ -417,11 +412,6 @@ class _AllWidgetState extends State<AllWidget>
                                           shopID: getStaffShopID,
                                         );
                                       });
-                                  if (mounted) {
-                                    BlocProvider.of<ManageBroughtReceiptBloc>(
-                                            navigatorKey.currentContext!)
-                                        .add(const ResetOrderID());
-                                  }
                                 },
                                 eventButton2: () async {
                                   getPaymentData(
@@ -450,12 +440,6 @@ class _AllWidgetState extends State<AllWidget>
                                           },
                                         );
                                       });
-                                  if (mounted) {
-                                    print("CLEAR ID");
-                                    BlocProvider.of<ManageBroughtReceiptBloc>(
-                                            context)
-                                        .add(ResetOrderID());
-                                  }
                                 },
                                 eventButton3: () async {
                                   printBroughtReceipt(
@@ -471,12 +455,6 @@ class _AllWidgetState extends State<AllWidget>
                                               .toString(),
                                         );
                                       });
-                                  if (mounted) {
-                                    print("CLEAR ID");
-                                    BlocProvider.of<ManageBroughtReceiptBloc>(
-                                            context)
-                                        .add(ResetOrderID());
-                                  }
                                 },
                                 eventButton4: () async {
                                   showDialog(
@@ -493,12 +471,6 @@ class _AllWidgetState extends State<AllWidget>
                                           orderID: newListFood[index].orderId,
                                         );
                                       });
-                                  if (mounted) {
-                                    print("CLEAR ID");
-                                    BlocProvider.of<ManageBroughtReceiptBloc>(
-                                            context)
-                                        .add(ResetOrderID());
-                                  }
                                 },
                               )
                             : PopUpMenuPrintBill(
@@ -516,12 +488,6 @@ class _AllWidgetState extends State<AllWidget>
                                               .toString(),
                                         );
                                       });
-                                  if (mounted) {
-                                    print("CLEAR ID");
-                                    BlocProvider.of<ManageBroughtReceiptBloc>(
-                                            context)
-                                        .add(ResetOrderID());
-                                  }
                                 },
                               ),
                         statusText: statusTextBill),
@@ -669,11 +635,6 @@ class _CompleteWidgetState extends State<CompleteWidget>
                                         .toString(),
                                   );
                                 });
-                            if (mounted) {
-                              print("CLEAR ID");
-                              BlocProvider.of<ManageBroughtReceiptBloc>(context)
-                                  .add(ResetOrderID());
-                            }
                           },
                         ),
                         statusText: "Hoàn thành"),
@@ -859,11 +820,6 @@ class _PendingWidgetState extends State<PendingWidget>
                                     shopID: getStaffShopID,
                                   );
                                 });
-                            if (mounted) {
-                              print("CLEAR ID");
-                              BlocProvider.of<ManageBroughtReceiptBloc>(context)
-                                  .add(ResetOrderID());
-                            }
                           },
                           eventButton2: () async {
                             getPaymentData(
@@ -892,11 +848,6 @@ class _PendingWidgetState extends State<PendingWidget>
                                     },
                                   );
                                 });
-                            if (mounted) {
-                              print("CLEAR ID");
-                              BlocProvider.of<ManageBroughtReceiptBloc>(context)
-                                  .add(ResetOrderID());
-                            }
                           },
                           eventButton3: () async {
                             await showDialog(
@@ -910,11 +861,6 @@ class _PendingWidgetState extends State<PendingWidget>
                                         .toString(),
                                   );
                                 });
-                            if (mounted) {
-                              print("CLEAR ID");
-                              BlocProvider.of<ManageBroughtReceiptBloc>(context)
-                                  .add(ResetOrderID());
-                            }
                           },
                           eventButton4: () async {
                             showDialog(
@@ -932,11 +878,6 @@ class _PendingWidgetState extends State<PendingWidget>
                                     orderID: listBillPending[index].orderId,
                                   );
                                 });
-                            if (mounted) {
-                              print("CLEAR ID");
-                              BlocProvider.of<ManageBroughtReceiptBloc>(context)
-                                  .add(ResetOrderID());
-                            }
                           },
                         ),
                         statusText: "Đang chế biến"),
@@ -1089,11 +1030,6 @@ class _CancleWidgetState extends State<CancleWidget>
                                         .toString(),
                                   );
                                 });
-                            if (mounted) {
-                              print("CLEAR ID");
-                              BlocProvider.of<ManageBroughtReceiptBloc>(context)
-                                  .add(ResetOrderID());
-                            }
                           },
                         ),
                         statusText: "Đã huỷ"),
