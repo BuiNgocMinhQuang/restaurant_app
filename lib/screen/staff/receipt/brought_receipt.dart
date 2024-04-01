@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:app_restaurant/bloc/brought_receipt/brought_receipt_bloc.dart';
 import 'package:app_restaurant/bloc/payment/payment_bloc.dart';
@@ -474,10 +475,10 @@ class _AllWidgetState extends State<AllWidget>
                                 },
                               )
                             : PopUpMenuPrintBill(
-                                eventButton1: () async {
+                                eventButton1: () {
                                   printBroughtReceipt(
                                       orderID: newListFood[index].orderId);
-                                  await showDialog(
+                                  showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return PrintBroughtReceiptDialog(
@@ -601,6 +602,11 @@ class _CompleteWidgetState extends State<CompleteWidget>
     }
   }
 
+  void printBroughtReceipt({required int orderID}) async {
+    BlocProvider.of<PrintBroughtReceiptBloc>(context).add(PrintBroughtReceipt(
+        client: 'staff', shopId: getStaffShopID, orderId: orderID));
+  }
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -624,9 +630,14 @@ class _CompleteWidgetState extends State<CompleteWidget>
                             "${MoneyFormatter(amount: (listBillComplete[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                         typePopMenu: PopUpMenuPrintBill(
                           eventButton1: () async {
+                            print("ZO DAY NEEE");
+
                             await showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
+                                  printBroughtReceipt(
+                                      orderID: listBillComplete[index].orderId);
+
                                   return PrintBroughtReceiptDialog(
                                     role: 'staff',
                                     shopID: getStaffShopID,
@@ -741,6 +752,11 @@ class _PendingWidgetState extends State<PendingWidget>
         orderId: orderID));
   }
 
+  void printBroughtReceipt({required int orderID}) async {
+    BlocProvider.of<PrintBroughtReceiptBloc>(context).add(PrintBroughtReceipt(
+        client: 'staff', shopId: getStaffShopID, orderId: orderID));
+  }
+
   Future loadMoreComplete(
       {required int page, required Map<String, int?> filtersFlg}) async {
     try {
@@ -850,6 +866,9 @@ class _PendingWidgetState extends State<PendingWidget>
                                 });
                           },
                           eventButton3: () async {
+                            printBroughtReceipt(
+                                orderID: listBillPending[index].orderId);
+
                             await showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
@@ -996,6 +1015,11 @@ class _CancleWidgetState extends State<CancleWidget>
     }
   }
 
+  void printBroughtReceipt({required int orderID}) async {
+    BlocProvider.of<PrintBroughtReceiptBloc>(context).add(PrintBroughtReceipt(
+        client: 'staff', shopId: getStaffShopID, orderId: orderID));
+  }
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -1019,6 +1043,8 @@ class _CancleWidgetState extends State<CancleWidget>
                             "${MoneyFormatter(amount: (listBillCancle[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                         typePopMenu: PopUpMenuPrintBill(
                           eventButton1: () async {
+                            printBroughtReceipt(
+                                orderID: listBillCancle[index].orderId);
                             await showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
