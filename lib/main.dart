@@ -54,7 +54,8 @@ class _MyAppState extends State<MyApp> {
             return MaterialApp.router(
                 theme: ThemeData.light(),
                 darkTheme: ThemeData.dark(),
-                themeMode: mode, // Decides which theme to show, light or dark.
+                themeMode: ThemeMode
+                    .light, // Decides which theme to show, light or dark.
                 debugShowCheckedModeBanner: false,
                 routerConfig: NyAppRouter().router);
           },

@@ -58,9 +58,11 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
         StorageUtils.instance
             .setString(key: 'tokenCheckOTP', val: tokenCheckOTP);
         StorageUtils.instance.setString(key: 'emailCheckOTP', val: email ?? '');
+        storeIdController.clear();
+        emailController.clear();
         navigatorKey.currentContext?.go('/staff_confirm_otp');
-        log(StorageUtils.instance.getString(key: 'tokenCheckOTP').toString());
-        Future.delayed(Duration(milliseconds: 300), () {
+
+        Future.delayed(const Duration(milliseconds: 300), () {
           showCustomDialogModal(
             typeDialog: "succes",
             context: navigatorKey.currentContext,
@@ -352,24 +354,21 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                   color1: color1BlueButton,
                                                   color2: color2BlueButton,
                                                   event: () {
-                                                    // if (_formField.currentState!
-                                                    //     .validate()) {
-                                                    //   handleForgotPassword(
-                                                    //     shopID:
-                                                    //         storeIdController
-                                                    //             .text,
-                                                    //     email: emailController
-                                                    //         .text,
-                                                    //   );
-
-                                                    //   // storeIdController.clear();
-                                                    //   // emailController.clear();
-                                                    // }
-                                                    handleForgotPassword(
-                                                      shopID: "123456",
-                                                      email:
-                                                          "buingocthanhbao@gmail.com",
-                                                    );
+                                                    if (_formField.currentState!
+                                                        .validate()) {
+                                                      handleForgotPassword(
+                                                        shopID:
+                                                            storeIdController
+                                                                .text,
+                                                        email: emailController
+                                                            .text,
+                                                      );
+                                                    }
+                                                    // handleForgotPassword(
+                                                    //   shopID: "123456",
+                                                    //   email:
+                                                    //       "buingocminhquang2@gmail.com",
+                                                    // );
                                                   },
                                                   text: "Gửi",
                                                   radius: 8.r,

@@ -775,7 +775,13 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                       Wrap(
                                         children: [
                                           DropdownSearch.multiSelection(
-                                            // dropdownBuilder: (context, selectedItems) => ,
+                                            // dropdownBuilder:
+                                            //     (context, selectedItems) =>
+                                            //         Container(
+                                            //   width: 300,
+                                            //   height: 300,
+                                            //   color: Colors.red,
+                                            // ),
                                             key: _popupCustomValidationKey,
                                             itemAsString: (item) =>
                                                 item.tableName,
@@ -791,16 +797,17 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                             },
                                             popupProps:
                                                 PopupPropsMultiSelection.dialog(
-                                                    title: Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: 15.w, top: 10.h),
-                                              child: TextApp(
-                                                text: "Chọn bàn để ghép",
-                                                fontsize: 16.sp,
-                                                fontWeight: FontWeight.bold,
-                                                color: blueText,
+                                              title: Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 15.w, top: 10.h),
+                                                child: TextApp(
+                                                  text: "Chọn bàn để ghép",
+                                                  fontsize: 16.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: blueText,
+                                                ),
                                               ),
-                                            )),
+                                            ),
                                           ),
                                         ],
                                       ),

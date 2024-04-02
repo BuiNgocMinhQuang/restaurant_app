@@ -380,8 +380,7 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                                           shopId: "123456",
                                                           email:
                                                               "buingocminhquang2@gmail.com",
-                                                          password:
-                                                              "1234567890",
+                                                          password: "123456789",
                                                           remember: isRemember),
                                                     );
                                                     //khong xoa

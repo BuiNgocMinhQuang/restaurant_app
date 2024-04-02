@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:app_restaurant/bloc/brought_receipt/brought_receipt_bloc.dart';
 import 'package:app_restaurant/bloc/payment/payment_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
@@ -16,7 +15,6 @@ import 'package:app_restaurant/widgets/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/custom_tab.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -48,16 +46,26 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
         filters: filtersFlg));
   }
 
+  void getDetailsBroughtReceiptData({required int? orderID}) async {
+    BlocProvider.of<ManageBroughtReceiptBloc>(context).add(
+        GetDetailsBroughtReceipt(
+            client: 'staff',
+            shopId: getStaffShopID,
+            limit: 15,
+            page: 1,
+            filters: null,
+            orderId: orderID));
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getListBroughtReceiptData(filtersFlg: {"pay_flg": null});
   }
 
   @override
   Widget build(BuildContext context) {
-    TabController _tabController = TabController(length: 4, vsync: this);
+    TabController tabController = TabController(length: 4, vsync: this);
 
     return BlocBuilder<BroughtReceiptBloc, BroughtReceiptPageState>(
         builder: (context, statePage) {
@@ -73,78 +81,71 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                           top: 10.h, left: 25.w, right: 25.w, bottom: 10.h),
                       child: Column(
                         children: [
-                          Container(
+                          SizedBox(
                             width: 1.sw,
                             height: 100,
-                            // color: Colors.red,
-                            child: Container(
-                                child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      height: 40.h,
-                                      color: Colors.white,
-                                      child: TabBar(
-                                          onTap: (index) {
-                                            if (index == 0) {
-                                              getListBroughtReceiptData(
-                                                  filtersFlg: {
-                                                    "pay_flg": null
-                                                  });
-                                            } else if (index == 1) {
-                                              getListBroughtReceiptData(
-                                                  filtersFlg: {"pay_flg": 1});
-                                            } else if (index == 2) {
-                                              getListBroughtReceiptData(
-                                                  filtersFlg: {"pay_flg": 0});
-                                            } else if (index == 3) {
-                                              getListBroughtReceiptData(
-                                                  filtersFlg: {"pay_flg": 2});
-                                            }
-                                          },
-                                          labelPadding: EdgeInsets.only(
-                                              left: 20, right: 20),
-                                          labelColor: Colors.white,
-                                          unselectedLabelColor:
-                                              Colors.black.withOpacity(0.5),
-                                          labelStyle:
-                                              TextStyle(color: Colors.red),
-                                          controller: _tabController,
-                                          isScrollable: true,
-                                          indicatorSize:
-                                              TabBarIndicatorSize.label,
-                                          indicator: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              8.r,
-                                            ),
-                                            color: Colors.blue,
-                                            border:
-                                                Border.all(color: Colors.blue),
-                                          ),
-                                          tabs: [
-                                            CustomTab(
-                                                text: "Tất cả",
-                                                icon: Icons.list_alt),
-                                            CustomTab(
-                                              text: "Đã thanh toán",
-                                              icon: Icons.credit_score,
-                                            ),
-                                            CustomTab(
-                                                text: "Chưa thanh toán",
-                                                icon: Icons.credit_card),
-                                            CustomTab(
-                                                text: "Hóa đơn đã hủy",
-                                                icon: Icons.cancel_sharp),
-                                          ]),
-                                    ))),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                  height: 40.h,
+                                  color: Colors.white,
+                                  child: TabBar(
+                                      onTap: (index) {
+                                        if (index == 0) {
+                                          getListBroughtReceiptData(
+                                              filtersFlg: {"pay_flg": null});
+                                        } else if (index == 1) {
+                                          getListBroughtReceiptData(
+                                              filtersFlg: {"pay_flg": 1});
+                                        } else if (index == 2) {
+                                          getListBroughtReceiptData(
+                                              filtersFlg: {"pay_flg": 0});
+                                        } else if (index == 3) {
+                                          getListBroughtReceiptData(
+                                              filtersFlg: {"pay_flg": 2});
+                                        }
+                                      },
+                                      labelPadding: const EdgeInsets.only(
+                                          left: 20, right: 20),
+                                      labelColor: Colors.white,
+                                      unselectedLabelColor:
+                                          Colors.black.withOpacity(0.5),
+                                      labelStyle:
+                                          const TextStyle(color: Colors.red),
+                                      controller: tabController,
+                                      isScrollable: true,
+                                      indicatorSize: TabBarIndicatorSize.label,
+                                      indicator: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                          8.r,
+                                        ),
+                                        color: Colors.blue,
+                                        border: Border.all(color: Colors.blue),
+                                      ),
+                                      tabs: [
+                                        CustomTab(
+                                            text: "Tất cả",
+                                            icon: Icons.list_alt),
+                                        CustomTab(
+                                          text: "Đã thanh toán",
+                                          icon: Icons.credit_score,
+                                        ),
+                                        CustomTab(
+                                            text: "Chưa thanh toán",
+                                            icon: Icons.credit_card),
+                                        CustomTab(
+                                            text: "Hóa đơn đã hủy",
+                                            icon: Icons.cancel_sharp),
+                                      ]),
+                                )),
                           ),
                           Expanded(
                             child: Container(
                               width: 1.sw,
-                              // height: 500,
                               color: Colors.white,
                               child: TabBarView(
                                   physics: const NeverScrollableScrollPhysics(),
-                                  controller: _tabController,
+                                  controller: tabController,
                                   children: const [
                                     //Tab All
                                     AllWidget(),
@@ -171,6 +172,7 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                       right: 50.w,
                       child: MaterialButton(
                         onPressed: () async {
+                          getDetailsBroughtReceiptData(orderID: null);
                           await showDialog(
                               context: context,
                               builder: (
@@ -210,7 +212,7 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
+                          SizedBox(
                             width: 100,
                             height: 100,
                             child: Lottie.asset('assets/lottie/error.json'),
@@ -222,13 +224,13 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                             fontWeight: FontWeight.bold,
                           ),
                           space30H,
-                          Container(
+                          SizedBox(
                             width: 200,
                             child: ButtonGradient(
                               color1: color1BlueButton,
                               color2: color2BlueButton,
                               event: () {},
-                              text: 'Thử lại',
+                              text: 'Đóng',
                               fontSize: 12.sp,
                               radius: 8.r,
                               textColor: Colors.white,
@@ -244,7 +246,7 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
 }
 
 class AllWidget extends StatefulWidget {
-  const AllWidget({super.key});
+  const AllWidget({Key? key}) : super(key: key);
   @override
   State<AllWidget> createState() => _AllWidgetState();
 }
@@ -259,7 +261,6 @@ class _AllWidgetState extends State<AllWidget>
   bool get wantKeepAlive => true;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     loadMoreFood(page: 1, filtersFlg: {"pay_flg": null});
 
@@ -341,7 +342,6 @@ class _AllWidgetState extends State<AllWidget>
         if (data['status'] == 200) {
           setState(() {
             var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
-            print("DATA ADD LENGHT ${broughtReceiptPageRes.data.data.length}");
             newListFood.addAll(broughtReceiptPageRes.data.data);
             currentPage++;
             if (broughtReceiptPageRes.data.data.isEmpty ||
@@ -350,13 +350,13 @@ class _AllWidgetState extends State<AllWidget>
             }
           });
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR BROUGHT RECEIPT PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
   }
 
@@ -365,7 +365,7 @@ class _AllWidgetState extends State<AllWidget>
     return RefreshIndicator(
       color: Colors.blue,
       onRefresh: () async {
-        // Implement logic to refresh data for Tab 1
+        loadMoreFood(page: 1, filtersFlg: {"pay_flg": null});
       },
       child: newListFood.isNotEmpty
           ? ListView.builder(
@@ -373,7 +373,6 @@ class _AllWidgetState extends State<AllWidget>
               shrinkWrap: true,
               itemCount: newListFood.length + 1,
               itemBuilder: (BuildContext context, int index) {
-                print("LIST LOAD MORE ${newListFood.length}");
                 var dataLength = newListFood.length;
 
                 if (index < dataLength) {
@@ -434,10 +433,6 @@ class _AllWidgetState extends State<AllWidget>
                                           eventSaveButton: () {
                                             getListBroughtReceiptData(
                                                 filtersFlg: {"pay_flg": null});
-
-                                            // getDataTabIndex(
-                                            //   roomId: data.storeRoomId.toString(),
-                                            // );
                                           },
                                         );
                                       });
@@ -495,7 +490,9 @@ class _AllWidgetState extends State<AllWidget>
                   );
                 } else {
                   return Center(
-                    child: hasMore ? CircularProgressIndicator() : Container(),
+                    child: hasMore
+                        ? const CircularProgressIndicator()
+                        : Container(),
                   );
                 }
               })
@@ -536,6 +533,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
   int currentPageComplete = 1;
   List listBillComplete = [];
   bool hasMoreComplete = true;
+  bool isRefesh = false;
 
   final scrollTabCompleteController = ScrollController();
   @override
@@ -544,7 +542,8 @@ class _CompleteWidgetState extends State<CompleteWidget>
     loadMoreComplete(page: 1, filtersFlg: {"pay_flg": 1});
     scrollTabCompleteController.addListener(() {
       if (scrollTabCompleteController.position.maxScrollExtent ==
-          scrollTabCompleteController.offset) {
+              scrollTabCompleteController.offset &&
+          isRefesh == false) {
         loadMoreComplete(page: currentPageComplete, filtersFlg: {"pay_flg": 1});
       }
     });
@@ -557,7 +556,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
     super.dispose();
   }
 
-  Future loadMoreComplete(
+  void loadMoreComplete(
       {required int page, required Map<String, int?> filtersFlg}) async {
     try {
       var token = StorageUtils.instance.getString(key: 'token');
@@ -583,22 +582,65 @@ class _CompleteWidgetState extends State<CompleteWidget>
         if (data['status'] == 200) {
           setState(() {
             var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
+            listBillComplete.clear();
             listBillComplete.addAll(broughtReceiptPageRes.data.data);
             currentPageComplete++;
-
+            isRefesh = false;
+            log(listBillComplete.length.toString());
             if (broughtReceiptPageRes.data.data.isEmpty ||
                 broughtReceiptPageRes.data.data.length <= 15) {
               hasMoreComplete = false;
             }
           });
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR BROUGHT RECEIPT PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
+    }
+  }
+
+  void refeshListComplete(
+      {required int page, required Map<String, int?> filtersFlg}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$getListBroughtReceipt'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': 'staff',
+          'shop_id': getStaffShopID,
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': filtersFlg,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+
+      try {
+        if (data['status'] == 200) {
+          setState(() {
+            var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
+            listBillComplete.clear();
+            listBillComplete.addAll(broughtReceiptPageRes.data.data);
+            isRefesh = true;
+          });
+        } else {
+          log("ERROR BROUGHT RECEIPT PAGE 1");
+        }
+      } catch (error) {
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
+      }
+    } catch (error) {
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
   }
 
@@ -612,10 +654,11 @@ class _CompleteWidgetState extends State<CompleteWidget>
     return RefreshIndicator(
       color: Colors.blue,
       onRefresh: () async {
-        // Implement logic to refresh data for Tab 1
+        refeshListComplete(page: 1, filtersFlg: {"pay_flg": 1});
       },
       child: listBillComplete.isNotEmpty
           ? ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
               controller: scrollTabCompleteController,
               shrinkWrap: true,
               itemCount: listBillComplete.length + 1,
@@ -703,11 +746,11 @@ class _PendingWidgetState extends State<PendingWidget>
   @override
   void initState() {
     super.initState();
-    loadMoreComplete(page: 1, filtersFlg: {"pay_flg": 0});
+    loadMorePending(page: 1, filtersFlg: {"pay_flg": 0});
     scrollTabPendingController.addListener(() {
       if (scrollTabPendingController.position.maxScrollExtent ==
           scrollTabPendingController.offset) {
-        loadMoreComplete(page: currentPagePending, filtersFlg: {"pay_flg": 0});
+        loadMorePending(page: currentPagePending, filtersFlg: {"pay_flg": 0});
       }
     });
   }
@@ -757,7 +800,7 @@ class _PendingWidgetState extends State<PendingWidget>
         client: 'staff', shopId: getStaffShopID, orderId: orderID));
   }
 
-  Future loadMoreComplete(
+  void loadMorePending(
       {required int page, required Map<String, int?> filtersFlg}) async {
     try {
       var token = StorageUtils.instance.getString(key: 'token');
@@ -857,10 +900,6 @@ class _PendingWidgetState extends State<PendingWidget>
                                     eventSaveButton: () {
                                       getListBroughtReceiptData(
                                           filtersFlg: {"pay_flg": null});
-
-                                      // getDataTabIndex(
-                                      //   roomId: data.storeRoomId.toString(),
-                                      // );
                                     },
                                   );
                                 });
