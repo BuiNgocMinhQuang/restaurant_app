@@ -36,14 +36,7 @@ class ManagerLoginBloc extends Bloc<ManagerLoginEvent, ManagerLoginState> {
     ManagerLoginButtonPressed event,
     Emitter<ManagerLoginState> emit,
   ) async {
-    print("TRUYEN CC GI V");
-    print("${{
-      'email': event.email,
-      'password': event.password,
-      'remember': event.remember,
-    }}");
     emit(state.copyWith(loginStatus: ManagerLoginStatus.loading));
-    print("111");
 
     final response = await http.post(
       Uri.parse('$baseUrl$managerLoginApi'),
@@ -57,8 +50,6 @@ class ManagerLoginBloc extends Bloc<ManagerLoginEvent, ManagerLoginState> {
         'remember': event.remember,
       }),
     );
-    print("???");
-    print("${response.body}");
 
     final data = jsonDecode(response.body);
     var message = data['message'];
@@ -81,31 +72,6 @@ class ManagerLoginBloc extends Bloc<ManagerLoginEvent, ManagerLoginState> {
           print("DANG NHAP THNAH CONG");
           showLoginSuccesDialog();
         });
-        // StorageUtils.instance
-        //     .setString(key: 'auth_manager', val: authManagerDataString);
-
-        // try {
-        //   final response = await http.post(
-        //     Uri.parse('$baseUrl$userInformationApi'),
-        //     headers: {
-        //       'Content-type': 'application/json',
-        //       'Accept': 'application/json',
-        //       "Authorization": "Bearer ${authManagerDataRes.token}"
-        //     },
-        //   );
-        //   final dataManagerInfor = jsonDecode(response.body);
-        //   if (dataManagerInfor['status'] == 200) {
-        //     var managerInforDataRes =
-        //         ManagerInforModel.fromJson(dataManagerInfor);
-        //     var managerInforDataString = jsonEncode(managerInforDataRes);
-
-        //     StorageUtils.instance.setString(
-        //         key: 'manager_infor_data', val: managerInforDataString);
-        //     emit(state.copyWith(managerInforModel: managerInforDataRes));
-        //   }
-        // } catch (error) {
-        //   print("ERROR LOGIN MANAGER $error");
-        // }
       } else {
         emit(state.copyWith(loginStatus: ManagerLoginStatus.failed));
         emit(state.copyWith(errorText: message['text']));

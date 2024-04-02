@@ -4,12 +4,11 @@ import 'package:app_restaurant/bloc/food/menu_food_bloc.dart';
 import 'package:app_restaurant/bloc/list_bill_shop/list_bill_shop_bloc.dart';
 import 'package:app_restaurant/bloc/login/login_bloc.dart';
 import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
-import 'package:app_restaurant/bloc/manager/manager_register/manager_register_bloc.dart';
 import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
 import 'package:app_restaurant/bloc/network/network_cubit.dart';
 import 'package:app_restaurant/bloc/payment/payment_bloc.dart';
-import 'package:app_restaurant/bloc/staff/infor/staff_infor_bloc.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,16 +28,12 @@ class AppBlocProvider extends StatelessWidget {
           create: (_) => LoginBloc(),
         ),
         BlocProvider(
-          create: (_) => StaffInforBloc(),
-        ),
-        BlocProvider(
           create: (_) => ListRoomBloc()..add(const ListRoomInit()),
         ),
         BlocProvider(
           create: (_) => TableBloc(),
         ),
         BlocProvider(create: (_) => ManagerLoginBloc()),
-        BlocProvider(create: (_) => ManagerRegisterBloc()),
         BlocProvider(create: (_) => TableCancleBloc()),
         BlocProvider(create: (_) => TableSaveInforBloc()),
         BlocProvider(create: (_) => SwitchTableBloc()),

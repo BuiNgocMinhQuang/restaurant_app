@@ -26,7 +26,7 @@ class ListBillShopBloc extends Bloc<ListBillShopEvent, ListBillShopState> {
     await Future.delayed(const Duration(seconds: 1));
 
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      // var token = StorageUtils.instance.getString(key: 'token');
       final respons = await http.post(
         Uri.parse('$baseUrl$listBill'),
         headers: {
@@ -52,10 +52,6 @@ class ListBillShopBloc extends Bloc<ListBillShopEvent, ListBillShopState> {
           emit(state.copyWith(listBillShopModel: listAllBillRes));
 
           emit(state.copyWith(listBillShopStatus: ListBillShopStatus.succes));
-          // showSnackBarTopCustom(
-          //     context: navigatorKey.currentContext,
-          //     mess: someThingWrong,
-          //     color: Colors.green);
         } else {
           print("ERROR LIST BILL 1");
 

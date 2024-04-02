@@ -1,11 +1,14 @@
 import 'dart:convert';
+import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
 import 'package:app_restaurant/config/text.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/widgets/background_welcome.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:app_restaurant/config/colors.dart';
@@ -53,7 +56,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
     super.dispose();
   }
 
-  void dangki({
+  void handleRegister({
     required String firstName,
     required String lastName,
     required String fullName,
@@ -80,98 +83,54 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
             "agree_conditon": agreeConditon
           }));
       final data = jsonDecode(response.body);
-      // var message = data['message'];
-      print("DANG KI RES $data");
-      print("DANG KI RES ${data['errors']['phone']}");
-      // print("DANG KI RES $data");
-      // print("DANG KI RES $data");
-      // print("DANG KI RES $data");
+      print("DAT DANG KIS $data");
       if (data['status'] == 200) {
         print("DANG KI OK");
+        BlocProvider.of<ManagerLoginBloc>(navigatorKey.currentContext!).add(
+          ManagerLoginButtonPressed(
+              email: email, password: password, remember: false),
+        );
       } else {
         print("ZO ELSE");
-        var toStringError = data['errors']['phone'].toString();
-        setState(() {
-          errorsPhoneField = toStringError.replaceAll("[", "");
-        });
-        pressButton();
+        showCustomDialogModal(
+            context: navigatorKey.currentContext,
+            textDesc: "messFailed",
+            title: "Thất bại",
+            colorButton: Colors.red,
+            btnText: "OK",
+            typeDialog: "error");
       }
     } catch (error) {
       print("ZO ELSE $error");
     }
   }
 
-  void pressButton() {
-    print("PRESS BUTOON");
-    print("STATE FORM ${_formField.currentState}");
-    if (_formField.currentState!.validate()) {
-      print("THONG TIN DANG KI ${{
-        "Ho": surNameController.text,
-        "Ten": nameController.text,
-        "Ho va ten": fullNameController.text,
-        "Email": emailController.text,
-        "So dien thoai": phoneController.text,
-        "Pass": passworldController.text,
-        "RePass": rePassworldController.text,
-        "AgreeConditon": isChecked,
-      }}");
-      dangki(
-        firstName: surNameController.text,
-        lastName: nameController.text,
-        fullName: fullNameController.text,
-        email: emailController.text,
-        phone: phoneController.text.toString(),
-        password: passworldController.text,
-        confirmPassword: rePassworldController.text,
-        agreeConditon: isChecked,
-      );
-      // BlocProvider.of<
-      //             ManagerRegisterBloc>(
-      //         context)
-      //     .add(
-      //   ManagerRegisterButtonPressed(
-      //     firstName:
-      //         surNameController
-      //             .text
-      //             .toString(),
-      //     lastName:
-      //         nameController
-      //             .text
-      //             .toString(),
-      //     fullName:
-      //         fullNameController
-      //             .text
-      //             .toString(),
-      //     email: emailController
-      //         .text
-      //         .toString(),
-      //     phone: phoneController
-      //         .text
-      //         .toString(),
-      //     password:
-      //         passworldController
-      //             .text
-      //             .toString(),
-      //     confirmPassword:
-      //         rePassworldController
-      //             .text
-      //             .toString(),
-      //     agreeConditon:
-      //         isChecked,
-      //   ),
-      // );
-      // surNameController.clear();
-      // nameController.clear();
-      // fullNameController
-      //     .clear();
-      // emailController.clear();
-      // phoneController.clear();
-      // passworldController
-      //     .clear();
-      // rePassworldController
-      //     .clear();
-    }
-  }
+  // void pressButton() {
+  //   print("PRESS BUTOON");
+  //   print("STATE FORM ${_formField.currentState}");
+  //   if (_formField.currentState!.validate()) {
+  //     print("THONG TIN DANG KI ${{
+  //       "Ho": surNameController.text,
+  //       "Ten": nameController.text,
+  //       "Ho va ten": fullNameController.text,
+  //       "Email": emailController.text,
+  //       "So dien thoai": phoneController.text,
+  //       "Pass": passworldController.text,
+  //       "RePass": rePassworldController.text,
+  //       "AgreeConditon": isChecked,
+  //     }}");
+  //     handleRegister(
+  //       firstName: surNameController.text,
+  //       lastName: nameController.text,
+  //       fullName: fullNameController.text,
+  //       email: emailController.text,
+  //       phone: phoneController.text.toString(),
+  //       password: passworldController.text,
+  //       confirmPassword: rePassworldController.text,
+  //       agreeConditon: isChecked,
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -838,7 +797,55 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                   color1: color1DarkButton,
                                                   color2: color2DarkButton,
                                                   event: () {
-                                                    pressButton();
+                                                    if (_formField.currentState!
+                                                        .validate()) {
+                                                      print(
+                                                          "THONG TIN DANG KI ${{
+                                                        "Ho": surNameController
+                                                            .text,
+                                                        "Ten":
+                                                            nameController.text,
+                                                        "Ho va ten":
+                                                            fullNameController
+                                                                .text,
+                                                        "Email": emailController
+                                                            .text,
+                                                        "So dien thoai":
+                                                            phoneController
+                                                                .text,
+                                                        "Pass":
+                                                            passworldController
+                                                                .text,
+                                                        "RePass":
+                                                            rePassworldController
+                                                                .text,
+                                                        "AgreeConditon":
+                                                            isChecked,
+                                                      }}");
+                                                      handleRegister(
+                                                        firstName:
+                                                            surNameController
+                                                                .text,
+                                                        lastName:
+                                                            nameController.text,
+                                                        fullName:
+                                                            fullNameController
+                                                                .text,
+                                                        email: emailController
+                                                            .text,
+                                                        phone: phoneController
+                                                            .text
+                                                            .toString(),
+                                                        password:
+                                                            passworldController
+                                                                .text,
+                                                        confirmPassword:
+                                                            rePassworldController
+                                                                .text,
+                                                        agreeConditon:
+                                                            isChecked,
+                                                      );
+                                                    }
                                                   },
                                                   text: "Đăng ký",
                                                   fontSize: 12.sp,

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:app_restaurant/bloc/bill_table/bill_table_bloc.dart';
 import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
@@ -363,6 +364,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                                       roomID: data.storeRoomId.toString(),
                                                                                                       listIdRoom: listRoomID,
                                                                                                       eventSaveButton: () {
+                                                                                                        log("RESET DATAAAAA");
                                                                                                         getDataTabIndex(
                                                                                                           roomId: data.storeRoomId.toString(),
                                                                                                         );

@@ -81,15 +81,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       print("DATAAAA $data");
       try {
         if (data['status'] == 200) {
-          print("DATA STAFF LOGIN $data");
           var authDataRes = StaffAuthData.fromJson(data);
           var authDataString = jsonEncode(authDataRes);
           var token = authDataRes.token;
           var staffShopID = authDataRes.data!.shopId;
           var token_expires_at = authDataRes.tokenExpiresAt;
-          print("TOKEN STAFF NE $token");
-          print("TOKEN Expires At $token_expires_at");
-
           StorageUtils.instance.setString(key: 'token', val: token ?? '');
           StorageUtils.instance
               .setString(key: 'staff_shop_id', val: staffShopID!);
@@ -102,7 +98,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
           navigatorKey.currentContext?.go("/staff_home");
 
-          Future.delayed(Duration(milliseconds: 500), () {
+          Future.delayed(const Duration(milliseconds: 500), () {
             print("DANG NHAP THNAH CONG");
             showLoginSuccesDialog();
           });

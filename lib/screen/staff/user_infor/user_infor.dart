@@ -1904,7 +1904,6 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                         if (_formField2.currentState!
                                             .validate()) {
                                           showConfirmDialog(context, () {
-                                            print("ConFIRM");
                                             changePasswordStaff(
                                                 currentPassword:
                                                     currentPassworldController

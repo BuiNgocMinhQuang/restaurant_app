@@ -1,14 +1,10 @@
 import 'dart:convert';
 
 import 'package:app_restaurant/config/text.dart';
-import 'package:app_restaurant/config/void_show_dialog.dart';
-import 'package:app_restaurant/model/bill_infor_model.dart';
 import 'package:app_restaurant/model/payment_infor_model.dart';
-import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';

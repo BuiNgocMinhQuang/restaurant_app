@@ -377,9 +377,9 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                           .add(
                                                         ManagerLoginButtonPressed(
                                                             email:
-                                                                "buingocminhquang@gmail.com",
+                                                                "chucuahang2@gmail.com",
                                                             password:
-                                                                "123456789",
+                                                                "1234567890",
                                                             remember: light),
                                                       );
                                                     },

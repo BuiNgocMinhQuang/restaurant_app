@@ -118,7 +118,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
   List<String> selectedCategories = [];
   List<String> listAllCategoriesFood = [];
   List<int> selectedCategoriesIndex = [];
-  List<ItemFood> currentFoodList = [];
+
   final List<TextEditingController> _foodQuantityController = [];
   bool hasMore = true;
 
@@ -443,6 +443,25 @@ class _BookingTableDialogState extends State<BookingTableDialog>
           roomId: widget.idRoom.toString()),
     );
   }
+// void init() async {
+//     await Future.delayed(const Duration(seconds: 0));
+
+//     mounted
+//         ? customerNameController.text = listFoodTableCurrent?.userFullName ?? ''
+//         : null;
+//     mounted
+//         ? surNameController.text = managerInforData?.userFirstName ?? ''
+//         : null;
+
+//     mounted ? nameController.text = managerInforData?.userLastName ?? '' : null;
+//     mounted ? emailController.text = managerInforData?.userEmail ?? '' : null;
+//     mounted ? phoneController.text = managerInforData?.userPhone ?? '' : null;
+
+//     mounted
+//         ? address4Controller.text = managerInforData?.userAddress4 ?? ''
+//         : null;
+
+//   }
 
   @override
   Widget build(BuildContext buildContext) {
@@ -1677,6 +1696,7 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
   // int selectedTable = -1;
   final Set<int> selectedTable = {};
   final Set<int> selectedTableId = {};
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TableBloc, TableState>(builder: (context, state) {
@@ -1686,9 +1706,6 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
         var listNameRoomFree = listRoomInit
             ?.map((data) => data.storeRoomName)
             .toList(); //list ten cua ban con trong
-        var listTableFree = listRoomInit
-            ?.map((e) => e.tables); //list tat ca ban cua phong (nhieu phong)
-        // debugPrint("listTableFree ${listTableFree}");
 
         var currentRoom = listRoomInit
             ?.where(
@@ -1696,10 +1713,6 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
             .firstOrNull;
 
         var currentRoomName = currentRoom?.storeRoomName;
-
-        //  var listTableFreeOfCurrentRoom = listTableFree?.where(
-        //     (e) => e!.isNotEmpty); // list cac ban con trong cua phong hien tai
-        // var listTableFreeOfCurrentRoom = currentRoom.tables
 
         return BlocBuilder<SwitchTableBloc, SwitchTableState>(
           builder: (context, stateSwitchTable) {
@@ -2029,6 +2042,7 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
                                                 selectedTableId.toList()));
                                     if (stateSwitchTable.switchtableStatus ==
                                         SwitchTableStatus.succes) {
+                                      print("ZOOOOOOOOOO");
                                       Navigator.of(context).pop();
                                       showUpdateDataSuccesDialog();
                                       widget.eventSaveButton();
@@ -3787,7 +3801,7 @@ class _ManageBroughtReceiptDialogState
   final String currentRole = "staff";
   final String currentShopId = getStaffShopID;
   List<String> selectedCategories = [];
-  List<ItemFood> currentFoodList = [];
+
   List<String> listAllCategoriesFood = [];
   List<int> selectedCategoriesIndex = [];
   List<int> selectedCategoriesIndex22 = [];
@@ -4801,7 +4815,6 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                         ],
                       ),
                       space5H,
-                      // CustomDotsLine(color: Colors.grey),
                       const Divider(
                         height: 1,
                         color: Colors.black,
@@ -4877,7 +4890,6 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                         ],
                       ),
                       space20H,
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -5151,7 +5163,6 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                         color: Colors.black,
                       ),
                       space10H,
-
                       state.printBroughtReceiptModel?.order
                                   .cancellationReason !=
                               null
@@ -5379,7 +5390,6 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                         ],
                       ),
                       space5H,
-                      // CustomDotsLine(color: Colors.grey),
                       const Divider(
                         height: 1,
                         color: Colors.black,
@@ -5452,7 +5462,6 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                         ],
                       ),
                       space20H,
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -5736,7 +5745,6 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                         color: Colors.black,
                       ),
                       space10H,
-
                       state.printBroughtReceiptModel?.order
                                   .cancellationReason !=
                               null
@@ -7583,5 +7591,3 @@ class _CreateItemDialogState extends State<CreateItemDialog>
     );
   }
 }
-
-// Navigator.of(context).pop();

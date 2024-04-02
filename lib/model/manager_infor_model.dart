@@ -3,7 +3,7 @@ class ManagerInforModel {
   String? message;
   String? token;
   String? tokenExpiresAt;
-  Data? data;
+  DataManagerInfor? data;
 
   ManagerInforModel(
       {this.status, this.message, this.token, this.tokenExpiresAt, this.data});
@@ -13,7 +13,9 @@ class ManagerInforModel {
     message = json['message'];
     token = json['token'];
     tokenExpiresAt = json['token_expires_at'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null
+        ? new DataManagerInfor.fromJson(json['data'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -29,7 +31,7 @@ class ManagerInforModel {
   }
 }
 
-class Data {
+class DataManagerInfor {
   int? userId;
   int? userNo;
   String? userFirstName;
@@ -38,9 +40,9 @@ class Data {
   String? userAvatar;
   String? userEmail;
   String? userPhone;
-  Null? frontImageCccd;
-  Null? backImageCccd;
-  Null? holdImageCccd;
+  String? frontImageCccd;
+  String? backImageCccd;
+  String? holdImageCccd;
   int? userAddress1;
   int? userAddress2;
   int? userAddress3;
@@ -53,7 +55,7 @@ class Data {
   String? createdAt;
   String? updatedAt;
 
-  Data(
+  DataManagerInfor(
       {this.userId,
       this.userNo,
       this.userFirstName,
@@ -77,7 +79,7 @@ class Data {
       this.createdAt,
       this.updatedAt});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  DataManagerInfor.fromJson(Map<String, dynamic> json) {
     userId = json['user_id'];
     userNo = json['user_no'];
     userFirstName = json['user_first_name'];

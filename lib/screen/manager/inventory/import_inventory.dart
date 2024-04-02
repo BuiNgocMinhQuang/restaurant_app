@@ -3,7 +3,6 @@ import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/fake_data.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
-import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/status_box.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';

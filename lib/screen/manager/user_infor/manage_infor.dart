@@ -1,18 +1,26 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
-
-import 'package:app_restaurant/bloc/login/login_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
+import 'package:app_restaurant/model/manager_infor_model.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
-import 'package:app_restaurant/widgets/shimmer/shimmer_list.dart';
+import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:app_restaurant/constant/api/index.dart';
+import 'package:app_restaurant/env/index.dart';
 
 class ManagerInformation extends StatefulWidget {
   const ManagerInformation({super.key});
@@ -24,9 +32,14 @@ class ManagerInformation extends StatefulWidget {
 class _ManagerInformationState extends State<ManagerInformation> {
   final _formField1 = GlobalKey<FormState>();
   final _formField2 = GlobalKey<FormState>();
+  final _formField3 = GlobalKey<FormState>();
+  final _formField4 = GlobalKey<FormState>();
   bool currentPasswordVisible = true;
   bool newPasswordVisible = true;
   bool reNewPasswordVisible = true;
+  bool passwordForOpenIDImageVisible = true;
+  bool isChangeUI = false;
+  DataManagerInfor? managerInforData;
   final surNameController = TextEditingController();
   final nameController = TextEditingController();
   final fullNameController = TextEditingController();
@@ -35,13 +48,15 @@ class _ManagerInformationState extends State<ManagerInformation> {
   final currentPassworldController = TextEditingController();
   final newPassworldController = TextEditingController();
   final reNewPassworldController = TextEditingController();
-  final twitterController = TextEditingController();
-  final facebookController = TextEditingController();
-  final instagramController = TextEditingController();
-  final address1Controller = TextEditingController();
-  final address2Controller = TextEditingController();
-  final address3Controller = TextEditingController();
   final address4Controller = TextEditingController();
+  final passwordForOpenIDImage = TextEditingController();
+  List cityList = [];
+  List districList = [];
+  List wardList = [];
+  String currentAvatar = 'assets/user/images/avt/no_image.png';
+  String currentIdImage = 'assets/img/no-image.png';
+  String? currentCity;
+  String? currentDistric;
   File? selectedImage;
   void pickImage() async {
     final returndImage =
@@ -55,94 +70,324 @@ class _ManagerInformationState extends State<ManagerInformation> {
   @override
   void initState() {
     super.initState();
-    init();
+    getInfor();
+  }
+
+  void checkPasswordToUpdateIdImage({
+    required String password,
+  }) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+
+      final response = await http.post(
+        Uri.parse('$baseUrl$managerCheckPassword'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': "Bearer $token"
+        },
+        body: jsonEncode({
+          'check_password': password,
+        }),
+      );
+      final data = jsonDecode(response.body);
+      print("DATA CJECK $data");
+      final messRes = data['message'];
+      final messText = messRes['text'];
+      try {
+        if (data['status'] == 200) {
+          setState(() {
+            isChangeUI = true;
+            showCustomDialogModal(
+                context: navigatorKey.currentContext,
+                textDesc: messText,
+                title: "Thành công",
+                colorButton: Colors.green,
+                btnText: "OK",
+                typeDialog: "succes");
+          });
+        } else {
+          showCustomDialogModal(
+              context: navigatorKey.currentContext,
+              textDesc: messText,
+              title: "Thất bại",
+              colorButton: Colors.red,
+              btnText: "OK",
+              typeDialog: "error");
+        }
+      } catch (error) {
+        print("LOI GI DO $error");
+      }
+    } catch (error) {
+      print("LOI GI DO $error");
+    }
+  }
+
+  void getListArea({
+    required int? city,
+    required int? district,
+  }) async {
+    print("DATA TRUYEN NN ${{
+      'city': city,
+      'district': district,
+    }}");
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl$areas'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          'city': city,
+          'district': district,
+        }),
+      );
+      final data = jsonDecode(response.body);
+
+      try {
+        if (response.statusCode == 200) {
+          setState(() {
+            cityList.clear();
+            districList.clear();
+            wardList.clear();
+            cityList.addAll(data['cities']);
+            districList.addAll(data['districts']);
+            wardList.addAll(data['wards']);
+
+            //get current City
+            var cityListMap = cityList.asMap();
+            var myCity = cityListMap[city];
+            currentCity = myCity;
+            //get current District
+            var districtListMap = districList.asMap();
+            var myDistrict = districtListMap[district];
+            currentDistric = myDistrict;
+            //get Current Ward
+            // var wardListMap = xaList.asMap();
+            // var myWard = wardListMap[userInforData?.staffAddress3];
+            // var currentWard = myWard;
+          });
+        } else {
+          print("LOI GI DO dadadadadadadada");
+        }
+      } catch (error) {
+        print("LOI GI DO $error");
+      }
+    } catch (error) {
+      print("LOI GI DO $error");
+    }
+  }
+
+  void getListAreaInit({
+    required int? city,
+    required int? district,
+  }) async {
+    print("DATA TRUYEN NN ${{
+      'city': city,
+      'district': district,
+    }}");
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl$areas'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          'city': city,
+          'district': district,
+        }),
+      );
+      final data = jsonDecode(response.body);
+
+      try {
+        if (response.statusCode == 200) {
+          setState(() {
+            cityList.clear();
+            districList.clear();
+            wardList.clear();
+            cityList.addAll(data['cities']);
+            districList.addAll(data['districts']);
+            wardList.addAll(data['wards']);
+
+            //get current City
+            var cityListMap = cityList.asMap();
+            var myCity = cityListMap[managerInforData?.userAddress1];
+            currentCity = myCity;
+            //get current District
+            var districtListMap = districList.asMap();
+            var myDistrict = districtListMap[managerInforData?.userAddress2];
+            currentDistric = myDistrict;
+
+            //get Current Ward
+            // var wardListMap = xaList.asMap();
+            // var myWard = wardListMap[userInforData?.staffAddress3];
+            // var currentWard = myWard;
+          });
+        } else {
+          print("LOI GI DO dadadadadadadada");
+        }
+      } catch (error) {
+        print("LOI GI DO $error");
+      }
+    } catch (error) {
+      print("LOI GI DO $error");
+    }
+  }
+
+  void getInfor() async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+      print("TOKEN CURRENT $token");
+      final response = await http.post(
+        Uri.parse('$baseUrl$userInformationApi'),
+        headers: {"Authorization": "Bearer $token"},
+      );
+      final data = jsonDecode(response.body);
+      // var message = data['message'];
+
+      try {
+        if (data['status'] == 200) {
+          var managerInforDataRes = ManagerInforModel.fromJson(data);
+          setState(() {
+            managerInforData = managerInforDataRes.data;
+            var imagePath1 =
+                (managerInforData?.userAvatar ?? '').replaceAll('["', '');
+            var imagePath2 = imagePath1.replaceAll('"]', '');
+            currentAvatar = imagePath2;
+          });
+          init();
+
+          print("GET INFOR MANGAER OK 1");
+        } else {
+          print("GET INFOR MANGAER ERROR 1");
+        }
+      } catch (error) {
+        print("GET INFOR MANGAER ERROR 2  $error");
+      }
+    } catch (error) {
+      print("GET INFOR MANGAER ERROR 3 $error");
+    }
+  }
+
+  void deletedAvatarStaff() async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$managerDeletedAvatar'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+      );
+      final data = jsonDecode(respons.body);
+      print("DATA DELETED AVATAR MANAGER  ${data}}");
+
+      try {
+        if (data['status'] == 200) {
+          print("DELETED AVATAR MANAGER  OK");
+          getInfor();
+
+          showSnackBarTopCustom(
+              title: "Thành công",
+              context: navigatorKey.currentContext,
+              mess: "Xoá ảnh đại diện thành công",
+              color: Colors.green);
+        } else {
+          print("ERROR DELETED AVATAR MANAGER  1");
+          showSnackBarTopCustom(
+              title: "Thất bại",
+              context: navigatorKey.currentContext,
+              mess: "Thao tác thất bại",
+              color: Colors.red);
+        }
+      } catch (error) {
+        print("ERROR DELETED AVATAR MANAGER  2 ${error}");
+      }
+    } catch (error) {
+      print("ERROR DELETED AVATAR MANAGER  3 $error");
+    }
+  }
+
+  void changePasswordManager({
+    required String? currentPassword,
+    required String? newPassword,
+    required String? confirmNewPassword,
+  }) async {
+    try {
+      print("TRUYEN NNNN ${{
+        "password": currentPassword,
+        "password_new": newPassword,
+        "confirm_password_new": confirmNewPassword
+      }}");
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+      log(token.toString());
+      final respons = await http.post(
+        Uri.parse('$baseUrl$managerUpdatePassword'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          "password": currentPassword,
+          "password_new": newPassword,
+          "confirm_password_new": confirmNewPassword
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print("DATA CHANGE PASS STAFF  ${data}}");
+      final messText = data['message'];
+      try {
+        if (data['status'] == 200) {
+          print("CHANGE PASS STAFF  OK");
+          currentPassworldController.clear();
+          newPassworldController.clear();
+          reNewPassworldController.clear();
+          getInfor();
+          showSnackBarTopCustom(
+              title: "Thành công",
+              context: navigatorKey.currentContext,
+              mess: messText['text'],
+              color: Colors.green);
+        } else {
+          print("ERROR CHANGE PASS STAFF  1");
+          showSnackBarTopCustom(
+              title: "Thất bại",
+              context: navigatorKey.currentContext,
+              mess: messText['text'],
+              color: Colors.red);
+        }
+      } catch (error) {
+        print("ERROR CHANGE PASS STAFF  2 ${error}");
+      }
+    } catch (error) {
+      print("ERROR CHANGE PASS STAFF  3 $error");
+    }
   }
 
   void init() async {
     await Future.delayed(const Duration(seconds: 0));
 
     mounted
-        ? fullNameController.text = context
-                .read<LoginBloc>()
-                .state
-                .managerInforModel
-                ?.data
-                ?.userFullName ??
-            ''
+        ? fullNameController.text = managerInforData?.userFullName ?? ''
         : null;
     mounted
-        ? surNameController.text = context
-                .read<LoginBloc>()
-                .state
-                .managerInforModel
-                ?.data
-                ?.userFirstName ??
-            ''
+        ? surNameController.text = managerInforData?.userFirstName ?? ''
         : null;
 
+    mounted ? nameController.text = managerInforData?.userLastName ?? '' : null;
+    mounted ? emailController.text = managerInforData?.userEmail ?? '' : null;
+    mounted ? phoneController.text = managerInforData?.userPhone ?? '' : null;
+
     mounted
-        ? nameController.text = context
-                .read<LoginBloc>()
-                .state
-                .managerInforModel
-                ?.data
-                ?.userLastName ??
-            ''
+        ? address4Controller.text = managerInforData?.userAddress4 ?? ''
         : null;
-    mounted
-        ? emailController.text = context
-                .read<LoginBloc>()
-                .state
-                .managerInforModel
-                ?.data
-                ?.userEmail ??
-            ''
-        : null;
-    mounted
-        ? phoneController.text = context
-                .read<LoginBloc>()
-                .state
-                .managerInforModel
-                ?.data
-                ?.userPhone ??
-            ''
-        : null;
-    mounted
-        ? address4Controller.text = context
-                .read<LoginBloc>()
-                .state
-                .managerInforModel
-                ?.data
-                ?.userAddress4 ??
-            ''
-        : null;
-    // mounted
-    //     ? twitterController.text = context
-    //             .read<LoginBloc>()
-    //             .state
-    //             .staffInforDataModel
-    //             ?.data
-    //             ?.staffTwitter ??
-    //         ''
-    //     : null;
-    // mounted
-    //     ? facebookController.text = context
-    //             .read<LoginBloc>()
-    //             .state
-    //             .staffInforDataModel
-    //             ?.data
-    //             ?.staffFacebook ??
-    //         ''
-    //     : null;
-    // mounted
-    //     ? instagramController.text = context
-    //             .read<LoginBloc>()
-    //             .state
-    //             .staffInforDataModel
-    //             ?.data
-    //             ?.staffInstagram ??
-    //         ''
-    //     : null;
+    getListAreaInit(
+        city: managerInforData?.userAddress1,
+        district: managerInforData?.userAddress2);
   }
 
   @override
@@ -152,960 +397,131 @@ class _ManagerInformationState extends State<ManagerInformation> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(
-      builder: (context, state) {
-        fullNameController.text =
-            state.managerInforModel?.data?.userFullName ?? '';
-        surNameController.text =
-            state.managerInforModel?.data?.userFirstName ?? '';
-        nameController.text = state.managerInforModel?.data?.userLastName ?? '';
-        emailController.text = state.managerInforModel?.data?.userEmail ?? '';
-        phoneController.text = state.managerInforModel?.data?.userPhone ?? '';
-        address4Controller.text =
-            state.managerInforModel?.data?.userAddress4 ?? '';
-        return Scaffold(
-          body: SafeArea(
-              child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding:
-                            EdgeInsets.only(top: 40.h, left: 10.w, right: 10.w),
-                        child: Container(
-                          width: double.infinity,
-                          // height: 100.h,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15.r),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 5,
-                                blurRadius: 7,
-                                offset: const Offset(
-                                    0, 3), // changes position of shadow
-                              ),
-                            ],
+    log(currentDistric.toString());
+    return Scaffold(
+      body: SafeArea(
+          child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  Padding(
+                    padding:
+                        EdgeInsets.only(top: 40.h, left: 10.w, right: 10.w),
+                    child: Container(
+                      width: double.infinity,
+                      // height: 100.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15.r),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
                           ),
-                          child: Padding(
-                            padding: EdgeInsets.all(10.w),
-                            child: IntrinsicHeight(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                        ],
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(10.w),
+                        child: IntrinsicHeight(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Stack(
                                 children: [
-                                  InkWell(
-                                      onTap: () {
-                                        pickImage();
-                                      },
-                                      child: Stack(
-                                        children: [
-                                          Container(
-                                            width: 100.w,
-                                            height: 150.w,
+                                  Container(
+                                    width: 100.w,
+                                    height: 150.w,
+                                    color: Colors.grey,
+                                    child: selectedImage != null
+                                        ? Image.file(
+                                            selectedImage!,
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Container(
+                                            // width: 100.w,
                                             color: Colors.grey,
-                                            child: selectedImage != null
-                                                ? Image.file(
-                                                    selectedImage!,
-                                                    fit: BoxFit.cover,
-                                                  )
-                                                : Container(
-                                                    // width: 100.w,
-                                                    color: Colors.grey,
-                                                    child: Icon(Icons.person),
-                                                  ),
+                                            child: Image.network(
+                                              httpImage + currentAvatar,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
-                                          Positioned(
-                                              top: 5.w,
-                                              right: 5.w,
-                                              child: Icon(Icons.edit))
-                                        ],
+                                  ),
+                                  Positioned(
+                                      top: 0.w,
+                                      right: 0.w,
+                                      child: PopUpSettingAvatar(
+                                        eventButton1: () {
+                                          pickImage();
+                                        },
+                                        eventButton2: () {
+                                          deletedAvatarStaff();
+                                        },
                                       )),
-                                  space25W,
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      TextApp(
-                                        text: fullNameController.text,
-                                        fontWeight: FontWeight.bold,
-                                        fontsize: 18.sp,
-                                      ),
-                                      TextApp(
-                                        text: "Tài khoản đã được xác nhận",
-                                        fontsize: 14.sp,
-                                        color: Color.fromRGBO(130, 214, 22, 1),
-                                        fontWeight: FontWeight.bold,
-                                      )
-                                    ],
-                                  )
                                 ],
                               ),
-                            ),
+                              // InkWell(
+                              //     onTap: () {
+                              //       pickImage();
+                              //     },
+                              //     child: Stack(
+                              //       children: [
+                              //         Container(
+                              //           width: 100.w,
+                              //           height: 150.w,
+                              //           color: Colors.grey,
+                              //           child: selectedImage != null
+                              //               ? Image.file(
+                              //                   selectedImage!,
+                              //                   fit: BoxFit.cover,
+                              //                 )
+                              //               : Container(
+                              //                   // width: 100.w,
+                              //                   color: Colors.grey,
+                              //                   child: Image.network(
+                              //                     httpImage + currentAvatar,
+                              //                     fit: BoxFit.cover,
+                              //                   ),
+                              //                 ),
+                              //         ),
+                              //         Positioned(
+                              //             top: 5.w,
+                              //             right: 5.w,
+                              //             child: Icon(Icons.edit))
+                              //       ],
+                              //     )),
+                              space25W,
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextApp(
+                                    text: fullNameController.text,
+                                    fontWeight: FontWeight.bold,
+                                    fontsize: 18.sp,
+                                  ),
+                                  TextApp(
+                                    text: "Tài khoản đã được xác nhận",
+                                    fontsize: 14.sp,
+                                    color: Color.fromRGBO(130, 214, 22, 1),
+                                    fontWeight: FontWeight.bold,
+                                  )
+                                ],
+                              )
+                            ],
                           ),
                         ),
                       ),
-                      Form(
-                        key: _formField1,
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  top: 40.h, left: 10.w, right: 10.w),
-                              child: Container(
-                                  width: double.infinity,
-                                  // height: heightView / 2,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15.r),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 5,
-                                        blurRadius: 7,
-                                        offset: const Offset(
-                                            0, 3), // changes position of shadow
-                                      ),
-                                    ],
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(20.w),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "Thông tin cơ bản",
-                                          style: TextStyle(
-                                            color: const Color.fromRGBO(
-                                                52, 71, 103, 1),
-                                            fontFamily: "Icomoon",
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 24.sp,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 30.h,
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            TextApp(
-                                              text: " Họ và tên",
-                                              fontsize: 10.sp,
-                                              fontWeight: FontWeight.bold,
-                                              color: blueText,
-                                            ),
-                                            SizedBox(
-                                              height: 10.h,
-                                            ),
-                                            TextFormField(
-                                              controller: fullNameController,
-                                              keyboardType: TextInputType.name,
-                                              style: TextStyle(
-                                                  fontSize: 12.sp, color: grey),
-                                              cursorColor: grey,
-                                              validator: (value) {
-                                                if (value!.isEmpty) {
-                                                  return fullnameIsRequied;
-                                                } else {
-                                                  return null;
-                                                }
-                                              },
-                                              decoration: InputDecoration(
-                                                  fillColor:
-                                                      const Color.fromARGB(
-                                                          255, 226, 104, 159),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide:
-                                                        const BorderSide(
-                                                            color:
-                                                                Color.fromRGBO(
-                                                                    214,
-                                                                    51,
-                                                                    123,
-                                                                    0.6),
-                                                            width: 2.0),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.r),
-                                                  ),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.r),
-                                                  ),
-                                                  // hintText: 'Tên',
-                                                  isDense: true,
-                                                  contentPadding:
-                                                      EdgeInsets.all(15.w)),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 20.h,
-                                        ),
-                                        IntrinsicHeight(
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                flex: 1,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    TextApp(
-                                                      text: " Họ",
-                                                      fontsize: 10.sp,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: blueText,
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10.h,
-                                                    ),
-                                                    TextFormField(
-                                                      keyboardType:
-                                                          TextInputType.name,
-                                                      controller:
-                                                          surNameController,
-                                                      style: TextStyle(
-                                                          fontSize: 12.sp,
-                                                          color: grey),
-                                                      cursorColor: grey,
-                                                      validator: (value) {
-                                                        if (value!.isEmpty) {
-                                                          return surNameIsRequied;
-                                                        } else {
-                                                          return null;
-                                                        }
-                                                      },
-                                                      decoration:
-                                                          InputDecoration(
-                                                              fillColor: Color
-                                                                  .fromARGB(
-                                                                      255,
-                                                                      226,
-                                                                      104,
-                                                                      159),
-                                                              focusedBorder:
-                                                                  OutlineInputBorder(
-                                                                borderSide: BorderSide(
-                                                                    color: Color
-                                                                        .fromRGBO(
-                                                                            214,
-                                                                            51,
-                                                                            123,
-                                                                            0.6),
-                                                                    width: 2.0),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.r),
-                                                              ),
-                                                              border:
-                                                                  OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.r),
-                                                              ),
-                                                              // hintText: 'Họ',
-                                                              isDense: true,
-                                                              contentPadding:
-                                                                  EdgeInsets
-                                                                      .all(15
-                                                                          .w)),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 10.w,
-                                              ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    TextApp(
-                                                      text: " Tên",
-                                                      fontsize: 10.sp,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: blueText,
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10.h,
-                                                    ),
-                                                    TextFormField(
-                                                      keyboardType:
-                                                          TextInputType.name,
-                                                      controller:
-                                                          nameController,
-                                                      style: TextStyle(
-                                                          fontSize: 12.sp,
-                                                          color: grey),
-                                                      cursorColor: grey,
-                                                      validator: (value) {
-                                                        if (value!.isEmpty) {
-                                                          return nameIsRequied;
-                                                        } else {
-                                                          return null;
-                                                        }
-                                                      },
-                                                      decoration:
-                                                          InputDecoration(
-                                                              fillColor:
-                                                                  const Color
-                                                                      .fromARGB(
-                                                                      255,
-                                                                      226,
-                                                                      104,
-                                                                      159),
-                                                              focusedBorder:
-                                                                  OutlineInputBorder(
-                                                                borderSide: const BorderSide(
-                                                                    color: Color
-                                                                        .fromRGBO(
-                                                                            214,
-                                                                            51,
-                                                                            123,
-                                                                            0.6),
-                                                                    width: 2.0),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.r),
-                                                              ),
-                                                              border:
-                                                                  OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.r),
-                                                              ),
-                                                              // hintText: 'Tên',
-                                                              isDense: true,
-                                                              contentPadding:
-                                                                  EdgeInsets
-                                                                      .all(15
-                                                                          .w)),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 20.h,
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            TextApp(
-                                              text: " Số điện thoại",
-                                              fontsize: 10.sp,
-                                              fontWeight: FontWeight.bold,
-                                              color: blueText,
-                                            ),
-                                            SizedBox(
-                                              height: 10.h,
-                                            ),
-                                            TextFormField(
-                                              controller: phoneController,
-                                              keyboardType: TextInputType.name,
-                                              style: TextStyle(
-                                                  fontSize: 12.sp, color: grey),
-                                              cursorColor: grey,
-                                              validator: (value) {
-                                                if (value!.isEmpty) {
-                                                  return phoneIsRequied;
-                                                }
-                                                bool phoneValid = RegExp(
-                                                        r'^(?:[+0]9)?[0-9]{10}$')
-                                                    .hasMatch(value);
-
-                                                if (!phoneValid) {
-                                                  return invalidPhone;
-                                                }
-                                              },
-                                              decoration: InputDecoration(
-                                                  fillColor:
-                                                      const Color.fromARGB(
-                                                          255, 226, 104, 159),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide:
-                                                        const BorderSide(
-                                                            color:
-                                                                Color.fromRGBO(
-                                                                    214,
-                                                                    51,
-                                                                    123,
-                                                                    0.6),
-                                                            width: 2.0),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.r),
-                                                  ),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.r),
-                                                  ),
-                                                  // hintText: 'Tên',
-                                                  isDense: true,
-                                                  contentPadding:
-                                                      EdgeInsets.all(15.w)),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 20.h,
-                                        ),
-                                        IntrinsicHeight(
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                flex: 1,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    TextApp(
-                                                      text: " Tỉnh/Thành phố",
-                                                      fontsize: 10.sp,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: blueText,
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10.h,
-                                                    ),
-                                                    TextFormField(
-                                                      keyboardType:
-                                                          TextInputType.name,
-                                                      style: TextStyle(
-                                                          fontSize: 12.sp,
-                                                          color: grey),
-                                                      cursorColor: grey,
-                                                      decoration:
-                                                          InputDecoration(
-                                                              fillColor: Color
-                                                                  .fromARGB(
-                                                                      255,
-                                                                      226,
-                                                                      104,
-                                                                      159),
-                                                              focusedBorder:
-                                                                  OutlineInputBorder(
-                                                                borderSide: BorderSide(
-                                                                    color: Color
-                                                                        .fromRGBO(
-                                                                            214,
-                                                                            51,
-                                                                            123,
-                                                                            0.6),
-                                                                    width: 2.0),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.r),
-                                                              ),
-                                                              border:
-                                                                  OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.r),
-                                                              ),
-                                                              // hintText: 'Họ',
-                                                              isDense: true,
-                                                              contentPadding:
-                                                                  EdgeInsets
-                                                                      .all(15
-                                                                          .w)),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 10.w,
-                                              ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    TextApp(
-                                                      text: " Quận/Huyện",
-                                                      fontsize: 10.sp,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: blueText,
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10.h,
-                                                    ),
-                                                    TextFormField(
-                                                      keyboardType:
-                                                          TextInputType.name,
-                                                      style: TextStyle(
-                                                          fontSize: 12.sp,
-                                                          color: grey),
-                                                      cursorColor: grey,
-                                                      decoration:
-                                                          InputDecoration(
-                                                              fillColor:
-                                                                  const Color
-                                                                      .fromARGB(
-                                                                      255,
-                                                                      226,
-                                                                      104,
-                                                                      159),
-                                                              focusedBorder:
-                                                                  OutlineInputBorder(
-                                                                borderSide: const BorderSide(
-                                                                    color: Color
-                                                                        .fromRGBO(
-                                                                            214,
-                                                                            51,
-                                                                            123,
-                                                                            0.6),
-                                                                    width: 2.0),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.r),
-                                                              ),
-                                                              border:
-                                                                  OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.r),
-                                                              ),
-                                                              // hintText: 'Tên',
-                                                              isDense: true,
-                                                              contentPadding:
-                                                                  EdgeInsets
-                                                                      .all(15
-                                                                          .w)),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 20.h,
-                                        ),
-                                        IntrinsicHeight(
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                flex: 1,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    TextApp(
-                                                      text: " Phường/Xã",
-                                                      fontsize: 10.sp,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: blueText,
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10.h,
-                                                    ),
-                                                    TextFormField(
-                                                      keyboardType:
-                                                          TextInputType.name,
-                                                      style: TextStyle(
-                                                          fontSize: 12.sp,
-                                                          color: grey),
-                                                      cursorColor: grey,
-                                                      decoration:
-                                                          InputDecoration(
-                                                              fillColor: Color
-                                                                  .fromARGB(
-                                                                      255,
-                                                                      226,
-                                                                      104,
-                                                                      159),
-                                                              focusedBorder:
-                                                                  OutlineInputBorder(
-                                                                borderSide: BorderSide(
-                                                                    color: Color
-                                                                        .fromRGBO(
-                                                                            214,
-                                                                            51,
-                                                                            123,
-                                                                            0.6),
-                                                                    width: 2.0),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.r),
-                                                              ),
-                                                              border:
-                                                                  OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.r),
-                                                              ),
-                                                              // hintText: 'Họ',
-                                                              isDense: true,
-                                                              contentPadding:
-                                                                  EdgeInsets
-                                                                      .all(15
-                                                                          .w)),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 10.w,
-                                              ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    TextApp(
-                                                      text: " Số nhà, đường",
-                                                      fontsize: 10.sp,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: blueText,
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10.h,
-                                                    ),
-                                                    TextFormField(
-                                                      controller:
-                                                          address4Controller,
-                                                      keyboardType:
-                                                          TextInputType.name,
-                                                      style: TextStyle(
-                                                          fontSize: 12.sp,
-                                                          color: grey),
-                                                      cursorColor: grey,
-                                                      decoration:
-                                                          InputDecoration(
-                                                              fillColor:
-                                                                  const Color
-                                                                      .fromARGB(
-                                                                      255,
-                                                                      226,
-                                                                      104,
-                                                                      159),
-                                                              focusedBorder:
-                                                                  OutlineInputBorder(
-                                                                borderSide: const BorderSide(
-                                                                    color: Color
-                                                                        .fromRGBO(
-                                                                            214,
-                                                                            51,
-                                                                            123,
-                                                                            0.6),
-                                                                    width: 2.0),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.r),
-                                                              ),
-                                                              border:
-                                                                  OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.r),
-                                                              ),
-                                                              // hintText: 'Tên',
-                                                              isDense: true,
-                                                              contentPadding:
-                                                                  EdgeInsets
-                                                                      .all(15
-                                                                          .w)),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        space20H,
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            TextApp(
-                                              text: " Email",
-                                              fontsize: 12.sp,
-                                              fontWeight: FontWeight.bold,
-                                              color: blueText,
-                                            ),
-                                            SizedBox(
-                                              height: 10.h,
-                                            ),
-                                            TextFormField(
-                                              controller: emailController,
-                                              keyboardType:
-                                                  TextInputType.emailAddress,
-                                              style: TextStyle(
-                                                  fontSize: 12.sp, color: grey),
-                                              cursorColor: grey,
-                                              validator: (value) {
-                                                if (value!.isEmpty) {
-                                                  return emailIsRequied;
-                                                }
-                                                bool emailValid = RegExp(
-                                                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                                    .hasMatch(value);
-
-                                                if (!emailValid) {
-                                                  return invalidEmail;
-                                                }
-                                              },
-                                              decoration: InputDecoration(
-                                                  fillColor:
-                                                      const Color.fromARGB(
-                                                          255, 226, 104, 159),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide:
-                                                        const BorderSide(
-                                                            color:
-                                                                Color.fromRGBO(
-                                                                    214,
-                                                                    51,
-                                                                    123,
-                                                                    0.6),
-                                                            width: 2.0),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.r),
-                                                  ),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.r),
-                                                  ),
-                                                  hintText: 'Email',
-                                                  isDense: true,
-                                                  contentPadding:
-                                                      EdgeInsets.all(15.w)),
-                                            ),
-                                          ],
-                                        ),
-                                        // SizedBox(
-                                        //   height: 20.h,
-                                        // ),
-                                        // Column(
-                                        //   crossAxisAlignment:
-                                        //       CrossAxisAlignment.start,
-                                        //   children: [
-                                        //     TextApp(
-                                        //       text: " Twitter",
-                                        //       fontsize: 12.sp,
-                                        //       fontWeight: FontWeight.bold,
-                                        //       color: blueText,
-                                        //     ),
-                                        //     SizedBox(
-                                        //       height: 10.h,
-                                        //     ),
-                                        //     TextField(
-                                        //       controller: twitterController,
-                                        //       style: TextStyle(
-                                        //           fontSize: 14.sp, color: grey),
-                                        //       cursorColor: grey,
-                                        //       decoration: InputDecoration(
-                                        //           fillColor:
-                                        //               const Color.fromARGB(
-                                        //                   255, 226, 104, 159),
-                                        //           focusedBorder:
-                                        //               OutlineInputBorder(
-                                        //             borderSide:
-                                        //                 const BorderSide(
-                                        //                     color:
-                                        //                         Color.fromRGBO(
-                                        //                             214,
-                                        //                             51,
-                                        //                             123,
-                                        //                             0.6),
-                                        //                     width: 2.0),
-                                        //             borderRadius:
-                                        //                 BorderRadius.circular(
-                                        //                     8.r),
-                                        //           ),
-                                        //           border: OutlineInputBorder(
-                                        //             borderRadius:
-                                        //                 BorderRadius.circular(
-                                        //                     8.r),
-                                        //           ),
-                                        //           hintText: 'Twitter',
-                                        //           isDense: true,
-                                        //           contentPadding:
-                                        //               EdgeInsets.all(15.w)),
-                                        //     ),
-                                        //   ],
-                                        // ),
-                                        // space20H,
-                                        // Column(
-                                        //   crossAxisAlignment:
-                                        //       CrossAxisAlignment.start,
-                                        //   children: [
-                                        //     TextApp(
-                                        //       text: " Facebook",
-                                        //       fontsize: 12.sp,
-                                        //       fontWeight: FontWeight.bold,
-                                        //       color: blueText,
-                                        //     ),
-                                        //     SizedBox(
-                                        //       height: 10.h,
-                                        //     ),
-                                        //     TextField(
-                                        //       controller: facebookController,
-                                        //       style: TextStyle(
-                                        //           fontSize: 14.sp, color: grey),
-                                        //       cursorColor: grey,
-                                        //       decoration: InputDecoration(
-                                        //           fillColor:
-                                        //               const Color.fromARGB(
-                                        //                   255, 226, 104, 159),
-                                        //           focusedBorder:
-                                        //               OutlineInputBorder(
-                                        //             borderSide:
-                                        //                 const BorderSide(
-                                        //                     color:
-                                        //                         Color.fromRGBO(
-                                        //                             214,
-                                        //                             51,
-                                        //                             123,
-                                        //                             0.6),
-                                        //                     width: 2.0),
-                                        //             borderRadius:
-                                        //                 BorderRadius.circular(
-                                        //                     8.r),
-                                        //           ),
-                                        //           border: OutlineInputBorder(
-                                        //             borderRadius:
-                                        //                 BorderRadius.circular(
-                                        //                     8.r),
-                                        //           ),
-                                        //           hintText: 'Facebook',
-                                        //           isDense: true,
-                                        //           contentPadding:
-                                        //               EdgeInsets.all(15.w)),
-                                        //     ),
-                                        //   ],
-                                        // ),
-                                        // space20H,
-                                        // Column(
-                                        //   crossAxisAlignment:
-                                        //       CrossAxisAlignment.start,
-                                        //   children: [
-                                        //     TextApp(
-                                        //       text: " Instagram",
-                                        //       fontsize: 12.sp,
-                                        //       fontWeight: FontWeight.bold,
-                                        //       color: blueText,
-                                        //     ),
-                                        //     SizedBox(
-                                        //       height: 10.h,
-                                        //     ),
-                                        //     TextField(
-                                        //       controller: instagramController,
-                                        //       style: TextStyle(
-                                        //           fontSize: 14.sp, color: grey),
-                                        //       cursorColor: grey,
-                                        //       decoration: InputDecoration(
-                                        //           fillColor:
-                                        //               const Color.fromARGB(
-                                        //                   255, 226, 104, 159),
-                                        //           focusedBorder:
-                                        //               OutlineInputBorder(
-                                        //             borderSide:
-                                        //                 const BorderSide(
-                                        //                     color:
-                                        //                         Color.fromRGBO(
-                                        //                             214,
-                                        //                             51,
-                                        //                             123,
-                                        //                             0.6),
-                                        //                     width: 2.0),
-                                        //             borderRadius:
-                                        //                 BorderRadius.circular(
-                                        //                     8.r),
-                                        //           ),
-                                        //           border: OutlineInputBorder(
-                                        //             borderRadius:
-                                        //                 BorderRadius.circular(
-                                        //                     8.r),
-                                        //           ),
-                                        //           hintText: 'Instagram',
-                                        //           isDense: true,
-                                        //           contentPadding:
-                                        //               EdgeInsets.all(15.w)),
-                                        //     ),
-                                        //   ],
-                                        // ),
-                                        space20H,
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            SizedBox(
-                                              width: 200.w,
-                                              child: ButtonGradient(
-                                                color1: color1DarkButton,
-                                                color2: color2DarkButton,
-                                                event: () {
-                                                  if (_formField1.currentState!
-                                                      .validate()) {
-                                                    surNameController.clear();
-                                                    nameController.clear();
-                                                    fullNameController.clear();
-                                                    emailController.clear();
-                                                    phoneController.clear();
-                                                  }
-                                                },
-                                                text: "Cập nhật thông tin",
-                                                fontSize: 12.sp,
-                                                radius: 8.r,
-                                                textColor: Colors.white,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 20.h,
-                                        ),
-                                      ],
-                                    ),
-                                  )),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      //Password form
-
-                      Form(
-                        key: _formField2,
-                        child: Padding(
+                    ),
+                  ),
+                  Form(
+                    key: _formField1,
+                    child: Column(
+                      children: [
+                        Padding(
                           padding: EdgeInsets.only(
                               top: 40.h, left: 10.w, right: 10.w),
                           child: Container(
@@ -1129,13 +545,217 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                 child: Column(
                                   children: [
                                     Text(
-                                      "Mật khẩu",
+                                      "Thông tin cơ bản",
                                       style: TextStyle(
                                         color: const Color.fromRGBO(
                                             52, 71, 103, 1),
                                         fontFamily: "Icomoon",
                                         fontWeight: FontWeight.bold,
                                         fontSize: 24.sp,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 30.h,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        TextApp(
+                                          text: " Họ và tên",
+                                          fontsize: 10.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: blueText,
+                                        ),
+                                        SizedBox(
+                                          height: 10.h,
+                                        ),
+                                        TextFormField(
+                                          onTapOutside: (event) {
+                                            FocusManager.instance.primaryFocus
+                                                ?.unfocus();
+                                          },
+                                          controller: fullNameController,
+                                          keyboardType: TextInputType.name,
+                                          style: TextStyle(
+                                              fontSize: 12.sp, color: grey),
+                                          cursorColor: grey,
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return fullnameIsRequied;
+                                            } else {
+                                              return null;
+                                            }
+                                          },
+                                          decoration: InputDecoration(
+                                              fillColor: const Color.fromARGB(
+                                                  255, 226, 104, 159),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color.fromRGBO(
+                                                        214, 51, 123, 0.6),
+                                                    width: 2.0),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              // hintText: 'Tên',
+                                              isDense: true,
+                                              contentPadding:
+                                                  EdgeInsets.all(15.w)),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
+                                    IntrinsicHeight(
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                TextApp(
+                                                  text: " Họ",
+                                                  fontsize: 10.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: blueText,
+                                                ),
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
+                                                TextFormField(
+                                                  onTapOutside: (event) {
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
+                                                  },
+                                                  keyboardType:
+                                                      TextInputType.name,
+                                                  controller: surNameController,
+                                                  style: TextStyle(
+                                                      fontSize: 12.sp,
+                                                      color: grey),
+                                                  cursorColor: grey,
+                                                  validator: (value) {
+                                                    if (value!.isEmpty) {
+                                                      return surNameIsRequied;
+                                                    } else {
+                                                      return null;
+                                                    }
+                                                  },
+                                                  decoration: InputDecoration(
+                                                      fillColor: Color.fromARGB(
+                                                          255, 226, 104, 159),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color:
+                                                                Color.fromRGBO(
+                                                                    214,
+                                                                    51,
+                                                                    123,
+                                                                    0.6),
+                                                            width: 2.0),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      // hintText: 'Họ',
+                                                      isDense: true,
+                                                      contentPadding:
+                                                          EdgeInsets.all(15.w)),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10.w,
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                TextApp(
+                                                  text: " Tên",
+                                                  fontsize: 10.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: blueText,
+                                                ),
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
+                                                TextFormField(
+                                                  onTapOutside: (event) {
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
+                                                  },
+                                                  keyboardType:
+                                                      TextInputType.name,
+                                                  controller: nameController,
+                                                  style: TextStyle(
+                                                      fontSize: 12.sp,
+                                                      color: grey),
+                                                  cursorColor: grey,
+                                                  validator: (value) {
+                                                    if (value!.isEmpty) {
+                                                      return nameIsRequied;
+                                                    } else {
+                                                      return null;
+                                                    }
+                                                  },
+                                                  decoration: InputDecoration(
+                                                      fillColor:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              226,
+                                                              104,
+                                                              159),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color: Color
+                                                                    .fromRGBO(
+                                                                        214,
+                                                                        51,
+                                                                        123,
+                                                                        0.6),
+                                                                width: 2.0),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      // hintText: 'Tên',
+                                                      isDense: true,
+                                                      contentPadding:
+                                                          EdgeInsets.all(15.w)),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                     SizedBox(
@@ -1146,8 +766,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         TextApp(
-                                          text: " Mật khẩu hiện tại",
-                                          fontsize: 12.sp,
+                                          text: " Số điện thoại",
+                                          fontsize: 10.sp,
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
@@ -1155,37 +775,28 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                           height: 10.h,
                                         ),
                                         TextFormField(
-                                          controller:
-                                              currentPassworldController,
-                                          obscureText: currentPasswordVisible,
+                                          onTapOutside: (event) {
+                                            FocusManager.instance.primaryFocus
+                                                ?.unfocus();
+                                          },
+                                          controller: phoneController,
+                                          keyboardType: TextInputType.name,
                                           style: TextStyle(
                                               fontSize: 12.sp, color: grey),
                                           cursorColor: grey,
                                           validator: (value) {
                                             if (value!.isEmpty) {
-                                              return canNotNull;
-                                            } else if (value.length < 8) {
-                                              return passwordRequiedLength;
-                                            } else {
-                                              return null;
+                                              return phoneIsRequied;
+                                            }
+                                            bool phoneValid =
+                                                RegExp(r'^(?:[+0]9)?[0-9]{10}$')
+                                                    .hasMatch(value);
+
+                                            if (!phoneValid) {
+                                              return invalidPhone;
                                             }
                                           },
                                           decoration: InputDecoration(
-                                              suffixIconColor: Color.fromARGB(
-                                                  255, 226, 104, 159),
-                                              suffixIcon: IconButton(
-                                                  onPressed: () {
-                                                    setState(
-                                                      () {
-                                                        currentPasswordVisible =
-                                                            !currentPasswordVisible;
-                                                      },
-                                                    );
-                                                  },
-                                                  icon: Icon(
-                                                      currentPasswordVisible
-                                                          ? Icons.visibility_off
-                                                          : Icons.visibility)),
                                               fillColor: const Color.fromARGB(
                                                   255, 226, 104, 159),
                                               focusedBorder: OutlineInputBorder(
@@ -1200,12 +811,314 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                 borderRadius:
                                                     BorderRadius.circular(8.r),
                                               ),
-                                              hintText: 'Mật khẩu hiện tại',
+                                              // hintText: 'Tên',
                                               isDense: true,
                                               contentPadding:
                                                   EdgeInsets.all(15.w)),
                                         ),
                                       ],
+                                    ),
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
+                                    IntrinsicHeight(
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                TextApp(
+                                                  text: " Tỉnh/Thành phố",
+                                                  fontsize: 10.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: blueText,
+                                                ),
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
+                                                DropdownSearch(
+                                                  validator: (value) {
+                                                    if (value ==
+                                                        "Chọn tỉnh/thành phố") {
+                                                      return canNotNull;
+                                                    }
+                                                  },
+                                                  selectedItem: currentCity,
+                                                  items: cityList,
+                                                  onChanged: (changeCity) {
+                                                    getListArea(
+                                                        city: cityList.indexOf(
+                                                            changeCity),
+                                                        district: null);
+                                                  },
+                                                  dropdownDecoratorProps:
+                                                      DropDownDecoratorProps(
+                                                    dropdownSearchDecoration:
+                                                        InputDecoration(
+                                                      // isCollapsed: true,
+
+                                                      hintMaxLines: 1,
+                                                      fillColor:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              226,
+                                                              104,
+                                                              159),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color: Color
+                                                                    .fromRGBO(
+                                                                        214,
+                                                                        51,
+                                                                        123,
+                                                                        0.6),
+                                                                width: 2.0),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      isDense: true,
+                                                      contentPadding:
+                                                          EdgeInsets.all(15.w),
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp),
+                                                      hintText:
+                                                          "Chọn tỉnh/thành phố",
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10.w,
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                TextApp(
+                                                  text: " Quận/Huyện",
+                                                  fontsize: 10.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: blueText,
+                                                ),
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
+                                                DropdownSearch(
+                                                  validator: (value) {
+                                                    if (value ==
+                                                        "Chọn quận/huyện") {
+                                                      return canNotNull;
+                                                    }
+                                                  },
+                                                  // dropdownBuilder: (context,
+                                                  //         selectedItem) =>
+                                                  //     Text(selectedItem ?? ''),
+
+                                                  selectedItem: currentDistric,
+
+                                                  items: districList,
+                                                  onChanged: (changeDistric) {},
+
+                                                  dropdownDecoratorProps:
+                                                      DropDownDecoratorProps(
+                                                    dropdownSearchDecoration:
+                                                        InputDecoration(
+                                                      hintMaxLines: 1,
+                                                      fillColor:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              226,
+                                                              104,
+                                                              159),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color: Color
+                                                                    .fromRGBO(
+                                                                        214,
+                                                                        51,
+                                                                        123,
+                                                                        0.6),
+                                                                width: 2.0),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      isDense: true,
+                                                      contentPadding:
+                                                          EdgeInsets.all(15.w),
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp),
+                                                      hintText:
+                                                          "Chọn quận/huyện",
+                                                    ),
+                                                  ),
+                                                  // selectedItem:
+                                                  //     "Chọn quận/huyện",
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
+                                    IntrinsicHeight(
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                TextApp(
+                                                  text: " Phường/Xã",
+                                                  fontsize: 10.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: blueText,
+                                                ),
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
+                                                TextFormField(
+                                                  onTapOutside: (event) {
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
+                                                  },
+                                                  keyboardType:
+                                                      TextInputType.name,
+                                                  style: TextStyle(
+                                                      fontSize: 12.sp,
+                                                      color: grey),
+                                                  cursorColor: grey,
+                                                  decoration: InputDecoration(
+                                                      fillColor: Color.fromARGB(
+                                                          255, 226, 104, 159),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color:
+                                                                Color.fromRGBO(
+                                                                    214,
+                                                                    51,
+                                                                    123,
+                                                                    0.6),
+                                                            width: 2.0),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      // hintText: 'Họ',
+                                                      isDense: true,
+                                                      contentPadding:
+                                                          EdgeInsets.all(15.w)),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10.w,
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                TextApp(
+                                                  text: " Số nhà, đường",
+                                                  fontsize: 10.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: blueText,
+                                                ),
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
+                                                TextFormField(
+                                                  onTapOutside: (event) {
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
+                                                  },
+                                                  controller:
+                                                      address4Controller,
+                                                  keyboardType:
+                                                      TextInputType.name,
+                                                  style: TextStyle(
+                                                      fontSize: 12.sp,
+                                                      color: grey),
+                                                  cursorColor: grey,
+                                                  decoration: InputDecoration(
+                                                      fillColor:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              226,
+                                                              104,
+                                                              159),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color: Color
+                                                                    .fromRGBO(
+                                                                        214,
+                                                                        51,
+                                                                        123,
+                                                                        0.6),
+                                                                width: 2.0),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      // hintText: 'Tên',
+                                                      isDense: true,
+                                                      contentPadding:
+                                                          EdgeInsets.all(15.w)),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                     space20H,
                                     Column(
@@ -1213,7 +1126,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         TextApp(
-                                          text: " Mật khẩu mới",
+                                          text: " Email",
                                           fontsize: 12.sp,
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
@@ -1222,39 +1135,29 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                           height: 10.h,
                                         ),
                                         TextFormField(
-                                          controller: newPassworldController,
-                                          obscureText: newPasswordVisible,
+                                          onTapOutside: (event) {
+                                            FocusManager.instance.primaryFocus
+                                                ?.unfocus();
+                                          },
+                                          controller: emailController,
+                                          keyboardType:
+                                              TextInputType.emailAddress,
                                           style: TextStyle(
                                               fontSize: 12.sp, color: grey),
                                           cursorColor: grey,
                                           validator: (value) {
                                             if (value!.isEmpty) {
-                                              return canNotNull;
-                                            } else if (value.length < 8) {
-                                              return passwordRequiedLength;
-                                            } else if (value ==
-                                                currentPassworldController
-                                                    .text) {
-                                              return newPasswordMustNotSameAsCurrentPassword;
-                                            } else {
-                                              return null;
+                                              return emailIsRequied;
+                                            }
+                                            bool emailValid = RegExp(
+                                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                                .hasMatch(value);
+
+                                            if (!emailValid) {
+                                              return invalidEmail;
                                             }
                                           },
                                           decoration: InputDecoration(
-                                              suffixIconColor: Color.fromARGB(
-                                                  255, 226, 104, 159),
-                                              suffixIcon: IconButton(
-                                                  onPressed: () {
-                                                    setState(
-                                                      () {
-                                                        newPasswordVisible =
-                                                            !newPasswordVisible;
-                                                      },
-                                                    );
-                                                  },
-                                                  icon: Icon(newPasswordVisible
-                                                      ? Icons.visibility_off
-                                                      : Icons.visibility)),
                                               fillColor: const Color.fromARGB(
                                                   255, 226, 104, 159),
                                               focusedBorder: OutlineInputBorder(
@@ -1269,76 +1172,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                 borderRadius:
                                                     BorderRadius.circular(8.r),
                                               ),
-                                              hintText: 'Mật khẩu mới',
-                                              isDense: true,
-                                              contentPadding:
-                                                  EdgeInsets.all(15.w)),
-                                        ),
-                                      ],
-                                    ),
-                                    space20H,
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        TextApp(
-                                          text: " Nhập lại mật khẩu mới",
-                                          fontsize: 12.sp,
-                                          fontWeight: FontWeight.bold,
-                                          color: blueText,
-                                        ),
-                                        SizedBox(
-                                          height: 10.h,
-                                        ),
-                                        TextFormField(
-                                          controller: reNewPassworldController,
-                                          obscureText: reNewPasswordVisible,
-                                          style: TextStyle(
-                                              fontSize: 12.sp, color: grey),
-                                          cursorColor: grey,
-                                          validator: (value) {
-                                            if (value!.isEmpty) {
-                                              return canNotNull;
-                                            } else if (value.length < 8) {
-                                              return passwordRequiedLength;
-                                            } else if (value !=
-                                                newPassworldController.text) {
-                                              return rePasswordNotCorrect;
-                                            } else {
-                                              return null;
-                                            }
-                                          },
-                                          decoration: InputDecoration(
-                                              suffixIconColor: Color.fromARGB(
-                                                  255, 226, 104, 159),
-                                              suffixIcon: IconButton(
-                                                  onPressed: () {
-                                                    setState(
-                                                      () {
-                                                        reNewPasswordVisible =
-                                                            !reNewPasswordVisible;
-                                                      },
-                                                    );
-                                                  },
-                                                  icon: Icon(
-                                                      reNewPasswordVisible
-                                                          ? Icons.visibility_off
-                                                          : Icons.visibility)),
-                                              fillColor: const Color.fromARGB(
-                                                  255, 226, 104, 159),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    color: Color.fromRGBO(
-                                                        214, 51, 123, 0.6),
-                                                    width: 2.0),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.r),
-                                              ),
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8.r),
-                                              ),
-                                              hintText: 'Nhập lại mật khẩu mới',
+                                              hintText: 'Email',
                                               isDense: true,
                                               contentPadding:
                                                   EdgeInsets.all(15.w)),
@@ -1355,16 +1189,16 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                             color1: color1DarkButton,
                                             color2: color2DarkButton,
                                             event: () {
-                                              if (_formField2.currentState!
-                                                  .validate()) {
-                                                currentPassworldController
-                                                    .clear();
-                                                newPassworldController.clear();
-                                                reNewPassworldController
-                                                    .clear();
-                                              }
+                                              // if (_formField1.currentState!
+                                              //     .validate()) {
+                                              //   surNameController.clear();
+                                              //   nameController.clear();
+                                              //   fullNameController.clear();
+                                              //   emailController.clear();
+                                              //   phoneController.clear();
+                                              // }
                                             },
-                                            text: "Cập nhật mật khẩu",
+                                            text: "Cập nhật thông tin",
                                             fontSize: 12.sp,
                                             radius: 8.r,
                                             textColor: Colors.white,
@@ -1379,15 +1213,651 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                 ),
                               )),
                         ),
-                      ),
-                      space25H,
+                      ],
+                    ),
+                  ),
 
-                      CopyRightText(),
-                      space35H,
-                    ],
-                  ))),
-        );
-      },
+                  //Password form
+
+                  Form(
+                    key: _formField2,
+                    child: Padding(
+                      padding:
+                          EdgeInsets.only(top: 40.h, left: 10.w, right: 10.w),
+                      child: Container(
+                          width: double.infinity,
+                          // height: heightView / 2,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15.r),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: const Offset(
+                                    0, 3), // changes position of shadow
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(20.w),
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Mật khẩu",
+                                  style: TextStyle(
+                                    color: const Color.fromRGBO(52, 71, 103, 1),
+                                    fontFamily: "Icomoon",
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24.sp,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20.h,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextApp(
+                                      text: " Mật khẩu hiện tại",
+                                      fontsize: 12.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: blueText,
+                                    ),
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
+                                    TextFormField(
+                                      onTapOutside: (event) {
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
+                                      },
+                                      controller: currentPassworldController,
+                                      obscureText: currentPasswordVisible,
+                                      style: TextStyle(
+                                          fontSize: 12.sp, color: grey),
+                                      cursorColor: grey,
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return canNotNull;
+                                        } else if (value.length < 8) {
+                                          return passwordRequiedLength;
+                                        } else {
+                                          return null;
+                                        }
+                                      },
+                                      decoration: InputDecoration(
+                                          suffixIconColor: Color.fromARGB(
+                                              255, 226, 104, 159),
+                                          suffixIcon: IconButton(
+                                              onPressed: () {
+                                                setState(
+                                                  () {
+                                                    currentPasswordVisible =
+                                                        !currentPasswordVisible;
+                                                  },
+                                                );
+                                              },
+                                              icon: Icon(currentPasswordVisible
+                                                  ? Icons.visibility_off
+                                                  : Icons.visibility)),
+                                          fillColor: const Color.fromARGB(
+                                              255, 226, 104, 159),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: Color.fromRGBO(
+                                                    214, 51, 123, 0.6),
+                                                width: 2.0),
+                                            borderRadius:
+                                                BorderRadius.circular(8.r),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.r),
+                                          ),
+                                          hintText: 'Mật khẩu hiện tại',
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.all(15.w)),
+                                    ),
+                                  ],
+                                ),
+                                space20H,
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextApp(
+                                      text: " Mật khẩu mới",
+                                      fontsize: 12.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: blueText,
+                                    ),
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
+                                    TextFormField(
+                                      onTapOutside: (event) {
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
+                                      },
+                                      controller: newPassworldController,
+                                      obscureText: newPasswordVisible,
+                                      style: TextStyle(
+                                          fontSize: 12.sp, color: grey),
+                                      cursorColor: grey,
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return canNotNull;
+                                        } else if (value.length < 8) {
+                                          return passwordRequiedLength;
+                                        } else if (value ==
+                                            currentPassworldController.text) {
+                                          return newPasswordMustNotSameAsCurrentPassword;
+                                        } else {
+                                          return null;
+                                        }
+                                      },
+                                      decoration: InputDecoration(
+                                          suffixIconColor: Color.fromARGB(
+                                              255, 226, 104, 159),
+                                          suffixIcon: IconButton(
+                                              onPressed: () {
+                                                setState(
+                                                  () {
+                                                    newPasswordVisible =
+                                                        !newPasswordVisible;
+                                                  },
+                                                );
+                                              },
+                                              icon: Icon(newPasswordVisible
+                                                  ? Icons.visibility_off
+                                                  : Icons.visibility)),
+                                          fillColor: const Color.fromARGB(
+                                              255, 226, 104, 159),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: Color.fromRGBO(
+                                                    214, 51, 123, 0.6),
+                                                width: 2.0),
+                                            borderRadius:
+                                                BorderRadius.circular(8.r),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.r),
+                                          ),
+                                          hintText: 'Mật khẩu mới',
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.all(15.w)),
+                                    ),
+                                  ],
+                                ),
+                                space20H,
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextApp(
+                                      text: " Nhập lại mật khẩu mới",
+                                      fontsize: 12.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: blueText,
+                                    ),
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
+                                    TextFormField(
+                                      onTapOutside: (event) {
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
+                                      },
+                                      controller: reNewPassworldController,
+                                      obscureText: reNewPasswordVisible,
+                                      style: TextStyle(
+                                          fontSize: 12.sp, color: grey),
+                                      cursorColor: grey,
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return canNotNull;
+                                        } else if (value.length < 8) {
+                                          return passwordRequiedLength;
+                                        } else if (value !=
+                                            newPassworldController.text) {
+                                          return rePasswordNotCorrect;
+                                        } else {
+                                          return null;
+                                        }
+                                      },
+                                      decoration: InputDecoration(
+                                          suffixIconColor: Color.fromARGB(
+                                              255, 226, 104, 159),
+                                          suffixIcon: IconButton(
+                                              onPressed: () {
+                                                setState(
+                                                  () {
+                                                    reNewPasswordVisible =
+                                                        !reNewPasswordVisible;
+                                                  },
+                                                );
+                                              },
+                                              icon: Icon(reNewPasswordVisible
+                                                  ? Icons.visibility_off
+                                                  : Icons.visibility)),
+                                          fillColor: const Color.fromARGB(
+                                              255, 226, 104, 159),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: Color.fromRGBO(
+                                                    214, 51, 123, 0.6),
+                                                width: 2.0),
+                                            borderRadius:
+                                                BorderRadius.circular(8.r),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.r),
+                                          ),
+                                          hintText: 'Nhập lại mật khẩu mới',
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.all(15.w)),
+                                    ),
+                                  ],
+                                ),
+                                space20H,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    SizedBox(
+                                      width: 200.w,
+                                      child: ButtonGradient(
+                                        color1: color1DarkButton,
+                                        color2: color2DarkButton,
+                                        event: () {
+                                          if (_formField2.currentState!
+                                              .validate()) {
+                                            // currentPassworldController
+                                            //     .clear();
+                                            // newPassworldController.clear();
+                                            // reNewPassworldController
+                                            //     .clear();
+                                            changePasswordManager(
+                                              currentPassword:
+                                                  currentPassworldController
+                                                      .text,
+                                              newPassword:
+                                                  newPassworldController.text,
+                                              confirmNewPassword:
+                                                  reNewPassworldController.text,
+                                            );
+                                          }
+                                        },
+                                        text: "Cập nhật mật khẩu",
+                                        fontSize: 12.sp,
+                                        radius: 8.r,
+                                        textColor: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20.h,
+                                ),
+                              ],
+                            ),
+                          )),
+                    ),
+                  ),
+
+                  //CCCD FORM
+                  isChangeUI
+                      ? Form(
+                          key: _formField4,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                top: 40.h, left: 10.w, right: 10.w),
+                            child: Container(
+                                width: double.infinity,
+                                // height: heightView / 2,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.r),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 5,
+                                      blurRadius: 7,
+                                      offset: const Offset(
+                                          0, 3), // changes position of shadow
+                                    ),
+                                  ],
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(20.w),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        "Hình ảnh CCCD",
+                                        style: TextStyle(
+                                          color: const Color.fromRGBO(
+                                              52, 71, 103, 1),
+                                          fontFamily: "Icomoon",
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 24.sp,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 20.h,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextApp(
+                                                text: "Mặt trước",
+                                                fontsize: 12.sp,
+                                                fontWeight: FontWeight.bold,
+                                                color: blueText,
+                                              ),
+                                              space10H,
+                                              InkWell(
+                                                onTap: () {
+                                                  pickImage();
+                                                },
+                                                child: Container(
+                                                  width: 110.w,
+                                                  height: 80.w,
+                                                  color: Colors.grey,
+                                                  child: selectedImage != null
+                                                      ? Image.file(
+                                                          selectedImage!,
+                                                          fit: BoxFit.cover,
+                                                        )
+                                                      : Container(
+                                                          // width: 100.w,
+                                                          color: Colors.grey,
+                                                          child: Image.network(
+                                                            httpImage +
+                                                                currentIdImage,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextApp(
+                                                text: "Mặt sau",
+                                                fontsize: 12.sp,
+                                                fontWeight: FontWeight.bold,
+                                                color: blueText,
+                                              ),
+                                              space10H,
+                                              InkWell(
+                                                onTap: () {
+                                                  pickImage();
+                                                },
+                                                child: Container(
+                                                  width: 110.w,
+                                                  height: 80.w,
+                                                  color: Colors.grey,
+                                                  child: selectedImage != null
+                                                      ? Image.file(
+                                                          selectedImage!,
+                                                          fit: BoxFit.cover,
+                                                        )
+                                                      : Container(
+                                                          // width: 100.w,
+                                                          color: Colors.grey,
+                                                          child: Image.network(
+                                                            httpImage +
+                                                                currentIdImage,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              TextApp(
+                                                text: "Khuôn mặt",
+                                                fontsize: 12.sp,
+                                                fontWeight: FontWeight.bold,
+                                                color: blueText,
+                                              ),
+                                              space10H,
+                                              InkWell(
+                                                onTap: () {
+                                                  pickImage();
+                                                },
+                                                child: Container(
+                                                  width: 110.w,
+                                                  height: 80.w,
+                                                  color: Colors.grey,
+                                                  child: selectedImage != null
+                                                      ? Image.file(
+                                                          selectedImage!,
+                                                          fit: BoxFit.cover,
+                                                        )
+                                                      : Container(
+                                                          // width: 100.w,
+                                                          color: Colors.grey,
+                                                          child: Image.network(
+                                                            httpImage +
+                                                                currentIdImage,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      space25H,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            width: 200.w,
+                                            child: ButtonGradient(
+                                              color1: color1DarkButton,
+                                              color2: color2DarkButton,
+                                              event: () {},
+                                              text: "Xác nhận",
+                                              fontSize: 12.sp,
+                                              radius: 8.r,
+                                              textColor: Colors.white,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 20.h,
+                                      ),
+                                    ],
+                                  ),
+                                )),
+                          ),
+                        )
+                      : Form(
+                          key: _formField3,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                top: 40.h, left: 10.w, right: 10.w),
+                            child: Container(
+                                width: double.infinity,
+                                // height: heightView / 2,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.r),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 5,
+                                      blurRadius: 7,
+                                      offset: const Offset(
+                                          0, 3), // changes position of shadow
+                                    ),
+                                  ],
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(20.w),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        "Hình ảnh CCCD",
+                                        style: TextStyle(
+                                          color: const Color.fromRGBO(
+                                              52, 71, 103, 1),
+                                          fontFamily: "Icomoon",
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 24.sp,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 20.h,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          TextApp(
+                                            text: " Mật khẩu",
+                                            fontsize: 12.sp,
+                                            fontWeight: FontWeight.bold,
+                                            color: blueText,
+                                          ),
+                                          SizedBox(
+                                            height: 10.h,
+                                          ),
+                                          TextFormField(
+                                            onTapOutside: (event) {
+                                              FocusManager.instance.primaryFocus
+                                                  ?.unfocus();
+                                            },
+                                            controller: passwordForOpenIDImage,
+                                            obscureText:
+                                                passwordForOpenIDImageVisible,
+                                            style: TextStyle(
+                                                fontSize: 12.sp, color: grey),
+                                            cursorColor: grey,
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return canNotNull;
+                                              } else if (value.length < 8) {
+                                                return passwordRequiedLength;
+                                              } else {
+                                                return null;
+                                              }
+                                            },
+                                            decoration: InputDecoration(
+                                                suffixIconColor: Color.fromARGB(
+                                                    255, 226, 104, 159),
+                                                suffixIcon: IconButton(
+                                                    onPressed: () {
+                                                      setState(
+                                                        () {
+                                                          passwordForOpenIDImageVisible =
+                                                              !passwordForOpenIDImageVisible;
+                                                        },
+                                                      );
+                                                    },
+                                                    icon: Icon(
+                                                        passwordForOpenIDImageVisible
+                                                            ? Icons
+                                                                .visibility_off
+                                                            : Icons
+                                                                .visibility)),
+                                                fillColor: const Color.fromARGB(
+                                                    255, 226, 104, 159),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Color.fromRGBO(
+                                                          214, 51, 123, 0.6),
+                                                      width: 2.0),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.r),
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.r),
+                                                ),
+                                                hintText:
+                                                    'Xác nhận mật khẩu để cập nhật thẻ CCCD',
+                                                isDense: true,
+                                                contentPadding:
+                                                    EdgeInsets.all(15.w)),
+                                          ),
+                                        ],
+                                      ),
+                                      space25H,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            width: 200.w,
+                                            child: ButtonGradient(
+                                              color1: color1DarkButton,
+                                              color2: color2DarkButton,
+                                              event: () {
+                                                if (_formField3.currentState!
+                                                    .validate()) {
+                                                  checkPasswordToUpdateIdImage(
+                                                      password:
+                                                          passwordForOpenIDImage
+                                                              .text);
+                                                }
+
+                                                // setState(() {
+                                                //   isChangeUI = true;
+                                                // });
+                                              },
+                                              text: "Xác nhận",
+                                              fontSize: 12.sp,
+                                              radius: 8.r,
+                                              textColor: Colors.white,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 20.h,
+                                      ),
+                                    ],
+                                  ),
+                                )),
+                          ),
+                        ),
+                  space25H,
+
+                  CopyRightText(),
+                  space35H,
+                ],
+              ))),
     );
   }
 }
