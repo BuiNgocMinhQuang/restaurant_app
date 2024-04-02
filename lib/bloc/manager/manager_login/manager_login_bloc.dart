@@ -116,7 +116,8 @@ class ManagerLoginBloc extends Bloc<ManagerLoginEvent, ManagerLoginState> {
     }
 
     if (state.loginStatus == ManagerLoginStatus.failed) {
-      showFailedModal(navigatorKey.currentContext, state.errorText);
+      showFailedModal(
+          context: navigatorKey.currentContext, desWhyFail: state.errorText);
     }
   }
 }

@@ -1,8 +1,5 @@
 import 'package:another_flushbar/flushbar.dart';
-import 'package:app_restaurant/bloc/login/login_bloc.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
-import 'package:app_restaurant/utils/storage.dart';
-import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,7 +22,7 @@ void showConfirmDialog(context, Function confirmEvent) {
       .show();
 }
 
-void showFailedModal(context, String? desWhyFail) {
+void showFailedModal({required context, required String? desWhyFail}) {
   AwesomeDialog(
     context: context,
     animType: AnimType.leftSlide,
@@ -44,6 +41,56 @@ void showFailedModal(context, String? desWhyFail) {
       debugPrint('Dialog Dissmiss from callback $type');
     },
   ).show();
+}
+
+void showCustomDialogModal(
+    {required context,
+    required String textDesc,
+    required String title,
+    required Color colorButton,
+    required String btnText,
+    required String? typeDialog}) {
+  AwesomeDialog(
+    context: context,
+    animType: AnimType.leftSlide,
+    headerAnimationLoop: false,
+    dialogType: typeDialog == "succes"
+        ? DialogType.success
+        : typeDialog == "question"
+            ? DialogType.question
+            : typeDialog == "info"
+                ? DialogType.info
+                : typeDialog == "noHeader"
+                    ? DialogType.noHeader
+                    : DialogType.error,
+    showCloseIcon: true,
+    title: title,
+    desc: textDesc,
+    btnOkColor: colorButton,
+    btnOkOnPress: () {
+      debugPrint('OnClcik');
+    },
+    btnOkText: btnText,
+    // btnOkIcon: Icons.check_circle,
+    onDismissCallback: (type) {
+      debugPrint('Dialog Dissmiss from callback $type');
+    },
+  ).show();
+  /****DialogType ******/
+  // ///Dialog with information type header
+  // info,
+  // ///Dialog with information type header rotated 180 degree
+  // infoReverse,
+  // ///Dialog with warning amber type header
+  // warning,
+  // ///Dialog with error red type header
+  // error,
+  // ///Dialog with success green type header
+  // success,
+  // ///Dialog without a header
+  // noHeader,
+  // ///Dialog with question header
+  // question
 }
 
 void showLoginSuccesDialog() {
@@ -221,8 +268,12 @@ showSnackBarTopUpdateSucces(context) async {
 }
 
 showSnackBarTopCustom(
-    {required context, required String mess, required Color color}) async {
+    {required context,
+    required String mess,
+    required Color color,
+    required String title}) async {
   await Flushbar(
+    title: title,
     isDismissible: false,
     backgroundColor: color,
     message: mess,

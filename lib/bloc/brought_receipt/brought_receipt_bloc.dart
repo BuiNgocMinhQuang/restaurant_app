@@ -115,6 +115,7 @@ class CancleBroughtReceiptBloc
           emit(state.copyWith(
               cancleBroughtReceiptStatus: CancleBroughtReceiptStatus.succes));
           showSnackBarTopCustom(
+              title: "Thành công",
               context: navigatorKey.currentContext,
               mess: message['title'],
               color: Colors.green);
@@ -124,6 +125,7 @@ class CancleBroughtReceiptBloc
           emit(state.copyWith(
               cancleBroughtReceiptStatus: CancleBroughtReceiptStatus.failed));
           showSnackBarTopCustom(
+              title: "Thất bại",
               context: navigatorKey.currentContext,
               mess: message['text'],
               color: Colors.red);

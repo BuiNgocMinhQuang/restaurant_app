@@ -312,12 +312,14 @@ class _BookingTableDialogState extends State<BookingTableDialog>
       try {
         if (data['status'] == 200) {
           showSnackBarTopCustom(
+              title: "Thành công",
               context: navigatorKey.currentContext,
               mess: message['title'],
               color: Colors.green);
         } else {
           print("ERROR ADD FOOD TO TABLE 1");
           showSnackBarTopCustom(
+              title: "Thất bại",
               context: navigatorKey.currentContext,
               mess: message['text'],
               color: Colors.red);
@@ -359,12 +361,14 @@ class _BookingTableDialogState extends State<BookingTableDialog>
       try {
         if (data['status'] == 200) {
           showSnackBarTopCustom(
+              title: "Thành công",
               context: navigatorKey.currentContext,
               mess: message['title'],
               color: Colors.green);
         } else {
           print("ERROR ADD FOOD TO TABLE 1");
           showSnackBarTopCustom(
+              title: "Thất bại",
               context: navigatorKey.currentContext,
               mess: message['text'],
               color: Colors.red);
@@ -408,12 +412,14 @@ class _BookingTableDialogState extends State<BookingTableDialog>
       try {
         if (data['status'] == 200) {
           showSnackBarTopCustom(
+              title: "Thành công",
               context: navigatorKey.currentContext,
               mess: message['title'],
               color: Colors.green);
         } else {
           print("ERROR ADD FOOD TO TABLE 1");
           showSnackBarTopCustom(
+              title: "Thất bại",
               context: navigatorKey.currentContext,
               mess: message['text'],
               color: Colors.red);
@@ -457,13 +463,16 @@ class _BookingTableDialogState extends State<BookingTableDialog>
               foodKindOfShop; //add data category food vao mang nay de lay index category
 
           customerNameController.text =
-              state.tableModel?.booking?.order?.clientName ?? '';
+              state.tableModel?.booking?.order?.clientName ??
+                  customerNameController.text;
           customerPhoneController.text =
-              state.tableModel?.booking?.order?.clientPhone ?? '';
+              state.tableModel?.booking?.order?.clientPhone ??
+                  customerPhoneController.text;
           _dateStartController.text =
               state.tableModel?.booking?.order?.endBookedTableAt ??
                   _dateStartController.text;
-          noteController.text = state.tableModel?.booking?.order?.note ?? '';
+          noteController.text =
+              state.tableModel?.booking?.order?.note ?? noteController.text;
           var listTableHaveSameOrderID = widget.listTableOfRoom
               ?.where((table) =>
                   table.orderId == widget.currentTable?.orderId &&
@@ -624,6 +633,10 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                       ),
                                       space10H,
                                       TextField(
+                                        onTapOutside: (event) {
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                        },
                                         readOnly: true,
                                         controller: _dateStartController,
                                         onTap: pickDateAndTime,
@@ -663,6 +676,10 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                         height: 10.h,
                                       ),
                                       TextField(
+                                        onTapOutside: (event) {
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                        },
                                         controller: customerNameController,
                                         cursorColor:
                                             const Color.fromRGBO(73, 80, 87, 1),
@@ -700,6 +717,15 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                         height: 10.h,
                                       ),
                                       TextField(
+                                        onTapOutside: (event) {
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                        },
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp("[0-9]")),
+                                        ], // Only numbers can be entered,
                                         controller: customerPhoneController,
                                         cursorColor:
                                             const Color.fromRGBO(73, 80, 87, 1),
@@ -792,6 +818,10 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                         height: 10.h,
                                       ),
                                       TextField(
+                                        onTapOutside: (event) {
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                        },
                                         controller: noteController,
                                         keyboardType: TextInputType.multiline,
                                         minLines: 1,
@@ -2141,12 +2171,12 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
         if (data['status'] == 200) {
           setState(() {
             var billTableDataRes = BillInforModel.fromJson(data);
-            // listFoodBillCurrent.clear();
             listFoodBillCurrent = billTableDataRes;
           });
         } else {
           print("ERROR BILL INFOR 1");
           showSnackBarTopCustom(
+              title: "Thất bại",
               context: navigatorKey.currentContext,
               mess: message['text'],
               color: Colors.red);
@@ -2186,12 +2216,14 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
       try {
         if (data['status'] == 200) {
           showSnackBarTopCustom(
+              title: "Thành công",
               context: navigatorKey.currentContext,
               mess: message['title'],
               color: Colors.green);
         } else {
           print("ERROR ADD FOOD TO TABLE 1");
           showSnackBarTopCustom(
+              title: "Thất bại",
               context: navigatorKey.currentContext,
               mess: message['text'],
               color: Colors.red);
@@ -2203,6 +2235,112 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
       print("ERROR ADD FOOD TO TABLE 3 $error");
     }
     refeshHomePage();
+    getBillData();
+  }
+
+  void updateQuantytiFoodToSeeBillTable(
+      {required int foodID, required String quantityFood}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$updateQuantityFoodTable'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': widget.role,
+          'shop_id': widget.shopID,
+          'is_api': true,
+          'room_id': widget.roomID.toString(),
+          'table_id': widget.currentTable?.roomTableId.toString() ?? '',
+          'order_id': widget.currentTable?.orderId,
+          'food_id': foodID,
+          'value': quantityFood,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print(" DATA ADD FOOD TO TABLE $data");
+      final message = data['message'];
+
+      try {
+        if (data['status'] == 200) {
+          showSnackBarTopCustom(
+              title: "Thành công",
+              context: navigatorKey.currentContext,
+              mess: message['title'],
+              color: Colors.green);
+        } else {
+          print("ERROR ADD FOOD TO TABLE 1");
+          showSnackBarTopCustom(
+              title: "Thất bại",
+              context: navigatorKey.currentContext,
+              mess: message['text'],
+              color: Colors.red);
+        }
+      } catch (error) {
+        print("ERROR ADD FOOD TO TABLE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR ADD FOOD TO TABLE 3 $error");
+    }
+    refeshHomePage();
+    getBillData();
+  }
+
+  void minusQuantytiFoodToSeeBillTable({required int foodID}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$removeFoodTable'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': widget.role,
+          'shop_id': widget.shopID,
+          'is_api': true,
+          'room_id': widget.roomID.toString(),
+          'table_id': widget.currentTable?.roomTableId.toString() ?? '',
+          'order_id': widget.currentTable?.orderId,
+          'food_id': foodID
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print(" DATA ADD FOOD TO TABLE $data");
+      final message = data['message'];
+
+      try {
+        if (data['status'] == 200) {
+          showSnackBarTopCustom(
+              title: "Thành công",
+              context: navigatorKey.currentContext,
+              mess: message['title'],
+              color: Colors.green);
+        } else {
+          print("ERROR ADD FOOD TO TABLE 1");
+          showSnackBarTopCustom(
+              title: "Thất bại",
+              context: navigatorKey.currentContext,
+              mess: message['text'],
+              color: Colors.red);
+        }
+      } catch (error) {
+        print("ERROR ADD FOOD TO TABLE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR ADD FOOD TO TABLE 3 $error");
+    }
+    refeshHomePage();
+    getBillData();
+  }
+
+  @override
+  void initState() {
+    super.initState();
     getBillData();
   }
 
@@ -2351,12 +2489,12 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                                                         MainAxisAlignment.end,
                                                     children: [
                                                       TextApp(
-                                                          text: formatDateTime(state
-                                                                  .billInforModel
-                                                                  ?.order
-                                                                  ?.createdAt
-                                                                  .toString() ??
-                                                              ''),
+                                                          text: formatDateTime(
+                                                              listFoodBillCurrent
+                                                                      ?.order
+                                                                      ?.createdAt
+                                                                      .toString() ??
+                                                                  ''),
                                                           fontsize: 14.sp),
                                                       SizedBox(
                                                         width: 5.w,
@@ -2388,7 +2526,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                                                       ),
                                                       TextApp(
                                                           text:
-                                                              "${MoneyFormatter(amount: (state.billInforModel?.order?.orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                              "${MoneyFormatter(amount: (listFoodBillCurrent?.order?.orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                                                           fontsize: 14.sp),
                                                     ],
                                                   )
@@ -2455,10 +2593,10 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                                         Padding(
                                           padding: EdgeInsets.only(
                                               left: 20.w, right: 20.w),
-                                          child: (state.billInforModel?.data ==
+                                          child: (listFoodBillCurrent?.data ==
                                                       null ||
-                                                  state.billInforModel!.data!
-                                                      .isEmpty)
+                                                  listFoodBillCurrent!
+                                                      .data!.isEmpty)
                                               ? ListView.builder(
                                                   shrinkWrap: true,
                                                   itemCount: 1,
@@ -2490,145 +2628,31 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                                                   physics:
                                                       NeverScrollableScrollPhysics(),
                                                   shrinkWrap: true,
-                                                  itemCount: state
-                                                          .billInforModel
-                                                          ?.data
-                                                          ?.length ??
+                                                  itemCount: listFoodBillCurrent
+                                                          ?.data?.length ??
                                                       0,
                                                   itemBuilder:
                                                       (context, index) {
                                                     _foodQuantityController.add(
                                                         TextEditingController());
                                                     _foodQuantityController[
-                                                            index]
-                                                        .text = state
-                                                            .billInforModel
-                                                            ?.data?[index]
-                                                            .quantityFood
-                                                            .toString() ??
-                                                        '0';
-                                                    var imagePath = state
-                                                            .billInforModel
-                                                            ?.data?[index]
-                                                            .foodImages ??
-                                                        '';
+                                                                index]
+                                                            .text =
+                                                        listFoodBillCurrent
+                                                                ?.data?[index]
+                                                                .quantityFood
+                                                                .toString() ??
+                                                            '0';
+
+                                                    var imagePath =
+                                                        listFoodBillCurrent
+                                                                ?.data?[index]
+                                                                .foodImages ??
+                                                            '';
                                                     var imagePath1 = imagePath
                                                         .replaceAll('["', '');
                                                     var imagePath2 = imagePath1
                                                         .replaceAll('"]', '');
-                                                    // void addFodd() {
-                                                    //   BlocProvider.of<
-                                                    //               BillInforBloc>(
-                                                    //           context)
-                                                    //       .add(AddFoodToBill(
-                                                    //     client: role,
-                                                    //     shopId: shopID,
-                                                    //     roomId: roomID,
-                                                    //     tableId: currentTable
-                                                    //             ?.roomTableId
-                                                    //             .toString() ??
-                                                    //         '',
-                                                    //     orderId: orderID,
-                                                    //     foodId: state
-                                                    //             .billInforModel
-                                                    //             ?.data?[index]
-                                                    //             .foodId
-                                                    //             .toString() ??
-                                                    //         '',
-                                                    //   ));
-
-                                                    //   BlocProvider.of<
-                                                    //               BillInforBloc>(
-                                                    //           context)
-                                                    //       .add(GetBillInfor(
-                                                    //     client: role,
-                                                    //     shopId: shopID,
-                                                    //     roomId: roomID,
-                                                    //     tableId: currentTable
-                                                    //             ?.roomTableId
-                                                    //             .toString() ??
-                                                    //         '',
-                                                    //     orderId:
-                                                    //         orderID.toString(),
-                                                    //   ));
-                                                    // }
-
-                                                    // void updateQuantytiFood() {
-                                                    //   BlocProvider.of<
-                                                    //               BillInforBloc>(
-                                                    //           context)
-                                                    //       .add(UpdateQuantytiFoodToBill(
-                                                    //           client: role,
-                                                    //           shopId: shopID,
-                                                    //           roomId: roomID,
-                                                    //           tableId: currentTable
-                                                    //                   ?.roomTableId
-                                                    //                   .toString() ??
-                                                    //               '',
-                                                    //           orderId: orderID,
-                                                    //           foodId: state
-                                                    //                   .billInforModel
-                                                    //                   ?.data?[
-                                                    //                       index]
-                                                    //                   .foodId
-                                                    //                   .toString() ??
-                                                    //               '',
-                                                    //           value:
-                                                    //               _foodQuantityController[
-                                                    //                       index]
-                                                    //                   .text));
-                                                    //   BlocProvider.of<
-                                                    //               BillInforBloc>(
-                                                    //           context)
-                                                    //       .add(GetBillInfor(
-                                                    //     client: role,
-                                                    //     shopId: shopID,
-                                                    //     roomId: roomID,
-                                                    //     tableId: currentTable
-                                                    //             ?.roomTableId
-                                                    //             .toString() ??
-                                                    //         '',
-                                                    //     orderId:
-                                                    //         orderID.toString(),
-                                                    //   ));
-                                                    // }
-
-                                                    // void removeFood() {
-                                                    //   BlocProvider.of<
-                                                    //               BillInforBloc>(
-                                                    //           context)
-                                                    //       .add(RemoveFoodToBill(
-                                                    //     client: role,
-                                                    //     shopId: shopID,
-                                                    //     roomId: roomID,
-                                                    //     tableId: currentTable
-                                                    //             ?.roomTableId
-                                                    //             .toString() ??
-                                                    //         '',
-                                                    //     orderId: orderID,
-                                                    //     foodId: state
-                                                    //             .billInforModel
-                                                    //             ?.data?[index]
-                                                    //             .foodId
-                                                    //             .toString() ??
-                                                    //         '',
-                                                    //   ));
-
-                                                    //   BlocProvider.of<
-                                                    //               BillInforBloc>(
-                                                    //           context)
-                                                    //       .add(GetBillInfor(
-                                                    //     client: role,
-                                                    //     shopId: shopID,
-                                                    //     roomId: roomID,
-                                                    //     tableId: currentTable
-                                                    //             ?.roomTableId
-                                                    //             .toString() ??
-                                                    //         '',
-                                                    //     orderId:
-                                                    //         orderID.toString(),
-                                                    //   ));
-                                                    // }
 
                                                     return Column(
                                                       children: [
@@ -2673,12 +2697,12 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                                                                                 width: 100.w,
                                                                                 child: Center(
                                                                                   child: TextApp(
-                                                                                    text: state.billInforModel?.data?[index].foodName ?? '',
+                                                                                    text: listFoodBillCurrent?.data?[index].foodName ?? '',
                                                                                     fontsize: 14.sp,
                                                                                   ),
                                                                                 )),
                                                                             TextApp(
-                                                                                text: "${MoneyFormatter(amount: (state.billInforModel?.data?[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                                                text: "${MoneyFormatter(amount: (listFoodBillCurrent?.data?[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                                                                                 fontsize: 14.sp)
                                                                           ],
                                                                         )
@@ -2714,7 +2738,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                                                                           children: [
                                                                             InkWell(
                                                                               onTap: () {
-                                                                                // removeFood();
+                                                                                minusQuantytiFoodToSeeBillTable(foodID: listFoodBillCurrent?.data?[index].foodId ?? 0);
                                                                               },
                                                                               child: Container(
                                                                                 width: 50.w,
@@ -2755,6 +2779,10 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                                                                                         print('onTapOutside');
                                                                                         FocusManager.instance.primaryFocus?.unfocus();
                                                                                         // updateQuantytiFood();
+                                                                                        updateQuantytiFoodToSeeBillTable(
+                                                                                          foodID: listFoodBillCurrent?.data?[index].foodId ?? 0,
+                                                                                          quantityFood: _foodQuantityController[index].text,
+                                                                                        );
                                                                                       },
                                                                                       cursorColor: grey,
                                                                                       decoration: const InputDecoration(
@@ -2772,7 +2800,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                                                                                 )),
                                                                             InkWell(
                                                                               onTap: () {
-                                                                                plusQuantytiFoodToSeeBillTable(foodID: state.billInforModel?.data?[index].foodId ?? 0);
+                                                                                plusQuantytiFoodToSeeBillTable(foodID: listFoodBillCurrent?.data?[index].foodId ?? 0);
                                                                               },
                                                                               child: Container(
                                                                                 width: 50.w,
@@ -3867,12 +3895,14 @@ class _ManageBroughtReceiptDialogState
             orderNewIDBroughtReceipt = newOrderId;
           });
           showSnackBarTopCustom(
+              title: "Thành công",
               context: navigatorKey.currentContext,
               mess: message['title'],
               color: Colors.green);
         } else {
           print("ERROR ADD FOOD TO BROUGHT RECEIPT 1");
           showSnackBarTopCustom(
+              title: "Thất bại",
               context: navigatorKey.currentContext,
               mess: message['text'],
               color: Colors.red);
@@ -3917,12 +3947,14 @@ class _ManageBroughtReceiptDialogState
             orderNewIDBroughtReceipt = newOrderId;
           });
           showSnackBarTopCustom(
+              title: "Thành công",
               context: navigatorKey.currentContext,
               mess: message['title'],
               color: Colors.green);
         } else {
           print("ERROR MINUS FOOD TO BROUGHT RECEIPT 1");
           showSnackBarTopCustom(
+              title: "Thất bại",
               context: navigatorKey.currentContext,
               mess: message['text'],
               color: Colors.red);
@@ -3968,12 +4000,14 @@ class _ManageBroughtReceiptDialogState
             orderNewIDBroughtReceipt = newOrderId;
           });
           showSnackBarTopCustom(
+              title: "Thành công",
               context: navigatorKey.currentContext,
               mess: message['title'],
               color: Colors.green);
         } else {
           print("ERROR MINUS FOOD TO BROUGHT RECEIPT 1");
           showSnackBarTopCustom(
+              title: "Thất bại",
               context: navigatorKey.currentContext,
               mess: message['text'],
               color: Colors.red);
@@ -4404,6 +4438,7 @@ class _ManageBroughtReceiptDialogState
                                                         );
                                                       } else {
                                                         showSnackBarTopCustom(
+                                                            title: "",
                                                             context: navigatorKey
                                                                 .currentContext,
                                                             mess:

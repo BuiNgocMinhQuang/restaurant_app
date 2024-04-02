@@ -61,6 +61,7 @@ class ListBillShopBloc extends Bloc<ListBillShopEvent, ListBillShopState> {
 
           emit(state.copyWith(listBillShopStatus: ListBillShopStatus.failed));
           showSnackBarTopCustom(
+              title: "Thất bại",
               context: navigatorKey.currentContext,
               mess: someThingWrong,
               color: Colors.red);

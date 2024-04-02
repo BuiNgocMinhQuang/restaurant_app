@@ -1,12 +1,9 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:app_restaurant/bloc/staff/infor/staff_infor_bloc.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/fake_data.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/env/index.dart';
@@ -20,10 +17,8 @@ import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lottie/lottie.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/constant/api/index.dart';
 
@@ -58,7 +53,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
   final address3Controller = TextEditingController();
   final address4Controller = TextEditingController();
   File? selectedImage;
-  String currentAvatar = '';
+  String currentAvatar = 'assets/user/images/avt/no_image.png';
   List cityList = [];
   List quanList = [];
   List xaList = [];
@@ -102,12 +97,14 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
           getInfor();
 
           showSnackBarTopCustom(
+              title: "Thành công",
               context: navigatorKey.currentContext,
               mess: "Xoá ảnh đại diện thành công",
               color: Colors.green);
         } else {
           print("ERROR DELETED AVATAR STAFF  1");
           showSnackBarTopCustom(
+              title: "Thất bại",
               context: navigatorKey.currentContext,
               mess: "Thao tác thất bại",
               color: Colors.red);
@@ -153,12 +150,14 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
             if (data['status'] == 200) {
               print("CHANGE AVATAR STAFF  OK");
               showSnackBarTopCustom(
+                  title: "Thành công",
                   context: navigatorKey.currentContext,
                   mess: "Cập nhật ảnh đại diện thành công",
                   color: Colors.green);
             } else {
               print("ERROR CHANGE AVATAR STAFF  1");
               showSnackBarTopCustom(
+                  title: "Thất bại",
                   context: navigatorKey.currentContext,
                   mess: "Thao tác thất bại",
                   color: Colors.red);
@@ -206,7 +205,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
             initIndexCity = userInforData?.staffAddress1;
             initIndexDistric = userInforData?.staffAddress2;
             initIndexWard = userInforData?.staffAddress3;
-            log(initIndexCity.toString());
+            log(currentAvatar.toString());
           });
           laythongitn(
               city: userInforData?.staffAddress1,
@@ -285,12 +284,14 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
           print("UPDATE INFOR  OK");
           getInfor();
           showSnackBarTopCustom(
+              title: "Thành công",
               context: navigatorKey.currentContext,
               mess: messText['text'],
               color: Colors.green);
         } else {
           print("ERROR UPDATE INFOR  1");
           showSnackBarTopCustom(
+              title: "Thất bại",
               context: navigatorKey.currentContext,
               mess: messText['text'],
               color: Colors.red);
@@ -339,12 +340,14 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
           reNewPassworldController.clear();
           getInfor();
           showSnackBarTopCustom(
+              title: "Thành công",
               context: navigatorKey.currentContext,
               mess: messText['text'],
               color: Colors.green);
         } else {
           print("ERROR CHANGE PASS STAFF  1");
           showSnackBarTopCustom(
+              title: "Thất bại",
               context: navigatorKey.currentContext,
               mess: messText['text'],
               color: Colors.red);

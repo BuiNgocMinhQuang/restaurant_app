@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/gradient_text.dart';
@@ -24,7 +26,6 @@ class StaffForgotPassword extends StatefulWidget {
 }
 
 class _StaffForgotPasswordState extends State<StaffForgotPassword> {
-  bool light = true;
   final _formField = GlobalKey<FormState>();
   final storeIdController = TextEditingController();
   final emailController = TextEditingController();
@@ -45,16 +46,35 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
         }),
       );
       final data = jsonDecode(respons.body);
+
       print("DADATATA $data");
       if (data['status'] == 200) {
-        showSnackBarTopCustom(
-            context: navigatorKey.currentContext,
-            mess: "Thành công",
-            color: Colors.green);
         print("HANLDE FOGOT PASSWORD OK");
+        final messRes = data['message'];
+
+        final messText = messRes['text'];
+        final otp = data['otp'];
+        final tokenCheckOTP = otp['token'];
+        StorageUtils.instance
+            .setString(key: 'tokenCheckOTP', val: tokenCheckOTP);
+        StorageUtils.instance.setString(key: 'emailCheckOTP', val: email ?? '');
         navigatorKey.currentContext?.go('/staff_confirm_otp');
+        log(StorageUtils.instance.getString(key: 'tokenCheckOTP').toString());
+        Future.delayed(Duration(milliseconds: 300), () {
+          showCustomDialogModal(
+            typeDialog: "succes",
+            context: navigatorKey.currentContext,
+            textDesc: messText,
+            title: "Thành công",
+            colorButton: Colors.green,
+            btnText: "OK",
+          );
+        });
       } else {
-        showFailedModal(navigatorKey.currentContext, "That bai");
+        final messRes = data['message'];
+
+        showFailedModal(
+            context: navigatorKey.currentContext, desWhyFail: messRes);
         // showSnackBarTopCustom(
         //     context: navigatorKey.currentContext,
         //     mess: messText['text'],
@@ -332,19 +352,24 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                   color1: color1BlueButton,
                                                   color2: color2BlueButton,
                                                   event: () {
-                                                    if (_formField.currentState!
-                                                        .validate()) {
-                                                      handleForgotPassword(
-                                                        shopID:
-                                                            storeIdController
-                                                                .text,
-                                                        email: emailController
-                                                            .text,
-                                                      );
+                                                    // if (_formField.currentState!
+                                                    //     .validate()) {
+                                                    //   handleForgotPassword(
+                                                    //     shopID:
+                                                    //         storeIdController
+                                                    //             .text,
+                                                    //     email: emailController
+                                                    //         .text,
+                                                    //   );
 
-                                                      // storeIdController.clear();
-                                                      // emailController.clear();
-                                                    }
+                                                    //   // storeIdController.clear();
+                                                    //   // emailController.clear();
+                                                    // }
+                                                    handleForgotPassword(
+                                                      shopID: "123456",
+                                                      email:
+                                                          "buingocthanhbao@gmail.com",
+                                                    );
                                                   },
                                                   text: "Gửi",
                                                   radius: 8.r,

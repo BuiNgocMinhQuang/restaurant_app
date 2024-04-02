@@ -123,7 +123,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
 
     if (state.loginStatus == LoginStatus.failed) {
-      showFailedModal(navigatorKey.currentContext, state.errorText);
+      showFailedModal(
+          context: navigatorKey.currentContext, desWhyFail: state.errorText);
     }
   }
 
