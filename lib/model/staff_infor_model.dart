@@ -1,14 +1,15 @@
 class StaffInfor {
   int? status;
   String? message;
-  Data? data;
+  DataStaffInfor? data;
 
   StaffInfor({this.status, this.message, this.data});
 
   StaffInfor.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data =
+        json['data'] != null ? new DataStaffInfor.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -22,7 +23,7 @@ class StaffInfor {
   }
 }
 
-class Data {
+class DataStaffInfor {
   int? staffId;
   int? staffNo;
   int? userId;
@@ -54,7 +55,7 @@ class Data {
   String? createdAt;
   String? updatedAt;
 
-  Data(
+  DataStaffInfor(
       {this.staffId,
       this.staffNo,
       this.userId,
@@ -86,7 +87,7 @@ class Data {
       this.createdAt,
       this.updatedAt});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  DataStaffInfor.fromJson(Map<String, dynamic> json) {
     staffId = json['staff_id'];
     staffNo = json['staff_no'];
     userId = json['user_id'];

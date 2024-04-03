@@ -47,7 +47,6 @@ class _StaffListBillState extends State<StaffListBill>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getListBillShop(filtersFlg: {"pay_flg": null});
   }

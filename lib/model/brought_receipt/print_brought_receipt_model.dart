@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final printBroughtReceiptModel = printBroughtReceiptModelFromJson(jsonString);
+
 import 'dart:convert';
 
 PrintBroughtReceiptModel printBroughtReceiptModelFromJson(String str) =>
@@ -10,7 +14,7 @@ class PrintBroughtReceiptModel {
   int status;
   List<Datum> data;
   Order order;
-  dynamic store;
+  Store store;
 
   PrintBroughtReceiptModel({
     required this.status,
@@ -24,36 +28,36 @@ class PrintBroughtReceiptModel {
         status: json["status"],
         data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
         order: Order.fromJson(json["order"]),
-        store: json["store"],
+        store: Store.fromJson(json["store"]),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "data": List<dynamic>.from(data.map((x) => x.toJson())),
         "order": order.toJson(),
-        "store": store,
+        "store": store.toJson(),
       };
 }
 
 class Datum {
   int orderFoodId;
-  int? foodId;
+  int foodId;
   int orderId;
   int quantityFood;
   dynamic createdAt;
   dynamic updatedAt;
   dynamic roomTableId;
   int doneFlg;
-  int? userId;
-  int? storeId;
+  int userId;
+  int storeId;
   dynamic storeRoomId;
-  String? foodName;
-  String? foodDescription;
-  String? foodImages;
-  int? foodPrice;
-  String? foodContent;
-  int? foodRate;
-  int? foodKind;
+  String foodName;
+  String foodDescription;
+  String foodImages;
+  int foodPrice;
+  String foodContent;
+  int foodRate;
+  int foodKind;
   dynamic activeFlg;
   dynamic deleteFlg;
   dynamic tableName;
@@ -264,6 +268,66 @@ class Order {
         "order_total": orderTotal,
         "pay_flg": payFlg,
         "close_order": closeOrder,
+        "active_flg": activeFlg,
+        "delete_flg": deleteFlg,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
+      };
+}
+
+class Store {
+  int storeId;
+  int userId;
+  String shopId;
+  String storeName;
+  String storeAddress;
+  String storeDescription;
+  String storeImages;
+  dynamic storeLogo;
+  int activeFlg;
+  int deleteFlg;
+  DateTime createdAt;
+  DateTime updatedAt;
+
+  Store({
+    required this.storeId,
+    required this.userId,
+    required this.shopId,
+    required this.storeName,
+    required this.storeAddress,
+    required this.storeDescription,
+    required this.storeImages,
+    required this.storeLogo,
+    required this.activeFlg,
+    required this.deleteFlg,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory Store.fromJson(Map<String, dynamic> json) => Store(
+        storeId: json["store_id"],
+        userId: json["user_id"],
+        shopId: json["shop_id"],
+        storeName: json["store_name"],
+        storeAddress: json["store_address"],
+        storeDescription: json["store_description"],
+        storeImages: json["store_images"],
+        storeLogo: json["store_logo"],
+        activeFlg: json["active_flg"],
+        deleteFlg: json["delete_flg"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "store_id": storeId,
+        "user_id": userId,
+        "shop_id": shopId,
+        "store_name": storeName,
+        "store_address": storeAddress,
+        "store_description": storeDescription,
+        "store_images": storeImages,
+        "store_logo": storeLogo,
         "active_flg": activeFlg,
         "delete_flg": deleteFlg,
         "created_at": createdAt.toIso8601String(),

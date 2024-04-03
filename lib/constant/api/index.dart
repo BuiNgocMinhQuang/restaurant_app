@@ -13,6 +13,7 @@ const String managerLoginApi = 'user/login';
 const String managerLogout = 'user/logout';
 const String managerRegister = 'user/register';
 const String managerUpdatePassword = 'user/update-password';
+const String mangerUpdateInfor = 'user/update-profile';
 const String managerUpdateAvatar = 'user/update-avatar';
 const String managerDeletedAvatar = 'user/delete-avatar';
 const String managerCheckPassword = 'user/check-password';

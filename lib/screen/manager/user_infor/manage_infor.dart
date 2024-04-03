@@ -57,6 +57,11 @@ class _ManagerInformationState extends State<ManagerInformation> {
   String currentIdImage = 'assets/img/no-image.png';
   String? currentCity;
   String? currentDistric;
+  String? currentWard;
+
+  int? currentIndexCity;
+  int? currentIndexDistric;
+  int? currentIndexWard;
   File? selectedImage;
   void pickImage() async {
     final returndImage =
@@ -71,6 +76,21 @@ class _ManagerInformationState extends State<ManagerInformation> {
   void initState() {
     super.initState();
     getInfor();
+  }
+
+  @override
+  void dispose() {
+    surNameController.dispose();
+    fullNameController.dispose();
+    nameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    currentPassworldController.dispose();
+    newPassworldController.dispose();
+    reNewPassworldController.dispose();
+    address4Controller.dispose();
+    passwordForOpenIDImage.dispose();
+    super.dispose();
   }
 
   void checkPasswordToUpdateIdImage({
@@ -164,9 +184,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
             var myDistrict = districtListMap[district];
             currentDistric = myDistrict;
             //get Current Ward
-            // var wardListMap = xaList.asMap();
-            // var myWard = wardListMap[userInforData?.staffAddress3];
-            // var currentWard = myWard;
+            // var wardListMap = wardList.asMap();
+            // var myWard = wardListMap[null];
+            // currentWard = myWard;
           });
         } else {
           print("LOI GI DO dadadadadadadada");
@@ -221,9 +241,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
             currentDistric = myDistrict;
 
             //get Current Ward
-            // var wardListMap = xaList.asMap();
-            // var myWard = wardListMap[userInforData?.staffAddress3];
-            // var currentWard = myWard;
+            var wardListMap = wardList.asMap();
+            var myWard = wardListMap[managerInforData?.userAddress3];
+            currentWard = myWard;
           });
         } else {
           print("LOI GI DO dadadadadadadada");
@@ -271,7 +291,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
     }
   }
 
-  void deletedAvatarStaff() async {
+  void deletedAvatarManager() async {
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
       final respons = await http.post(
@@ -368,6 +388,78 @@ class _ManagerInformationState extends State<ManagerInformation> {
     }
   }
 
+  void updateInforManager({
+    required String? firstName,
+    required String? lastName,
+    required String? fullName,
+    required String? email,
+    required String? phone,
+    required int? address1,
+    required int? address2,
+    required int? address3,
+    required String? address4,
+  }) async {
+    print("CAI DONG TRUYEN LEN ${{
+      "first_name": firstName,
+      "last_name": lastName,
+      "full_name": fullName,
+      "email": email,
+      "phone": phone,
+      "address_1": address1,
+      "address_2": address2,
+      "address_3": address3,
+      "address_4": address4,
+    }}");
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$mangerUpdateInfor'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          "first_name": firstName,
+          "last_name": lastName,
+          "full_name": fullName,
+          "email": email,
+          "phone": phone,
+          "address_1": address1,
+          "address_2": address2,
+          "address_3": address3,
+          "address_4": address4,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print("DATA UPDATE INFOR  ${data}}");
+      final messText = data['message'];
+
+      try {
+        if (data['status'] == 200) {
+          print("UPDATE INFOR  OK");
+          getInfor();
+          showSnackBarTopCustom(
+              title: "Thành công",
+              context: navigatorKey.currentContext,
+              mess: messText['text'],
+              color: Colors.green);
+        } else {
+          print("ERROR UPDATE INFOR  1");
+          showSnackBarTopCustom(
+              title: "Thất bại",
+              context: navigatorKey.currentContext,
+              mess: messText['text'],
+              color: Colors.red);
+        }
+      } catch (error) {
+        print("ERROR UPDATE INFOR  2 ${error}");
+      }
+    } catch (error) {
+      print("ERROR UPDATE INFOR  3 $error");
+    }
+  }
+
   void init() async {
     await Future.delayed(const Duration(seconds: 0));
 
@@ -391,13 +483,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    log(currentDistric.toString());
     return Scaffold(
       body: SafeArea(
           child: SingleChildScrollView(
@@ -458,41 +544,13 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                           pickImage();
                                         },
                                         eventButton2: () {
-                                          deletedAvatarStaff();
+                                          showConfirmDialog(context, () {
+                                            deletedAvatarManager();
+                                          });
                                         },
                                       )),
                                 ],
                               ),
-                              // InkWell(
-                              //     onTap: () {
-                              //       pickImage();
-                              //     },
-                              //     child: Stack(
-                              //       children: [
-                              //         Container(
-                              //           width: 100.w,
-                              //           height: 150.w,
-                              //           color: Colors.grey,
-                              //           child: selectedImage != null
-                              //               ? Image.file(
-                              //                   selectedImage!,
-                              //                   fit: BoxFit.cover,
-                              //                 )
-                              //               : Container(
-                              //                   // width: 100.w,
-                              //                   color: Colors.grey,
-                              //                   child: Image.network(
-                              //                     httpImage + currentAvatar,
-                              //                     fit: BoxFit.cover,
-                              //                   ),
-                              //                 ),
-                              //         ),
-                              //         Positioned(
-                              //             top: 5.w,
-                              //             right: 5.w,
-                              //             child: Icon(Icons.edit))
-                              //       ],
-                              //     )),
                               space25W,
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -853,6 +911,16 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         city: cityList.indexOf(
                                                             changeCity),
                                                         district: null);
+                                                    setState(() {
+                                                      currentIndexCity =
+                                                          cityList.indexOf(
+                                                              changeCity);
+                                                      currentDistric = null;
+                                                      currentIndexDistric =
+                                                          null;
+                                                      currentWard = null;
+                                                      currentIndexWard = null;
+                                                    });
                                                   },
                                                   dropdownDecoratorProps:
                                                       DropDownDecoratorProps(
@@ -920,20 +988,35 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                   height: 10.h,
                                                 ),
                                                 DropdownSearch(
+                                                  key: Key(currentDistric
+                                                      .toString()),
+
                                                   validator: (value) {
                                                     if (value ==
                                                         "Chọn quận/huyện") {
                                                       return canNotNull;
                                                     }
                                                   },
-                                                  // dropdownBuilder: (context,
-                                                  //         selectedItem) =>
-                                                  //     Text(selectedItem ?? ''),
 
                                                   selectedItem: currentDistric,
 
                                                   items: districList,
-                                                  onChanged: (changeDistric) {},
+                                                  onChanged: (changeDistric) {
+                                                    getListArea(
+                                                        city: currentIndexCity ??
+                                                            managerInforData
+                                                                ?.userAddress1,
+                                                        district:
+                                                            districList.indexOf(
+                                                                changeDistric));
+                                                    setState(() {
+                                                      currentIndexDistric =
+                                                          districList.indexOf(
+                                                              changeDistric);
+                                                      currentWard = null;
+                                                      currentIndexWard = null;
+                                                    });
+                                                  },
 
                                                   dropdownDecoratorProps:
                                                       DropDownDecoratorProps(
@@ -1006,31 +1089,60 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                 SizedBox(
                                                   height: 10.h,
                                                 ),
-                                                TextFormField(
-                                                  onTapOutside: (event) {
-                                                    FocusManager
-                                                        .instance.primaryFocus
-                                                        ?.unfocus();
+                                                DropdownSearch(
+                                                  key: Key(
+                                                      currentWard.toString()),
+
+                                                  validator: (value) {
+                                                    if (value ==
+                                                        "Chọn phường/xã") {
+                                                      return canNotNull;
+                                                    }
                                                   },
-                                                  keyboardType:
-                                                      TextInputType.name,
-                                                  style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
-                                                  cursorColor: grey,
-                                                  decoration: InputDecoration(
-                                                      fillColor: Color.fromARGB(
-                                                          255, 226, 104, 159),
+
+                                                  selectedItem: currentWard,
+
+                                                  items: wardList,
+                                                  onChanged: (changeWard) {
+                                                    getListArea(
+                                                        city: currentIndexCity,
+                                                        district:
+                                                            currentIndexDistric);
+                                                    setState(() {
+                                                      currentIndexWard =
+                                                          wardList.indexOf(
+                                                              changeWard);
+                                                      var wardListMap =
+                                                          wardList.asMap();
+                                                      var myWard = wardListMap[
+                                                          wardList.indexOf(
+                                                              changeWard)];
+                                                      currentWard = myWard;
+                                                    });
+                                                  },
+
+                                                  dropdownDecoratorProps:
+                                                      DropDownDecoratorProps(
+                                                    dropdownSearchDecoration:
+                                                        InputDecoration(
+                                                      hintMaxLines: 1,
+                                                      fillColor:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              226,
+                                                              104,
+                                                              159),
                                                       focusedBorder:
                                                           OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color:
-                                                                Color.fromRGBO(
-                                                                    214,
-                                                                    51,
-                                                                    123,
-                                                                    0.6),
-                                                            width: 2.0),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color: Color
+                                                                    .fromRGBO(
+                                                                        214,
+                                                                        51,
+                                                                        123,
+                                                                        0.6),
+                                                                width: 2.0),
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(8.r),
@@ -1041,10 +1153,17 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
-                                                      // hintText: 'Họ',
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(15.w),
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp),
+                                                      hintText:
+                                                          "Chọn phường/xã",
+                                                    ),
+                                                  ),
+                                                  // selectedItem:
+                                                  //     "Chọn quận/huyện",
                                                 ),
                                               ],
                                             ),
@@ -1189,14 +1308,35 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                             color1: color1DarkButton,
                                             color2: color2DarkButton,
                                             event: () {
-                                              // if (_formField1.currentState!
-                                              //     .validate()) {
-                                              //   surNameController.clear();
-                                              //   nameController.clear();
-                                              //   fullNameController.clear();
-                                              //   emailController.clear();
-                                              //   phoneController.clear();
-                                              // }
+                                              if (_formField1.currentState!
+                                                  .validate()) {
+                                                showConfirmDialog(context, () {
+                                                  updateInforManager(
+                                                    firstName:
+                                                        surNameController.text,
+                                                    lastName:
+                                                        nameController.text,
+                                                    fullName:
+                                                        fullNameController.text,
+                                                    email: emailController.text,
+                                                    phone: phoneController.text,
+                                                    address1:
+                                                        currentIndexCity ??
+                                                            managerInforData
+                                                                ?.userAddress1,
+                                                    address2:
+                                                        currentIndexDistric ??
+                                                            managerInforData
+                                                                ?.userAddress2,
+                                                    address3:
+                                                        currentIndexWard ??
+                                                            managerInforData
+                                                                ?.userAddress3,
+                                                    address4:
+                                                        address4Controller.text,
+                                                  );
+                                                });
+                                              }
                                             },
                                             text: "Cập nhật thông tin",
                                             fontSize: 12.sp,
@@ -1474,20 +1614,18 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                         event: () {
                                           if (_formField2.currentState!
                                               .validate()) {
-                                            // currentPassworldController
-                                            //     .clear();
-                                            // newPassworldController.clear();
-                                            // reNewPassworldController
-                                            //     .clear();
-                                            changePasswordManager(
-                                              currentPassword:
-                                                  currentPassworldController
-                                                      .text,
-                                              newPassword:
-                                                  newPassworldController.text,
-                                              confirmNewPassword:
-                                                  reNewPassworldController.text,
-                                            );
+                                            showConfirmDialog(context, () {
+                                              changePasswordManager(
+                                                currentPassword:
+                                                    currentPassworldController
+                                                        .text,
+                                                newPassword:
+                                                    newPassworldController.text,
+                                                confirmNewPassword:
+                                                    reNewPassworldController
+                                                        .text,
+                                              );
+                                            });
                                           }
                                         },
                                         text: "Cập nhật mật khẩu",

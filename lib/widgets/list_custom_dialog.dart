@@ -4710,7 +4710,7 @@ class PrintBillDialog extends StatefulWidget {
     required this.roomName,
     required this.tableName,
     required this.orderID,
-  });
+  }) : super(key: key);
   @override
   State<PrintBillDialog> createState() => _PrintBillDialogState();
 }
@@ -4721,8 +4721,8 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
         client: 'staff', shopId: getStaffShopID, orderId: orderID));
   }
 
+  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     printBroughtReceipt(orderID: widget.orderID);
   }
@@ -4789,7 +4789,9 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           TextApp(
-                            text: "Shop 1",
+                            text: state.printBroughtReceiptModel?.store
+                                    .storeName ??
+                                '',
                             fontsize: 18.sp,
                             color: blueText,
                             fontWeight: FontWeight.bold,
@@ -4806,7 +4808,9 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                               ),
                               space10W,
                               TextApp(
-                                text: 'Dia ch idau',
+                                text: state.printBroughtReceiptModel?.store
+                                        .storeAddress ??
+                                    '',
                                 fontsize: 16.sp,
                                 color: blueText,
                               ),
@@ -5364,7 +5368,9 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           TextApp(
-                            text: "Shop 1",
+                            text: state.printBroughtReceiptModel?.store
+                                    .storeName ??
+                                '',
                             fontsize: 18.sp,
                             color: blueText,
                             fontWeight: FontWeight.bold,
@@ -5381,7 +5387,9 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                               ),
                               space10W,
                               TextApp(
-                                text: "123 duong abc",
+                                text: state.printBroughtReceiptModel?.store
+                                        .storeAddress ??
+                                    '',
                                 fontsize: 16.sp,
                                 color: blueText,
                               ),

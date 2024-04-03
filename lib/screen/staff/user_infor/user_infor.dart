@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:app_restaurant/config/void_show_dialog.dart';
@@ -15,7 +14,6 @@ import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
@@ -55,18 +53,17 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
   File? selectedImage;
   String currentAvatar = 'assets/user/images/avt/no_image.png';
   List cityList = [];
-  List quanList = [];
-  List xaList = [];
-  Data? userInforData;
-  bool isChangeCity = false;
-  bool isChangeDistrict = false;
-  int? initIndexCity;
-  int? initIndexDistric;
-  int? initIndexWard;
+  List districList = [];
+  List wardList = [];
+  DataStaffInfor? staffInforData;
+
+  String? currentCity;
+  String? currentDistric;
+  String? currentWard;
+
   int? currentIndexCity;
   int? currentIndexDistric;
   int? currentIndexWard;
-  int? preChoose;
   void pickImage() async {
     final returndImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -197,19 +194,13 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
         if (data['status'] == 200) {
           var staffInforDataRes = StaffInfor.fromJson(data);
           setState(() {
-            userInforData = staffInforDataRes.data;
+            staffInforData = staffInforDataRes.data;
             var imagePath1 =
-                (userInforData?.staffAvatar ?? '').replaceAll('["', '');
+                (staffInforData?.staffAvatar ?? '').replaceAll('["', '');
             var imagePath2 = imagePath1.replaceAll('"]', '');
             currentAvatar = imagePath2;
-            initIndexCity = userInforData?.staffAddress1;
-            initIndexDistric = userInforData?.staffAddress2;
-            initIndexWard = userInforData?.staffAddress3;
-            log(currentAvatar.toString());
           });
-          laythongitn(
-              city: userInforData?.staffAddress1,
-              district: userInforData?.staffAddress2);
+          init();
 
           print("GET INFOR STAFF OK 1");
         } else {
@@ -360,7 +351,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
     }
   }
 
-  void laythongitn({
+  void getListAreaInit({
     required int? city,
     required int? district,
   }) async {
@@ -381,25 +372,30 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
         }),
       );
       final data = jsonDecode(response.body);
-      // print("DATA HHHHHHH ${data}");
 
       try {
         if (response.statusCode == 200) {
           setState(() {
             cityList.clear();
-            quanList.clear();
-            xaList.clear();
+            districList.clear();
+            wardList.clear();
             cityList.addAll(data['cities']);
-            quanList.addAll(data['districts']);
-            xaList.addAll(data['wards']);
-          });
+            districList.addAll(data['districts']);
+            wardList.addAll(data['wards']);
+            //get current City
+            var cityListMap = cityList.asMap();
+            var myCity = cityListMap[staffInforData?.staffAddress1];
+            currentCity = myCity;
+            //get current District
+            var districtListMap = districList.asMap();
+            var myDistrict = districtListMap[staffInforData?.staffAddress2];
+            currentDistric = myDistrict;
 
-          // print("============");
-          // print(cityList);
-          // print("============");
-          // print(quanList);
-          // print("============");
-          // print(xaList);
+            //get Current Ward
+            var wardListMap = wardList.asMap();
+            var myWard = wardListMap[staffInforData?.staffAddress3];
+            currentWard = myWard;
+          });
         } else {
           print("LOI GI DO dadadadadadadada");
         }
@@ -411,6 +407,102 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
     }
   }
 
+  void getListArea({
+    required int? city,
+    required int? district,
+  }) async {
+    print("DATA TRUYEN NN ${{
+      'city': city,
+      'district': district,
+    }}");
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl$areas'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          'city': city,
+          'district': district,
+        }),
+      );
+      final data = jsonDecode(response.body);
+
+      try {
+        if (response.statusCode == 200) {
+          setState(() {
+            cityList.clear();
+            districList.clear();
+            wardList.clear();
+            cityList.addAll(data['cities']);
+            districList.addAll(data['districts']);
+            wardList.addAll(data['wards']);
+
+            //get current City
+            var cityListMap = cityList.asMap();
+            var myCity = cityListMap[city];
+            currentCity = myCity;
+            //get current District
+            var districtListMap = districList.asMap();
+            var myDistrict = districtListMap[district];
+            currentDistric = myDistrict;
+          });
+        } else {
+          print("LOI GI DO dadadadadadadada");
+        }
+      } catch (error) {
+        print("LOI GI DO $error");
+      }
+    } catch (error) {
+      print("LOI GI DO $error");
+    }
+  }
+
+  void init() async {
+    await Future.delayed(const Duration(seconds: 0));
+
+    mounted
+        ? fullNameController.text = staffInforData?.staffFullName ?? ''
+        : null;
+    mounted
+        ? surNameController.text = staffInforData?.staffFirstName ?? ''
+        : null;
+
+    mounted ? nameController.text = staffInforData?.staffLastName ?? '' : null;
+    mounted ? emailController.text = staffInforData?.staffEmail ?? '' : null;
+    mounted ? phoneController.text = staffInforData?.staffPhone ?? '' : null;
+    mounted
+        ? roleController.text = (staffInforData?.staffPosition == 1
+            ? 'Nhân viên'
+            : staffInforData?.staffPosition == 2
+                ? 'Trưởng nhóm'
+                : staffInforData?.staffPosition == 3
+                    ? 'Quản lý'
+                    : staffInforData?.staffPosition == 4
+                        ? 'Kế toán'
+                        : '')
+        : null;
+    mounted
+        ? twitterController.text = staffInforData?.staffTwitter ?? ''
+        : null;
+    mounted
+        ? facebookController.text = staffInforData?.staffFacebook ?? ''
+        : null;
+    mounted
+        ? instagramController.text = staffInforData?.staffInstagram ?? ''
+        : null;
+    mounted ? shopIDController.text = staffInforData?.shopId ?? '' : null;
+
+    mounted
+        ? address4Controller.text = staffInforData?.staffAddress4 ?? ''
+        : null;
+
+    getListAreaInit(
+        city: staffInforData?.staffAddress1,
+        district: staffInforData?.staffAddress2);
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -418,44 +510,6 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
 
   @override
   Widget build(BuildContext context) {
-    shopIDController.text = userInforData?.shopId ?? '';
-    fullNameController.text = userInforData?.staffFullName ?? '';
-    surNameController.text = userInforData?.staffFirstName ?? '';
-    nameController.text = userInforData?.staffLastName ?? '';
-    emailController.text = userInforData?.staffEmail ?? '';
-    phoneController.text = userInforData?.staffPhone ?? '';
-    // currentPassworldController.text = userInforData?.staffLastName ?? '';
-    // newPassworldController.text = userInforData?.staffLastName ?? '';
-    // reNewPassworldController.text = userInforData?.staffLastName ?? '';
-    roleController.text = userInforData?.staffPosition == 1
-        ? 'Nhân viên'
-        : userInforData?.staffPosition == 2
-            ? 'Trưởng nhóm'
-            : userInforData?.staffPosition == 3
-                ? 'Quản lý'
-                : userInforData?.staffPosition == 4
-                    ? 'Kế toán'
-                    : '';
-
-    twitterController.text = userInforData?.staffTwitter ?? '';
-    facebookController.text = userInforData?.staffFacebook ?? '';
-    instagramController.text = userInforData?.staffInstagram ?? '';
-    address1Controller.text = userInforData?.staffAddress1.toString() ?? '';
-    address2Controller.text = userInforData?.staffAddress2.toString() ?? '';
-    address3Controller.text = userInforData?.staffAddress3.toString() ?? '';
-    address4Controller.text = userInforData?.staffAddress4 ?? '';
-    //get current City
-    var cityListMap = cityList.asMap();
-    var myCity = cityListMap[userInforData?.staffAddress1];
-    var currentCity = myCity;
-    //get current District
-    var districtListMap = quanList.asMap();
-    var myDistrict = districtListMap[userInforData?.staffAddress2];
-    var currentDistrict = myDistrict;
-    //get Current Ward
-    var wardListMap = xaList.asMap();
-    var myWard = wardListMap[userInforData?.staffAddress3];
-    var currentWard = myWard;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -521,7 +575,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                         pickImage();
                                       },
                                       eventButton2: () {
-                                        deletedAvatarStaff();
+                                        showConfirmDialog(context, () {
+                                          deletedAvatarStaff();
+                                        });
                                       },
                                     ))
                               ],
@@ -1054,22 +1110,17 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                 selectedItem: currentCity,
                                                 items: cityList,
                                                 onChanged: (changeCity) {
-                                                  laythongitn(
+                                                  getListArea(
                                                       city: cityList
                                                           .indexOf(changeCity),
                                                       district: null);
-
                                                   setState(() {
-                                                    preChoose =
-                                                        currentIndexCity;
-                                                    print("VO CU $preChoose");
-                                                    isChangeCity = true;
-                                                    userInforData
-                                                        ?.staffAddress2 = null;
                                                     currentIndexCity = cityList
                                                         .indexOf(changeCity);
-                                                    print(
-                                                        "VAN TREN TOP $currentIndexCity");
+                                                    currentDistric = null;
+                                                    currentIndexDistric = null;
+                                                    currentWard = null;
+                                                    currentIndexWard = null;
                                                   });
                                                 },
                                                 dropdownDecoratorProps:
@@ -1134,32 +1185,31 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                 height: 10.h,
                                               ),
                                               DropdownSearch(
+                                                key: Key(
+                                                    currentDistric.toString()),
                                                 validator: (value) {
                                                   if (value ==
                                                       "Chọn quận/huyện") {
                                                     return canNotNull;
                                                   }
                                                 },
-                                                selectedItem: currentDistrict,
+                                                selectedItem: currentDistric,
 
-                                                items: quanList,
+                                                items: districList,
                                                 onChanged: (changeDistric) {
-                                                  // var myInt = int.tryParse(
-                                                  //     address1Controller.text);
-                                                  laythongitn(
+                                                  getListArea(
                                                       city: currentIndexCity ??
-                                                          initIndexCity,
+                                                          staffInforData
+                                                              ?.staffAddress1,
                                                       district:
-                                                          quanList.indexOf(
+                                                          districList.indexOf(
                                                               changeDistric));
                                                   setState(() {
-                                                    print(
-                                                        "LOZNAO NULL $currentIndexCity");
-                                                    print(
-                                                        "LOZNAO NULL $initIndexCity");
-                                                    isChangeDistrict = true;
-                                                    initIndexDistric = quanList
-                                                        .indexOf(changeDistric);
+                                                    currentIndexDistric =
+                                                        districList.indexOf(
+                                                            changeDistric);
+                                                    currentWard = null;
+                                                    currentIndexWard = null;
                                                   });
                                                 },
 
@@ -1230,25 +1280,31 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                 height: 10.h,
                                               ),
                                               DropdownSearch(
+                                                key:
+                                                    Key(currentWard.toString()),
                                                 validator: (value) {
                                                   if (value ==
                                                       "Chọn phường/xã") {
                                                     return canNotNull;
                                                   }
                                                 },
-                                                selectedItem: isChangeDistrict
-                                                    ? null
-                                                    : currentWard,
+                                                selectedItem: currentWard,
 
-                                                items: xaList,
+                                                items: wardList,
                                                 onChanged: (changeWard) {
-                                                  // var xamoi = xaList
-                                                  //     .indexOf(
-                                                  //         changeWard);
-
+                                                  getListArea(
+                                                      city: currentIndexCity,
+                                                      district:
+                                                          currentIndexDistric);
                                                   setState(() {
-                                                    initIndexWard = xaList
+                                                    currentIndexWard = wardList
                                                         .indexOf(changeWard);
+                                                    var wardListMap =
+                                                        wardList.asMap();
+                                                    var myWard = wardListMap[
+                                                        wardList.indexOf(
+                                                            changeWard)];
+                                                    currentWard = myWard;
                                                   });
                                                 },
                                                 dropdownDecoratorProps:
@@ -1594,34 +1650,19 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                   instagram:
                                                       instagramController.text,
                                                   address1: currentIndexCity ??
-                                                      userInforData
+                                                      staffInforData
                                                           ?.staffAddress1,
-                                                  address2: initIndexDistric ??
-                                                      userInforData
-                                                          ?.staffAddress2,
-                                                  address3: initIndexWard ??
-                                                      userInforData
+                                                  address2:
+                                                      currentIndexDistric ??
+                                                          staffInforData
+                                                              ?.staffAddress2,
+                                                  address3: currentIndexWard ??
+                                                      staffInforData
                                                           ?.staffAddress3,
                                                   address4:
                                                       address4Controller.text,
                                                 );
-                                                getInfor();
-                                                // setState(() {
-                                                //   thanhphoIndex = null;
-                                                //   quanIndex = null;
-                                                //   xaIndex = null;
-                                                // });
                                               });
-                                              // surNameController
-                                              //     .clear();
-                                              // nameController
-                                              //     .clear();
-                                              // fullNameController
-                                              //     .clear();
-                                              // emailController
-                                              //     .clear();
-                                              // phoneController
-                                              //     .clear();
                                             }
                                           },
                                           text: "Cập nhật thông tin",
