@@ -22,6 +22,7 @@ class GetTableInfor extends TableEvent {
   final bool isApi;
   final String roomId;
   final String tableId;
+  final String token;
 
   const GetTableInfor({
     required this.client,
@@ -29,6 +30,7 @@ class GetTableInfor extends TableEvent {
     this.isApi = true,
     required this.roomId,
     required this.tableId,
+    required this.token,
   });
 
   @override

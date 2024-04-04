@@ -288,7 +288,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                   child: ItemDrawer(
                       isExpand: true,
                       text: 'Nhân viên',
-                      iconColor: currentIndex == 1 || currentIndex == 1
+                      iconColor: currentIndex == 1 || currentIndex == 5
                           ? Colors.white
                           : Colors.black,
                       backgroundIconColor:

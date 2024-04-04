@@ -1,5 +1,3 @@
-import 'package:app_restaurant/widgets/shimmer/shimmer_list.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,7 +11,6 @@ class ManagerHome extends StatefulWidget {
 
 class _ManagerHomeState extends State<ManagerHome> {
   bool showModal = true;
-  bool isLoading = true;
   String imageSrc = 'https://picsum.photos/200';
   final ScrollController _scrollController = ScrollController();
   @override
@@ -37,35 +34,33 @@ class _ManagerHomeState extends State<ManagerHome> {
           imageSrc = "https://picsum.photos/250";
         });
       },
-      child: !isLoading
-          ? const ShimmerHomeManager()
-          : SingleChildScrollView(
-              child: Padding(
-                  padding: EdgeInsets.only(
-                      top: 20.w, left: 20.w, right: 20.w, bottom: 20.w),
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const ClampingScrollPhysics(),
-                      itemCount: 6,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Card(
-                          child: Row(
-                            children: [
-                              Image.network(imageSrc),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              const Expanded(
-                                child: Text(
-                                  "Every city is good for travel.",
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ],
+      child: SingleChildScrollView(
+        child: Padding(
+            padding: EdgeInsets.only(
+                top: 20.w, left: 20.w, right: 20.w, bottom: 20.w),
+            child: ListView.builder(
+                shrinkWrap: true,
+                physics: const ClampingScrollPhysics(),
+                itemCount: 6,
+                itemBuilder: (BuildContext context, int index) {
+                  return Card(
+                    child: Row(
+                      children: [
+                        Image.network(imageSrc),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        const Expanded(
+                          child: Text(
+                            "Every city is good for travel.",
+                            textAlign: TextAlign.center,
                           ),
-                        );
-                      })),
-            ),
+                        ),
+                      ],
+                    ),
+                  );
+                })),
+      ),
     )));
   }
 }

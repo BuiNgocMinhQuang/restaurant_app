@@ -33,7 +33,7 @@ class ManagerListBill extends StatefulWidget {
 class _ManagerListBillState extends State<ManagerListBill>
     with TickerProviderStateMixin {
   final String currentRole = "user";
-  final String currentShopId = "123456";
+  final String currentShopId = "123456"; //đổi chỗ này thành shopID truyên vào
   void getListBillShop({required Map<String, int?> filtersFlg}) async {
     BlocProvider.of<ListBillShopBloc>(context).add(GetListBillShop(
         token: StorageUtils.instance.getString(key: 'token_manager'),

@@ -7,6 +7,7 @@ import 'package:app_restaurant/bloc/payment/payment_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/utils/share_getString.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/list_pop_menu.dart';
@@ -31,6 +32,8 @@ class _StaffBookingTableState extends State<StaffBookingTable>
     with TickerProviderStateMixin {
   final String currentRole = "staff";
   final String currentShopId = getStaffShopID;
+  var tokenStaff = StorageUtils.instance.getString(key: 'token') ?? '';
+
   void getDataTabIndex({String? roomId}) async {
     await Future.delayed(const Duration(seconds: 0));
 
@@ -48,6 +51,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
     required String tableId,
   }) async {
     BlocProvider.of<TableBloc>(context).add(GetTableInfor(
+        token: tokenStaff,
         client: currentRole,
         shopId: getStaffShopID,
         roomId: roomId ?? '',
@@ -342,6 +346,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                                         roomId: data.storeRoomId.toString(),
                                                                                                       );
                                                                                                     },
+                                                                                                    token: tokenStaff,
                                                                                                     role: currentRole,
                                                                                                     shopID: currentShopId,
                                                                                                     idRoom: data.storeRoomId,
@@ -423,6 +428,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                                   context: context,
                                                                                                   builder: (BuildContext context) {
                                                                                                     return BookingTableDialog(
+                                                                                                      token: tokenStaff,
                                                                                                       role: currentRole,
                                                                                                       shopID: currentShopId,
                                                                                                       idRoom: data.storeRoomId,

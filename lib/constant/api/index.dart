@@ -17,7 +17,7 @@ const String mangerUpdateInfor = 'user/update-profile';
 const String managerUpdateAvatar = 'user/update-avatar';
 const String managerDeletedAvatar = 'user/delete-avatar';
 const String managerCheckPassword = 'user/check-password';
-const String managerUpdateCitizenID = 'user/update-citizen-identification';
+const String managerUpdateCitizenIDApi = 'user/update-citizen-identification';
 
 //Shared API
 const String userInformationApi = 'information';

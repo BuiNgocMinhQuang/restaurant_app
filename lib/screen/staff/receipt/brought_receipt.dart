@@ -35,10 +35,12 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
     with TickerProviderStateMixin {
   final String currentRole = "staff";
   final String currentShopId = getStaffShopID;
+  var tokenStaff = StorageUtils.instance.getString(key: 'token') ?? '';
 
   void getListBroughtReceiptData(
       {required Map<String, int?> filtersFlg}) async {
     BlocProvider.of<BroughtReceiptBloc>(context).add(GetListBroughtReceipt(
+        token: tokenStaff,
         client: currentRole,
         shopId: currentShopId,
         limit: 15,
@@ -49,6 +51,7 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
   void getDetailsBroughtReceiptData({required int? orderID}) async {
     BlocProvider.of<ManageBroughtReceiptBloc>(context).add(
         GetDetailsBroughtReceipt(
+            token: tokenStaff,
             client: 'staff',
             shopId: getStaffShopID,
             limit: 15,
@@ -179,6 +182,7 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                                 BuildContext context,
                               ) {
                                 return ManageBroughtReceiptDialog(
+                                  token: tokenStaff,
                                   role: currentRole,
                                   shopID: currentShopId,
                                   orderID: null,
@@ -257,6 +261,8 @@ class _AllWidgetState extends State<AllWidget>
   int currentPage = 1;
   List newListFood = [];
   bool hasMore = true;
+  var tokenStaff = StorageUtils.instance.getString(key: 'token') ?? '';
+
   @override
   bool get wantKeepAlive => true;
   @override
@@ -281,6 +287,7 @@ class _AllWidgetState extends State<AllWidget>
   void getDetailsBroughtReceiptData({required int? orderID}) async {
     BlocProvider.of<ManageBroughtReceiptBloc>(context).add(
         GetDetailsBroughtReceipt(
+            token: tokenStaff,
             client: 'staff',
             shopId: getStaffShopID,
             limit: 15,
@@ -292,6 +299,7 @@ class _AllWidgetState extends State<AllWidget>
   void getListBroughtReceiptData(
       {required Map<String, int?> filtersFlg}) async {
     BlocProvider.of<BroughtReceiptBloc>(context).add(GetListBroughtReceipt(
+        token: tokenStaff,
         client: 'staff',
         shopId: getStaffShopID,
         limit: 15,
@@ -313,7 +321,11 @@ class _AllWidgetState extends State<AllWidget>
 
   void printBroughtReceipt({required int orderID}) async {
     BlocProvider.of<PrintBroughtReceiptBloc>(context).add(PrintBroughtReceipt(
-        client: 'staff', shopId: getStaffShopID, orderId: orderID));
+      token: tokenStaff,
+      client: 'staff',
+      shopId: getStaffShopID,
+      orderId: orderID,
+    ));
   }
 
   Future loadMoreFood(
@@ -407,6 +419,7 @@ class _AllWidgetState extends State<AllWidget>
                                       context: navigatorKey.currentContext!,
                                       builder: (BuildContext context) {
                                         return ManageBroughtReceiptDialog(
+                                          token: tokenStaff,
                                           role: 'staff',
                                           orderID: newListFood[index].orderId,
                                           shopID: getStaffShopID,
@@ -457,6 +470,7 @@ class _AllWidgetState extends State<AllWidget>
                                       context: context,
                                       builder: (BuildContext context) {
                                         return CancleBillDialog(
+                                          token: tokenStaff,
                                           eventSaveButton: () {
                                             Navigator.of(context).pop();
                                             getListBroughtReceiptData(
@@ -534,6 +548,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
   List listBillComplete = [];
   bool hasMoreComplete = true;
   bool isRefesh = false;
+  var tokenStaff = StorageUtils.instance.getString(key: 'token') ?? '';
 
   final scrollTabCompleteController = ScrollController();
   @override
@@ -646,7 +661,11 @@ class _CompleteWidgetState extends State<CompleteWidget>
 
   void printBroughtReceipt({required int orderID}) async {
     BlocProvider.of<PrintBroughtReceiptBloc>(context).add(PrintBroughtReceipt(
-        client: 'staff', shopId: getStaffShopID, orderId: orderID));
+      token: tokenStaff,
+      client: 'staff',
+      shopId: getStaffShopID,
+      orderId: orderID,
+    ));
   }
 
   @override
@@ -741,6 +760,7 @@ class _PendingWidgetState extends State<PendingWidget>
   int currentPagePending = 1;
   List listBillPending = [];
   bool hasMoreComplete = true;
+  var tokenStaff = StorageUtils.instance.getString(key: 'token') ?? '';
 
   final scrollTabPendingController = ScrollController();
   @override
@@ -765,6 +785,7 @@ class _PendingWidgetState extends State<PendingWidget>
   void getDetailsBroughtReceiptData({required int? orderID}) async {
     BlocProvider.of<ManageBroughtReceiptBloc>(context).add(
         GetDetailsBroughtReceipt(
+            token: tokenStaff,
             client: 'staff',
             shopId: getStaffShopID,
             limit: 15,
@@ -776,6 +797,7 @@ class _PendingWidgetState extends State<PendingWidget>
   void getListBroughtReceiptData(
       {required Map<String, int?> filtersFlg}) async {
     BlocProvider.of<BroughtReceiptBloc>(context).add(GetListBroughtReceipt(
+        token: tokenStaff,
         client: 'staff',
         shopId: getStaffShopID,
         limit: 15,
@@ -797,7 +819,11 @@ class _PendingWidgetState extends State<PendingWidget>
 
   void printBroughtReceipt({required int orderID}) async {
     BlocProvider.of<PrintBroughtReceiptBloc>(context).add(PrintBroughtReceipt(
-        client: 'staff', shopId: getStaffShopID, orderId: orderID));
+      token: tokenStaff,
+      client: 'staff',
+      shopId: getStaffShopID,
+      orderId: orderID,
+    ));
   }
 
   void loadMorePending(
@@ -874,6 +900,7 @@ class _PendingWidgetState extends State<PendingWidget>
                                 context: context,
                                 builder: (BuildContext context) {
                                   return ManageBroughtReceiptDialog(
+                                    token: tokenStaff,
                                     role: 'staff',
                                     orderID: listBillPending[index].orderId,
                                     shopID: getStaffShopID,
@@ -925,6 +952,7 @@ class _PendingWidgetState extends State<PendingWidget>
                                 context: context,
                                 builder: (BuildContext context) {
                                   return CancleBillDialog(
+                                    token: tokenStaff,
                                     eventSaveButton: () {
                                       Navigator.of(context).pop();
 
@@ -988,6 +1016,7 @@ class _CancleWidgetState extends State<CancleWidget>
   int currentPageCancle = 1;
   List listBillCancle = [];
   bool hasMoreCanle = true;
+  var tokenStaff = StorageUtils.instance.getString(key: 'token') ?? '';
 
   final scrollTabCancleController2 = ScrollController();
   @override
@@ -1056,7 +1085,11 @@ class _CancleWidgetState extends State<CancleWidget>
 
   void printBroughtReceipt({required int orderID}) async {
     BlocProvider.of<PrintBroughtReceiptBloc>(context).add(PrintBroughtReceipt(
-        client: 'staff', shopId: getStaffShopID, orderId: orderID));
+      token: tokenStaff,
+      client: 'staff',
+      shopId: getStaffShopID,
+      orderId: orderID,
+    ));
   }
 
   @override

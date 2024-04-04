@@ -29,7 +29,8 @@ class BroughtReceiptBloc
         broughtReceiptPageStatus: BroughtReceiptPageStatus.loading));
     await Future.delayed(const Duration(seconds: 1));
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      var token = event.token;
+      print("TOKEN TRUYEN VAO $token");
       final respons = await http.post(
         Uri.parse('$baseUrl$getListBroughtReceipt'),
         headers: {
@@ -48,6 +49,7 @@ class BroughtReceiptBloc
       );
       final data = jsonDecode(respons.body);
       var message = data['message'];
+      print("HELLOO $data");
       try {
         if (data['status'] == 200) {
           var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
@@ -89,7 +91,8 @@ class CancleBroughtReceiptBloc
     Emitter<CancleBroughtReceiptState> emit,
   ) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      // var token = StorageUtils.instance.getString(key: 'token');
+      var token = event.token;
       final respons = await http.post(
         Uri.parse('$baseUrl$cancleBroughtReceipt'),
         headers: {
@@ -160,7 +163,8 @@ class PrintBroughtReceiptBloc
         printBroughtReceiptStatus: PrintBroughtReceiptStatus.loading));
     await Future.delayed(const Duration(seconds: 1));
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      // var token = StorageUtils.instance.getString(key: 'token');
+      var token = event.token;
       final respons = await http.post(
         Uri.parse('$baseUrl$printBroughtReceipt'),
         headers: {
@@ -222,7 +226,8 @@ class ManageBroughtReceiptBloc
     await Future.delayed(const Duration(seconds: 1));
 
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      // var token = StorageUtils.instance.getString(key: 'token');
+      var token = event.token;
       final respons = await http.post(
         Uri.parse('$baseUrl$getListFoodBroughtReceipt'),
         headers: {

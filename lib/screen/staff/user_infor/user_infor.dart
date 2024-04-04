@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:app_restaurant/config/void_show_dialog.dart';
@@ -13,6 +15,7 @@ import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -60,7 +63,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
   String? currentCity;
   String? currentDistric;
   String? currentWard;
-
+  String? dayroi;
   int? currentIndexCity;
   int? currentIndexDistric;
   int? currentIndexWard;
@@ -86,13 +89,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
         },
       );
       final data = jsonDecode(respons.body);
-      print("DATA DELETED AVATAR STAFF  ${data}}");
-
       try {
         if (data['status'] == 200) {
-          print("DELETED AVATAR STAFF  OK");
           getInfor();
-
           showSnackBarTopCustom(
               title: "Thành công",
               context: navigatorKey.currentContext,
@@ -118,15 +117,14 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
     try {
       if (selectedImage != null) {
         Uint8List imagebytes =
-            await selectedImage!.readAsBytes(); //convert to bytes
+            selectedImage!.readAsBytesSync(); //convert to bytes
         String base64string =
-            base64.encode(imagebytes); //convert bytes to base64 string
-        print(base64string);
+            base64Encode(imagebytes); //convert bytes to base64 string
+        // base64.encode(imagebytes);
 
-        setState(() {});
         try {
           print("TRUYEN NNNN ${{
-            "d]staff_avatar": base64string,
+            "staff_avatar": base64string,
           }}");
           var token = StorageUtils.instance.getString(key: 'token');
           final respons = await http.post(
@@ -141,7 +139,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
             }),
           );
           final data = jsonDecode(respons.body);
-          print("DATA CHANGE AVATAR STAFF  ${data}}");
+          log("DATA CHANGE AVATAR STAFF  ${data}}");
 
           try {
             if (data['status'] == 200) {
@@ -173,19 +171,18 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    getInfor();
-  }
-
   void getInfor() async {
     try {
       var token = StorageUtils.instance.getString(key: 'token');
       print("TOKEN CURRENT $token");
       final response = await http.post(
         Uri.parse('$baseUrl$userInformationApi'),
-        headers: {"Authorization": "Bearer $token"},
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        // headers: {"Authorization": "Bearer $token"},
       );
       final data = jsonDecode(response.body);
       // var message = data['message'];
@@ -195,10 +192,6 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
           var staffInforDataRes = StaffInfor.fromJson(data);
           setState(() {
             staffInforData = staffInforDataRes.data;
-            var imagePath1 =
-                (staffInforData?.staffAvatar ?? '').replaceAll('["', '');
-            var imagePath2 = imagePath1.replaceAll('"]', '');
-            currentAvatar = imagePath2;
           });
           init();
 
@@ -461,6 +454,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
 
   void init() async {
     await Future.delayed(const Duration(seconds: 0));
+    var imagePath1 = (staffInforData?.staffAvatar ?? '').replaceAll('["', '');
+    var imagePath2 = imagePath1.replaceAll('"]', '');
+    mounted ? currentAvatar = imagePath2 : currentAvatar;
 
     mounted
         ? fullNameController.text = staffInforData?.staffFullName ?? ''
@@ -501,6 +497,14 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
     getListAreaInit(
         city: staffInforData?.staffAddress1,
         district: staffInforData?.staffAddress2);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => getInfor());
+    });
   }
 
   @override
@@ -551,21 +555,36 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                               children: [
                                 Container(
                                   width: 100.w,
-                                  height: 150.w,
+                                  height: 125.w,
                                   color: Colors.grey,
                                   child: selectedImage != null
                                       ? Image.file(
                                           selectedImage!,
-                                          fit: BoxFit.cover,
+                                          fit: BoxFit.fill,
                                         )
-                                      : Container(
-                                          // width: 100.w,
-                                          color: Colors.grey,
-                                          child: Image.network(
-                                            httpImage + currentAvatar,
-                                            fit: BoxFit.cover,
+                                      : CachedNetworkImage(
+                                          fit: BoxFit.fill,
+                                          imageUrl: httpImage + currentAvatar,
+                                          placeholder: (context, url) =>
+                                              SizedBox(
+                                            child: Center(
+                                                child:
+                                                    CircularProgressIndicator()),
+                                            height: 10.w,
+                                            width: 10.w,
                                           ),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(Icons.error),
                                         ),
+                                  // Container(
+                                  //     // width: 100.w,
+                                  //     color: Colors.grey,
+                                  //     child:
+                                  //      Image.network(
+                                  //             httpImage + currentAvatar,
+                                  //             fit: BoxFit.cover,
+                                  //           ),
+                                  //   ),
                                 ),
                                 Positioned(
                                     top: 0.w,

@@ -2,11 +2,9 @@ import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
-import 'package:app_restaurant/model/list_room_model.dart';
 import 'package:app_restaurant/utils/storage.dart';
-import 'package:app_restaurant/widgets/list_custom_dialog.dart';
+
 import 'package:app_restaurant/widgets/list_pop_menu.dart';
-import 'package:app_restaurant/widgets/shimmer/shimmer_list.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +20,9 @@ class ManagerBookingTable extends StatefulWidget {
 
 class _ManagerBookingTableState extends State<ManagerBookingTable>
     with TickerProviderStateMixin {
+  var tokenManager =
+      StorageUtils.instance.getString(key: 'token_manager') ?? '';
+
   void saveBookingModal() {}
 
   void saveMoveTableModal() {}
@@ -52,7 +53,11 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
 
   void getTableInfor(String roomId, String tableId) {
     BlocProvider.of<TableBloc>(context).add(GetTableInfor(
-        client: "user", shopId: "123456", roomId: roomId, tableId: tableId));
+        token: tokenManager,
+        client: "user",
+        shopId: "123456",
+        roomId: roomId,
+        tableId: tableId));
   }
 
   @override

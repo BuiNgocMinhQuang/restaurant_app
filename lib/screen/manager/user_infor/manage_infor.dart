@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
@@ -54,7 +55,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
   List districList = [];
   List wardList = [];
   String currentAvatar = 'assets/user/images/avt/no_image.png';
-  String currentIdImage = 'assets/img/no-image.png';
+  String currentImageFrontID = 'assets/img/no-image.png';
+  String currentImageBackID = 'assets/img/no-image.png';
+  String currentImageHoldID = 'assets/img/no-image.png';
   String? currentCity;
   String? currentDistric;
   String? currentWard;
@@ -63,6 +66,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
   int? currentIndexDistric;
   int? currentIndexWard;
   File? selectedImage;
+  File? selectedImageFrontID;
+  File? selectedImageBackID;
+  File? selectedImageHoldID;
   void pickImage() async {
     final returndImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -70,6 +76,91 @@ class _ManagerInformationState extends State<ManagerInformation> {
     setState(() {
       selectedImage = File(returndImage.path);
     });
+    openImage();
+  }
+
+  void pickImageFrontID() async {
+    final returndImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (returndImage == null) return;
+    setState(() {
+      selectedImageFrontID = File(returndImage.path);
+    });
+  }
+
+  void pickImageBackID() async {
+    final returndImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (returndImage == null) return;
+    setState(() {
+      selectedImageBackID = File(returndImage.path);
+    });
+  }
+
+  void pickImageHoldID() async {
+    final returndImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (returndImage == null) return;
+    setState(() {
+      selectedImageHoldID = File(returndImage.path);
+    });
+  }
+
+  openImage() async {
+    try {
+      if (selectedImage != null) {
+        Uint8List imagebytes =
+            await selectedImage!.readAsBytes(); //convert to bytes
+        String base64string =
+            base64Encode(imagebytes); //convert bytes to base64 string
+
+        try {
+          print("TRUYEN NNNN ${{
+            "staff_avatar": base64string,
+          }}");
+          var token = StorageUtils.instance.getString(key: 'token');
+          final respons = await http.post(
+            Uri.parse('$baseUrl$managerUpdateAvatar'),
+            headers: {
+              'Content-type': 'application/json',
+              'Accept': 'application/json',
+              "Authorization": "Bearer $token"
+            },
+            body: jsonEncode({
+              "user_avatar": base64string,
+            }),
+          );
+          final data = jsonDecode(respons.body);
+          print("DATA CHANGE AVATAR MANAGER  ${data}}");
+
+          try {
+            if (data['status'] == 200) {
+              print("CHANGE AVATAR MANAGER  OK");
+              showSnackBarTopCustom(
+                  title: "Thành công",
+                  context: navigatorKey.currentContext,
+                  mess: "Cập nhật ảnh đại diện thành công",
+                  color: Colors.green);
+            } else {
+              print("ERROR CHANGE AVATAR MANAGER  1");
+              showSnackBarTopCustom(
+                  title: "Thất bại",
+                  context: navigatorKey.currentContext,
+                  mess: "Thao tác thất bại",
+                  color: Colors.red);
+            }
+          } catch (error) {
+            print("ERROR CHANGE AVATAR MANAGER  2 ${error}");
+          }
+        } catch (error) {
+          print("ERROR CHANGE AVATAR MANAGER  3 $error");
+        }
+      } else {
+        print("No image is selected.");
+      }
+    } catch (e) {
+      print("error while picking file.");
+    }
   }
 
   @override
@@ -111,7 +202,6 @@ class _ManagerInformationState extends State<ManagerInformation> {
         }),
       );
       final data = jsonDecode(response.body);
-      print("DATA CJECK $data");
       final messRes = data['message'];
       final messText = messRes['text'];
       try {
@@ -272,10 +362,6 @@ class _ManagerInformationState extends State<ManagerInformation> {
           var managerInforDataRes = ManagerInforModel.fromJson(data);
           setState(() {
             managerInforData = managerInforDataRes.data;
-            var imagePath1 =
-                (managerInforData?.userAvatar ?? '').replaceAll('["', '');
-            var imagePath2 = imagePath1.replaceAll('"]', '');
-            currentAvatar = imagePath2;
           });
           init();
 
@@ -388,6 +474,81 @@ class _ManagerInformationState extends State<ManagerInformation> {
     }
   }
 
+  void managerUpdateCitizenID() async {
+    try {
+      if (selectedImageFrontID != null &&
+          selectedImageBackID != null &&
+          selectedImageHoldID != null) {
+        Uint8List selectedImageFrontIDBytes =
+            await selectedImageFrontID!.readAsBytes(); //convert to bytes
+        String base64SelectedImageFrontID =
+            base64Encode(selectedImageFrontIDBytes);
+
+        Uint8List selectedImageBackIDBytes =
+            await selectedImageBackID!.readAsBytes(); //convert to bytes
+        String base64SelectedImageBackID =
+            base64Encode(selectedImageBackIDBytes);
+
+        Uint8List selectedImageHoldIDBytes =
+            await selectedImageHoldID!.readAsBytes(); //convert to bytes
+        String base64SelectedImageHoldID =
+            base64Encode(selectedImageHoldIDBytes);
+
+        try {
+          var token = StorageUtils.instance.getString(key: 'token_manager');
+          final respons = await http.post(
+            Uri.parse('$baseUrl$managerUpdateCitizenIDApi'),
+            headers: {
+              'Content-type': 'application/json',
+              'Accept': 'application/json',
+              "Authorization": "Bearer $token"
+            },
+            body: jsonEncode({
+              "front_image_cccd": base64SelectedImageFrontID,
+              "back_image_cccd": base64SelectedImageBackID,
+              "hold_image_cccd": base64SelectedImageHoldID,
+            }),
+          );
+          final data = jsonDecode(respons.body);
+          print("DATA UPDATE INFOR  ${data}}");
+          try {
+            if (data['status'] == 200) {
+              print("UPDATE INFOR  OK");
+              getInfor();
+              showSnackBarTopCustom(
+                  title: "Thành công",
+                  context: navigatorKey.currentContext,
+                  mess: "Cập nhật hình ảnh thành công",
+                  color: Colors.green);
+            } else {
+              print("ERROR UPDATE INFOR  1");
+              showSnackBarTopCustom(
+                  title: "Thất bại",
+                  context: navigatorKey.currentContext,
+                  mess: "Thao tác thất bại",
+                  color: Colors.red);
+            }
+          } catch (error) {
+            print("ERROR UPDATE INFOR  2 ${error}");
+          }
+        } catch (error) {
+          print("ERROR UPDATE INFOR  3 $error");
+        }
+      } else {
+        showCustomDialogModal(
+            context: navigatorKey.currentContext,
+            textDesc:
+                "Bạn phải cập nhật đủ ảnh CCCD, nếu thay đối bất kỳ ảnh nào hãy cập nhật lại tất cả ảnh",
+            title: "Thất bại",
+            colorButton: Colors.red,
+            btnText: "OK",
+            typeDialog: "error");
+      }
+    } catch (error) {
+      print("error while picking file.");
+    }
+  }
+
   void updateInforManager({
     required String? firstName,
     required String? lastName,
@@ -462,6 +623,26 @@ class _ManagerInformationState extends State<ManagerInformation> {
 
   void init() async {
     await Future.delayed(const Duration(seconds: 0));
+    var imagePath1 =
+        (managerInforData?.userAvatar ?? 'assets/user/images/avt/no_image.png')
+            .replaceAll('["', '');
+    var imagePath2 = imagePath1.replaceAll('"]', '');
+    var imageFrontID1 =
+        (managerInforData?.frontImageCccd ?? 'assets/img/no-image.png')
+            .replaceAll('["', '');
+    var imageFrontID2 = imageFrontID1.replaceAll('"]', '');
+    var imageBackID1 =
+        (managerInforData?.backImageCccd ?? 'assets/img/no-image.png')
+            .replaceAll('["', '');
+    var imageBackID2 = imageBackID1.replaceAll('"]', '');
+    var imageHoldID1 =
+        (managerInforData?.holdImageCccd ?? 'assets/img/no-image.png')
+            .replaceAll('["', '');
+    var imageHoldID2 = imageHoldID1.replaceAll('"]', '');
+    mounted ? currentAvatar = imagePath2 : currentAvatar;
+    mounted ? currentImageFrontID = imageFrontID2 : currentImageFrontID;
+    mounted ? currentImageBackID = imageBackID2 : currentImageBackID;
+    mounted ? currentImageHoldID = imageHoldID2 : currentImageHoldID;
 
     mounted
         ? fullNameController.text = managerInforData?.userFullName ?? ''
@@ -1706,15 +1887,16 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                               space10H,
                                               InkWell(
                                                 onTap: () {
-                                                  pickImage();
+                                                  pickImageFrontID();
                                                 },
                                                 child: Container(
                                                   width: 110.w,
                                                   height: 80.w,
                                                   color: Colors.grey,
-                                                  child: selectedImage != null
+                                                  child: selectedImageFrontID !=
+                                                          null
                                                       ? Image.file(
-                                                          selectedImage!,
+                                                          selectedImageFrontID!,
                                                           fit: BoxFit.cover,
                                                         )
                                                       : Container(
@@ -1722,7 +1904,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                           color: Colors.grey,
                                                           child: Image.network(
                                                             httpImage +
-                                                                currentIdImage,
+                                                                currentImageFrontID,
                                                             fit: BoxFit.cover,
                                                           ),
                                                         ),
@@ -1745,15 +1927,16 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                               space10H,
                                               InkWell(
                                                 onTap: () {
-                                                  pickImage();
+                                                  pickImageBackID();
                                                 },
                                                 child: Container(
                                                   width: 110.w,
                                                   height: 80.w,
                                                   color: Colors.grey,
-                                                  child: selectedImage != null
+                                                  child: selectedImageBackID !=
+                                                          null
                                                       ? Image.file(
-                                                          selectedImage!,
+                                                          selectedImageBackID!,
                                                           fit: BoxFit.cover,
                                                         )
                                                       : Container(
@@ -1761,7 +1944,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                           color: Colors.grey,
                                                           child: Image.network(
                                                             httpImage +
-                                                                currentIdImage,
+                                                                currentImageBackID,
                                                             fit: BoxFit.cover,
                                                           ),
                                                         ),
@@ -1784,15 +1967,16 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                               space10H,
                                               InkWell(
                                                 onTap: () {
-                                                  pickImage();
+                                                  pickImageHoldID();
                                                 },
                                                 child: Container(
                                                   width: 110.w,
                                                   height: 80.w,
                                                   color: Colors.grey,
-                                                  child: selectedImage != null
+                                                  child: selectedImageHoldID !=
+                                                          null
                                                       ? Image.file(
-                                                          selectedImage!,
+                                                          selectedImageHoldID!,
                                                           fit: BoxFit.cover,
                                                         )
                                                       : Container(
@@ -1800,7 +1984,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                           color: Colors.grey,
                                                           child: Image.network(
                                                             httpImage +
-                                                                currentIdImage,
+                                                                currentImageHoldID,
                                                             fit: BoxFit.cover,
                                                           ),
                                                         ),
@@ -1820,7 +2004,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                             child: ButtonGradient(
                                               color1: color1DarkButton,
                                               color2: color2DarkButton,
-                                              event: () {},
+                                              event: () {
+                                                managerUpdateCitizenID();
+                                              },
                                               text: "Xác nhận",
                                               fontSize: 12.sp,
                                               radius: 8.r,

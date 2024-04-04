@@ -5,6 +5,7 @@ abstract class BroughtReceiptEvent extends Equatable {
 }
 
 class GetListBroughtReceipt extends BroughtReceiptEvent {
+  final String token;
   final String client;
   final String shopId;
   final bool isApi;
@@ -13,7 +14,8 @@ class GetListBroughtReceipt extends BroughtReceiptEvent {
   final Map<String, int?> filters; //chua bit type
 
   const GetListBroughtReceipt(
-      {required this.client,
+      {required this.token,
+      required this.client,
       required this.shopId,
       this.isApi = true,
       required this.limit,
@@ -25,6 +27,7 @@ class GetListBroughtReceipt extends BroughtReceiptEvent {
 }
 
 class GetDetailsBroughtReceipt extends BroughtReceiptEvent {
+  final String token;
   final String client;
   final String shopId;
   final bool isApi;
@@ -34,6 +37,7 @@ class GetDetailsBroughtReceipt extends BroughtReceiptEvent {
   final List? filters;
 
   const GetDetailsBroughtReceipt({
+    required this.token,
     required this.client,
     required this.shopId,
     this.isApi = true,
@@ -55,6 +59,8 @@ class ResetOrderID extends BroughtReceiptEvent {
 }
 
 class CancleBroughtReceipt extends BroughtReceiptEvent {
+  final String token;
+
   final String client;
   final String shopId;
   final bool isApi;
@@ -62,6 +68,7 @@ class CancleBroughtReceipt extends BroughtReceiptEvent {
   final String cancellationReason;
 
   const CancleBroughtReceipt({
+    required this.token,
     required this.client,
     required this.shopId,
     this.isApi = true,
@@ -74,12 +81,15 @@ class CancleBroughtReceipt extends BroughtReceiptEvent {
 }
 
 class PrintBroughtReceipt extends BroughtReceiptEvent {
+  final String token;
+
   final String client;
   final String shopId;
   final bool isApi;
   final int orderId;
 
   const PrintBroughtReceipt({
+    required this.token,
     required this.client,
     required this.shopId,
     this.isApi = true,

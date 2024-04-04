@@ -47,6 +47,7 @@ class BookingTableDialog extends StatefulWidget {
   final Function eventSaveButton;
   final String role;
   final String shopID;
+  final String token;
   const BookingTableDialog(
       {Key? key,
       this.idRoom,
@@ -54,6 +55,7 @@ class BookingTableDialog extends StatefulWidget {
       this.currentTable,
       required this.role,
       required this.shopID,
+      required this.token,
       required this.eventSaveButton})
       : super(key: key);
 
@@ -533,6 +535,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                 if (index == 0) {
                                   BlocProvider.of<TableBloc>(context)
                                       .add(GetTableInfor(
+                                    token: widget.token,
                                     client: widget.role,
                                     shopId: widget.shopID,
                                     roomId: widget.idRoom.toString(),
@@ -3783,11 +3786,13 @@ class ManageBroughtReceiptDialog extends StatefulWidget {
   final int? orderID;
   final String role;
   final String shopID;
+  final String token;
   const ManageBroughtReceiptDialog({
     Key? key,
     required this.orderID,
     required this.role,
     required this.shopID,
+    required this.token,
   }) : super(key: key);
 
   @override
@@ -3798,8 +3803,6 @@ class ManageBroughtReceiptDialog extends StatefulWidget {
 class _ManageBroughtReceiptDialogState
     extends State<ManageBroughtReceiptDialog> {
   final searchController = TextEditingController();
-  final String currentRole = "staff";
-  final String currentShopId = getStaffShopID;
   List<String> selectedCategories = [];
 
   List<String> listAllCategoriesFood = [];
@@ -3829,9 +3832,11 @@ class _ManageBroughtReceiptDialogState
     );
   }
 
-  void getDetailsBroughtReceiptData({required int? orderID}) async {
+  void getDetailsBroughtReceiptData(
+      {required int? orderID, required String tokenReq}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      // var token = StorageUtils.instance.getString(key: 'token');
+      var token = tokenReq;
       final respons = await http.post(
         Uri.parse('$baseUrl$getListFoodBroughtReceipt'),
         headers: {
@@ -3876,21 +3881,22 @@ class _ManageBroughtReceiptDialogState
 
   void getListBroughtReceiptData({required Map<String, int?> filtersFlg}) {
     BlocProvider.of<BroughtReceiptBloc>(context).add(GetListBroughtReceipt(
-        client: currentRole,
-        shopId: currentShopId,
+        token: widget.token,
+        client: widget.role,
+        shopId: "123456",
         limit: 15,
         page: currentPage,
         filters: filtersFlg));
   }
 
   void plusQuantityFoodToBroughtReceipt(
-      {required int foodID, int? orderID}) async {
+      {required int foodID, int? orderID, required String tokenReq}) async {
     log("orderNewIDBroughtReceipt");
     log(orderNewIDBroughtReceipt.toString());
     log("widget.orderID");
     log(widget.orderID.toString());
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      var token = tokenReq;
       final respons = await http.post(
         Uri.parse('$baseUrl$addFoodToBroughtReceipt'),
         headers: {
@@ -3936,13 +3942,15 @@ class _ManageBroughtReceiptDialogState
     }
     getListBroughtReceiptData(filtersFlg: {"pay_flg": null});
     getDetailsBroughtReceiptData(
+        tokenReq: tokenReq,
         orderID: orderNewIDBroughtReceipt ?? widget.orderID);
   }
 
   void minusQuantityFoodToBroughtReceipt(
-      {required int foodID, int? orderID}) async {
+      {required int foodID, int? orderID, required String tokenReq}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      // var token = StorageUtils.instance.getString(key: 'token');
+      var token = tokenReq;
       final respons = await http.post(
         Uri.parse('$baseUrl$removeFoodToBroughtReceipt'),
         headers: {
@@ -3988,13 +3996,19 @@ class _ManageBroughtReceiptDialogState
     }
     getListBroughtReceiptData(filtersFlg: {"pay_flg": null});
     getDetailsBroughtReceiptData(
+        tokenReq: tokenReq,
         orderID: orderNewIDBroughtReceipt ?? widget.orderID);
   }
 
   void updateQuantityFoodToBroughtReceipt(
-      {required int foodID, int? orderID, required String quantityFood}) async {
+      {required int foodID,
+      int? orderID,
+      required String quantityFood,
+      required String tokenReq}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      // var token = StorageUtils.instance.getString(key: 'token');
+      var token = tokenReq;
+
       final respons = await http.post(
         Uri.parse('$baseUrl$updateQuantityFoodBroughtReceipt'),
         headers: {
@@ -4041,6 +4055,7 @@ class _ManageBroughtReceiptDialogState
     }
     getListBroughtReceiptData(filtersFlg: {"pay_flg": null});
     getDetailsBroughtReceiptData(
+        tokenReq: tokenReq,
         orderID: orderNewIDBroughtReceipt ?? widget.orderID);
   }
 
@@ -4102,7 +4117,8 @@ class _ManageBroughtReceiptDialogState
   void initState() {
     super.initState();
     getListFood(page: 1);
-    getDetailsBroughtReceiptData(orderID: widget.orderID);
+    getDetailsBroughtReceiptData(
+        orderID: widget.orderID, tokenReq: widget.token);
     scrollListFoodController.addListener(() {
       if (scrollListFoodController.position.maxScrollExtent ==
           scrollListFoodController.offset) {
@@ -4452,6 +4468,8 @@ class _ManageBroughtReceiptDialogState
                                                               .quantityFood !=
                                                           0) {
                                                         minusQuantityFoodToBroughtReceipt(
+                                                          tokenReq:
+                                                              widget.token,
                                                           foodID:
                                                               filterProducts2[
                                                                       index]
@@ -4537,6 +4555,8 @@ class _ManageBroughtReceiptDialogState
                                                               .primaryFocus
                                                               ?.unfocus();
                                                           updateQuantityFoodToBroughtReceipt(
+                                                            tokenReq:
+                                                                widget.token,
                                                             foodID:
                                                                 filterProducts2[
                                                                         index]
@@ -4581,6 +4601,7 @@ class _ManageBroughtReceiptDialogState
                                                   InkWell(
                                                     onTap: () {
                                                       plusQuantityFoodToBroughtReceipt(
+                                                        tokenReq: widget.token,
                                                         foodID: filterProducts2[
                                                                 index]
                                                             .foodId,
@@ -4702,15 +4723,17 @@ class _ManageBroughtReceiptDialogState
 //Modal in hoá đơn
 
 class PrintBillDialog extends StatefulWidget {
+  final String token;
   final String roomName;
   final String tableName;
   final int orderID;
-  const PrintBillDialog({
-    Key? key,
-    required this.roomName,
-    required this.tableName,
-    required this.orderID,
-  }) : super(key: key);
+  const PrintBillDialog(
+      {Key? key,
+      required this.roomName,
+      required this.tableName,
+      required this.orderID,
+      required this.token})
+      : super(key: key);
   @override
   State<PrintBillDialog> createState() => _PrintBillDialogState();
 }
@@ -4718,7 +4741,10 @@ class PrintBillDialog extends StatefulWidget {
 class _PrintBillDialogState extends State<PrintBillDialog> {
   void printBroughtReceipt({required int orderID}) async {
     BlocProvider.of<PrintBroughtReceiptBloc>(context).add(PrintBroughtReceipt(
-        client: 'staff', shopId: getStaffShopID, orderId: orderID));
+        token: widget.token,
+        client: 'staff',
+        shopId: getStaffShopID,
+        orderId: orderID));
   }
 
   @override
@@ -5886,6 +5912,7 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
 
 // Modal huỷ hoá đơn
 class CancleBillDialog extends StatefulWidget {
+  final String token;
   final String role;
   final String shopID;
   final int? orderID;
@@ -5894,6 +5921,7 @@ class CancleBillDialog extends StatefulWidget {
   const CancleBillDialog({
     Key? key,
     required this.eventSaveButton,
+    required this.token,
     required this.role,
     required this.shopID,
     required this.orderID,
@@ -6069,6 +6097,7 @@ class _CancleBillDialogState extends State<CancleBillDialog> {
                         widget.eventSaveButton();
                         BlocProvider.of<CancleBroughtReceiptBloc>(context).add(
                             CancleBroughtReceipt(
+                                token: widget.token,
                                 client: widget.role,
                                 shopId: widget.shopID,
                                 orderId: widget.orderID,

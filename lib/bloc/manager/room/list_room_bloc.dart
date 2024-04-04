@@ -53,7 +53,7 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
 
       var message = data['message'];
 
-      // print(" LIST ROOM $data");
+      print(" LIST ROOM $data");
       try {
         if (data['status'] == 200) {
           var roomDataRes = ListRoomModel.fromJson(data);
@@ -85,11 +85,11 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
 
       emit(state.copyWith(listRoomStatus: ListRoomStatus.failed));
       emit(state.copyWith(errorText: "Đã có lỗi xảy ra !"));
-      BlocProvider.of<LoginBloc>(navigatorKey.currentContext!)
-          .add(const LogoutStaff());
-      StorageUtils.instance.removeKey(key: 'auth_staff');
-      StorageUtils.instance.removeKey(key: 'staff_infor_data');
-      navigatorKey.currentContext?.go("/staff_sign_in");
+      // BlocProvider.of<LoginBloc>(navigatorKey.currentContext!)
+      //     .add(const LogoutStaff());
+      // StorageUtils.instance.removeKey(key: 'auth_staff');
+      // StorageUtils.instance.removeKey(key: 'staff_infor_data');
+      // navigatorKey.currentContext?.go("/staff_sign_in");
     }
   }
 }

@@ -215,6 +215,8 @@ class _ListAllBillShopState extends State<ListAllBillShop>
   int currentPage = 1;
   List newListAllBillShop = [];
   bool hasMore = true;
+  var tokenStaff = StorageUtils.instance.getString(key: 'token') ?? '';
+
   @override
   bool get wantKeepAlive => true;
   Future loadMoreBill(
@@ -345,6 +347,7 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                                 context: context,
                                 builder: (BuildContext context) {
                                   return PrintBillDialog(
+                                    token: tokenStaff,
                                     orderID: newListAllBillShop[index].orderId,
                                     roomName: newListAllBillShop[index]
                                             ?.room
@@ -400,6 +403,7 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
   int currentPageComplete = 1;
   List listBillComplete = [];
   bool hasMoreComplete = true;
+  var tokenStaff = StorageUtils.instance.getString(key: 'token') ?? '';
 
   final scrollTabCompleteController = ScrollController();
   @override
@@ -504,6 +508,7 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                                 context: context,
                                 builder: (BuildContext context) {
                                   return PrintBillDialog(
+                                    token: tokenStaff,
                                     orderID: listBillComplete[index].orderId,
                                     roomName: listBillComplete[index]
                                             ?.room
@@ -566,6 +571,7 @@ class _PendingWidgetState extends State<PendingWidget>
   int currentPagePending = 1;
   List listBillPending = [];
   bool hasMoreComplete = true;
+  var tokenStaff = StorageUtils.instance.getString(key: 'token') ?? '';
 
   final scrollTabPendingController = ScrollController();
   @override
@@ -667,6 +673,7 @@ class _PendingWidgetState extends State<PendingWidget>
                                 context: context,
                                 builder: (BuildContext context) {
                                   return PrintBillDialog(
+                                    token: tokenStaff,
                                     orderID: listBillPending[index].orderId,
                                     roomName: listBillPending[index]
                                             ?.room
@@ -727,6 +734,7 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
   int currentPageCancle = 1;
   List listBillCancle = [];
   bool hasMoreCancle = true;
+  var tokenStaff = StorageUtils.instance.getString(key: 'token') ?? '';
 
   final scrollTabCancleController = ScrollController();
   @override
@@ -828,6 +836,7 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                                 context: context,
                                 builder: (BuildContext context) {
                                   return PrintBillDialog(
+                                    token: tokenStaff,
                                     orderID: listBillCancle[index].orderId,
                                     roomName: listBillCancle[index]
                                             ?.room

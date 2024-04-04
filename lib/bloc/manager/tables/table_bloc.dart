@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/model/food_table_data_model.dart';
 import 'package:app_restaurant/model/switch_table_data_model.dart';
@@ -143,23 +144,24 @@ class TableBloc extends Bloc<TableEvent, TableState> {
     await Future.delayed(const Duration(seconds: 1));
 
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      // var token = StorageUtils.instance.getString(key: 'token');
+      var token = event.token;
       print("TOKEN GET TABLE $token");
 
       final respons = await http.post(
         Uri.parse('$baseUrl$tableApi'),
         headers: {
-          // 'Content-type': 'application/json',
-          // 'Accept': 'application/json',
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
           "Authorization": "Bearer $token"
         },
-        body: {
+        body: jsonEncode({
           'client': event.client,
           'shop_id': event.shopId,
           'is_api': event.isApi.toString(),
           'room_id': event.roomId,
           'table_id': event.tableId
-        },
+        }),
       );
       final data = jsonDecode(respons.body);
       var message = data['message'];
@@ -170,9 +172,12 @@ class TableBloc extends Bloc<TableEvent, TableState> {
           var tableDataRes = TableModel.fromJson(data);
 
           emit(state.copyWith(tableModel: tableDataRes));
+
           StorageUtils.instance.setStringList(
               key: 'food_kinds_list',
               val: tableDataRes.foodKinds ?? []); //luu danh muc thuc an
+          log("FOOOOD");
+          log(tableDataRes.foodKinds.toString());
 
           emit(state.copyWith(tableStatus: TableStatus.succes));
         } else {
