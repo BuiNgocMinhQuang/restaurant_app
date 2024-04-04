@@ -1,10 +1,8 @@
 import 'dart:convert';
-
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/bill/list_bill_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
-import 'package:app_restaurant/utils/storage.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +24,6 @@ class ListBillShopBloc extends Bloc<ListBillShopEvent, ListBillShopState> {
     await Future.delayed(const Duration(seconds: 1));
 
     try {
-      // var token = StorageUtils.instance.getString(key: 'token');
       final respons = await http.post(
         Uri.parse('$baseUrl$listBill'),
         headers: {

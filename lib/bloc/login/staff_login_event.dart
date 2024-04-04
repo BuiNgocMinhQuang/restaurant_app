@@ -1,15 +1,15 @@
-part of 'login_bloc.dart';
+part of 'staff_login_bloc.dart';
 
 abstract class LoginEvent extends Equatable {
   const LoginEvent();
 }
 
-class LoginAppInit extends LoginEvent {
-  const LoginAppInit();
+// class LoginAppInit extends LoginEvent {
+//   const LoginAppInit();
 
-  @override
-  List<Object> get props => [];
-}
+//   @override
+//   List<Object> get props => [];
+// }
 
 class StaffLoginButtonPressed extends LoginEvent {
   final String shopId;

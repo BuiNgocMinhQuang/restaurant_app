@@ -79,7 +79,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
 
   void deletedAvatarStaff() async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      var token = StorageUtils.instance.getString(key: 'token_staff');
       final respons = await http.post(
         Uri.parse('$baseUrl$deleteAvatarStaff'),
         headers: {
@@ -126,7 +126,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
           print("TRUYEN NNNN ${{
             "staff_avatar": base64string,
           }}");
-          var token = StorageUtils.instance.getString(key: 'token');
+          var token = StorageUtils.instance.getString(key: 'token_staff');
           final respons = await http.post(
             Uri.parse('$baseUrl$updateAvatarStaffApi'),
             headers: {
@@ -173,7 +173,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
 
   void getInfor() async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      var token = StorageUtils.instance.getString(key: 'token_staff');
       print("TOKEN CURRENT $token");
       final response = await http.post(
         Uri.parse('$baseUrl$userInformationApi'),
@@ -236,7 +236,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
       "instagram": instagram
     }}");
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      var token = StorageUtils.instance.getString(key: 'token_staff');
       final respons = await http.post(
         Uri.parse('$baseUrl$updateStaffInfor'),
         headers: {
@@ -299,7 +299,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
         "password_new": newPassword,
         "confirm_password_new": confirmNewPassword
       }}");
-      var token = StorageUtils.instance.getString(key: 'token');
+      var token = StorageUtils.instance.getString(key: 'token_staff');
       final respons = await http.post(
         Uri.parse('$baseUrl$changePasswordStaffApi'),
         headers: {
@@ -567,14 +567,14 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                           imageUrl: httpImage + currentAvatar,
                                           placeholder: (context, url) =>
                                               SizedBox(
-                                            child: Center(
-                                                child:
-                                                    CircularProgressIndicator()),
                                             height: 10.w,
                                             width: 10.w,
+                                            child: const Center(
+                                                child:
+                                                    CircularProgressIndicator()),
                                           ),
                                           errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
+                                              const Icon(Icons.error),
                                         ),
                                   // Container(
                                   //     // width: 100.w,

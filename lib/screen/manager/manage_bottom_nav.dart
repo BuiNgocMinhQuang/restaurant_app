@@ -37,16 +37,14 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
   bool isHaveNoti = true;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    // Future.delayed(Duration.zero, () {
-    //   checkTokenExpires();
-    // });
+    Future.delayed(Duration.zero, () {
+      checkTokenExpires();
+    });
   }
 
   void tapDrawerChangeBotNav(int index) {
-    // checkTokenExpires();
-
+    checkTokenExpires();
     final CurvedNavigationBarState? navBarState =
         bottomNavigationKey.currentState;
     navBarState!.setPage(index);
@@ -54,36 +52,38 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
 
   void hanldeLogOut() async {
     BlocProvider.of<ManagerLoginBloc>(context).add(const ManagerLogout());
-    StorageUtils.instance.removeKey(key: 'auth_manager');
-    StorageUtils.instance.removeKey(key: 'manager_infor_data');
     StorageUtils.instance.removeKey(key: 'token_manager');
     context.go("/");
   }
 
-  // void checkTokenExpires() async {
-  //   var tokenExpiresTime =
-  //       StorageUtils.instance.getString(key: 'token_expires_manager');
-  //   if (tokenExpiresTime != '') {
-  //     DateTime now = DateTime.now().toUtc();
-  //     print("TIME NOW $now");
+  void checkTokenExpires() async {
+    var tokenExpiresTime =
+        StorageUtils.instance.getString(key: 'token_manager_expires');
+    if (tokenExpiresTime != '') {
+      DateTime now = DateTime.now().toUtc();
+      print("TIME NOW $now");
 
-  //     var tokenExpires = DateTime.parse(tokenExpiresTime!);
-  //     print("TIME TOKEN $tokenExpires");
-  //     if (now.year >= tokenExpires.year &&
-  //         now.month >= tokenExpires.month &&
-  //         now.day >= tokenExpires.day &&
-  //         now.hour >= tokenExpires.hour &&
-  //         now.minute >= tokenExpires.minute &&
-  //         now.second >= tokenExpires.second) {
-  //       print("Het han token");
-  //       showLoginSessionExpiredDialog(context, hanldeLogOut);
-  //     } else {
-  //       print("Giu phien dang nhap");
-  //     }
-  //   } else {
-  //     print("Dang nhap hoai luon");
-  //   }
-  // }
+      var tokenExpires = DateTime.parse(tokenExpiresTime!);
+      print("TIME TOKEN $tokenExpires");
+      if (now.year >= tokenExpires.year &&
+          now.month >= tokenExpires.month &&
+          now.day >= tokenExpires.day &&
+          now.hour >= tokenExpires.hour &&
+          now.minute >= tokenExpires.minute &&
+          now.second >= tokenExpires.second) {
+        print("Het han token");
+        showLoginSessionExpiredDialog(
+            context: context,
+            okEvent: () {
+              hanldeLogOut();
+            });
+      } else {
+        print("Giu phien dang nhap");
+      }
+    } else {
+      print("Dang nhap hoai luon");
+    }
+  }
 
   final List<Widget> pages = const [
     ListStores(), //index = 0
@@ -99,7 +99,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
     ListInventory(), //index 10
     ImportInventory() //11
   ];
-  final ScrollController _scrollController = ScrollController();
 
   final PageStorageBucket bucket = PageStorageBucket();
   GlobalKey<CurvedNavigationBarState> bottomNavigationKey = GlobalKey();

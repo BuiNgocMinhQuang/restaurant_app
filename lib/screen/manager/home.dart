@@ -12,7 +12,6 @@ class ManagerHome extends StatefulWidget {
 class _ManagerHomeState extends State<ManagerHome> {
   bool showModal = true;
   String imageSrc = 'https://picsum.photos/200';
-  final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
     // TODO: implement initState

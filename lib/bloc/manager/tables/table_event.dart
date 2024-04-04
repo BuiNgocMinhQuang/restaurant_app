@@ -38,6 +38,7 @@ class GetTableInfor extends TableEvent {
 }
 
 class GetTableFoods extends TableEvent {
+  final String token;
   final String client;
   final String shopId;
   final bool isApi;
@@ -47,7 +48,8 @@ class GetTableFoods extends TableEvent {
   final int page;
 
   const GetTableFoods(
-      {required this.client,
+      {required this.token,
+      required this.client,
       required this.shopId,
       this.isApi = true,
       required this.roomId,
@@ -60,6 +62,7 @@ class GetTableFoods extends TableEvent {
 }
 
 class GetTableSwitchInfor extends TableEvent {
+  final String token;
   final String client;
   final String shopId;
   final bool isApi;
@@ -68,6 +71,7 @@ class GetTableSwitchInfor extends TableEvent {
   final String orderId;
 
   const GetTableSwitchInfor({
+    required this.token,
     required this.client,
     required this.shopId,
     this.isApi = true,
@@ -81,6 +85,7 @@ class GetTableSwitchInfor extends TableEvent {
 }
 
 class CancleTable extends TableCancleEvent {
+  final String token;
   final String client;
   final String shopId;
   final bool isApi;
@@ -90,6 +95,7 @@ class CancleTable extends TableCancleEvent {
   final String cancellationReason; //phan trang
 
   const CancleTable({
+    required this.token,
     required this.client,
     required this.shopId,
     this.isApi = true,
@@ -104,6 +110,7 @@ class CancleTable extends TableCancleEvent {
 }
 
 class HandleSwitchTable extends SwitchTableEvent {
+  final String token;
   final String client;
   final String shopId;
   final bool isApi;
@@ -113,6 +120,7 @@ class HandleSwitchTable extends SwitchTableEvent {
   final List<int> selectedTableId;
 
   const HandleSwitchTable({
+    required this.token,
     required this.client,
     required this.shopId,
     this.isApi = true,
@@ -127,6 +135,7 @@ class HandleSwitchTable extends SwitchTableEvent {
 }
 
 class SaveTableInfor extends TableSaveInforEvent {
+  final String token;
   final String client;
   final String shopId;
   final bool isApi;
@@ -139,6 +148,7 @@ class SaveTableInfor extends TableSaveInforEvent {
   final List tables;
 
   const SaveTableInfor({
+    required this.token,
     required this.client,
     required this.shopId,
     this.isApi = true,

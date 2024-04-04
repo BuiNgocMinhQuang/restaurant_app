@@ -5,6 +5,7 @@ abstract class PaymentInforEvent extends Equatable {
 }
 
 class GetPaymentInfor extends PaymentInforEvent {
+  final String token;
   final String client;
   final String shopId;
   final bool isApi;
@@ -13,7 +14,8 @@ class GetPaymentInfor extends PaymentInforEvent {
   final String orderId;
 
   const GetPaymentInfor(
-      {required this.client,
+      {required this.token,
+      required this.client,
       required this.shopId,
       this.isApi = true,
       required this.roomId,
@@ -25,6 +27,7 @@ class GetPaymentInfor extends PaymentInforEvent {
 }
 
 class UpdatePaymentInfor extends PaymentInforEvent {
+  final String token;
   final String client;
   final String shopId;
   final bool isApi;
@@ -35,6 +38,7 @@ class UpdatePaymentInfor extends PaymentInforEvent {
   final int payKind;
 
   const UpdatePaymentInfor({
+    required this.token,
     required this.client,
     required this.shopId,
     this.isApi = true,
@@ -50,12 +54,14 @@ class UpdatePaymentInfor extends PaymentInforEvent {
 }
 
 class ConfirmPayment extends PaymentInforEvent {
+  final String token;
   final String client;
   final String shopId;
   final bool isApi;
   final String orderId;
 
   const ConfirmPayment({
+    required this.token,
     required this.client,
     required this.shopId,
     this.isApi = true,

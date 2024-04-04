@@ -13,15 +13,13 @@ import 'package:equatable/equatable.dart';
 import 'package:http/http.dart' as http;
 import 'package:go_router/go_router.dart';
 
-part 'login_state.dart';
-part 'login_event.dart';
+part 'staff_login_state.dart';
+part 'staff_login_event.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(const LoginState()) {
-    on<LoginAppInit>(_onLoginAppInit);
     on<StaffLoginButtonPressed>(_onStaffLoginButtonPressed);
     on<LogoutStaff>(_onLogout);
-    on<ConfirmLogged>(_onConfirmLogged);
   }
 
   void _onLogout(
@@ -30,36 +28,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   ) async {
     print("LOGOUT HHHEHHE");
 
-    var token = StorageUtils.instance.getString(key: 'token');
+    var token = StorageUtils.instance.getString(key: 'token_staff');
     await http.post(
       Uri.parse('$baseUrl$staffLogout'),
       headers: {"Authorization": "Bearer $token"},
     );
-  }
-
-  void _onLoginAppInit(
-    LoginAppInit event,
-    Emitter<LoginState> emit,
-  ) async {
-    var staffInforDataString =
-        StorageUtils.instance.getString(key: 'staff_infor_data');
-    print("CO DATA STAFF $staffInforDataString");
-
-    var managerInforDataString =
-        StorageUtils.instance.getString(key: 'manager_infor_data');
-    print("CO DATA MANAGER $managerInforDataString");
-    if (staffInforDataString != null && staffInforDataString != "") {
-      var staffInforDataRes =
-          StaffInfor.fromJson(jsonDecode(staffInforDataString));
-
-      emit(state.copyWith(staffInforDataModel: staffInforDataRes));
-    }
-    if (managerInforDataString != null && managerInforDataString != "") {
-      var managerInforDataRes =
-          ManagerInforModel.fromJson(jsonDecode(managerInforDataString));
-
-      emit(state.copyWith(managerInforModel: managerInforDataRes));
-    }
   }
 
   void _onStaffLoginButtonPressed(
@@ -81,18 +54,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       print("DATAAAA $data");
       try {
         if (data['status'] == 200) {
-          var authDataRes = StaffAuthData.fromJson(data);
-          var authDataString = jsonEncode(authDataRes);
-          var token = authDataRes.token;
-          var staffShopID = authDataRes.data!.shopId;
-          var token_expires_at = authDataRes.tokenExpiresAt;
-          StorageUtils.instance.setString(key: 'token', val: token ?? '');
+          var authStaffDataRes = StaffAuthData.fromJson(data);
+          // var authDataString = jsonEncode(authStaffDataRes);
+          var token = authStaffDataRes.token;
+          var staffShopID = authStaffDataRes.data!.shopId;
+          var tokenExpiresAt = authStaffDataRes.tokenExpiresAt;
+          StorageUtils.instance.setString(key: 'token_staff', val: token ?? '');
           StorageUtils.instance
               .setString(key: 'staff_shop_id', val: staffShopID!);
           StorageUtils.instance
-              .setString(key: 'token_expires', val: token_expires_at ?? '');
-          StorageUtils.instance
-              .setString(key: 'auth_staff', val: authDataString);
+              .setString(key: 'token_staff_expires', val: tokenExpiresAt ?? '');
+          // StorageUtils.instance
+          //     .setString(key: 'auth_staff', val: authDataString);
 
           emit(state.copyWith(loginStatus: LoginStatus.success));
 
@@ -122,12 +95,5 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       showFailedModal(
           context: navigatorKey.currentContext, desWhyFail: state.errorText);
     }
-  }
-
-  void _onConfirmLogged(
-    ConfirmLogged event,
-    Emitter<LoginState> emit,
-  ) async {
-    emit(state.copyWith(loginStatus: LoginStatus.logged));
   }
 }

@@ -24,8 +24,8 @@ class TableCancleBloc extends Bloc<TableCancleEvent, TableCancleState> {
     emit(state.copyWith(tableCancleStatus: TableCancleStatus.loading));
 
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
-
+      // var token = StorageUtils.instance.getString(key: 'token_staff');
+      var token = event.token;
       final respons = await http.post(
         Uri.parse('$baseUrl$cancleTable'),
         headers: {
@@ -45,7 +45,6 @@ class TableCancleBloc extends Bloc<TableCancleEvent, TableCancleState> {
       );
       final data = jsonDecode(respons.body);
       var message = data['message'];
-      print("DATA Cancle Table $data");
 
       try {
         if (data['status'] == 200) {
@@ -85,24 +84,23 @@ class TableBloc extends Bloc<TableEvent, TableState> {
     await Future.delayed(const Duration(seconds: 1));
 
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
-      print("TOKEN GET TABLE $token");
-
+      // var token = StorageUtils.instance.getString(key: 'token_staff');
+      var token = event.token;
       final respons = await http.post(
         Uri.parse('$baseUrl$getSwitchTable'),
         headers: {
-          // 'Content-type': 'application/json',
-          // 'Accept': 'application/json',
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
           "Authorization": "Bearer $token"
         },
-        body: {
+        body: jsonEncode({
           'client': event.client,
           'shop_id': event.shopId,
-          'is_api': event.isApi.toString(),
+          'is_api': event.isApi,
           'room_id': event.roomId,
           'table_id': event.tableId,
           'order_id': event.orderId
-        },
+        }),
       );
       final data = jsonDecode(respons.body);
       print(event.roomId);
@@ -144,10 +142,7 @@ class TableBloc extends Bloc<TableEvent, TableState> {
     await Future.delayed(const Duration(seconds: 1));
 
     try {
-      // var token = StorageUtils.instance.getString(key: 'token');
       var token = event.token;
-      print("TOKEN GET TABLE $token");
-
       final respons = await http.post(
         Uri.parse('$baseUrl$tableApi'),
         headers: {
@@ -206,7 +201,8 @@ class TableBloc extends Bloc<TableEvent, TableState> {
     emit(state.copyWith(tableStatus: TableStatus.loading));
     await Future.delayed(const Duration(seconds: 1));
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      // var token = StorageUtils.instance.getString(key: 'token_staff');
+      var token = event.token;
       final respons = await http.post(
         Uri.parse('$baseUrl$foodsTableApi'),
         headers: {
@@ -225,10 +221,8 @@ class TableBloc extends Bloc<TableEvent, TableState> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print("HINE DATA MOIW ${data}}");
       try {
         if (data['status'] == 200) {
-          // print("DATA FOOD TABLE ${data['booking']}");
           var foodTableDataRes = FoodTableDataModel.fromJson(data);
 
           emit(state.copyWith(foodTableDataModel: foodTableDataRes));
@@ -263,20 +257,8 @@ class TableSaveInforBloc
     emit(state.copyWith(tableSaveInforStatus: TableSaveInforStatus.loading));
 
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
-
-      print('DATA SEND ${{
-        'client': event.client,
-        'shop_id': event.shopId,
-        'is_api': event.isApi,
-        'room_id': event.roomId,
-        'table_id': event.tableId,
-        'client_name': event.clientName,
-        'client_phone': event.clientPhone,
-        'note': event.note,
-        'end_date': event.endDate,
-        'tables': event.tables,
-      }}');
+      // var token = StorageUtils.instance.getString(key: 'token_staff');
+      var token = event.token;
 
       final respons = await http.post(
         Uri.parse('$baseUrl$saveInforTable'),
@@ -340,8 +322,8 @@ class SwitchTableBloc extends Bloc<SwitchTableEvent, SwitchTableState> {
     emit(state.copyWith(switchtableStatus: SwitchTableStatus.loading));
 
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
-
+      // var token = StorageUtils.instance.getString(key: 'token_staff');
+      var token = event.token;
       final respons = await http.post(
         Uri.parse('$baseUrl$handleSwitchTable'),
         headers: {

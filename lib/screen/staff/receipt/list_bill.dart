@@ -37,7 +37,7 @@ class _StaffListBillState extends State<StaffListBill>
   final String currentShopId = getStaffShopID;
   void getListBillShop({required Map<String, int?> filtersFlg}) async {
     BlocProvider.of<ListBillShopBloc>(context).add(GetListBillShop(
-        token: StorageUtils.instance.getString(key: 'token'),
+        token: StorageUtils.instance.getString(key: 'token_staff'),
         client: currentRole,
         shopId: currentShopId,
         limit: 15,
@@ -215,21 +215,19 @@ class _ListAllBillShopState extends State<ListAllBillShop>
   int currentPage = 1;
   List newListAllBillShop = [];
   bool hasMore = true;
-  var tokenStaff = StorageUtils.instance.getString(key: 'token') ?? '';
+  var tokenStaff = StorageUtils.instance.getString(key: 'token_staff') ?? '';
 
   @override
   bool get wantKeepAlive => true;
   Future loadMoreBill(
       {required int page, required Map<String, int?> filtersFlg}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
-
       final respons = await http.post(
         Uri.parse('$baseUrl$listBill'),
         headers: {
           'Content-type': 'application/json',
           'Accept': 'application/json',
-          "Authorization": "Bearer $token"
+          "Authorization": "Bearer $tokenStaff"
         },
         body: jsonEncode({
           'client': 'staff',
@@ -317,10 +315,6 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                       break;
                   }
 
-                  // print(newListAllBillShop[index]
-                  //     ?.booked_tables
-                  //     ?.map((table) => table?.room_table?.table_name)
-                  //     ?.toList());
                   print(newListAllBillShop[index]
                       ?.bookedTables
                       ?.map((table) => table?.roomTable?.tableName)
@@ -403,7 +397,7 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
   int currentPageComplete = 1;
   List listBillComplete = [];
   bool hasMoreComplete = true;
-  var tokenStaff = StorageUtils.instance.getString(key: 'token') ?? '';
+  var tokenStaff = StorageUtils.instance.getString(key: 'token_staff') ?? '';
 
   final scrollTabCompleteController = ScrollController();
   @override
@@ -429,7 +423,7 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
   Future loadMoreCompleteBill(
       {required int page, required Map<String, int?> filtersFlg}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      var token = StorageUtils.instance.getString(key: 'token_staff');
 
       final respons = await http.post(
         Uri.parse('$baseUrl$listBill'),
@@ -571,7 +565,7 @@ class _PendingWidgetState extends State<PendingWidget>
   int currentPagePending = 1;
   List listBillPending = [];
   bool hasMoreComplete = true;
-  var tokenStaff = StorageUtils.instance.getString(key: 'token') ?? '';
+  var tokenStaff = StorageUtils.instance.getString(key: 'token_staff') ?? '';
 
   final scrollTabPendingController = ScrollController();
   @override
@@ -595,7 +589,7 @@ class _PendingWidgetState extends State<PendingWidget>
   Future loadMorePending(
       {required int page, required Map<String, int?> filtersFlg}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      var token = StorageUtils.instance.getString(key: 'token_staff');
 
       final respons = await http.post(
         Uri.parse('$baseUrl$listBill'),
@@ -734,7 +728,7 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
   int currentPageCancle = 1;
   List listBillCancle = [];
   bool hasMoreCancle = true;
-  var tokenStaff = StorageUtils.instance.getString(key: 'token') ?? '';
+  var tokenStaff = StorageUtils.instance.getString(key: 'token_staff') ?? '';
 
   final scrollTabCancleController = ScrollController();
   @override
@@ -760,7 +754,7 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
   Future loadMoreCompleteBill(
       {required int page, required Map<String, int?> filtersFlg}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      var token = StorageUtils.instance.getString(key: 'token_staff');
 
       final respons = await http.post(
         Uri.parse('$baseUrl$listBill'),

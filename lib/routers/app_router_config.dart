@@ -177,10 +177,10 @@ class NyAppRouter {
             }),
       ],
       redirect: (BuildContext context, GoRouterState state) async {
-        if (StorageUtils.instance.getString(key: 'auth_staff') != null) {
+        if (StorageUtils.instance.getString(key: 'token_staff') != null) {
           print("HOME STAFF");
           return '/staff_home';
-        } else if (StorageUtils.instance.getString(key: 'auth_manager') !=
+        } else if (StorageUtils.instance.getString(key: 'token_manager') !=
             null) {
           print("HOME MANAGER");
           return '/manager_home';

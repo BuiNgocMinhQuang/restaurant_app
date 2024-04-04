@@ -35,7 +35,7 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
     with TickerProviderStateMixin {
   final String currentRole = "staff";
   final String currentShopId = getStaffShopID;
-  var tokenStaff = StorageUtils.instance.getString(key: 'token') ?? '';
+  var tokenStaff = StorageUtils.instance.getString(key: 'token_staff') ?? '';
 
   void getListBroughtReceiptData(
       {required Map<String, int?> filtersFlg}) async {
@@ -261,7 +261,7 @@ class _AllWidgetState extends State<AllWidget>
   int currentPage = 1;
   List newListFood = [];
   bool hasMore = true;
-  var tokenStaff = StorageUtils.instance.getString(key: 'token') ?? '';
+  var tokenStaff = StorageUtils.instance.getString(key: 'token_staff') ?? '';
 
   @override
   bool get wantKeepAlive => true;
@@ -312,6 +312,7 @@ class _AllWidgetState extends State<AllWidget>
       required String tableId,
       required String orderID}) async {
     BlocProvider.of<PaymentInforBloc>(context).add(GetPaymentInfor(
+        token: tokenStaff,
         client: 'staff',
         shopId: getStaffShopID,
         roomId: roomId ?? '',
@@ -331,7 +332,7 @@ class _AllWidgetState extends State<AllWidget>
   Future loadMoreFood(
       {required int page, required Map<String, int?> filtersFlg}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      var token = StorageUtils.instance.getString(key: 'token_staff');
       final respons = await http.post(
         Uri.parse('$baseUrl$getListBroughtReceipt'),
         headers: {
@@ -436,6 +437,7 @@ class _AllWidgetState extends State<AllWidget>
                                       context: context,
                                       builder: (BuildContext context) {
                                         return PayBillDialog(
+                                          token: tokenStaff,
                                           role: 'staff',
                                           shopID: getStaffShopID,
                                           orderID: newListFood[index]
@@ -548,7 +550,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
   List listBillComplete = [];
   bool hasMoreComplete = true;
   bool isRefesh = false;
-  var tokenStaff = StorageUtils.instance.getString(key: 'token') ?? '';
+  var tokenStaff = StorageUtils.instance.getString(key: 'token_staff') ?? '';
 
   final scrollTabCompleteController = ScrollController();
   @override
@@ -574,7 +576,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
   void loadMoreComplete(
       {required int page, required Map<String, int?> filtersFlg}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      var token = StorageUtils.instance.getString(key: 'token_staff');
       final respons = await http.post(
         Uri.parse('$baseUrl$getListBroughtReceipt'),
         headers: {
@@ -621,7 +623,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
   void refeshListComplete(
       {required int page, required Map<String, int?> filtersFlg}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      var token = StorageUtils.instance.getString(key: 'token_staff');
       final respons = await http.post(
         Uri.parse('$baseUrl$getListBroughtReceipt'),
         headers: {
@@ -760,7 +762,7 @@ class _PendingWidgetState extends State<PendingWidget>
   int currentPagePending = 1;
   List listBillPending = [];
   bool hasMoreComplete = true;
-  var tokenStaff = StorageUtils.instance.getString(key: 'token') ?? '';
+  var tokenStaff = StorageUtils.instance.getString(key: 'token_staff') ?? '';
 
   final scrollTabPendingController = ScrollController();
   @override
@@ -810,6 +812,7 @@ class _PendingWidgetState extends State<PendingWidget>
       required String tableId,
       required String orderID}) async {
     BlocProvider.of<PaymentInforBloc>(context).add(GetPaymentInfor(
+        token: tokenStaff,
         client: 'staff',
         shopId: getStaffShopID,
         roomId: roomId ?? '',
@@ -829,7 +832,7 @@ class _PendingWidgetState extends State<PendingWidget>
   void loadMorePending(
       {required int page, required Map<String, int?> filtersFlg}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      var token = StorageUtils.instance.getString(key: 'token_staff');
       final respons = await http.post(
         Uri.parse('$baseUrl$getListBroughtReceipt'),
         headers: {
@@ -917,6 +920,7 @@ class _PendingWidgetState extends State<PendingWidget>
                                 context: context,
                                 builder: (BuildContext context) {
                                   return PayBillDialog(
+                                    token: tokenStaff,
                                     role: 'staff',
                                     shopID: getStaffShopID,
                                     orderID: listBillPending[index]
@@ -1016,7 +1020,7 @@ class _CancleWidgetState extends State<CancleWidget>
   int currentPageCancle = 1;
   List listBillCancle = [];
   bool hasMoreCanle = true;
-  var tokenStaff = StorageUtils.instance.getString(key: 'token') ?? '';
+  var tokenStaff = StorageUtils.instance.getString(key: 'token_staff') ?? '';
 
   final scrollTabCancleController2 = ScrollController();
   @override
@@ -1040,7 +1044,7 @@ class _CancleWidgetState extends State<CancleWidget>
   Future loadMoreCancle(
       {required int page, required Map<String, int?> filtersFlg}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      var token = StorageUtils.instance.getString(key: 'token_staff');
       final respons = await http.post(
         Uri.parse('$baseUrl$getListBroughtReceipt'),
         headers: {

@@ -333,6 +333,7 @@ class _AllWidgetState extends State<AllWidget>
       required String tableId,
       required String orderID}) async {
     BlocProvider.of<PaymentInforBloc>(context).add(GetPaymentInfor(
+        token: tokenManager,
         client: 'user',
         shopId: "123456",
         roomId: roomId ?? '',
@@ -373,15 +374,18 @@ class _AllWidgetState extends State<AllWidget>
       print("DATA $data");
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
-            newListFood.addAll(broughtReceiptPageRes.data.data);
-            currentPage++;
-            if (broughtReceiptPageRes.data.data.isEmpty ||
-                broughtReceiptPageRes.data.data.length <= 15) {
-              hasMore = false;
-            }
-          });
+          mounted
+              ? setState(() {
+                  var broughtReceiptPageRes =
+                      ListBroughtReceiptModel.fromJson(data);
+                  newListFood.addAll(broughtReceiptPageRes.data.data);
+                  currentPage++;
+                  if (broughtReceiptPageRes.data.data.isEmpty ||
+                      broughtReceiptPageRes.data.data.length <= 15) {
+                    hasMore = false;
+                  }
+                })
+              : null;
         } else {
           log("ERROR BROUGHT RECEIPT ALL PAGE 1");
         }
@@ -457,6 +461,7 @@ class _AllWidgetState extends State<AllWidget>
                                       context: context,
                                       builder: (BuildContext context) {
                                         return PayBillDialog(
+                                          token: tokenManager,
                                           role: 'user',
                                           shopID: "123456",
                                           orderID: newListFood[index]
@@ -833,6 +838,7 @@ class _PendingWidgetState extends State<PendingWidget>
       required String tableId,
       required String orderID}) async {
     BlocProvider.of<PaymentInforBloc>(context).add(GetPaymentInfor(
+        token: tokenManager,
         client: 'user',
         shopId: "123456",
         roomId: roomId ?? '',
@@ -940,6 +946,7 @@ class _PendingWidgetState extends State<PendingWidget>
                                 context: context,
                                 builder: (BuildContext context) {
                                   return PayBillDialog(
+                                    token: tokenManager,
                                     role: 'user',
                                     shopID: "123456",
                                     orderID: listBillPending[index]

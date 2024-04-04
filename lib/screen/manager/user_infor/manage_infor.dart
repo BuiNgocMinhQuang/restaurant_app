@@ -13,6 +13,7 @@ import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -118,7 +119,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
           print("TRUYEN NNNN ${{
             "staff_avatar": base64string,
           }}");
-          var token = StorageUtils.instance.getString(key: 'token');
+          var token = StorageUtils.instance.getString(key: 'token_manager');
           final respons = await http.post(
             Uri.parse('$baseUrl$managerUpdateAvatar'),
             headers: {
@@ -151,9 +152,19 @@ class _ManagerInformationState extends State<ManagerInformation> {
             }
           } catch (error) {
             print("ERROR CHANGE AVATAR MANAGER  2 ${error}");
+            showSnackBarTopCustom(
+                title: "Thất bại",
+                context: navigatorKey.currentContext,
+                mess: "Thao tác thất bại",
+                color: Colors.red);
           }
         } catch (error) {
           print("ERROR CHANGE AVATAR MANAGER  3 $error");
+          showSnackBarTopCustom(
+              title: "Thất bại",
+              context: navigatorKey.currentContext,
+              mess: "Thao tác thất bại",
+              color: Colors.red);
         }
       } else {
         print("No image is selected.");
@@ -530,9 +541,19 @@ class _ManagerInformationState extends State<ManagerInformation> {
             }
           } catch (error) {
             print("ERROR UPDATE INFOR  2 ${error}");
+            showSnackBarTopCustom(
+                title: "Thất bại",
+                context: navigatorKey.currentContext,
+                mess: "Thao tác thất bại",
+                color: Colors.red);
           }
         } catch (error) {
           print("ERROR UPDATE INFOR  3 $error");
+          showSnackBarTopCustom(
+              title: "Thất bại",
+              context: navigatorKey.currentContext,
+              mess: "Thao tác thất bại",
+              color: Colors.red);
         }
       } else {
         showCustomDialogModal(
@@ -701,20 +722,27 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                 children: [
                                   Container(
                                     width: 100.w,
-                                    height: 150.w,
+                                    height: 125.w,
                                     color: Colors.grey,
                                     child: selectedImage != null
                                         ? Image.file(
                                             selectedImage!,
-                                            fit: BoxFit.cover,
+                                            fit: BoxFit.fill,
                                           )
-                                        : Container(
-                                            // width: 100.w,
-                                            color: Colors.grey,
-                                            child: Image.network(
-                                              httpImage + currentAvatar,
-                                              fit: BoxFit.cover,
+                                        : CachedNetworkImage(
+                                            fit: BoxFit.fill,
+                                            imageUrl: httpImage + currentAvatar,
+                                            placeholder: (context, url) =>
+                                                SizedBox(
+                                              height: 10.w,
+                                              width: 10.w,
+                                              child: const Center(
+                                                  child:
+                                                      CircularProgressIndicator()),
                                             ),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const Icon(Icons.error),
                                           ),
                                   ),
                                   Positioned(
@@ -890,18 +918,23 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                     }
                                                   },
                                                   decoration: InputDecoration(
-                                                      fillColor: Color.fromARGB(
-                                                          255, 226, 104, 159),
+                                                      fillColor:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              226,
+                                                              104,
+                                                              159),
                                                       focusedBorder:
                                                           OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color:
-                                                                Color.fromRGBO(
-                                                                    214,
-                                                                    51,
-                                                                    123,
-                                                                    0.6),
-                                                            width: 2.0),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color: Color
+                                                                    .fromRGBO(
+                                                                        214,
+                                                                        51,
+                                                                        123,
+                                                                        0.6),
+                                                                width: 2.0),
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(8.r),
@@ -1899,14 +1932,22 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                           selectedImageFrontID!,
                                                           fit: BoxFit.cover,
                                                         )
-                                                      : Container(
-                                                          // width: 100.w,
-                                                          color: Colors.grey,
-                                                          child: Image.network(
-                                                            httpImage +
-                                                                currentImageFrontID,
-                                                            fit: BoxFit.cover,
+                                                      : CachedNetworkImage(
+                                                          fit: BoxFit.cover,
+                                                          imageUrl: httpImage +
+                                                              currentImageFrontID,
+                                                          placeholder:
+                                                              (context, url) =>
+                                                                  SizedBox(
+                                                            child: Center(
+                                                                child:
+                                                                    CircularProgressIndicator()),
+                                                            height: 10.w,
+                                                            width: 10.w,
                                                           ),
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              Icon(Icons.error),
                                                         ),
                                                 ),
                                               )
@@ -1939,14 +1980,23 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                           selectedImageBackID!,
                                                           fit: BoxFit.cover,
                                                         )
-                                                      : Container(
-                                                          // width: 100.w,
-                                                          color: Colors.grey,
-                                                          child: Image.network(
-                                                            httpImage +
-                                                                currentImageBackID,
-                                                            fit: BoxFit.cover,
+                                                      : CachedNetworkImage(
+                                                          fit: BoxFit.cover,
+                                                          imageUrl: httpImage +
+                                                              currentImageBackID,
+                                                          placeholder:
+                                                              (context, url) =>
+                                                                  SizedBox(
+                                                            height: 10.w,
+                                                            width: 10.w,
+                                                            child: const Center(
+                                                                child:
+                                                                    CircularProgressIndicator()),
                                                           ),
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              const Icon(
+                                                                  Icons.error),
                                                         ),
                                                 ),
                                               )
@@ -1979,14 +2029,23 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                           selectedImageHoldID!,
                                                           fit: BoxFit.cover,
                                                         )
-                                                      : Container(
-                                                          // width: 100.w,
-                                                          color: Colors.grey,
-                                                          child: Image.network(
-                                                            httpImage +
-                                                                currentImageHoldID,
-                                                            fit: BoxFit.cover,
+                                                      : CachedNetworkImage(
+                                                          fit: BoxFit.cover,
+                                                          imageUrl: httpImage +
+                                                              currentImageHoldID,
+                                                          placeholder:
+                                                              (context, url) =>
+                                                                  SizedBox(
+                                                            height: 10.w,
+                                                            width: 10.w,
+                                                            child: const Center(
+                                                                child:
+                                                                    CircularProgressIndicator()),
                                                           ),
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              const Icon(
+                                                                  Icons.error),
                                                         ),
                                                 ),
                                               )

@@ -6,7 +6,6 @@ import 'package:app_restaurant/model/brought_receipt/list_brought_receipt_model.
 import 'package:app_restaurant/model/brought_receipt/manage_brought_receipt_model.dart';
 import 'package:app_restaurant/model/brought_receipt/print_brought_receipt_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
-import 'package:app_restaurant/utils/storage.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +29,6 @@ class BroughtReceiptBloc
     await Future.delayed(const Duration(seconds: 1));
     try {
       var token = event.token;
-      print("TOKEN TRUYEN VAO $token");
       final respons = await http.post(
         Uri.parse('$baseUrl$getListBroughtReceipt'),
         headers: {
@@ -54,8 +52,6 @@ class BroughtReceiptBloc
         if (data['status'] == 200) {
           var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
           emit(state.copyWith(listBroughtReceiptModel: broughtReceiptPageRes));
-          print("LIST BILL ${broughtReceiptPageRes.data.data.length}");
-
           emit(state.copyWith(
               broughtReceiptPageStatus: BroughtReceiptPageStatus.succes));
         } else {
@@ -91,7 +87,6 @@ class CancleBroughtReceiptBloc
     Emitter<CancleBroughtReceiptState> emit,
   ) async {
     try {
-      // var token = StorageUtils.instance.getString(key: 'token');
       var token = event.token;
       final respons = await http.post(
         Uri.parse('$baseUrl$cancleBroughtReceipt'),
@@ -109,7 +104,6 @@ class CancleBroughtReceiptBloc
         }),
       );
       final data = jsonDecode(respons.body);
-      print("ERROR CANCLE BROUGHT RECEIPTTTTT $data");
 
       var message = data['message'];
 
@@ -163,7 +157,6 @@ class PrintBroughtReceiptBloc
         printBroughtReceiptStatus: PrintBroughtReceiptStatus.loading));
     await Future.delayed(const Duration(seconds: 1));
     try {
-      // var token = StorageUtils.instance.getString(key: 'token');
       var token = event.token;
       final respons = await http.post(
         Uri.parse('$baseUrl$printBroughtReceipt'),
@@ -180,7 +173,6 @@ class PrintBroughtReceiptBloc
         }),
       );
       final data = jsonDecode(respons.body);
-      print("PRINT BROUGHT RECEIPTTTTT $data");
 
       try {
         if (data['status'] == 200) {
@@ -226,7 +218,6 @@ class ManageBroughtReceiptBloc
     await Future.delayed(const Duration(seconds: 1));
 
     try {
-      // var token = StorageUtils.instance.getString(key: 'token');
       var token = event.token;
       final respons = await http.post(
         Uri.parse('$baseUrl$getListFoodBroughtReceipt'),
@@ -247,7 +238,6 @@ class ManageBroughtReceiptBloc
       );
 
       final data = jsonDecode(respons.body);
-      print("DATAE !!! $data");
       var message = data['message'];
       try {
         if (data['status'] == 200) {

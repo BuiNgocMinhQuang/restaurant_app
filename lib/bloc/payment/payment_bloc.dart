@@ -26,7 +26,8 @@ class PaymentInforBloc extends Bloc<PaymentInforEvent, PaymentInforState> {
     await Future.delayed(const Duration(seconds: 1));
 
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      var token = event.token;
+
       final respons = await http.post(
         Uri.parse('$baseUrl$updatePaymentInfor'),
         headers: {
@@ -80,7 +81,8 @@ class PaymentInforBloc extends Bloc<PaymentInforEvent, PaymentInforState> {
     await Future.delayed(const Duration(seconds: 1));
 
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      var token = event.token;
+
       final respons = await http.post(
         Uri.parse('$baseUrl$confirmPayment'),
         headers: {
@@ -137,22 +139,22 @@ class PaymentInforBloc extends Bloc<PaymentInforEvent, PaymentInforState> {
     await Future.delayed(const Duration(seconds: 1));
 
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      var token = event.token;
       final respons = await http.post(
         Uri.parse('$baseUrl$showPaymentInfor'),
         headers: {
-          // 'Content-type': 'application/json',
-          // 'Accept': 'application/json',
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
           "Authorization": "Bearer $token"
         },
-        body: {
+        body: jsonEncode({
           'client': event.client,
           'shop_id': event.shopId,
           'is_api': event.isApi.toString(),
           'room_id': event.roomId,
           'table_id': event.tableId,
           'order_id': event.orderId
-        },
+        }),
       );
       final data = jsonDecode(respons.body);
       // print("BILL INFOR $data");

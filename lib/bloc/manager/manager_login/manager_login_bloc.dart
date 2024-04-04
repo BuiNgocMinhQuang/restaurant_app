@@ -57,13 +57,13 @@ class ManagerLoginBloc extends Bloc<ManagerLoginEvent, ManagerLoginState> {
     try {
       if (data['status'] == 200) {
         var authManagerDataRes = ManagerInforModel.fromJson(data);
-        // var authManagerDataString = jsonEncode(authManagerDataRes);
         var authMangerDataString = jsonEncode(authManagerDataRes);
 
         var token = authManagerDataRes.token;
-        print("TOKEN MANAGER NE $token");
-
+        var tokenExpiresAt = authManagerDataRes.tokenExpiresAt;
         StorageUtils.instance.setString(key: 'token_manager', val: token ?? '');
+        StorageUtils.instance
+            .setString(key: 'token_manager_expires', val: tokenExpiresAt ?? '');
         StorageUtils.instance
             .setString(key: 'auth_manager', val: authMangerDataString);
         emit(state.copyWith(loginStatus: ManagerLoginStatus.success));

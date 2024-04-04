@@ -1,4 +1,4 @@
-import 'package:app_restaurant/bloc/login/login_bloc.dart';
+import 'package:app_restaurant/bloc/login/staff_login_bloc.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/screen/staff/receipt/brought_receipt.dart';
@@ -40,16 +40,15 @@ class _StaffFabTabState extends State<StaffFabTab> {
     super.dispose();
   }
 
-  void showTokenExpiredDialog() async {
+  void handleLogout() async {
     BlocProvider.of<LoginBloc>(context).add(const LogoutStaff());
-    StorageUtils.instance.removeKey(key: 'auth_staff');
-    StorageUtils.instance.removeKey(key: 'staff_infor_data');
+    StorageUtils.instance.removeKey(key: 'token_staff');
     context.go("/staff_sign_in");
   }
 
   void checkTokenExpires() async {
     var tokenExpiresTime =
-        StorageUtils.instance.getString(key: 'token_expires');
+        StorageUtils.instance.getString(key: 'token_staff_expires');
     if (tokenExpiresTime != '') {
       DateTime now = DateTime.now().toUtc();
       print("TIME NOW $now");
@@ -63,7 +62,11 @@ class _StaffFabTabState extends State<StaffFabTab> {
           now.minute >= tokenExpires.minute &&
           now.second >= tokenExpires.second) {
         print("Het han token");
-        showLoginSessionExpiredDialog(context, showTokenExpiredDialog);
+        showLoginSessionExpiredDialog(
+            context: context,
+            okEvent: () {
+              handleLogout();
+            });
       } else {
         print("Giu phien dang nhap");
       }
@@ -336,7 +339,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                                 color1: Colors.white,
                                 color2: Colors.white,
                                 event: () {
-                                  showTokenExpiredDialog();
+                                  handleLogout();
                                 },
                                 text: "Đăng xuất",
                                 textColor: Colors.black,

@@ -31,7 +31,8 @@ class MenuFoodBloc extends Bloc<GetListFoodMenu, MenuFoodState> {
       }
     }}");
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      var token = StorageUtils.instance.getString(key: 'token_staff');
+
       final respons = await http.post(
         Uri.parse('$baseUrl$getListBroughtReceipt'),
         headers: {

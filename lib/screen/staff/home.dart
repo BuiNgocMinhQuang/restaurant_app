@@ -32,13 +32,14 @@ class _StaffBookingTableState extends State<StaffBookingTable>
     with TickerProviderStateMixin {
   final String currentRole = "staff";
   final String currentShopId = getStaffShopID;
-  var tokenStaff = StorageUtils.instance.getString(key: 'token') ?? '';
+  var tokenStaff = StorageUtils.instance.getString(key: 'token_staff') ?? '';
 
   void getDataTabIndex({String? roomId}) async {
     await Future.delayed(const Duration(seconds: 0));
 
     BlocProvider.of<ListRoomBloc>(context).add(
       GetListRoom(
+          token: tokenStaff,
           client: currentRole,
           shopId: getStaffShopID,
           isApi: true,
@@ -63,6 +64,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
       required String tableId,
       required String orderID}) async {
     BlocProvider.of<TableBloc>(context).add(GetTableSwitchInfor(
+        token: tokenStaff,
         client: currentRole,
         shopId: getStaffShopID,
         roomId: roomId ?? '',
@@ -75,6 +77,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
       required String tableId,
       required String orderID}) async {
     BlocProvider.of<BillInforBloc>(context).add(GetBillInfor(
+        token: tokenStaff,
         client: currentRole,
         shopId: getStaffShopID,
         roomId: roomId ?? '',
@@ -87,6 +90,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
       required String tableId,
       required String orderID}) async {
     BlocProvider.of<PaymentInforBloc>(context).add(GetPaymentInfor(
+        token: tokenStaff,
         client: currentRole,
         shopId: getStaffShopID,
         roomId: roomId ?? '',
@@ -111,7 +115,6 @@ class _StaffBookingTableState extends State<StaffBookingTable>
 
     return BlocBuilder<ListRoomBloc, ListRoomState>(builder: (context, state) {
       return Scaffold(
-          // resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
           body: SafeArea(
               child: SizedBox(
@@ -361,6 +364,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                                   context: context,
                                                                                                   builder: (BuildContext context) {
                                                                                                     return MoveTableDialog(
+                                                                                                      token: tokenStaff,
                                                                                                       role: currentRole,
                                                                                                       shopID: currentShopId,
                                                                                                       orderID: data.tables![index].orderId.toString(),
@@ -369,7 +373,6 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                                       roomID: data.storeRoomId.toString(),
                                                                                                       listIdRoom: listRoomID,
                                                                                                       eventSaveButton: () {
-                                                                                                        log("RESET DATAAAAA");
                                                                                                         getDataTabIndex(
                                                                                                           roomId: data.storeRoomId.toString(),
                                                                                                         );
@@ -387,6 +390,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                                   context: context,
                                                                                                   builder: (BuildContext context) {
                                                                                                     return SeeBillDialog(
+                                                                                                      token: tokenStaff,
                                                                                                       role: currentRole,
                                                                                                       shopID: currentShopId,
                                                                                                       orderID: data.tables?[index].orderId,
@@ -404,6 +408,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                                   context: context,
                                                                                                   builder: (BuildContext context) {
                                                                                                     return PayBillDialog(
+                                                                                                      token: tokenStaff,
                                                                                                       role: currentRole,
                                                                                                       shopID: currentShopId,
                                                                                                       orderID: data.tables?[index].orderId.toString(),

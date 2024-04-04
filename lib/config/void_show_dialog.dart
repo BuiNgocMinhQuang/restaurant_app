@@ -233,7 +233,8 @@ void showExpiredOtpDialog(context) {
       .show();
 }
 
-void showLoginSessionExpiredDialog(context, Function okEvent) {
+void showLoginSessionExpiredDialog(
+    {required context, required Function okEvent}) {
   AwesomeDialog(
           dismissOnTouchOutside: false,
           context: context,

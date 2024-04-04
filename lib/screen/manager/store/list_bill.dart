@@ -10,7 +10,6 @@ import 'package:app_restaurant/widgets/bill_infor_container.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/list_pop_menu.dart';
-import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/custom_tab.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/cupertino.dart';
@@ -217,19 +216,20 @@ class _ListAllBillShopState extends State<ListAllBillShop>
   int currentPage = 1;
   List newListAllBillShop = [];
   bool hasMore = true;
+  var tokenManager =
+      StorageUtils.instance.getString(key: 'token_manager') ?? '';
+
   @override
   bool get wantKeepAlive => true;
   Future loadMoreBill(
       {required int page, required Map<String, int?> filtersFlg}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token_manager');
-
       final respons = await http.post(
         Uri.parse('$baseUrl$listBill'),
         headers: {
           'Content-type': 'application/json',
           'Accept': 'application/json',
-          "Authorization": "Bearer $token"
+          "Authorization": "Bearer $tokenManager"
         },
         body: jsonEncode({
           'client': 'user',
@@ -244,14 +244,16 @@ class _ListAllBillShopState extends State<ListAllBillShop>
       // print("DAT BACK LOAD MORE ${data}");
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var listBillShopRes = ListBillShopModel.fromJson(data);
-            newListAllBillShop.addAll(listBillShopRes.data.data);
-            currentPage++;
-            if (listBillShopRes.data.data.isEmpty) {
-              hasMore = false;
-            }
-          });
+          mounted
+              ? setState(() {
+                  var listBillShopRes = ListBillShopModel.fromJson(data);
+                  newListAllBillShop.addAll(listBillShopRes.data.data);
+                  currentPage++;
+                  if (listBillShopRes.data.data.isEmpty) {
+                    hasMore = false;
+                  }
+                })
+              : null;
         } else {
           print("ERROR BROUGHT RECEIPT PAGE 1");
         }
@@ -316,7 +318,10 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                       statusTextBill = "Hoá đơn bị huỷ";
                       break;
                   }
-
+                  var tableNameBill = newListAllBillShop[index]
+                      ?.bookedTables
+                      ?.map((table) => table?.roomTable?.tableName)
+                      ?.join(',');
                   return Padding(
                     padding: EdgeInsets.only(left: 5.w, right: 5.w),
                     child: BillInforContainer(
@@ -330,11 +335,19 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                             "${MoneyFormatter(amount: (newListAllBillShop[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                         typePopMenu: PopUpMenuPrintBill(
                           eventButton1: () {
-                            // showDialog(
-                            //     context: context,
-                            //     builder: (BuildContext context) {
-                            //       return const PrintBillDialog();
-                            //     });
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return PrintBillDialog(
+                                    token: tokenManager,
+                                    orderID: newListAllBillShop[index].orderId,
+                                    roomName: newListAllBillShop[index]
+                                            ?.room
+                                            ?.storeRoomName ??
+                                        '',
+                                    tableName: tableNameBill,
+                                  );
+                                });
                           },
                         ),
                         statusText: statusTextBill),
@@ -382,7 +395,8 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
   int currentPageComplete = 1;
   List listBillComplete = [];
   bool hasMoreComplete = true;
-
+  var tokenManager =
+      StorageUtils.instance.getString(key: 'token_manager') ?? '';
   final scrollTabCompleteController = ScrollController();
   @override
   void initState() {
@@ -429,15 +443,17 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
       print("_CompleteWidgetState ${data}");
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var listBillShopRes = ListBillShopModel.fromJson(data);
-            listBillComplete.addAll(listBillShopRes.data.data);
-            currentPageComplete++;
-            if (listBillShopRes.data.data.isEmpty ||
-                listBillShopRes.data.data.length <= 15) {
-              hasMoreComplete = false;
-            }
-          });
+          mounted
+              ? setState(() {
+                  var listBillShopRes = ListBillShopModel.fromJson(data);
+                  listBillComplete.addAll(listBillShopRes.data.data);
+                  currentPageComplete++;
+                  if (listBillShopRes.data.data.isEmpty ||
+                      listBillShopRes.data.data.length <= 15) {
+                    hasMoreComplete = false;
+                  }
+                })
+              : null;
         } else {
           print("ERROR BROUGHT RECEIPT PAGE 1");
         }
@@ -466,7 +482,10 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                 if (index < dataLength) {
                   var statusCloseBill =
                       listBillComplete[index].closeOrder.toString();
-
+                  var tableNameBill = listBillComplete[index]
+                      ?.bookedTables
+                      ?.map((table) => table?.roomTable?.tableName)
+                      ?.join(',');
                   return Padding(
                     padding: EdgeInsets.only(left: 5.w, right: 5.w),
                     child: BillInforContainer(
@@ -479,11 +498,19 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                             "${MoneyFormatter(amount: (listBillComplete[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                         typePopMenu: PopUpMenuPrintBill(
                           eventButton1: () {
-                            // showDialog(
-                            //     context: context,
-                            //     builder: (BuildContext context) {
-                            //       return const PrintBillDialog();
-                            //     });
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return PrintBillDialog(
+                                    token: tokenManager,
+                                    orderID: listBillComplete[index].orderId,
+                                    roomName: listBillComplete[index]
+                                            ?.room
+                                            ?.storeRoomName ??
+                                        '',
+                                    tableName: tableNameBill,
+                                  );
+                                });
                           },
                         ),
                         statusText: statusCloseBill == "1"
@@ -538,7 +565,8 @@ class _PendingWidgetState extends State<PendingWidget>
   int currentPagePending = 1;
   List listBillPending = [];
   bool hasMoreComplete = true;
-
+  var tokenManager =
+      StorageUtils.instance.getString(key: 'token_manager') ?? '';
   final scrollTabPendingController = ScrollController();
   @override
   void initState() {
@@ -583,16 +611,18 @@ class _PendingWidgetState extends State<PendingWidget>
 
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var listBillShopRes = ListBillShopModel.fromJson(data);
-            listBillPending.addAll(listBillShopRes.data.data);
-            currentPagePending++;
+          mounted
+              ? setState(() {
+                  var listBillShopRes = ListBillShopModel.fromJson(data);
+                  listBillPending.addAll(listBillShopRes.data.data);
+                  currentPagePending++;
 
-            if (listBillShopRes.data.data.isEmpty ||
-                listBillShopRes.data.data.length <= 15) {
-              hasMoreComplete = false;
-            }
-          });
+                  if (listBillShopRes.data.data.isEmpty ||
+                      listBillShopRes.data.data.length <= 15) {
+                    hasMoreComplete = false;
+                  }
+                })
+              : null;
         } else {
           print("ERROR BROUGHT RECEIPT PAGE 1");
         }
@@ -619,6 +649,10 @@ class _PendingWidgetState extends State<PendingWidget>
               itemBuilder: (BuildContext context, int index) {
                 var dataLength = listBillPending.length;
                 if (index < dataLength) {
+                  var tableNameBill = listBillPending[index]
+                      ?.bookedTables
+                      ?.map((table) => table?.roomTable?.tableName)
+                      ?.join(',');
                   return Padding(
                     padding: EdgeInsets.only(left: 5.w, right: 5.w),
                     child: BillInforContainer(
@@ -631,11 +665,19 @@ class _PendingWidgetState extends State<PendingWidget>
                             "${MoneyFormatter(amount: (listBillPending[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                         typePopMenu: PopUpMenuPrintBill(
                           eventButton1: () {
-                            // showDialog(
-                            //     context: context,
-                            //     builder: (BuildContext context) {
-                            //       return const PrintBillDialog();
-                            //     });
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return PrintBillDialog(
+                                    token: tokenManager,
+                                    orderID: listBillPending[index].orderId,
+                                    roomName: listBillPending[index]
+                                            ?.room
+                                            ?.storeRoomName ??
+                                        '',
+                                    tableName: tableNameBill,
+                                  );
+                                });
                           },
                         ),
                         statusText: "Chưa thanh toán"),
@@ -688,7 +730,8 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
   int currentPageCancle = 1;
   List listBillCancle = [];
   bool hasMoreCancle = true;
-
+  var tokenManager =
+      StorageUtils.instance.getString(key: 'token_manager') ?? '';
   final scrollTabCancleController = ScrollController();
   @override
   void initState() {
@@ -734,15 +777,17 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
       final data = jsonDecode(respons.body);
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var listBillShopRes = ListBillShopModel.fromJson(data);
-            listBillCancle.addAll(listBillShopRes.data.data);
-            currentPageCancle++;
-            if (listBillShopRes.data.data.isEmpty ||
-                listBillShopRes.data.data.length <= 15) {
-              hasMoreCancle = false;
-            }
-          });
+          mounted
+              ? setState(() {
+                  var listBillShopRes = ListBillShopModel.fromJson(data);
+                  listBillCancle.addAll(listBillShopRes.data.data);
+                  currentPageCancle++;
+                  if (listBillShopRes.data.data.isEmpty ||
+                      listBillShopRes.data.data.length <= 15) {
+                    hasMoreCancle = false;
+                  }
+                })
+              : null;
         } else {
           print("ERROR BROUGHT RECEIPT PAGE 1");
         }
@@ -769,6 +814,10 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
               itemBuilder: (BuildContext context, int index) {
                 var dataLength = listBillCancle.length;
                 if (index < dataLength) {
+                  var tableNameBill = listBillCancle[index]
+                      ?.bookedTables
+                      ?.map((table) => table?.roomTable?.tableName)
+                      ?.join(',');
                   return Padding(
                     padding: EdgeInsets.only(left: 5.w, right: 5.w),
                     child: BillInforContainer(
@@ -781,11 +830,19 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                             "${MoneyFormatter(amount: (listBillCancle[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                         typePopMenu: PopUpMenuPrintBill(
                           eventButton1: () {
-                            // showDialog(
-                            //     context: context,
-                            //     builder: (BuildContext context) {
-                            //       return const PrintBillDialog();
-                            //     });
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return PrintBillDialog(
+                                    token: tokenManager,
+                                    orderID: listBillCancle[index].orderId,
+                                    roomName: listBillCancle[index]
+                                            ?.room
+                                            ?.storeRoomName ??
+                                        '',
+                                    tableName: tableNameBill,
+                                  );
+                                });
                           },
                         ),
                         statusText: "Hoá đơn bị huỷ"),

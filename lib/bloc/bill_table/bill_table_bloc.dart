@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/model/bill_infor_model.dart';
-import 'package:app_restaurant/utils/storage.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart' as http;
@@ -23,7 +22,7 @@ class BillInforBloc extends Bloc<BillInforEvent, BillInforState> {
     await Future.delayed(const Duration(seconds: 1));
 
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      var token = event.token;
       print("TOKEN GET TABLE $token");
 
       final respons = await http.post(
@@ -36,15 +35,14 @@ class BillInforBloc extends Bloc<BillInforEvent, BillInforState> {
         body: jsonEncode({
           'client': event.client,
           'shop_id': event.shopId,
-          'is_api': event.isApi.toString(),
+          'is_api': event.isApi,
           'room_id': event.roomId,
           'table_id': event.tableId,
           'order_id': event.orderId
         }),
       );
       final data = jsonDecode(respons.body);
-      // print("BILL INFOR $data");
-
+      print(data);
       try {
         if (data['status'] == 200) {
           var billTableDataRes = BillInforModel.fromJson(data);

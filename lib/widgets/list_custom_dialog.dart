@@ -133,6 +133,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
       this.query = query;
     });
     getListFoodTable(
+      tokenReq: widget.token,
       page: currentPage,
       keywords: query,
       foodKinds:
@@ -168,6 +169,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
       if (scrollListFoodController.position.maxScrollExtent ==
           scrollListFoodController.offset) {
         getListFoodTable(
+          tokenReq: widget.token,
           page: currentPage,
           keywords: query,
           foodKinds:
@@ -194,12 +196,14 @@ class _BookingTableDialogState extends State<BookingTableDialog>
 
   void getListFoodTable({
     required int page,
+    required String tokenReq,
     String? keywords,
     List<int>? foodKinds,
     int? payFlg,
   }) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      // var token = StorageUtils.instance.getString(key: 'token_staff');
+      var token = tokenReq;
       final respons = await http.post(
         Uri.parse('$baseUrl$foodsTableApi'),
         headers: {
@@ -247,9 +251,10 @@ class _BookingTableDialogState extends State<BookingTableDialog>
     }
   }
 
-  void getDetailFoodTable() async {
+  void getDetailFoodTable({required String tokenReq}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      // var token = StorageUtils.instance.getString(key: 'token_staff');
+      var token = tokenReq;
       final respons = await http.post(
         Uri.parse('$baseUrl$foodsTableApi'),
         headers: {
@@ -287,9 +292,11 @@ class _BookingTableDialogState extends State<BookingTableDialog>
     }
   }
 
-  void plusQuantytiFoodToTable({required int foodID}) async {
+  void plusQuantytiFoodToTable(
+      {required int foodID, required String tokenReq}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      // var token = StorageUtils.instance.getString(key: 'token_staff');
+      var token = tokenReq;
       final respons = await http.post(
         Uri.parse('$baseUrl$addFoodTable'),
         headers: {
@@ -333,12 +340,14 @@ class _BookingTableDialogState extends State<BookingTableDialog>
       print("ERROR ADD FOOD TO TABLE 3 $error");
     }
     refeshHomePage();
-    getDetailFoodTable();
+    getDetailFoodTable(tokenReq: widget.token);
   }
 
-  void minusQuantytiFoodToTable({required int foodID}) async {
+  void minusQuantytiFoodToTable(
+      {required int foodID, required String tokenReq}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      // var token = StorageUtils.instance.getString(key: 'token_staff');
+      var token = tokenReq;
       final respons = await http.post(
         Uri.parse('$baseUrl$removeFoodTable'),
         headers: {
@@ -382,13 +391,16 @@ class _BookingTableDialogState extends State<BookingTableDialog>
       print("ERROR ADD FOOD TO TABLE 3 $error");
     }
     refeshHomePage();
-    getDetailFoodTable();
+    getDetailFoodTable(tokenReq: widget.token);
   }
 
   void updateQuantytiFoodToTable(
-      {required int foodID, required String quantityFood}) async {
+      {required int foodID,
+      required String quantityFood,
+      required String tokenReq}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      // var token = StorageUtils.instance.getString(key: 'token_staff');
+      var token = tokenReq;
       final respons = await http.post(
         Uri.parse('$baseUrl$updateQuantityFoodTable'),
         headers: {
@@ -433,37 +445,19 @@ class _BookingTableDialogState extends State<BookingTableDialog>
       print("ERROR ADD FOOD TO TABLE 3 $error");
     }
     refeshHomePage();
-    getDetailFoodTable();
+    getDetailFoodTable(tokenReq: widget.token);
   }
 
   void refeshHomePage() async {
     BlocProvider.of<ListRoomBloc>(context).add(
       GetListRoom(
+          token: widget.token,
           client: widget.role,
           shopId: widget.shopID,
           isApi: true,
           roomId: widget.idRoom.toString()),
     );
   }
-// void init() async {
-//     await Future.delayed(const Duration(seconds: 0));
-
-//     mounted
-//         ? customerNameController.text = listFoodTableCurrent?.userFullName ?? ''
-//         : null;
-//     mounted
-//         ? surNameController.text = managerInforData?.userFirstName ?? ''
-//         : null;
-
-//     mounted ? nameController.text = managerInforData?.userLastName ?? '' : null;
-//     mounted ? emailController.text = managerInforData?.userEmail ?? '' : null;
-//     mounted ? phoneController.text = managerInforData?.userPhone ?? '' : null;
-
-//     mounted
-//         ? address4Controller.text = managerInforData?.userAddress4 ?? ''
-//         : null;
-
-//   }
 
   @override
   Widget build(BuildContext buildContext) {
@@ -547,6 +541,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                   // getListFoodTable(page: 1);
                                   BlocProvider.of<TableBloc>(context).add(
                                       GetTableFoods(
+                                          token: widget.token,
                                           client: widget.role,
                                           shopId: widget.shopID,
                                           roomId: widget.idRoom,
@@ -554,7 +549,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                               widget.currentTable?.roomTableId,
                                           limit: 15,
                                           page: 1));
-                                  getDetailFoodTable();
+                                  getDetailFoodTable(tokenReq: widget.token);
                                 }
                                 // else if (index == 2) {
                                 //   // getListFoodTable(page: 1);
@@ -797,13 +792,6 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                       Wrap(
                                         children: [
                                           DropdownSearch.multiSelection(
-                                            // dropdownBuilder:
-                                            //     (context, selectedItems) =>
-                                            //         Container(
-                                            //   width: 300,
-                                            //   height: 300,
-                                            //   color: Colors.red,
-                                            // ),
                                             key: _popupCustomValidationKey,
                                             itemAsString: (item) =>
                                                 item.tableName,
@@ -910,6 +898,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                             BlocProvider.of<TableSaveInforBloc>(
                                                     context)
                                                 .add(SaveTableInfor(
+                                              token: widget.token,
                                               client: "staff",
                                               shopId: getStaffShopID,
                                               roomId: widget.idRoom.toString(),
@@ -1033,6 +1022,8 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                 .add(
                                                                     index); //thêm index category vào mảng
                                                             getListFoodTable(
+                                                              tokenReq:
+                                                                  widget.token,
                                                               page: 1,
                                                               keywords: query,
                                                               foodKinds:
@@ -1053,6 +1044,8 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                 .remove(
                                                                     index); //xoá index category vào mảng
                                                             getListFoodTable(
+                                                              tokenReq:
+                                                                  widget.token,
                                                               page: 1,
                                                               keywords: query,
                                                               foodKinds:
@@ -1243,10 +1236,8 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                           index]
                                                                       .foodName),
                                                               TextApp(
-                                                                text: filterProducts[
-                                                                        index]
-                                                                    .foodPrice
-                                                                    .toString(),
+                                                                text:
+                                                                    "${MoneyFormatter(amount: (filterProducts[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                                                                 fontsize: 20.sp,
                                                                 fontWeight:
                                                                     FontWeight
@@ -1283,8 +1274,9 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                       onTap:
                                                                           () {
                                                                         minusQuantytiFoodToTable(
-                                                                            foodID:
-                                                                                filterProducts[index].foodId);
+                                                                            tokenReq:
+                                                                                widget.token,
+                                                                            foodID: filterProducts[index].foodId);
                                                                       },
                                                                       child:
                                                                           Container(
@@ -1345,7 +1337,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                               onTapOutside: (event) {
                                                                                 FocusManager.instance.primaryFocus?.unfocus();
 
-                                                                                updateQuantytiFoodToTable(foodID: filterProducts[index].foodId, quantityFood: _foodQuantityController[index].text);
+                                                                                updateQuantytiFoodToTable(tokenReq: widget.token, foodID: filterProducts[index].foodId, quantityFood: _foodQuantityController[index].text);
                                                                               },
                                                                               cursorColor: grey,
                                                                               decoration: const InputDecoration(
@@ -1365,8 +1357,9 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                       onTap:
                                                                           () {
                                                                         plusQuantytiFoodToTable(
-                                                                            foodID:
-                                                                                filterProducts[index].foodId);
+                                                                            tokenReq:
+                                                                                widget.token,
+                                                                            foodID: filterProducts[index].foodId);
                                                                       },
                                                                       child:
                                                                           Container(
@@ -1552,6 +1545,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                     .validate()) {
                                                   BlocProvider.of<TableCancleBloc>(context)
                                                       .add(CancleTable(
+                                                          token: widget.token,
                                                           orderId: state
                                                                   .tableModel
                                                                   ?.booking
@@ -1675,6 +1669,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
 class MoveTableDialog extends StatefulWidget {
   final Function eventSaveButton;
   final Tables? currentTable;
+  final String token;
   final String nameRoom;
   final String orderID;
   final String role;
@@ -1685,6 +1680,7 @@ class MoveTableDialog extends StatefulWidget {
     Key? key,
     required this.eventSaveButton,
     required this.currentTable,
+    required this.token,
     required this.nameRoom,
     required this.orderID,
     required this.listIdRoom,
@@ -1855,6 +1851,7 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
                                           onChanged: (changeRoom) {
                                             BlocProvider.of<TableBloc>(context)
                                                 .add(GetTableSwitchInfor(
+                                                    token: widget.token,
                                                     client: widget.role,
                                                     shopId: widget.shopID,
                                                     roomId: listRoomInit!
@@ -2033,6 +2030,7 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
                                   event: () {
                                     BlocProvider.of<SwitchTableBloc>(context)
                                         .add(HandleSwitchTable(
+                                            token: widget.token,
                                             client: widget.role,
                                             shopId: widget.shopID,
                                             roomId: widget.roomID,
@@ -2045,7 +2043,6 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
                                                 selectedTableId.toList()));
                                     if (stateSwitchTable.switchtableStatus ==
                                         SwitchTableStatus.succes) {
-                                      print("ZOOOOOOOOOO");
                                       Navigator.of(context).pop();
                                       showUpdateDataSuccesDialog();
                                       widget.eventSaveButton();
@@ -2135,6 +2132,7 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
 //Modal xem hoá đơn
 class SeeBillDialog extends StatefulWidget {
   final Tables? currentTable;
+  final String token;
   final String nameRoom;
   final String role;
   final String shopID;
@@ -2143,6 +2141,7 @@ class SeeBillDialog extends StatefulWidget {
   SeeBillDialog({
     Key? key,
     required this.currentTable,
+    required this.token,
     required this.nameRoom,
     required this.role,
     required this.shopID,
@@ -2159,6 +2158,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
   void refeshHomePage() async {
     BlocProvider.of<ListRoomBloc>(context).add(
       GetListRoom(
+          token: widget.token,
           client: widget.role,
           shopId: widget.shopID,
           isApi: true,
@@ -2168,9 +2168,9 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
 
   void getBillData() async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
-      print("TOKEN GET TABLE $token");
-
+      // var token = StorageUtils.instance.getString(key: 'token_staff');
+      // print("TOKEN GET TABLE $token");
+      var token = widget.token;
       final respons = await http.post(
         Uri.parse('$baseUrl$showBillInfor'),
         headers: {
@@ -2183,8 +2183,8 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
           'shop_id': widget.shopID,
           'is_api': true,
           'room_id': widget.roomID,
-          'table_id': widget.currentTable?.roomTableId.toString() ?? '',
-          'order_id': widget.orderID.toString()
+          'table_id': widget.currentTable?.roomTableId,
+          'order_id': widget.orderID
         }),
       );
       final data = jsonDecode(respons.body);
@@ -2215,7 +2215,9 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
 
   void plusQuantytiFoodToSeeBillTable({required int foodID}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      // var token = StorageUtils.instance.getString(key: 'token_staff');
+      var token = widget.token;
+
       final respons = await http.post(
         Uri.parse('$baseUrl$addFoodTable'),
         headers: {
@@ -2253,6 +2255,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
               color: Colors.red);
         }
       } catch (error) {
+        print('BCBCBCBHCBCBC');
         print("ERROR ADD FOOD TO TABLE 2 $error");
       }
     } catch (error) {
@@ -2265,7 +2268,9 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
   void updateQuantytiFoodToSeeBillTable(
       {required int foodID, required String quantityFood}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      // var token = StorageUtils.instance.getString(key: 'token_staff');
+      var token = widget.token;
+
       final respons = await http.post(
         Uri.parse('$baseUrl$updateQuantityFoodTable'),
         headers: {
@@ -2315,7 +2320,9 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
 
   void minusQuantytiFoodToSeeBillTable({required int foodID}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      // var token = StorageUtils.instance.getString(key: 'token_staff');
+      var token = widget.token;
+
       final respons = await http.post(
         Uri.parse('$baseUrl$removeFoodTable'),
         headers: {
@@ -2967,6 +2974,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
 
 //Modal thanh toán hoá đơn
 class PayBillDialog extends StatefulWidget {
+  final String token;
   final Tables? currentTable;
   final String nameRoom;
   final String role;
@@ -2976,6 +2984,7 @@ class PayBillDialog extends StatefulWidget {
   final Function eventSaveButton;
   const PayBillDialog({
     Key? key,
+    required this.token,
     required this.eventSaveButton,
     this.currentTable,
     required this.nameRoom,
@@ -3022,6 +3031,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                 FocusManager.instance.primaryFocus?.unfocus();
                 BlocProvider.of<PaymentInforBloc>(context).add(
                     UpdatePaymentInfor(
+                        token: widget.token,
                         client: widget.role,
                         shopId: widget.shopID,
                         orderId: widget.orderID ?? '',
@@ -3032,6 +3042,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                         guestPay: payMoney,
                         payKind: paymentMethod));
                 BlocProvider.of<PaymentInforBloc>(context).add(GetPaymentInfor(
+                    token: widget.token,
                     client: widget.role,
                     shopId: widget.shopID,
                     orderId: widget.orderID ?? '',
@@ -3069,7 +3080,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                       padding: EdgeInsets.only(left: 20.w),
                                       child: TextApp(
                                         text: widget.currentTable?.tableName ??
-                                            '',
+                                            'Thanh toán hoá đơn',
                                         fontsize: 18.sp,
                                         color: blueText,
                                         fontWeight: FontWeight.bold,
@@ -3265,12 +3276,8 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                                       SizedBox(
                                                         // width: 100.w,
                                                         child: TextApp(
-                                                          text: MoneyFormatter(
-                                                                  amount: priceOfFood
-                                                                      .toDouble())
-                                                              .output
-                                                              .compactNonSymbol
-                                                              .toString(),
+                                                          text:
+                                                              "${MoneyFormatter(amount: priceOfFood.toDouble()).output.withoutFractionDigits.toString()} đ",
                                                           color: Colors.black,
                                                           fontsize: 14.sp,
                                                         ),
@@ -3287,12 +3294,8 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                                       SizedBox(
                                                         // width: 100.w,
                                                         child: TextApp(
-                                                          text: MoneyFormatter(
-                                                                  amount: totalMoneyFood
-                                                                      .toDouble())
-                                                              .output
-                                                              .compactNonSymbol
-                                                              .toString(),
+                                                          text:
+                                                              "${MoneyFormatter(amount: totalMoneyFood.toDouble()).output.withoutFractionDigits.toString()} đ",
                                                           color: Colors.black,
                                                           fontsize: 14.sp,
                                                         ),
@@ -3326,16 +3329,8 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                             fontsize: 14.sp,
                                           ),
                                           TextApp(
-                                            text: MoneyFormatter(
-                                                    amount: (state
-                                                                .paymentInforModel
-                                                                ?.order
-                                                                ?.orderTotal ??
-                                                            0)
-                                                        .toDouble())
-                                                .output
-                                                .compactNonSymbol
-                                                .toString(),
+                                            text:
+                                                "${MoneyFormatter(amount: (state.paymentInforModel?.order?.orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                                             color: Colors.black,
                                             fontsize: 14.sp,
                                           ),
@@ -3375,16 +3370,8 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                             fontsize: 14.sp,
                                           ),
                                           TextApp(
-                                            text: MoneyFormatter(
-                                                    amount: (state
-                                                                .paymentInforModel
-                                                                ?.order
-                                                                ?.orderTotal ??
-                                                            0)
-                                                        .toDouble())
-                                                .output
-                                                .compactNonSymbol
-                                                .toString(),
+                                            text:
+                                                "${MoneyFormatter(amount: (state.paymentInforModel?.order?.orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                                             color: Colors.black,
                                             fontsize: 14.sp,
                                           ),
@@ -3477,16 +3464,8 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                             fontsize: 14.sp,
                                           ),
                                           TextApp(
-                                            text: MoneyFormatter(
-                                                    amount: (state
-                                                                .paymentInforModel
-                                                                ?.order
-                                                                ?.clientCanPay ??
-                                                            0)
-                                                        .toDouble())
-                                                .output
-                                                .compactNonSymbol
-                                                .toString(),
+                                            text:
+                                                "${MoneyFormatter(amount: (state.paymentInforModel?.order?.clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                                             color: Colors.black,
                                             fontsize: 14.sp,
                                           ),
@@ -3647,16 +3626,8 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                             fontsize: 14.sp,
                                           ),
                                           TextApp(
-                                            text: MoneyFormatter(
-                                                    amount: (state
-                                                                .paymentInforModel
-                                                                ?.order
-                                                                ?.guestPayClient ??
-                                                            0)
-                                                        .toDouble())
-                                                .output
-                                                .compactNonSymbol
-                                                .toString(),
+                                            text:
+                                                "${MoneyFormatter(amount: (state.paymentInforModel?.order?.guestPayClient ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                                             color: Colors.black,
                                             fontsize: 14.sp,
                                           ),
@@ -3695,6 +3666,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                 showConfirmDialog(context, () {
                                   BlocProvider.of<PaymentInforBloc>(context)
                                       .add(ConfirmPayment(
+                                    token: widget.token,
                                     client: widget.role,
                                     shopId: widget.shopID,
                                     orderId: widget.orderID ?? '',
@@ -3835,7 +3807,7 @@ class _ManageBroughtReceiptDialogState
   void getDetailsBroughtReceiptData(
       {required int? orderID, required String tokenReq}) async {
     try {
-      // var token = StorageUtils.instance.getString(key: 'token');
+      // var token = StorageUtils.instance.getString(key: 'token_staff');
       var token = tokenReq;
       final respons = await http.post(
         Uri.parse('$baseUrl$getListFoodBroughtReceipt'),
@@ -3949,7 +3921,7 @@ class _ManageBroughtReceiptDialogState
   void minusQuantityFoodToBroughtReceipt(
       {required int foodID, int? orderID, required String tokenReq}) async {
     try {
-      // var token = StorageUtils.instance.getString(key: 'token');
+      // var token = StorageUtils.instance.getString(key: 'token_staff');
       var token = tokenReq;
       final respons = await http.post(
         Uri.parse('$baseUrl$removeFoodToBroughtReceipt'),
@@ -4006,7 +3978,7 @@ class _ManageBroughtReceiptDialogState
       required String quantityFood,
       required String tokenReq}) async {
     try {
-      // var token = StorageUtils.instance.getString(key: 'token');
+      // var token = StorageUtils.instance.getString(key: 'token_staff');
       var token = tokenReq;
 
       final respons = await http.post(
@@ -4066,7 +4038,7 @@ class _ManageBroughtReceiptDialogState
     int? payFlg,
   }) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token');
+      var token = StorageUtils.instance.getString(key: 'token_staff');
       final respons = await http.post(
         Uri.parse('$baseUrl$getListFoodBroughtReceipt'),
         headers: {
@@ -4221,7 +4193,7 @@ class _ManageBroughtReceiptDialogState
                                   ),
                                   TextApp(
                                     text:
-                                        currentOrderTotalBroughtReceipt ?? '0',
+                                        "${currentOrderTotalBroughtReceipt ?? '0'} đ",
                                     fontsize: 14.sp,
                                   ),
                                 ],
@@ -4438,9 +4410,8 @@ class _ManageBroughtReceiptDialogState
                                                       .foodName ??
                                                   ''),
                                           TextApp(
-                                            text: filterProducts2[index]
-                                                .foodPrice
-                                                .toString(),
+                                            text:
+                                                "${MoneyFormatter(amount: (filterProducts2[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                                             fontsize: 20.sp,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -4997,16 +4968,8 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                                       // color: Colors.green,
                                       width: 50.w,
                                       child: TextApp(
-                                        text: MoneyFormatter(
-                                                amount: (state
-                                                            .printBroughtReceiptModel
-                                                            ?.data[index]
-                                                            .foodPrice ??
-                                                        0)
-                                                    .toDouble())
-                                            .output
-                                            .compactNonSymbol
-                                            .toString(),
+                                        text:
+                                            "${MoneyFormatter(amount: (state.printBroughtReceiptModel?.data[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                                         fontsize: 16.sp,
                                         color: blueText,
                                       ),
@@ -5015,20 +4978,8 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                                       // color: Colors.yellow,
                                       width: 50.w,
                                       child: TextApp(
-                                        text: MoneyFormatter(
-                                                amount: ((state
-                                                            .printBroughtReceiptModel!
-                                                            .data[index]
-                                                            .foodPrice ??
-                                                        0 *
-                                                            state
-                                                                .printBroughtReceiptModel!
-                                                                .data[index]
-                                                                .quantityFood))
-                                                    .toDouble())
-                                            .output
-                                            .compactNonSymbol
-                                            .toString(),
+                                        text:
+                                            "${MoneyFormatter(amount: ((state.printBroughtReceiptModel!.data[index].foodPrice * state.printBroughtReceiptModel!.data[index].quantityFood)).toDouble()).output.withoutFractionDigits.toString()} đ",
                                         fontsize: 16.sp,
                                         color: blueText,
                                       ),
@@ -5055,14 +5006,8 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                             fontWeight: FontWeight.bold,
                           ),
                           TextApp(
-                            text: MoneyFormatter(
-                                    amount: (state.printBroughtReceiptModel
-                                                ?.order.orderTotal ??
-                                            0)
-                                        .toDouble())
-                                .output
-                                .compactNonSymbol
-                                .toString(),
+                            text:
+                                "${MoneyFormatter(amount: (state.printBroughtReceiptModel?.order.orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                             fontsize: 16.sp,
                             color: blueText,
                             fontWeight: FontWeight.bold,
@@ -5080,14 +5025,8 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                             fontWeight: FontWeight.bold,
                           ),
                           TextApp(
-                            text: MoneyFormatter(
-                                    amount: (state.printBroughtReceiptModel
-                                                ?.order.discount ??
-                                            0)
-                                        .toDouble())
-                                .output
-                                .compactNonSymbol
-                                .toString(),
+                            text:
+                                "${MoneyFormatter(amount: (state.printBroughtReceiptModel?.order.discount ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                             fontsize: 16.sp,
                             color: blueText,
                             fontWeight: FontWeight.bold,
@@ -5105,14 +5044,8 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                             fontWeight: FontWeight.bold,
                           ),
                           TextApp(
-                            text: MoneyFormatter(
-                                    amount: (state.printBroughtReceiptModel
-                                                ?.order.clientCanPay ??
-                                            0)
-                                        .toDouble())
-                                .output
-                                .compactNonSymbol
-                                .toString(),
+                            text:
+                                "${MoneyFormatter(amount: (state.printBroughtReceiptModel?.order.clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                             fontsize: 16.sp,
                             color: blueText,
                             fontWeight: FontWeight.bold,
@@ -5130,14 +5063,8 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                             fontWeight: FontWeight.bold,
                           ),
                           TextApp(
-                            text: MoneyFormatter(
-                                    amount: (state.printBroughtReceiptModel
-                                                ?.order.guestPay ??
-                                            0)
-                                        .toDouble())
-                                .output
-                                .compactNonSymbol
-                                .toString(),
+                            text:
+                                "${MoneyFormatter(amount: (state.printBroughtReceiptModel?.order.guestPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                             fontsize: 16.sp,
                             color: blueText,
                             fontWeight: FontWeight.bold,
@@ -5173,14 +5100,8 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                             fontWeight: FontWeight.bold,
                           ),
                           TextApp(
-                            text: MoneyFormatter(
-                                    amount: (state.printBroughtReceiptModel
-                                                ?.order.guestPayClient ??
-                                            0)
-                                        .toDouble())
-                                .output
-                                .compactNonSymbol
-                                .toString(),
+                            text:
+                                "${MoneyFormatter(amount: (state.printBroughtReceiptModel?.order.guestPayClient ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                             fontsize: 16.sp,
                             color: blueText,
                             fontWeight: FontWeight.bold,
@@ -5583,16 +5504,8 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                                       // color: Colors.green,
                                       width: 50.w,
                                       child: TextApp(
-                                        text: MoneyFormatter(
-                                                amount: (state
-                                                            .printBroughtReceiptModel
-                                                            ?.data[index]
-                                                            .foodPrice ??
-                                                        0)
-                                                    .toDouble())
-                                            .output
-                                            .compactNonSymbol
-                                            .toString(),
+                                        text:
+                                            "${MoneyFormatter(amount: (state.printBroughtReceiptModel?.data[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                                         fontsize: 16.sp,
                                         color: blueText,
                                       ),
@@ -5601,20 +5514,8 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                                       // color: Colors.yellow,
                                       width: 50.w,
                                       child: TextApp(
-                                        text: MoneyFormatter(
-                                                amount: ((state
-                                                            .printBroughtReceiptModel!
-                                                            .data[index]
-                                                            .foodPrice ??
-                                                        0 *
-                                                            state
-                                                                .printBroughtReceiptModel!
-                                                                .data[index]
-                                                                .quantityFood))
-                                                    .toDouble())
-                                            .output
-                                            .compactNonSymbol
-                                            .toString(),
+                                        text:
+                                            "${MoneyFormatter(amount: ((state.printBroughtReceiptModel!.data[index].foodPrice * state.printBroughtReceiptModel!.data[index].quantityFood)).toDouble()).output.withoutFractionDigits.toString()} đ",
                                         fontsize: 16.sp,
                                         color: blueText,
                                       ),
@@ -5641,14 +5542,8 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                           TextApp(
-                            text: MoneyFormatter(
-                                    amount: (state.printBroughtReceiptModel
-                                                ?.order.orderTotal ??
-                                            0)
-                                        .toDouble())
-                                .output
-                                .compactNonSymbol
-                                .toString(),
+                            text:
+                                "${MoneyFormatter(amount: (state.printBroughtReceiptModel?.order.orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                             fontsize: 16.sp,
                             color: blueText,
                             fontWeight: FontWeight.bold,
@@ -5666,14 +5561,8 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                           TextApp(
-                            text: MoneyFormatter(
-                                    amount: (state.printBroughtReceiptModel
-                                                ?.order.discount ??
-                                            0)
-                                        .toDouble())
-                                .output
-                                .compactNonSymbol
-                                .toString(),
+                            text:
+                                "${MoneyFormatter(amount: (state.printBroughtReceiptModel?.order.discount ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                             fontsize: 16.sp,
                             color: blueText,
                             fontWeight: FontWeight.bold,
@@ -5691,14 +5580,8 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                           TextApp(
-                            text: MoneyFormatter(
-                                    amount: (state.printBroughtReceiptModel
-                                                ?.order.clientCanPay ??
-                                            0)
-                                        .toDouble())
-                                .output
-                                .compactNonSymbol
-                                .toString(),
+                            text:
+                                "${MoneyFormatter(amount: (state.printBroughtReceiptModel?.order.clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                             fontsize: 16.sp,
                             color: blueText,
                             fontWeight: FontWeight.bold,
@@ -5716,14 +5599,8 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                           TextApp(
-                            text: MoneyFormatter(
-                                    amount: (state.printBroughtReceiptModel
-                                                ?.order.guestPay ??
-                                            0)
-                                        .toDouble())
-                                .output
-                                .compactNonSymbol
-                                .toString(),
+                            text:
+                                "${MoneyFormatter(amount: (state.printBroughtReceiptModel?.order.guestPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                             fontsize: 16.sp,
                             color: blueText,
                             fontWeight: FontWeight.bold,
@@ -5759,14 +5636,8 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                           TextApp(
-                            text: MoneyFormatter(
-                                    amount: (state.printBroughtReceiptModel
-                                                ?.order.guestPayClient ??
-                                            0)
-                                        .toDouble())
-                                .output
-                                .compactNonSymbol
-                                .toString(),
+                            text:
+                                "${MoneyFormatter(amount: (state.printBroughtReceiptModel?.order.guestPayClient ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                             fontsize: 16.sp,
                             color: blueText,
                             fontWeight: FontWeight.bold,
