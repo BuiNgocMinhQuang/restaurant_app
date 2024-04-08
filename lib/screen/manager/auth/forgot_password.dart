@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/text.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/gradient_text.dart';
@@ -7,6 +12,9 @@ import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
+import 'package:app_restaurant/env/index.dart';
+import 'package:app_restaurant/constant/api/index.dart';
 
 class ManagerForgotPassword extends StatefulWidget {
   const ManagerForgotPassword({super.key});
@@ -16,9 +24,62 @@ class ManagerForgotPassword extends StatefulWidget {
 }
 
 class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
-  bool light = true;
   final _formField = GlobalKey<FormState>();
   final emailController = TextEditingController();
+  void handleForgotPassword({
+    required String email,
+  }) async {
+    try {
+      final respons = await http.post(
+        Uri.parse('$baseUrl$forgotPasswordManager'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          "email": email,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+
+      print("DADATATA $data");
+      if (data['status'] == 200) {
+        print("HANLDE FOGOT PASSWORD OK");
+        final messRes = data['message'];
+
+        final messText = messRes['text'];
+        final otp = data['otp'];
+        final tokenCheckOTP = otp['token'];
+        StorageUtils.instance
+            .setString(key: 'tokenManagerCheckOTP', val: tokenCheckOTP);
+        StorageUtils.instance
+            .setString(key: 'emailManagerCheckOTP', val: email);
+        emailController.clear();
+        navigatorKey.currentContext?.go('/manager_confirm_otp');
+
+        Future.delayed(const Duration(milliseconds: 300), () {
+          showCustomDialogModal(
+            typeDialog: "succes",
+            context: navigatorKey.currentContext,
+            textDesc: messText,
+            title: "Thành công",
+            colorButton: Colors.green,
+            btnText: "OK",
+          );
+        });
+      } else {
+        final messRes = data['message'];
+
+        showFailedModal(
+            context: navigatorKey.currentContext, desWhyFail: messRes);
+
+        print("FOGOT PASSWORD ERROR 1");
+      }
+    } catch (error) {
+      print("FOGOT PASSWORD ERROR ${error}");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,9 +188,10 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                                 ),
                                                 Center(
                                                   child: TextApp(
+                                                    softWrap: true,
+                                                    isOverFlow: false,
                                                     text: sendCodeIn60Sec,
                                                     textAlign: TextAlign.center,
-                                                    fontsize: 12.sp,
                                                   ),
                                                 ),
                                                 SizedBox(
@@ -219,9 +281,12 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                                   event: () {
                                                     if (_formField.currentState!
                                                         .validate()) {
-                                                      emailController.clear();
-                                                      context.go(
-                                                          "/manager_confirm_otp");
+                                                      handleForgotPassword(
+                                                          email: emailController
+                                                              .text);
+                                                      // emailController.clear();
+                                                      // context.go(
+                                                      //     "/manager_confirm_otp");
                                                     }
                                                   },
                                                   text: send,

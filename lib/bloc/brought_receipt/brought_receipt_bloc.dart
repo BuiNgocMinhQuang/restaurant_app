@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
@@ -158,6 +159,7 @@ class PrintBroughtReceiptBloc
     await Future.delayed(const Duration(seconds: 1));
     try {
       var token = event.token;
+      log("TOKENTRREEE $token");
       final respons = await http.post(
         Uri.parse('$baseUrl$printBroughtReceipt'),
         headers: {
@@ -168,12 +170,12 @@ class PrintBroughtReceiptBloc
         body: jsonEncode({
           'client': event.client,
           'shop_id': event.shopId,
-          'is_api': event.isApi,
+          'is_api': true,
           'order_id': event.orderId
         }),
       );
       final data = jsonDecode(respons.body);
-
+      print("BUG HOA DON MANG VE $data");
       try {
         if (data['status'] == 200) {
           var printBroughtReceiptRes = PrintBroughtReceiptModel.fromJson(data);

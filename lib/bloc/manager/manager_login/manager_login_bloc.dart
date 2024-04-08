@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
+import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
 import 'package:app_restaurant/model/manager_infor_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
@@ -67,6 +69,26 @@ class ManagerLoginBloc extends Bloc<ManagerLoginEvent, ManagerLoginState> {
         StorageUtils.instance
             .setString(key: 'auth_manager', val: authMangerDataString);
         emit(state.copyWith(loginStatus: ManagerLoginStatus.success));
+        // final responseListStore = await http.post(
+        //   Uri.parse('$baseUrl$managerGetListStores'),
+        //   headers: {
+        //     'Content-type': 'application/json',
+        //     'Accept': 'application/json',
+        //     'Authorization': 'Bearer $token'
+        //   },
+        // );
+        // final dataListStore = jsonDecode(responseListStore.body);
+        // print("DATA LIST STORES $dataListStore");
+
+        // try {
+        //   if (dataListStore['status'] == 200) {
+        //     var listStoreManagerDataRes = ListStoreModel.fromJson(data);
+        //     emit(state.copyWith(listStoreModel: listStoreManagerDataRes));
+
+        //     emit(state.copyWith(loginStatus: ManagerLoginStatus.success));
+        //   }
+        // } catch (error) {}
+        log(token.toString());
         navigatorKey.currentContext?.go("/manager_home");
         Future.delayed(Duration(milliseconds: 500), () {
           print("DANG NHAP THNAH CONG");

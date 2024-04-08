@@ -28,15 +28,15 @@ import 'package:go_router/go_router.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class NyAppRouter {
-  final GoRouter testRouter =
-      GoRouter(navigatorKey: navigatorKey, routes: <RouteBase>[
-    GoRoute(
-        name: AppRouterContants.managerHomeRouterName,
-        path: '/',
-        builder: (BuildContext context, GoRouterState state) {
-          return ListFoodStaff();
-        }),
-  ]);
+  // final GoRouter testRouter =
+  //     GoRouter(navigatorKey: navigatorKey, routes: <RouteBase>[
+  //   GoRoute(
+  //       name: AppRouterContants.managerHomeRouterName,
+  //       path: '/',
+  //       builder: (BuildContext context, GoRouterState state) {
+  //         return ListFoodStaff();
+  //       }),
+  // ]);
   final GoRouter router = GoRouter(
       navigatorKey: navigatorKey,
       routes: <RouteBase>[
@@ -104,12 +104,12 @@ class NyAppRouter {
             builder: (BuildContext context, GoRouterState state) {
               return const ManagerBroughtReceipt();
             }),
-        GoRoute(
-            name: AppRouterContants.managerBookingTableRouterName,
-            path: '/manager_booking_table',
-            builder: (BuildContext context, GoRouterState state) {
-              return const ManagerBookingTable();
-            }),
+        // GoRoute(
+        //     name: AppRouterContants.managerBookingTableRouterName,
+        //     path: '/manager_booking_table',
+        //     builder: (BuildContext context, GoRouterState state) {
+        //       return const ManagerBookingTable();
+        //     }),
 
         GoRoute(
             name: AppRouterContants.managerAddStaffRouterName,

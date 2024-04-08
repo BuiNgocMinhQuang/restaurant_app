@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
@@ -56,8 +54,9 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
         final otp = data['otp'];
         final tokenCheckOTP = otp['token'];
         StorageUtils.instance
-            .setString(key: 'tokenCheckOTP', val: tokenCheckOTP);
-        StorageUtils.instance.setString(key: 'emailCheckOTP', val: email ?? '');
+            .setString(key: 'tokenStaffCheckOTP', val: tokenCheckOTP);
+        StorageUtils.instance
+            .setString(key: 'emailStaffCheckOTP', val: email ?? '');
         storeIdController.clear();
         emailController.clear();
         navigatorKey.currentContext?.go('/staff_confirm_otp');

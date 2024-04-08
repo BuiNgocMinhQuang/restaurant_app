@@ -7,7 +7,6 @@ import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
-import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,10 +35,11 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
   }) async {
     try {
       var tokenCheckOtp =
-          StorageUtils.instance.getString(key: 'tokenCheckOTP').toString();
+          StorageUtils.instance.getString(key: 'tokenStaffCheckOTP').toString();
       var emailCheckOtp =
-          StorageUtils.instance.getString(key: 'emailCheckOTP').toString();
-      var paramOTP = StorageUtils.instance.getString(key: 'OTP').toString();
+          StorageUtils.instance.getString(key: 'emailStaffCheckOTP').toString();
+      var paramOTP =
+          StorageUtils.instance.getString(key: 'OTPtoStaff').toString();
 
       final respons = await http.post(
         Uri.parse('$baseUrl$changePasswordStaffWhenForget'),

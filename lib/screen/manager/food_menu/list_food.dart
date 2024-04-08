@@ -1,16 +1,28 @@
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
+import 'package:app_restaurant/model/manager/manager_list_food_model.dart';
 import 'package:app_restaurant/screen/manager/food_menu/edit_food.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/status_box.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:http/http.dart' as http;
+import 'package:app_restaurant/env/index.dart';
+import 'package:app_restaurant/constant/api/index.dart';
+import 'package:money_formatter/money_formatter.dart';
 
 List<String> listState = ["Tất cả", "Đang hoạt động", "Đã chặn"];
 
@@ -24,16 +36,44 @@ class ListFoodManager extends StatefulWidget {
 class _ListFoodManagerState extends State<ListFoodManager> {
   TextEditingController _dateStartController = TextEditingController();
   TextEditingController _dateEndController = TextEditingController();
-  String accountStatus = "isActive";
+  final scrollListFoodController = ScrollController();
+  int currentPage = 1;
+  List currentFoodList = [];
+  String query = '';
+  bool hasMore = true;
+
+  void searchProduct(String query) {
+    setState(() {
+      this.query = query;
+    });
+    loadMoreMenuFood(
+      page: currentPage,
+      keywords: query,
+      // foodKinds:
+      //     selectedCategoriesIndex.isEmpty ? null : selectedCategoriesIndex,
+      filtersFlg: null,
+    );
+  }
+
   void selectDayStart() async {
     DateTime? picked = await showDatePicker(
-        // helpText: 'Chọn ngày bắt đầu', // Can be used as title
-        // cancelText: 'Huỷ',
-        // confirmText: 'Xác nhận',
+        helpText: 'Chọn ngày bắt đầu',
+        cancelText: 'Huỷ',
+        confirmText: 'Xác nhận',
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(2020),
-        lastDate: DateTime(2025));
+        lastDate: DateTime(2025),
+        builder: (context, child) => Theme(
+              data: ThemeData().copyWith(
+                  colorScheme: const ColorScheme.dark(
+                      primary: Colors.black,
+                      onPrimary: Colors.white,
+                      onSurface: Colors.black,
+                      surface: Colors.white),
+                  dialogBackgroundColor: Colors.green),
+              child: child ?? Container(),
+            ));
 
     if (picked != null) {
       setState(() {
@@ -44,10 +84,23 @@ class _ListFoodManagerState extends State<ListFoodManager> {
 
   void selectDayEnd() async {
     DateTime? picked = await showDatePicker(
+        helpText: 'Chọn ngày kết thúc',
+        cancelText: 'Huỷ',
+        confirmText: 'Xác nhận',
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(2020),
-        lastDate: DateTime(2025));
+        lastDate: DateTime(2025),
+        builder: (context, child) => Theme(
+              data: ThemeData().copyWith(
+                  colorScheme: const ColorScheme.dark(
+                      primary: Colors.black,
+                      onPrimary: Colors.white,
+                      onSurface: Colors.black,
+                      surface: Colors.white),
+                  dialogBackgroundColor: Colors.green),
+              child: child ?? Container(),
+            ));
     if (picked != null) {
       setState(() {
         _dateEndController.text = picked.toString().split(" ")[0];
@@ -55,11 +108,196 @@ class _ListFoodManagerState extends State<ListFoodManager> {
     }
   }
 
+  Future loadMoreMenuFood({
+    required int page,
+    String? keywords,
+    List<int>? foodKinds,
+    int? filtersFlg,
+  }) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+      print("DATA TTTT ${{
+        {
+          'client': 'user',
+          'shop_id': '123456',
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': {
+            "keywords": keywords,
+            "food_kinds": foodKinds,
+            "pay_flg": filtersFlg
+          },
+        }
+      }}");
+      log(token.toString());
+      final respons = await http.post(
+        Uri.parse('$baseUrl$managerGetListFood'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': 'user',
+          'shop_id': '123456',
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': {
+            "keywords": keywords,
+            "food_kinds": foodKinds,
+            "pay_flg": filtersFlg
+          },
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print("GET DATA LIST FOOD ${data}");
+      try {
+        if (data['status'] == 200) {
+          setState(() {
+            var listMenuPageRes = ManagerListFoodModel.fromJson(data);
+            currentFoodList.addAll(listMenuPageRes.data.data);
+            currentPage++;
+            if (listMenuPageRes.data.data.isEmpty) {
+              hasMore = false;
+            }
+            // currentPage++;
+            // if (listMenuPageRes.data.data.isEmpty) {
+            //   hasMore = false;
+            // }
+            log('LENGHT ${listMenuPageRes.data.data.length}');
+          });
+        } else {
+          print("ERROR LIST FOOOD RECEIPT PAGE 1");
+        }
+      } catch (error) {
+        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback(
+          (_) => loadMoreMenuFood(page: 1, filtersFlg: null));
+    });
+    scrollListFoodController.addListener(() {
+      print("SCROLL END");
+      if (scrollListFoodController.position.maxScrollExtent ==
+          scrollListFoodController.offset) {
+        print("LOADD MORE FOOD");
+        loadMoreMenuFood(
+            page: currentPage,
+            keywords: query,
+            // foodKinds: selectedCategoriesIndex.isEmpty
+            //     ? null
+            //     : selectedCategoriesIndex,
+            filtersFlg: null);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    scrollListFoodController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    List filterProducts = currentFoodList.where((product) {
+      final foodTitle = product.foodName.toLowerCase();
+      final input = query.toLowerCase();
+      return (foodTitle.contains(input));
+    }).toList();
     return Scaffold(
-      body: SafeArea(
-          child: SingleChildScrollView(
+      body:
+          // SingleChildScrollView(
+          //   child: Column(
+          //     mainAxisSize: MainAxisSize.min,
+          //     children: <Widget>[
+          //       Text(
+          //         'Headline',
+          //         style: TextStyle(fontSize: 18),
+          //       ),
+          //       SizedBox(
+          //         height: 200.0,
+          //         child: ListView.builder(
+          //           physics: ClampingScrollPhysics(),
+          //           shrinkWrap: true,
+          //           scrollDirection: Axis.horizontal,
+          //           itemCount: 15,
+          //           itemBuilder: (BuildContext context, int index) => Card(
+          //             child: Center(child: Text('Dummy Card Text')),
+          //           ),
+          //         ),
+          //       ),
+          //       Text(
+          //         'Demo Headline 2',
+          //         style: TextStyle(fontSize: 18),
+          //       ),
+          //       Card(
+          //         child: ListTile(
+          //             title: Text('Motivation $int'),
+          //             subtitle: Text('this is a description of the motivation')),
+          //       ),
+          //       Card(
+          //         child: ListTile(
+          //             title: Text('Motivation $int'),
+          //             subtitle: Text('this is a description of the motivation')),
+          //       ),
+          //       Card(
+          //         child: ListTile(
+          //             title: Text('Motivation $int'),
+          //             subtitle: Text('this is a description of the motivation')),
+          //       ),
+          //       Card(
+          //         child: ListTile(
+          //             title: Text('Motivation $int'),
+          //             subtitle: Text('this is a description of the motivation')),
+          //       ),
+          //       Card(
+          //         child: ListTile(
+          //             title: Text('Motivation $int'),
+          //             subtitle: Text('this is a description of the motivation')),
+          //       ),
+          //       Card(
+          //         child: ListTile(
+          //             title: Text('Motivation $int'),
+          //             subtitle: Text('this is a description of the motivation')),
+          //       ),
+          //       Card(
+          //         child: ListTile(
+          //             title: Text('Motivation $int'),
+          //             subtitle: Text('this is a description of the motivation')),
+          //       ),
+          //       Card(
+          //         child: ListTile(
+          //             title: Text('Motivation $int'),
+          //             subtitle: Text('this is a description of the motivation')),
+          //       ),
+          //       Card(
+          //         child: ListTile(
+          //             title: Text('Motivation $int'),
+          //             subtitle: Text('this is a description of the motivation')),
+          //       ),
+          //       Card(
+          //         child: ListTile(
+          //             title: Text('Motivation $int'),
+          //             subtitle: Text('this is a description of the motivation')),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+
+          SafeArea(
+              child: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(20.w),
           child: Container(
@@ -89,6 +327,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                       padding: EdgeInsets.all(20.w),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -298,126 +537,219 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                           ),
                           space20H,
                           SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: [
-                                  DataTable(columns: const [
-                                    DataColumn(
-                                      label: Center(
-                                        child: Text('Món ăn',
-                                            textAlign: TextAlign.center),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Center(
-                                        child: Text('Cửa hàng',
-                                            textAlign: TextAlign.center),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Center(
-                                        child: Text('Giá tiền',
-                                            textAlign: TextAlign.center),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Center(
-                                        child: Text('Trạng thái',
-                                            textAlign: TextAlign.center),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Center(
-                                        child: Text('Ngày tạo',
-                                            textAlign: TextAlign.center),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Center(child: Text('')),
-                                    ),
-                                  ], rows: [
-                                    DataRow(cells: [
-                                      DataCell(Center(
-                                          child: IntrinsicHeight(
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Container(
-                                              width: 80.w,
-                                              height: 80.w,
-                                              color: Colors.amber,
-                                              child: Image.asset(
-                                                "assets/images/banner1.png",
-                                                fit: BoxFit.cover,
+                            scrollDirection: Axis.horizontal,
+                            child:
+                                Row(mainAxisSize: MainAxisSize.min, children: [
+                              SizedBox(
+                                width: 1.sw * 2.4,
+                                child: ListView.builder(
+                                    // physics: const ClampingScrollPhysics(),
+                                    // scrollDirection: Axis.horizontal,
+                                    controller: scrollListFoodController,
+                                    shrinkWrap: true,
+                                    itemCount: filterProducts.length + 1,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      var dataLength = filterProducts.length;
+
+                                      if (index < dataLength) {
+                                        final product = filterProducts[index];
+                                        var imagePath1 = filterProducts[index]
+                                            ?.foodImages
+                                            .replaceAll('["', '');
+                                        var imagePath2 =
+                                            imagePath1.replaceAll('"]', '');
+                                        return Theme(
+                                          data: Theme.of(context).copyWith(
+                                              dividerColor: Colors.transparent),
+                                          child: DataTable(
+                                            dividerThickness: 0.0,
+                                            columns: const [
+                                              DataColumn(label: Text('')
+                                                  // Center(
+                                                  //   child: Text('Món ăn',
+                                                  //       textAlign: TextAlign.center),
+                                                  // ),
+                                                  ),
+                                              DataColumn(label: Text('')
+                                                  // Center(
+                                                  //   child: Text('Cửa hàng',
+                                                  //       textAlign: TextAlign.center),
+                                                  // ),
+                                                  ),
+                                              DataColumn(label: Text('')
+                                                  // Center(
+                                                  //   child: Text('Giá tiền',
+                                                  //       textAlign: TextAlign.center),
+                                                  // ),
+                                                  ),
+                                              DataColumn(label: Text('')
+                                                  // Center(
+                                                  //   child: Text('Trạng thái',
+                                                  //       textAlign: TextAlign.center),
+                                                  // ),
+                                                  ),
+                                              DataColumn(label: Text('')
+                                                  //  Center(
+                                                  //   child: Text('Ngày tạo',
+                                                  //       textAlign: TextAlign.center),
+                                                  // ),
+                                                  ),
+                                              DataColumn(
+                                                label: Center(child: Text('')),
                                               ),
-                                            ),
-                                            space10W,
-                                            TextApp(text: "Mon an 1")
-                                          ],
-                                        ),
-                                      ))),
-                                      const DataCell(Center(
-                                        child: Text('shop 1',
-                                            textAlign: TextAlign.center),
-                                      )),
-                                      const DataCell(Center(
-                                        child: Text('2,000,000đ',
-                                            textAlign: TextAlign.center),
-                                      )),
-                                      const DataCell(
-                                          Center(child: StatusBoxIsSelling())),
-                                      const DataCell(Center(
-                                        child: Text('26/02/2024 11:35:12',
-                                            textAlign: TextAlign.center),
-                                      )),
-                                      DataCell(Row(
-                                        children: [
-                                          SizedBox(
-                                            height: 30.h,
-                                            child: ButtonIcon(
-                                                isIconCircle: false,
-                                                color1: const Color.fromRGBO(
-                                                    23, 193, 232, 1),
-                                                color2: const Color.fromRGBO(
-                                                    23, 193, 232, 1),
-                                                event: () {
-                                                  // context.go(
-                                                  //     "/manager_edit_staff_info");
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            EditFood()),
-                                                  );
-                                                },
-                                                icon: Icons.edit),
+                                            ],
+                                            rows: [
+                                              DataRow(cells: [
+                                                DataCell(Center(
+                                                    child: IntrinsicHeight(
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Container(
+                                                        width: 80.w,
+                                                        height: 80.w,
+                                                        // color: Colors.amber,
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          fit: BoxFit.fill,
+                                                          imageUrl: httpImage +
+                                                              imagePath2,
+                                                          placeholder:
+                                                              (context, url) =>
+                                                                  SizedBox(
+                                                            height: 10.w,
+                                                            width: 10.w,
+                                                            child: const Center(
+                                                                child:
+                                                                    CircularProgressIndicator()),
+                                                          ),
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              const Icon(
+                                                                  Icons.error),
+                                                        ),
+                                                      ),
+                                                      space10W,
+                                                      SizedBox(
+                                                        width: 120.w,
+                                                        child: TextApp(
+                                                          isOverFlow: false,
+                                                          softWrap: true,
+                                                          text:
+                                                              product.foodName,
+                                                          fontsize: 14.sp,
+                                                          color: blueText,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ))),
+                                                DataCell(Center(
+                                                  child: SizedBox(
+                                                    width: 80.w,
+                                                    child: TextApp(
+                                                      isOverFlow: false,
+                                                      softWrap: true,
+                                                      text: product.storeName,
+                                                      fontsize: 14.sp,
+                                                    ),
+                                                  ),
+                                                )),
+                                                DataCell(Center(
+                                                  child: SizedBox(
+                                                    width: 120.w,
+                                                    child: TextApp(
+                                                      isOverFlow: false,
+                                                      softWrap: true,
+                                                      text:
+                                                          "${MoneyFormatter(amount: (product.foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                      fontsize: 14.sp,
+                                                    ),
+                                                  ),
+                                                )),
+                                                const DataCell(Center(
+                                                    child:
+                                                        StatusBoxIsSelling())),
+                                                DataCell(Center(
+                                                  child: SizedBox(
+                                                    width: 120.w,
+                                                    child: TextApp(
+                                                      isOverFlow: false,
+                                                      softWrap: true,
+                                                      text: formatDateTime(
+                                                          product.createdAt),
+                                                      fontsize: 14.sp,
+                                                    ),
+                                                  ),
+                                                )),
+                                                DataCell(Row(
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 30.h,
+                                                      child: ButtonIcon(
+                                                          isIconCircle: false,
+                                                          color1: const Color
+                                                              .fromRGBO(
+                                                              23, 193, 232, 1),
+                                                          color2: const Color
+                                                              .fromRGBO(
+                                                              23, 193, 232, 1),
+                                                          event: () {
+                                                            // context.go(
+                                                            //     "/manager_edit_staff_info");
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          EditFood()),
+                                                            );
+                                                          },
+                                                          icon: Icons.edit),
+                                                    ),
+                                                    space15W,
+                                                    SizedBox(
+                                                      height: 30.h,
+                                                      child: ButtonIcon(
+                                                          isIconCircle: false,
+                                                          color1:
+                                                              const Color
+                                                                  .fromRGBO(
+                                                                  234, 6, 6, 1),
+                                                          color2: const Color
+                                                              .fromRGBO(
+                                                              234, 6, 6, 1),
+                                                          event: () {
+                                                            showConfirmDialog(
+                                                                context, () {
+                                                              print("ConFIRM");
+                                                            });
+                                                          },
+                                                          icon: Icons.delete),
+                                                    )
+                                                  ],
+                                                ))
+                                              ]),
+                                            ],
                                           ),
-                                          space15W,
-                                          SizedBox(
-                                            height: 30.h,
-                                            child: ButtonIcon(
-                                                isIconCircle: false,
-                                                color1: const Color.fromRGBO(
-                                                    234, 6, 6, 1),
-                                                color2: const Color.fromRGBO(
-                                                    234, 6, 6, 1),
-                                                event: () {
-                                                  showConfirmDialog(context,
-                                                      () {
-                                                    print("ConFIRM");
-                                                  });
-                                                },
-                                                icon: Icons.delete),
-                                          )
-                                        ],
-                                      ))
-                                    ]),
-                                  ]),
-                                ],
-                              ))
+                                        );
+                                      } else {
+                                        return Center(
+                                          child: hasMore
+                                              ? CircularProgressIndicator()
+                                              : Container(),
+                                        );
+                                      }
+                                    }),
+                              )
+                            ]),
+                          )
                         ],
                       ),
                     )),

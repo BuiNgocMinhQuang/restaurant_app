@@ -8,7 +8,9 @@ class ItemDrawer extends StatelessWidget {
   Color iconColor;
   double fontSize;
   double iconSize;
-  IconData icon;
+  IconData? icon;
+  bool isShowIcon;
+  Widget? image;
 
   final String text;
   bool isExpand;
@@ -17,7 +19,9 @@ class ItemDrawer extends StatelessWidget {
       {Key? key,
       required this.text,
       required this.subItem,
-      required this.icon,
+      this.image,
+      this.icon,
+      this.isShowIcon = true,
       this.isExpand = true,
       this.iconSize = 0,
       this.fontSize = 0,
@@ -47,11 +51,13 @@ class ItemDrawer extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Icon(
-                  icon,
-                  size: iconSize == 0 ? 20.w : iconSize,
-                  color: iconColor,
-                ),
+                child: isShowIcon
+                    ? Icon(
+                        icon,
+                        size: iconSize == 0 ? 20.w : iconSize,
+                        color: iconColor,
+                      )
+                    : image,
               ),
               title: Text(
                 text,
@@ -75,11 +81,13 @@ class ItemDrawer extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Icon(
-                  icon,
-                  size: iconSize == 0 ? 20.w : iconSize,
-                  color: iconColor,
-                ),
+                child: isShowIcon
+                    ? Icon(
+                        icon,
+                        size: iconSize == 0 ? 20.w : iconSize,
+                        color: iconColor,
+                      )
+                    : image,
               ),
               title: Text(
                 text,

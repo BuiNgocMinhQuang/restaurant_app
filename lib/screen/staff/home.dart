@@ -33,7 +33,8 @@ class _StaffBookingTableState extends State<StaffBookingTable>
   final String currentRole = "staff";
   final String currentShopId = getStaffShopID;
   var tokenStaff = StorageUtils.instance.getString(key: 'token_staff') ?? '';
-
+  var numberOfRoom =
+      int.parse(StorageUtils.instance.getString(key: 'numberOfRoom') ?? '1');
   void getDataTabIndex({String? roomId}) async {
     await Future.delayed(const Duration(seconds: 0));
 
@@ -109,7 +110,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
   @override
   Widget build(BuildContext context) {
     TabController _tabController = TabController(
-      length: 2,
+      length: numberOfRoom,
       vsync: this,
     );
 

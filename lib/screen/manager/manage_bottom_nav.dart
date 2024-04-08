@@ -1,6 +1,12 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
+import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
+import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/screen/manager/food_menu/add_food.dart';
 import 'package:app_restaurant/screen/manager/staff/add_staff.dart';
 import 'package:app_restaurant/screen/manager/store/booking_table.dart';
@@ -19,11 +25,15 @@ import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/item_drawer.dart';
 import 'package:app_restaurant/widgets/sub_item_drawer.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
+import 'package:app_restaurant/env/index.dart';
+import 'package:app_restaurant/constant/api/index.dart';
 
 class ManagerFabTab extends StatefulWidget {
   ManagerFabTab({Key? key, required this.selectedIndex}) : super(key: key);
@@ -35,14 +45,8 @@ class ManagerFabTab extends StatefulWidget {
 class _ManagerFabTabState extends State<ManagerFabTab> {
   int currentIndex = 2;
   bool isHaveNoti = true;
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration.zero, () {
-      checkTokenExpires();
-    });
-  }
-
+  String shopIDPar = '';
+  List<DataListStore> listStoreManagerData = [];
   void tapDrawerChangeBotNav(int index) {
     checkTokenExpires();
     final CurvedNavigationBarState? navBarState =
@@ -85,25 +89,82 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
     }
   }
 
-  final List<Widget> pages = const [
-    ListStores(), //index = 0
-    ListStaff(), //index = 1
-    ManagerHome(), //index = 2
-    ListFoodManager(), //index = 3
-    ManagerInformation(), //index = 4
-    AddStaff(), //index = 5
-    ManagerAddFood(), //index 6
-    ManagerBookingTable(), //index = 7
-    ManagerListBill(), //index = 8
-    ManagerBroughtReceipt(), //index = 9
-    ListInventory(), //index 10
-    ImportInventory() //11
-  ];
+  void getListStore() async {
+    var token = StorageUtils.instance.getString(key: 'token_manager');
+    final responseListStore = await http.post(
+      Uri.parse('$baseUrl$managerGetListStores'),
+      headers: {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+    final dataListStore = jsonDecode(responseListStore.body);
+    print("DATA LIST STORES $dataListStore");
+
+    try {
+      if (dataListStore['status'] == 200) {
+        setState(() {
+          var listStoreManagerDataRes = ListStoreModel.fromJson(dataListStore);
+          listStoreManagerData.addAll(listStoreManagerDataRes.data);
+        });
+      } else {
+        print("ERRRO GET LIST STORE 111111");
+      }
+    } catch (error) {
+      print("ERRRO GET LIST STORE $error");
+    }
+  }
+
+  var tokenManager =
+      StorageUtils.instance.getString(key: 'token_manager') ?? '';
+  void getDataTabIndex({required String roomId, required String shopID}) async {
+    await Future.delayed(const Duration(seconds: 0));
+    BlocProvider.of<ListRoomBloc>(context).add(
+      GetListRoom(
+          token: tokenManager,
+          client: "user",
+          shopId: shopID,
+          isApi: true,
+          roomId: roomId),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      checkTokenExpires();
+      getListStore();
+    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) => () {
+    //         checkTokenExpires();
+    //         getListStore();
+    //       });
+    // });
+  }
+
+  // final List<Widget> pages = const [
+  //   ListStores(), //index = 0
+  //   ListStaff(), //index = 1
+  //   ManagerHome(), //index = 2
+  //   ListFoodManager(), //index = 3
+  //   ManagerInformation(), //index = 4
+  //   AddStaff(), //index = 5
+  //   ManagerAddFood(), //index 6
+  //   ManagerBookingTable(), //index = 7
+  //   ManagerListBill(), //index = 8
+  //   ManagerBroughtReceipt(), //index = 9
+  //   ListInventory(), //index 10
+  //   ImportInventory() //11
+  // ];
 
   final PageStorageBucket bucket = PageStorageBucket();
   GlobalKey<CurvedNavigationBarState> bottomNavigationKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
+    log(listStoreManagerData.length.toString());
     Widget currentScreen = currentIndex == 0
         ? const ListStores()
         : currentIndex == 1
@@ -119,7 +180,9 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             : currentIndex == 6
                                 ? const ManagerAddFood()
                                 : currentIndex == 7
-                                    ? const ManagerBookingTable()
+                                    ? ManagerBookingTable(
+                                        shopID: shopIDPar,
+                                      )
                                     : currentIndex == 8
                                         ? const ManagerListBill()
                                         : currentIndex == 9
@@ -227,10 +290,12 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                   onTap: () {
                     setState(() {
                       // currentScreen = const ManagerHome();
+
                       currentIndex = 2;
                       tapDrawerChangeBotNav(2);
                     });
                     Navigator.pop(context);
+                    checkTokenExpires();
                   },
                   child: ItemDrawer(
                     isExpand: false,
@@ -270,10 +335,13 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             event: () {
                               setState(() {
                                 // currentScreen = const ListStores();
+
                                 currentIndex = 0;
 
                                 tapDrawerChangeBotNav(0);
                               });
+                              checkTokenExpires();
+
                               Navigator.pop(context);
                             }),
                       ],
@@ -302,9 +370,12 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             event: () {
                               setState(() {
                                 // currentScreen = const ListStaff();
+
                                 currentIndex = 1;
                                 tapDrawerChangeBotNav(1);
                               });
+                              checkTokenExpires();
+
                               Navigator.pop(context);
                             }),
                         SizedBox(
@@ -318,6 +389,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                               setState(() {
                                 currentIndex = 5;
                               });
+                              checkTokenExpires();
+
                               Navigator.pop(context);
                             })
                       ],
@@ -337,10 +410,15 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             textColor:
                                 currentIndex == 3 ? Colors.blue : Colors.black,
                             event: () {
+                              log("PRESSS");
                               setState(() {
+                                checkTokenExpires();
+
                                 currentIndex = 3;
                                 tapDrawerChangeBotNav(3);
                               });
+                              // checkTokenExpires();
+
                               Navigator.pop(context);
                             }),
                         SizedBox(
@@ -354,6 +432,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                               setState(() {
                                 currentIndex = 6;
                               });
+                              checkTokenExpires();
+
                               Navigator.pop(context);
                             })
                       ],
@@ -378,61 +458,98 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                 SizedBox(
                   height: 25.h,
                 ),
-                InkWell(
-                  onTap: () {},
-                  child: ItemDrawer(
-                      isExpand: true,
-                      text: 'Cửa hàng 1',
-                      iconColor: currentIndex == 7 ||
-                              currentIndex == 8 ||
-                              currentIndex == 9
-                          ? Colors.white
-                          : Colors.black,
-                      backgroundIconColor: currentIndex == 7 ||
-                              currentIndex == 8 ||
-                              currentIndex == 9
-                          ? Colors.blue
-                          : const Color.fromRGBO(233, 236, 239, 1),
-                      subItem: [
-                        SubItemDrawer(
-                            text: "Đặt bàn",
-                            textColor:
-                                currentIndex == 7 ? Colors.blue : Colors.black,
-                            event: () {
-                              setState(() {
-                                currentIndex = 7;
-                              });
-                              Navigator.pop(context);
-                            }),
-                        SizedBox(
-                          height: 10.h,
+                ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: listStoreManagerData.length,
+                    itemBuilder: (context, index) {
+                      var imagePath1 =
+                          (listStoreManagerData[index].storeImages ?? '')
+                              .replaceAll('["', '');
+                      var imagePath2 = imagePath1.replaceAll('"]', '');
+                      return InkWell(
+                        onTap: () {},
+                        child: ItemDrawer(
+                          image: CachedNetworkImage(
+                            fit: BoxFit.fill,
+                            imageUrl: httpImage + imagePath2,
+                            placeholder: (context, url) => SizedBox(
+                              height: 10.w,
+                              width: 10.w,
+                              child: const Center(
+                                  child: CircularProgressIndicator()),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                          ),
+                          isShowIcon: false,
+                          isExpand: true,
+                          text: listStoreManagerData[index].storeName,
+                          iconColor: currentIndex == 7 ||
+                                  currentIndex == 8 ||
+                                  currentIndex == 9
+                              ? Colors.white
+                              : Colors.black,
+                          backgroundIconColor: currentIndex == 7 ||
+                                  currentIndex == 8 ||
+                                  currentIndex == 9
+                              ? Colors.blue
+                              : const Color.fromRGBO(233, 236, 239, 1),
+                          subItem: [
+                            SubItemDrawer(
+                                text: "Đặt bàn",
+                                textColor: currentIndex == 7
+                                    ? Colors.blue
+                                    : Colors.black,
+                                event: () {
+                                  setState(() {
+                                    log("VAOOOO");
+
+                                    shopIDPar = listStoreManagerData[index]
+                                        .shopId
+                                        .toString();
+                                    getDataTabIndex(
+                                        roomId: "", shopID: shopIDPar);
+                                    currentIndex = 7;
+                                  });
+                                  checkTokenExpires();
+
+                                  // context.go("/manager_booking_table");
+                                  Navigator.pop(context);
+                                }),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            SubItemDrawer(
+                                text: "Danh sách hóa đơn",
+                                textColor: currentIndex == 8
+                                    ? Colors.blue
+                                    : Colors.black,
+                                event: () {
+                                  setState(() {
+                                    currentIndex = 8;
+                                  });
+                                  Navigator.pop(context);
+                                }),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            SubItemDrawer(
+                                text: "Hóa đơn mang về",
+                                textColor: currentIndex == 9
+                                    ? Colors.blue
+                                    : Colors.black,
+                                event: () {
+                                  setState(() {
+                                    currentIndex = 9;
+                                  });
+                                  checkTokenExpires();
+
+                                  Navigator.pop(context);
+                                }),
+                          ],
                         ),
-                        SubItemDrawer(
-                            text: "Danh sách hóa đơn",
-                            textColor:
-                                currentIndex == 8 ? Colors.blue : Colors.black,
-                            event: () {
-                              setState(() {
-                                currentIndex = 8;
-                              });
-                              Navigator.pop(context);
-                            }),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        SubItemDrawer(
-                            text: "Hóa đơn mang về",
-                            textColor:
-                                currentIndex == 9 ? Colors.blue : Colors.black,
-                            event: () {
-                              setState(() {
-                                currentIndex = 9;
-                              });
-                              Navigator.pop(context);
-                            }),
-                      ],
-                      icon: Icons.person),
-                ),
+                      );
+                    }),
                 SizedBox(
                   height: 25.h,
                 ),
@@ -466,6 +583,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                               setState(() {
                                 currentIndex = 10;
                               });
+                              checkTokenExpires();
+
                               Navigator.pop(context);
                             }),
                         SizedBox(
@@ -479,6 +598,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                               setState(() {
                                 currentIndex = 11;
                               });
+                              checkTokenExpires();
+
                               Navigator.pop(context);
                             })
                       ],
@@ -583,7 +704,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
         onTap: (index) {
           setState(() {
             currentIndex = index;
-            // checkTokenExpires();
+            checkTokenExpires();
           });
         },
         letIndexChange: (index) => true,

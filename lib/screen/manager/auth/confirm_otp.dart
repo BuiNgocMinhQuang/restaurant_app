@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
@@ -11,6 +14,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
+import 'package:app_restaurant/env/index.dart';
+import 'package:app_restaurant/constant/api/index.dart';
 
 class ManagerConfirmOTP extends StatefulWidget {
   final String? verificationId;
@@ -23,7 +29,68 @@ class ManagerConfirmOTP extends StatefulWidget {
 class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
   String otp = "";
   bool showButton = false;
-  @override
+  void handleCheckOtp({
+    required String? otp,
+  }) async {
+    try {
+      var tokenCheckOtp = StorageUtils.instance
+          .getString(key: 'tokenManagerCheckOTP')
+          .toString();
+      var emailCheckOtp = StorageUtils.instance
+          .getString(key: 'emailManagerCheckOTP')
+          .toString();
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$checkOtpManager'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          "email": emailCheckOtp,
+          "token": tokenCheckOtp,
+          "otp": otp,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+
+      print("DADATATA $data");
+      if (data['status'] == 200) {
+        print("HANLDE FOGOT PASSWORD OK");
+        StorageUtils.instance.setString(key: 'OTPtoManager', val: otp ?? '');
+        final messRes = data['message'];
+        final messText = messRes['text'];
+        navigatorKey.currentContext?.go('/manager_change_password');
+
+        Future.delayed(Duration(milliseconds: 300), () {
+          showCustomDialogModal(
+            typeDialog: "succes",
+            context: navigatorKey.currentContext,
+            textDesc: messText,
+            title: "Thành công",
+            colorButton: Colors.green,
+            btnText: "OK",
+          );
+        });
+      } else {
+        final messRes = data['message'];
+        final messFailed = messRes['text'];
+
+        showCustomDialogModal(
+            context: navigatorKey.currentContext,
+            textDesc: messFailed,
+            title: "Thất bại",
+            colorButton: Colors.red,
+            btnText: "OK",
+            typeDialog: "error");
+
+        print("FOGOT PASSWORD ERROR 1");
+      }
+    } catch (error) {
+      print("CHECK OTP ERROR ${error}");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -160,12 +227,13 @@ class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
                                                 color1: color1BlueButton,
                                                 color2: color2BlueButton,
                                                 event: () {
-                                                  if (otp == "1234") {
-                                                    showWrongOtpDialog(context);
-                                                  } else {
-                                                    context.go(
-                                                        "/manager_change_password");
-                                                  }
+                                                  handleCheckOtp(otp: otp);
+                                                  // if (otp == "1234") {
+                                                  //   showWrongOtpDialog(context);
+                                                  // } else {
+                                                  //   context.go(
+                                                  //       "/manager_change_password");
+                                                  // }
                                                 },
                                                 text: confirm,
                                                 fontSize: 12.sp,

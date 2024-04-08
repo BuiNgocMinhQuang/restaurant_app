@@ -36,9 +36,9 @@ class _StaffConfirmOTPState extends State<StaffConfirmOTP> {
   }) async {
     try {
       var tokenCheckOtp =
-          StorageUtils.instance.getString(key: 'tokenCheckOTP').toString();
+          StorageUtils.instance.getString(key: 'tokenStaffCheckOTP').toString();
       var emailCheckOtp =
-          StorageUtils.instance.getString(key: 'emailCheckOTP').toString();
+          StorageUtils.instance.getString(key: 'emailStaffCheckOTP').toString();
 
       final respons = await http.post(
         Uri.parse('$baseUrl$checkOtpStaff'),
@@ -57,7 +57,7 @@ class _StaffConfirmOTPState extends State<StaffConfirmOTP> {
       print("DADATATA $data");
       if (data['status'] == 200) {
         print("HANLDE FOGOT PASSWORD OK");
-        StorageUtils.instance.setString(key: 'OTP', val: otp ?? '');
+        StorageUtils.instance.setString(key: 'OTPtoStaff', val: otp ?? '');
         final messRes = data['message'];
         final messText = messRes['text'];
         navigatorKey.currentContext?.go('/staff_change_password');

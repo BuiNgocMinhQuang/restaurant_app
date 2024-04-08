@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:app_restaurant/bloc/login/staff_login_bloc.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,11 +51,23 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
       try {
         if (data['status'] == 200) {
           var roomDataRes = ListRoomModel.fromJson(data);
+          var numberOfRoom = roomDataRes.rooms?.length;
+          StorageUtils.instance
+              .setString(key: 'numberOfRoom', val: numberOfRoom.toString());
           emit(state.copyWith(listRoomModel: roomDataRes));
           emit(state.copyWith(listRoomStatus: ListRoomStatus.succes));
         } else {
           emit(state.copyWith(listRoomStatus: ListRoomStatus.failed));
           emit(state.copyWith(errorText: message));
+          showLoginSessionExpiredDialog(
+              context: navigatorKey.currentContext,
+              okEvent: () {
+                // handleLogout();
+                BlocProvider.of<LoginBloc>(navigatorKey.currentContext!)
+                    .add(const LogoutStaff());
+                StorageUtils.instance.removeKey(key: 'token_staff');
+                navigatorKey.currentContext!.go("/staff_sign_in");
+              });
         }
       } catch (error) {
         print("ERROR GET LIST ROOM $error");

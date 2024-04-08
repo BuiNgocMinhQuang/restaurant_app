@@ -1,6 +1,5 @@
 import 'package:app_restaurant/bloc/bill_table/bill_table_bloc.dart';
 import 'package:app_restaurant/bloc/brought_receipt/brought_receipt_bloc.dart';
-import 'package:app_restaurant/bloc/food/menu_food_bloc.dart';
 import 'package:app_restaurant/bloc/list_bill_shop/list_bill_shop_bloc.dart';
 import 'package:app_restaurant/bloc/login/staff_login_bloc.dart';
 import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
@@ -46,7 +45,6 @@ class AppBlocProvider extends StatelessWidget {
         ),
         BlocProvider(create: (_) => CancleBroughtReceiptBloc()),
         BlocProvider(create: (_) => PrintBroughtReceiptBloc()),
-        BlocProvider(create: (_) => MenuFoodBloc()),
         BlocProvider(create: (_) => ListBillShopBloc()),
       ],
       child: child,

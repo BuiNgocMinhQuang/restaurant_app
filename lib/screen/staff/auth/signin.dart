@@ -347,42 +347,43 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                                   color1: color1BlueButton,
                                                   color2: color2BlueButton,
                                                   event: () async {
-                                                    // if (_formField.currentState!
-                                                    //     .validate()) {
-                                                    //   // context.go("/staff_home");
-                                                    //   BlocProvider.of<
-                                                    //               LoginBloc>(
-                                                    //           context)
-                                                    //       .add(
-                                                    //     StaffLoginButtonPressed(
-                                                    //       remember: isRemember,
-                                                    //       shopId:
-                                                    //           storeIdController
-                                                    //               .text,
-                                                    //       email: emailController
-                                                    //           .text,
+                                                    if (_formField.currentState!
+                                                        .validate()) {
+                                                      // context.go("/staff_home");
+                                                      BlocProvider.of<
+                                                                  LoginBloc>(
+                                                              context)
+                                                          .add(
+                                                        StaffLoginButtonPressed(
+                                                          remember: isRemember,
+                                                          shopId:
+                                                              storeIdController
+                                                                  .text,
+                                                          email: emailController
+                                                              .text,
+                                                          password:
+                                                              passworldController
+                                                                  .text,
+                                                        ),
+                                                      );
+                                                      storeIdController.clear();
+                                                      emailController.clear();
+                                                      passworldController
+                                                          .clear();
+                                                    }
+                                                    // print(
+                                                    //     "REMEBER ${isRemember}");
+                                                    // BlocProvider.of<LoginBloc>(
+                                                    //         context)
+                                                    //     .add(
+                                                    //   StaffLoginButtonPressed(
+                                                    //       shopId: "123456",
+                                                    //       email:
+                                                    //           "buingocminhquang2@gmail.com",
                                                     //       password:
-                                                    //           passworldController
-                                                    //               .text,
-                                                    //     ),
-                                                    //   );
-                                                    //   storeIdController.clear();
-                                                    //   emailController.clear();
-                                                    //   passworldController
-                                                    //       .clear();
-                                                    // }
-                                                    print(
-                                                        "REMEBER ${isRemember}");
-                                                    BlocProvider.of<LoginBloc>(
-                                                            context)
-                                                        .add(
-                                                      StaffLoginButtonPressed(
-                                                          shopId: "123456",
-                                                          email:
-                                                              "buingocminhquang2@gmail.com",
-                                                          password: "123456789",
-                                                          remember: isRemember),
-                                                    );
+                                                    //           "1234567890",
+                                                    //       remember: isRemember),
+                                                    // );
                                                     //khong xoa
                                                   },
                                                   text: "Đăng nhập",

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/env/index.dart';
@@ -66,7 +67,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               .setString(key: 'token_staff_expires', val: tokenExpiresAt ?? '');
           // StorageUtils.instance
           //     .setString(key: 'auth_staff', val: authDataString);
-
+          log(token.toString());
           emit(state.copyWith(loginStatus: LoginStatus.success));
 
           navigatorKey.currentContext?.go("/staff_home");

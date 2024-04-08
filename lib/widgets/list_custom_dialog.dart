@@ -24,6 +24,7 @@ import 'package:app_restaurant/widgets/button/button_app.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/custom_tab.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -111,7 +112,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
         DateTime(date.year, date.month, date.day, time.hour, time.minute);
     setState(() {
       dateTime = newDateTime;
-      _dateStartController.text = newDateTime.toString();
+      _dateStartController.text = formatDateTime(newDateTime.toString());
     });
   }
 
@@ -2714,10 +2715,20 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                                                                             height: 80.w,
                                                                             child: ClipRRect(
                                                                               borderRadius: BorderRadius.only(topLeft: Radius.circular(15.r), topRight: Radius.circular(15.r)),
-                                                                              child: Image.network(
-                                                                                httpImage + imagePath2,
+                                                                              child: CachedNetworkImage(
                                                                                 fit: BoxFit.cover,
+                                                                                imageUrl: httpImage + imagePath2,
+                                                                                placeholder: (context, url) => SizedBox(
+                                                                                  height: 10.w,
+                                                                                  width: 10.w,
+                                                                                  child: const Center(child: CircularProgressIndicator()),
+                                                                                ),
+                                                                                errorWidget: (context, url, error) => const Icon(Icons.error),
                                                                               ),
+                                                                              //  Image.network(
+                                                                              //   httpImage + imagePath2,
+                                                                              //   fit: BoxFit.cover,
+                                                                              // ),
                                                                             )),
                                                                         space50W,
                                                                         Column(
@@ -4392,10 +4403,26 @@ class _ManageBroughtReceiptDialogState
                                                 topLeft: Radius.circular(15.r),
                                                 topRight:
                                                     Radius.circular(15.r)),
-                                            child: Image.network(
-                                              httpImage + imagePath2,
-                                              fit: BoxFit.cover,
+                                            child: CachedNetworkImage(
+                                              fit: BoxFit.fill,
+                                              imageUrl: httpImage + imagePath2,
+                                              placeholder: (context, url) =>
+                                                  SizedBox(
+                                                height: 10.w,
+                                                width: 10.w,
+                                                child: const Center(
+                                                    child:
+                                                        CircularProgressIndicator()),
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      const Icon(Icons.error),
                                             ),
+
+                                            // Image.network(
+                                            //   httpImage + imagePath2,
+                                            //   fit: BoxFit.cover,
+                                            // ),
                                           )),
                                       space10H,
                                       Column(
@@ -4698,11 +4725,13 @@ class PrintBillDialog extends StatefulWidget {
   final String roomName;
   final String tableName;
   final int orderID;
+  final String role;
   const PrintBillDialog(
       {Key? key,
       required this.roomName,
       required this.tableName,
       required this.orderID,
+      required this.role,
       required this.token})
       : super(key: key);
   @override
@@ -4713,7 +4742,7 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
   void printBroughtReceipt({required int orderID}) async {
     BlocProvider.of<PrintBroughtReceiptBloc>(context).add(PrintBroughtReceipt(
         token: widget.token,
-        client: 'staff',
+        client: widget.role,
         shopId: getStaffShopID,
         orderId: orderID));
   }

@@ -350,38 +350,38 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                     color1: color1BlueButton,
                                                     color2: color2BlueButton,
                                                     event: () {
-                                                      // if (_formField
-                                                      //     .currentState!
-                                                      //     .validate()) {
-                                                      //   BlocProvider.of<
-                                                      //               ManagerLoginBloc>(
-                                                      //           context)
-                                                      //       .add(
-                                                      //     ManagerLoginButtonPressed(
-                                                      //       email:
-                                                      //           emailController
-                                                      //               .text,
-                                                      //       password:
-                                                      //           passworldController
-                                                      //               .text,
-                                                      //     ),
-                                                      //   );
-                                                      //   // emailController.clear();
-                                                      //   // passworldController
-                                                      //   //     .clear();
-                                                      // }
+                                                      if (_formField
+                                                          .currentState!
+                                                          .validate()) {
+                                                        BlocProvider.of<
+                                                                    ManagerLoginBloc>(
+                                                                context)
+                                                            .add(
+                                                          ManagerLoginButtonPressed(
+                                                              email:
+                                                                  emailController
+                                                                      .text,
+                                                              password:
+                                                                  passworldController
+                                                                      .text,
+                                                              remember: light),
+                                                        );
+                                                        // emailController.clear();
+                                                        // passworldController
+                                                        //     .clear();
+                                                      }
 
-                                                      BlocProvider.of<
-                                                                  ManagerLoginBloc>(
-                                                              context)
-                                                          .add(
-                                                        ManagerLoginButtonPressed(
-                                                            email:
-                                                                "buingocminhquang@gmail.com",
-                                                            password:
-                                                                "123456789",
-                                                            remember: light),
-                                                      );
+                                                      // BlocProvider.of<
+                                                      //             ManagerLoginBloc>(
+                                                      //         context)
+                                                      //     .add(
+                                                      //   ManagerLoginButtonPressed(
+                                                      //       email:
+                                                      //           "buingocminhquang@gmail.com",
+                                                      //       password:
+                                                      //           "1234567890",
+                                                      //       remember: light),
+                                                      // );
                                                     },
                                                     text: login,
                                                     fontSize: 12.sp,

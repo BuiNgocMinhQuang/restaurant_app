@@ -339,6 +339,7 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                                 context: context,
                                 builder: (BuildContext context) {
                                   return PrintBillDialog(
+                                    role: 'user',
                                     token: tokenManager,
                                     orderID: newListAllBillShop[index].orderId,
                                     roomName: newListAllBillShop[index]
@@ -502,6 +503,7 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                                 context: context,
                                 builder: (BuildContext context) {
                                   return PrintBillDialog(
+                                    role: 'user',
                                     token: tokenManager,
                                     orderID: listBillComplete[index].orderId,
                                     roomName: listBillComplete[index]
@@ -669,6 +671,7 @@ class _PendingWidgetState extends State<PendingWidget>
                                 context: context,
                                 builder: (BuildContext context) {
                                   return PrintBillDialog(
+                                    role: 'user',
                                     token: tokenManager,
                                     orderID: listBillPending[index].orderId,
                                     roomName: listBillPending[index]
@@ -834,6 +837,7 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                                 context: context,
                                 builder: (BuildContext context) {
                                   return PrintBillDialog(
+                                    role: 'user',
                                     token: tokenManager,
                                     orderID: listBillCancle[index].orderId,
                                     roomName: listBillCancle[index]

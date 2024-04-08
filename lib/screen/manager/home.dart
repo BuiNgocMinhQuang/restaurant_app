@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -45,7 +46,23 @@ class _ManagerHomeState extends State<ManagerHome> {
                   return Card(
                     child: Row(
                       children: [
-                        Image.network(imageSrc),
+                        Container(
+                          width: 100.w,
+                          height: 100.w,
+                          color: Colors.grey,
+                          child: CachedNetworkImage(
+                            fit: BoxFit.fill,
+                            imageUrl: imageSrc,
+                            placeholder: (context, url) => SizedBox(
+                              height: 10.w,
+                              width: 10.w,
+                              child: const Center(
+                                  child: CircularProgressIndicator()),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                          ),
+                        ),
                         const SizedBox(
                           width: 20,
                         ),

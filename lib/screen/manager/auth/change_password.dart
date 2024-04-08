@@ -1,13 +1,18 @@
+import 'dart:convert';
+
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/text.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
-import 'package:app_restaurant/widgets/text/text_app.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
+import 'package:app_restaurant/env/index.dart';
+import 'package:app_restaurant/constant/api/index.dart';
 
 class ManagerChangePassword extends StatefulWidget {
   const ManagerChangePassword({super.key});
@@ -21,8 +26,76 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
   bool rePasswordVisible = true;
 
   final _formField = GlobalKey<FormState>();
-  final passworldController = TextEditingController();
+  final passwordController = TextEditingController();
   final rePassworldController = TextEditingController();
+  void handleChangePassword({
+    required String password,
+    required String rePassword,
+  }) async {
+    try {
+      var tokenCheckOtp = StorageUtils.instance
+          .getString(key: 'tokenManagerCheckOTP')
+          .toString();
+      var emailCheckOtp = StorageUtils.instance
+          .getString(key: 'emailManagerCheckOTP')
+          .toString();
+      var paramOTP =
+          StorageUtils.instance.getString(key: 'OTPtoManager').toString();
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$changePasswordManagerWhenForget'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          "email": emailCheckOtp,
+          "token": tokenCheckOtp,
+          "otp": paramOTP,
+          "password_new": password,
+          "confirm_password_new": rePassword,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+
+      print("DADATATA $data");
+      if (data['status'] == 200) {
+        print("HANLDE FOGOT PASSWORD OK");
+        final messRes = data['message'];
+        final messText = messRes['text'];
+
+        passwordController.clear();
+        rePassworldController.clear();
+        navigatorKey.currentContext?.go('/');
+
+        Future.delayed(Duration(milliseconds: 300), () {
+          showCustomDialogModal(
+            typeDialog: "succes",
+            context: navigatorKey.currentContext,
+            textDesc: messText,
+            title: "Thành công",
+            colorButton: Colors.green,
+            btnText: "OK",
+          );
+        });
+      } else {
+        final messRes = data['message'];
+        final messFailed = messRes['text'];
+
+        showCustomDialogModal(
+            context: navigatorKey.currentContext,
+            textDesc: messFailed,
+            title: "Thất bại",
+            colorButton: Colors.red,
+            btnText: "OK",
+            typeDialog: "error");
+
+        print("FOGOT PASSWORD ERROR 1");
+      }
+    } catch (error) {
+      print("CHECK OTP ERROR ${error}");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +199,7 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                 ),
                                                 TextFormField(
                                                   controller:
-                                                      passworldController,
+                                                      passwordController,
                                                   obscureText: passwordVisible,
                                                   style: TextStyle(
                                                       fontSize: 12.sp,
@@ -211,7 +284,7 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                     if (value!.isEmpty) {
                                                       return rePasswordIsRequied;
                                                     } else if (value !=
-                                                        passworldController
+                                                        passwordController
                                                             .text) {
                                                       return rePasswordNotCorrect;
                                                     } else {
@@ -283,13 +356,13 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                   event: () {
                                                     if (_formField.currentState!
                                                         .validate()) {
-                                                      context.go("/");
-                                                      showChangePasswordSuccessDialog(
-                                                          context); //
-                                                      passworldController
-                                                          .clear();
-                                                      rePassworldController
-                                                          .clear();
+                                                      handleChangePassword(
+                                                          password:
+                                                              passwordController
+                                                                  .text,
+                                                          rePassword:
+                                                              rePassworldController
+                                                                  .text);
                                                     }
                                                   },
                                                   text: confirm,
