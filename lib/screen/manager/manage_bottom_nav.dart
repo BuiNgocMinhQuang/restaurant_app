@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:app_restaurant/bloc/brought_receipt/brought_receipt_bloc.dart';
+import 'package:app_restaurant/bloc/list_bill_shop/list_bill_shop_bloc.dart';
 import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
 import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
-import 'package:app_restaurant/routers/app_router_config.dart';
+import 'package:app_restaurant/model/manager_infor_model.dart';
 import 'package:app_restaurant/screen/manager/food_menu/add_food.dart';
 import 'package:app_restaurant/screen/manager/staff/add_staff.dart';
 import 'package:app_restaurant/screen/manager/store/booking_table.dart';
@@ -44,9 +46,16 @@ class ManagerFabTab extends StatefulWidget {
 
 class _ManagerFabTabState extends State<ManagerFabTab> {
   int currentIndex = 2;
+  int? selectedStoreIndex;
   bool isHaveNoti = true;
   String shopIDPar = '';
   List<DataListStore> listStoreManagerData = [];
+  List<String> listImageBanner = [];
+  DataManagerInfor? managerInforData;
+
+  var numberOfRoom =
+      int.parse(StorageUtils.instance.getString(key: 'numberOfRoom') ?? '1');
+
   void tapDrawerChangeBotNav(int index) {
     checkTokenExpires();
     final CurvedNavigationBarState? navBarState =
@@ -107,6 +116,12 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
         setState(() {
           var listStoreManagerDataRes = ListStoreModel.fromJson(dataListStore);
           listStoreManagerData.addAll(listStoreManagerDataRes.data);
+          listStoreManagerData.where((imageStore) {
+            final image1 = imageStore.storeImages.replaceAll('["', '');
+            final image2 = image1.replaceAll('"]', '');
+            listImageBanner.add(image2);
+            return true;
+          }).toList();
         });
       } else {
         print("ERRRO GET LIST STORE 111111");
@@ -130,6 +145,60 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
     );
   }
 
+  void getListBillShop(
+      {required Map<String, int?> filtersFlg, required String shopID}) async {
+    BlocProvider.of<ListBillShopBloc>(context).add(GetListBillShop(
+        token: tokenManager,
+        client: "user",
+        shopId: shopID,
+        limit: 15,
+        page: 1,
+        filters: filtersFlg));
+  }
+
+  void getListBroughtReceiptData(
+      {required Map<String, int?> filtersFlg, required String shopID}) async {
+    BlocProvider.of<BroughtReceiptBloc>(context).add(GetListBroughtReceipt(
+        token: tokenManager,
+        client: "user",
+        shopId: shopID,
+        limit: 15,
+        page: 1,
+        filters: filtersFlg));
+  }
+
+  void getInfor() async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+      print("TOKEN CURRENT $token");
+      final response = await http.post(
+        Uri.parse('$baseUrl$userInformationApi'),
+        headers: {"Authorization": "Bearer $token"},
+      );
+      final data = jsonDecode(response.body);
+      // var message = data['message'];
+
+      try {
+        if (data['status'] == 200) {
+          var managerInforDataRes = ManagerInforModel.fromJson(data);
+          setState(() {
+            managerInforData = managerInforDataRes.data;
+            log(managerInforData?.userAvatar.toString() ?? '');
+            // avatarUser = imagePath2;
+          });
+
+          print("GET INFOR MANGAER OK 1");
+        } else {
+          print("GET INFOR MANGAER ERROR 1");
+        }
+      } catch (error) {
+        print("GET INFOR MANGAER ERROR 2  $error");
+      }
+    } catch (error) {
+      print("GET INFOR MANGAER ERROR 3 $error");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -137,12 +206,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
       checkTokenExpires();
       getListStore();
     });
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   WidgetsBinding.instance.addPostFrameCallback((_) => () {
-    //         checkTokenExpires();
-    //         getListStore();
-    //       });
-    // });
   }
 
   // final List<Widget> pages = const [
@@ -166,13 +229,16 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
   Widget build(BuildContext context) {
     log(listStoreManagerData.length.toString());
     Widget currentScreen = currentIndex == 0
-        ? const ListStores()
+        ? ListStores(
+            bannerList3: listImageBanner,
+            managerInforData: managerInforData,
+          )
         : currentIndex == 1
             ? const ListStaff()
             : currentIndex == 2
                 ? const ManagerHome()
                 : currentIndex == 3
-                    ? const ListFoodManager()
+                    ? ListFoodManager()
                     : currentIndex == 4
                         ? const ManagerInformation()
                         : currentIndex == 5
@@ -182,11 +248,13 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                 : currentIndex == 7
                                     ? ManagerBookingTable(
                                         shopID: shopIDPar,
+                                        listRoom: numberOfRoom,
                                       )
                                     : currentIndex == 8
-                                        ? const ManagerListBill()
+                                        ? ManagerListBill(shopID: shopIDPar)
                                         : currentIndex == 9
-                                            ? const ManagerBroughtReceipt()
+                                            ? ManagerBroughtReceipt(
+                                                shopID: shopIDPar)
                                             : currentIndex == 10
                                                 ? const ListInventory()
                                                 : const ImportInventory();
@@ -261,8 +329,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
         ],
         bottom: PreferredSize(
             preferredSize: Size.fromHeight(20.w),
-            child: Container(
-              child: Padding(padding: EdgeInsets.only(left: 30, bottom: 20)),
+            child: const Padding(
+              padding: EdgeInsets.only(left: 30, bottom: 20),
             )),
       ),
       body: PageStorage(bucket: bucket, child: currentScreen),
@@ -335,8 +403,9 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             event: () {
                               setState(() {
                                 // currentScreen = const ListStores();
-
                                 currentIndex = 0;
+                                getInfor();
+                                // getListStore();
 
                                 tapDrawerChangeBotNav(0);
                               });
@@ -462,6 +531,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                     shrinkWrap: true,
                     itemCount: listStoreManagerData.length,
                     itemBuilder: (context, index) {
+                      var selectStore = false;
                       var imagePath1 =
                           (listStoreManagerData[index].storeImages ?? '')
                               .replaceAll('["', '');
@@ -470,7 +540,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                         onTap: () {},
                         child: ItemDrawer(
                           image: CachedNetworkImage(
-                            fit: BoxFit.fill,
+                            fit: BoxFit.cover,
                             imageUrl: httpImage + imagePath2,
                             placeholder: (context, url) => SizedBox(
                               height: 10.w,
@@ -484,31 +554,41 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                           isShowIcon: false,
                           isExpand: true,
                           text: listStoreManagerData[index].storeName,
-                          iconColor: currentIndex == 7 ||
-                                  currentIndex == 8 ||
-                                  currentIndex == 9
+                          // iconColor: currentIndex == 7 ||
+                          //         currentIndex == 8 ||
+                          //         currentIndex == 9
+                          //     ? Colors.white
+                          //     : Colors.black,
+                          // backgroundIconColor: currentIndex == 7 ||
+                          //         currentIndex == 8 ||
+                          //         currentIndex == 9
+                          //     ? Colors.blue
+                          //     : const Color.fromRGBO(233, 236, 239, 1),
+                          iconColor: index == selectedStoreIndex
                               ? Colors.white
                               : Colors.black,
-                          backgroundIconColor: currentIndex == 7 ||
-                                  currentIndex == 8 ||
-                                  currentIndex == 9
+                          backgroundIconColor: index == selectedStoreIndex
                               ? Colors.blue
                               : const Color.fromRGBO(233, 236, 239, 1),
                           subItem: [
                             SubItemDrawer(
                                 text: "Đặt bàn",
-                                textColor: currentIndex == 7
+                                textColor: currentIndex == 7 &&
+                                        index == selectedStoreIndex
                                     ? Colors.blue
                                     : Colors.black,
                                 event: () {
                                   setState(() {
-                                    log("VAOOOO");
+                                    log("Store");
+
+                                    log("IDDD $index");
 
                                     shopIDPar = listStoreManagerData[index]
                                         .shopId
                                         .toString();
                                     getDataTabIndex(
                                         roomId: "", shopID: shopIDPar);
+                                    selectedStoreIndex = index;
                                     currentIndex = 7;
                                   });
                                   checkTokenExpires();
@@ -521,11 +601,20 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             ),
                             SubItemDrawer(
                                 text: "Danh sách hóa đơn",
-                                textColor: currentIndex == 8
+                                textColor: currentIndex == 8 &&
+                                        index == selectedStoreIndex
                                     ? Colors.blue
                                     : Colors.black,
                                 event: () {
                                   setState(() {
+                                    shopIDPar = listStoreManagerData[index]
+                                        .shopId
+                                        .toString();
+                                    getListBillShop(
+                                        filtersFlg: {"pay_flg": null},
+                                        shopID: shopIDPar);
+                                    selectedStoreIndex = index;
+
                                     currentIndex = 8;
                                   });
                                   Navigator.pop(context);
@@ -535,11 +624,20 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             ),
                             SubItemDrawer(
                                 text: "Hóa đơn mang về",
-                                textColor: currentIndex == 9
+                                textColor: currentIndex == 9 &&
+                                        index == selectedStoreIndex
                                     ? Colors.blue
                                     : Colors.black,
                                 event: () {
                                   setState(() {
+                                    shopIDPar = listStoreManagerData[index]
+                                        .shopId
+                                        .toString();
+                                    getListBroughtReceiptData(
+                                        filtersFlg: {"pay_flg": null},
+                                        shopID: shopIDPar);
+                                    selectedStoreIndex = index;
+
                                     currentIndex = 9;
                                   });
                                   checkTokenExpires();

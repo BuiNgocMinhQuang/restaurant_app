@@ -48,7 +48,6 @@ class BroughtReceiptBloc
       );
       final data = jsonDecode(respons.body);
       var message = data['message'];
-      print("HELLOO $data");
       try {
         if (data['status'] == 200) {
           var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
@@ -250,7 +249,7 @@ class ManageBroughtReceiptBloc
           emit(state.copyWith(
               broughtReceiptStatus: BroughtReceiptStatus.succes));
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          print("ERROR BROUGHT RECEIPT PAGE 1 HEHHEHEHEH");
 
           emit(state.copyWith(
               broughtReceiptStatus: BroughtReceiptStatus.failed));

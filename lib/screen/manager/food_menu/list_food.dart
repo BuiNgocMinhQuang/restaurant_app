@@ -27,7 +27,9 @@ import 'package:money_formatter/money_formatter.dart';
 List<String> listState = ["Tất cả", "Đang hoạt động", "Đã chặn"];
 
 class ListFoodManager extends StatefulWidget {
-  const ListFoodManager({super.key});
+  const ListFoodManager({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<ListFoodManager> createState() => _ListFoodManagerState();
@@ -116,21 +118,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
   }) async {
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
-      print("DATA TTTT ${{
-        {
-          'client': 'user',
-          'shop_id': '123456',
-          'is_api': true,
-          'limit': 15,
-          'page': page,
-          'filters': {
-            "keywords": keywords,
-            "food_kinds": foodKinds,
-            "pay_flg": filtersFlg
-          },
-        }
-      }}");
-      log(token.toString());
+
       final respons = await http.post(
         Uri.parse('$baseUrl$managerGetListFood'),
         headers: {
@@ -140,7 +128,6 @@ class _ListFoodManagerState extends State<ListFoodManager> {
         },
         body: jsonEncode({
           'client': 'user',
-          'shop_id': '123456',
           'is_api': true,
           'limit': 15,
           'page': page,

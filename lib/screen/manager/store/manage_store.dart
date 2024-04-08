@@ -7,7 +7,6 @@ import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

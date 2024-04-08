@@ -23,7 +23,11 @@ import 'package:app_restaurant/constant/api/index.dart';
 import 'package:money_formatter/money_formatter.dart';
 
 class ManagerListBill extends StatefulWidget {
-  const ManagerListBill({super.key});
+  final String shopID;
+  const ManagerListBill({
+    Key? key,
+    required this.shopID,
+  }) : super(key: key);
 
   @override
   State<ManagerListBill> createState() => _ManagerListBillState();
@@ -32,12 +36,11 @@ class ManagerListBill extends StatefulWidget {
 class _ManagerListBillState extends State<ManagerListBill>
     with TickerProviderStateMixin {
   final String currentRole = "user";
-  final String currentShopId = "123456"; //đổi chỗ này thành shopID truyên vào
   void getListBillShop({required Map<String, int?> filtersFlg}) async {
     BlocProvider.of<ListBillShopBloc>(context).add(GetListBillShop(
         token: StorageUtils.instance.getString(key: 'token_manager'),
         client: currentRole,
-        shopId: currentShopId,
+        shopId: widget.shopID,
         limit: 15,
         page: 1,
         filters: filtersFlg));
@@ -47,7 +50,7 @@ class _ManagerListBillState extends State<ManagerListBill>
   void initState() {
     // TODO: implement initState
     super.initState();
-    getListBillShop(filtersFlg: {"pay_flg": null});
+    // getListBillShop(filtersFlg: {"pay_flg": null});
   }
 
   @override
@@ -134,20 +137,21 @@ class _ManagerListBillState extends State<ManagerListBill>
                             child: Container(
                           width: 1.sw,
                           color: Colors.white,
-                          child: TabBarView(
-                              controller: _tabController,
-                              children: const [
-                                //Tab All
-                                //Tab All
-                                ListAllBillShop(),
-                                //Tab Paid
-                                ListCompleteBillShop(),
+                          child:
+                              TabBarView(controller: _tabController, children: [
+                            //Tab All
+                            //Tab All
+                            ListAllBillShop(
+                              shopID: widget.shopID,
+                            ),
+                            //Tab Paid
+                            ListCompleteBillShop(shopID: widget.shopID),
 
-                                //Tab Unpaid
-                                PendingWidget(),
-                                //Tab Cancle
-                                ListCancleBillShop(),
-                              ]),
+                            //Tab Unpaid
+                            PendingWidget(shopID: widget.shopID),
+                            //Tab Cancle
+                            ListCancleBillShop(shopID: widget.shopID),
+                          ]),
                         )),
                         SizedBox(
                           height: 15.h,
@@ -204,7 +208,8 @@ class _ManagerListBillState extends State<ManagerListBill>
 }
 
 class ListAllBillShop extends StatefulWidget {
-  const ListAllBillShop({super.key});
+  final String shopID;
+  const ListAllBillShop({Key? key, required this.shopID}) : super(key: key);
 
   @override
   State<ListAllBillShop> createState() => _ListAllBillShopState();
@@ -233,7 +238,7 @@ class _ListAllBillShopState extends State<ListAllBillShop>
         },
         body: jsonEncode({
           'client': 'user',
-          'shop_id': '123456',
+          'shop_id': widget.shopID,
           'is_api': true,
           'limit': 15,
           'page': page,
@@ -385,7 +390,9 @@ class _ListAllBillShopState extends State<ListAllBillShop>
 }
 
 class ListCompleteBillShop extends StatefulWidget {
-  const ListCompleteBillShop({super.key});
+  final String shopID;
+  const ListCompleteBillShop({Key? key, required this.shopID})
+      : super(key: key);
 
   @override
   State<ListCompleteBillShop> createState() => _CompleteWidgetState();
@@ -433,7 +440,7 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
         },
         body: jsonEncode({
           'client': 'user',
-          'shop_id': '123456',
+          'shop_id': widget.shopID,
           'is_api': true,
           'limit': 15,
           'page': page,
@@ -556,7 +563,8 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
 }
 
 class PendingWidget extends StatefulWidget {
-  const PendingWidget({super.key});
+  final String shopID;
+  const PendingWidget({Key? key, required this.shopID}) : super(key: key);
 
   @override
   State<PendingWidget> createState() => _PendingWidgetState();
@@ -602,7 +610,7 @@ class _PendingWidgetState extends State<PendingWidget>
         },
         body: jsonEncode({
           'client': 'user',
-          'shop_id': '123456',
+          'shop_id': widget.shopID,
           'is_api': true,
           'limit': 15,
           'page': page,
@@ -722,7 +730,8 @@ class _PendingWidgetState extends State<PendingWidget>
 }
 
 class ListCancleBillShop extends StatefulWidget {
-  const ListCancleBillShop({super.key});
+  final String shopID;
+  const ListCancleBillShop({Key? key, required this.shopID}) : super(key: key);
 
   @override
   State<ListCancleBillShop> createState() => _ListCancleBillShopState();
@@ -770,7 +779,7 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
         },
         body: jsonEncode({
           'client': 'user',
-          'shop_id': '123456',
+          'shop_id': widget.shopID,
           'is_api': true,
           'limit': 15,
           'page': page,

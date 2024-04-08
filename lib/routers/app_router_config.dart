@@ -80,30 +80,30 @@ class NyAppRouter {
                 selectedIndex: 2,
               );
             }),
-        GoRoute(
-            name: AppRouterContants.managerListStoresRouterName,
-            path: '/manager_list_stores',
-            builder: (BuildContext context, GoRouterState state) {
-              return const ListStores();
-            }),
+        // GoRoute(
+        //     name: AppRouterContants.managerListStoresRouterName,
+        //     path: '/manager_list_stores',
+        //     builder: (BuildContext context, GoRouterState state) {
+        //       return const ListStores();
+        //     }),
         GoRoute(
             name: AppRouterContants.managerManageStoresRouterName,
             path: '/manager_manage_stores',
             builder: (BuildContext context, GoRouterState state) {
               return const ManageStore();
             }),
-        GoRoute(
-            name: AppRouterContants.managerListBillRouterName,
-            path: '/manager_list_bill',
-            builder: (BuildContext context, GoRouterState state) {
-              return const ManagerListBill();
-            }),
-        GoRoute(
-            name: AppRouterContants.managerBroughtReceiptRouterName,
-            path: '/manager_brought_receipt',
-            builder: (BuildContext context, GoRouterState state) {
-              return const ManagerBroughtReceipt();
-            }),
+        // GoRoute(
+        //     name: AppRouterContants.managerListBillRouterName,
+        //     path: '/manager_list_bill',
+        //     builder: (BuildContext context, GoRouterState state) {
+        //       return const ManagerListBill();
+        //     }),
+        // GoRoute(
+        //     name: AppRouterContants.managerBroughtReceiptRouterName,
+        //     path: '/manager_brought_receipt',
+        //     builder: (BuildContext context, GoRouterState state) {
+        //       return const ManagerBroughtReceipt();
+        //     }),
         // GoRoute(
         //     name: AppRouterContants.managerBookingTableRouterName,
         //     path: '/manager_booking_table',

@@ -41,8 +41,6 @@ class ListBillShopBloc extends Bloc<ListBillShopEvent, ListBillShopState> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print("LIST BILL $data");
-
       try {
         if (data['status'] == 200) {
           var listAllBillRes = ListBillShopModel.fromJson(data);

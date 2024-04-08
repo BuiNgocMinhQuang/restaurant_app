@@ -320,6 +320,8 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                               width: 100.w,
                                                                                               child: Center(
                                                                                                 child: TextApp(
+                                                                                                  isOverFlow: false,
+                                                                                                  softWrap: true,
                                                                                                   textAlign: TextAlign.center,
                                                                                                   text: data.tables?[index].tableName ?? '',
                                                                                                   color: Colors.white,

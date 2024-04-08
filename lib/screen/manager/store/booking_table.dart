@@ -16,9 +16,11 @@ import 'package:lottie/lottie.dart';
 
 class ManagerBookingTable extends StatefulWidget {
   final String shopID;
+  final int listRoom;
   const ManagerBookingTable({
     Key? key,
     required this.shopID,
+    required this.listRoom,
   }) : super(key: key);
 
   @override
@@ -29,8 +31,8 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
     with TickerProviderStateMixin {
   var tokenManager =
       StorageUtils.instance.getString(key: 'token_manager') ?? '';
-  var numberOfRoom =
-      int.parse(StorageUtils.instance.getString(key: 'numberOfRoom') ?? '1');
+  // var numberOfRoom =
+  //     int.parse(StorageUtils.instance.getString(key: 'numberOfRoom') ?? '1');
 
   void getBillData(
       {String? roomId,
@@ -92,28 +94,28 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
         orderId: orderID));
   }
 
-  late TabController _tabController;
+  // late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    print(widget.shopID);
+
     // getDataTabIndex(roomId: "");
-    _tabController = TabController(vsync: this, length: numberOfRoom);
+    // _tabController = TabController(vsync: this, length: widget.listRoom);
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    // _tabController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // TabController _tabController = TabController(
-    //   length: numberOfRoom,
-    //   vsync: this,
-    // );
+    TabController _tabController = TabController(
+      length: widget.listRoom,
+      vsync: this,
+    );
 
     return BlocBuilder<ListRoomBloc, ListRoomState>(builder: (context, state) {
       return Scaffold(
@@ -345,7 +347,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                                                   },
                                                                                                   token: tokenManager,
                                                                                                   role: 'user',
-                                                                                                  shopID: '123456',
+                                                                                                  shopID: widget.shopID,
                                                                                                   idRoom: data.storeRoomId,
                                                                                                   listTableOfRoom: data.tables,
                                                                                                   currentTable: data.tables![index],
@@ -360,7 +362,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                                                   return MoveTableDialog(
                                                                                                     token: tokenManager,
                                                                                                     role: 'user',
-                                                                                                    shopID: '123456',
+                                                                                                    shopID: widget.shopID,
                                                                                                     orderID: data.tables![index].orderId.toString(),
                                                                                                     currentTable: data.tables![index],
                                                                                                     nameRoom: data.storeRoomName ?? '',
@@ -386,7 +388,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                                                   return SeeBillDialog(
                                                                                                     token: tokenManager,
                                                                                                     role: 'user',
-                                                                                                    shopID: '123456',
+                                                                                                    shopID: widget.shopID,
                                                                                                     orderID: data.tables?[index].orderId,
                                                                                                     roomID: data.storeRoomId.toString(),
                                                                                                     currentTable: data.tables![index],
@@ -404,7 +406,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                                                   return PayBillDialog(
                                                                                                     token: tokenManager,
                                                                                                     role: 'user',
-                                                                                                    shopID: '123456',
+                                                                                                    shopID: widget.shopID,
                                                                                                     orderID: data.tables?[index].orderId.toString(),
                                                                                                     roomID: data.storeRoomId.toString(),
                                                                                                     currentTable: data.tables![index],
@@ -425,7 +427,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                                                   return BookingTableDialog(
                                                                                                     token: tokenManager,
                                                                                                     role: 'user',
-                                                                                                    shopID: '123456',
+                                                                                                    shopID: widget.shopID,
                                                                                                     idRoom: data.storeRoomId,
                                                                                                     eventSaveButton: () {
                                                                                                       getDataTabIndex(

@@ -57,7 +57,27 @@ class ItemDrawer extends StatelessWidget {
                         size: iconSize == 0 ? 20.w : iconSize,
                         color: iconColor,
                       )
-                    : image,
+                    : Container(
+                        width: 20.w,
+                        height: 20.w,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.r),
+                          color: backgroundIconColor,
+                          boxShadow: [
+                            BoxShadow(
+                              color: backgroundIconColor,
+                              spreadRadius: 3,
+                              blurRadius: 5,
+                              offset: const Offset(
+                                  0, 3), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.r),
+                          child: image,
+                        ),
+                      ),
               ),
               title: Text(
                 text,

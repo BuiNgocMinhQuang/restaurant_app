@@ -25,7 +25,11 @@ import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
 
 class ManagerBroughtReceipt extends StatefulWidget {
-  const ManagerBroughtReceipt({super.key});
+  final String shopID;
+  const ManagerBroughtReceipt({
+    Key? key,
+    required this.shopID,
+  }) : super(key: key);
 
   @override
   State<ManagerBroughtReceipt> createState() => _ManagerBroughtReceiptState();
@@ -34,7 +38,6 @@ class ManagerBroughtReceipt extends StatefulWidget {
 class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
     with TickerProviderStateMixin {
   final String currentRole = "user";
-  final String currentShopId = "123456";
   var tokenManager =
       StorageUtils.instance.getString(key: 'token_manager') ?? '';
   void getListBroughtReceiptData(
@@ -42,7 +45,7 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
     BlocProvider.of<BroughtReceiptBloc>(context).add(GetListBroughtReceipt(
         token: tokenManager,
         client: currentRole,
-        shopId: currentShopId,
+        shopId: widget.shopID,
         limit: 15,
         page: 1,
         filters: filtersFlg));
@@ -53,7 +56,7 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
         GetDetailsBroughtReceipt(
             token: tokenManager,
             client: 'user',
-            shopId: currentShopId,
+            shopId: widget.shopID,
             limit: 15,
             page: 1,
             filters: null,
@@ -63,7 +66,7 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
   @override
   void initState() {
     super.initState();
-    getListBroughtReceiptData(filtersFlg: {"pay_flg": null});
+    // getListBroughtReceiptData(filtersFlg: {"pay_flg": null});
   }
 
   @override
@@ -169,16 +172,24 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                                         controller: tabController,
                                         children: [
                                           //Tab All
-                                          AllWidget(),
+                                          AllWidget(
+                                            shopID: widget.shopID,
+                                          ),
 
                                           //Tab Hoàn thành
-                                          CompleteWidget(),
+                                          CompleteWidget(
+                                            shopID: widget.shopID,
+                                          ),
 
                                           //Tab đang chế biến
-                                          PendingWidget(),
+                                          PendingWidget(
+                                            shopID: widget.shopID,
+                                          ),
 
                                           //Tab huỷ
-                                          CancleWidget()
+                                          CancleWidget(
+                                            shopID: widget.shopID,
+                                          )
                                         ]),
                                   ),
                                 ),
@@ -202,7 +213,7 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                                       return ManageBroughtReceiptDialog(
                                         token: tokenManager,
                                         role: currentRole,
-                                        shopID: currentShopId,
+                                        shopID: widget.shopID,
                                         orderID: null,
                                       );
                                     });
@@ -270,7 +281,11 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
 }
 
 class AllWidget extends StatefulWidget {
-  const AllWidget({Key? key}) : super(key: key);
+  final String shopID;
+  const AllWidget({
+    Key? key,
+    required this.shopID,
+  }) : super(key: key);
   @override
   State<AllWidget> createState() => _AllWidgetState();
 }
@@ -310,7 +325,7 @@ class _AllWidgetState extends State<AllWidget>
         GetDetailsBroughtReceipt(
             token: tokenManager,
             client: 'user',
-            shopId: "123456",
+            shopId: widget.shopID,
             limit: 15,
             page: 1,
             filters: null,
@@ -322,7 +337,7 @@ class _AllWidgetState extends State<AllWidget>
     BlocProvider.of<BroughtReceiptBloc>(context).add(GetListBroughtReceipt(
         token: tokenManager,
         client: 'user',
-        shopId: "123456",
+        shopId: widget.shopID,
         limit: 15,
         page: 1,
         filters: filtersFlg));
@@ -335,7 +350,7 @@ class _AllWidgetState extends State<AllWidget>
     BlocProvider.of<PaymentInforBloc>(context).add(GetPaymentInfor(
         token: tokenManager,
         client: 'user',
-        shopId: "123456",
+        shopId: widget.shopID,
         roomId: roomId ?? '',
         tableId: tableId,
         orderId: orderID));
@@ -345,7 +360,7 @@ class _AllWidgetState extends State<AllWidget>
     BlocProvider.of<PrintBroughtReceiptBloc>(context).add(PrintBroughtReceipt(
       token: tokenManager,
       client: 'user',
-      shopId: "123456",
+      shopId: widget.shopID,
       orderId: orderID,
     ));
   }
@@ -363,7 +378,7 @@ class _AllWidgetState extends State<AllWidget>
         },
         body: jsonEncode({
           'client': 'user',
-          'shop_id': "123456",
+          'shop_id': widget.shopID,
           'is_api': true,
           'limit': 15,
           'page': page,
@@ -447,7 +462,7 @@ class _AllWidgetState extends State<AllWidget>
                                           token: tokenManager,
                                           role: 'user',
                                           orderID: newListFood[index].orderId,
-                                          shopID: "123456",
+                                          shopID: widget.shopID,
                                         );
                                       });
                                 },
@@ -463,7 +478,7 @@ class _AllWidgetState extends State<AllWidget>
                                         return PayBillDialog(
                                           token: tokenManager,
                                           role: 'user',
-                                          shopID: "123456",
+                                          shopID: widget.shopID,
                                           orderID: newListFood[index]
                                               .orderId
                                               .toString(),
@@ -484,7 +499,7 @@ class _AllWidgetState extends State<AllWidget>
                                       builder: (BuildContext context) {
                                         return PrintBroughtReceiptDialog(
                                           role: 'user',
-                                          shopID: "123456",
+                                          shopID: widget.shopID,
                                           orderID: newListFood[index]
                                               .orderId
                                               .toString(),
@@ -503,7 +518,7 @@ class _AllWidgetState extends State<AllWidget>
                                                 filtersFlg: {"pay_flg": null});
                                           },
                                           role: 'user',
-                                          shopID: "123456",
+                                          shopID: widget.shopID,
                                           orderID: newListFood[index].orderId,
                                         );
                                       });
@@ -518,7 +533,7 @@ class _AllWidgetState extends State<AllWidget>
                                       builder: (BuildContext context) {
                                         return PrintBroughtReceiptDialog(
                                           role: 'user',
-                                          shopID: "123456",
+                                          shopID: widget.shopID,
                                           orderID: newListFood[index]
                                               .orderId
                                               .toString(),
@@ -562,7 +577,11 @@ class _AllWidgetState extends State<AllWidget>
 }
 
 class CompleteWidget extends StatefulWidget {
-  const CompleteWidget({super.key});
+  final String shopID;
+  const CompleteWidget({
+    Key? key,
+    required this.shopID,
+  }) : super(key: key);
 
   @override
   State<CompleteWidget> createState() => _CompleteWidgetState();
@@ -611,7 +630,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
         },
         body: jsonEncode({
           'client': 'user',
-          'shop_id': "123456",
+          'shop_id': widget.shopID,
           'is_api': true,
           'limit': 15,
           'page': page,
@@ -658,7 +677,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
         },
         body: jsonEncode({
           'client': 'user',
-          'shop_id': "123456",
+          'shop_id': widget.shopID,
           'is_api': true,
           'limit': 15,
           'page': page,
@@ -690,7 +709,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
     BlocProvider.of<PrintBroughtReceiptBloc>(context).add(PrintBroughtReceipt(
       token: tokenManager,
       client: 'user',
-      shopId: "123456",
+      shopId: widget.shopID,
       orderId: orderID,
     ));
   }
@@ -729,7 +748,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
 
                                   return PrintBroughtReceiptDialog(
                                     role: 'user',
-                                    shopID: "123456",
+                                    shopID: widget.shopID,
                                     orderID: listBillComplete[index]
                                         .orderId
                                         .toString(),
@@ -776,7 +795,11 @@ class _CompleteWidgetState extends State<CompleteWidget>
 }
 
 class PendingWidget extends StatefulWidget {
-  const PendingWidget({super.key});
+  final String shopID;
+  const PendingWidget({
+    Key? key,
+    required this.shopID,
+  }) : super(key: key);
 
   @override
   State<PendingWidget> createState() => _PendingWidgetState();
@@ -815,7 +838,7 @@ class _PendingWidgetState extends State<PendingWidget>
         GetDetailsBroughtReceipt(
             token: tokenManager,
             client: 'user',
-            shopId: "123456",
+            shopId: widget.shopID,
             limit: 15,
             page: 1,
             filters: null,
@@ -827,7 +850,7 @@ class _PendingWidgetState extends State<PendingWidget>
     BlocProvider.of<BroughtReceiptBloc>(context).add(GetListBroughtReceipt(
         token: tokenManager,
         client: 'user',
-        shopId: "123456",
+        shopId: widget.shopID,
         limit: 15,
         page: 1,
         filters: filtersFlg));
@@ -840,7 +863,7 @@ class _PendingWidgetState extends State<PendingWidget>
     BlocProvider.of<PaymentInforBloc>(context).add(GetPaymentInfor(
         token: tokenManager,
         client: 'user',
-        shopId: "123456",
+        shopId: widget.shopID,
         roomId: roomId ?? '',
         tableId: tableId,
         orderId: orderID));
@@ -850,7 +873,7 @@ class _PendingWidgetState extends State<PendingWidget>
     BlocProvider.of<PrintBroughtReceiptBloc>(context).add(PrintBroughtReceipt(
       token: tokenManager,
       client: 'user',
-      shopId: "123456",
+      shopId: widget.shopID,
       orderId: orderID,
     ));
   }
@@ -868,7 +891,7 @@ class _PendingWidgetState extends State<PendingWidget>
         },
         body: jsonEncode({
           'client': 'user',
-          'shop_id': "123456",
+          'shop_id': widget.shopID,
           'is_api': true,
           'limit': 15,
           'page': page,
@@ -932,7 +955,7 @@ class _PendingWidgetState extends State<PendingWidget>
                                     token: tokenManager,
                                     role: 'user',
                                     orderID: listBillPending[index].orderId,
-                                    shopID: "123456",
+                                    shopID: widget.shopID,
                                   );
                                 });
                           },
@@ -948,7 +971,7 @@ class _PendingWidgetState extends State<PendingWidget>
                                   return PayBillDialog(
                                     token: tokenManager,
                                     role: 'user',
-                                    shopID: "123456",
+                                    shopID: widget.shopID,
                                     orderID: listBillPending[index]
                                         .orderId
                                         .toString(),
@@ -970,7 +993,7 @@ class _PendingWidgetState extends State<PendingWidget>
                                 builder: (BuildContext context) {
                                   return PrintBroughtReceiptDialog(
                                     role: 'user',
-                                    shopID: "123456",
+                                    shopID: widget.shopID,
                                     orderID: listBillPending[index]
                                         .orderId
                                         .toString(),
@@ -990,7 +1013,7 @@ class _PendingWidgetState extends State<PendingWidget>
                                     },
                                     token: tokenManager,
                                     role: 'user',
-                                    shopID: "123456",
+                                    shopID: widget.shopID,
                                     orderID: listBillPending[index].orderId,
                                   );
                                 });
@@ -1035,7 +1058,11 @@ class _PendingWidgetState extends State<PendingWidget>
 }
 
 class CancleWidget extends StatefulWidget {
-  const CancleWidget({super.key});
+  final String shopID;
+  const CancleWidget({
+    Key? key,
+    required this.shopID,
+  }) : super(key: key);
 
   @override
   State<CancleWidget> createState() => _CancleWidgetState();
@@ -1081,7 +1108,7 @@ class _CancleWidgetState extends State<CancleWidget>
         },
         body: jsonEncode({
           'client': 'user',
-          'shop_id': "123456",
+          'shop_id': widget.shopID,
           'is_api': true,
           'limit': 15,
           'page': page,
@@ -1118,7 +1145,7 @@ class _CancleWidgetState extends State<CancleWidget>
     BlocProvider.of<PrintBroughtReceiptBloc>(context).add(PrintBroughtReceipt(
       token: tokenManager,
       client: 'user',
-      shopId: "123456",
+      shopId: widget.shopID,
       orderId: orderID,
     ));
   }
@@ -1153,7 +1180,7 @@ class _CancleWidgetState extends State<CancleWidget>
                                 builder: (BuildContext context) {
                                   return PrintBroughtReceiptDialog(
                                     role: 'user',
-                                    shopID: "123456",
+                                    shopID: widget.shopID,
                                     orderID: listBillCancle[index]
                                         .orderId
                                         .toString(),

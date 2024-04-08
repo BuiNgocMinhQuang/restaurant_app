@@ -39,13 +39,11 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
   String? errorsPhoneField;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     surNameController.dispose();
     nameController.dispose();
     fullNameController.dispose();
@@ -90,11 +88,34 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
           ManagerLoginButtonPressed(
               email: email, password: password, remember: false),
         );
-      } else {
-        print("ZO ELSE");
+      } else if (data['status'] == 500) {
+        print("ZO ELSE 500");
+        var messRes = data['message'];
+        var messFailed = messRes['text'];
         showCustomDialogModal(
             context: navigatorKey.currentContext,
-            textDesc: "messFailed",
+            textDesc: messFailed,
+            title: "Thất bại",
+            colorButton: Colors.red,
+            btnText: "OK",
+            typeDialog: "error");
+      } else {
+        print("ZO ELSE");
+        var messRes = data['errors'];
+        var messErrorEmail1 = messRes['email'].toString();
+        var messErrorEmail2 = messErrorEmail1.replaceAll("[", "");
+        var messErrorEmail3 = messErrorEmail2.replaceAll("]", "");
+        var messErrorEmail4 = messErrorEmail3.replaceAll("Nội dung", "Email");
+
+        var messErrorPhone1 = messRes['phone'].toString();
+        var messErrorPhone2 = messErrorPhone1.replaceAll("[", "");
+        var messErrorPhone3 = messErrorPhone2.replaceAll("]", "");
+        var messErrorPhone4 =
+            messErrorPhone3.replaceAll("Số điện thoại", "Email");
+        var messError = '$messErrorEmail4\n  $messErrorPhone4\n';
+        showCustomDialogModal(
+            context: navigatorKey.currentContext,
+            textDesc: messError,
             title: "Thất bại",
             colorButton: Colors.red,
             btnText: "OK",
@@ -846,6 +867,19 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                             isChecked,
                                                       );
                                                     }
+                                                    // handleRegister(
+                                                    //   firstName: "Quang",
+                                                    //   lastName: "MIdddd",
+                                                    //   fullName:
+                                                    //       "BUI NGOC MINH QUANG",
+                                                    //   email:
+                                                    //       "buingocminhquang@gmail1.com",
+                                                    //   phone: "0987654322",
+                                                    //   password: "123456789",
+                                                    //   confirmPassword:
+                                                    //       "123456789",
+                                                    //   agreeConditon: false,
+                                                    // );
                                                   },
                                                   text: "Đăng ký",
                                                   fontSize: 12.sp,

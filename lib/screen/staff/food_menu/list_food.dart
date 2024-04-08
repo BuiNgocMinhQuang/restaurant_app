@@ -40,6 +40,8 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
     setState(() {
       this.query = query;
     });
+    currentPage = 1;
+    currentFoodList.clear();
     loadMoreMenuFood(
       page: currentPage,
       keywords: query,
@@ -75,7 +77,7 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
     super.dispose();
   }
 
-  Future loadMoreMenuFood({
+  void loadMoreMenuFood({
     required int page,
     String? keywords,
     List<int>? foodKinds,
@@ -121,15 +123,19 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
       print("GET DAT FOOD ${data}");
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var listMenuPageRes = ListFoodMenuModel.fromJson(data);
-            currentFoodList.addAll(listMenuPageRes.data.data);
-            currentPage++;
-            if (listMenuPageRes.data.data.isEmpty) {
-              hasMore = false;
-            }
-            print('LENGHT ${listMenuPageRes.data.data.length}');
-          });
+          mounted
+              ? setState(() {
+                  var listMenuPageRes = ListFoodMenuModel.fromJson(data);
+                  // currentFoodList.clear();
+                  currentFoodList.addAll(listMenuPageRes.data.data);
+                  currentPage++;
+                  if (listMenuPageRes.data.data.isEmpty ||
+                      listMenuPageRes.data.data.length <= 15) {
+                    hasMore = false;
+                  }
+                  print('LENGHT ${listMenuPageRes.data.data.length}');
+                })
+              : null;
         } else {
           print("ERROR BROUGHT RECEIPT PAGE 1");
         }
@@ -213,7 +219,8 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                                             .indexOf(lableFood);
                                         selectedCategoriesIndex.add(
                                             index); //thêm index category vào mảng
-
+                                        currentPage = 1;
+                                        currentFoodList.clear();
                                         loadMoreMenuFood(
                                             page: currentPage,
                                             keywords: query,
@@ -229,6 +236,8 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                                             .indexOf(lableFood);
                                         selectedCategoriesIndex.remove(
                                             index); //xoá index category vào mảng
+                                        currentPage = 1;
+                                        currentFoodList.clear();
                                         loadMoreMenuFood(
                                             page: currentPage,
                                             keywords: query,
@@ -249,6 +258,9 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                     )),
                 space30H,
                 TextFormField(
+                  onTapOutside: (event) {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  },
                   onChanged: searchProduct,
                   controller: searchController,
                   style: TextStyle(fontSize: 12, color: Colors.grey),

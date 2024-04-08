@@ -597,18 +597,21 @@ class _CompleteWidgetState extends State<CompleteWidget>
 
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
-            listBillComplete.clear();
-            listBillComplete.addAll(broughtReceiptPageRes.data.data);
-            currentPageComplete++;
-            isRefesh = false;
-            log(listBillComplete.length.toString());
-            if (broughtReceiptPageRes.data.data.isEmpty ||
-                broughtReceiptPageRes.data.data.length <= 15) {
-              hasMoreComplete = false;
-            }
-          });
+          mounted
+              ? setState(() {
+                  var broughtReceiptPageRes =
+                      ListBroughtReceiptModel.fromJson(data);
+                  listBillComplete.clear();
+                  listBillComplete.addAll(broughtReceiptPageRes.data.data);
+                  currentPageComplete++;
+                  isRefesh = false;
+                  log(listBillComplete.length.toString());
+                  if (broughtReceiptPageRes.data.data.isEmpty ||
+                      broughtReceiptPageRes.data.data.length <= 15) {
+                    hasMoreComplete = false;
+                  }
+                })
+              : null;
         } else {
           log("ERROR BROUGHT RECEIPT PAGE 1");
         }
@@ -644,12 +647,15 @@ class _CompleteWidgetState extends State<CompleteWidget>
 
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
-            listBillComplete.clear();
-            listBillComplete.addAll(broughtReceiptPageRes.data.data);
-            isRefesh = true;
-          });
+          mounted
+              ? setState(() {
+                  var broughtReceiptPageRes =
+                      ListBroughtReceiptModel.fromJson(data);
+                  listBillComplete.clear();
+                  listBillComplete.addAll(broughtReceiptPageRes.data.data);
+                  isRefesh = true;
+                })
+              : null;
         } else {
           log("ERROR BROUGHT RECEIPT PAGE 1");
         }
@@ -853,16 +859,19 @@ class _PendingWidgetState extends State<PendingWidget>
 
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
-            listBillPending.addAll(broughtReceiptPageRes.data.data);
-            currentPagePending++;
+          mounted
+              ? setState(() {
+                  var broughtReceiptPageRes =
+                      ListBroughtReceiptModel.fromJson(data);
+                  listBillPending.addAll(broughtReceiptPageRes.data.data);
+                  currentPagePending++;
 
-            if (broughtReceiptPageRes.data.data.isEmpty ||
-                broughtReceiptPageRes.data.data.length <= 15) {
-              hasMoreComplete = false;
-            }
-          });
+                  if (broughtReceiptPageRes.data.data.isEmpty ||
+                      broughtReceiptPageRes.data.data.length <= 15) {
+                    hasMoreComplete = false;
+                  }
+                })
+              : null;
         } else {
           print("ERROR BROUGHT RECEIPT PAGE 1");
         }
@@ -1065,16 +1074,19 @@ class _CancleWidgetState extends State<CancleWidget>
 
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
-            listBillCancle.addAll(broughtReceiptPageRes.data.data);
-            currentPageCancle++;
+          mounted
+              ? setState(() {
+                  var broughtReceiptPageRes =
+                      ListBroughtReceiptModel.fromJson(data);
+                  listBillCancle.addAll(broughtReceiptPageRes.data.data);
+                  currentPageCancle++;
 
-            if (broughtReceiptPageRes.data.data.isEmpty ||
-                broughtReceiptPageRes.data.data.length <= 15) {
-              hasMoreCanle = false;
-            }
-          });
+                  if (broughtReceiptPageRes.data.data.isEmpty ||
+                      broughtReceiptPageRes.data.data.length <= 15) {
+                    hasMoreCanle = false;
+                  }
+                })
+              : null;
           print("DATA BACK ${data}");
         } else {
           print("ERROR BROUGHT RECEIPT PAGE 1");

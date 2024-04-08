@@ -203,7 +203,6 @@ class _BookingTableDialogState extends State<BookingTableDialog>
     int? payFlg,
   }) async {
     try {
-      // var token = StorageUtils.instance.getString(key: 'token_staff');
       var token = tokenReq;
       final respons = await http.post(
         Uri.parse('$baseUrl$foodsTableApi'),
@@ -254,7 +253,6 @@ class _BookingTableDialogState extends State<BookingTableDialog>
 
   void getDetailFoodTable({required String tokenReq}) async {
     try {
-      // var token = StorageUtils.instance.getString(key: 'token_staff');
       var token = tokenReq;
       final respons = await http.post(
         Uri.parse('$baseUrl$foodsTableApi'),
@@ -296,7 +294,6 @@ class _BookingTableDialogState extends State<BookingTableDialog>
   void plusQuantytiFoodToTable(
       {required int foodID, required String tokenReq}) async {
     try {
-      // var token = StorageUtils.instance.getString(key: 'token_staff');
       var token = tokenReq;
       final respons = await http.post(
         Uri.parse('$baseUrl$addFoodTable'),
@@ -347,7 +344,6 @@ class _BookingTableDialogState extends State<BookingTableDialog>
   void minusQuantytiFoodToTable(
       {required int foodID, required String tokenReq}) async {
     try {
-      // var token = StorageUtils.instance.getString(key: 'token_staff');
       var token = tokenReq;
       final respons = await http.post(
         Uri.parse('$baseUrl$removeFoodTable'),
@@ -400,7 +396,6 @@ class _BookingTableDialogState extends State<BookingTableDialog>
       required String quantityFood,
       required String tokenReq}) async {
     try {
-      // var token = StorageUtils.instance.getString(key: 'token_staff');
       var token = tokenReq;
       final respons = await http.post(
         Uri.parse('$baseUrl$updateQuantityFoodTable'),
@@ -516,6 +511,8 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         TextApp(
+                          isOverFlow: false,
+                          softWrap: true,
                           text:
                               "Quản lý bàn đặt: ${widget.currentTable?.tableName.toString() ?? ''}",
                           fontsize: 18.sp,
@@ -900,7 +897,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                     context)
                                                 .add(SaveTableInfor(
                                               token: widget.token,
-                                              client: "staff",
+                                              client: widget.role,
                                               shopId: getStaffShopID,
                                               roomId: widget.idRoom.toString(),
                                               tableId: widget
@@ -1553,7 +1550,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                   ?.orderId
                                                                   .toString() ??
                                                               '',
-                                                          client: "staff",
+                                                          client: widget.role,
                                                           shopId:
                                                               getStaffShopID,
                                                           roomId: state
@@ -2169,8 +2166,6 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
 
   void getBillData() async {
     try {
-      // var token = StorageUtils.instance.getString(key: 'token_staff');
-      // print("TOKEN GET TABLE $token");
       var token = widget.token;
       final respons = await http.post(
         Uri.parse('$baseUrl$showBillInfor'),
@@ -2216,7 +2211,6 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
 
   void plusQuantytiFoodToSeeBillTable({required int foodID}) async {
     try {
-      // var token = StorageUtils.instance.getString(key: 'token_staff');
       var token = widget.token;
 
       final respons = await http.post(
@@ -2269,7 +2263,6 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
   void updateQuantytiFoodToSeeBillTable(
       {required int foodID, required String quantityFood}) async {
     try {
-      // var token = StorageUtils.instance.getString(key: 'token_staff');
       var token = widget.token;
 
       final respons = await http.post(
@@ -2321,7 +2314,6 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
 
   void minusQuantytiFoodToSeeBillTable({required int foodID}) async {
     try {
-      // var token = StorageUtils.instance.getString(key: 'token_staff');
       var token = widget.token;
 
       final respons = await http.post(
@@ -2739,6 +2731,9 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                                                                                 width: 100.w,
                                                                                 child: Center(
                                                                                   child: TextApp(
+                                                                                    isOverFlow: false,
+                                                                                    softWrap: true,
+                                                                                    textAlign: TextAlign.center,
                                                                                     text: listFoodBillCurrent?.data?[index].foodName ?? '',
                                                                                     fontsize: 14.sp,
                                                                                   ),
@@ -3808,6 +3803,7 @@ class _ManageBroughtReceiptDialogState
     });
 
     getListFood(
+      tokenReq: widget.token,
       page: currentPage,
       keywords: query,
       foodKinds:
@@ -3818,7 +3814,6 @@ class _ManageBroughtReceiptDialogState
   void getDetailsBroughtReceiptData(
       {required int? orderID, required String tokenReq}) async {
     try {
-      // var token = StorageUtils.instance.getString(key: 'token_staff');
       var token = tokenReq;
       final respons = await http.post(
         Uri.parse('$baseUrl$getListFoodBroughtReceipt'),
@@ -3852,7 +3847,7 @@ class _ManageBroughtReceiptDialogState
             lamchoichoi.addAll(detailsBroughtReceiptRes.data.data);
           });
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          print("ERROR BROUGHT RECEIPT PAGE 1 CCCC");
         }
       } catch (error) {
         print("ERROR BROUGHT RECEIPT PAGE 2 $error");
@@ -3866,7 +3861,7 @@ class _ManageBroughtReceiptDialogState
     BlocProvider.of<BroughtReceiptBloc>(context).add(GetListBroughtReceipt(
         token: widget.token,
         client: widget.role,
-        shopId: "123456",
+        shopId: widget.shopID,
         limit: 15,
         page: currentPage,
         filters: filtersFlg));
@@ -3932,7 +3927,6 @@ class _ManageBroughtReceiptDialogState
   void minusQuantityFoodToBroughtReceipt(
       {required int foodID, int? orderID, required String tokenReq}) async {
     try {
-      // var token = StorageUtils.instance.getString(key: 'token_staff');
       var token = tokenReq;
       final respons = await http.post(
         Uri.parse('$baseUrl$removeFoodToBroughtReceipt'),
@@ -3989,7 +3983,6 @@ class _ManageBroughtReceiptDialogState
       required String quantityFood,
       required String tokenReq}) async {
     try {
-      // var token = StorageUtils.instance.getString(key: 'token_staff');
       var token = tokenReq;
 
       final respons = await http.post(
@@ -4042,14 +4035,15 @@ class _ManageBroughtReceiptDialogState
         orderID: orderNewIDBroughtReceipt ?? widget.orderID);
   }
 
-  void getListFood({
-    required int page,
-    String? keywords,
-    List<int>? foodKinds,
-    int? payFlg,
-  }) async {
+  void getListFood(
+      {required int page,
+      String? keywords,
+      List<int>? foodKinds,
+      int? payFlg,
+      required String tokenReq}) async {
     try {
-      var token = StorageUtils.instance.getString(key: 'token_staff');
+      var token = tokenReq;
+
       final respons = await http.post(
         Uri.parse('$baseUrl$getListFoodBroughtReceipt'),
         headers: {
@@ -4073,7 +4067,7 @@ class _ManageBroughtReceiptDialogState
       );
 
       final data = jsonDecode(respons.body);
-
+      print("??? $data");
       try {
         if (data['status'] == 200) {
           setState(() {
@@ -4086,7 +4080,7 @@ class _ManageBroughtReceiptDialogState
             }
           });
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          print("ERROR BROUGHT RECEIPT PAGE 1 AAA");
         }
       } catch (error) {
         print("ERROR BROUGHT RECEIPT PAGE 2 $error");
@@ -4099,13 +4093,17 @@ class _ManageBroughtReceiptDialogState
   @override
   void initState() {
     super.initState();
-    getListFood(page: 1);
+    getListFood(
+      page: 1,
+      tokenReq: widget.token,
+    );
     getDetailsBroughtReceiptData(
         orderID: widget.orderID, tokenReq: widget.token);
     scrollListFoodController.addListener(() {
       if (scrollListFoodController.position.maxScrollExtent ==
           scrollListFoodController.offset) {
         getListFood(
+          tokenReq: widget.token,
           page: currentPage,
           keywords: query,
           foodKinds: selectedCategoriesIndex22.isEmpty
@@ -4267,6 +4265,7 @@ class _ManageBroughtReceiptDialogState
                                           selectedCategoriesIndex22.add(
                                               index); //thêm index category vào mảng
                                           getListFood(
+                                              tokenReq: widget.token,
                                               page: currentPage,
                                               keywords: query,
                                               foodKinds: selectedCategoriesIndex22
@@ -4281,6 +4280,7 @@ class _ManageBroughtReceiptDialogState
                                           selectedCategoriesIndex22.remove(
                                               index); //xoá index category vào mảng
                                           getListFood(
+                                              tokenReq: widget.token,
                                               page: currentPage,
                                               keywords: query,
                                               foodKinds: selectedCategoriesIndex22
@@ -4365,299 +4365,358 @@ class _ManageBroughtReceiptDialogState
                 ),
                 const SizedBox(height: 5.0),
                 const SizedBox(height: 10.0),
-                Expanded(
-                    child: ListView.builder(
-                        itemCount: filterProducts2.length + 1,
-                        controller: scrollListFoodController,
-                        itemBuilder: (context, index) {
-                          if (index < filterProducts2.length) {
-                            _foodQuantityController
-                                .add(TextEditingController());
-                            _foodQuantityController[index].text =
-                                filterProducts2[index].quantityFood.toString();
+                filterProducts2.isEmpty
+                    ? Container(
+                        width: 1.sw,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.r),
+                            gradient: const LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: [
+                                Color.fromRGBO(33, 82, 255, 1),
+                                Color.fromRGBO(33, 212, 253, 1)
+                              ],
+                            )),
+                        child: Center(
+                          child: TextApp(
+                            text: "Cửa hàng này chưa có món ăn",
+                            fontsize: 14.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            textAlign: TextAlign.center,
+                          ),
+                        ))
+                    : Expanded(
+                        child: ListView.builder(
+                            itemCount: filterProducts2.length + 1,
+                            controller: scrollListFoodController,
+                            itemBuilder: (context, index) {
+                              if (index < filterProducts2.length) {
+                                _foodQuantityController
+                                    .add(TextEditingController());
+                                _foodQuantityController[index].text =
+                                    filterProducts2[index]
+                                        .quantityFood
+                                        .toString();
 
-                            var imagePath1 = filterProducts2[index]
-                                ?.foodImages
-                                .replaceAll('["', '');
-                            var imagePath2 = imagePath1.replaceAll('"]', '');
+                                var imagePath1 = filterProducts2[index]
+                                    ?.foodImages
+                                    .replaceAll('["', '');
+                                var imagePath2 =
+                                    imagePath1.replaceAll('"]', '');
 
-                            return Card(
-                              elevation: 8.0,
-                              margin: const EdgeInsets.all(8),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.r),
-                              ),
-                              child: Container(
-                                  width: 1.sw,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius:
-                                          BorderRadius.circular(15.r)),
-                                  child: Column(
-                                    children: [
-                                      space15H,
-                                      SizedBox(
-                                          height: 160.w,
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(15.r),
-                                                topRight:
-                                                    Radius.circular(15.r)),
-                                            child: CachedNetworkImage(
-                                              fit: BoxFit.fill,
-                                              imageUrl: httpImage + imagePath2,
-                                              placeholder: (context, url) =>
-                                                  SizedBox(
-                                                height: 10.w,
-                                                width: 10.w,
-                                                child: const Center(
-                                                    child:
-                                                        CircularProgressIndicator()),
-                                              ),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      const Icon(Icons.error),
-                                            ),
-
-                                            // Image.network(
-                                            //   httpImage + imagePath2,
-                                            //   fit: BoxFit.cover,
-                                            // ),
-                                          )),
-                                      space10H,
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                return Card(
+                                  elevation: 8.0,
+                                  margin: const EdgeInsets.all(8),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.r),
+                                  ),
+                                  child: Container(
+                                      width: 1.sw,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(15.r)),
+                                      child: Column(
                                         children: [
-                                          TextApp(
-                                              //fix day
-                                              text: filterProducts2[index]
-                                                      .foodName ??
-                                                  ''),
-                                          TextApp(
-                                            text:
-                                                "${MoneyFormatter(amount: (filterProducts2[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                            fontsize: 20.sp,
-                                            fontWeight: FontWeight.bold,
+                                          space15H,
+                                          SizedBox(
+                                              height: 160.w,
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(15.r),
+                                                    topRight:
+                                                        Radius.circular(15.r)),
+                                                child: CachedNetworkImage(
+                                                  fit: BoxFit.fill,
+                                                  imageUrl:
+                                                      httpImage + imagePath2,
+                                                  placeholder: (context, url) =>
+                                                      SizedBox(
+                                                    height: 10.w,
+                                                    width: 10.w,
+                                                    child: const Center(
+                                                        child:
+                                                            CircularProgressIndicator()),
+                                                  ),
+                                                  errorWidget: (context, url,
+                                                          error) =>
+                                                      const Icon(Icons.error),
+                                                ),
+
+                                                // Image.network(
+                                                //   httpImage + imagePath2,
+                                                //   fit: BoxFit.cover,
+                                                // ),
+                                              )),
+                                          space10H,
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              TextApp(
+                                                  //fix day
+                                                  text: filterProducts2[index]
+                                                          .foodName ??
+                                                      ''),
+                                              TextApp(
+                                                text:
+                                                    "${MoneyFormatter(amount: (filterProducts2[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                fontsize: 20.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                      const Divider(),
-                                      Padding(
-                                        padding: EdgeInsets.all(20.w),
-                                        child: Container(
-                                            width: 1.sw,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(8.r)),
-                                            ),
-                                            child: IntrinsicHeight(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.stretch,
-                                                children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      if (filterProducts2[index]
-                                                              .quantityFood !=
-                                                          0) {
-                                                        minusQuantityFoodToBroughtReceipt(
-                                                          tokenReq:
-                                                              widget.token,
-                                                          foodID:
-                                                              filterProducts2[
+                                          const Divider(),
+                                          Padding(
+                                            padding: EdgeInsets.all(20.w),
+                                            child: Container(
+                                                width: 1.sw,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(8.r)),
+                                                ),
+                                                child: IntrinsicHeight(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .stretch,
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () {
+                                                          if (filterProducts2[
                                                                       index]
-                                                                  .foodId,
-                                                        );
-                                                      } else {
-                                                        showSnackBarTopCustom(
-                                                            title: "",
-                                                            context: navigatorKey
-                                                                .currentContext,
-                                                            mess:
-                                                                "Thao tác không thể thực hiện",
-                                                            color: Colors.red);
-                                                      }
-                                                    },
-                                                    child: Container(
-                                                      width: 70.w,
-                                                      height: 35.w,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          8.r),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          8.r)),
-                                                          gradient:
-                                                              const LinearGradient(
-                                                            begin: Alignment
-                                                                .topRight,
-                                                            end: Alignment
-                                                                .bottomLeft,
-                                                            colors: [
-                                                              Color.fromRGBO(33,
-                                                                  82, 255, 1),
-                                                              Color.fromRGBO(33,
-                                                                  212, 253, 1)
-                                                            ],
-                                                          )),
-                                                      child: Center(
-                                                        child: TextApp(
-                                                          text: "-",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          color: Colors.white,
-                                                          fontsize: 18.sp,
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                                                  .quantityFood !=
+                                                              0) {
+                                                            minusQuantityFoodToBroughtReceipt(
+                                                              tokenReq:
+                                                                  widget.token,
+                                                              foodID:
+                                                                  filterProducts2[
+                                                                          index]
+                                                                      .foodId,
+                                                            );
+                                                          } else {
+                                                            showSnackBarTopCustom(
+                                                                title: "",
+                                                                context:
+                                                                    navigatorKey
+                                                                        .currentContext,
+                                                                mess:
+                                                                    "Thao tác không thể thực hiện",
+                                                                color:
+                                                                    Colors.red);
+                                                          }
+                                                        },
+                                                        child: Container(
+                                                          width: 70.w,
+                                                          height: 35.w,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                                  borderRadius: BorderRadius.only(
+                                                                      topLeft: Radius
+                                                                          .circular(8
+                                                                              .r),
+                                                                      bottomLeft:
+                                                                          Radius.circular(8
+                                                                              .r)),
+                                                                  gradient:
+                                                                      const LinearGradient(
+                                                                    begin: Alignment
+                                                                        .topRight,
+                                                                    end: Alignment
+                                                                        .bottomLeft,
+                                                                    colors: [
+                                                                      Color.fromRGBO(
+                                                                          33,
+                                                                          82,
+                                                                          255,
+                                                                          1),
+                                                                      Color.fromRGBO(
+                                                                          33,
+                                                                          212,
+                                                                          253,
+                                                                          1)
+                                                                    ],
+                                                                  )),
+                                                          child: Center(
+                                                            child: TextApp(
+                                                              text: "-",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              color:
+                                                                  Colors.white,
+                                                              fontsize: 18.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                      child: Container(
-                                                    decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                          width: 0.4,
-                                                          color: Colors.grey),
-                                                    ),
-                                                    child: Center(
-                                                      child: TextField(
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        inputFormatters: <TextInputFormatter>[
-                                                          FilteringTextInputFormatter
-                                                              .allow(RegExp(
-                                                                  "[0-9]")),
-                                                        ], // Only numbers can be entered,
-                                                        style: TextStyle(
-                                                            fontSize: 12.sp,
-                                                            color: grey),
-                                                        controller:
-                                                            _foodQuantityController[
-                                                                index],
+                                                      Expanded(
+                                                          child: Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          border: Border.all(
+                                                              width: 0.4,
+                                                              color:
+                                                                  Colors.grey),
+                                                        ),
+                                                        child: Center(
+                                                          child: TextField(
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            inputFormatters: <TextInputFormatter>[
+                                                              FilteringTextInputFormatter
+                                                                  .allow(RegExp(
+                                                                      "[0-9]")),
+                                                            ], // Only numbers can be entered,
+                                                            style: TextStyle(
+                                                                fontSize: 12.sp,
+                                                                color: grey),
+                                                            controller:
+                                                                _foodQuantityController[
+                                                                    index],
 
-                                                        onTapOutside: (event) {
-                                                          print('onTapOutside');
-                                                          FocusManager.instance
-                                                              .primaryFocus
-                                                              ?.unfocus();
-                                                          updateQuantityFoodToBroughtReceipt(
+                                                            onTapOutside:
+                                                                (event) {
+                                                              print(
+                                                                  'onTapOutside');
+                                                              FocusManager
+                                                                  .instance
+                                                                  .primaryFocus
+                                                                  ?.unfocus();
+                                                              updateQuantityFoodToBroughtReceipt(
+                                                                tokenReq: widget
+                                                                    .token,
+                                                                foodID:
+                                                                    filterProducts2[
+                                                                            index]
+                                                                        .foodId,
+                                                                quantityFood:
+                                                                    _foodQuantityController[
+                                                                            index]
+                                                                        .text,
+                                                              );
+                                                            },
+                                                            cursorColor: grey,
+                                                            decoration:
+                                                                const InputDecoration(
+                                                              fillColor: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      226,
+                                                                      104,
+                                                                      159),
+                                                              focusedBorder:
+                                                                  OutlineInputBorder(
+                                                                borderSide: BorderSide(
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            214,
+                                                                            51,
+                                                                            123,
+                                                                            0.6),
+                                                                    width: 2.0),
+                                                              ),
+
+                                                              hintText: '',
+                                                              isDense:
+                                                                  true, // Added this
+                                                              contentPadding:
+                                                                  EdgeInsets.all(
+                                                                      8), // Added this
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )),
+                                                      InkWell(
+                                                        onTap: () {
+                                                          plusQuantityFoodToBroughtReceipt(
                                                             tokenReq:
                                                                 widget.token,
                                                             foodID:
                                                                 filterProducts2[
                                                                         index]
                                                                     .foodId,
-                                                            quantityFood:
-                                                                _foodQuantityController[
-                                                                        index]
-                                                                    .text,
                                                           );
                                                         },
-                                                        cursorColor: grey,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          fillColor:
-                                                              Color.fromARGB(
-                                                                  255,
-                                                                  226,
-                                                                  104,
-                                                                  159),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color: Color
-                                                                    .fromRGBO(
-                                                                        214,
-                                                                        51,
-                                                                        123,
-                                                                        0.6),
-                                                                width: 2.0),
+                                                        child: Container(
+                                                          width: 70.w,
+                                                          height: 35.w,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                                  borderRadius: BorderRadius.only(
+                                                                      topRight:
+                                                                          Radius.circular(8
+                                                                              .r),
+                                                                      bottomRight:
+                                                                          Radius.circular(8
+                                                                              .r)),
+                                                                  gradient:
+                                                                      const LinearGradient(
+                                                                    begin: Alignment
+                                                                        .topRight,
+                                                                    end: Alignment
+                                                                        .bottomLeft,
+                                                                    colors: [
+                                                                      Color.fromRGBO(
+                                                                          33,
+                                                                          82,
+                                                                          255,
+                                                                          1),
+                                                                      Color.fromRGBO(
+                                                                          33,
+                                                                          212,
+                                                                          253,
+                                                                          1)
+                                                                    ],
+                                                                  )),
+                                                          child: Center(
+                                                            child: TextApp(
+                                                              text: "+",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              color:
+                                                                  Colors.white,
+                                                              fontsize: 18.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
                                                           ),
-
-                                                          hintText: '',
-                                                          isDense:
-                                                              true, // Added this
-                                                          contentPadding:
-                                                              EdgeInsets.all(
-                                                                  8), // Added this
                                                         ),
-                                                      ),
-                                                    ),
-                                                  )),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      plusQuantityFoodToBroughtReceipt(
-                                                        tokenReq: widget.token,
-                                                        foodID: filterProducts2[
-                                                                index]
-                                                            .foodId,
-                                                      );
-                                                    },
-                                                    child: Container(
-                                                      width: 70.w,
-                                                      height: 35.w,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.only(
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          8.r),
-                                                                  bottomRight:
-                                                                      Radius.circular(
-                                                                          8.r)),
-                                                          gradient:
-                                                              const LinearGradient(
-                                                            begin: Alignment
-                                                                .topRight,
-                                                            end: Alignment
-                                                                .bottomLeft,
-                                                            colors: [
-                                                              Color.fromRGBO(33,
-                                                                  82, 255, 1),
-                                                              Color.fromRGBO(33,
-                                                                  212, 253, 1)
-                                                            ],
-                                                          )),
-                                                      child: Center(
-                                                        child: TextApp(
-                                                          text: "+",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          color: Colors.white,
-                                                          fontsize: 18.sp,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            )),
-                                      )
-                                    ],
-                                  )),
-                            );
-                          } else {
-                            return Center(
-                              child: hasMore
-                                  ? CircularProgressIndicator()
-                                  : Container(),
-                            );
-                          }
-                        })),
+                                                      )
+                                                    ],
+                                                  ),
+                                                )),
+                                          )
+                                        ],
+                                      )),
+                                );
+                              } else {
+                                return Center(
+                                  child: hasMore
+                                      ? CircularProgressIndicator()
+                                      : Container(),
+                                );
+                              }
+                            })),
               ],
             ),
           ),
@@ -4973,7 +5032,7 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                                             text: state.printBroughtReceiptModel
                                                     ?.data[index].foodName ??
                                                 '',
-                                            fontsize: 16.sp,
+                                            fontsize: 14.sp,
                                             color: blueText,
                                           ),
                                         ),
@@ -4981,14 +5040,14 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                                     ),
                                     Container(
                                       // color: Colors.red,
-                                      width: 20.w,
+                                      width: 10.w,
                                       child: Center(
                                         child: TextApp(
                                           text: state.printBroughtReceiptModel
                                                   ?.data[index].quantityFood
                                                   .toString() ??
                                               '',
-                                          fontsize: 16.sp,
+                                          fontsize: 14.sp,
                                           color: blueText,
                                         ),
                                       ),
@@ -4997,9 +5056,11 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                                       // color: Colors.green,
                                       width: 50.w,
                                       child: TextApp(
+                                        isOverFlow: false,
+                                        softWrap: true,
                                         text:
                                             "${MoneyFormatter(amount: (state.printBroughtReceiptModel?.data[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                        fontsize: 16.sp,
+                                        fontsize: 14.sp,
                                         color: blueText,
                                       ),
                                     ),
@@ -5007,9 +5068,11 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                                       // color: Colors.yellow,
                                       width: 50.w,
                                       child: TextApp(
+                                        isOverFlow: false,
+                                        softWrap: true,
                                         text:
                                             "${MoneyFormatter(amount: ((state.printBroughtReceiptModel!.data[index].foodPrice * state.printBroughtReceiptModel!.data[index].quantityFood)).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                        fontsize: 16.sp,
+                                        fontsize: 14.sp,
                                         color: blueText,
                                       ),
                                     ),
@@ -5509,7 +5572,7 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                                             text: state.printBroughtReceiptModel
                                                     ?.data[index].foodName ??
                                                 '',
-                                            fontsize: 16.sp,
+                                            fontsize: 14.sp,
                                             color: blueText,
                                           ),
                                         ),
@@ -5517,14 +5580,14 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                                     ),
                                     Container(
                                       // color: Colors.red,
-                                      width: 20.w,
+                                      width: 10.w,
                                       child: Center(
                                         child: TextApp(
                                           text: state.printBroughtReceiptModel
                                                   ?.data[index].quantityFood
                                                   .toString() ??
                                               '',
-                                          fontsize: 16.sp,
+                                          fontsize: 14.sp,
                                           color: blueText,
                                         ),
                                       ),
@@ -5533,9 +5596,11 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                                       // color: Colors.green,
                                       width: 50.w,
                                       child: TextApp(
+                                        isOverFlow: false,
+                                        softWrap: true,
                                         text:
                                             "${MoneyFormatter(amount: (state.printBroughtReceiptModel?.data[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                        fontsize: 16.sp,
+                                        fontsize: 14.sp,
                                         color: blueText,
                                       ),
                                     ),
@@ -5543,9 +5608,11 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                                       // color: Colors.yellow,
                                       width: 50.w,
                                       child: TextApp(
+                                        isOverFlow: false,
+                                        softWrap: true,
                                         text:
                                             "${MoneyFormatter(amount: ((state.printBroughtReceiptModel!.data[index].foodPrice * state.printBroughtReceiptModel!.data[index].quantityFood)).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                        fontsize: 16.sp,
+                                        fontsize: 14.sp,
                                         color: blueText,
                                       ),
                                     ),
@@ -6265,8 +6332,8 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
       contentPadding: const EdgeInsets.all(0),
       surfaceTintColor: Colors.white,
       backgroundColor: Colors.white,
-      content: SizedBox(
-        width: double.maxFinite,
+      content: Container(
+        width: 1.sw,
         child: ListView(
           shrinkWrap: true,
           children: [
@@ -6274,395 +6341,404 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                    width: 1.sw,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      border: const Border(
-                          top: BorderSide(width: 0, color: Colors.grey),
-                          bottom: BorderSide(width: 1, color: Colors.grey),
-                          left: BorderSide(width: 0, color: Colors.grey),
-                          right: BorderSide(width: 0, color: Colors.grey)),
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15.w),
-                          topRight: Radius.circular(15.w)),
-                      // color: Colors.amber,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          children: [
-                            TextApp(
-                              text: "Cửa hàng",
-                              fontsize: 18.sp,
-                              color: blueText,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ],
-                        ),
-                      ],
-                    )),
-                space15H,
+                Padding(
+                  padding: EdgeInsets.only(top: 15.w, left: 15.w, right: 15.w),
+                  child: Container(
+                      width: 1.sw,
+                      height: 50,
+                      // decoration: BoxDecoration(
+                      //   borderRadius: BorderRadius.only(
+                      //       topLeft: Radius.circular(15.w),
+                      //       topRight: Radius.circular(15.w)),
+                      //   // color: Colors.amber,
+                      // ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              TextApp(
+                                text: "Cửa hàng",
+                                fontsize: 18.sp,
+                                color: blueText,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ],
+                          ),
+                        ],
+                      )),
+                ),
                 SingleChildScrollView(
-                    child: Form(
-                  key: _formField,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextApp(
-                        text: storeId,
-                        fontsize: 12.sp,
-                        fontWeight: FontWeight.bold,
-                        color: blueText,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      TextFormField(
-                        controller: idStoreController,
-                        cursorColor: const Color.fromRGBO(73, 80, 87, 1),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return canNotNull;
-                          } else {
-                            return null;
-                          }
-                        },
-                        decoration: InputDecoration(
-                            fillColor: const Color.fromARGB(255, 226, 104, 159),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Color.fromRGBO(214, 51, 123, 0.6),
-                                  width: 2.0),
-                              borderRadius: BorderRadius.circular(8.r),
+                    child: Padding(
+                  padding: EdgeInsets.all(15.w),
+                  child: Form(
+                    key: _formField,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextApp(
+                          text: storeId,
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        TextFormField(
+                          controller: idStoreController,
+                          cursorColor: const Color.fromRGBO(73, 80, 87, 1),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return canNotNull;
+                            } else {
+                              return null;
+                            }
+                          },
+                          decoration: InputDecoration(
+                              fillColor:
+                                  const Color.fromARGB(255, 226, 104, 159),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color.fromRGBO(214, 51, 123, 0.6),
+                                    width: 2.0),
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              hintText: storeId,
+                              isDense: true,
+                              contentPadding:
+                                  EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
+                        ),
+                        ////////
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        //////
+                        TextApp(
+                          text: storeName,
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        TextFormField(
+                          controller: nameStoreController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return canNotNull;
+                            } else {
+                              return null;
+                            }
+                          },
+                          cursorColor: const Color.fromRGBO(73, 80, 87, 1),
+                          decoration: InputDecoration(
+                              fillColor:
+                                  const Color.fromARGB(255, 226, 104, 159),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color.fromRGBO(214, 51, 123, 0.6),
+                                    width: 2.0),
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              hintText: storeName,
+                              isDense: true,
+                              contentPadding:
+                                  EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
+                        ),
+                        /////
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        ////
+                        TextApp(
+                          text: storeAddress,
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        TextFormField(
+                          controller: addressStoreController,
+                          cursorColor: const Color.fromRGBO(73, 80, 87, 1),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return canNotNull;
+                            } else {
+                              return null;
+                            }
+                          },
+                          decoration: InputDecoration(
+                              fillColor:
+                                  const Color.fromARGB(255, 226, 104, 159),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color.fromRGBO(214, 51, 123, 0.6),
+                                    width: 2.0),
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              hintText: storeAddress,
+                              isDense: true,
+                              contentPadding:
+                                  EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
+                        ),
+                        /////
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        ////
+                        TextApp(
+                          text: displayMode,
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        TextApp(
+                          text: allowOpenStore,
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.normal,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        SizedBox(
+                          width: 50.w,
+                          height: 30.w,
+                          child: FittedBox(
+                            fit: BoxFit.fill,
+                            child: CupertinoSwitch(
+                              value: light,
+                              activeColor:
+                                  const Color.fromRGBO(58, 65, 111, .95),
+                              onChanged: (bool value) {
+                                if (mounted) {
+                                  setState(() {
+                                    light = value;
+                                  });
+                                }
+                              },
                             ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.r),
-                            ),
-                            hintText: storeId,
-                            isDense: true,
-                            contentPadding:
-                                EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
-                      ),
-                      ////////
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      //////
-                      TextApp(
-                        text: storeName,
-                        fontsize: 12.sp,
-                        fontWeight: FontWeight.bold,
-                        color: blueText,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      TextFormField(
-                        controller: nameStoreController,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return canNotNull;
-                          } else {
-                            return null;
-                          }
-                        },
-                        cursorColor: const Color.fromRGBO(73, 80, 87, 1),
-                        decoration: InputDecoration(
-                            fillColor: const Color.fromARGB(255, 226, 104, 159),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Color.fromRGBO(214, 51, 123, 0.6),
-                                  width: 2.0),
-                              borderRadius: BorderRadius.circular(8.r),
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.r),
-                            ),
-                            hintText: storeName,
-                            isDense: true,
-                            contentPadding:
-                                EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
-                      ),
-                      /////
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      ////
-                      TextApp(
-                        text: storeAddress,
-                        fontsize: 12.sp,
-                        fontWeight: FontWeight.bold,
-                        color: blueText,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      TextFormField(
-                        controller: addressStoreController,
-                        cursorColor: const Color.fromRGBO(73, 80, 87, 1),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return canNotNull;
-                          } else {
-                            return null;
-                          }
-                        },
-                        decoration: InputDecoration(
-                            fillColor: const Color.fromARGB(255, 226, 104, 159),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Color.fromRGBO(214, 51, 123, 0.6),
-                                  width: 2.0),
-                              borderRadius: BorderRadius.circular(8.r),
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.r),
-                            ),
-                            hintText: storeAddress,
-                            isDense: true,
-                            contentPadding:
-                                EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
-                      ),
-                      /////
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      ////
-                      TextApp(
-                        text: displayMode,
-                        fontsize: 12.sp,
-                        fontWeight: FontWeight.bold,
-                        color: blueText,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      TextApp(
-                        text: allowOpenStore,
-                        fontsize: 12.sp,
-                        fontWeight: FontWeight.normal,
-                        color: blueText,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      SizedBox(
-                        width: 50.w,
-                        height: 30.w,
-                        child: FittedBox(
-                          fit: BoxFit.fill,
-                          child: CupertinoSwitch(
-                            value: light,
-                            activeColor: const Color.fromRGBO(58, 65, 111, .95),
-                            onChanged: (bool value) {
-                              if (mounted) {
-                                setState(() {
-                                  light = value;
-                                });
-                              }
-                            },
                           ),
                         ),
-                      ),
 
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      ////
-                      TextApp(
-                        text: desStore,
-                        fontsize: 12.sp,
-                        fontWeight: FontWeight.bold,
-                        color: blueText,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      TextApp(
-                        text: describeDetailSotre,
-                        fontsize: 12.sp,
-                        fontWeight: FontWeight.normal,
-                        color: blueText,
-                      ),
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      Container(
-                          width: 1.sw,
-                          // height: 250.h,
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        ////
+                        TextApp(
+                          text: desStore,
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        TextApp(
+                          text: describeDetailSotre,
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.normal,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Container(
+                            width: 1.sw,
+                            // height: 250.h,
 
-                          decoration: BoxDecoration(
-                            border: const Border(
-                                top: BorderSide(width: 1, color: Colors.grey),
-                                bottom:
-                                    BorderSide(width: 1, color: Colors.grey),
-                                left: BorderSide(width: 1, color: Colors.grey),
-                                right:
-                                    BorderSide(width: 1, color: Colors.grey)),
-                            borderRadius: BorderRadius.circular(15.w),
-                            // color: Colors.amber,
-                          ),
-                          child: Column(
-                            children: [
-                              QuillProvider(
-                                  configurations: QuillConfigurations(
-                                      controller: _controllerQuill),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                          width: 1.sw,
-                                          decoration: const BoxDecoration(
-                                            border: Border(
-                                                top: BorderSide(
-                                                    width: 0,
-                                                    color: Colors.grey),
-                                                bottom: BorderSide(
-                                                    width: 1,
-                                                    color: Colors.grey),
-                                                left: BorderSide(
-                                                    width: 0,
-                                                    color: Colors.grey),
-                                                right: BorderSide(
-                                                    width: 0,
-                                                    color: Colors.grey)),
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(10.w),
-                                            child: const QuillToolbar(
-                                              configurations:
-                                                  QuillToolbarConfigurations(
-                                                      toolbarIconAlignment:
-                                                          WrapAlignment.center,
-                                                      showFontFamily: true,
-                                                      showFontSize: false,
-                                                      showBoldButton: true,
-                                                      showItalicButton: true,
-                                                      showSmallButton: false,
-                                                      showUnderLineButton: true,
-                                                      showStrikeThrough: false,
-                                                      showInlineCode: false,
-                                                      showColorButton: false,
-                                                      showBackgroundColorButton:
-                                                          false,
-                                                      showClearFormat: false,
-                                                      showAlignmentButtons:
-                                                          true,
-                                                      showLeftAlignment: true,
-                                                      showCenterAlignment: true,
-                                                      showRightAlignment: true,
-                                                      showJustifyAlignment:
-                                                          true,
-                                                      showHeaderStyle: false,
-                                                      showListNumbers: true,
-                                                      showListBullets: true,
-                                                      showListCheck: false,
-                                                      showCodeBlock: false,
-                                                      showQuote: false,
-                                                      showIndent: false,
-                                                      showLink: true,
-                                                      showUndo: false,
-                                                      showRedo: false,
-                                                      showDirection: false,
-                                                      showSearchButton: false,
-                                                      showSubscript: false,
-                                                      showSuperscript: false),
-                                            ),
-                                          )),
-                                      // space20H,
-                                      Container(
-                                        margin: EdgeInsets.all(5.w),
-                                        height: 200.h,
-                                        child: QuillEditor.basic(
-                                          configurations:
-                                              const QuillEditorConfigurations(
-                                            readOnly: false,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  )),
-                            ],
-                          )),
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      TextApp(
-                        text: storeImage,
-                        fontsize: 12.sp,
-                        fontWeight: FontWeight.bold,
-                        color: blueText,
-                      ),
-                      SizedBox(
-                        height: 15.h,
-                      ),
-                      OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.r),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+
+                              borderRadius: BorderRadius.circular(15.w),
+                              // color: Colors.amber,
                             ),
+                            child: Column(
+                              children: [
+                                QuillProvider(
+                                    configurations: QuillConfigurations(
+                                        controller: _controllerQuill),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                            width: 1.sw,
+                                            decoration: const BoxDecoration(
+                                              // border: Border.all(
+                                              //     color: Colors.grey),
 
-                            backgroundColor: Colors.white,
-                            side: BorderSide(color: Colors.grey, width: 1), //
-                          ),
-                          onPressed: () {
-                            selectImages();
-                          },
-                          child: Column(
-                            children: [
-                              Visibility(
-                                  visible: widget.imageFileList!.length == 0,
-                                  child: SizedBox(width: 1.sw, height: 150.h)),
-                              SizedBox(
-                                width: double.infinity,
-                                child: GridView.builder(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: widget.imageFileList!.length,
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 2),
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                              width: 100.w,
-                                              height: 100.w,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(15.w),
-                                                child: Image.file(
-                                                  File(widget
-                                                      .imageFileList![index]
-                                                      .path),
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              )),
-                                          space10H,
-                                          InkWell(
-                                            onTap: () {
-                                              deleteImages(
-                                                  widget.imageFileList![index]);
-                                            },
-                                            child: TextApp(
-                                              text: deleteImage,
-                                              color: Colors.blue,
+                                              border: Border(
+                                                  top: BorderSide(
+                                                      width: 0,
+                                                      color: Colors.grey),
+                                                  bottom: BorderSide(
+                                                      width: 1,
+                                                      color: Colors.grey),
+                                                  left: BorderSide(
+                                                      width: 0,
+                                                      color: Colors.grey),
+                                                  right: BorderSide(
+                                                      width: 0,
+                                                      color: Colors.grey)),
                                             ),
-                                          )
-                                        ],
-                                      );
-                                    }),
-                              )
-                            ],
-                          )),
-                    ],
+                                            child: Padding(
+                                              padding: EdgeInsets.all(10.w),
+                                              child: const QuillToolbar(
+                                                configurations:
+                                                    QuillToolbarConfigurations(
+                                                        toolbarIconAlignment:
+                                                            WrapAlignment
+                                                                .center,
+                                                        showFontFamily: true,
+                                                        showFontSize: false,
+                                                        showBoldButton: true,
+                                                        showItalicButton: true,
+                                                        showSmallButton: false,
+                                                        showUnderLineButton:
+                                                            true,
+                                                        showStrikeThrough:
+                                                            false,
+                                                        showInlineCode: false,
+                                                        showColorButton: false,
+                                                        showBackgroundColorButton:
+                                                            false,
+                                                        showClearFormat: false,
+                                                        showAlignmentButtons:
+                                                            true,
+                                                        showLeftAlignment: true,
+                                                        showCenterAlignment:
+                                                            true,
+                                                        showRightAlignment:
+                                                            true,
+                                                        showJustifyAlignment:
+                                                            true,
+                                                        showHeaderStyle: false,
+                                                        showListNumbers: true,
+                                                        showListBullets: true,
+                                                        showListCheck: false,
+                                                        showCodeBlock: false,
+                                                        showQuote: false,
+                                                        showIndent: false,
+                                                        showLink: true,
+                                                        showUndo: false,
+                                                        showRedo: false,
+                                                        showDirection: false,
+                                                        showSearchButton: false,
+                                                        showSubscript: false,
+                                                        showSuperscript: false),
+                                              ),
+                                            )),
+                                        // space20H,
+                                        Container(
+                                          margin: EdgeInsets.all(5.w),
+                                          height: 200.h,
+                                          child: QuillEditor.basic(
+                                            configurations:
+                                                const QuillEditorConfigurations(
+                                              readOnly: false,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    )),
+                              ],
+                            )),
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        TextApp(
+                          text: storeImage,
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.r),
+                              ),
+
+                              backgroundColor: Colors.white,
+                              side: BorderSide(color: Colors.grey, width: 1), //
+                            ),
+                            onPressed: () {
+                              selectImages();
+                            },
+                            child: Column(
+                              children: [
+                                Visibility(
+                                    visible: widget.imageFileList!.length == 0,
+                                    child:
+                                        SizedBox(width: 1.sw, height: 150.h)),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: GridView.builder(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: widget.imageFileList!.length,
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 2),
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                                width: 100.w,
+                                                height: 100.w,
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15.w),
+                                                  child: Image.file(
+                                                    File(widget
+                                                        .imageFileList![index]
+                                                        .path),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                )),
+                                            space10H,
+                                            InkWell(
+                                              onTap: () {
+                                                deleteImages(widget
+                                                    .imageFileList![index]);
+                                              },
+                                              child: TextApp(
+                                                text: deleteImage,
+                                                color: Colors.blue,
+                                              ),
+                                            )
+                                          ],
+                                        );
+                                      }),
+                                )
+                              ],
+                            )),
+                      ],
+                    ),
                   ),
                 )),
                 space15H,
@@ -6670,11 +6746,11 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                   width: 1.sw,
                   height: 80,
                   decoration: BoxDecoration(
-                    border: const Border(
-                        top: BorderSide(width: 1, color: Colors.grey),
-                        bottom: BorderSide(width: 0, color: Colors.grey),
-                        left: BorderSide(width: 0, color: Colors.grey),
-                        right: BorderSide(width: 0, color: Colors.grey)),
+                    // border: const Border(
+                    //     top: BorderSide(width: 1, color: Colors.grey),
+                    //     bottom: BorderSide(width: 0, color: Colors.grey),
+                    //     left: BorderSide(width: 0, color: Colors.grey),
+                    //     right: BorderSide(width: 0, color: Colors.grey)),
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(15.w),
                         bottomRight: Radius.circular(15.w)),

@@ -4,6 +4,7 @@ import 'package:app_restaurant/bloc/list_bill_shop/list_bill_shop_bloc.dart';
 import 'package:app_restaurant/bloc/login/staff_login_bloc.dart';
 import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
 import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
+import 'package:app_restaurant/bloc/manager/stores/list_stores_bloc.dart';
 import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
 import 'package:app_restaurant/bloc/network/network_cubit.dart';
 import 'package:app_restaurant/bloc/payment/payment_bloc.dart';
@@ -33,6 +34,7 @@ class AppBlocProvider extends StatelessWidget {
           create: (_) => TableBloc(),
         ),
         BlocProvider(create: (_) => ManagerLoginBloc()),
+        BlocProvider(create: (_) => ListStoresBloc()),
         BlocProvider(create: (_) => TableCancleBloc()),
         BlocProvider(create: (_) => TableSaveInforBloc()),
         BlocProvider(create: (_) => SwitchTableBloc()),
