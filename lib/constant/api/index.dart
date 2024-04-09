@@ -23,6 +23,9 @@ const String managerCheckPassword = 'user/check-password';
 const String managerUpdateCitizenIDApi = 'user/update-citizen-identification';
 const String managerGetListFood = 'user/foods/list';
 const String managerGetListStores = 'user/stores';
+const String deleteFood = 'user/foods/delete';
+const String createFood = 'user/foods/create';
+const String editFood = 'user/foods/edit';
 
 //Shared API
 const String userInformationApi = 'information';

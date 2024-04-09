@@ -132,7 +132,9 @@ class _BookingTableDialogState extends State<BookingTableDialog>
   void searchProduct(String query) {
     setState(() {
       this.query = query;
+      currentPage = 1;
     });
+    listFoodTableCurrent.clear();
     getListFoodTable(
       tokenReq: widget.token,
       page: currentPage,
@@ -227,7 +229,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
         }),
       );
       final data = jsonDecode(respons.body);
-
+      log(currentPage.toString());
       try {
         if (data['status'] == 200) {
           if (mounted) {
@@ -235,7 +237,8 @@ class _BookingTableDialogState extends State<BookingTableDialog>
               var foodTableDataRes = FoodTableDataModel.fromJson(data);
               listFoodTableCurrent.addAll(foodTableDataRes.foods.data);
               currentPage++;
-              if (foodTableDataRes.foods.data.isEmpty) {
+              if (foodTableDataRes.foods.data.isEmpty ||
+                  foodTableDataRes.foods.data.length <= 15) {
                 hasMore = false;
               }
             });
@@ -536,17 +539,18 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                         '',
                                   ));
                                 } else if (index == 1) {
-                                  // getListFoodTable(page: 1);
-                                  BlocProvider.of<TableBloc>(context).add(
-                                      GetTableFoods(
-                                          token: widget.token,
-                                          client: widget.role,
-                                          shopId: widget.shopID,
-                                          roomId: widget.idRoom,
-                                          tableId:
-                                              widget.currentTable?.roomTableId,
-                                          limit: 15,
-                                          page: 1));
+                                  getListFoodTable(
+                                      tokenReq: widget.token, page: 1);
+                                  // BlocProvider.of<TableBloc>(context).add(
+                                  //     GetTableFoods(
+                                  //         token: widget.token,
+                                  //         client: widget.role,
+                                  //         shopId: widget.shopID,
+                                  //         roomId: widget.idRoom,
+                                  //         tableId:
+                                  //             widget.currentTable?.roomTableId,
+                                  //         limit: 15,
+                                  //         page: 1));
                                   getDetailFoodTable(tokenReq: widget.token);
                                 }
                                 // else if (index == 2) {
@@ -1017,12 +1021,15 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                     .indexOf(
                                                                         lableFood);
                                                             selectedCategoriesIndex
-                                                                .add(
-                                                                    index); //thêm index category vào mảng
+                                                                .add(index);
+                                                            //thêm index category vào mảng
+                                                            listFoodTableCurrent
+                                                                .clear();
+                                                            currentPage = 1;
                                                             getListFoodTable(
                                                               tokenReq:
                                                                   widget.token,
-                                                              page: 1,
+                                                              page: currentPage,
                                                               keywords: query,
                                                               foodKinds:
                                                                   selectedCategoriesIndex
@@ -1041,10 +1048,14 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                             selectedCategoriesIndex
                                                                 .remove(
                                                                     index); //xoá index category vào mảng
+                                                            listFoodTableCurrent
+                                                                .clear();
+                                                            currentPage = 1;
+
                                                             getListFoodTable(
                                                               tokenReq:
                                                                   widget.token,
-                                                              page: 1,
+                                                              page: currentPage,
                                                               keywords: query,
                                                               foodKinds:
                                                                   selectedCategoriesIndex
@@ -1163,10 +1174,6 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                             itemBuilder: (context, index) {
                                               if (index <
                                                   filterProducts.length) {
-                                                log(filterProducts[0]
-                                                    .quantityFood
-                                                    .toString());
-
                                                 _foodQuantityController.add(
                                                     TextEditingController());
                                                 _foodQuantityController[index]
@@ -3785,7 +3792,7 @@ class _ManageBroughtReceiptDialogState
 
   List<String> listAllCategoriesFood = [];
   List<int> selectedCategoriesIndex = [];
-  List<int> selectedCategoriesIndex22 = [];
+  // List<int> selectedCategoriesIndex22 = [];
   final List<TextEditingController> _foodQuantityController = [];
   final scrollListFoodController = ScrollController();
   bool hasMore = true;
@@ -3794,20 +3801,21 @@ class _ManageBroughtReceiptDialogState
   int? currentCartBroughtReceipt;
   String? currentOrderTotalBroughtReceipt;
   int? orderNewIDBroughtReceipt;
-  List lamchoichoi = [];
+  List listFoodCurrent = [];
 
   String query = '';
   void searchProduct(String query) {
     setState(() {
       this.query = query;
+      currentPage = 1;
     });
-
+    listFoodCurrent.clear();
     getListFood(
       tokenReq: widget.token,
-      page: currentPage,
+      page: 1,
       keywords: query,
       foodKinds:
-          selectedCategoriesIndex22.isEmpty ? null : selectedCategoriesIndex22,
+          selectedCategoriesIndex.isEmpty ? null : selectedCategoriesIndex,
     );
   }
 
@@ -3839,12 +3847,12 @@ class _ManageBroughtReceiptDialogState
       try {
         if (data['status'] == 200) {
           setState(() {
-            lamchoichoi.clear();
+            listFoodCurrent.clear();
             currentOrderTotalBroughtReceipt =
                 detailsBroughtReceiptRes.orderTotal;
             currentCartBroughtReceipt =
                 detailsBroughtReceiptRes.countOrderFoods;
-            lamchoichoi.addAll(detailsBroughtReceiptRes.data.data);
+            listFoodCurrent.addAll(detailsBroughtReceiptRes.data.data);
           });
         } else {
           print("ERROR BROUGHT RECEIPT PAGE 1 CCCC");
@@ -3869,10 +3877,6 @@ class _ManageBroughtReceiptDialogState
 
   void plusQuantityFoodToBroughtReceipt(
       {required int foodID, int? orderID, required String tokenReq}) async {
-    log("orderNewIDBroughtReceipt");
-    log(orderNewIDBroughtReceipt.toString());
-    log("widget.orderID");
-    log(widget.orderID.toString());
     try {
       var token = tokenReq;
       final respons = await http.post(
@@ -4007,9 +4011,11 @@ class _ManageBroughtReceiptDialogState
       try {
         if (data['status'] == 200) {
           var newOrderId = data['order_id'];
-          setState(() {
-            orderNewIDBroughtReceipt = newOrderId;
-          });
+          mounted
+              ? setState(() {
+                  orderNewIDBroughtReceipt = newOrderId;
+                })
+              : null;
           showSnackBarTopCustom(
               title: "Thành công",
               context: navigatorKey.currentContext,
@@ -4073,9 +4079,10 @@ class _ManageBroughtReceiptDialogState
           setState(() {
             var detailsBroughtReceiptRes =
                 ManageBroughtReceiptModel.fromJson(data);
-            lamchoichoi.addAll(detailsBroughtReceiptRes.data.data);
+            listFoodCurrent.addAll(detailsBroughtReceiptRes.data.data);
             currentPage++;
-            if (detailsBroughtReceiptRes.data.data.isEmpty) {
+            if (detailsBroughtReceiptRes.data.data.isEmpty ||
+                detailsBroughtReceiptRes.data.data.length <= 15) {
               hasMore = false;
             }
           });
@@ -4106,9 +4113,8 @@ class _ManageBroughtReceiptDialogState
           tokenReq: widget.token,
           page: currentPage,
           keywords: query,
-          foodKinds: selectedCategoriesIndex22.isEmpty
-              ? null
-              : selectedCategoriesIndex22,
+          foodKinds:
+              selectedCategoriesIndex.isEmpty ? null : selectedCategoriesIndex,
         );
       }
     });
@@ -4129,11 +4135,11 @@ class _ManageBroughtReceiptDialogState
         List<String> foodKindOfShop =
             StorageUtils.instance.getStringList(key: 'food_kinds_list') ?? [];
 
-        List filterProducts2 = lamchoichoi.where((product) {
+        List filterProducts2 = listFoodCurrent.where((product) {
           final foodTitle = product.foodName.toLowerCase();
           final input = query.toLowerCase();
-          return (selectedCategoriesIndex22.isEmpty ||
-                  selectedCategoriesIndex22.contains(product.foodKind)) &&
+          return (selectedCategoriesIndex.isEmpty ||
+                  selectedCategoriesIndex.contains(product.foodKind)) &&
               foodTitle.contains(input);
         }).toList();
         listAllCategoriesFood = foodKindOfShop;
@@ -4262,31 +4268,36 @@ class _ManageBroughtReceiptDialogState
                                               lableFood); //thêm tên category vào mảng
                                           int index = listAllCategoriesFood
                                               .indexOf(lableFood);
-                                          selectedCategoriesIndex22.add(
+                                          selectedCategoriesIndex.add(
                                               index); //thêm index category vào mảng
+                                          listFoodCurrent.clear();
+                                          currentPage = 1;
+
                                           getListFood(
                                               tokenReq: widget.token,
                                               page: currentPage,
                                               keywords: query,
-                                              foodKinds: selectedCategoriesIndex22
+                                              foodKinds: selectedCategoriesIndex
                                                       .isEmpty
                                                   ? null
-                                                  : selectedCategoriesIndex22);
+                                                  : selectedCategoriesIndex);
                                         } else {
                                           selectedCategories.remove(
                                               lableFood); //xoá tên category vào mảng
                                           int index = listAllCategoriesFood
                                               .indexOf(lableFood);
-                                          selectedCategoriesIndex22.remove(
+                                          selectedCategoriesIndex.remove(
                                               index); //xoá index category vào mảng
+                                          listFoodCurrent.clear();
+                                          currentPage = 1;
                                           getListFood(
                                               tokenReq: widget.token,
                                               page: currentPage,
                                               keywords: query,
-                                              foodKinds: selectedCategoriesIndex22
+                                              foodKinds: selectedCategoriesIndex
                                                       .isEmpty
                                                   ? null
-                                                  : selectedCategoriesIndex22);
+                                                  : selectedCategoriesIndex);
                                         }
                                       });
                                     }
@@ -4366,28 +4377,29 @@ class _ManageBroughtReceiptDialogState
                 const SizedBox(height: 5.0),
                 const SizedBox(height: 10.0),
                 filterProducts2.isEmpty
-                    ? Container(
-                        width: 1.sw,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.r),
-                            gradient: const LinearGradient(
-                              begin: Alignment.topRight,
-                              end: Alignment.bottomLeft,
-                              colors: [
-                                Color.fromRGBO(33, 82, 255, 1),
-                                Color.fromRGBO(33, 212, 253, 1)
-                              ],
-                            )),
-                        child: Center(
-                          child: TextApp(
-                            text: "Cửa hàng này chưa có món ăn",
-                            fontsize: 14.sp,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            textAlign: TextAlign.center,
-                          ),
-                        ))
+                    ? Container()
+                    // Container(
+                    //     width: 1.sw,
+                    //     height: 50,
+                    //     decoration: BoxDecoration(
+                    //         borderRadius: BorderRadius.circular(10.r),
+                    //         gradient: const LinearGradient(
+                    //           begin: Alignment.topRight,
+                    //           end: Alignment.bottomLeft,
+                    //           colors: [
+                    //             Color.fromRGBO(33, 82, 255, 1),
+                    //             Color.fromRGBO(33, 212, 253, 1)
+                    //           ],
+                    //         )),
+                    //     child: Center(
+                    //       child: TextApp(
+                    //         text: "Cửa hàng này chưa có món ăn",
+                    //         fontsize: 14.sp,
+                    //         color: Colors.white,
+                    //         fontWeight: FontWeight.bold,
+                    //         textAlign: TextAlign.center,
+                    //       ),
+                    //     ))
                     : Expanded(
                         child: ListView.builder(
                             itemCount: filterProducts2.length + 1,

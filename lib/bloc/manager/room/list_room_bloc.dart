@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:app_restaurant/bloc/login/staff_login_bloc.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/env/index.dart';
@@ -50,9 +51,6 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
       try {
         if (data['status'] == 200) {
           var roomDataRes = ListRoomModel.fromJson(data);
-          var numberOfRoom = roomDataRes.rooms?.length;
-          StorageUtils.instance
-              .setString(key: 'numberOfRoom', val: numberOfRoom.toString());
           emit(state.copyWith(listRoomModel: roomDataRes));
           emit(state.copyWith(listRoomStatus: ListRoomStatus.succes));
         } else {

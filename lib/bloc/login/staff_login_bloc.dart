@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
+import 'package:app_restaurant/model/list_room_model.dart';
 import 'package:app_restaurant/model/manager_infor_model.dart';
 import 'package:app_restaurant/model/staff_infor_model.dart';
 import 'package:app_restaurant/model/staff_auth_model.dart';
@@ -56,7 +57,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       try {
         if (data['status'] == 200) {
           var authStaffDataRes = StaffAuthData.fromJson(data);
-          // var authDataString = jsonEncode(authStaffDataRes);
           var token = authStaffDataRes.token;
           var staffShopID = authStaffDataRes.data!.shopId;
           var tokenExpiresAt = authStaffDataRes.tokenExpiresAt;
@@ -65,13 +65,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               .setString(key: 'staff_shop_id', val: staffShopID!);
           StorageUtils.instance
               .setString(key: 'token_staff_expires', val: tokenExpiresAt ?? '');
-          // StorageUtils.instance
-          //     .setString(key: 'auth_staff', val: authDataString);
           log(token.toString());
           emit(state.copyWith(loginStatus: LoginStatus.success));
-
           navigatorKey.currentContext?.go("/staff_home");
-
           Future.delayed(const Duration(milliseconds: 500), () {
             print("DANG NHAP THNAH CONG");
             showLoginSuccesDialog();

@@ -601,11 +601,10 @@ class _CompleteWidgetState extends State<CompleteWidget>
               ? setState(() {
                   var broughtReceiptPageRes =
                       ListBroughtReceiptModel.fromJson(data);
-                  listBillComplete.clear();
+
                   listBillComplete.addAll(broughtReceiptPageRes.data.data);
                   currentPageComplete++;
                   isRefesh = false;
-                  log(listBillComplete.length.toString());
                   if (broughtReceiptPageRes.data.data.isEmpty ||
                       broughtReceiptPageRes.data.data.length <= 15) {
                     hasMoreComplete = false;
@@ -651,7 +650,6 @@ class _CompleteWidgetState extends State<CompleteWidget>
               ? setState(() {
                   var broughtReceiptPageRes =
                       ListBroughtReceiptModel.fromJson(data);
-                  listBillComplete.clear();
                   listBillComplete.addAll(broughtReceiptPageRes.data.data);
                   isRefesh = true;
                 })

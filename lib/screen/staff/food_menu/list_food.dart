@@ -39,8 +39,8 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
   void searchProduct(String query) {
     setState(() {
       this.query = query;
+      currentPage = 1;
     });
-    currentPage = 1;
     currentFoodList.clear();
     loadMoreMenuFood(
       page: currentPage,

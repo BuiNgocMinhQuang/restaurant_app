@@ -33,7 +33,7 @@ class ListStoresBloc extends Bloc<ListStoresEvent, ListStoresState> {
         },
       );
       final dataListStore = jsonDecode(responseListStore.body);
-
+      print("dataListStore $dataListStore");
       try {
         if (dataListStore['status'] == 200) {
           var listStoreManagerDataRes = ListStoreModel.fromJson(dataListStore);

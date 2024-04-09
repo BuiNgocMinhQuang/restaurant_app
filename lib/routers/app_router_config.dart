@@ -28,15 +28,15 @@ import 'package:go_router/go_router.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class NyAppRouter {
-  // final GoRouter testRouter =
-  //     GoRouter(navigatorKey: navigatorKey, routes: <RouteBase>[
-  //   GoRoute(
-  //       name: AppRouterContants.managerHomeRouterName,
-  //       path: '/',
-  //       builder: (BuildContext context, GoRouterState state) {
-  //         return ListFoodStaff();
-  //       }),
-  // ]);
+  final GoRouter testRouter =
+      GoRouter(navigatorKey: navigatorKey, routes: <RouteBase>[
+    GoRoute(
+        name: AppRouterContants.managerHomeRouterName,
+        path: '/',
+        builder: (BuildContext context, GoRouterState state) {
+          return ManageStore();
+        }),
+  ]);
   final GoRouter router = GoRouter(
       navigatorKey: navigatorKey,
       routes: <RouteBase>[

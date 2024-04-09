@@ -7,9 +7,6 @@ import 'package:app_restaurant/widgets/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/status_box.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:path/path.dart';
-
-import 'package:excel/excel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -40,42 +37,6 @@ class _ImportInventoryState extends State<ImportInventory> {
     ['Trần Thị B', 25, 'Nhân viên văn phòng'],
     ['Lê Văn C', 30, 'Kỹ sư'],
   ];
-
-  _exportExcel() async {
-    Excel excel = Excel.createExcel();
-    excel.getDefaultSheet();
-    // excel.rename(excel.getDefaultSheet()!, "test sheet");
-    Sheet sheet = excel["Test sheeep"];
-    var cell =
-        sheet.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 0));
-    // cell.value = "Index ke 1";
-    cell.cellStyle = CellStyle(backgroundColorHex: "#1AFF!A");
-    // var cell2 = sheet.cell(CellIndex.indexByString("HEHEE"));
-    var cell2 =
-        sheet.cell(CellIndex.indexByColumnRow(columnIndex: 4, rowIndex: 2));
-    // cell.value = "Index ke 2";
-    cell2.cellStyle = CellStyle(backgroundColorHex: "#1AFF!A");
-    final directory = await getApplicationDocumentsDirectory();
-
-    var filePath = '${directory.path}/export.xlsx';
-    print(filePath);
-
-    // var bytes = excel.save(fileName: filePath)!;
-    // await File(filePath).writeAsBytes(bytes);
-
-    List<int>? fileBytes = excel.save();
-    if (fileBytes != null) {
-      File(join(filePath))
-        ..createSync(recursive: true)
-        ..writeAsBytesSync(fileBytes);
-    }
-    // Lưu file Excel
-
-    // Hiển thị thông báo
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   const SnackBar(content: Text('File Excel đã được xuất thành công!')),
-    // );
-  }
 
   bool _isSelected = false; // Tracks selection state
   void _onSelectedRowChanged(int selectedIndex) {

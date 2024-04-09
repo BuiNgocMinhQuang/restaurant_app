@@ -390,55 +390,57 @@ class _ManageStoreState extends State<ManageStore> {
                                                     )
                                                   ],
                                                 ),
-                                                Padding(
-                                                  padding: EdgeInsets.all(20.w),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Column(
-                                                        children: [
-                                                          TextApp(
-                                                              text: "Ngày tạo"),
-                                                          space10H,
-                                                          TextApp(
-                                                            text: "26-02-2024",
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Column(
+                                                      children: [
+                                                        TextApp(
+                                                            fontsize: 10.sp,
+                                                            text: "Ngày tạo"),
+                                                        space10H,
+                                                        TextApp(
+                                                          fontsize: 10.sp,
+                                                          text: "26-02-2024",
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Column(
+                                                      children: [
+                                                        TextApp(
+                                                            fontsize: 10.sp,
+                                                            text:
+                                                                "Số bàn trong phòng"),
+                                                        space10H,
+                                                        TextApp(
+                                                            fontsize: 10.sp,
+                                                            text: "1",
                                                             fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Column(
-                                                        children: [
-                                                          TextApp(
-                                                              text:
-                                                                  "Số bàn trong phòng"),
-                                                          space10H,
-                                                          TextApp(
-                                                              text: "1",
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        ],
-                                                      ),
-                                                      Column(
-                                                        children: [
-                                                          TextApp(
-                                                              text:
-                                                                  "Trạng thái"),
-                                                          space10H,
-                                                          TextApp(
-                                                              text:
-                                                                  "Đang hoạt động",
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                )
+                                                                FontWeight
+                                                                    .bold),
+                                                      ],
+                                                    ),
+                                                    Column(
+                                                      children: [
+                                                        TextApp(
+                                                            fontsize: 10.sp,
+                                                            text: "Trạng thái"),
+                                                        space10H,
+                                                        TextApp(
+                                                            fontsize: 10.sp,
+                                                            text:
+                                                                "Đang hoạt động",
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
                                               ],
                                             ),
                                           )

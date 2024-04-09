@@ -643,7 +643,6 @@ class _CompleteWidgetState extends State<CompleteWidget>
         if (data['status'] == 200) {
           setState(() {
             var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
-            listBillComplete.clear();
             listBillComplete.addAll(broughtReceiptPageRes.data.data);
             currentPageComplete++;
             isRefesh = false;
@@ -690,7 +689,6 @@ class _CompleteWidgetState extends State<CompleteWidget>
         if (data['status'] == 200) {
           setState(() {
             var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
-            listBillComplete.clear();
             listBillComplete.addAll(broughtReceiptPageRes.data.data);
             isRefesh = true;
           });

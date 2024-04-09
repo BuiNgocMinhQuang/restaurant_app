@@ -11,7 +11,7 @@ class ItemDrawer extends StatelessWidget {
   IconData? icon;
   bool isShowIcon;
   Widget? image;
-
+  FontWeight fontWeight;
   final String text;
   bool isExpand;
   List<Widget> subItem;
@@ -19,6 +19,7 @@ class ItemDrawer extends StatelessWidget {
       {Key? key,
       required this.text,
       required this.subItem,
+      this.fontWeight = FontWeight.normal,
       this.image,
       this.icon,
       this.isShowIcon = true,
@@ -81,7 +82,7 @@ class ItemDrawer extends StatelessWidget {
               ),
               title: Text(
                 text,
-                style: TextStyle(color: textColor),
+                style: TextStyle(color: textColor, fontWeight: fontWeight),
               ),
               children: subItem)
           : ListTile(
@@ -111,7 +112,7 @@ class ItemDrawer extends StatelessWidget {
               ),
               title: Text(
                 text,
-                style: TextStyle(color: textColor),
+                style: TextStyle(color: textColor, fontWeight: fontWeight),
               ),
             ),
     );

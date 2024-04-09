@@ -1,5 +1,4 @@
 import 'package:app_restaurant/bloc/login/staff_login_bloc.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/screen/staff/receipt/brought_receipt.dart';
 import 'package:app_restaurant/screen/staff/home.dart';
@@ -26,7 +25,6 @@ class StaffFabTab extends StatefulWidget {
 
 class _StaffFabTabState extends State<StaffFabTab> {
   int currentIndex = 2;
-
   @override
   void initState() {
     super.initState();
@@ -82,13 +80,13 @@ class _StaffFabTabState extends State<StaffFabTab> {
     navBarState!.setPage(index);
   }
 
-  final List<Widget> pages = [
-    const ListFoodStaff(), //index 0
-    const StaffBroughtReceipt(), //index 1
-    const StaffBookingTable(), //index 2
-    const StaffListBill(), //index 3
-    const StaffUserInformation() //index 4
-  ];
+  // final List<Widget> pages = [
+  //   const ListFoodStaff(), //index 0
+  //   const StaffBroughtReceipt(), //index 1
+  //   const StaffBookingTable(), //index 2
+  //   const StaffListBill(), //index 3
+  //   const StaffUserInformation() //index 4
+  // ];
   GlobalKey<CurvedNavigationBarState> bottomNavigationKey = GlobalKey();
 
   final PageStorageBucket bucket = PageStorageBucket();

@@ -6,6 +6,7 @@ import 'package:app_restaurant/bloc/list_bill_shop/list_bill_shop_bloc.dart';
 import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
 import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
+import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
 import 'package:app_restaurant/model/manager_infor_model.dart';
@@ -52,10 +53,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
   List<DataListStore> listStoreManagerData = [];
   List<String> listImageBanner = [];
   DataManagerInfor? managerInforData;
-
-  var numberOfRoom =
-      int.parse(StorageUtils.instance.getString(key: 'numberOfRoom') ?? '1');
-
   void tapDrawerChangeBotNav(int index) {
     checkTokenExpires();
     final CurvedNavigationBarState? navBarState =
@@ -227,7 +224,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
   GlobalKey<CurvedNavigationBarState> bottomNavigationKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
-    log(listStoreManagerData.length.toString());
     Widget currentScreen = currentIndex == 0
         ? ListStores(
             bannerList3: listImageBanner,
@@ -248,7 +244,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                 : currentIndex == 7
                                     ? ManagerBookingTable(
                                         shopID: shopIDPar,
-                                        listRoom: numberOfRoom,
                                       )
                                     : currentIndex == 8
                                         ? ManagerListBill(shopID: shopIDPar)
@@ -366,9 +361,11 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                     checkTokenExpires();
                   },
                   child: ItemDrawer(
+                    fontWeight:
+                        currentIndex == 2 ? FontWeight.bold : FontWeight.normal,
                     isExpand: false,
                     text: "Trang chủ",
-                    iconColor: currentIndex == 2 ? Colors.white : Colors.black,
+                    iconColor: currentIndex == 2 ? Colors.white : menuGrey,
                     backgroundIconColor: currentIndex == 2
                         ? Colors.blue
                         : const Color.fromRGBO(233, 236, 239, 1),
@@ -390,16 +387,25 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                   child: ItemDrawer(
                       isExpand: true,
                       text: 'Cửa hàng',
-                      iconColor:
-                          currentIndex == 0 ? Colors.white : Colors.black,
+                      fontWeight: currentIndex == 0
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                      iconColor: currentIndex == 0 ? Colors.white : menuGrey,
                       backgroundIconColor: currentIndex == 0
                           ? Colors.blue
                           : const Color.fromRGBO(233, 236, 239, 1),
+                      textColor: currentIndex == 0 ? Colors.black : menuGrey,
                       subItem: [
+                        space15H,
                         SubItemDrawer(
+                            fontWeight: currentIndex == 0
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            iconColor:
+                                currentIndex == 0 ? Colors.black : menuGrey,
                             text: "Danh sách cửa hàng",
                             textColor:
-                                currentIndex == 0 ? Colors.blue : Colors.black,
+                                currentIndex == 0 ? Colors.black : menuGrey,
                             event: () {
                               setState(() {
                                 // currentScreen = const ListStores();
@@ -413,6 +419,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
 
                               Navigator.pop(context);
                             }),
+                        space15H,
                       ],
                       icon: Icons.store),
                 ),
@@ -423,19 +430,31 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                   onTap: () {},
                   child: ItemDrawer(
                       isExpand: true,
+                      fontWeight: currentIndex == 1 || currentIndex == 5
+                          ? FontWeight.bold
+                          : FontWeight.normal,
                       text: 'Nhân viên',
+                      textColor: currentIndex == 1 || currentIndex == 5
+                          ? Colors.black
+                          : menuGrey,
                       iconColor: currentIndex == 1 || currentIndex == 5
                           ? Colors.white
-                          : Colors.black,
+                          : menuGrey,
                       backgroundIconColor:
                           currentIndex == 1 || currentIndex == 5
                               ? Colors.blue
                               : const Color.fromRGBO(233, 236, 239, 1),
                       subItem: [
+                        space15H,
                         SubItemDrawer(
                             text: "Danh sách nhân viên",
+                            fontWeight: currentIndex == 1
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                             textColor:
-                                currentIndex == 1 ? Colors.blue : Colors.black,
+                                currentIndex == 1 ? Colors.black : menuGrey,
+                            iconColor:
+                                currentIndex == 5 ? Colors.black : menuGrey,
                             event: () {
                               setState(() {
                                 // currentScreen = const ListStaff();
@@ -447,13 +466,16 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
 
                               Navigator.pop(context);
                             }),
-                        SizedBox(
-                          height: 10.h,
-                        ),
+                        space20H,
                         SubItemDrawer(
                             text: "Thêm nhân viên",
+                            fontWeight: currentIndex == 5
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            iconColor:
+                                currentIndex == 5 ? Colors.black : menuGrey,
                             textColor:
-                                currentIndex == 5 ? Colors.blue : Colors.black,
+                                currentIndex == 5 ? Colors.black : menuGrey,
                             event: () {
                               setState(() {
                                 currentIndex = 5;
@@ -461,7 +483,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                               checkTokenExpires();
 
                               Navigator.pop(context);
-                            })
+                            }),
+                        space15H,
                       ],
                       icon: Icons.group),
                 ),
@@ -472,12 +495,19 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                   onTap: () {},
                   child: ItemDrawer(
                       isExpand: true,
+                      fontWeight: currentIndex == 3 || currentIndex == 6
+                          ? FontWeight.bold
+                          : FontWeight.normal,
                       text: 'Thực đơn',
+                      textColor: currentIndex == 0 ? Colors.black : menuGrey,
                       subItem: [
+                        space15H,
                         SubItemDrawer(
                             text: "Danh sách món ăn",
+                            iconColor:
+                                currentIndex == 3 ? Colors.black : menuGrey,
                             textColor:
-                                currentIndex == 3 ? Colors.blue : Colors.black,
+                                currentIndex == 3 ? Colors.black : Colors.grey,
                             event: () {
                               log("PRESSS");
                               setState(() {
@@ -490,13 +520,13 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
 
                               Navigator.pop(context);
                             }),
-                        SizedBox(
-                          height: 10.h,
-                        ),
+                        space20H,
                         SubItemDrawer(
                             text: "Thêm món ăn",
+                            iconColor:
+                                currentIndex == 6 ? Colors.black : menuGrey,
                             textColor:
-                                currentIndex == 6 ? Colors.blue : Colors.black,
+                                currentIndex == 6 ? Colors.blue : Colors.grey,
                             event: () {
                               setState(() {
                                 currentIndex = 6;
@@ -504,11 +534,12 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                               checkTokenExpires();
 
                               Navigator.pop(context);
-                            })
+                            }),
+                        space15H,
                       ],
                       iconColor: currentIndex == 3 || currentIndex == 6
                           ? Colors.white
-                          : Colors.black,
+                          : menuGrey,
                       backgroundIconColor:
                           currentIndex == 3 || currentIndex == 6
                               ? Colors.blue
@@ -528,6 +559,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                   height: 25.h,
                 ),
                 ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: listStoreManagerData.length,
                     itemBuilder: (context, index) {
@@ -537,6 +569,9 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                       return InkWell(
                         onTap: () {},
                         child: ItemDrawer(
+                          fontWeight: index == selectedStoreIndex
+                              ? FontWeight.bold
+                              : FontWeight.normal,
                           image: CachedNetworkImage(
                             fit: BoxFit.cover,
                             imageUrl: httpImage + imagePath2,
@@ -565,23 +600,28 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                           //     : const Color.fromRGBO(233, 236, 239, 1),
                           iconColor: index == selectedStoreIndex
                               ? Colors.white
-                              : Colors.black,
+                              : menuGrey,
                           backgroundIconColor: index == selectedStoreIndex
                               ? Colors.blue
                               : const Color.fromRGBO(233, 236, 239, 1),
                           subItem: [
+                            space15H,
                             SubItemDrawer(
+                                iconColor: currentIndex == 7 &&
+                                        index == selectedStoreIndex
+                                    ? Colors.black
+                                    : menuGrey,
+                                fontWeight: currentIndex == 7 &&
+                                        index == selectedStoreIndex
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
                                 text: "Đặt bàn",
                                 textColor: currentIndex == 7 &&
                                         index == selectedStoreIndex
-                                    ? Colors.blue
-                                    : Colors.black,
+                                    ? Colors.black
+                                    : menuGrey,
                                 event: () {
                                   setState(() {
-                                    log("Store");
-
-                                    log("IDDD $index");
-
                                     shopIDPar = listStoreManagerData[index]
                                         .shopId
                                         .toString();
@@ -595,15 +635,17 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                   // context.go("/manager_booking_table");
                                   Navigator.pop(context);
                                 }),
-                            SizedBox(
-                              height: 10.h,
-                            ),
+                            space20H,
                             SubItemDrawer(
+                                iconColor: currentIndex == 8 &&
+                                        index == selectedStoreIndex
+                                    ? Colors.black
+                                    : menuGrey,
                                 text: "Danh sách hóa đơn",
                                 textColor: currentIndex == 8 &&
                                         index == selectedStoreIndex
                                     ? Colors.blue
-                                    : Colors.black,
+                                    : Colors.grey,
                                 event: () {
                                   setState(() {
                                     shopIDPar = listStoreManagerData[index]
@@ -618,15 +660,17 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                   });
                                   Navigator.pop(context);
                                 }),
-                            SizedBox(
-                              height: 10.h,
-                            ),
+                            space20H,
                             SubItemDrawer(
+                                iconColor: currentIndex == 9 &&
+                                        index == selectedStoreIndex
+                                    ? Colors.black
+                                    : menuGrey,
                                 text: "Hóa đơn mang về",
                                 textColor: currentIndex == 9 &&
                                         index == selectedStoreIndex
                                     ? Colors.blue
-                                    : Colors.black,
+                                    : Colors.grey,
                                 event: () {
                                   setState(() {
                                     shopIDPar = listStoreManagerData[index]
@@ -643,6 +687,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
 
                                   Navigator.pop(context);
                                 }),
+                            space15H,
                           ],
                         ),
                       );
@@ -675,7 +720,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                         SubItemDrawer(
                             text: "Danh sách tồn kho",
                             textColor:
-                                currentIndex == 10 ? Colors.blue : Colors.black,
+                                currentIndex == 10 ? Colors.blue : Colors.grey,
                             event: () {
                               setState(() {
                                 currentIndex = 10;
@@ -690,7 +735,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                         SubItemDrawer(
                             text: "Nhập kho",
                             textColor:
-                                currentIndex == 11 ? Colors.blue : Colors.black,
+                                currentIndex == 11 ? Colors.blue : Colors.grey,
                             event: () {
                               setState(() {
                                 currentIndex = 11;

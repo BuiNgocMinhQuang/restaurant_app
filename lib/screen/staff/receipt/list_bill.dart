@@ -246,7 +246,8 @@ class _ListAllBillShopState extends State<ListAllBillShop>
             var listBillShopRes = ListBillShopModel.fromJson(data);
             newListAllBillShop.addAll(listBillShopRes.data.data);
             currentPage++;
-            if (listBillShopRes.data.data.isEmpty) {
+            if (listBillShopRes.data.data.isEmpty ||
+                listBillShopRes.data.data.length <= 15) {
               hasMore = false;
             }
           });

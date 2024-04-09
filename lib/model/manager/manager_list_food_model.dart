@@ -11,7 +11,7 @@ String managerListFoodModelToJson(ManagerListFoodModel data) =>
     json.encode(data.toJson());
 
 class ManagerListFoodModel {
-  int status;
+  int? status;
   String message;
   Data data;
 
@@ -36,19 +36,17 @@ class ManagerListFoodModel {
 }
 
 class Data {
-  int currentPage;
-  List<Datum> data;
-  String firstPageUrl;
-  int from;
-  int lastPage;
-  String lastPageUrl;
-  List<Link> links;
-  String nextPageUrl;
-  String path;
-  int perPage;
-  dynamic prevPageUrl;
-  int to;
-  int total;
+  int? currentPage;
+  List<DataFoodAllStore> data;
+  String? firstPageUrl;
+  int? from;
+  int? lastPage;
+  String? lastPageUrl;
+  String? nextPageUrl;
+  String? path;
+  int? perPage;
+  int? to;
+  int? total;
 
   Data({
     required this.currentPage,
@@ -57,27 +55,24 @@ class Data {
     required this.from,
     required this.lastPage,
     required this.lastPageUrl,
-    required this.links,
     required this.nextPageUrl,
     required this.path,
     required this.perPage,
-    required this.prevPageUrl,
     required this.to,
     required this.total,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         currentPage: json["current_page"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        data: List<DataFoodAllStore>.from(
+            json["data"].map((x) => DataFoodAllStore.fromJson(x))),
         firstPageUrl: json["first_page_url"],
         from: json["from"],
         lastPage: json["last_page"],
         lastPageUrl: json["last_page_url"],
-        links: List<Link>.from(json["links"].map((x) => Link.fromJson(x))),
         nextPageUrl: json["next_page_url"],
         path: json["path"],
         perPage: json["per_page"],
-        prevPageUrl: json["prev_page_url"],
         to: json["to"],
         total: json["total"],
       );
@@ -89,35 +84,33 @@ class Data {
         "from": from,
         "last_page": lastPage,
         "last_page_url": lastPageUrl,
-        "links": List<dynamic>.from(links.map((x) => x.toJson())),
         "next_page_url": nextPageUrl,
         "path": path,
         "per_page": perPage,
-        "prev_page_url": prevPageUrl,
         "to": to,
         "total": total,
       };
 }
 
-class Datum {
-  int foodId;
-  int userId;
-  int storeId;
-  dynamic storeRoomId;
-  String foodName;
-  String foodDescription;
-  String foodImages;
-  int foodPrice;
-  String foodContent;
-  int foodRate;
-  int foodKind;
-  int activeFlg;
-  int deleteFlg;
-  String createdAt;
-  String updatedAt;
-  String storeName;
+class DataFoodAllStore {
+  int? foodId;
+  int? userId;
+  int? storeId;
+  int? storeRoomId;
+  String? foodName;
+  String? foodDescription;
+  String? foodImages;
+  int? foodPrice;
+  String? foodContent;
+  int? foodRate;
+  int? foodKind;
+  int? activeFlg;
+  int? deleteFlg;
+  String? createdAt;
+  String? updatedAt;
+  String? storeName;
 
-  Datum({
+  DataFoodAllStore({
     required this.foodId,
     required this.userId,
     required this.storeId,
@@ -136,7 +129,8 @@ class Datum {
     required this.storeName,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory DataFoodAllStore.fromJson(Map<String, dynamic> json) =>
+      DataFoodAllStore(
         foodId: json["food_id"],
         userId: json["user_id"],
         storeId: json["store_id"],

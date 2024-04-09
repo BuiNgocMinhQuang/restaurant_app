@@ -38,22 +38,27 @@ class ListFoodManager extends StatefulWidget {
 class _ListFoodManagerState extends State<ListFoodManager> {
   TextEditingController _dateStartController = TextEditingController();
   TextEditingController _dateEndController = TextEditingController();
+  final searchController = TextEditingController();
+
   final scrollListFoodController = ScrollController();
   int currentPage = 1;
   List currentFoodList = [];
   String query = '';
   bool hasMore = true;
-
+  int? selectedFlag;
+  String? selectedFlitterFlag = 'Tất cả';
   void searchProduct(String query) {
     setState(() {
       this.query = query;
+      currentPage = 1;
     });
+    currentFoodList.clear();
     loadMoreMenuFood(
       page: currentPage,
       keywords: query,
       // foodKinds:
       //     selectedCategoriesIndex.isEmpty ? null : selectedCategoriesIndex,
-      filtersFlg: null,
+      filtersFlg: selectedFlag,
     );
   }
 
@@ -110,11 +115,56 @@ class _ListFoodManagerState extends State<ListFoodManager> {
     }
   }
 
-  Future loadMoreMenuFood({
+//   void handleDeleteFood() async{
+// try {
+//       var token = StorageUtils.instance.getString(key: 'token_manager');
+
+//       final respons = await http.post(
+//         Uri.parse('$baseUrl$managerGetListFood'),
+//         headers: {
+//           'Content-type': 'application/json',
+//           'Accept': 'application/json',
+//           "Authorization": "Bearer $token"
+//         },
+//         body: jsonEncode({
+
+//         }),
+//       );
+//       final data = jsonDecode(respons.body);
+//       print("GET DATA LIST FOOD ${data}");
+//       try {
+//         if (data['status'] == 200) {
+//           setState(() {
+//             var listMenuPageRes = ManagerListFoodModel.fromJson(data);
+//             currentFoodList.addAll(listMenuPageRes.data.data);
+//             currentPage++;
+//             if (listMenuPageRes.data.data.isEmpty ||
+//                 listMenuPageRes.data.data.length <= 15) {
+//               hasMore = false;
+//             }
+//             // currentPage++;
+//             // if (listMenuPageRes.data.data.isEmpty) {
+//             //   hasMore = false;
+//             // }
+//             log('LENGHT ${listMenuPageRes.data.data.length}');
+//           });
+//         } else {
+//           print("ERROR LIST FOOOD RECEIPT PAGE 1");
+//         }
+//       } catch (error) {
+//         print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+//       }
+//     } catch (error) {
+//       print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+//     }
+//   }
+
+  void loadMoreMenuFood({
     required int page,
     String? keywords,
     List<int>? foodKinds,
     int? filtersFlg,
+    int? activeFlg,
   }) async {
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
@@ -134,7 +184,8 @@ class _ListFoodManagerState extends State<ListFoodManager> {
           'filters': {
             "keywords": keywords,
             "food_kinds": foodKinds,
-            "pay_flg": filtersFlg
+            "pay_flg": filtersFlg,
+            "active_flg": activeFlg,
           },
         }),
       );
@@ -146,7 +197,8 @@ class _ListFoodManagerState extends State<ListFoodManager> {
             var listMenuPageRes = ManagerListFoodModel.fromJson(data);
             currentFoodList.addAll(listMenuPageRes.data.data);
             currentPage++;
-            if (listMenuPageRes.data.data.isEmpty) {
+            if (listMenuPageRes.data.data.isEmpty ||
+                listMenuPageRes.data.data.length <= 15) {
               hasMore = false;
             }
             // currentPage++;
@@ -185,7 +237,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
             // foodKinds: selectedCategoriesIndex.isEmpty
             //     ? null
             //     : selectedCategoriesIndex,
-            filtersFlg: null);
+            filtersFlg: selectedFlag);
       }
     });
   }
@@ -204,87 +256,8 @@ class _ListFoodManagerState extends State<ListFoodManager> {
       return (foodTitle.contains(input));
     }).toList();
     return Scaffold(
-      body:
-          // SingleChildScrollView(
-          //   child: Column(
-          //     mainAxisSize: MainAxisSize.min,
-          //     children: <Widget>[
-          //       Text(
-          //         'Headline',
-          //         style: TextStyle(fontSize: 18),
-          //       ),
-          //       SizedBox(
-          //         height: 200.0,
-          //         child: ListView.builder(
-          //           physics: ClampingScrollPhysics(),
-          //           shrinkWrap: true,
-          //           scrollDirection: Axis.horizontal,
-          //           itemCount: 15,
-          //           itemBuilder: (BuildContext context, int index) => Card(
-          //             child: Center(child: Text('Dummy Card Text')),
-          //           ),
-          //         ),
-          //       ),
-          //       Text(
-          //         'Demo Headline 2',
-          //         style: TextStyle(fontSize: 18),
-          //       ),
-          //       Card(
-          //         child: ListTile(
-          //             title: Text('Motivation $int'),
-          //             subtitle: Text('this is a description of the motivation')),
-          //       ),
-          //       Card(
-          //         child: ListTile(
-          //             title: Text('Motivation $int'),
-          //             subtitle: Text('this is a description of the motivation')),
-          //       ),
-          //       Card(
-          //         child: ListTile(
-          //             title: Text('Motivation $int'),
-          //             subtitle: Text('this is a description of the motivation')),
-          //       ),
-          //       Card(
-          //         child: ListTile(
-          //             title: Text('Motivation $int'),
-          //             subtitle: Text('this is a description of the motivation')),
-          //       ),
-          //       Card(
-          //         child: ListTile(
-          //             title: Text('Motivation $int'),
-          //             subtitle: Text('this is a description of the motivation')),
-          //       ),
-          //       Card(
-          //         child: ListTile(
-          //             title: Text('Motivation $int'),
-          //             subtitle: Text('this is a description of the motivation')),
-          //       ),
-          //       Card(
-          //         child: ListTile(
-          //             title: Text('Motivation $int'),
-          //             subtitle: Text('this is a description of the motivation')),
-          //       ),
-          //       Card(
-          //         child: ListTile(
-          //             title: Text('Motivation $int'),
-          //             subtitle: Text('this is a description of the motivation')),
-          //       ),
-          //       Card(
-          //         child: ListTile(
-          //             title: Text('Motivation $int'),
-          //             subtitle: Text('this is a description of the motivation')),
-          //       ),
-          //       Card(
-          //         child: ListTile(
-          //             title: Text('Motivation $int'),
-          //             subtitle: Text('this is a description of the motivation')),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-
-          SafeArea(
-              child: SingleChildScrollView(
+      body: SafeArea(
+          child: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(20.w),
           child: Container(
@@ -449,6 +422,34 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                     ),
                                     DropdownSearch(
                                       items: listState,
+                                      onChanged: (changeFlag) {
+                                        // getListArea(
+                                        //     city: listState.indexOf(changeCity),
+                                        //     district: null);
+                                        setState(() {
+                                          selectedFlitterFlag = changeFlag;
+                                          currentPage = 1;
+                                        });
+                                        var hehe = listState.indexOf(
+                                                    changeFlag ?? '') ==
+                                                0
+                                            ? null
+                                            : listState.indexOf(
+                                                        changeFlag ?? '') ==
+                                                    2
+                                                ? 0
+                                                : listState
+                                                    .indexOf(changeFlag ?? '');
+                                        log(hehe.toString());
+                                        currentFoodList.clear();
+
+                                        loadMoreMenuFood(
+                                          page: currentPage,
+                                          keywords: query,
+                                          // filtersFlg: hehe,
+                                          activeFlg: hehe,
+                                        );
+                                      },
                                       dropdownDecoratorProps:
                                           DropDownDecoratorProps(
                                         dropdownSearchDecoration:
@@ -472,8 +473,8 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                           hintText: "Tất cả",
                                         ),
                                       ),
-                                      onChanged: print,
-                                      selectedItem: "Tất cả",
+                                      // onChanged: print,
+                                      selectedItem: selectedFlitterFlag,
                                     ),
                                   ],
                                 ),
@@ -494,7 +495,13 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                     SizedBox(
                                       height: 10.h,
                                     ),
-                                    TextField(
+                                    TextFormField(
+                                      onTapOutside: (event) {
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
+                                      },
+                                      onChanged: searchProduct,
+                                      controller: searchController,
                                       style: TextStyle(
                                           fontSize: 14.sp, color: grey),
                                       cursorColor: grey,
@@ -527,10 +534,16 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                             scrollDirection: Axis.horizontal,
                             child:
                                 Row(mainAxisSize: MainAxisSize.min, children: [
+                              // Container(
+                              //   width: 1.sw * 2.4,
+                              //   height: 50.h,
+                              //   color: Colors.amber,
+                              // ),
                               SizedBox(
                                 width: 1.sw * 2.4,
+                                height: 500.h,
                                 child: ListView.builder(
-                                    // physics: const ClampingScrollPhysics(),
+                                    physics: const ClampingScrollPhysics(),
                                     // scrollDirection: Axis.horizontal,
                                     controller: scrollListFoodController,
                                     shrinkWrap: true,
@@ -540,7 +553,8 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                       var dataLength = filterProducts.length;
 
                                       if (index < dataLength) {
-                                        final product = filterProducts[index];
+                                        DataFoodAllStore product =
+                                            filterProducts[index];
                                         var imagePath1 = filterProducts[index]
                                             ?.foodImages
                                             .replaceAll('["', '');
@@ -552,36 +566,11 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                           child: DataTable(
                                             dividerThickness: 0.0,
                                             columns: const [
-                                              DataColumn(label: Text('')
-                                                  // Center(
-                                                  //   child: Text('Món ăn',
-                                                  //       textAlign: TextAlign.center),
-                                                  // ),
-                                                  ),
-                                              DataColumn(label: Text('')
-                                                  // Center(
-                                                  //   child: Text('Cửa hàng',
-                                                  //       textAlign: TextAlign.center),
-                                                  // ),
-                                                  ),
-                                              DataColumn(label: Text('')
-                                                  // Center(
-                                                  //   child: Text('Giá tiền',
-                                                  //       textAlign: TextAlign.center),
-                                                  // ),
-                                                  ),
-                                              DataColumn(label: Text('')
-                                                  // Center(
-                                                  //   child: Text('Trạng thái',
-                                                  //       textAlign: TextAlign.center),
-                                                  // ),
-                                                  ),
-                                              DataColumn(label: Text('')
-                                                  //  Center(
-                                                  //   child: Text('Ngày tạo',
-                                                  //       textAlign: TextAlign.center),
-                                                  // ),
-                                                  ),
+                                              DataColumn(label: Text('')),
+                                              DataColumn(label: Text('')),
+                                              DataColumn(label: Text('')),
+                                              DataColumn(label: Text('')),
+                                              DataColumn(label: Text('')),
                                               DataColumn(
                                                 label: Center(child: Text('')),
                                               ),
@@ -628,8 +617,9 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                         child: TextApp(
                                                           isOverFlow: false,
                                                           softWrap: true,
-                                                          text:
-                                                              product.foodName,
+                                                          text: product
+                                                                  .foodName ??
+                                                              '',
                                                           fontsize: 14.sp,
                                                           color: blueText,
                                                         ),
@@ -643,7 +633,8 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                     child: TextApp(
                                                       isOverFlow: false,
                                                       softWrap: true,
-                                                      text: product.storeName,
+                                                      text: product.storeName ??
+                                                          '',
                                                       fontsize: 14.sp,
                                                     ),
                                                   ),
@@ -660,9 +651,11 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                     ),
                                                   ),
                                                 )),
-                                                const DataCell(Center(
-                                                    child:
-                                                        StatusBoxIsSelling())),
+                                                DataCell(Center(
+                                                    child: product.activeFlg ==
+                                                            1
+                                                        ? StatusBoxIsSelling()
+                                                        : StatusBoxNoMoreSelling())),
                                                 DataCell(Center(
                                                   child: SizedBox(
                                                     width: 120.w,
@@ -670,7 +663,8 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                       isOverFlow: false,
                                                       softWrap: true,
                                                       text: formatDateTime(
-                                                          product.createdAt),
+                                                          product.createdAt ??
+                                                              ''),
                                                       fontsize: 14.sp,
                                                     ),
                                                   ),

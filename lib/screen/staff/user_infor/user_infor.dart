@@ -1101,341 +1101,262 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                   SizedBox(
                                     height: 20.h,
                                   ),
-                                  IntrinsicHeight(
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              TextApp(
-                                                text: " Tỉnh/Thành phố",
-                                                fontsize: 12.sp,
-                                                fontWeight: FontWeight.bold,
-                                                color: blueText,
-                                              ),
-                                              SizedBox(
-                                                height: 10.h,
-                                              ),
-                                              DropdownSearch(
-                                                validator: (value) {
-                                                  if (value ==
-                                                      "Chọn tỉnh/thành phố") {
-                                                    return canNotNull;
-                                                  }
-                                                },
-                                                selectedItem: currentCity,
-                                                items: cityList,
-                                                onChanged: (changeCity) {
-                                                  getListArea(
-                                                      city: cityList
-                                                          .indexOf(changeCity),
-                                                      district: null);
-                                                  setState(() {
-                                                    currentIndexCity = cityList
-                                                        .indexOf(changeCity);
-                                                    currentDistric = null;
-                                                    currentIndexDistric = null;
-                                                    currentWard = null;
-                                                    currentIndexWard = null;
-                                                  });
-                                                },
-                                                dropdownDecoratorProps:
-                                                    DropDownDecoratorProps(
-                                                  dropdownSearchDecoration:
-                                                      InputDecoration(
-                                                    // isCollapsed: true,
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextApp(
+                                        text: " Tỉnh/Thành phố",
+                                        fontsize: 12.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: blueText,
+                                      ),
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                      DropdownSearch(
+                                        validator: (value) {
+                                          if (value == "Chọn tỉnh/thành phố") {
+                                            return canNotNull;
+                                          }
+                                        },
+                                        selectedItem: currentCity,
+                                        items: cityList,
+                                        onChanged: (changeCity) {
+                                          getListArea(
+                                              city:
+                                                  cityList.indexOf(changeCity),
+                                              district: null);
+                                          setState(() {
+                                            currentIndexCity =
+                                                cityList.indexOf(changeCity);
+                                            currentDistric = null;
+                                            currentIndexDistric = null;
+                                            currentWard = null;
+                                            currentIndexWard = null;
+                                          });
+                                        },
+                                        dropdownDecoratorProps:
+                                            DropDownDecoratorProps(
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            // isCollapsed: true,
 
-                                                    hintMaxLines: 1,
-                                                    fillColor:
-                                                        const Color.fromARGB(
-                                                            255, 226, 104, 159),
-                                                    focusedBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide:
-                                                          const BorderSide(
-                                                              color: Color
-                                                                  .fromRGBO(
-                                                                      214,
-                                                                      51,
-                                                                      123,
-                                                                      0.6),
-                                                              width: 2.0),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.r),
-                                                    ),
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.r),
-                                                    ),
-                                                    isDense: true,
-                                                    contentPadding:
-                                                        EdgeInsets.all(15.w),
-                                                    hintStyle: TextStyle(
-                                                        fontSize: 14.sp),
-                                                    hintText:
-                                                        "Chọn tỉnh/thành phố",
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
+                                            hintMaxLines: 1,
+                                            fillColor: const Color.fromARGB(
+                                                255, 226, 104, 159),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  color: Color.fromRGBO(
+                                                      214, 51, 123, 0.6),
+                                                  width: 2.0),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            isDense: true,
+                                            contentPadding:
+                                                EdgeInsets.all(15.w),
+                                            hintStyle:
+                                                TextStyle(fontSize: 14.sp),
+                                            hintText: "Chọn tỉnh/thành phố",
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: 10.w,
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              TextApp(
-                                                text: " Quận/Huyện",
-                                                fontsize: 12.sp,
-                                                fontWeight: FontWeight.bold,
-                                                color: blueText,
-                                              ),
-                                              SizedBox(
-                                                height: 10.h,
-                                              ),
-                                              DropdownSearch(
-                                                key: Key(
-                                                    currentDistric.toString()),
-                                                validator: (value) {
-                                                  if (value ==
-                                                      "Chọn quận/huyện") {
-                                                    return canNotNull;
-                                                  }
-                                                },
-                                                selectedItem: currentDistric,
+                                      ),
+                                    ],
+                                  ),
+                                  space20H,
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextApp(
+                                        text: " Quận/Huyện",
+                                        fontsize: 12.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: blueText,
+                                      ),
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                      DropdownSearch(
+                                        key: Key(currentDistric.toString()),
+                                        validator: (value) {
+                                          if (value == "Chọn quận/huyện") {
+                                            return canNotNull;
+                                          }
+                                        },
+                                        selectedItem: currentDistric,
 
-                                                items: districList,
-                                                onChanged: (changeDistric) {
-                                                  getListArea(
-                                                      city: currentIndexCity ??
-                                                          staffInforData
-                                                              ?.staffAddress1,
-                                                      district:
-                                                          districList.indexOf(
-                                                              changeDistric));
-                                                  setState(() {
-                                                    currentIndexDistric =
-                                                        districList.indexOf(
-                                                            changeDistric);
-                                                    currentWard = null;
-                                                    currentIndexWard = null;
-                                                  });
-                                                },
+                                        items: districList,
+                                        onChanged: (changeDistric) {
+                                          getListArea(
+                                              city: currentIndexCity ??
+                                                  staffInforData?.staffAddress1,
+                                              district: districList
+                                                  .indexOf(changeDistric));
+                                          setState(() {
+                                            currentIndexDistric = districList
+                                                .indexOf(changeDistric);
+                                            currentWard = null;
+                                            currentIndexWard = null;
+                                          });
+                                        },
 
-                                                dropdownDecoratorProps:
-                                                    DropDownDecoratorProps(
-                                                  dropdownSearchDecoration:
-                                                      InputDecoration(
-                                                    hintMaxLines: 1,
-                                                    fillColor:
-                                                        const Color.fromARGB(
-                                                            255, 226, 104, 159),
-                                                    focusedBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide:
-                                                          const BorderSide(
-                                                              color: Color
-                                                                  .fromRGBO(
-                                                                      214,
-                                                                      51,
-                                                                      123,
-                                                                      0.6),
-                                                              width: 2.0),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.r),
-                                                    ),
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.r),
-                                                    ),
-                                                    isDense: true,
-                                                    contentPadding:
-                                                        EdgeInsets.all(15.w),
-                                                    hintStyle: TextStyle(
-                                                        fontSize: 14.sp),
-                                                    hintText: "Chọn quận/huyện",
-                                                  ),
-                                                ),
-                                                // selectedItem:
-                                                //     "Chọn quận/huyện",
-                                              ),
-                                            ],
+                                        dropdownDecoratorProps:
+                                            DropDownDecoratorProps(
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            hintMaxLines: 1,
+                                            fillColor: const Color.fromARGB(
+                                                255, 226, 104, 159),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  color: Color.fromRGBO(
+                                                      214, 51, 123, 0.6),
+                                                  width: 2.0),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            isDense: true,
+                                            contentPadding:
+                                                EdgeInsets.all(15.w),
+                                            hintStyle:
+                                                TextStyle(fontSize: 14.sp),
+                                            hintText: "Chọn quận/huyện",
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                        // selectedItem:
+                                        //     "Chọn quận/huyện",
+                                      ),
+                                    ],
                                   ),
                                   SizedBox(
                                     height: 20.h,
                                   ),
-                                  IntrinsicHeight(
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              TextApp(
-                                                text: " Phường/Xã",
-                                                fontsize: 12.sp,
-                                                fontWeight: FontWeight.bold,
-                                                color: blueText,
-                                              ),
-                                              SizedBox(
-                                                height: 10.h,
-                                              ),
-                                              DropdownSearch(
-                                                key:
-                                                    Key(currentWard.toString()),
-                                                validator: (value) {
-                                                  if (value ==
-                                                      "Chọn phường/xã") {
-                                                    return canNotNull;
-                                                  }
-                                                },
-                                                selectedItem: currentWard,
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextApp(
+                                        text: " Phường/Xã",
+                                        fontsize: 12.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: blueText,
+                                      ),
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                      DropdownSearch(
+                                        key: Key(currentWard.toString()),
+                                        validator: (value) {
+                                          if (value == "Chọn phường/xã") {
+                                            return canNotNull;
+                                          }
+                                        },
+                                        selectedItem: currentWard,
 
-                                                items: wardList,
-                                                onChanged: (changeWard) {
-                                                  getListArea(
-                                                      city: currentIndexCity,
-                                                      district:
-                                                          currentIndexDistric);
-                                                  setState(() {
-                                                    currentIndexWard = wardList
-                                                        .indexOf(changeWard);
-                                                    var wardListMap =
-                                                        wardList.asMap();
-                                                    var myWard = wardListMap[
-                                                        wardList.indexOf(
-                                                            changeWard)];
-                                                    currentWard = myWard;
-                                                  });
-                                                },
-                                                dropdownDecoratorProps:
-                                                    DropDownDecoratorProps(
-                                                  dropdownSearchDecoration:
-                                                      InputDecoration(
-                                                    hintMaxLines: 1,
-                                                    fillColor:
-                                                        const Color.fromARGB(
-                                                            255, 226, 104, 159),
-                                                    focusedBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide:
-                                                          const BorderSide(
-                                                              color: Color
-                                                                  .fromRGBO(
-                                                                      214,
-                                                                      51,
-                                                                      123,
-                                                                      0.6),
-                                                              width: 2.0),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.r),
-                                                    ),
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.r),
-                                                    ),
-                                                    isDense: true,
-                                                    contentPadding:
-                                                        EdgeInsets.all(15.w),
-                                                    hintStyle: TextStyle(
-                                                        fontSize: 14.sp),
-                                                    hintText: "Chọn phường/xã",
-                                                  ),
-                                                ),
-
-                                                // selectedItem:
-                                                //     "Chọn phường/xã",
-                                              ),
-                                            ],
+                                        items: wardList,
+                                        onChanged: (changeWard) {
+                                          getListArea(
+                                              city: currentIndexCity,
+                                              district: currentIndexDistric);
+                                          setState(() {
+                                            currentIndexWard =
+                                                wardList.indexOf(changeWard);
+                                            var wardListMap = wardList.asMap();
+                                            var myWard = wardListMap[
+                                                wardList.indexOf(changeWard)];
+                                            currentWard = myWard;
+                                          });
+                                        },
+                                        dropdownDecoratorProps:
+                                            DropDownDecoratorProps(
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            hintMaxLines: 1,
+                                            fillColor: const Color.fromARGB(
+                                                255, 226, 104, 159),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  color: Color.fromRGBO(
+                                                      214, 51, 123, 0.6),
+                                                  width: 2.0),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            isDense: true,
+                                            contentPadding:
+                                                EdgeInsets.all(15.w),
+                                            hintStyle:
+                                                TextStyle(fontSize: 14.sp),
+                                            hintText: "Chọn phường/xã",
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: 10.w,
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              TextApp(
-                                                text: " Số nhà, đường",
-                                                fontsize: 12.sp,
-                                                fontWeight: FontWeight.bold,
-                                                color: blueText,
-                                              ),
-                                              SizedBox(
-                                                height: 10.h,
-                                              ),
-                                              TextFormField(
-                                                onTapOutside: (event) {
-                                                  FocusManager
-                                                      .instance.primaryFocus
-                                                      ?.unfocus();
-                                                },
-                                                controller: address4Controller,
-                                                keyboardType:
-                                                    TextInputType.name,
-                                                style: TextStyle(
-                                                    fontSize: 12.sp,
-                                                    color: grey),
-                                                cursorColor: grey,
-                                                decoration: InputDecoration(
-                                                    fillColor:
-                                                        const Color.fromARGB(
-                                                            255, 226, 104, 159),
-                                                    focusedBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide:
-                                                          const BorderSide(
-                                                              color: Color
-                                                                  .fromRGBO(
-                                                                      214,
-                                                                      51,
-                                                                      123,
-                                                                      0.6),
-                                                              width: 2.0),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.r),
-                                                    ),
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.r),
-                                                    ),
-                                                    // hintText: 'Tên',
-                                                    hintStyle: TextStyle(
-                                                        fontSize: 14.sp),
-                                                    isDense: true,
-                                                    contentPadding:
-                                                        EdgeInsets.all(15.w)),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+
+                                        // selectedItem:
+                                        //     "Chọn phường/xã",
+                                      ),
+                                    ],
+                                  ),
+                                  space20H,
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextApp(
+                                        text: " Số nhà, đường",
+                                        fontsize: 12.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: blueText,
+                                      ),
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                      TextFormField(
+                                        onTapOutside: (event) {
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                        },
+                                        controller: address4Controller,
+                                        keyboardType: TextInputType.name,
+                                        style: TextStyle(
+                                            fontSize: 12.sp, color: grey),
+                                        cursorColor: grey,
+                                        decoration: InputDecoration(
+                                            fillColor: const Color.fromARGB(
+                                                255, 226, 104, 159),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  color: Color.fromRGBO(
+                                                      214, 51, 123, 0.6),
+                                                  width: 2.0),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            // hintText: 'Tên',
+                                            hintStyle:
+                                                TextStyle(fontSize: 14.sp),
+                                            isDense: true,
+                                            contentPadding:
+                                                EdgeInsets.all(15.w)),
+                                      ),
+                                    ],
                                   ),
                                   space20H,
                                   Column(

@@ -16,11 +16,9 @@ import 'package:lottie/lottie.dart';
 
 class ManagerBookingTable extends StatefulWidget {
   final String shopID;
-  final int listRoom;
   const ManagerBookingTable({
     Key? key,
     required this.shopID,
-    required this.listRoom,
   }) : super(key: key);
 
   @override
@@ -31,9 +29,6 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
     with TickerProviderStateMixin {
   var tokenManager =
       StorageUtils.instance.getString(key: 'token_manager') ?? '';
-  // var numberOfRoom =
-  //     int.parse(StorageUtils.instance.getString(key: 'numberOfRoom') ?? '1');
-
   void getBillData(
       {String? roomId,
       required String tableId,
@@ -97,27 +92,12 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
   // late TabController _tabController;
 
   @override
-  void initState() {
-    super.initState();
-
-    // getDataTabIndex(roomId: "");
-    // _tabController = TabController(vsync: this, length: widget.listRoom);
-  }
-
-  @override
-  void dispose() {
-    // _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    TabController _tabController = TabController(
-      length: widget.listRoom,
-      vsync: this,
-    );
-
     return BlocBuilder<ListRoomBloc, ListRoomState>(builder: (context, state) {
+      TabController _tabController = TabController(
+        length: state.listRoomModel?.rooms?.length ?? 1,
+        vsync: this,
+      );
       return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(

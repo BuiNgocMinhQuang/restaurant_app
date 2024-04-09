@@ -46,6 +46,28 @@ class StatusBoxIsSelling extends StatelessWidget {
   }
 }
 
+class StatusBoxNoMoreSelling extends StatelessWidget {
+  const StatusBoxNoMoreSelling({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5.w),
+          color: Color.fromARGB(255, 242, 101, 83),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(5.w),
+          child: TextApp(
+            text: "Ngưng bán".toUpperCase(),
+            fontsize: 8.sp,
+            fontWeight: FontWeight.bold,
+            color: Color.fromARGB(255, 238, 41, 15),
+          ),
+        ));
+  }
+}
+
 class StatusBoxIsLock extends StatelessWidget {
   const StatusBoxIsLock({super.key});
 
