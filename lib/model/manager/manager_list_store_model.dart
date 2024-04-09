@@ -35,18 +35,18 @@ class ListStoreModel {
 }
 
 class DataListStore {
-  int storeId;
-  int userId;
+  int? storeId;
+  int? userId;
   String shopId;
-  String storeName;
-  String storeAddress;
+  String? storeName;
+  String? storeAddress;
   String? storeDescription;
   String storeImages;
-  dynamic storeLogo;
-  int activeFlg;
-  int deleteFlg;
-  DateTime createdAt;
-  DateTime updatedAt;
+  String? storeLogo;
+  int? activeFlg;
+  int? deleteFlg;
+  String? createdAt;
+  String? updatedAt;
   List<Staff> staffs;
 
   DataListStore({
@@ -76,8 +76,8 @@ class DataListStore {
         storeLogo: json["store_logo"],
         activeFlg: json["active_flg"],
         deleteFlg: json["delete_flg"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"],
+        updatedAt: json["updated_at"],
         staffs: List<Staff>.from(json["staffs"].map((x) => Staff.fromJson(x))),
       );
 
@@ -92,43 +92,43 @@ class DataListStore {
         "store_logo": storeLogo,
         "active_flg": activeFlg,
         "delete_flg": deleteFlg,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
+        "created_at": createdAt,
+        "updated_at": updatedAt,
         "staffs": List<dynamic>.from(staffs.map((x) => x.toJson())),
       };
 }
 
 class Staff {
-  int staffId;
-  int staffNo;
-  int userId;
-  int storeId;
-  String shopId;
-  String staffFirstName;
-  String staffLastName;
-  String staffFullName;
-  String staffAvatar;
-  String staffEmail;
-  String staffPhone;
-  String password;
-  dynamic frontImageCccd;
-  dynamic backImageCccd;
-  dynamic holdImageCccd;
-  int staffAddress1;
-  int staffAddress2;
-  int staffAddress3;
-  String staffAddress4;
-  dynamic staffFullAddress;
-  String staffTwitter;
-  String staffFacebook;
-  String staffInstagram;
+  int? staffId;
+  int? staffNo;
+  int? userId;
+  int? storeId;
+  String? shopId;
+  String? staffFirstName;
+  String? staffLastName;
+  String? staffFullName;
+  String? staffAvatar;
+  String? staffEmail;
+  String? staffPhone;
+  String? password;
+  String? frontImageCccd;
+  String? backImageCccd;
+  String? holdImageCccd;
+  int? staffAddress1;
+  int? staffAddress2;
+  int? staffAddress3;
+  String? staffAddress4;
+  String? staffFullAddress;
+  String? staffTwitter;
+  String? staffFacebook;
+  String? staffInstagram;
   int staffPosition;
   int staffKind;
   int activeFlg;
   int deleteFlg;
-  String rememberToken;
-  DateTime createdAt;
-  DateTime updatedAt;
+  String? rememberToken;
+  String? createdAt;
+  String? updatedAt;
 
   Staff({
     required this.staffId,
@@ -192,8 +192,8 @@ class Staff {
         activeFlg: json["active_flg"],
         deleteFlg: json["delete_flg"],
         rememberToken: json["remember_token"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"],
+        updatedAt: json["updated_at"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -225,7 +225,7 @@ class Staff {
         "active_flg": activeFlg,
         "delete_flg": deleteFlg,
         "remember_token": rememberToken,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
+        "created_at": createdAt,
+        "updated_at": updatedAt,
       };
 }

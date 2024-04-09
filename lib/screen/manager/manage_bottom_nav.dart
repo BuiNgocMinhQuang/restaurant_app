@@ -531,10 +531,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                     shrinkWrap: true,
                     itemCount: listStoreManagerData.length,
                     itemBuilder: (context, index) {
-                      var selectStore = false;
-                      var imagePath1 =
-                          (listStoreManagerData[index].storeImages ?? '')
-                              .replaceAll('["', '');
+                      var imagePath1 = (listStoreManagerData[index].storeImages)
+                          .replaceAll('["', '');
                       var imagePath2 = imagePath1.replaceAll('"]', '');
                       return InkWell(
                         onTap: () {},
@@ -553,7 +551,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                           ),
                           isShowIcon: false,
                           isExpand: true,
-                          text: listStoreManagerData[index].storeName,
+                          text:
+                              listStoreManagerData[index].storeName.toString(),
                           // iconColor: currentIndex == 7 ||
                           //         currentIndex == 8 ||
                           //         currentIndex == 9

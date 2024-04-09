@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:app_restaurant/bloc/manager/stores/list_stores_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
@@ -14,6 +15,7 @@ import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:avatar_stack/avatar_stack.dart';
 import 'package:avatar_stack/positions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -105,9 +107,35 @@ class _ListStoresState extends State<ListStores> {
                               space25H,
                               Stack(
                                 children: [
+                                  //Carousel
+                                  CarouselSlider.builder(
+                                      itemCount: widget.bannerList3.length,
+                                      itemBuilder: (context, index, realIndex) {
+                                        final currentBanner =
+                                            widget.bannerList3[index];
+                                        return buildImage(currentBanner, index);
+                                      },
+                                      options: CarouselOptions(
+                                          height: 300.h,
+                                          autoPlay: true,
+                                          reverse: false,
+                                          autoPlayInterval:
+                                              const Duration(seconds: 3),
+                                          onPageChanged: (index, reason) {
+                                            setState(() {
+                                              activeIndex = index;
+                                            });
+                                          },
+                                          viewportFraction: 1)),
+
+                                  // buildIndicator(),
+
                                   widget.managerInforData != null
                                       ? Padding(
-                                          padding: EdgeInsets.all(20.w),
+                                          padding: EdgeInsets.only(
+                                              left: 20.w,
+                                              right: 20.w,
+                                              top: 250.h),
                                           child: Container(
                                             width: 1.sw,
                                             // height: 120.h,
@@ -195,31 +223,9 @@ class _ListStoresState extends State<ListStores> {
                                       : Container()
                                 ],
                               ),
-                              //Carousel
-                              // CarouselSlider.builder(
-                              //     itemCount: widget.bannerList3.length,
-                              //     itemBuilder: (context, index, realIndex) {
-                              //       final currentBanner =
-                              //           widget.bannerList3[index];
-                              //       return buildImage(currentBanner, index);
-                              //     },
-                              //     options: CarouselOptions(
-                              //         height: 300.h,
-                              //         autoPlay: true,
-                              //         reverse: false,
-                              //         autoPlayInterval: Duration(seconds: 2),
-                              //         onPageChanged: (index, reason) {
-                              //           setState(() {
-                              //             activeIndex = index;
-                              //           });
-                              //         },
-                              //         viewportFraction: 1)),
-                              // space25H,
-
-                              // buildIndicator(),
-                              // space25H,
 
                               //List Stores
+                              space25H,
                               Container(
                                   width: 1.sw,
                                   decoration: BoxDecoration(
@@ -387,13 +393,18 @@ class _ListStoresState extends State<ListStores> {
                                                                         true,
                                                                     itemBuilder:
                                                                         (context,
-                                                                            index) {
+                                                                            indexStaff) {
+                                                                      var staffInfor = state
+                                                                          .listStoreModel
+                                                                          ?.data[
+                                                                              index]
+                                                                          .staffs;
+
                                                                       return CircleAvatar(
                                                                         radius:
                                                                             15.0,
                                                                         backgroundImage:
-                                                                            NetworkImage('https://picsum.photos/200'),
-                                                                        // NetworkImage("${httpImage + listStaffAvatar}"),
+                                                                            NetworkImage("${httpImage + (staffInfor?[indexStaff].staffAvatar ?? '')}"),
                                                                         backgroundColor:
                                                                             Colors.red,
                                                                       );
