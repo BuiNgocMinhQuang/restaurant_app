@@ -269,7 +269,7 @@ class _AllWidgetState extends State<AllWidget>
   void initState() {
     super.initState();
     loadMoreFood(page: 1, filtersFlg: {"pay_flg": null});
-
+    newListFood.clear();
     scrollListFoodController.addListener(() {
       if (scrollListFoodController.position.maxScrollExtent ==
           scrollListFoodController.offset) {
@@ -329,7 +329,7 @@ class _AllWidgetState extends State<AllWidget>
     ));
   }
 
-  Future loadMoreFood(
+  void loadMoreFood(
       {required int page, required Map<String, int?> filtersFlg}) async {
     try {
       var token = StorageUtils.instance.getString(key: 'token_staff');
@@ -353,15 +353,18 @@ class _AllWidgetState extends State<AllWidget>
 
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
-            newListFood.addAll(broughtReceiptPageRes.data.data);
-            currentPage++;
-            if (broughtReceiptPageRes.data.data.isEmpty ||
-                broughtReceiptPageRes.data.data.length <= 15) {
-              hasMore = false;
-            }
-          });
+          mounted
+              ? setState(() {
+                  var broughtReceiptPageRes =
+                      ListBroughtReceiptModel.fromJson(data);
+                  newListFood.addAll(broughtReceiptPageRes.data.data);
+                  currentPage++;
+                  if (broughtReceiptPageRes.data.data.isEmpty ||
+                      broughtReceiptPageRes.data.data.length <= 15) {
+                    hasMore = false;
+                  }
+                })
+              : null;
         } else {
           log("ERROR BROUGHT RECEIPT PAGE 1");
         }
@@ -557,6 +560,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
   void initState() {
     super.initState();
     loadMoreComplete(page: 1, filtersFlg: {"pay_flg": 1});
+
     scrollTabCompleteController.addListener(() {
       if (scrollTabCompleteController.position.maxScrollExtent ==
               scrollTabCompleteController.offset &&

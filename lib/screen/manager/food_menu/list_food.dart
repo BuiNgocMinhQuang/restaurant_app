@@ -534,200 +534,232 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                             scrollDirection: Axis.horizontal,
                             child:
                                 Row(mainAxisSize: MainAxisSize.min, children: [
-                              // Container(
-                              //   width: 1.sw * 2.4,
-                              //   height: 50.h,
-                              //   color: Colors.amber,
-                              // ),
-                              SizedBox(
-                                width: 1.sw * 2.4,
-                                height: 500.h,
-                                child: ListView.builder(
-                                    physics: const ClampingScrollPhysics(),
-                                    // scrollDirection: Axis.horizontal,
-                                    controller: scrollListFoodController,
-                                    shrinkWrap: true,
-                                    itemCount: filterProducts.length + 1,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      var dataLength = filterProducts.length;
+                              Column(
+                                children: [
+                                  // Container(
+                                  //   width: 1.sw * 2.4,
+                                  //   height: 50.h,
+                                  //   color: Colors.amber,
+                                  // ),
+                                  SizedBox(
+                                    width: 1.sw * 2.5,
+                                    height: 500.h,
+                                    child: ListView.builder(
+                                        physics: const ClampingScrollPhysics(),
+                                        // scrollDirection: Axis.horizontal,
+                                        controller: scrollListFoodController,
+                                        shrinkWrap: true,
+                                        itemCount: filterProducts.length + 1,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          var dataLength =
+                                              filterProducts.length;
 
-                                      if (index < dataLength) {
-                                        DataFoodAllStore product =
-                                            filterProducts[index];
-                                        var imagePath1 = filterProducts[index]
-                                            ?.foodImages
-                                            .replaceAll('["', '');
-                                        var imagePath2 =
-                                            imagePath1.replaceAll('"]', '');
-                                        return Theme(
-                                          data: Theme.of(context).copyWith(
-                                              dividerColor: Colors.transparent),
-                                          child: DataTable(
-                                            dividerThickness: 0.0,
-                                            columns: const [
-                                              DataColumn(label: Text('')),
-                                              DataColumn(label: Text('')),
-                                              DataColumn(label: Text('')),
-                                              DataColumn(label: Text('')),
-                                              DataColumn(label: Text('')),
-                                              DataColumn(
-                                                label: Center(child: Text('')),
-                                              ),
-                                            ],
-                                            rows: [
-                                              DataRow(cells: [
-                                                DataCell(Center(
-                                                    child: IntrinsicHeight(
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Container(
-                                                        width: 80.w,
-                                                        height: 80.w,
-                                                        // color: Colors.amber,
-                                                        child:
-                                                            CachedNetworkImage(
-                                                          fit: BoxFit.fill,
-                                                          imageUrl: httpImage +
-                                                              imagePath2,
-                                                          placeholder:
-                                                              (context, url) =>
-                                                                  SizedBox(
-                                                            height: 10.w,
-                                                            width: 10.w,
-                                                            child: const Center(
-                                                                child:
-                                                                    CircularProgressIndicator()),
+                                          if (index < dataLength) {
+                                            DataFoodAllStore product =
+                                                filterProducts[index];
+                                            var imagePath1 =
+                                                filterProducts[index]
+                                                    ?.foodImages
+                                                    .replaceAll('["', '');
+                                            var imagePath2 =
+                                                imagePath1.replaceAll('"]', '');
+                                            return Theme(
+                                              data: Theme.of(context).copyWith(
+                                                  dividerColor:
+                                                      Colors.transparent),
+                                              child: DataTable(
+                                                dividerThickness: 0.0,
+                                                columns: const [
+                                                  DataColumn(label: Text('')),
+                                                  DataColumn(label: Text('')),
+                                                  DataColumn(label: Text('')),
+                                                  DataColumn(label: Text('')),
+                                                  DataColumn(label: Text('')),
+                                                  DataColumn(
+                                                    label:
+                                                        Center(child: Text('')),
+                                                  ),
+                                                ],
+                                                rows: [
+                                                  DataRow(cells: [
+                                                    DataCell(Center(
+                                                        child: IntrinsicHeight(
+                                                      child: Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Container(
+                                                            width: 80.w,
+                                                            height: 80.w,
+                                                            // color: Colors.amber,
+                                                            child:
+                                                                CachedNetworkImage(
+                                                              fit: BoxFit.fill,
+                                                              imageUrl:
+                                                                  httpImage +
+                                                                      imagePath2,
+                                                              placeholder:
+                                                                  (context,
+                                                                          url) =>
+                                                                      SizedBox(
+                                                                height: 10.w,
+                                                                width: 10.w,
+                                                                child: const Center(
+                                                                    child:
+                                                                        CircularProgressIndicator()),
+                                                              ),
+                                                              errorWidget: (context,
+                                                                      url,
+                                                                      error) =>
+                                                                  const Icon(Icons
+                                                                      .error),
+                                                            ),
                                                           ),
-                                                          errorWidget: (context,
-                                                                  url, error) =>
-                                                              const Icon(
-                                                                  Icons.error),
-                                                        ),
+                                                          space10W,
+                                                          SizedBox(
+                                                            width: 120.w,
+                                                            child: TextApp(
+                                                              isOverFlow: false,
+                                                              softWrap: true,
+                                                              text: product
+                                                                      .foodName ??
+                                                                  '',
+                                                              fontsize: 14.sp,
+                                                              color: blueText,
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                      space10W,
-                                                      SizedBox(
-                                                        width: 120.w,
+                                                    ))),
+                                                    DataCell(Center(
+                                                      child: SizedBox(
+                                                        width: 80.w,
                                                         child: TextApp(
                                                           isOverFlow: false,
                                                           softWrap: true,
                                                           text: product
-                                                                  .foodName ??
+                                                                  .storeName ??
                                                               '',
                                                           fontsize: 14.sp,
-                                                          color: blueText,
                                                         ),
                                                       ),
-                                                    ],
-                                                  ),
-                                                ))),
-                                                DataCell(Center(
-                                                  child: SizedBox(
-                                                    width: 80.w,
-                                                    child: TextApp(
-                                                      isOverFlow: false,
-                                                      softWrap: true,
-                                                      text: product.storeName ??
-                                                          '',
-                                                      fontsize: 14.sp,
-                                                    ),
-                                                  ),
-                                                )),
-                                                DataCell(Center(
-                                                  child: SizedBox(
-                                                    width: 120.w,
-                                                    child: TextApp(
-                                                      isOverFlow: false,
-                                                      softWrap: true,
-                                                      text:
-                                                          "${MoneyFormatter(amount: (product.foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                      fontsize: 14.sp,
-                                                    ),
-                                                  ),
-                                                )),
-                                                DataCell(Center(
-                                                    child: product.activeFlg ==
-                                                            1
-                                                        ? StatusBoxIsSelling()
-                                                        : StatusBoxNoMoreSelling())),
-                                                DataCell(Center(
-                                                  child: SizedBox(
-                                                    width: 120.w,
-                                                    child: TextApp(
-                                                      isOverFlow: false,
-                                                      softWrap: true,
-                                                      text: formatDateTime(
-                                                          product.createdAt ??
-                                                              ''),
-                                                      fontsize: 14.sp,
-                                                    ),
-                                                  ),
-                                                )),
-                                                DataCell(Row(
-                                                  children: [
-                                                    SizedBox(
-                                                      height: 30.h,
-                                                      child: ButtonIcon(
-                                                          isIconCircle: false,
-                                                          color1: const Color
-                                                              .fromRGBO(
-                                                              23, 193, 232, 1),
-                                                          color2: const Color
-                                                              .fromRGBO(
-                                                              23, 193, 232, 1),
-                                                          event: () {
-                                                            // context.go(
-                                                            //     "/manager_edit_staff_info");
-                                                            Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          EditFood()),
-                                                            );
-                                                          },
-                                                          icon: Icons.edit),
-                                                    ),
-                                                    space15W,
-                                                    SizedBox(
-                                                      height: 30.h,
-                                                      child: ButtonIcon(
-                                                          isIconCircle: false,
-                                                          color1:
-                                                              const Color
-                                                                  .fromRGBO(
-                                                                  234, 6, 6, 1),
-                                                          color2: const Color
-                                                              .fromRGBO(
-                                                              234, 6, 6, 1),
-                                                          event: () {
-                                                            showConfirmDialog(
-                                                                context, () {
-                                                              print("ConFIRM");
-                                                            });
-                                                          },
-                                                          icon: Icons.delete),
-                                                    )
-                                                  ],
-                                                ))
-                                              ]),
-                                            ],
-                                          ),
-                                        );
-                                      } else {
-                                        return Center(
-                                          child: hasMore
-                                              ? CircularProgressIndicator()
-                                              : Container(),
-                                        );
-                                      }
-                                    }),
+                                                    )),
+                                                    DataCell(Center(
+                                                      child: SizedBox(
+                                                        width: 120.w,
+                                                        child: TextApp(
+                                                          isOverFlow: false,
+                                                          softWrap: true,
+                                                          text:
+                                                              "${MoneyFormatter(amount: (product.foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                          fontsize: 14.sp,
+                                                        ),
+                                                      ),
+                                                    )),
+                                                    DataCell(Center(
+                                                        child: product
+                                                                    .activeFlg ==
+                                                                1
+                                                            ? StatusBoxIsSelling()
+                                                            : StatusBoxNoMoreSelling())),
+                                                    DataCell(Center(
+                                                      child: SizedBox(
+                                                        width: 120.w,
+                                                        child: TextApp(
+                                                          isOverFlow: false,
+                                                          softWrap: true,
+                                                          text: formatDateTime(
+                                                              product.createdAt ??
+                                                                  ''),
+                                                          fontsize: 14.sp,
+                                                        ),
+                                                      ),
+                                                    )),
+                                                    DataCell(Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          height: 30.h,
+                                                          child: ButtonIcon(
+                                                              isIconCircle:
+                                                                  false,
+                                                              color1:
+                                                                  const Color
+                                                                      .fromRGBO(
+                                                                      23,
+                                                                      193,
+                                                                      232,
+                                                                      1),
+                                                              color2:
+                                                                  const Color
+                                                                      .fromRGBO(
+                                                                      23,
+                                                                      193,
+                                                                      232,
+                                                                      1),
+                                                              event: () {
+                                                                // context.go(
+                                                                //     "/manager_edit_staff_info");
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              EditFood()),
+                                                                );
+                                                              },
+                                                              icon: Icons.edit),
+                                                        ),
+                                                        space15W,
+                                                        SizedBox(
+                                                          height: 30.h,
+                                                          child: ButtonIcon(
+                                                              isIconCircle:
+                                                                  false,
+                                                              color1:
+                                                                  const Color.fromRGBO(
+                                                                      234,
+                                                                      6,
+                                                                      6,
+                                                                      1),
+                                                              color2:
+                                                                  const Color
+                                                                      .fromRGBO(
+                                                                      234,
+                                                                      6,
+                                                                      6,
+                                                                      1),
+                                                              event: () {
+                                                                showConfirmDialog(
+                                                                    context,
+                                                                    () {
+                                                                  print(
+                                                                      "ConFIRM");
+                                                                });
+                                                              },
+                                                              icon:
+                                                                  Icons.delete),
+                                                        )
+                                                      ],
+                                                    ))
+                                                  ]),
+                                                ],
+                                              ),
+                                            );
+                                          } else {
+                                            return Center(
+                                              child: hasMore
+                                                  ? CircularProgressIndicator()
+                                                  : Container(),
+                                            );
+                                          }
+                                        }),
+                                  )
+                                ],
                               )
                             ]),
                           )

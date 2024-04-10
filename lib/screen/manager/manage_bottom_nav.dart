@@ -89,9 +89,11 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
             });
       } else {
         print("Giu phien dang nhap");
+        // getListStore();
       }
     } else {
       print("Dang nhap hoai luon");
+      // getListStore();
     }
   }
 
@@ -111,6 +113,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
     try {
       if (dataListStore['status'] == 200) {
         setState(() {
+          listStoreManagerData.clear();
           var listStoreManagerDataRes = ListStoreModel.fromJson(dataListStore);
           listStoreManagerData.addAll(listStoreManagerDataRes.data);
           listStoreManagerData.where((imageStore) {
@@ -499,7 +502,9 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                           ? FontWeight.bold
                           : FontWeight.normal,
                       text: 'Thực đơn',
-                      textColor: currentIndex == 0 ? Colors.black : menuGrey,
+                      textColor: currentIndex == 3 || currentIndex == 6
+                          ? Colors.black
+                          : menuGrey,
                       subItem: [
                         space15H,
                         SubItemDrawer(
@@ -507,7 +512,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             iconColor:
                                 currentIndex == 3 ? Colors.black : menuGrey,
                             textColor:
-                                currentIndex == 3 ? Colors.black : Colors.grey,
+                                currentIndex == 3 ? Colors.black : menuGrey,
                             event: () {
                               log("PRESSS");
                               setState(() {
@@ -526,7 +531,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             iconColor:
                                 currentIndex == 6 ? Colors.black : menuGrey,
                             textColor:
-                                currentIndex == 6 ? Colors.blue : Colors.grey,
+                                currentIndex == 6 ? Colors.black : menuGrey,
                             event: () {
                               setState(() {
                                 currentIndex = 6;
@@ -569,6 +574,9 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                       return InkWell(
                         onTap: () {},
                         child: ItemDrawer(
+                          textColor: index == selectedStoreIndex
+                              ? Colors.black
+                              : menuGrey,
                           fontWeight: index == selectedStoreIndex
                               ? FontWeight.bold
                               : FontWeight.normal,
@@ -644,8 +652,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                 text: "Danh sách hóa đơn",
                                 textColor: currentIndex == 8 &&
                                         index == selectedStoreIndex
-                                    ? Colors.blue
-                                    : Colors.grey,
+                                    ? Colors.black
+                                    : menuGrey,
                                 event: () {
                                   setState(() {
                                     shopIDPar = listStoreManagerData[index]
@@ -669,8 +677,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                 text: "Hóa đơn mang về",
                                 textColor: currentIndex == 9 &&
                                         index == selectedStoreIndex
-                                    ? Colors.blue
-                                    : Colors.grey,
+                                    ? Colors.black
+                                    : menuGrey,
                                 event: () {
                                   setState(() {
                                     shopIDPar = listStoreManagerData[index]

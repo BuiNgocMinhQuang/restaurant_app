@@ -3810,17 +3810,31 @@ class _ManageBroughtReceiptDialogState
       currentPage = 1;
     });
     listFoodCurrent.clear();
-    getListFood(
+    // getListFood(
+    //   tokenReq: widget.token,
+    //   page: currentPage,
+    //   keywords: query,
+    //   foodKinds:
+    //       selectedCategoriesIndex.isEmpty ? null : selectedCategoriesIndex,
+    // );
+    getDetailsBroughtReceiptData(
+      page: currentPage,
+      orderID: widget.orderID,
       tokenReq: widget.token,
-      page: 1,
       keywords: query,
       foodKinds:
           selectedCategoriesIndex.isEmpty ? null : selectedCategoriesIndex,
     );
   }
 
-  void getDetailsBroughtReceiptData(
-      {required int? orderID, required String tokenReq}) async {
+  void getDetailsBroughtReceiptData({
+    required int? orderID,
+    required String tokenReq,
+    required int page,
+    String? keywords,
+    List<int>? foodKinds,
+    int? payFlg,
+  }) async {
     try {
       var token = tokenReq;
       final respons = await http.post(
@@ -3847,12 +3861,17 @@ class _ManageBroughtReceiptDialogState
       try {
         if (data['status'] == 200) {
           setState(() {
-            listFoodCurrent.clear();
+            // listFoodCurrent.clear();
             currentOrderTotalBroughtReceipt =
                 detailsBroughtReceiptRes.orderTotal;
             currentCartBroughtReceipt =
                 detailsBroughtReceiptRes.countOrderFoods;
             listFoodCurrent.addAll(detailsBroughtReceiptRes.data.data);
+            currentPage++;
+            if (detailsBroughtReceiptRes.data.data.isEmpty ||
+                detailsBroughtReceiptRes.data.data.length <= 15) {
+              hasMore = false;
+            }
           });
         } else {
           print("ERROR BROUGHT RECEIPT PAGE 1 CCCC");
@@ -3901,7 +3920,14 @@ class _ManageBroughtReceiptDialogState
         if (data['status'] == 200) {
           var newOrderId = data['order_id'];
           setState(() {
+            currentPage = 1;
+            listFoodCurrent.clear();
             orderNewIDBroughtReceipt = newOrderId;
+            getListBroughtReceiptData(filtersFlg: {"pay_flg": null});
+            getDetailsBroughtReceiptData(
+                page: currentPage,
+                tokenReq: tokenReq,
+                orderID: orderNewIDBroughtReceipt ?? widget.orderID);
           });
           showSnackBarTopCustom(
               title: "Thành công",
@@ -3922,10 +3948,6 @@ class _ManageBroughtReceiptDialogState
     } catch (error) {
       print("ERROR ADD FOOD TO BROUGHT RECEIPT 3 $error");
     }
-    getListBroughtReceiptData(filtersFlg: {"pay_flg": null});
-    getDetailsBroughtReceiptData(
-        tokenReq: tokenReq,
-        orderID: orderNewIDBroughtReceipt ?? widget.orderID);
   }
 
   void minusQuantityFoodToBroughtReceipt(
@@ -3954,7 +3976,14 @@ class _ManageBroughtReceiptDialogState
         if (data['status'] == 200) {
           var newOrderId = data['order_id'];
           setState(() {
+            currentPage = 1;
+            listFoodCurrent.clear();
             orderNewIDBroughtReceipt = newOrderId;
+            getListBroughtReceiptData(filtersFlg: {"pay_flg": null});
+            getDetailsBroughtReceiptData(
+                page: currentPage,
+                tokenReq: tokenReq,
+                orderID: orderNewIDBroughtReceipt ?? widget.orderID);
           });
           showSnackBarTopCustom(
               title: "Thành công",
@@ -3975,10 +4004,6 @@ class _ManageBroughtReceiptDialogState
     } catch (error) {
       print("ERROR MINUS FOOD TO BROUGHT RECEIPT 3 $error");
     }
-    getListBroughtReceiptData(filtersFlg: {"pay_flg": null});
-    getDetailsBroughtReceiptData(
-        tokenReq: tokenReq,
-        orderID: orderNewIDBroughtReceipt ?? widget.orderID);
   }
 
   void updateQuantityFoodToBroughtReceipt(
@@ -4013,7 +4038,15 @@ class _ManageBroughtReceiptDialogState
           var newOrderId = data['order_id'];
           mounted
               ? setState(() {
+                  currentPage = 1;
+                  listFoodCurrent.clear();
+
                   orderNewIDBroughtReceipt = newOrderId;
+                  getListBroughtReceiptData(filtersFlg: {"pay_flg": null});
+                  getDetailsBroughtReceiptData(
+                      page: currentPage,
+                      tokenReq: tokenReq,
+                      orderID: orderNewIDBroughtReceipt ?? widget.orderID);
                 })
               : null;
           showSnackBarTopCustom(
@@ -4035,87 +4068,95 @@ class _ManageBroughtReceiptDialogState
     } catch (error) {
       print("ERROR MINUS FOOD TO BROUGHT RECEIPT 3 $error");
     }
-    getListBroughtReceiptData(filtersFlg: {"pay_flg": null});
-    getDetailsBroughtReceiptData(
-        tokenReq: tokenReq,
-        orderID: orderNewIDBroughtReceipt ?? widget.orderID);
   }
 
-  void getListFood(
-      {required int page,
-      String? keywords,
-      List<int>? foodKinds,
-      int? payFlg,
-      required String tokenReq}) async {
-    try {
-      var token = tokenReq;
+  // void getListFood(
+  //     {required int page,
+  //     String? keywords,
+  //     List<int>? foodKinds,
+  //     int? payFlg,
+  //     required String tokenReq}) async {
+  //   try {
+  //     var token = tokenReq;
 
-      final respons = await http.post(
-        Uri.parse('$baseUrl$getListFoodBroughtReceipt'),
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          "Authorization": "Bearer $token"
-        },
-        body: jsonEncode({
-          'client': widget.role,
-          'shop_id': widget.shopID,
-          'is_api': true,
-          'limit': 15,
-          'page': page,
-          'filters': {
-            "keywords": keywords,
-            "food_kinds": foodKinds,
-            "pay_flg": payFlg
-          },
-          'order_id': widget.orderID
-        }),
-      );
+  //     final respons = await http.post(
+  //       Uri.parse('$baseUrl$getListFoodBroughtReceipt'),
+  //       headers: {
+  //         'Content-type': 'application/json',
+  //         'Accept': 'application/json',
+  //         "Authorization": "Bearer $token"
+  //       },
+  //       body: jsonEncode({
+  //         'client': widget.role,
+  //         'shop_id': widget.shopID,
+  //         'is_api': true,
+  //         'limit': 15,
+  //         'page': page,
+  //         'filters': {
+  //           "keywords": keywords,
+  //           "food_kinds": foodKinds,
+  //           "pay_flg": payFlg
+  //         },
+  //         'order_id': widget.orderID
+  //       }),
+  //     );
 
-      final data = jsonDecode(respons.body);
-      print("??? $data");
-      try {
-        if (data['status'] == 200) {
-          setState(() {
-            var detailsBroughtReceiptRes =
-                ManageBroughtReceiptModel.fromJson(data);
-            listFoodCurrent.addAll(detailsBroughtReceiptRes.data.data);
-            currentPage++;
-            if (detailsBroughtReceiptRes.data.data.isEmpty ||
-                detailsBroughtReceiptRes.data.data.length <= 15) {
-              hasMore = false;
-            }
-          });
-        } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1 AAA");
-        }
-      } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
-      }
-    } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
-    }
-  }
+  //     final data = jsonDecode(respons.body);
+  //     print("??? $data");
+  //     try {
+  //       if (data['status'] == 200) {
+  //         setState(() {
+  //           var detailsBroughtReceiptRes =
+  //               ManageBroughtReceiptModel.fromJson(data);
+  //           listFoodCurrent.addAll(detailsBroughtReceiptRes.data.data);
+  //           currentPage++;
+  //           if (detailsBroughtReceiptRes.data.data.isEmpty ||
+  //               detailsBroughtReceiptRes.data.data.length <= 15) {
+  //             hasMore = false;
+  //           }
+  //         });
+  //       } else {
+  //         print("ERROR BROUGHT RECEIPT PAGE 1 AAA");
+  //       }
+  //     } catch (error) {
+  //       print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+  //     }
+  //   } catch (error) {
+  //     print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+  //   }
+  // }
 
   @override
   void initState() {
+    log('INIT');
     super.initState();
-    getListFood(
-      page: 1,
-      tokenReq: widget.token,
-    );
+    // getListFood(
+    //   page: 1,
+    //   tokenReq: widget.token,
+    // );
     getDetailsBroughtReceiptData(
-        orderID: widget.orderID, tokenReq: widget.token);
+        page: 1, orderID: widget.orderID, tokenReq: widget.token);
+    // setState(() {
+    //   currentPage = 1;
+    // });
     scrollListFoodController.addListener(() {
       if (scrollListFoodController.position.maxScrollExtent ==
           scrollListFoodController.offset) {
-        getListFood(
-          tokenReq: widget.token,
+        getDetailsBroughtReceiptData(
           page: currentPage,
+          orderID: widget.orderID,
+          tokenReq: widget.token,
           keywords: query,
           foodKinds:
               selectedCategoriesIndex.isEmpty ? null : selectedCategoriesIndex,
         );
+        // getListFood(
+        //   tokenReq: widget.token,
+        //   page: currentPage,
+        //   keywords: query,
+        //   foodKinds:
+        //       selectedCategoriesIndex.isEmpty ? null : selectedCategoriesIndex,
+        // );
       }
     });
   }
@@ -4129,6 +4170,7 @@ class _ManageBroughtReceiptDialogState
 
   @override
   Widget build(BuildContext context) {
+    log(listFoodCurrent.length.toString());
     return BlocBuilder<ManageBroughtReceiptBloc, BroughtReceiptState>(
         builder: (context, state) {
       if (state.broughtReceiptStatus == BroughtReceiptStatus.succes) {
@@ -4272,15 +4314,24 @@ class _ManageBroughtReceiptDialogState
                                               index); //thêm index category vào mảng
                                           listFoodCurrent.clear();
                                           currentPage = 1;
-
-                                          getListFood(
-                                              tokenReq: widget.token,
-                                              page: currentPage,
-                                              keywords: query,
-                                              foodKinds: selectedCategoriesIndex
-                                                      .isEmpty
-                                                  ? null
-                                                  : selectedCategoriesIndex);
+                                          getDetailsBroughtReceiptData(
+                                            page: currentPage,
+                                            orderID: widget.orderID,
+                                            tokenReq: widget.token,
+                                            keywords: query,
+                                            foodKinds:
+                                                selectedCategoriesIndex.isEmpty
+                                                    ? null
+                                                    : selectedCategoriesIndex,
+                                          );
+                                          // getListFood(
+                                          //     tokenReq: widget.token,
+                                          //     page: currentPage,
+                                          //     keywords: query,
+                                          //     foodKinds: selectedCategoriesIndex
+                                          //             .isEmpty
+                                          //         ? null
+                                          //         : selectedCategoriesIndex);
                                         } else {
                                           selectedCategories.remove(
                                               lableFood); //xoá tên category vào mảng
@@ -4290,14 +4341,24 @@ class _ManageBroughtReceiptDialogState
                                               index); //xoá index category vào mảng
                                           listFoodCurrent.clear();
                                           currentPage = 1;
-                                          getListFood(
-                                              tokenReq: widget.token,
-                                              page: currentPage,
-                                              keywords: query,
-                                              foodKinds: selectedCategoriesIndex
-                                                      .isEmpty
-                                                  ? null
-                                                  : selectedCategoriesIndex);
+                                          getDetailsBroughtReceiptData(
+                                            page: currentPage,
+                                            orderID: widget.orderID,
+                                            tokenReq: widget.token,
+                                            keywords: query,
+                                            foodKinds:
+                                                selectedCategoriesIndex.isEmpty
+                                                    ? null
+                                                    : selectedCategoriesIndex,
+                                          );
+                                          // getListFood(
+                                          //     tokenReq: widget.token,
+                                          //     page: currentPage,
+                                          //     keywords: query,
+                                          //     foodKinds: selectedCategoriesIndex
+                                          //             .isEmpty
+                                          //         ? null
+                                          //         : selectedCategoriesIndex);
                                         }
                                       });
                                     }

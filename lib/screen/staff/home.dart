@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
 import 'package:app_restaurant/bloc/bill_table/bill_table_bloc.dart';
 import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
 import 'package:app_restaurant/bloc/payment/payment_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
+import 'package:app_restaurant/model/list_room_model.dart';
 import 'package:app_restaurant/utils/share_getString.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
@@ -17,6 +20,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import 'package:http/http.dart' as http;
+import 'package:app_restaurant/env/index.dart';
+import 'package:app_restaurant/constant/api/index.dart';
 
 class StaffBookingTable extends StatefulWidget {
   const StaffBookingTable({
@@ -32,10 +38,9 @@ class _StaffBookingTableState extends State<StaffBookingTable>
   final String currentRole = "staff";
   final String currentShopId = getStaffShopID;
   var tokenStaff = StorageUtils.instance.getString(key: 'token_staff') ?? '';
-
+  int dayne = 1;
+  int currentStoreRoomId = 1;
   void getDataTabIndex({String? roomId}) async {
-    await Future.delayed(const Duration(seconds: 0));
-
     BlocProvider.of<ListRoomBloc>(context).add(
       GetListRoom(
           token: tokenStaff,
@@ -97,14 +102,52 @@ class _StaffBookingTableState extends State<StaffBookingTable>
         orderId: orderID));
   }
 
+  // void init() async {
+  //   try {
+  //     await Future.delayed(const Duration(seconds: 1));
+  //     final respons = await http.post(
+  //       Uri.parse('$baseUrl$bookingApi'),
+  //       headers: {
+  //         'Content-type': 'application/json',
+  //         'Accept': 'application/json',
+  //         "Authorization": "Bearer $tokenStaff"
+  //       },
+  //       body: jsonEncode({
+  //         'client': 'staff',
+  //         'shop_id': currentShopId,
+  //         'is_api': true,
+  //         'room_id': '',
+  //       }),
+  //     );
+  //     final data = jsonDecode(respons.body);
+
+  //     print(" LIST ROOM $data");
+  //     try {
+  //       if (data['status'] == 200) {
+  //         var roomDataRes = ListRoomModel.fromJson(data);
+  //         setState(() {
+  //           dayne = roomDataRes.rooms?.length ?? 1;
+  //         });
+  //       } else {}
+  //     } catch (error) {
+  //       print("ERROR GET LIST ROOM $error");
+  //     }
+  //   } catch (error) {
+  //     print("NO DATA ROOM $error");
+  //   }
+  // }
+
   @override
   void initState() {
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => getDataTabIndex(roomId: ''));
-    });
+    // init();
+    getDataTabIndex(roomId: '');
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     init();
+    //     getDataTabIndex(roomId: '');
+    //   });
+    // });
   }
 
   // @override
@@ -113,15 +156,20 @@ class _StaffBookingTableState extends State<StaffBookingTable>
   //   super.dispose();
   // }
 
-  var indexRoomID = 1;
-
   @override
   Widget build(BuildContext context) {
+    // log("dayne");
+    // log(dayne.toString());
+
+    TabController _tabController = TabController(
+      length: 3,
+      vsync: this,
+    );
     return BlocBuilder<ListRoomBloc, ListRoomState>(builder: (context, state) {
-      TabController _tabController = TabController(
-        length: state.listRoomModel?.rooms?.length ?? 1,
-        vsync: this,
-      );
+      // TabController _tabController = TabController(
+      //   length: state.listRoomModel?.rooms?.length ?? 1,
+      //   vsync: this,
+      // );
       return Scaffold(
           backgroundColor: Colors.white,
           body: SafeArea(
@@ -141,11 +189,21 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                     height: 40.h,
                                     color: Colors.white,
                                     child: TabBar(
-                                      onTap: (index) {
-                                        indexRoomID = index;
+                                      onTap: (indexRoom) {
+                                        // log(indexRoom.toString());
+                                        // log(state.listRoomModel!
+                                        //     .rooms![indexRoom].storeRoomId
+                                        //     .toString());
+                                        // currentStoreRoomId = state
+                                        //         .listRoomModel!
+                                        //         .rooms![indexRoom]
+                                        //         .storeRoomId ??
+                                        //     1;
                                         getDataTabIndex(
-                                          roomId: state.listRoomModel!
-                                              .rooms![index].storeRoomId
+                                          roomId: (state
+                                                  .listRoomModel!
+                                                  .rooms![indexRoom]
+                                                  .storeRoomId)
                                               .toString(),
                                         );
                                       },
@@ -548,13 +606,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                               child: ButtonGradient(
                                 color1: color1BlueButton,
                                 color2: color2BlueButton,
-                                event: () {
-                                  getDataTabIndex(
-                                    roomId: state.listRoomModel!
-                                        .rooms![indexRoomID].storeRoomId
-                                        .toString(),
-                                  );
-                                },
+                                event: () {},
                                 text: 'Thử lại',
                                 fontSize: 12.sp,
                                 radius: 8.r,

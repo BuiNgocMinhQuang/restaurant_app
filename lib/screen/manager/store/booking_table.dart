@@ -93,11 +93,15 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
 
   @override
   Widget build(BuildContext context) {
+    TabController _tabController = TabController(
+      length: 3,
+      vsync: this,
+    );
     return BlocBuilder<ListRoomBloc, ListRoomState>(builder: (context, state) {
-      TabController _tabController = TabController(
-        length: state.listRoomModel?.rooms?.length ?? 1,
-        vsync: this,
-      );
+      // TabController _tabController = TabController(
+      //   length: state.listRoomModel?.rooms?.length ?? 1,
+      //   vsync: this,
+      // );
       return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
