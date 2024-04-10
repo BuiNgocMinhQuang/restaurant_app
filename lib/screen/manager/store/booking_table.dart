@@ -29,6 +29,8 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
     with TickerProviderStateMixin {
   var tokenManager =
       StorageUtils.instance.getString(key: 'token_manager') ?? '';
+  int currentRoomIndex = 0;
+
   void getBillData(
       {String? roomId,
       required String tableId,
@@ -93,10 +95,10 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
 
   @override
   Widget build(BuildContext context) {
-    TabController _tabController = TabController(
-      length: 3,
-      vsync: this,
-    );
+    // TabController _tabController = TabController(
+    //   length: 3,
+    //   vsync: this,
+    // );
     return BlocBuilder<ListRoomBloc, ListRoomState>(builder: (context, state) {
       // TabController _tabController = TabController(
       //   length: state.listRoomModel?.rooms?.length ?? 1,
@@ -112,42 +114,56 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      space20H,
                       SizedBox(
                         width: 1.sw,
                         child: SizedBox(
-                            child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Container(
-                                  height: 40.h,
-                                  color: Colors.white,
-                                  child: state.listRoomModel!.rooms!.isNotEmpty
-                                      ? TabBar(
-                                          onTap: (index) {
-                                            getDataTabIndex(
-                                                roomId: state.listRoomModel!
-                                                    .rooms![index].storeRoomId
-                                                    .toString());
-                                          },
-                                          labelPadding: const EdgeInsets.only(
-                                              left: 20, right: 20),
-                                          labelColor: Colors.blue,
-                                          labelStyle: TextStyle(
-                                              fontSize: 14.sp,
-                                              fontFamily: 'OpenSans',
-                                              fontWeight: FontWeight.bold),
-                                          unselectedLabelColor:
-                                              Colors.black.withOpacity(0.5),
-                                          controller: _tabController,
-                                          isScrollable: true,
-                                          indicatorSize:
-                                              TabBarIndicatorSize.label,
-                                          tabs: state.listRoomModel!.rooms!
-                                              .map((data) =>
-                                                  Tab(text: data.storeRoomName))
-                                              .toList(),
-                                        )
-                                      : null,
-                                ))),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              height: 40.h,
+                              color: Colors.white,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount:
+                                    state.listRoomModel?.rooms?.length ?? 1,
+                                itemBuilder: (context, index) {
+                                  return Center(
+                                      child: Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 15.w, right: 15.w),
+                                    child: InkWell(
+                                        onTap: () {
+                                          getDataTabIndex(
+                                            roomId: state.listRoomModel!
+                                                .rooms![index].storeRoomId
+                                                .toString(),
+                                          );
+                                          setState(() {
+                                            currentRoomIndex = index;
+                                          });
+                                        },
+                                        child: TextApp(
+                                          text: state
+                                                  .listRoomModel
+                                                  ?.rooms?[index]
+                                                  .storeRoomName ??
+                                              '',
+                                          color: currentRoomIndex == index
+                                              ? Colors.blue
+                                              : Colors.black,
+                                          fontWeight: currentRoomIndex == index
+                                              ? FontWeight.bold
+                                              : FontWeight.normal,
+                                          fontsize: 14.sp,
+                                        )),
+                                  ));
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                       space25H,
                       SizedBox(
@@ -222,264 +238,311 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                 ),
                               ),
                             )
-                          : Column(mainAxisSize: MainAxisSize.min, children: [
-                              Padding(
-                                padding:
-                                    EdgeInsets.only(left: 30.w, right: 30.w),
-                                child: SizedBox(
-                                  width: 1.sw,
-                                  height: 500.h,
-                                  child: state.listRoomModel!.rooms!.isNotEmpty
-                                      ? TabBarView(
-                                          controller: _tabController,
-                                          children: state.listRoomModel!.rooms!
-                                              .map((data) =>
-                                                  data.tables!.isNotEmpty
-                                                      ? RefreshIndicator(
-                                                          color: Colors.blue,
-                                                          onRefresh: () async {
-                                                            getDataTabIndex(
-                                                              roomId: data
-                                                                  .storeRoomId
-                                                                  .toString(),
-                                                            ); //get data table of firts room
-                                                          },
-                                                          child:
-                                                              GridView.builder(
-                                                                  gridDelegate:
-                                                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                                                          crossAxisCount:
-                                                                              3),
-                                                                  itemCount: data
-                                                                          .tables
-                                                                          ?.length ??
-                                                                      0,
-                                                                  itemBuilder:
-                                                                      (context,
-                                                                          index) {
-                                                                    var listRoomID = state
-                                                                        .listRoomModel!
-                                                                        .rooms!
-                                                                        .map((data) =>
-                                                                            data.storeRoomId)
-                                                                        .toList();
-                                                                    return Padding(
-                                                                        padding:
-                                                                            EdgeInsets.all(10),
-                                                                        child: Container(
-                                                                            decoration: BoxDecoration(
-                                                                              borderRadius: BorderRadius.circular(8.r),
-                                                                              gradient: LinearGradient(
-                                                                                begin: Alignment.topLeft,
-                                                                                end: Alignment.bottomRight,
-                                                                                colors: data.tables?[index].bookingStatus == true
-                                                                                    ? <Color>[
-                                                                                        color2BlueButton,
-                                                                                        color1BlueButton
-                                                                                      ]
-                                                                                    : <Color>[
-                                                                                        color1DarkGreyButton,
-                                                                                        color2DarkGreyButton
-                                                                                      ],
-                                                                              ),
-                                                                            ),
-                                                                            width: 50,
-                                                                            height: 50,
-                                                                            child: Stack(
-                                                                              children: [
-                                                                                Row(
-                                                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                  children: [
-                                                                                    Column(
-                                                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                      children: [
-                                                                                        SizedBox(
-                                                                                            width: 100.w,
-                                                                                            child: Center(
-                                                                                              child: TextApp(
-                                                                                                textAlign: TextAlign.center,
-                                                                                                text: data.tables?[index].tableName ?? '',
-                                                                                                color: Colors.white,
-                                                                                                fontWeight: FontWeight.bold,
-                                                                                              ),
-                                                                                            )),
-                                                                                        if (data.tables?[index].bookingStatus == false) TextApp(text: "${data.tables?[index].clientCanPay.toString() ?? '0'} đ", color: Colors.white),
-                                                                                        TextApp(text: data.tables?[index].orderCreatedAt.toString() ?? '', color: Colors.white)
-                                                                                      ],
-                                                                                    ),
-                                                                                  ],
+                          : Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Padding(
+                                  padding:
+                                      EdgeInsets.only(left: 30.w, right: 30.w),
+                                  child: Container(
+                                    width: 1.sw,
+                                    height: 500,
+                                    // color: Colors.amber,
+                                    child:
+                                        state
+                                                .listRoomModel!
+                                                .rooms![currentRoomIndex]
+                                                .tables!
+                                                .isNotEmpty
+                                            ? RefreshIndicator(
+                                                color: Colors.blue,
+                                                onRefresh: () async {
+                                                  getDataTabIndex(
+                                                    roomId: state
+                                                        .listRoomModel!
+                                                        .rooms![
+                                                            currentRoomIndex]
+                                                        .storeRoomId
+                                                        .toString(),
+                                                  ); //get data table of firts room
+                                                },
+                                                child: GridView.builder(
+                                                    gridDelegate:
+                                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                                            crossAxisCount: 3),
+                                                    itemCount: state
+                                                            .listRoomModel!
+                                                            .rooms![
+                                                                currentRoomIndex]
+                                                            .tables
+                                                            ?.length ??
+                                                        1,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      var roomName = state
+                                                              .listRoomModel!
+                                                              .rooms![index]
+                                                              .storeRoomName ??
+                                                          '';
+
+                                                      var listRoomID = state
+                                                          .listRoomModel!.rooms!
+                                                          .map((data) =>
+                                                              data.storeRoomId)
+                                                          .toList();
+
+                                                      return Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(10),
+                                                          child: Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8.r),
+                                                                gradient:
+                                                                    LinearGradient(
+                                                                  begin: Alignment
+                                                                      .topLeft,
+                                                                  end: Alignment
+                                                                      .bottomRight,
+                                                                  colors: state
+                                                                              .listRoomModel!
+                                                                              .rooms![
+                                                                                  currentRoomIndex]
+                                                                              .tables?[
+                                                                                  index]
+                                                                              .bookingStatus ==
+                                                                          true
+                                                                      ? <Color>[
+                                                                          color2BlueButton,
+                                                                          color1BlueButton
+                                                                        ]
+                                                                      : <Color>[
+                                                                          color1DarkGreyButton,
+                                                                          color2DarkGreyButton
+                                                                        ],
+                                                                ),
+                                                              ),
+                                                              width: 50,
+                                                              height: 50,
+                                                              child: Stack(
+                                                                children: [
+                                                                  Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      Column(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        children: [
+                                                                          SizedBox(
+                                                                              width: 100.w,
+                                                                              child: Center(
+                                                                                child: TextApp(
+                                                                                  isOverFlow: false,
+                                                                                  softWrap: true,
+                                                                                  textAlign: TextAlign.center,
+                                                                                  text: state.listRoomModel!.rooms![currentRoomIndex].tables?[index].tableName ?? '',
+                                                                                  color: Colors.white,
+                                                                                  fontWeight: FontWeight.bold,
                                                                                 ),
-                                                                                Positioned(
-                                                                                    top: 0,
-                                                                                    right: 0,
-                                                                                    child: data.tables?[index].bookingStatus == false
-                                                                                        ? PopUpMenuUsingTable(eventButton1: () {
-                                                                                            getTableInfor(
-                                                                                              roomId: data.storeRoomId.toString(),
-                                                                                              tableId: data.tables![index].roomTableId.toString(),
-                                                                                            );
-                                                                                            showDialog(
-                                                                                              context: context,
-                                                                                              builder: (BuildContext context) {
-                                                                                                return BookingTableDialog(
-                                                                                                  eventSaveButton: () {
-                                                                                                    getDataTabIndex(
-                                                                                                      roomId: data.storeRoomId.toString(),
-                                                                                                    );
-                                                                                                  },
-                                                                                                  token: tokenManager,
-                                                                                                  role: 'user',
-                                                                                                  shopID: widget.shopID,
-                                                                                                  idRoom: data.storeRoomId,
-                                                                                                  listTableOfRoom: data.tables,
-                                                                                                  currentTable: data.tables![index],
-                                                                                                );
-                                                                                              },
-                                                                                            );
-                                                                                          }, eventButton2: () {
-                                                                                            getSwitchTableData(roomId: data.storeRoomId.toString(), tableId: data.tables![index].roomTableId.toString(), orderID: data.tables![index].orderId.toString());
-                                                                                            showDialog(
-                                                                                                context: context,
-                                                                                                builder: (BuildContext context) {
-                                                                                                  return MoveTableDialog(
-                                                                                                    token: tokenManager,
-                                                                                                    role: 'user',
-                                                                                                    shopID: widget.shopID,
-                                                                                                    orderID: data.tables![index].orderId.toString(),
-                                                                                                    currentTable: data.tables![index],
-                                                                                                    nameRoom: data.storeRoomName ?? '',
-                                                                                                    roomID: data.storeRoomId.toString(),
-                                                                                                    listIdRoom: listRoomID,
-                                                                                                    eventSaveButton: () {
-                                                                                                      getDataTabIndex(
-                                                                                                        roomId: data.storeRoomId.toString(),
-                                                                                                      );
-                                                                                                    },
-                                                                                                  );
-                                                                                                });
-                                                                                          }, eventButton3: () {
-                                                                                            getBillData(
-                                                                                              roomId: data.storeRoomId.toString(),
-                                                                                              tableId: data.tables![index].roomTableId.toString(),
-                                                                                              orderID: data.tables![index].orderId.toString(),
-                                                                                            );
-                                                                                            showDialog(
-                                                                                                useRootNavigator: false,
-                                                                                                context: context,
-                                                                                                builder: (BuildContext context) {
-                                                                                                  return SeeBillDialog(
-                                                                                                    token: tokenManager,
-                                                                                                    role: 'user',
-                                                                                                    shopID: widget.shopID,
-                                                                                                    orderID: data.tables?[index].orderId,
-                                                                                                    roomID: data.storeRoomId.toString(),
-                                                                                                    currentTable: data.tables![index],
-                                                                                                    nameRoom: data.storeRoomName ?? '',
-                                                                                                  );
-                                                                                                });
-                                                                                          }, eventButton4: () {
-                                                                                            getPaymentData(
-                                                                                              tableId: data.tables![index].roomTableId.toString(),
-                                                                                              orderID: data.tables![index].orderId.toString(),
-                                                                                            );
-                                                                                            showDialog(
-                                                                                                context: context,
-                                                                                                builder: (BuildContext context) {
-                                                                                                  return PayBillDialog(
-                                                                                                    token: tokenManager,
-                                                                                                    role: 'user',
-                                                                                                    shopID: widget.shopID,
-                                                                                                    orderID: data.tables?[index].orderId.toString(),
-                                                                                                    roomID: data.storeRoomId.toString(),
-                                                                                                    currentTable: data.tables![index],
-                                                                                                    nameRoom: data.storeRoomName ?? '',
-                                                                                                    eventSaveButton: () {
-                                                                                                      getDataTabIndex(
-                                                                                                        roomId: data.storeRoomId.toString(),
-                                                                                                      );
-                                                                                                    },
-                                                                                                  );
-                                                                                                });
-                                                                                          })
-                                                                                        : PopUpMenuUnUseTable(eventButton1: () {
-                                                                                            getTableInfor(roomId: data.storeRoomId.toString(), tableId: data.tables?[index].roomTableId.toString() ?? '');
-                                                                                            showDialog(
-                                                                                                context: context,
-                                                                                                builder: (BuildContext context) {
-                                                                                                  return BookingTableDialog(
-                                                                                                    token: tokenManager,
-                                                                                                    role: 'user',
-                                                                                                    shopID: widget.shopID,
-                                                                                                    idRoom: data.storeRoomId,
-                                                                                                    eventSaveButton: () {
-                                                                                                      getDataTabIndex(
-                                                                                                        roomId: data.storeRoomId.toString(),
-                                                                                                      );
-                                                                                                    },
-                                                                                                    listTableOfRoom: data.tables,
-                                                                                                    currentTable: data.tables![index],
-                                                                                                  );
-                                                                                                });
-                                                                                          })),
-                                                                              ],
-                                                                            )));
-                                                                  }),
-                                                        )
-                                                      : RefreshIndicator(
-                                                          color: Colors.blue,
-                                                          onRefresh: () async {
-                                                            getDataTabIndex(
-                                                              roomId: data
-                                                                  .storeRoomId
-                                                                  .toString(),
-                                                            );
-                                                          },
-                                                          child:
-                                                              ListView.builder(
-                                                                  itemCount: 1,
-                                                                  itemBuilder:
-                                                                      (context,
-                                                                          index) {
-                                                                    return Padding(
-                                                                      padding: EdgeInsets.only(
-                                                                          left: 30
-                                                                              .w,
-                                                                          right:
-                                                                              30.w),
-                                                                      child:
-                                                                          Container(
-                                                                        width: 1
-                                                                            .sw,
-                                                                        height:
-                                                                            50,
-                                                                        color: Colors
-                                                                            .blue,
-                                                                        child:
-                                                                            Center(
-                                                                          child:
-                                                                              TextApp(
-                                                                            text:
-                                                                                "Phòng này không có bàn",
-                                                                            color:
-                                                                                Colors.white,
-                                                                            fontsize:
-                                                                                14.sp,
-                                                                            textAlign:
-                                                                                TextAlign.center,
-                                                                          ),
-                                                                        ),
+                                                                              )),
+                                                                          if (state.listRoomModel!.rooms![currentRoomIndex].tables?[index].bookingStatus ==
+                                                                              false)
+                                                                            TextApp(
+                                                                                text: state.listRoomModel!.rooms![currentRoomIndex].tables?[index].clientCanPay.toString() ?? '',
+                                                                                color: Colors.white),
+                                                                          TextApp(
+                                                                              text: state.listRoomModel!.rooms![currentRoomIndex].tables?[index].orderCreatedAt.toString() ?? '',
+                                                                              color: Colors.white)
+                                                                        ],
                                                                       ),
-                                                                    );
-                                                                  }),
-                                                        ))
-                                              .toList(),
-                                        )
-                                      : null,
-                                ),
-                              )
-                            ]),
+                                                                    ],
+                                                                  ),
+                                                                  Positioned(
+                                                                      top: 0,
+                                                                      right: 0,
+                                                                      child: state.listRoomModel!.rooms![currentRoomIndex].tables?[index].bookingStatus ==
+                                                                              false
+                                                                          ? PopUpMenuUsingTable(eventButton1:
+                                                                              () {
+                                                                              getTableInfor(
+                                                                                roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
+                                                                                tableId: state.listRoomModel!.rooms![currentRoomIndex].tables![index].roomTableId.toString(),
+                                                                              );
+                                                                              showDialog(
+                                                                                context: context,
+                                                                                builder: (BuildContext context) {
+                                                                                  return BookingTableDialog(
+                                                                                    eventSaveButton: () {
+                                                                                      getDataTabIndex(
+                                                                                        roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
+                                                                                      );
+                                                                                    },
+                                                                                    token: tokenManager,
+                                                                                    role: 'user',
+                                                                                    shopID: widget.shopID,
+                                                                                    idRoom: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId,
+                                                                                    listTableOfRoom: state.listRoomModel!.rooms![currentRoomIndex].tables,
+                                                                                    currentTable: state.listRoomModel!.rooms![currentRoomIndex].tables![index],
+                                                                                  );
+                                                                                },
+                                                                              );
+                                                                            }, eventButton2:
+                                                                              () {
+                                                                              getSwitchTableData(
+                                                                                roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
+                                                                                tableId: state.listRoomModel!.rooms![currentRoomIndex].tables![index].roomTableId.toString(),
+                                                                                orderID: state.listRoomModel!.rooms![currentRoomIndex].tables![index].orderId.toString(),
+                                                                              );
+                                                                              showDialog(
+                                                                                  context: context,
+                                                                                  builder: (BuildContext context) {
+                                                                                    return MoveTableDialog(
+                                                                                      token: tokenManager,
+                                                                                      role: 'user',
+                                                                                      shopID: widget.shopID,
+                                                                                      orderID: state.listRoomModel!.rooms![currentRoomIndex].tables![index].orderId.toString(),
+                                                                                      currentTable: state.listRoomModel!.rooms![currentRoomIndex].tables![index],
+                                                                                      nameRoom: roomName,
+                                                                                      roomID: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
+                                                                                      listIdRoom: listRoomID,
+                                                                                      eventSaveButton: () {
+                                                                                        getDataTabIndex(
+                                                                                          roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
+                                                                                        );
+                                                                                      },
+                                                                                    );
+                                                                                  });
+                                                                            }, eventButton3:
+                                                                              () {
+                                                                              getBillData(
+                                                                                roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
+                                                                                tableId: state.listRoomModel!.rooms![currentRoomIndex].tables![index].roomTableId.toString(),
+                                                                                orderID: state.listRoomModel!.rooms![currentRoomIndex].tables![index].orderId.toString(),
+                                                                              );
+                                                                              showDialog(
+                                                                                  useRootNavigator: false,
+                                                                                  context: context,
+                                                                                  builder: (BuildContext context) {
+                                                                                    return SeeBillDialog(
+                                                                                      token: tokenManager,
+                                                                                      role: 'user',
+                                                                                      shopID: widget.shopID,
+                                                                                      orderID: state.listRoomModel!.rooms![currentRoomIndex].tables?[index].orderId,
+                                                                                      roomID: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
+                                                                                      currentTable: state.listRoomModel!.rooms![currentRoomIndex].tables![index],
+                                                                                      nameRoom: roomName,
+                                                                                    );
+                                                                                  });
+                                                                            }, eventButton4:
+                                                                              () {
+                                                                              getPaymentData(
+                                                                                tableId: state.listRoomModel!.rooms![currentRoomIndex].tables![index].roomTableId.toString(),
+                                                                                orderID: state.listRoomModel!.rooms![currentRoomIndex].tables![index].orderId.toString(),
+                                                                              );
+                                                                              showDialog(
+                                                                                  context: context,
+                                                                                  builder: (BuildContext context) {
+                                                                                    return PayBillDialog(
+                                                                                      token: tokenManager,
+                                                                                      role: 'user',
+                                                                                      shopID: widget.shopID,
+                                                                                      orderID: state.listRoomModel!.rooms![currentRoomIndex].tables?[index].orderId.toString(),
+                                                                                      roomID: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
+                                                                                      currentTable: state.listRoomModel!.rooms![currentRoomIndex].tables![index],
+                                                                                      nameRoom: roomName,
+                                                                                      eventSaveButton: () {
+                                                                                        getDataTabIndex(
+                                                                                          roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
+                                                                                        );
+                                                                                      },
+                                                                                    );
+                                                                                  });
+                                                                            })
+                                                                          : PopUpMenuUnUseTable(eventButton1:
+                                                                              () {
+                                                                              getTableInfor(
+                                                                                roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
+                                                                                tableId: state.listRoomModel!.rooms![currentRoomIndex].tables![index].roomTableId.toString(),
+                                                                              );
+
+                                                                              showDialog(
+                                                                                  context: context,
+                                                                                  builder: (BuildContext context) {
+                                                                                    return BookingTableDialog(
+                                                                                      token: tokenManager,
+                                                                                      role: 'user',
+                                                                                      shopID: widget.shopID,
+                                                                                      idRoom: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId,
+                                                                                      eventSaveButton: () {
+                                                                                        getDataTabIndex(
+                                                                                          roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
+                                                                                        );
+                                                                                      },
+                                                                                      listTableOfRoom: state.listRoomModel!.rooms![currentRoomIndex].tables,
+                                                                                      currentTable: state.listRoomModel!.rooms![currentRoomIndex].tables![index],
+                                                                                    );
+                                                                                  });
+                                                                            })),
+                                                                ],
+                                                              )));
+                                                    }),
+                                              )
+                                            : RefreshIndicator(
+                                                color: Colors.blue,
+                                                onRefresh: () async {
+                                                  getDataTabIndex(
+                                                    roomId: state
+                                                        .listRoomModel!
+                                                        .rooms![
+                                                            currentRoomIndex]
+                                                        .storeRoomId
+                                                        .toString(),
+                                                  );
+                                                },
+                                                child: ListView.builder(
+                                                    itemCount: 1,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                left: 30.w,
+                                                                right: 30.w),
+                                                        child: Container(
+                                                          width: 1.sw,
+                                                          height: 50,
+                                                          color: Colors.blue,
+                                                          child: Center(
+                                                            child: TextApp(
+                                                              text:
+                                                                  "Phòng này không có bàn",
+                                                              color:
+                                                                  Colors.white,
+                                                              fontsize: 14.sp,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }),
+                                              ),
+                                  ),
+                                )
+                              ],
+                            ),
                       SizedBox(
                         height: 15.h,
                       ),
