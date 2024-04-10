@@ -3158,10 +3158,16 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                             Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
                                               children: [
-                                                SizedBox(
-                                                  // width: 50.w,
+                                                Container(
+                                                  // color: Colors.amber,
+                                                  width: 120.w,
                                                   child: TextApp(
+                                                    textAlign: TextAlign.center,
+                                                    softWrap: true,
+                                                    isOverFlow: false,
                                                     text: "Tên món ăn",
                                                     color: Colors.black,
                                                     fontsize: 14.sp,
@@ -3172,11 +3178,17 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                             Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
                                               children: [
-                                                SizedBox(
-                                                  // width: 100.w,
+                                                Container(
+                                                  width: 30.w,
+                                                  // color: Colors.red,
                                                   child: TextApp(
-                                                    text: "Số lượng",
+                                                    textAlign: TextAlign.center,
+                                                    softWrap: true,
+                                                    isOverFlow: false,
+                                                    text: "SL",
                                                     color: Colors.black,
                                                     fontsize: 14.sp,
                                                   ),
@@ -3186,10 +3198,16 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                             Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
                                               children: [
-                                                SizedBox(
-                                                  // width: 100.w,
+                                                Container(
+                                                  width: 80.w,
+                                                  // color: Colors.green,
                                                   child: TextApp(
+                                                    textAlign: TextAlign.center,
+                                                    softWrap: true,
+                                                    isOverFlow: false,
                                                     text: "Giá",
                                                     color: Colors.black,
                                                     fontsize: 14.sp,
@@ -3200,10 +3218,16 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                             Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
                                               children: [
-                                                SizedBox(
-                                                  // width: 100.w,
+                                                Container(
+                                                  width: 80.w,
+                                                  // color: Colors.pink,
                                                   child: TextApp(
+                                                    textAlign: TextAlign.center,
+                                                    softWrap: true,
+                                                    isOverFlow: false,
                                                     text: "Tổng",
                                                     color: Colors.black,
                                                     fontsize: 14.sp,
@@ -3213,6 +3237,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                             ),
                                           ],
                                         ),
+                                        space15H,
                                         ListView.builder(
                                             shrinkWrap: true,
                                             itemCount: state.paymentInforModel
@@ -3235,87 +3260,119 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                                           .quantityFood ??
                                                       1);
 
-                                              return Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 80.w,
-                                                        child: TextApp(
-                                                          text: state
-                                                                  .paymentInforModel
-                                                                  ?.data?[index]
-                                                                  .foodName ??
-                                                              '',
-                                                          color: Colors.black,
-                                                          fontsize: 14.sp,
+                                              return Padding(
+                                                padding: EdgeInsets.only(
+                                                    bottom: 10.h),
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        SizedBox(
+                                                          width: 120.w,
+                                                          child: TextApp(
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            softWrap: true,
+                                                            isOverFlow: false,
+                                                            text: state
+                                                                    .paymentInforModel
+                                                                    ?.data?[
+                                                                        index]
+                                                                    .foodName ??
+                                                                '',
+                                                            color: Colors.black,
+                                                            fontsize: 14.sp,
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                    Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        SizedBox(
+                                                          width: 30.w,
+                                                          child: TextApp(
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            text: state
+                                                                    .paymentInforModel
+                                                                    ?.data?[
+                                                                        index]
+                                                                    .quantityFood
+                                                                    .toString() ??
+                                                                '',
+                                                            color: Colors.black,
+                                                            fontsize: 14.sp,
+                                                          ),
                                                         ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 50.w,
-                                                        child: TextApp(
-                                                          text: state
-                                                                  .paymentInforModel
-                                                                  ?.data?[index]
-                                                                  .quantityFood
-                                                                  .toString() ??
-                                                              '',
-                                                          color: Colors.black,
-                                                          fontsize: 14.sp,
+                                                      ],
+                                                    ),
+                                                    Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        SizedBox(
+                                                          width: 80.w,
+                                                          child: TextApp(
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            softWrap: true,
+                                                            isOverFlow: false,
+                                                            text:
+                                                                "${MoneyFormatter(amount: priceOfFood.toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                            color: Colors.black,
+                                                            fontsize: 14.sp,
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      SizedBox(
-                                                        // width: 100.w,
-                                                        child: TextApp(
-                                                          text:
-                                                              "${MoneyFormatter(amount: priceOfFood.toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                          color: Colors.black,
-                                                          fontsize: 14.sp,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      // MoneyFormatter(amount:
+                                                      ],
+                                                    ),
+                                                    Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        // MoneyFormatter(amount:
 
-                                                      SizedBox(
-                                                        // width: 100.w,
-                                                        child: TextApp(
-                                                          text:
-                                                              "${MoneyFormatter(amount: totalMoneyFood.toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                          color: Colors.black,
-                                                          fontsize: 14.sp,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ],
+                                                        SizedBox(
+                                                          width: 80.w,
+                                                          child: TextApp(
+                                                            softWrap: true,
+                                                            isOverFlow: false,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            text:
+                                                                "${MoneyFormatter(amount: totalMoneyFood.toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                            color: Colors.black,
+                                                            fontsize: 14.sp,
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
                                               );
                                             })
                                       ],
@@ -3810,13 +3867,7 @@ class _ManageBroughtReceiptDialogState
       currentPage = 1;
     });
     listFoodCurrent.clear();
-    // getListFood(
-    //   tokenReq: widget.token,
-    //   page: currentPage,
-    //   keywords: query,
-    //   foodKinds:
-    //       selectedCategoriesIndex.isEmpty ? null : selectedCategoriesIndex,
-    // );
+
     getDetailsBroughtReceiptData(
       page: currentPage,
       orderID: widget.orderID,
@@ -4070,75 +4121,13 @@ class _ManageBroughtReceiptDialogState
     }
   }
 
-  // void getListFood(
-  //     {required int page,
-  //     String? keywords,
-  //     List<int>? foodKinds,
-  //     int? payFlg,
-  //     required String tokenReq}) async {
-  //   try {
-  //     var token = tokenReq;
-
-  //     final respons = await http.post(
-  //       Uri.parse('$baseUrl$getListFoodBroughtReceipt'),
-  //       headers: {
-  //         'Content-type': 'application/json',
-  //         'Accept': 'application/json',
-  //         "Authorization": "Bearer $token"
-  //       },
-  //       body: jsonEncode({
-  //         'client': widget.role,
-  //         'shop_id': widget.shopID,
-  //         'is_api': true,
-  //         'limit': 15,
-  //         'page': page,
-  //         'filters': {
-  //           "keywords": keywords,
-  //           "food_kinds": foodKinds,
-  //           "pay_flg": payFlg
-  //         },
-  //         'order_id': widget.orderID
-  //       }),
-  //     );
-
-  //     final data = jsonDecode(respons.body);
-  //     print("??? $data");
-  //     try {
-  //       if (data['status'] == 200) {
-  //         setState(() {
-  //           var detailsBroughtReceiptRes =
-  //               ManageBroughtReceiptModel.fromJson(data);
-  //           listFoodCurrent.addAll(detailsBroughtReceiptRes.data.data);
-  //           currentPage++;
-  //           if (detailsBroughtReceiptRes.data.data.isEmpty ||
-  //               detailsBroughtReceiptRes.data.data.length <= 15) {
-  //             hasMore = false;
-  //           }
-  //         });
-  //       } else {
-  //         print("ERROR BROUGHT RECEIPT PAGE 1 AAA");
-  //       }
-  //     } catch (error) {
-  //       print("ERROR BROUGHT RECEIPT PAGE 2 $error");
-  //     }
-  //   } catch (error) {
-  //     print("ERROR BROUGHT RECEIPT PAGE 3 $error");
-  //   }
-  // }
-
   @override
   void initState() {
-    log('INIT');
     super.initState();
-    // getListFood(
-    //   page: 1,
-    //   tokenReq: widget.token,
-    // );
+
     getDetailsBroughtReceiptData(
         page: 1, orderID: widget.orderID, tokenReq: widget.token);
-    // setState(() {
-    //   currentPage = 1;
-    // });
+
     scrollListFoodController.addListener(() {
       if (scrollListFoodController.position.maxScrollExtent ==
           scrollListFoodController.offset) {
@@ -4150,13 +4139,6 @@ class _ManageBroughtReceiptDialogState
           foodKinds:
               selectedCategoriesIndex.isEmpty ? null : selectedCategoriesIndex,
         );
-        // getListFood(
-        //   tokenReq: widget.token,
-        //   page: currentPage,
-        //   keywords: query,
-        //   foodKinds:
-        //       selectedCategoriesIndex.isEmpty ? null : selectedCategoriesIndex,
-        // );
       }
     });
   }
@@ -6025,89 +6007,125 @@ class _CancleBillDialogState extends State<CancleBillDialog> {
                 space5H,
                 Column(
                   children: [
-                    Row(
-                      children: [
-                        Radio(
-                          activeColor: Colors.black,
-                          value: optionsCancle[0],
-                          groupValue: currentOptions,
-                          onChanged: (value) {
-                            if (mounted) {
-                              setState(() {
-                                currentOptions = value.toString();
-                              });
-                            }
-                          },
-                        ),
-                        TextApp(
-                          text: optionsCancle[0],
-                          color: Colors.black,
-                          fontsize: 14.sp,
-                        )
-                      ],
+                    InkWell(
+                      onTap: () {
+                        if (mounted) {
+                          setState(() {
+                            currentOptions = optionsCancle[0].toString();
+                          });
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          Radio(
+                            activeColor: Colors.black,
+                            value: optionsCancle[0],
+                            groupValue: currentOptions,
+                            onChanged: (value) {
+                              // if (mounted) {
+                              //   setState(() {
+                              //     currentOptions = value.toString();
+                              //   });
+                              // }
+                            },
+                          ),
+                          TextApp(
+                            text: optionsCancle[0],
+                            color: Colors.black,
+                            fontsize: 14.sp,
+                          )
+                        ],
+                      ),
                     ),
-                    Row(
-                      children: [
-                        Radio(
-                          activeColor: Colors.black,
-                          value: optionsCancle[1],
-                          groupValue: currentOptions,
-                          onChanged: (value) {
-                            if (mounted) {
-                              setState(() {
-                                currentOptions = value.toString();
-                              });
-                            }
-                          },
-                        ),
-                        TextApp(
-                          text: optionsCancle[1],
-                          color: Colors.black,
-                          fontsize: 14.sp,
-                        )
-                      ],
+                    InkWell(
+                      onTap: () {
+                        if (mounted) {
+                          setState(() {
+                            currentOptions = optionsCancle[1].toString();
+                          });
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          Radio(
+                            activeColor: Colors.black,
+                            value: optionsCancle[1],
+                            groupValue: currentOptions,
+                            onChanged: (value) {
+                              // if (mounted) {
+                              //   setState(() {
+                              //     currentOptions = value.toString();
+                              //   });
+                              // }
+                            },
+                          ),
+                          TextApp(
+                            text: optionsCancle[1],
+                            color: Colors.black,
+                            fontsize: 14.sp,
+                          )
+                        ],
+                      ),
                     ),
-                    Row(
-                      children: [
-                        Radio(
-                          activeColor: Colors.black,
-                          value: optionsCancle[2],
-                          groupValue: currentOptions,
-                          onChanged: (value) {
-                            if (mounted) {
-                              setState(() {
-                                currentOptions = value.toString();
-                              });
-                            }
-                          },
-                        ),
-                        TextApp(
-                          text: optionsCancle[2],
-                          color: Colors.black,
-                          fontsize: 14.sp,
-                        )
-                      ],
+                    InkWell(
+                      onTap: () {
+                        if (mounted) {
+                          setState(() {
+                            currentOptions = optionsCancle[2].toString();
+                          });
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          Radio(
+                            activeColor: Colors.black,
+                            value: optionsCancle[2],
+                            groupValue: currentOptions,
+                            onChanged: (value) {
+                              // if (mounted) {
+                              //   setState(() {
+                              //     currentOptions = value.toString();
+                              //   });
+                              // }
+                            },
+                          ),
+                          TextApp(
+                            text: optionsCancle[2],
+                            color: Colors.black,
+                            fontsize: 14.sp,
+                          )
+                        ],
+                      ),
                     ),
-                    Row(
-                      children: [
-                        Radio(
-                          activeColor: Colors.black,
-                          value: optionsCancle[3],
-                          groupValue: currentOptions,
-                          onChanged: (value) {
-                            if (mounted) {
-                              setState(() {
-                                currentOptions = value.toString();
-                              });
-                            }
-                          },
-                        ),
-                        TextApp(
-                          text: optionsCancle[3],
-                          color: Colors.black,
-                          fontsize: 14.sp,
-                        )
-                      ],
+                    InkWell(
+                      onTap: () {
+                        if (mounted) {
+                          setState(() {
+                            currentOptions = optionsCancle[3].toString();
+                          });
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          Radio(
+                            activeColor: Colors.black,
+                            value: optionsCancle[3],
+                            groupValue: currentOptions,
+                            onChanged: (value) {
+                              // if (mounted) {
+                              //   setState(() {
+                              //     currentOptions = value.toString();
+                              //   });
+                              // }
+                            },
+                          ),
+                          TextApp(
+                            text: optionsCancle[3],
+                            color: Colors.black,
+                            fontsize: 14.sp,
+                          )
+                        ],
+                      ),
                     )
                   ],
                 ),
