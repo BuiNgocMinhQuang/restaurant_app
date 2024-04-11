@@ -688,6 +688,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
       try {
         if (data['status'] == 200) {
           setState(() {
+            listBillComplete.clear();
             var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
             listBillComplete.addAll(broughtReceiptPageRes.data.data);
             isRefesh = true;

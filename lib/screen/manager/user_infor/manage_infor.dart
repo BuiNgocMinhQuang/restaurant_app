@@ -643,7 +643,6 @@ class _ManagerInformationState extends State<ManagerInformation> {
   }
 
   void init() async {
-    await Future.delayed(const Duration(seconds: 0));
     var imagePath1 =
         (managerInforData?.userAvatar ?? 'assets/user/images/avt/no_image.png')
             .replaceAll('["', '');

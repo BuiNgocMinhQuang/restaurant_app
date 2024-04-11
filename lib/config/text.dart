@@ -49,6 +49,7 @@ const String foodInfor = "Thông tin món";
 const String foodName = "Tên món ăn";
 const String type = "Loại";
 const String chooseType = "Chọn loại";
+const String chooseStore = "Chọn cửa hàng";
 const String next = "Tiếp";
 const String back = "Về trước";
 const String image = "Hình ảnh";

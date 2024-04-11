@@ -7,6 +7,7 @@ class AppRouterContants {
   static const String managerChangePasswordRouterName = 'ManagerChangePassword';
   static const String managerHomeRouterName = 'ManagerHome';
   static const String managerListStoresRouterName = 'ManagerListStores';
+  static const String managerListFoodRouterName = 'ManagerListFood';
   static const String managerManageStoresRouterName = 'ManagerManageStores';
   static const String managerListBillRouterName = 'ManagerListBill';
   static const String managerBroughtReceiptRouterName = 'ManagerBroughtReceipt';

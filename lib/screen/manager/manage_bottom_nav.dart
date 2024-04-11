@@ -108,6 +108,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
       },
     );
     final dataListStore = jsonDecode(responseListStore.body);
+    log(token.toString());
     print("DATA LIST STORES $dataListStore");
 
     try {
@@ -237,13 +238,14 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
             : currentIndex == 2
                 ? const ManagerHome()
                 : currentIndex == 3
-                    ? ListFoodManager()
+                    ? ListFoodManager(listStores: listStoreManagerData)
                     : currentIndex == 4
                         ? const ManagerInformation()
                         : currentIndex == 5
                             ? const AddStaff()
                             : currentIndex == 6
-                                ? const ManagerAddFood()
+                                ? ManagerAddFood(
+                                    listStores: listStoreManagerData)
                                 : currentIndex == 7
                                     ? ManagerBookingTable(
                                         shopID: shopIDPar,
@@ -356,7 +358,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                   onTap: () {
                     setState(() {
                       // currentScreen = const ManagerHome();
-
+                      selectedStoreIndex = null;
                       currentIndex = 2;
                       tapDrawerChangeBotNav(2);
                     });
@@ -414,6 +416,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                 // currentScreen = const ListStores();
                                 currentIndex = 0;
                                 getInfor();
+                                selectedStoreIndex = null;
+
                                 // getListStore();
 
                                 tapDrawerChangeBotNav(0);
@@ -464,6 +468,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
 
                                 currentIndex = 1;
                                 tapDrawerChangeBotNav(1);
+                                selectedStoreIndex = null;
                               });
                               checkTokenExpires();
 
@@ -482,6 +487,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             event: () {
                               setState(() {
                                 currentIndex = 5;
+                                selectedStoreIndex = null;
                               });
                               checkTokenExpires();
 
@@ -520,6 +526,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
 
                                 currentIndex = 3;
                                 tapDrawerChangeBotNav(3);
+                                selectedStoreIndex = null;
                               });
                               // checkTokenExpires();
 
@@ -535,6 +542,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             event: () {
                               setState(() {
                                 currentIndex = 6;
+                                selectedStoreIndex = null;
                               });
                               checkTokenExpires();
 
