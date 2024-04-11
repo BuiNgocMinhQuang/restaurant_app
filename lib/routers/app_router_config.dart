@@ -10,7 +10,7 @@ import 'package:app_restaurant/screen/manager/store/booking_table.dart';
 import 'package:app_restaurant/screen/manager/store/brought_receipt.dart';
 import 'package:app_restaurant/screen/manager/auth/forgot_password.dart';
 import 'package:app_restaurant/screen/manager/staff/edit_staff_infor.dart';
-import 'package:app_restaurant/screen/manager/store/manage_store.dart';
+import 'package:app_restaurant/screen/manager/store/details_store.dart';
 import 'package:app_restaurant/screen/manager/manage_bottom_nav.dart';
 import 'package:app_restaurant/screen/manager/store/list_bill.dart';
 import 'package:app_restaurant/screen/manager/staff/list_staff.dart';
@@ -29,15 +29,15 @@ import 'package:go_router/go_router.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class NyAppRouter {
-  final GoRouter testRouter =
-      GoRouter(navigatorKey: navigatorKey, routes: <RouteBase>[
-    GoRoute(
-        name: AppRouterContants.managerHomeRouterName,
-        path: '/',
-        builder: (BuildContext context, GoRouterState state) {
-          return ManageStore();
-        }),
-  ]);
+  // final GoRouter testRouter =
+  //     GoRouter(navigatorKey: navigatorKey, routes: <RouteBase>[
+  //   GoRoute(
+  //       name: AppRouterContants.managerHomeRouterName,
+  //       path: '/',
+  //       builder: (BuildContext context, GoRouterState state) {
+  //         return DetailsStore();
+  //       }),
+  // ]);
   final GoRouter router = GoRouter(
     navigatorKey: navigatorKey,
     routes: <RouteBase>[
@@ -87,12 +87,12 @@ class NyAppRouter {
       //     builder: (BuildContext context, GoRouterState state) {
       //       return const ListStores();
       //     }),
-      GoRoute(
-          name: AppRouterContants.managerManageStoresRouterName,
-          path: '/manager_manage_stores',
-          builder: (BuildContext context, GoRouterState state) {
-            return const ManageStore();
-          }),
+      // GoRoute(
+      //     name: AppRouterContants.managerManageStoresRouterName,
+      //     path: '/manager_details_stores',
+      //     builder: (BuildContext context, GoRouterState state) {
+      //       return const DetailsStore();
+      //     }),
       // GoRoute(
       //     name: AppRouterContants.managerListFoodRouterName,
       //     path: '/manager_list_food',

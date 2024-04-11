@@ -1,29 +1,42 @@
+import 'dart:convert';
+
+import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
+import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/screen/manager/store/manage_room.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
+import 'package:app_restaurant/widgets/chart/chart_dialog.dart';
 import 'package:app_restaurant/widgets/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:app_restaurant/model/manager/store/details_stores_model.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:money_formatter/money_formatter.dart';
 
-class ManageStore extends StatefulWidget {
-  const ManageStore({super.key});
+class DetailsStore extends StatefulWidget {
+  final DetailsStoreModel? detailsStoreModel;
+  const DetailsStore({Key? key, required this.detailsStoreModel})
+      : super(key: key);
 
   @override
-  State<ManageStore> createState() => _ManageStoreState();
+  State<DetailsStore> createState() => _DetailsStoreState();
 }
 
-class _ManageStoreState extends State<ManageStore> {
+class _DetailsStoreState extends State<DetailsStore> {
   // bool isShowCreateRoomModal = false;
   void createRoom() {}
 
   @override
   Widget build(BuildContext context) {
+    var imageStorePath = widget.detailsStoreModel?.store.storeImages ?? '';
+    var imageStore = jsonDecode(imageStorePath);
     return Scaffold(
         appBar: AppBar(
           title: Text("Quản lí cửa hàng"),
@@ -61,7 +74,8 @@ class _ManageStoreState extends State<ManageStore> {
                             ),
                             space15H,
                             TextApp(
-                                text: "100,000,000",
+                                text:
+                                    "${MoneyFormatter(amount: (widget.detailsStoreModel?.totalIncome ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                                 fontsize: 20.sp,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -71,8 +85,14 @@ class _ManageStoreState extends State<ManageStore> {
                               child: ButtonGradient(
                                 color1: color1DarkButton,
                                 color2: color2DarkButton,
-                                event: () {},
-                                text: "Tổng thu nhập cửa hàng".toUpperCase(),
+                                event: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return OverviewChartDialog(shopID: "1");
+                                      });
+                                },
+                                text: "Biểu đồ tổng quan".toUpperCase(),
                                 fontSize: 12.sp,
                                 radius: 8.r,
                                 textColor: Colors.white,
@@ -112,7 +132,8 @@ class _ManageStoreState extends State<ManageStore> {
                                       fontWeight: FontWeight.normal,
                                     ),
                                     TextApp(
-                                      text: "100,000,000đ",
+                                      text:
+                                          "${MoneyFormatter(amount: (widget.detailsStoreModel?.todayIncome ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                                       fontsize: 20.sp,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -152,7 +173,10 @@ class _ManageStoreState extends State<ManageStore> {
                                       fontWeight: FontWeight.normal,
                                     ),
                                     TextApp(
-                                      text: "100",
+                                      text: widget.detailsStoreModel?.store
+                                              .staffsCount
+                                              .toString() ??
+                                          '',
                                       fontsize: 20.sp,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -192,9 +216,21 @@ class _ManageStoreState extends State<ManageStore> {
                                               child: ClipRRect(
                                                 borderRadius:
                                                     BorderRadius.circular(8.0),
-                                                child: Image.asset(
-                                                  "assets/images/banner1.png",
+                                                child: CachedNetworkImage(
                                                   fit: BoxFit.cover,
+                                                  imageUrl:
+                                                      httpImage + imageStore[0],
+                                                  placeholder: (context, url) =>
+                                                      SizedBox(
+                                                    height: 15.w,
+                                                    width: 15.w,
+                                                    child: const Center(
+                                                        child:
+                                                            CircularProgressIndicator()),
+                                                  ),
+                                                  errorWidget: (context, url,
+                                                          error) =>
+                                                      const Icon(Icons.error),
                                                 ),
                                               )),
                                           space20W,
@@ -205,12 +241,18 @@ class _ManageStoreState extends State<ManageStore> {
                                                 MainAxisAlignment.center,
                                             children: [
                                               TextApp(
-                                                text: "shop 1",
+                                                text: widget.detailsStoreModel
+                                                        ?.store.storeName ??
+                                                    '',
                                                 fontsize: 12.sp,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                               TextApp(
-                                                text: "26-02-2024",
+                                                text: formatDateTime(widget
+                                                        .detailsStoreModel
+                                                        ?.store
+                                                        .createdAt ??
+                                                    ''),
                                                 fontsize: 12.sp,
                                                 fontWeight: FontWeight.normal,
                                               ),
@@ -241,16 +283,25 @@ class _ManageStoreState extends State<ManageStore> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                       TextApp(
-                                        text: "somwhere.",
+                                        text: widget.detailsStoreModel?.store
+                                                .storeAddress ??
+                                            '',
                                         fontsize: 14.sp,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ],
                                   ),
                                   space10H,
-                                  TextApp(
-                                    text: "Mo ta",
-                                    fontsize: 14.sp,
+                                  // TextApp(
+                                  //   text:
+                                  //   desStoreText,
+
+                                  //   fontsize: 14.sp,
+                                  // ),
+                                  HtmlWidget(
+                                    '''
+                                                       ${widget.detailsStoreModel?.store.storeDescription ?? ''}
+                                                      ''',
                                   ),
                                   space30H,
                                   Container(
@@ -264,12 +315,13 @@ class _ManageStoreState extends State<ManageStore> {
                                       children: [
                                         space20W,
                                         TextApp(
-                                          text: "100,000,000 ",
+                                          text:
+                                              "${MoneyFormatter(amount: (widget.detailsStoreModel?.monthTotalOrder ?? 0).toDouble()).output.withoutFractionDigits.toString()} ",
                                           fontsize: 18.sp,
                                           fontWeight: FontWeight.bold,
                                         ),
                                         TextApp(
-                                          text: "đ/tháng",
+                                          text: "đ/tháng hiện tại",
                                           fontsize: 18.sp,
                                         ),
                                       ],

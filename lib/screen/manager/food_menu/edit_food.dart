@@ -11,6 +11,7 @@ import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,12 +24,16 @@ import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
 import 'package:intl/intl.dart';
+import 'package:app_restaurant/model/manager/food/details_food_model.dart';
 
 class EditFood extends StatefulWidget {
   final List<DataListStore> listStores;
-  final DataFoodAllStore dataFood;
-  const EditFood({Key? key, required this.listStores, required this.dataFood})
-      : super(key: key);
+  final DetailsFoodModel? detailsDataFood;
+  const EditFood({
+    Key? key,
+    required this.listStores,
+    required this.detailsDataFood,
+  }) : super(key: key);
 
   @override
   State<EditFood> createState() => _EditFoodState();
@@ -50,8 +55,13 @@ class _EditFoodState extends State<EditFood> {
   // List<int> listStoreId = [];
   List<String> listImageFood = [];
   List<String> listStoreName = [];
+  List<String> listFoodKind = [];
+  List<FoodImage> listImageFood22 = [];
+  List<String> listImageFood33 = [];
   int? currentFoodKind;
   int? currentStoreID;
+  String? currentStoreText;
+  String? currentFoodKindText;
 
   String priceFoodString = '';
   static const _locale = 'en';
@@ -67,6 +77,35 @@ class _EditFoodState extends State<EditFood> {
     listStoreName.clear();
   }
 
+  void init() async {
+    mounted
+        ? priceOfFood.text =
+            '${_formatNumber((widget.detailsDataFood?.food.foodPrice.toString() ?? '').replaceAll(',', ''))}'
+        : null;
+    mounted
+        ? foodNameController.text = widget.detailsDataFood?.food.foodName ?? ''
+        : null;
+    mounted
+        ? desTextController.text =
+            widget.detailsDataFood?.food.foodDescription ?? ''
+        : null;
+
+    mounted
+        ? widget.detailsDataFood?.food.activeFlg == 1
+            ? light = true
+            : light = false
+        : null;
+    mounted
+        ? currentStoreText = widget.detailsDataFood?.food.storeName ?? ''
+        : null;
+    var foodKindMap = widget.detailsDataFood?.foodKinds.asMap();
+    var myFoodKind = foodKindMap?[widget.detailsDataFood?.food.foodKind];
+    mounted ? currentFoodKindText = myFoodKind ?? '' : null;
+    mounted
+        ? listImageFood22 = widget.detailsDataFood?.food.foodImages ?? []
+        : null;
+  }
+
   void pickImage() async {
     final returndImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -74,38 +113,25 @@ class _EditFoodState extends State<EditFood> {
     setState(() {
       var pathImage = File(returndImage.path);
       imageFileList!.add(pathImage);
+      listImageFood33.add(pathImage.toString());
       if (pathImage != null) {
         Uint8List imagebytes = pathImage.readAsBytesSync(); //convert to bytes
         String base64string = base64Encode(imagebytes);
         listImageFood.add(base64string);
       }
-      log(imageFileList.toString());
-      // selectedImage = File(returndImage.path);
     });
     // openImage();
   }
 
   void deleteImages(data) {
-    imageFileList!.remove(data);
+    listImageFood22.remove(data);
     setState(() {});
   }
-
-  // void selectImages() async {
-  //   final List<XFile> selectedImages = await imagePicker.pickMultiImage();
-  //   if (selectedImages.isNotEmpty) {
-  //     imageFileList!.addAll(selectedImages);
-  //   }
-  //   setState(() {});
-  // } //selecte multi image
-
-  // void deleteImages(data) {
-  //   imageFileList!.remove(data);
-  //   setState(() {});
-  // }
 
   @override
   void initState() {
     super.initState();
+    init();
   }
 
   void handleEditFood({
@@ -357,12 +383,12 @@ class _EditFoodState extends State<EditFood> {
                                 // height: 100.h,
                                 child: DropdownSearch(
                                   validator: (value) {
-                                    if (currentStoreID == null) {
+                                    if (currentStoreText == null) {
                                       return canNotNull;
                                     }
                                     return null;
                                   },
-                                  selectedItem: currentStoreID,
+                                  selectedItem: currentStoreText,
                                   key: _popupCustomValidationKey1,
                                   // itemAsString: (item) => item.storeName,
                                   items: listStoreName,
@@ -395,17 +421,6 @@ class _EditFoodState extends State<EditFood> {
                                       contentPadding: EdgeInsets.all(15.w),
                                     ),
                                   ),
-                                  // popupProps: PopupPropsMultiSelection.dialog(
-                                  //     title: Padding(
-                                  //   padding:
-                                  //       EdgeInsets.only(left: 15.w, top: 10.h),
-                                  //   child: TextApp(
-                                  //     text: "Chọn cửa hàng",
-                                  //     fontsize: 16.sp,
-                                  //     fontWeight: FontWeight.bold,
-                                  //     color: blueText,
-                                  //   ),
-                                  // )),
                                 ),
                               ),
                               space20H,
@@ -427,7 +442,7 @@ class _EditFoodState extends State<EditFood> {
                                   },
                                   key: _popupCustomValidationKey2,
                                   items: categories,
-                                  selectedItem: chooseType,
+                                  selectedItem: currentFoodKindText,
                                   onChanged: (foodKindIndex) {
                                     currentFoodKind = categories
                                         .indexOf(foodKindIndex.toString());
@@ -559,11 +574,16 @@ class _EditFoodState extends State<EditFood> {
                                     SizedBox(
                                       height: 10.h,
                                     ),
-                                    TextApp(
-                                      text: allowFoodReady,
-                                      fontsize: 12.sp,
-                                      fontWeight: FontWeight.normal,
-                                      color: blueText,
+                                    SizedBox(
+                                      width: 1.sw,
+                                      child: TextApp(
+                                        isOverFlow: false,
+                                        softWrap: true,
+                                        text: allowFoodReady,
+                                        fontsize: 12.sp,
+                                        fontWeight: FontWeight.normal,
+                                        color: blueText,
+                                      ),
                                     ),
                                     SizedBox(
                                       height: 10.h,
@@ -651,190 +671,8 @@ class _EditFoodState extends State<EditFood> {
               ),
             ),
 
-            ///FORM 1
             space50H,
-            // Container(
-            //   width: 1.sw,
-            //   // height: 1.sh,
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(20.r),
-            //   ),
-            //   child: Form(
-            //     key: _formField,
-            //     child: Column(
-            //       children: [
-            //         Container(
-            //             width: double.infinity,
-            //             decoration: BoxDecoration(
-            //               borderRadius: BorderRadius.circular(15.r),
-            //               color: Colors.white,
-            //               boxShadow: [
-            //                 BoxShadow(
-            //                   color: Colors.grey.withOpacity(0.5),
-            //                   spreadRadius: 5,
-            //                   blurRadius: 7,
-            //                   offset: const Offset(
-            //                       0, 3), // changes position of shadow
-            //                 ),
-            //               ],
-            //             ),
-            //             child: Padding(
-            //               padding: EdgeInsets.all(20.w),
-            //               child: Column(
-            //                 crossAxisAlignment: CrossAxisAlignment.start,
-            //                 children: [
-            //                   TextApp(
-            //                     text: foodInfor,
-            //                     color: const Color.fromRGBO(52, 71, 103, 1),
-            //                     fontFamily: "OpenSans",
-            //                     fontWeight: FontWeight.bold,
-            //                     fontsize: 20.sp,
-            //                   ),
-            //                   space20H,
-            //                   Column(
-            //                     crossAxisAlignment: CrossAxisAlignment.start,
-            //                     children: [
-            //                       TextApp(
-            //                         text: foodName,
-            //                         fontsize: 12.sp,
-            //                         fontWeight: FontWeight.bold,
-            //                         color: blueText,
-            //                       ),
-            //                       SizedBox(
-            //                         height: 10.h,
-            //                       ),
-            //                       TextFormField(
-            //                         controller: foodNameController,
-            //                         onTapOutside: (event) {
-            //                           FocusManager.instance.primaryFocus
-            //                               ?.unfocus();
-            //                         },
-            //                         style:
-            //                             TextStyle(fontSize: 14.sp, color: grey),
-            //                         cursorColor: grey,
-            //                         validator: (value) {
-            //                           if (value!.isEmpty) {
-            //                             return canNotNull;
-            //                           } else {
-            //                             return null;
-            //                           }
-            //                         },
-            //                         decoration: InputDecoration(
-            //                             fillColor: const Color.fromARGB(
-            //                                 255, 226, 104, 159),
-            //                             focusedBorder: OutlineInputBorder(
-            //                               borderSide: const BorderSide(
-            //                                   color: Color.fromRGBO(
-            //                                       214, 51, 123, 0.6),
-            //                                   width: 2.0),
-            //                               borderRadius:
-            //                                   BorderRadius.circular(8.r),
-            //                             ),
-            //                             border: OutlineInputBorder(
-            //                               borderRadius:
-            //                                   BorderRadius.circular(8.r),
-            //                             ),
-            //                             hintText: foodName,
-            //                             isDense: true,
-            //                             contentPadding: EdgeInsets.all(15.w)),
-            //                       ),
-            //                     ],
-            //                   ),
-            //                   space20H,
-            //                   TextApp(
-            //                     text: "Chế độ hiển thị",
-            //                     fontsize: 12.sp,
-            //                     fontWeight: FontWeight.bold,
-            //                     color: blueText,
-            //                   ),
-            //                   SizedBox(
-            //                     height: 10.h,
-            //                   ),
-            //                   TextApp(
-            //                     text: allowFoodReady,
-            //                     fontsize: 12.sp,
-            //                     fontWeight: FontWeight.normal,
-            //                     color: blueText,
-            //                   ),
-            //                   SizedBox(
-            //                     height: 10.h,
-            //                   ),
-            //                   SizedBox(
-            //                     width: 50.w,
-            //                     height: 30.w,
-            //                     child: FittedBox(
-            //                       fit: BoxFit.fill,
-            //                       child: CupertinoSwitch(
-            //                         value: light,
-            //                         activeColor:
-            //                             const Color.fromRGBO(58, 65, 111, .95),
-            //                         onChanged: (bool value) {
-            //                           setState(() {
-            //                             light = value;
-            //                           });
-            //                         },
-            //                       ),
-            //                     ),
-            //                   ),
-            //                   space20H,
-            //                   Column(
-            //                     crossAxisAlignment: CrossAxisAlignment.start,
-            //                     children: [
-            //                       TextApp(
-            //                         text: " Mô tả",
-            //                         fontsize: 12.sp,
-            //                         fontWeight: FontWeight.bold,
-            //                         color: blueText,
-            //                       ),
-            //                       SizedBox(
-            //                         height: 10.h,
-            //                       ),
-            //                       TextFormField(
-            //                         maxLength: 255,
-            //                         onTapOutside: (event) {
-            //                           FocusManager.instance.primaryFocus
-            //                               ?.unfocus();
-            //                         },
-            //                         controller: desTextController,
-            //                         keyboardType: TextInputType.multiline,
-            //                         minLines: 1,
-            //                         maxLines: 3,
-            //                         cursorColor:
-            //                             const Color.fromRGBO(73, 80, 87, 1),
-            //                         decoration: InputDecoration(
-            //                             fillColor: const Color.fromARGB(
-            //                                 255, 226, 104, 159),
-            //                             focusedBorder: const OutlineInputBorder(
-            //                               borderSide: BorderSide(
-            //                                   color: Color.fromRGBO(
-            //                                       214, 51, 123, 0.6),
-            //                                   width: 2.0),
-            //                             ),
-            //                             border: OutlineInputBorder(
-            //                               borderRadius:
-            //                                   BorderRadius.circular(8.r),
-            //                             ),
-            //                             hintText: '',
-            //                             isDense: true,
-            //                             contentPadding: EdgeInsets.only(
-            //                                 bottom: 1.sw > 600 ? 50.w : 40.w,
-            //                                 top: 0,
-            //                                 left: 1.sw > 600 ? 20.w : 15.w,
-            //                                 right: 1.sw > 600 ? 20.w : 15.w)),
-            //                       ),
-            //                     ],
-            //                   ),
-            //                   space20H,
-            //                 ],
-            //               ),
-            //             )),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            // space50H,
 
-            ///FORM 2
             Container(
               width: 1.sw,
               // height: 1.sh,
@@ -881,78 +719,156 @@ class _EditFoodState extends State<EditFood> {
                             ),
                             space10H,
                             OutlinedButton(
-                                style: OutlinedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.r),
-                                  ),
-                                  backgroundColor: Colors.white,
-                                  side: const BorderSide(
-                                      color: Colors.grey, width: 1), //
+                              style: OutlinedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.r),
                                 ),
-                                onPressed: () {
-                                  // selectImages();
-                                  pickImage();
-                                },
-                                child: imageFileList!.isEmpty
-                                    ? SizedBox(
-                                        width: double.infinity,
-                                        height: 200.h,
-                                        // color: Colors.red,
-                                        child: Center(
-                                          child: TextApp(
-                                            text: addPictureHere,
-                                            textAlign: TextAlign.center,
-                                          ),
+                                backgroundColor: Colors.white,
+                                side: const BorderSide(
+                                    color: Colors.grey, width: 1), //
+                              ),
+                              onPressed: () {
+                                // selectImages();
+                                pickImage();
+                              },
+                              child: listImageFood22.isEmpty
+                                  ? SizedBox(
+                                      width: double.infinity,
+                                      height: 200.h,
+                                      // color: Colors.red,
+                                      child: Center(
+                                        child: TextApp(
+                                          text: addPictureHere,
+                                          textAlign: TextAlign.center,
                                         ),
-                                      )
-                                    : SizedBox(
-                                        width: double.infinity,
-                                        child: GridView.builder(
-                                            physics:
-                                                const NeverScrollableScrollPhysics(),
-                                            shrinkWrap: true,
-                                            itemCount: imageFileList!.length,
-                                            gridDelegate:
-                                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                                    crossAxisCount: 2),
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  SizedBox(
-                                                      width: 100.w,
-                                                      height: 100.w,
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15.w),
-                                                        child: Image.file(
-                                                          File(imageFileList![
-                                                                  index]
-                                                              .path),
-                                                          fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : SizedBox(
+                                      width: double.infinity,
+                                      child: GridView.builder(
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount: listImageFood22.length,
+                                          gridDelegate:
+                                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 2),
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            var imgTTTT =
+                                                listImageFood22[index].path;
+                                            // listImageFood33
+                                            //     .add(imgTTTT.toString());
+                                            log(listImageFood33.toString());
+
+                                            return Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                SizedBox(
+                                                    width: 100.w,
+                                                    height: 100.w,
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15.w),
+                                                      child: CachedNetworkImage(
+                                                        fit: BoxFit.fill,
+                                                        imageUrl: imgTTTT ?? '',
+                                                        placeholder:
+                                                            (context, url) =>
+                                                                SizedBox(
+                                                          height: 10.w,
+                                                          width: 10.w,
+                                                          child: const Center(
+                                                              child:
+                                                                  CircularProgressIndicator()),
                                                         ),
-                                                      )),
-                                                  space10H,
-                                                  InkWell(
-                                                    onTap: () {
-                                                      deleteImages(
-                                                          imageFileList![
-                                                              index]);
-                                                    },
-                                                    child: TextApp(
-                                                      text: deleteImage,
-                                                      color: Colors.blue,
-                                                    ),
-                                                  )
-                                                ],
-                                              );
-                                            }),
-                                      )),
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            const Icon(
+                                                                Icons.error),
+                                                      ),
+                                                    )),
+                                                space10H,
+                                                InkWell(
+                                                  onTap: () {
+                                                    deleteImages(
+                                                        listImageFood22[index]);
+                                                  },
+                                                  child: TextApp(
+                                                    text: deleteImage,
+                                                    color: Colors.blue,
+                                                  ),
+                                                )
+                                              ],
+                                            );
+                                          }),
+                                    ),
+                              // imageFileList!.isEmpty
+                              //     ? SizedBox(
+                              //         width: double.infinity,
+                              //         height: 200.h,
+                              //         // color: Colors.red,
+                              //         child: Center(
+                              //           child: TextApp(
+                              //             text: addPictureHere,
+                              //             textAlign: TextAlign.center,
+                              //           ),
+                              //         ),
+                              //       )
+                              //     : SizedBox(
+                              //         width: double.infinity,
+                              //         child: GridView.builder(
+                              //             physics:
+                              //                 const NeverScrollableScrollPhysics(),
+                              //             shrinkWrap: true,
+                              //             itemCount: imageFileList!.length,
+                              //             gridDelegate:
+                              //                 const SliverGridDelegateWithFixedCrossAxisCount(
+                              //                     crossAxisCount: 2),
+                              //             itemBuilder: (BuildContext context,
+                              //                 int index) {
+
+                              //               return Column(
+                              //                 mainAxisAlignment:
+                              //                     MainAxisAlignment.center,
+                              //                 crossAxisAlignment:
+                              //                     CrossAxisAlignment.center,
+                              //                 children: [
+                              //                   SizedBox(
+                              //                       width: 100.w,
+                              //                       height: 100.w,
+                              //                       child: ClipRRect(
+                              //                         borderRadius:
+                              //                             BorderRadius
+                              //                                 .circular(15.w),
+                              //                         child: Image.file(
+                              //                           File(imageFileList![
+                              //                                   index]
+                              //                               .path),
+                              //                           fit: BoxFit.cover,
+                              //                         ),
+                              //                       )),
+                              //                   space10H,
+                              //                   InkWell(
+                              //                     onTap: () {
+                              //                       deleteImages(
+                              //                           imageFileList![
+                              //                               index]);
+                              //                     },
+                              //                     child: TextApp(
+                              //                       text: deleteImage,
+                              //                       color: Colors.blue,
+                              //                     ),
+                              //                   )
+                              //                 ],
+                              //               );
+                              //             }),
+                              //       ),
+                            ),
                             space20H,
                           ],
                         ),
@@ -977,7 +893,9 @@ class _EditFoodState extends State<EditFood> {
                         if (imageFileList != null &&
                             imageFileList!.isNotEmpty) {
                           handleEditFood(
-                              foodID: widget.dataFood.foodId.toString(),
+                              foodID: widget.detailsDataFood?.food.foodId
+                                      .toString() ??
+                                  '',
                               listStore: currentStoreID!,
                               foodName: foodNameController.text,
                               foodPrice: priceFoodNumber,

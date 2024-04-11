@@ -644,9 +644,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
 
   void init() async {
     var imagePath1 =
-        (managerInforData?.userAvatar ?? 'assets/user/images/avt/no_image.png')
-            .replaceAll('["', '');
-    var imagePath2 = imagePath1.replaceAll('"]', '');
+        (managerInforData?.userAvatar ?? 'assets/user/images/avt/no_image.png');
+    // var imagePath2 = imagePath1.replaceAll('"]', '');
+    var listImagePath = imagePath1;
     var imageFrontID1 =
         (managerInforData?.frontImageCccd ?? 'assets/img/no-image.png')
             .replaceAll('["', '');
@@ -659,7 +659,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
         (managerInforData?.holdImageCccd ?? 'assets/img/no-image.png')
             .replaceAll('["', '');
     var imageHoldID2 = imageHoldID1.replaceAll('"]', '');
-    mounted ? currentAvatar = imagePath2 : currentAvatar;
+    mounted ? currentAvatar = listImagePath : currentAvatar;
     mounted ? currentImageFrontID = imageFrontID2 : currentImageFrontID;
     mounted ? currentImageBackID = imageBackID2 : currentImageBackID;
     mounted ? currentImageHoldID = imageHoldID2 : currentImageHoldID;

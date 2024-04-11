@@ -454,9 +454,11 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
 
   void init() async {
     await Future.delayed(const Duration(seconds: 0));
-    var imagePath1 = (staffInforData?.staffAvatar ?? '').replaceAll('["', '');
-    var imagePath2 = imagePath1.replaceAll('"]', '');
-    mounted ? currentAvatar = imagePath2 : currentAvatar;
+    var imagePath1 =
+        (staffInforData?.staffAvatar ?? 'assets/user/images/avt/no_image.png');
+    // var imagePath2 = imagePath1.replaceAll('"]', '');
+    var listImagePath = imagePath1;
+    mounted ? currentAvatar = listImagePath : currentAvatar;
 
     mounted
         ? fullNameController.text = staffInforData?.staffFullName ?? ''

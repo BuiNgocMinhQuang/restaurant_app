@@ -26,6 +26,8 @@ const String managerGetListStores = 'user/stores';
 const String deleteFood = 'user/foods/delete';
 const String createFood = 'user/foods/create';
 const String editFood = 'user/foods/edit';
+const String getDetailsFood = 'user/foods/detail';
+const String detailStore = 'user/stores/detail/data';
 
 //Shared API
 const String userInformationApi = 'information';

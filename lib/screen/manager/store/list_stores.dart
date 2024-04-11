@@ -1,11 +1,15 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:app_restaurant/bloc/manager/stores/list_stores_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/env/index.dart';
+import 'package:app_restaurant/model/manager/store/details_stores_model.dart';
 import 'package:app_restaurant/model/manager_infor_model.dart';
-import 'package:app_restaurant/screen/manager/store/manage_store.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
+import 'package:app_restaurant/screen/manager/store/details_store.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
@@ -27,34 +31,17 @@ import 'package:http/http.dart' as http;
 import 'package:app_restaurant/constant/api/index.dart';
 
 class ListStores extends StatefulWidget {
-  final List<String> bannerList3;
+  final List<String> bannerList;
   final DataManagerInfor? managerInforData;
   const ListStores({
     Key? key,
-    required this.bannerList3,
+    required this.bannerList,
     required this.managerInforData,
   }) : super(key: key);
 
   @override
   State<ListStores> createState() => _ListStoresState();
 }
-
-final List<String> bannerList = [
-  "assets/images/banner1.png",
-  "assets/images/banner2.png",
-  "assets/images/banner3.png",
-];
-
-final List<String> bannerList2 = [];
-
-final List<String> staffList = [
-  "assets/images/banner1.png",
-  "assets/images/banner2.png",
-  "assets/images/banner3.png",
-  "assets/images/banner1.png",
-  "assets/images/banner1.png",
-  "assets/images/banner2.png",
-];
 
 List<XFile>? imageFileList = [];
 
@@ -65,6 +52,7 @@ class _ListStoresState extends State<ListStores> {
   String avatarUser = '';
   List<String>? avatarStaff;
   // DataManagerInfor? managerInforData;
+  DetailsStoreModel? detailsStoreModel;
 
   final ImagePicker imagePicker = ImagePicker();
   @override
@@ -81,6 +69,51 @@ class _ListStoresState extends State<ListStores> {
     ));
   }
 
+  void getDetailsStore({required shopID}) async {
+    print({
+      'shopID': shopID,
+    });
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$detailStore'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'shop_id': shopID,
+          'is_api': true,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print(" DATA CREATE FOOD ${data}");
+      try {
+        if (data['status'] == 200) {
+          // var hahah = DetailsStoreModel.fromJson(data);
+          setState(() {
+            detailsStoreModel = DetailsStoreModel.fromJson(data);
+          });
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DetailsStore(
+                      detailsStoreModel: detailsStoreModel,
+                    )),
+          );
+        } else {
+          print("ERROR CREATE FOOOD");
+        }
+      } catch (error) {
+        print("ERROR CREATE $error");
+      }
+    } catch (error) {
+      print("ERROR CREATE $error");
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -90,9 +123,6 @@ class _ListStoresState extends State<ListStores> {
   Widget build(BuildContext context) {
     return BlocBuilder<ListStoresBloc, ListStoresState>(
       builder: (context, state) {
-        var imagePath1 =
-            widget.managerInforData?.userAvatar?.replaceAll('["', '');
-        var imagePath2 = imagePath1?.replaceAll('"]', '') ?? '';
         return Scaffold(
           body: Stack(
             children: [
@@ -109,10 +139,10 @@ class _ListStoresState extends State<ListStores> {
                                 children: [
                                   //Carousel
                                   CarouselSlider.builder(
-                                      itemCount: widget.bannerList3.length,
+                                      itemCount: widget.bannerList.length,
                                       itemBuilder: (context, index, realIndex) {
                                         final currentBanner =
-                                            widget.bannerList3[index];
+                                            widget.bannerList[index];
                                         return buildImage(currentBanner, index);
                                       },
                                       options: CarouselOptions(
@@ -249,13 +279,12 @@ class _ListStoresState extends State<ListStores> {
                                             itemBuilder: (BuildContext context,
                                                 int index) {
                                               var imagePath1 = (state
-                                                          .listStoreModel
-                                                          ?.data[index]
-                                                          .storeImages ??
-                                                      '')
-                                                  .replaceAll('["', '');
-                                              var imagePath2 = imagePath1
-                                                  .replaceAll('"]', '');
+                                                      .listStoreModel
+                                                      ?.data[index]
+                                                      .storeImages ??
+                                                  '');
+                                              var listImagePath =
+                                                  jsonDecode(imagePath1);
                                               var desStore = state
                                                       .listStoreModel
                                                       ?.data[index]
@@ -288,9 +317,9 @@ class _ListStoresState extends State<ListStores> {
                                                           child:
                                                               CachedNetworkImage(
                                                             fit: BoxFit.cover,
-                                                            imageUrl:
-                                                                httpImage +
-                                                                    imagePath2,
+                                                            imageUrl: httpImage +
+                                                                listImagePath[
+                                                                    0],
                                                             placeholder:
                                                                 (context,
                                                                         url) =>
@@ -352,15 +381,14 @@ class _ListStoresState extends State<ListStores> {
                                                       children: [
                                                         ButtonApp(
                                                           event: () {
+                                                            getDetailsStore(
+                                                                shopID: state
+                                                                    .listStoreModel
+                                                                    ?.data[
+                                                                        index]
+                                                                    .shopId);
                                                             // context.go(
                                                             //     '/manager_manage_stores');
-                                                            Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          ManageStore()),
-                                                            );
                                                           },
                                                           text:
                                                               "Quản lý cửa hàng",
@@ -596,7 +624,7 @@ class _ListStoresState extends State<ListStores> {
       );
   Widget buildIndicator() => AnimatedSmoothIndicator(
         activeIndex: activeIndex,
-        count: widget.bannerList3.length,
+        count: widget.bannerList.length,
       );
 }
 

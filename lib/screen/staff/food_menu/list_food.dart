@@ -295,10 +295,9 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
 
                         if (index < dataLength) {
                           // final product = filterProducts[index];
-                          var imagePath1 = filterProducts[index]
-                              ?.foodImages
-                              .replaceAll('["', '');
-                          var imagePath2 = imagePath1.replaceAll('"]', '');
+                          var imagePath1 = filterProducts[index]?.foodImages;
+                          var listImagePath = jsonDecode(imagePath1);
+                          // var imagePath2 = imagePath1.replaceAll('"]', '');
                           return Card(
                             elevation: 8.0,
                             margin: EdgeInsets.all(10.w),
@@ -320,7 +319,8 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                                               topRight: Radius.circular(10.r)),
                                           child: CachedNetworkImage(
                                             fit: BoxFit.fill,
-                                            imageUrl: httpImage + imagePath2,
+                                            imageUrl:
+                                                httpImage + listImagePath[0],
                                             placeholder: (context, url) =>
                                                 SizedBox(
                                               height: 10.w,

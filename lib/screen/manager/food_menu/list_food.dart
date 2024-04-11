@@ -25,6 +25,7 @@ import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
+import 'package:app_restaurant/model/manager/food/details_food_model.dart';
 
 List<String> listState = ["Tất cả", "Đang hoạt động", "Đã chặn"];
 
@@ -48,7 +49,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
   String query = '';
   bool hasMore = true;
   bool isRefesh = false;
-
+  DetailsFoodModel? detailsFoodData;
   int? selectedFlag;
   String? selectedFlitterFlag = 'Tất cả';
   void searchProduct(String query) {
@@ -64,6 +65,67 @@ class _ListFoodManagerState extends State<ListFoodManager> {
       //     selectedCategoriesIndex.isEmpty ? null : selectedCategoriesIndex,
       filtersFlg: selectedFlag,
     );
+  }
+
+  void handleGetDetailsFood({required int foodID}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$getDetailsFood'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({'is_api': true, 'food_id': foodID}),
+      );
+      final data = jsonDecode(respons.body);
+      print("GET DETAILS  FOOD ${data}");
+      try {
+        if (data['status'] == 200) {
+          setState(() {
+            detailsFoodData = DetailsFoodModel.fromJson(data);
+          });
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EditFood(
+                      //  foodID: product.foodId,
+                      detailsDataFood: detailsFoodData,
+                      listStores: widget.listStores,
+                    )),
+          );
+        } else {
+          print("ERROR DETAILS  FOOD 1");
+          showCustomDialogModal(
+              context: navigatorKey.currentContext,
+              textDesc: "Có lỗi xảy ra",
+              title: "Thất bại",
+              colorButton: Colors.red,
+              btnText: "OK",
+              typeDialog: "error");
+        }
+      } catch (error) {
+        print("ERROR DETAILS  FOOD 2 $error");
+        showCustomDialogModal(
+            context: navigatorKey.currentContext,
+            textDesc: "Có lỗi xảy ra",
+            title: "Thất bại",
+            colorButton: Colors.red,
+            btnText: "OK",
+            typeDialog: "error");
+      }
+    } catch (error) {
+      print("ERROR DETAILS  FOOD 3 $error");
+      showCustomDialogModal(
+          context: navigatorKey.currentContext,
+          textDesc: "Có lỗi xảy ra",
+          title: "Thất bại",
+          colorButton: Colors.red,
+          btnText: "OK",
+          typeDialog: "error");
+    }
   }
 
   void selectDayStart() async {
@@ -662,7 +724,6 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                   var imagePath1 =
                                                       filterProducts[index]
                                                           ?.foodImages;
-                                                  log(imagePath1);
                                                   var listImagePath =
                                                       jsonDecode(imagePath1);
 
@@ -823,15 +884,8 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                                             () {
                                                                           // context.go(
                                                                           //     "/manager_edit_staff_info");
-                                                                          Navigator
-                                                                              .push(
-                                                                            context,
-                                                                            MaterialPageRoute(
-                                                                                builder: (context) => EditFood(
-                                                                                      dataFood: product,
-                                                                                      listStores: widget.listStores,
-                                                                                    )),
-                                                                          );
+                                                                          handleGetDetailsFood(
+                                                                              foodID: product.foodId ?? 0);
                                                                         },
                                                                         icon: Icons
                                                                             .edit),

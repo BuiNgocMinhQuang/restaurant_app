@@ -230,7 +230,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
   Widget build(BuildContext context) {
     Widget currentScreen = currentIndex == 0
         ? ListStores(
-            bannerList3: listImageBanner,
+            bannerList: listImageBanner,
             managerInforData: managerInforData,
           )
         : currentIndex == 1
@@ -576,9 +576,10 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                     shrinkWrap: true,
                     itemCount: listStoreManagerData.length,
                     itemBuilder: (context, index) {
-                      var imagePath1 = (listStoreManagerData[index].storeImages)
-                          .replaceAll('["', '');
-                      var imagePath2 = imagePath1.replaceAll('"]', '');
+                      var imagePath1 =
+                          (listStoreManagerData[index].storeImages);
+                      var listImagePath = jsonDecode(imagePath1);
+                      // var imagePath2 = imagePath1.replaceAll('"]', '');
                       return InkWell(
                         onTap: () {},
                         child: ItemDrawer(
@@ -590,7 +591,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                               : FontWeight.normal,
                           image: CachedNetworkImage(
                             fit: BoxFit.cover,
-                            imageUrl: httpImage + imagePath2,
+                            imageUrl: httpImage + listImagePath[0],
                             placeholder: (context, url) => SizedBox(
                               height: 10.w,
                               width: 10.w,

@@ -1183,10 +1183,11 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                         .toString();
                                                 var imagePath1 =
                                                     filterProducts[index]
-                                                        ?.foodImages
-                                                        .replaceAll('["', '');
-                                                var imagePath2 = imagePath1
-                                                    .replaceAll('"]', '');
+                                                        ?.foodImages;
+                                                var listImagePath =
+                                                    jsonDecode(imagePath1);
+                                                // var imagePath2 = imagePath1
+                                                //     .replaceAll('"]', '');
 
                                                 return Card(
                                                   elevation: 8.0,
@@ -1222,7 +1223,8 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                 child: Image
                                                                     .network(
                                                                   httpImage +
-                                                                      imagePath2,
+                                                                      listImagePath[
+                                                                          0],
                                                                   fit: BoxFit
                                                                       .cover,
                                                                 ),
@@ -2680,10 +2682,13 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                                                                 ?.data?[index]
                                                                 .foodImages ??
                                                             '';
-                                                    var imagePath1 = imagePath
-                                                        .replaceAll('["', '');
-                                                    var imagePath2 = imagePath1
-                                                        .replaceAll('"]', '');
+                                                    log(imagePath);
+                                                    var listImagePath =
+                                                        jsonDecode(imagePath);
+                                                    // var imagePath1 = imagePath
+                                                    //     .replaceAll('["', '');
+                                                    // var imagePath2 = imagePath1
+                                                    //     .replaceAll('"]', '');
 
                                                     return Column(
                                                       children: [
@@ -2716,7 +2721,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                                                                               borderRadius: BorderRadius.only(topLeft: Radius.circular(15.r), topRight: Radius.circular(15.r)),
                                                                               child: CachedNetworkImage(
                                                                                 fit: BoxFit.cover,
-                                                                                imageUrl: httpImage + imagePath2,
+                                                                                imageUrl: httpImage + listImagePath[0],
                                                                                 placeholder: (context, url) => SizedBox(
                                                                                   height: 10.w,
                                                                                   width: 10.w,
@@ -4456,12 +4461,11 @@ class _ManageBroughtReceiptDialogState
                                         .quantityFood
                                         .toString();
 
-                                var imagePath1 = filterProducts2[index]
-                                    ?.foodImages
-                                    .replaceAll('["', '');
-                                var imagePath2 =
-                                    imagePath1.replaceAll('"]', '');
-
+                                var imagePath1 =
+                                    filterProducts2[index]?.foodImages;
+                                // var imagePath2 =
+                                //     imagePath1.replaceAll('"]', '');
+                                var listImagePath = jsonDecode(imagePath1);
                                 return Card(
                                   elevation: 8.0,
                                   margin: const EdgeInsets.all(8),
@@ -4487,8 +4491,8 @@ class _ManageBroughtReceiptDialogState
                                                         Radius.circular(15.r)),
                                                 child: CachedNetworkImage(
                                                   fit: BoxFit.fill,
-                                                  imageUrl:
-                                                      httpImage + imagePath2,
+                                                  imageUrl: httpImage +
+                                                      listImagePath[0],
                                                   placeholder: (context, url) =>
                                                       SizedBox(
                                                     height: 10.w,
