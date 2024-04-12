@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:app_restaurant/bloc/bill_table/bill_table_bloc.dart';
 import 'package:app_restaurant/bloc/brought_receipt/brought_receipt_bloc.dart';
 import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
+import 'package:app_restaurant/bloc/manager/stores/list_stores_bloc.dart';
 import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
 import 'package:app_restaurant/bloc/payment/payment_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
@@ -17,6 +18,8 @@ import 'package:app_restaurant/model/bill_infor_model.dart';
 import 'package:app_restaurant/model/brought_receipt/manage_brought_receipt_model.dart';
 import 'package:app_restaurant/model/food_table_data_model.dart';
 import 'package:app_restaurant/model/list_room_model.dart';
+import 'package:app_restaurant/model/manager/store/details_stores_model.dart';
+import 'package:app_restaurant/model/manager/store/edit_details_store_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/share_getString.dart';
 import 'package:app_restaurant/utils/storage.dart';
@@ -168,9 +171,13 @@ class _BookingTableDialogState extends State<BookingTableDialog>
     _tabController = TabController(length: 3, vsync: this);
     _tabController!.addListener(_handleTabSelection);
     //
+
     scrollListFoodController.addListener(() {
+      log("ENDDDDDD");
+
       if (scrollListFoodController.position.maxScrollExtent ==
           scrollListFoodController.offset) {
+        currentPage = 2; ////check this
         getListFoodTable(
           tokenReq: widget.token,
           page: currentPage,
@@ -539,8 +546,11 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                         '',
                                   ));
                                 } else if (index == 1) {
-                                  getListFoodTable(
-                                      tokenReq: widget.token, page: 1);
+                                  // setState(() {
+                                  //   currentPage = 1;
+                                  // });
+                                  // getListFoodTable(
+                                  //     tokenReq: widget.token, page: 1);
                                   // BlocProvider.of<TableBloc>(context).add(
                                   //     GetTableFoods(
                                   //         token: widget.token,
@@ -609,6 +619,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                           width: 1.sw,
                           height: 650.h,
                           child: TabBarView(
+                            physics: const NeverScrollableScrollPhysics(),
                             controller: _tabController,
                             children: [
                               Column(
@@ -1285,6 +1296,23 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                                 widget.token,
                                                                             foodID: filterProducts[index].foodId);
                                                                       },
+                                                                      onDoubleTap:
+                                                                          () {
+                                                                        showCustomDialogModal(
+                                                                          typeDialog:
+                                                                              "error",
+                                                                          context:
+                                                                              navigatorKey.currentContext,
+                                                                          textDesc:
+                                                                              "Bạn thao tác quá nhanh",
+                                                                          title:
+                                                                              "Thành công",
+                                                                          colorButton:
+                                                                              Colors.red,
+                                                                          btnText:
+                                                                              "OK",
+                                                                        );
+                                                                      },
                                                                       child:
                                                                           Container(
                                                                         width:
@@ -1367,6 +1395,23 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                             tokenReq:
                                                                                 widget.token,
                                                                             foodID: filterProducts[index].foodId);
+                                                                      },
+                                                                      onDoubleTap:
+                                                                          () {
+                                                                        showCustomDialogModal(
+                                                                          typeDialog:
+                                                                              "error",
+                                                                          context:
+                                                                              navigatorKey.currentContext,
+                                                                          textDesc:
+                                                                              "Bạn thao tác quá nhanh",
+                                                                          title:
+                                                                              "Thành công",
+                                                                          colorButton:
+                                                                              Colors.red,
+                                                                          btnText:
+                                                                              "OK",
+                                                                        );
                                                                       },
                                                                       child:
                                                                           Container(
@@ -2789,6 +2834,16 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                                                                               onTap: () {
                                                                                 minusQuantytiFoodToSeeBillTable(foodID: listFoodBillCurrent?.data?[index].foodId ?? 0);
                                                                               },
+                                                                              onDoubleTap: () {
+                                                                                showCustomDialogModal(
+                                                                                  typeDialog: "error",
+                                                                                  context: navigatorKey.currentContext,
+                                                                                  textDesc: "Bạn thao tác quá nhanh",
+                                                                                  title: "Thành công",
+                                                                                  colorButton: Colors.red,
+                                                                                  btnText: "OK",
+                                                                                );
+                                                                              },
                                                                               child: Container(
                                                                                 width: 50.w,
                                                                                 height: 25.w,
@@ -2850,6 +2905,16 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                                                                             InkWell(
                                                                               onTap: () {
                                                                                 plusQuantytiFoodToSeeBillTable(foodID: listFoodBillCurrent?.data?[index].foodId ?? 0);
+                                                                              },
+                                                                              onDoubleTap: () {
+                                                                                showCustomDialogModal(
+                                                                                  typeDialog: "error",
+                                                                                  context: navigatorKey.currentContext,
+                                                                                  textDesc: "Bạn thao tác quá nhanh",
+                                                                                  title: "Thành công",
+                                                                                  colorButton: Colors.red,
+                                                                                  btnText: "OK",
+                                                                                );
                                                                               },
                                                                               child: Container(
                                                                                 width: 50.w,
@@ -4576,6 +4641,19 @@ class _ManageBroughtReceiptDialogState
                                                                     Colors.red);
                                                           }
                                                         },
+                                                        onDoubleTap: () {
+                                                          showCustomDialogModal(
+                                                            typeDialog: "error",
+                                                            context: navigatorKey
+                                                                .currentContext,
+                                                            textDesc:
+                                                                "Bạn thao tác quá nhanh",
+                                                            title: "Thành công",
+                                                            colorButton:
+                                                                Colors.red,
+                                                            btnText: "OK",
+                                                          );
+                                                        },
                                                         child: Container(
                                                           width: 70.w,
                                                           height: 35.w,
@@ -4712,6 +4790,19 @@ class _ManageBroughtReceiptDialogState
                                                                 filterProducts2[
                                                                         index]
                                                                     .foodId,
+                                                          );
+                                                        },
+                                                        onDoubleTap: () {
+                                                          showCustomDialogModal(
+                                                            typeDialog: "error",
+                                                            context: navigatorKey
+                                                                .currentContext,
+                                                            textDesc:
+                                                                "Bạn thao tác quá nhanh",
+                                                            title: "Thành công",
+                                                            colorButton:
+                                                                Colors.red,
+                                                            btnText: "OK",
                                                           );
                                                         },
                                                         child: Container(
@@ -6390,14 +6481,15 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
   }
 }
 
-// Modal tạo cửa hàng và chỉnh sửa cửa hàng
+// Modal tạo cửa hàng
 
 class CreateStoreDialog extends StatefulWidget {
-  final List<XFile>? imageFileList;
+  // final List<XFile>? imageFileList;
   final Function eventSaveButton;
-  const CreateStoreDialog({
+
+  CreateStoreDialog({
     Key? key,
-    required this.imageFileList,
+    // required this.imageFileList,
     required this.eventSaveButton,
   }) : super(key: key);
 
@@ -6414,6 +6506,894 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
   final addressStoreController = TextEditingController();
   final ImagePicker imagePicker = ImagePicker();
   QuillController _controllerQuill = QuillController.basic();
+  String currentStoreLogo = 'assets/img/no-image.png';
+  List<File>? imageFileList = [];
+  List<String> listImageStore = [];
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _controllerQuill;
+  }
+
+  void pickImageLogoStore() async {
+    final returndImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (returndImage == null) return;
+    setState(() {
+      selectedImage = File(returndImage.path);
+      if (selectedImage != null) {
+        Uint8List imagebytes = selectedImage!.readAsBytesSync();
+        String base64string = base64Encode(imagebytes);
+        currentStoreLogo = base64string;
+      }
+    });
+    // openImage();
+  }
+
+  void pickImage() async {
+    final returndImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (returndImage == null) return;
+    setState(() {
+      var pathImage = File(returndImage.path);
+      imageFileList!.add(pathImage);
+      if (pathImage != null) {
+        Uint8List imagebytes = pathImage.readAsBytesSync(); //convert to bytes
+        String base64string = base64Encode(imagebytes);
+        listImageStore.add(base64string);
+      }
+    });
+  } //selecte one picture
+
+  void takeImage() async {
+    final returndImage =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    if (returndImage == null) return;
+    setState(() {
+      selectedImage = File(returndImage.path);
+    });
+  }
+
+  // void selectImages() async {
+  //   final List<XFile> selectedImages = await imagePicker.pickMultiImage();
+  //   if (selectedImages.isNotEmpty) {
+  //     widget.imageFileList!.addAll(selectedImages);
+  //   }
+  //   setState(() {});
+  // } //selecte multi image
+
+  void deleteImages(data) {
+    imageFileList!.remove(data);
+    setState(() {});
+  }
+
+  void handleCreateStore({
+    required String nameStore,
+    required String addressStore,
+    required String shopID,
+    required String descriptionStore,
+    required String logoStore,
+    required List<String> imagesStore,
+    required bool activeFlag,
+  }) async {
+    try {
+      print({
+        "active_flg": activeFlag,
+        'store_logo': logoStore,
+        'description': descriptionStore,
+        "shop_id": shopID,
+        'name': nameStore,
+        'address': addressStore,
+        'images': imagesStore,
+      });
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$createStoreApi'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'active_flg': activeFlag,
+          'images': imagesStore,
+          'store_logo': logoStore,
+          'description': descriptionStore,
+          'shop_id': shopID,
+          'name': nameStore,
+          'address': addressStore
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      log(data.toString());
+      try {
+        if (data['status'] == 200) {
+          Navigator.of(navigatorKey.currentContext!).pop();
+          Future.delayed(Duration(milliseconds: 500), () {
+            showCustomDialogModal(
+              typeDialog: "succes",
+              context: navigatorKey.currentContext,
+              textDesc: "Thêm mới cửa hàng thành công",
+              title: "Thành công",
+              colorButton: Colors.green,
+              btnText: "OK",
+            );
+          });
+
+          // ignore: use_build_context_synchronously
+          // Navigator.of(context).pop();
+        } else {
+          print("ERROR DATA FOOD TABLE 1 ${data}");
+          var messFailed = data['errors'];
+          var messErrorShopId1 = messFailed['shop_id'].toString();
+          var messErrorShopId2 = messErrorShopId1.replaceAll("[", "");
+          var messErrorShopId3 = messErrorShopId2.replaceAll("]", "");
+          var messErrorShopId4 =
+              messErrorShopId3.replaceAll("Nội dung", "Mã cửa hàng");
+
+          var messErrorNameShop1 = messFailed['name'].toString();
+          var messErrorNameShop2 = messErrorNameShop1.replaceAll("[", "");
+          var messErrorNameShop3 = messErrorNameShop2.replaceAll("]", "");
+          var messErrorNameShop4 =
+              messErrorNameShop3.replaceAll("Nội dung", "Tên cửa hàng");
+
+          var messErrorAddressShop1 = messFailed['address'].toString();
+          var messErrorAddressShop2 = messErrorAddressShop1.replaceAll("[", "");
+          var messErrorAddressShop3 = messErrorAddressShop2.replaceAll("]", "");
+          var messErrorAddressShop4 =
+              messErrorAddressShop3.replaceAll("Nội dung", "Địa chỉ cửa hàng");
+
+          var messError =
+              '$messErrorShopId4\n  ${messErrorNameShop4 == 'null' ? '' : messErrorNameShop4}\n ${messErrorAddressShop4 == 'null' ? '' : messErrorAddressShop4}\n';
+          showCustomDialogModal(
+              context: navigatorKey.currentContext,
+              textDesc: messError,
+              title: "Thất bại",
+              colorButton: Colors.red,
+              btnText: "OK",
+              typeDialog: "error");
+        }
+      } catch (error) {
+        print("ERROR DATA FOOD TABLE 2 ${error}");
+        showCustomDialogModal(
+            context: navigatorKey.currentContext,
+            textDesc: "Có lỗi xảy ra",
+            title: "Thất bại",
+            colorButton: Colors.red,
+            btnText: "OK",
+            typeDialog: "error");
+      }
+    } catch (error) {
+      print("ERROR DATA FOOD TABLE 3 $error");
+      showCustomDialogModal(
+          context: navigatorKey.currentContext,
+          textDesc: "Có lỗi xảy ra",
+          title: "Thất bại",
+          colorButton: Colors.red,
+          btnText: "OK",
+          typeDialog: "error");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      contentPadding: const EdgeInsets.all(0),
+      surfaceTintColor: Colors.white,
+      backgroundColor: Colors.white,
+      content: Container(
+        width: 1.sw,
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 15.w, left: 15.w, right: 15.w),
+                  child: Container(
+                      width: 1.sw,
+                      height: 50,
+                      // decoration: BoxDecoration(
+                      //   borderRadius: BorderRadius.only(
+                      //       topLeft: Radius.circular(15.w),
+                      //       topRight: Radius.circular(15.w)),
+                      //   // color: Colors.amber,
+                      // ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              TextApp(
+                                text: "Cửa hàng",
+                                fontsize: 18.sp,
+                                color: blueText,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ],
+                          ),
+                        ],
+                      )),
+                ),
+                SingleChildScrollView(
+                    child: Padding(
+                  padding: EdgeInsets.all(15.w),
+                  child: Form(
+                    key: _formField,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextApp(
+                          text: storeId,
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        TextFormField(
+                          onTapOutside: (event) {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          },
+                          controller: idStoreController,
+                          cursorColor: const Color.fromRGBO(73, 80, 87, 1),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return canNotNull;
+                            } else if (value.length < 6) {
+                              return "Độ dài ít nhất 6 kí tự";
+                            } else {
+                              return null;
+                            }
+                          },
+                          decoration: InputDecoration(
+                              fillColor:
+                                  const Color.fromARGB(255, 226, 104, 159),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color.fromRGBO(214, 51, 123, 0.6),
+                                    width: 2.0),
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              hintText: storeId,
+                              isDense: true,
+                              contentPadding:
+                                  EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
+                        ),
+                        ////////
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        //////
+                        TextApp(
+                          text: storeName,
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        TextFormField(
+                          onTapOutside: (event) {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          },
+                          controller: nameStoreController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return canNotNull;
+                            } else {
+                              return null;
+                            }
+                          },
+                          cursorColor: const Color.fromRGBO(73, 80, 87, 1),
+                          decoration: InputDecoration(
+                              fillColor:
+                                  const Color.fromARGB(255, 226, 104, 159),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color.fromRGBO(214, 51, 123, 0.6),
+                                    width: 2.0),
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              hintText: storeName,
+                              isDense: true,
+                              contentPadding:
+                                  EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
+                        ),
+                        /////
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        ////
+                        TextApp(
+                          text: storeAddress,
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        TextFormField(
+                          onTapOutside: (event) {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          },
+                          controller: addressStoreController,
+                          cursorColor: const Color.fromRGBO(73, 80, 87, 1),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return canNotNull;
+                            } else {
+                              return null;
+                            }
+                          },
+                          decoration: InputDecoration(
+                              fillColor:
+                                  const Color.fromARGB(255, 226, 104, 159),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color.fromRGBO(214, 51, 123, 0.6),
+                                    width: 2.0),
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              hintText: storeAddress,
+                              isDense: true,
+                              contentPadding:
+                                  EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
+                        ),
+                        /////
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        ////
+                        TextApp(
+                          text: displayMode,
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        TextApp(
+                          text: allowOpenStore,
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.normal,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        SizedBox(
+                          width: 50.w,
+                          height: 30.w,
+                          child: FittedBox(
+                            fit: BoxFit.fill,
+                            child: CupertinoSwitch(
+                              value: light,
+                              activeColor:
+                                  const Color.fromRGBO(58, 65, 111, .95),
+                              onChanged: (bool value) {
+                                if (mounted) {
+                                  setState(() {
+                                    light = value;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        ////
+                        TextApp(
+                          text: desStore,
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        TextApp(
+                          text: describeDetailSotre,
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.normal,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Container(
+                            width: 1.sw,
+                            // height: 250.h,
+
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+
+                              borderRadius: BorderRadius.circular(15.w),
+                              // color: Colors.amber,
+                            ),
+                            child: Column(
+                              children: [
+                                QuillProvider(
+                                    configurations: QuillConfigurations(
+                                        controller: _controllerQuill),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                            width: 1.sw,
+                                            decoration: const BoxDecoration(
+                                              // border: Border.all(
+                                              //     color: Colors.grey),
+
+                                              border: Border(
+                                                  top: BorderSide(
+                                                      width: 0,
+                                                      color: Colors.grey),
+                                                  bottom: BorderSide(
+                                                      width: 1,
+                                                      color: Colors.grey),
+                                                  left: BorderSide(
+                                                      width: 0,
+                                                      color: Colors.grey),
+                                                  right: BorderSide(
+                                                      width: 0,
+                                                      color: Colors.grey)),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(10.w),
+                                              child: const QuillToolbar(
+                                                configurations:
+                                                    QuillToolbarConfigurations(
+                                                        toolbarIconAlignment:
+                                                            WrapAlignment
+                                                                .center,
+                                                        showFontFamily: true,
+                                                        showFontSize: false,
+                                                        showBoldButton: true,
+                                                        showItalicButton: true,
+                                                        showSmallButton: false,
+                                                        showUnderLineButton:
+                                                            true,
+                                                        showStrikeThrough:
+                                                            false,
+                                                        showInlineCode: false,
+                                                        showColorButton: false,
+                                                        showBackgroundColorButton:
+                                                            false,
+                                                        showClearFormat: false,
+                                                        showAlignmentButtons:
+                                                            true,
+                                                        showLeftAlignment: true,
+                                                        showCenterAlignment:
+                                                            true,
+                                                        showRightAlignment:
+                                                            true,
+                                                        showJustifyAlignment:
+                                                            true,
+                                                        showHeaderStyle: false,
+                                                        showListNumbers: true,
+                                                        showListBullets: true,
+                                                        showListCheck: false,
+                                                        showCodeBlock: false,
+                                                        showQuote: false,
+                                                        showIndent: false,
+                                                        showLink: true,
+                                                        showUndo: false,
+                                                        showRedo: false,
+                                                        showDirection: false,
+                                                        showSearchButton: false,
+                                                        showSubscript: false,
+                                                        showSuperscript: false),
+                                              ),
+                                            )),
+                                        // space20H,
+                                        Container(
+                                          margin: EdgeInsets.all(5.w),
+                                          height: 200.h,
+                                          child: QuillEditor.basic(
+                                            configurations:
+                                                const QuillEditorConfigurations(
+                                              readOnly: false,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    )),
+                              ],
+                            )),
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        TextApp(
+                          text: storeImage,
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.r),
+                              ),
+
+                              backgroundColor: Colors.white,
+                              side: BorderSide(color: Colors.grey, width: 1), //
+                            ),
+                            onPressed: () {
+                              // selectImages();
+                              pickImage();
+                            },
+                            child: Column(
+                              children: [
+                                imageFileList!.isEmpty
+                                    ? SizedBox(
+                                        width: double.infinity,
+                                        height: 200.h,
+                                        // color: Colors.red,
+                                        child: Center(
+                                          child: TextApp(
+                                            text: addPictureHere,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      )
+                                    : SizedBox(
+                                        width: double.infinity,
+                                        child: GridView.builder(
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            itemCount: imageFileList!.length,
+                                            gridDelegate:
+                                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                                    crossAxisCount: 2),
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  SizedBox(
+                                                      width: 100.w,
+                                                      height: 100.w,
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15.w),
+                                                        child: Image.file(
+                                                          File(imageFileList![
+                                                                  index]
+                                                              .path),
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      )),
+                                                  space10H,
+                                                  InkWell(
+                                                    onTap: () {
+                                                      deleteImages(
+                                                          imageFileList![
+                                                              index]);
+                                                    },
+                                                    child: TextApp(
+                                                      text: deleteImage,
+                                                      color: Colors.blue,
+                                                    ),
+                                                  )
+                                                ],
+                                              );
+                                            }),
+                                      )
+                              ],
+                            )),
+
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        TextApp(
+                          text: "Logo của của hàng",
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+
+                        OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.r),
+                              ),
+                              backgroundColor: Colors.white,
+                              side: const BorderSide(
+                                  color: Colors.grey, width: 1), //
+                            ),
+                            onPressed: () {
+                              // selectImages();
+                              // pickImage();
+                              pickImageLogoStore();
+                            },
+                            child: Container(
+                                width: 1.sw,
+                                height: 150.h,
+                                margin: EdgeInsets.all(20.h),
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 0),
+                                  child: SizedBox(
+                                      width: 100.w,
+                                      height: 100.w,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(15.w),
+                                        child: selectedImage != null
+                                            ? Image.file(
+                                                selectedImage!,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : CachedNetworkImage(
+                                                fit: BoxFit.cover,
+                                                imageUrl: httpImage +
+                                                    currentStoreLogo,
+                                                placeholder: (context, url) =>
+                                                    SizedBox(
+                                                  height: 10.w,
+                                                  width: 10.w,
+                                                  child: const Center(
+                                                      child:
+                                                          CircularProgressIndicator()),
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        const Icon(Icons.error),
+                                              ),
+                                      )),
+                                ))),
+                      ],
+                    ),
+                  ),
+                )),
+                space15H,
+                Container(
+                  width: 1.sw,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    // border: const Border(
+                    //     top: BorderSide(width: 1, color: Colors.grey),
+                    //     bottom: BorderSide(width: 0, color: Colors.grey),
+                    //     left: BorderSide(width: 0, color: Colors.grey),
+                    //     right: BorderSide(width: 0, color: Colors.grey)),
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(15.w),
+                        bottomRight: Radius.circular(15.w)),
+                    // color: Colors.green,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ButtonApp(
+                        event: () {
+                          Navigator.of(context).pop();
+                        },
+                        text: "Đóng",
+                        colorText: Colors.white,
+                        backgroundColor: Color.fromRGBO(131, 146, 171, 1),
+                        outlineColor: Color.fromRGBO(131, 146, 171, 1),
+                      ),
+                      SizedBox(
+                        width: 20.w,
+                      ),
+                      ButtonApp(
+                        event: () {
+                          handleCreateStore(
+                            nameStore: "ndahibuidj",
+                            addressStore: "addressStoreController.text",
+                            shopID: "22224e0053",
+                            descriptionStore: "descriptionStore",
+                            logoStore: currentStoreLogo,
+                            imagesStore: listImageStore,
+                            activeFlag: light,
+                          );
+                          // if (_formField.currentState!.validate() &&
+                          //     listImageStore.isNotEmpty) {
+                          //   if (listImageStore.isNotEmpty) {
+                          //     handleCreateStore(
+                          //       nameStore: nameStoreController.text,
+                          //       addressStore: addressStoreController.text,
+                          //       shopID: idStoreController.text,
+                          //       descriptionStore: "descriptionStore",
+                          //       logoStore: currentStoreLogo,
+                          //       imagesStore: listImageStore,
+                          //       activeFlag: light,
+                          //     );
+
+                          //   }
+                          // } else {
+                          //   showCustomDialogModal(
+                          //       context: navigatorKey.currentContext,
+                          //       textDesc:
+                          //           "Bạn cần ít nhất một ảnh cho cửa hàng",
+                          //       title: "Thất bại",
+                          //       colorButton: Colors.red,
+                          //       btnText: "OK",
+                          //       typeDialog: "error");
+                          // }
+                        },
+                        text: save,
+                        colorText: Colors.white,
+                        backgroundColor: Color.fromRGBO(23, 193, 232, 1),
+                        outlineColor: Color.fromRGBO(23, 193, 232, 1),
+                      ),
+                      SizedBox(
+                        width: 20.w,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class EditDetailStoreDialog extends StatefulWidget {
+  final List<XFile>? imageFileList;
+  final Function eventSaveButton;
+  EditDetailsStoreModel? editDetailsStoreModel;
+
+  EditDetailStoreDialog({
+    Key? key,
+    required this.imageFileList,
+    required this.eventSaveButton,
+    required this.editDetailsStoreModel,
+  }) : super(key: key);
+
+  @override
+  State<EditDetailStoreDialog> createState() => _EditDetailStoreDialogState();
+}
+
+class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
+  bool light = false;
+  File? selectedImage;
+  final _formField = GlobalKey<FormState>();
+  final idStoreController = TextEditingController();
+  final nameStoreController = TextEditingController();
+  final addressStoreController = TextEditingController();
+  final ImagePicker imagePicker = ImagePicker();
+  QuillController _controllerQuill = QuillController.basic();
+  String currentStoreLogo = 'assets/img/no-image.png';
+  List<StoreImage> listImageFood22 = [];
+  List<File>? imageFileList = [];
+  List<String> listImageStore = [];
+
+  void pickImageLogoStore() async {
+    final returndImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (returndImage == null) return;
+    setState(() {
+      selectedImage = File(returndImage.path);
+      if (selectedImage != null) {
+        Uint8List imagebytes = selectedImage!.readAsBytesSync();
+        String base64string = base64Encode(imagebytes);
+        currentStoreLogo = base64string;
+      }
+    });
+    // openImage();
+  }
+
+  void pickImage() async {
+    final returndImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (returndImage == null) return;
+    setState(() {
+      var pathImage = File(returndImage.path);
+      imageFileList!.add(pathImage);
+      // log(listImageFood22.toString());
+
+      listImageFood22.where((element) {
+        if (element.name != null) {
+          print("ZOOO ADDD");
+          listImageStore.add(element.normal!);
+        } else {
+          print("element NULL");
+
+          return false;
+        }
+        return true;
+      }).toList();
+
+      if (pathImage != null) {
+        Uint8List imagebytes = pathImage.readAsBytesSync(); //convert to bytes
+        String base64string = base64Encode(imagebytes);
+        listImageStore.add(base64string);
+      }
+    });
+  } //selecte one picture
+
+  void takeImage() async {
+    final returndImage =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    if (returndImage == null) return;
+    setState(() {
+      selectedImage = File(returndImage.path);
+    });
+  }
+
+  void selectImages() async {
+    final List<XFile> selectedImages = await imagePicker.pickMultiImage();
+    if (selectedImages.isNotEmpty) {
+      widget.imageFileList!.addAll(selectedImages);
+    }
+    setState(() {});
+  } //selecte multi image
+
+  void deleteImages(data) {
+    listImageFood22.remove(data);
+    // widget.imageFileList!.remove(data);
+    setState(() {});
+  }
+
+  void init() async {
+    mounted
+        ? nameStoreController.text =
+            widget.editDetailsStoreModel?.data.storeName ?? ''
+        : null;
+    mounted
+        ? idStoreController.text =
+            widget.editDetailsStoreModel?.data.shopId ?? ''
+        : null;
+    mounted
+        ? addressStoreController.text =
+            widget.editDetailsStoreModel?.data.storeAddress ?? ''
+        : null;
+
+    mounted
+        ? widget.editDetailsStoreModel?.data.activeFlg == 1
+            ? light = true
+            : light = false
+        : null;
+    mounted
+        ? currentStoreLogo =
+            widget.editDetailsStoreModel?.data.storeLogo ?? currentStoreLogo
+        : currentStoreLogo;
+    mounted
+        ? listImageFood22 = widget.editDetailsStoreModel?.data.storeImages ?? []
+        : null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -6453,7 +7433,15 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                           Row(
                             children: [
                               TextApp(
-                                text: "Cửa hàng",
+                                text: "Cửa hàng ",
+                                fontsize: 18.sp,
+                                color: blueText,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              TextApp(
+                                text: widget.editDetailsStoreModel?.data
+                                        .storeName ??
+                                    '',
                                 fontsize: 18.sp,
                                 color: blueText,
                                 fontWeight: FontWeight.bold,
@@ -6765,36 +7753,49 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                         SizedBox(
                           height: 15.h,
                         ),
-                        OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.r),
-                              ),
 
-                              backgroundColor: Colors.white,
-                              side: BorderSide(color: Colors.grey, width: 1), //
+                        OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.r),
                             ),
-                            onPressed: () {
-                              selectImages();
-                            },
-                            child: Column(
-                              children: [
-                                Visibility(
-                                    visible: widget.imageFileList!.length == 0,
-                                    child:
-                                        SizedBox(width: 1.sw, height: 150.h)),
-                                SizedBox(
+                            backgroundColor: Colors.white,
+                            side: const BorderSide(
+                                color: Colors.grey, width: 1), //
+                          ),
+                          onPressed: () {
+                            // selectImages();
+                            pickImage();
+                          },
+                          child: listImageFood22.isEmpty
+                              ? SizedBox(
+                                  width: double.infinity,
+                                  height: 200.h,
+                                  // color: Colors.red,
+                                  child: Center(
+                                    child: TextApp(
+                                      text: addPictureHere,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                )
+                              : SizedBox(
                                   width: double.infinity,
                                   child: GridView.builder(
                                       physics:
                                           const NeverScrollableScrollPhysics(),
                                       shrinkWrap: true,
-                                      itemCount: widget.imageFileList!.length,
+                                      itemCount: imageFileList!.isEmpty
+                                          ? listImageFood22.length
+                                          : (imageFileList!.length),
                                       gridDelegate:
                                           const SliverGridDelegateWithFixedCrossAxisCount(
                                               crossAxisCount: 2),
                                       itemBuilder:
                                           (BuildContext context, int index) {
+                                        var imgTTTT =
+                                            listImageFood22[index].name;
+                                        var ddddd = listImageFood22[index].path;
                                         return Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -6808,18 +7809,39 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           15.w),
-                                                  child: Image.file(
-                                                    File(widget
-                                                        .imageFileList![index]
-                                                        .path),
-                                                    fit: BoxFit.cover,
-                                                  ),
+                                                  child: (imgTTTT!.length <
+                                                              150 &&
+                                                          imageFileList!
+                                                              .isEmpty)
+                                                      ? CachedNetworkImage(
+                                                          fit: BoxFit.fill,
+                                                          imageUrl: ddddd ?? '',
+                                                          placeholder:
+                                                              (context, url) =>
+                                                                  SizedBox(
+                                                            height: 10.w,
+                                                            width: 10.w,
+                                                            child: const Center(
+                                                                child:
+                                                                    CircularProgressIndicator()),
+                                                          ),
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              const Icon(
+                                                                  Icons.error),
+                                                        )
+                                                      : Image.file(
+                                                          File(imageFileList![
+                                                                  index]
+                                                              .path),
+                                                          fit: BoxFit.cover,
+                                                        ),
                                                 )),
                                             space10H,
                                             InkWell(
                                               onTap: () {
-                                                deleteImages(widget
-                                                    .imageFileList![index]);
+                                                deleteImages(
+                                                    listImageFood22[index]);
                                               },
                                               child: TextApp(
                                                 text: deleteImage,
@@ -6829,9 +7851,71 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                                           ],
                                         );
                                       }),
-                                )
-                              ],
-                            )),
+                                ),
+                        ),
+
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        TextApp(
+                          text: "Logo của của hàng",
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+
+                        OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.r),
+                              ),
+                              backgroundColor: Colors.white,
+                              side: const BorderSide(
+                                  color: Colors.grey, width: 1), //
+                            ),
+                            onPressed: () {
+                              // selectImages();
+                              // pickImage();
+                              pickImageLogoStore();
+                            },
+                            child: Container(
+                                width: 1.sw,
+                                height: 150.h,
+                                margin: EdgeInsets.all(20.h),
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 0),
+                                  child: SizedBox(
+                                      width: 100.w,
+                                      height: 100.w,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(15.w),
+                                        child: selectedImage != null
+                                            ? Image.file(
+                                                selectedImage!,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : CachedNetworkImage(
+                                                fit: BoxFit.cover,
+                                                imageUrl: httpImage +
+                                                    currentStoreLogo,
+                                                placeholder: (context, url) =>
+                                                    SizedBox(
+                                                  height: 10.w,
+                                                  width: 10.w,
+                                                  child: const Center(
+                                                      child:
+                                                          CircularProgressIndicator()),
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        const Icon(Icons.error),
+                                              ),
+                                      )),
+                                ))),
                       ],
                     ),
                   ),
@@ -6892,37 +7976,6 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
         ),
       ),
     );
-  }
-
-  void pickImage() async {
-    final returndImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (returndImage == null) return;
-    setState(() {
-      selectedImage = File(returndImage.path);
-    });
-  } //selecte one picture
-
-  void takeImage() async {
-    final returndImage =
-        await ImagePicker().pickImage(source: ImageSource.camera);
-    if (returndImage == null) return;
-    setState(() {
-      selectedImage = File(returndImage.path);
-    });
-  }
-
-  void selectImages() async {
-    final List<XFile> selectedImages = await imagePicker.pickMultiImage();
-    if (selectedImages.isNotEmpty) {
-      widget.imageFileList!.addAll(selectedImages);
-    }
-    setState(() {});
-  } //selecte multi image
-
-  void deleteImages(data) {
-    widget.imageFileList!.remove(data);
-    setState(() {});
   }
 }
 
@@ -7392,253 +8445,265 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                 Container(
                   width: 1.sw,
                   height: 400.h,
-                  child: TabBarView(controller: _tabController, children: [
-                    ListView(
-                      shrinkWrap: true,
+                  child: TabBarView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: _tabController,
                       children: [
-                        Form(
-                          key: _formField,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ////////
-                              SizedBox(
-                                height: 30.h,
-                              ),
-                              //////
-                              TextApp(
-                                text: "Tên mặt hàng",
-                                fontsize: 12.sp,
-                                fontWeight: FontWeight.bold,
-                                color: blueText,
-                              ),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-
-                              TextFormField(
-                                controller: nameItemController,
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return canNotNull;
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                cursorColor:
-                                    const Color.fromRGBO(73, 80, 87, 1),
-                                decoration: InputDecoration(
-                                    fillColor: const Color.fromARGB(
-                                        255, 226, 104, 159),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color:
-                                              Color.fromRGBO(214, 51, 123, 0.6),
-                                          width: 2.0),
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
-                                    // hintText: storeName,
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.all(
-                                        1.sw > 600 ? 20.w : 15.w)),
-                              ),
-                              /////
-                              SizedBox(
-                                height: 20.h,
-                              ),
-                              TextApp(
-                                text: "Đơn vị",
-                                fontsize: 12.sp,
-                                fontWeight: FontWeight.bold,
-                                color: blueText,
-                              ),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              DropdownSearch(
-                                validator: (value) {
-                                  if (value == "Nhập đơn vị") {
-                                    // setState(() {
-                                    //   isHaveddddd = false;
-                                    // });
-                                    return canNotNull;
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                items: listMeasure,
-                                dropdownDecoratorProps: DropDownDecoratorProps(
-                                  dropdownSearchDecoration: InputDecoration(
-                                    fillColor: const Color.fromARGB(
-                                        255, 226, 104, 159),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color:
-                                              Color.fromRGBO(214, 51, 123, 0.6),
-                                          width: 2.0),
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.all(15.w),
-                                    hintText: "Nhập đơn vị",
+                        ListView(
+                          shrinkWrap: true,
+                          children: [
+                            Form(
+                              key: _formField,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ////////
+                                  SizedBox(
+                                    height: 30.h,
                                   ),
-                                ),
-                                onChanged: print,
-                                selectedItem: "Nhập đơn vị",
-                              ),
-                              SizedBox(
-                                height: 20.h,
-                              ),
-                              ////
-                              TextApp(
-                                text: "Số lượng ban đầu",
-                                fontsize: 12.sp,
-                                fontWeight: FontWeight.bold,
-                                color: blueText,
-                              ),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              TextFormField(
-                                controller: initalQuantityController,
-                                cursorColor:
-                                    const Color.fromRGBO(73, 80, 87, 1),
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return canNotNull;
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                    fillColor: const Color.fromARGB(
-                                        255, 226, 104, 159),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color:
-                                              Color.fromRGBO(214, 51, 123, 0.6),
-                                          width: 2.0),
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
-                                    // hintText: storeAddress,
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.all(
-                                        1.sw > 600 ? 20.w : 15.w)),
-                              ),
+                                  //////
+                                  TextApp(
+                                    text: "Tên mặt hàng",
+                                    fontsize: 12.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: blueText,
+                                  ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
 
-                              SizedBox(
-                                height: 30.h,
-                              ),
-                              ////
-                              TextApp(
-                                text: "Số lượng tối thiểu",
-                                fontsize: 12.sp,
-                                fontWeight: FontWeight.bold,
-                                color: blueText,
-                              ),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              TextFormField(
-                                controller: minQuantityController,
-                                cursorColor:
-                                    const Color.fromRGBO(73, 80, 87, 1),
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return canNotNull;
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                    fillColor: const Color.fromARGB(
-                                        255, 226, 104, 159),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color:
-                                              Color.fromRGBO(214, 51, 123, 0.6),
-                                          width: 2.0),
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
-                                    // hintText: storeAddress,
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.all(
-                                        1.sw > 600 ? 20.w : 15.w)),
-                              ),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-
-                              SizedBox(
-                                height: 30.h,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    // Tab2
-
-                    ListView(
-                      shrinkWrap: true,
-                      children: [
-                        Form(
-                          key: _formField2,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ////////
-                              SizedBox(
-                                height: 30.h,
-                              ),
-                              //////
-                              isHaveddddd
-                                  ? TextApp(
-                                      text:
-                                          "* Lưu ý: Chỉ số nhập vào bé nhất là 1 và đơn vị quy đổi không được trùng lặp",
-                                      fontsize: 12.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.red,
-                                    )
-                                  : Container(
-                                      width: 1.sw,
-                                      height: 50.h,
-                                      decoration: BoxDecoration(
+                                  TextFormField(
+                                    controller: nameItemController,
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return canNotNull;
+                                      } else {
+                                        return null;
+                                      }
+                                    },
+                                    cursorColor:
+                                        const Color.fromRGBO(73, 80, 87, 1),
+                                    decoration: InputDecoration(
+                                        fillColor: const Color.fromARGB(
+                                            255, 226, 104, 159),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color: Color.fromRGBO(
+                                                  214, 51, 123, 0.6),
+                                              width: 2.0),
                                           borderRadius:
-                                              BorderRadius.circular(8.w),
-                                          color: Colors.red),
-                                      child: Center(
-                                        child: TextApp(
-                                          text: "Chưa chọn đơn vị quy đổi",
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontsize: 14.sp,
+                                              BorderRadius.circular(8.r),
                                         ),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.r),
+                                        ),
+                                        // hintText: storeName,
+                                        isDense: true,
+                                        contentPadding: EdgeInsets.all(
+                                            1.sw > 600 ? 20.w : 15.w)),
+                                  ),
+                                  /////
+                                  SizedBox(
+                                    height: 20.h,
+                                  ),
+                                  TextApp(
+                                    text: "Đơn vị",
+                                    fontsize: 12.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: blueText,
+                                  ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+                                  DropdownSearch(
+                                    validator: (value) {
+                                      if (value == "Nhập đơn vị") {
+                                        // setState(() {
+                                        //   isHaveddddd = false;
+                                        // });
+                                        return canNotNull;
+                                      } else {
+                                        return null;
+                                      }
+                                    },
+                                    items: listMeasure,
+                                    dropdownDecoratorProps:
+                                        DropDownDecoratorProps(
+                                      dropdownSearchDecoration: InputDecoration(
+                                        fillColor: const Color.fromARGB(
+                                            255, 226, 104, 159),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color: Color.fromRGBO(
+                                                  214, 51, 123, 0.6),
+                                              width: 2.0),
+                                          borderRadius:
+                                              BorderRadius.circular(8.r),
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.r),
+                                        ),
+                                        isDense: true,
+                                        contentPadding: EdgeInsets.all(15.w),
+                                        hintText: "Nhập đơn vị",
                                       ),
                                     ),
+                                    onChanged: print,
+                                    selectedItem: "Nhập đơn vị",
+                                  ),
+                                  SizedBox(
+                                    height: 20.h,
+                                  ),
+                                  ////
+                                  TextApp(
+                                    text: "Số lượng ban đầu",
+                                    fontsize: 12.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: blueText,
+                                  ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+                                  TextFormField(
+                                    controller: initalQuantityController,
+                                    cursorColor:
+                                        const Color.fromRGBO(73, 80, 87, 1),
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return canNotNull;
+                                      } else {
+                                        return null;
+                                      }
+                                    },
+                                    decoration: InputDecoration(
+                                        fillColor: const Color.fromARGB(
+                                            255, 226, 104, 159),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color: Color.fromRGBO(
+                                                  214, 51, 123, 0.6),
+                                              width: 2.0),
+                                          borderRadius:
+                                              BorderRadius.circular(8.r),
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.r),
+                                        ),
+                                        // hintText: storeAddress,
+                                        isDense: true,
+                                        contentPadding: EdgeInsets.all(
+                                            1.sw > 600 ? 20.w : 15.w)),
+                                  ),
 
-                              SizedBox(
-                                width: 20.w,
+                                  SizedBox(
+                                    height: 30.h,
+                                  ),
+                                  ////
+                                  TextApp(
+                                    text: "Số lượng tối thiểu",
+                                    fontsize: 12.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: blueText,
+                                  ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+                                  TextFormField(
+                                    controller: minQuantityController,
+                                    cursorColor:
+                                        const Color.fromRGBO(73, 80, 87, 1),
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return canNotNull;
+                                      } else {
+                                        return null;
+                                      }
+                                    },
+                                    decoration: InputDecoration(
+                                        fillColor: const Color.fromARGB(
+                                            255, 226, 104, 159),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color: Color.fromRGBO(
+                                                  214, 51, 123, 0.6),
+                                              width: 2.0),
+                                          borderRadius:
+                                              BorderRadius.circular(8.r),
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.r),
+                                        ),
+                                        // hintText: storeAddress,
+                                        isDense: true,
+                                        contentPadding: EdgeInsets.all(
+                                            1.sw > 600 ? 20.w : 15.w)),
+                                  ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+
+                                  SizedBox(
+                                    height: 30.h,
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ]),
+
+                        // Tab2
+
+                        ListView(
+                          shrinkWrap: true,
+                          children: [
+                            Form(
+                              key: _formField2,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ////////
+                                  SizedBox(
+                                    height: 30.h,
+                                  ),
+                                  //////
+                                  isHaveddddd
+                                      ? TextApp(
+                                          text:
+                                              "* Lưu ý: Chỉ số nhập vào bé nhất là 1 và đơn vị quy đổi không được trùng lặp",
+                                          fontsize: 12.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.red,
+                                        )
+                                      : Container(
+                                          width: 1.sw,
+                                          height: 50.h,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.w),
+                                              color: Colors.red),
+                                          child: Center(
+                                            child: TextApp(
+                                              text: "Chưa chọn đơn vị quy đổi",
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontsize: 14.sp,
+                                            ),
+                                          ),
+                                        ),
+
+                                  SizedBox(
+                                    width: 20.w,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ]),
                 ),
                 space15H,
                 Container(

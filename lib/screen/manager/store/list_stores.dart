@@ -58,9 +58,7 @@ class _ListStoresState extends State<ListStores> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
-      getListStore();
-    });
+    getListStore();
   }
 
   void getListStore() async {
@@ -130,88 +128,214 @@ class _ListStoresState extends State<ListStores> {
                   child: Padding(
                 padding: EdgeInsets.only(left: 15.w, right: 15.w),
                 child: state.listStoresStatus == ListStoresStatus.succes
-                    ? SingleChildScrollView(
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              space25H,
-                              Stack(
-                                children: [
-                                  //Carousel
-                                  CarouselSlider.builder(
-                                      itemCount: widget.bannerList.length,
-                                      itemBuilder: (context, index, realIndex) {
-                                        final currentBanner =
-                                            widget.bannerList[index];
-                                        return buildImage(currentBanner, index);
-                                      },
-                                      options: CarouselOptions(
-                                          height: 300.h,
-                                          autoPlay: true,
-                                          reverse: false,
-                                          autoPlayInterval:
-                                              const Duration(seconds: 3),
-                                          onPageChanged: (index, reason) {
-                                            setState(() {
-                                              activeIndex = index;
-                                            });
-                                          },
-                                          viewportFraction: 1)),
+                    ? RefreshIndicator(
+                        color: Colors.blue,
+                        onRefresh: () async {
+                          getListStore();
+                        },
+                        child: SingleChildScrollView(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                space25H,
+                                Stack(
+                                  children: [
+                                    //Carousel
+                                    CarouselSlider.builder(
+                                        itemCount: widget.bannerList.length,
+                                        itemBuilder:
+                                            (context, index, realIndex) {
+                                          final currentBanner =
+                                              widget.bannerList[index];
+                                          return buildImage(
+                                              currentBanner, index);
+                                        },
+                                        options: CarouselOptions(
+                                            height: 300.h,
+                                            autoPlay: true,
+                                            reverse: false,
+                                            autoPlayInterval:
+                                                const Duration(seconds: 3),
+                                            onPageChanged: (index, reason) {
+                                              setState(() {
+                                                activeIndex = index;
+                                              });
+                                            },
+                                            viewportFraction: 1)),
 
-                                  // buildIndicator(),
+                                    // buildIndicator(),
 
-                                  widget.managerInforData != null
-                                      ? Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 20.w,
-                                              right: 20.w,
-                                              top: 250.h),
-                                          child: Container(
-                                            width: 1.sw,
-                                            // height: 120.h,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        15.r)),
-                                            child: Padding(
-                                              padding: EdgeInsets.only(
-                                                  top: 10.w,
-                                                  left: 15.w,
-                                                  right: 15.w,
-                                                  bottom: 10.w),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  widget.managerInforData!
-                                                                  .userAvatar !=
-                                                              null &&
-                                                          widget
-                                                              .managerInforData!
-                                                              .userAvatar!
-                                                              .isNotEmpty
-                                                      ? ClipRRect(
+                                    widget.managerInforData != null
+                                        ? Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 20.w,
+                                                right: 20.w,
+                                                top: 250.h),
+                                            child: Container(
+                                              width: 1.sw,
+                                              // height: 120.h,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15.r)),
+                                              child: Padding(
+                                                padding: EdgeInsets.only(
+                                                    top: 10.w,
+                                                    left: 15.w,
+                                                    right: 15.w,
+                                                    bottom: 10.w),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    widget.managerInforData!
+                                                                    .userAvatar !=
+                                                                null &&
+                                                            widget
+                                                                .managerInforData!
+                                                                .userAvatar!
+                                                                .isNotEmpty
+                                                        ? ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10.r),
+                                                            child: Container(
+                                                              width: 50.w,
+                                                              height: 50.h,
+                                                              child:
+                                                                  CachedNetworkImage(
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                imageUrl: httpImage +
+                                                                    (widget.managerInforData
+                                                                            ?.userAvatar ??
+                                                                        ''),
+                                                                placeholder:
+                                                                    (context,
+                                                                            url) =>
+                                                                        SizedBox(
+                                                                  height: 15.w,
+                                                                  width: 15.w,
+                                                                  child: const Center(
+                                                                      child:
+                                                                          CircularProgressIndicator()),
+                                                                ),
+                                                                errorWidget: (context,
+                                                                        url,
+                                                                        error) =>
+                                                                    const Icon(Icons
+                                                                        .error),
+                                                              ),
+                                                            ))
+                                                        : Container(),
+                                                    space10H,
+                                                    TextApp(
+                                                      text: widget
+                                                              .managerInforData
+                                                              ?.userFullName ??
+                                                          '',
+                                                      fontsize: 16.sp,
+                                                      color: blueText,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                    space10H,
+                                                    TextApp(
+                                                      text: widget
+                                                              .managerInforData
+                                                              ?.userPhone ??
+                                                          '',
+                                                      fontsize: 14.sp,
+                                                      color: grey,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        : Container()
+                                  ],
+                                ),
+
+                                //List Stores
+                                space25H,
+                                Container(
+                                    width: 1.sw,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(15.r)),
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.w, left: 15.w, right: 15.w),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          contentStores(),
+                                          ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const ClampingScrollPhysics(),
+                                              itemCount: state
+                                                  .listStoreModel?.data.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                var imagePath1 = (state
+                                                        .listStoreModel
+                                                        ?.data[index]
+                                                        .storeImages ??
+                                                    '');
+                                                var listImagePath =
+                                                    jsonDecode(imagePath1);
+                                                var desStore = state
+                                                        .listStoreModel
+                                                        ?.data[index]
+                                                        .storeDescription ??
+                                                    '';
+                                                // var listStaffAvatar = state
+                                                //     .listStoreModel
+                                                //     ?.data[index]
+                                                //     .staffs
+                                                //     .where((avatar) {
+                                                //   var ddddavatarStaff =
+                                                //       avatar.staffAvatar;
+                                                //   return true;
+                                                // }).toList();
+                                                return Container(
+                                                  margin: EdgeInsetsDirectional
+                                                      .symmetric(
+                                                          horizontal: 10.w),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      ClipRRect(
                                                           borderRadius:
                                                               BorderRadius
                                                                   .circular(
-                                                                      10.r),
+                                                                      15.r),
                                                           child: Container(
-                                                            width: 50.w,
-                                                            height: 50.h,
+                                                            width: 1.sw,
+                                                            height: 150.h,
                                                             child:
                                                                 CachedNetworkImage(
                                                               fit: BoxFit.cover,
                                                               imageUrl: httpImage +
-                                                                  (widget.managerInforData
-                                                                          ?.userAvatar ??
-                                                                      ''),
+                                                                  listImagePath[
+                                                                      0],
                                                               placeholder:
                                                                   (context,
                                                                           url) =>
                                                                       SizedBox(
-                                                                height: 15.w,
-                                                                width: 15.w,
+                                                                height: 30.w,
+                                                                width: 30.w,
                                                                 child: const Center(
                                                                     child:
                                                                         CircularProgressIndicator()),
@@ -222,284 +346,174 @@ class _ListStoresState extends State<ListStores> {
                                                                   const Icon(Icons
                                                                       .error),
                                                             ),
-                                                          ))
-                                                      : Container(),
-                                                  space10H,
-                                                  TextApp(
-                                                    text: widget
-                                                            .managerInforData
-                                                            ?.userFullName ??
-                                                        '',
-                                                    fontsize: 16.sp,
-                                                    color: blueText,
-                                                    fontWeight: FontWeight.bold,
+                                                          )),
+                                                      space15H,
+                                                      TextApp(
+                                                        text: state
+                                                                .listStoreModel
+                                                                ?.data[index]
+                                                                .storeName ??
+                                                            '',
+                                                        fontsize: 14.sp,
+                                                      ),
+                                                      space15H,
+                                                      TextApp(
+                                                        text: state
+                                                                .listStoreModel
+                                                                ?.data[index]
+                                                                .shopId ??
+                                                            '',
+                                                        color: blueText,
+                                                        fontsize: 16.sp,
+                                                      ),
+                                                      space15H,
+                                                      // TextApp(
+                                                      //   text: state
+                                                      //           .listStoreModel
+                                                      //           ?.data[index]
+                                                      //           .storeDescription ??
+                                                      //       '',
+                                                      //   fontsize: 14.sp,
+                                                      // ),
+                                                      HtmlWidget(
+                                                        '''
+                                                         $desStore
+                                                        ''',
+                                                      ),
+                                                      space30H,
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          ButtonApp(
+                                                            event: () {
+                                                              getDetailsStore(
+                                                                  shopID: state
+                                                                      .listStoreModel
+                                                                      ?.data[
+                                                                          index]
+                                                                      .shopId);
+                                                              // context.go(
+                                                              //     '/manager_manage_stores');
+                                                            },
+                                                            text:
+                                                                "Quản lý cửa hàng",
+                                                            colorText:
+                                                                Color.fromRGBO(
+                                                                    23,
+                                                                    193,
+                                                                    232,
+                                                                    1),
+                                                            backgroundColor:
+                                                                Colors.white,
+                                                            outlineColor:
+                                                                Color.fromRGBO(
+                                                                    23,
+                                                                    193,
+                                                                    232,
+                                                                    1),
+                                                          ),
+                                                          space25W,
+                                                          Container(
+                                                              // width: 120.w,
+                                                              height: 50.h,
+                                                              // color: Colors.amber,
+                                                              child: ListView
+                                                                  .builder(
+                                                                      scrollDirection:
+                                                                          Axis
+                                                                              .horizontal,
+                                                                      itemCount: state
+                                                                          .listStoreModel
+                                                                          ?.data[
+                                                                              index]
+                                                                          .staffs
+                                                                          .length,
+                                                                      shrinkWrap:
+                                                                          true,
+                                                                      itemBuilder:
+                                                                          (context,
+                                                                              indexStaff) {
+                                                                        var staffInfor = state
+                                                                            .listStoreModel
+                                                                            ?.data[index]
+                                                                            .staffs;
+
+                                                                        return CircleAvatar(
+                                                                          radius:
+                                                                              15.0,
+                                                                          backgroundImage:
+                                                                              NetworkImage("${httpImage + (staffInfor?[indexStaff].staffAvatar ?? '')}"),
+                                                                          backgroundColor:
+                                                                              Colors.red,
+                                                                        );
+                                                                      }))
+                                                        ],
+                                                      ),
+                                                      space30H,
+                                                    ],
+                                                  ),
+                                                );
+                                              }),
+                                          OutlinedButton(
+                                            style: OutlinedButton.styleFrom(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15.r),
+                                              ),
+                                              backgroundColor: Colors.white,
+                                              side: BorderSide(
+                                                  color: Colors.grey,
+                                                  width: 1), //<-- SEE HERE
+                                            ),
+                                            onPressed: () {
+                                              // setState(() {
+                                              //   showModal = true;
+                                              // });
+                                              showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return CreateStoreDialog(
+                                                        eventSaveButton: () {});
+                                                  });
+                                            },
+                                            child: Container(
+                                              width: 1.sw,
+                                              height: 150.h,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.add,
+                                                    color: Colors.grey,
                                                   ),
                                                   space10H,
                                                   TextApp(
-                                                    text: widget
-                                                            .managerInforData
-                                                            ?.userPhone ??
-                                                        '',
-                                                    fontsize: 14.sp,
-                                                    color: grey,
-                                                    fontWeight:
-                                                        FontWeight.normal,
+                                                    text: "Tạo cửa hàng",
+                                                    fontWeight: FontWeight.bold,
+                                                    fontsize: 16.sp,
+                                                    color: Colors.grey,
                                                   )
                                                 ],
                                               ),
                                             ),
                                           ),
-                                        )
-                                      : Container()
-                                ],
-                              ),
+                                          space30H,
+                                        ],
+                                      ),
+                                    )),
+                                space30H,
 
-                              //List Stores
-                              space25H,
-                              Container(
-                                  width: 1.sw,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius:
-                                          BorderRadius.circular(15.r)),
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 10.w, left: 15.w, right: 15.w),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        contentStores(),
-                                        ListView.builder(
-                                            shrinkWrap: true,
-                                            physics:
-                                                const ClampingScrollPhysics(),
-                                            itemCount: state
-                                                .listStoreModel?.data.length,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              var imagePath1 = (state
-                                                      .listStoreModel
-                                                      ?.data[index]
-                                                      .storeImages ??
-                                                  '');
-                                              var listImagePath =
-                                                  jsonDecode(imagePath1);
-                                              var desStore = state
-                                                      .listStoreModel
-                                                      ?.data[index]
-                                                      .storeDescription ??
-                                                  '';
-                                              // var listStaffAvatar = state
-                                              //     .listStoreModel
-                                              //     ?.data[index]
-                                              //     .staffs
-                                              //     .where((avatar) {
-                                              //   var ddddavatarStaff =
-                                              //       avatar.staffAvatar;
-                                              //   return true;
-                                              // }).toList();
-                                              return Container(
-                                                margin: EdgeInsetsDirectional
-                                                    .symmetric(
-                                                        horizontal: 10.w),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15.r),
-                                                        child: Container(
-                                                          width: 1.sw,
-                                                          height: 150.h,
-                                                          child:
-                                                              CachedNetworkImage(
-                                                            fit: BoxFit.cover,
-                                                            imageUrl: httpImage +
-                                                                listImagePath[
-                                                                    0],
-                                                            placeholder:
-                                                                (context,
-                                                                        url) =>
-                                                                    SizedBox(
-                                                              height: 30.w,
-                                                              width: 30.w,
-                                                              child: const Center(
-                                                                  child:
-                                                                      CircularProgressIndicator()),
-                                                            ),
-                                                            errorWidget: (context,
-                                                                    url,
-                                                                    error) =>
-                                                                const Icon(Icons
-                                                                    .error),
-                                                          ),
-                                                        )),
-                                                    space15H,
-                                                    TextApp(
-                                                      text: state
-                                                              .listStoreModel
-                                                              ?.data[index]
-                                                              .storeName ??
-                                                          '',
-                                                      fontsize: 14.sp,
-                                                    ),
-                                                    space15H,
-                                                    TextApp(
-                                                      text: state
-                                                              .listStoreModel
-                                                              ?.data[index]
-                                                              .shopId ??
-                                                          '',
-                                                      color: blueText,
-                                                      fontsize: 16.sp,
-                                                    ),
-                                                    space15H,
-                                                    // TextApp(
-                                                    //   text: state
-                                                    //           .listStoreModel
-                                                    //           ?.data[index]
-                                                    //           .storeDescription ??
-                                                    //       '',
-                                                    //   fontsize: 14.sp,
-                                                    // ),
-                                                    HtmlWidget(
-                                                      '''
-                                                       $desStore
-                                                      ''',
-                                                    ),
-                                                    space30H,
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        ButtonApp(
-                                                          event: () {
-                                                            getDetailsStore(
-                                                                shopID: state
-                                                                    .listStoreModel
-                                                                    ?.data[
-                                                                        index]
-                                                                    .shopId);
-                                                            // context.go(
-                                                            //     '/manager_manage_stores');
-                                                          },
-                                                          text:
-                                                              "Quản lý cửa hàng",
-                                                          colorText:
-                                                              Color.fromRGBO(23,
-                                                                  193, 232, 1),
-                                                          backgroundColor:
-                                                              Colors.white,
-                                                          outlineColor:
-                                                              Color.fromRGBO(23,
-                                                                  193, 232, 1),
-                                                        ),
-                                                        space25W,
-                                                        Container(
-                                                            // width: 120.w,
-                                                            height: 50.h,
-                                                            // color: Colors.amber,
-                                                            child: ListView
-                                                                .builder(
-                                                                    scrollDirection:
-                                                                        Axis
-                                                                            .horizontal,
-                                                                    itemCount: state
-                                                                        .listStoreModel
-                                                                        ?.data[
-                                                                            index]
-                                                                        .staffs
-                                                                        .length,
-                                                                    shrinkWrap:
-                                                                        true,
-                                                                    itemBuilder:
-                                                                        (context,
-                                                                            indexStaff) {
-                                                                      var staffInfor = state
-                                                                          .listStoreModel
-                                                                          ?.data[
-                                                                              index]
-                                                                          .staffs;
-
-                                                                      return CircleAvatar(
-                                                                        radius:
-                                                                            15.0,
-                                                                        backgroundImage:
-                                                                            NetworkImage("${httpImage + (staffInfor?[indexStaff].staffAvatar ?? '')}"),
-                                                                        backgroundColor:
-                                                                            Colors.red,
-                                                                      );
-                                                                    }))
-                                                      ],
-                                                    ),
-                                                    space30H,
-                                                  ],
-                                                ),
-                                              );
-                                            }),
-                                        OutlinedButton(
-                                          style: OutlinedButton.styleFrom(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(15.r),
-                                            ),
-                                            backgroundColor: Colors.white,
-                                            side: BorderSide(
-                                                color: Colors.grey,
-                                                width: 1), //<-- SEE HERE
-                                          ),
-                                          onPressed: () {
-                                            // setState(() {
-                                            //   showModal = true;
-                                            // });
-                                            showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return CreateStoreDialog(
-                                                      imageFileList:
-                                                          imageFileList,
-                                                      eventSaveButton: () {});
-                                                });
-                                          },
-                                          child: Container(
-                                            width: 1.sw,
-                                            height: 150.h,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.add,
-                                                  color: Colors.grey,
-                                                ),
-                                                space10H,
-                                                TextApp(
-                                                  text: "Tạo cửa hàng",
-                                                  fontWeight: FontWeight.bold,
-                                                  fontsize: 16.sp,
-                                                  color: Colors.grey,
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        space30H,
-                                      ],
-                                    ),
-                                  )),
-                              space30H,
-
-                              const CopyRightText(),
-                              space35H
-                            ]),
+                                const CopyRightText(),
+                                space35H
+                              ]),
+                        ),
                       )
                     : state.listStoresStatus == ListStoresStatus.loading
                         ? Center(

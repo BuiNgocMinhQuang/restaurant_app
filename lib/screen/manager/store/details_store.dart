@@ -5,7 +5,9 @@ import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/env/index.dart';
+import 'package:app_restaurant/model/manager/store/edit_details_store_model.dart';
 import 'package:app_restaurant/screen/manager/store/manage_room.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/chart/chart_dialog.dart';
@@ -18,6 +20,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app_restaurant/model/manager/store/details_stores_model.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:app_restaurant/constant/api/index.dart';
 import 'package:money_formatter/money_formatter.dart';
 
 class DetailsStore extends StatefulWidget {
@@ -31,7 +36,55 @@ class DetailsStore extends StatefulWidget {
 
 class _DetailsStoreState extends State<DetailsStore> {
   // bool isShowCreateRoomModal = false;
+  List<XFile>? imageFileList = [];
+  EditDetailsStoreModel? editDetailsStoreModel;
   void createRoom() {}
+  void hanldeGetEditDetailsStore({required shopID}) async {
+    print({
+      'shopID': shopID,
+    });
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$detailEditStore'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'shop_id': shopID,
+          'is_api': true,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print(" DATA CREATE FOOD ${data}");
+      try {
+        if (data['status'] == 200) {
+          // var hahah = DetailsStoreModel.fromJson(data);
+          setState(() {
+            editDetailsStoreModel = EditDetailsStoreModel.fromJson(data);
+          });
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return EditDetailStoreDialog(
+                  imageFileList: imageFileList,
+                  eventSaveButton: () {},
+                  editDetailsStoreModel: editDetailsStoreModel,
+                );
+              });
+        } else {
+          print("ERROR CREATE FOOOD");
+        }
+      } catch (error) {
+        print("ERROR CREATE $error");
+      }
+    } catch (error) {
+      print("ERROR CREATE $error");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,11 +139,14 @@ class _DetailsStoreState extends State<DetailsStore> {
                                 color1: color1DarkButton,
                                 color2: color2DarkButton,
                                 event: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return OverviewChartDialog(shopID: "1");
-                                      });
+                                  // showDialog(
+                                  //     context: context,
+                                  //     builder: (BuildContext context) {
+                                  //       return OverviewChartDialog(
+                                  //           shopID: widget.detailsStoreModel
+                                  //                   ?.shopId ??
+                                  //               '');
+                                  //     });
                                 },
                                 text: "Biểu đồ tổng quan".toUpperCase(),
                                 fontSize: 12.sp,
@@ -269,8 +325,14 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                 20, 23, 39, 1),
                                             color2: const Color.fromRGBO(
                                                 58, 65, 111, 1),
-                                            event: () {},
-                                            icon: Icons.person_pin),
+                                            event: () {
+                                              // hanldeGetEditDetailsStore(
+                                              //     shopID: widget
+                                              //             .detailsStoreModel
+                                              //             ?.shopId ??
+                                              //         1);
+                                            },
+                                            icon: Icons.edit),
                                       )
                                     ],
                                   ),

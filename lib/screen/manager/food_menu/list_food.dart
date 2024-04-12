@@ -882,10 +882,8 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                                             1),
                                                                         event:
                                                                             () {
-                                                                          // context.go(
-                                                                          //     "/manager_edit_staff_info");
-                                                                          handleGetDetailsFood(
-                                                                              foodID: product.foodId ?? 0);
+                                                                          // handleGetDetailsFood(
+                                                                          //     foodID: product.foodId ?? 0);
                                                                         },
                                                                         icon: Icons
                                                                             .edit),

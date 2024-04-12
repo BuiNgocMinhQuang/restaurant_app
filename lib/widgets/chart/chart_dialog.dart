@@ -1,9 +1,20 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
+import 'package:app_restaurant/config/text.dart';
+import 'package:app_restaurant/model/manager/chart/chart_data_model.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
+import 'package:app_restaurant/widgets/chart/test_chart.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:http/http.dart' as http;
+import 'package:app_restaurant/env/index.dart';
+import 'package:app_restaurant/constant/api/index.dart';
 
 class OverviewChartDialog extends StatefulWidget {
   final String shopID;
@@ -19,11 +30,76 @@ class OverviewChartDialog extends StatefulWidget {
 class _OverviewChartDialogState extends State<OverviewChartDialog> {
   TextEditingController _dateStartController = TextEditingController();
   TextEditingController _dateEndController = TextEditingController();
+
+  ChartDataModel? chartDataModel;
+  bool isShowChart = false;
   @override
   void initState() {
     super.initState();
+    handleGetChartData();
   }
 
+  void handleGetChartData() async {
+    log({
+      'chart_with': 0,
+      'filters': {
+        'date_range': {"start_date": null, "end_date": null}
+      },
+      'shop_id': widget.shopID,
+      'date_type': "%m-%Y",
+      'is_api': true
+    }.toString());
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$getChartData'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'chart_with': 0,
+          'filters': {
+            'date_range': {"start_date": null, "end_date": null}
+          },
+          'shop_id': widget.shopID,
+          'date_type': "%m-%Y",
+          'is_api': true
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print(" DATA CHART ${data}");
+      try {
+        if (data['status'] == 200) {
+          setState(() {
+            chartDataModel = ChartDataModel.fromJson(data);
+            isShowChart = true;
+          });
+        } else {
+          print("ERROR DATA CHART");
+        }
+      } catch (error) {
+        print("ERROR DATA CHART $error");
+      }
+    } catch (error) {
+      print("ERROR DATA CHART $error");
+    }
+  }
+
+  List<String> bieudotheoList = [
+    "Tất cả hoá đơn",
+    "Hoá đơn tại quán",
+    "Hoá đơn mang về",
+    "Phòng",
+    "Bàn",
+  ];
+  List<String> loaiList = [
+    "Theo ngày",
+    "Theo tháng",
+    "Theo năm",
+  ];
   void selectDayStart() async {
     DateTime? picked = await showDatePicker(
         helpText: 'Chọn ngày bắt đầu',
@@ -159,63 +235,40 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                           SizedBox(
                             height: 10.h,
                           ),
-                          // DropdownSearch(
-                          //   items: listState,
-                          //   onChanged: (changeFlag) {
-                          //     // getListArea(
-                          //     //     city: listState.indexOf(changeCity),
-                          //     //     district: null);
-                          //     setState(() {
-                          //       selectedFlitterFlag = changeFlag;
-                          //       currentPage = 1;
-                          //     });
-                          //     var hehe = listState.indexOf(
-                          //                 changeFlag ?? '') ==
-                          //             0
-                          //         ? null
-                          //         : listState.indexOf(
-                          //                     changeFlag ?? '') ==
-                          //                 2
-                          //             ? 0
-                          //             : listState.indexOf(
-                          //                 changeFlag ?? '');
-                          //     log(hehe.toString());
-                          //     currentFoodList.clear();
+                          DropdownSearch(
+                            // validator: (value) {
+                            //   if (value == chooseStore) {
+                            //     return canNotNull;
+                            //   }
+                            //   return null;
+                            // },
+                            onChanged: (bieudotheoListIndex) {
+                              // currentFoodKind =
+                              //     categories.indexOf(foodKindIndex ?? '');
 
-                          //     loadMoreMenuFood(
-                          //       page: currentPage,
-                          //       keywords: query,
-                          //       // filtersFlg: hehe,
-                          //       activeFlg: hehe,
-                          //     );
-                          //   },
-                          //   dropdownDecoratorProps:
-                          //       DropDownDecoratorProps(
-                          //     dropdownSearchDecoration:
-                          //         InputDecoration(
-                          //       fillColor: const Color.fromARGB(
-                          //           255, 226, 104, 159),
-                          //       focusedBorder: OutlineInputBorder(
-                          //         borderSide: const BorderSide(
-                          //             color: Color.fromRGBO(
-                          //                 214, 51, 123, 0.6),
-                          //             width: 2.0),
-                          //         borderRadius:
-                          //             BorderRadius.circular(8.r),
-                          //       ),
-                          //       border: OutlineInputBorder(
-                          //         borderRadius:
-                          //             BorderRadius.circular(8.r),
-                          //       ),
-                          //       isDense: true,
-                          //       contentPadding:
-                          //           EdgeInsets.all(15.w),
-                          //       hintText: "Tất cả",
-                          //     ),
-                          //   ),
-                          //   // onChanged: print,
-                          //   selectedItem: selectedFlitterFlag,
-                          // ),
+                              // log(currentFoodKind.toString());
+                            },
+                            items: bieudotheoList,
+                            dropdownDecoratorProps: DropDownDecoratorProps(
+                              dropdownSearchDecoration: InputDecoration(
+                                fillColor:
+                                    const Color.fromARGB(255, 226, 104, 159),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Color.fromRGBO(214, 51, 123, 0.6),
+                                      width: 2.0),
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                                isDense: true,
+                                contentPadding: EdgeInsets.all(15.w),
+                              ),
+                            ),
+                            // onChanged: print,
+                            selectedItem: bieudotheoList[0],
+                          ),
                         ],
                       ),
                     ),
@@ -235,15 +288,22 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                           SizedBox(
                             height: 10.h,
                           ),
-                          TextFormField(
-                            onTapOutside: (event) {
-                              FocusManager.instance.primaryFocus?.unfocus();
+                          DropdownSearch(
+                            // validator: (value) {
+                            //   if (value == chooseStore) {
+                            //     return canNotNull;
+                            //   }
+                            //   return null;
+                            // },
+                            onChanged: (loaiListIndex) {
+                              // currentFoodKind =
+                              //     categories.indexOf(foodKindIndex ?? '');
+
+                              // log(currentFoodKind.toString());
                             },
-                            // onChanged: searchProduct,
-                            // controller: searchController,
-                            style: TextStyle(fontSize: 14.sp, color: grey),
-                            cursorColor: grey,
-                            decoration: InputDecoration(
+                            items: loaiList,
+                            dropdownDecoratorProps: DropDownDecoratorProps(
+                              dropdownSearchDecoration: InputDecoration(
                                 fillColor:
                                     const Color.fromARGB(255, 226, 104, 159),
                                 focusedBorder: OutlineInputBorder(
@@ -255,9 +315,12 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
-                                // hintText: 'Instagram',
                                 isDense: true,
-                                contentPadding: EdgeInsets.all(15.w)),
+                                contentPadding: EdgeInsets.all(15.w),
+                              ),
+                            ),
+                            // onChanged: print,
+                            selectedItem: loaiList[0],
                           ),
                         ],
                       ),
@@ -352,6 +415,17 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                     )
                   ],
                 ),
+                space30H,
+                isShowChart
+                    ? Container(
+                        width: 1.sw,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 0.w, right: 00.w),
+                          child:
+                              BarChartSample4(chartDataModel: chartDataModel!),
+                        ),
+                      )
+                    : Container(),
                 space20H,
                 Container(
                   width: 1.sw,

@@ -137,21 +137,21 @@ class _ManagerListBillState extends State<ManagerListBill>
                             child: Container(
                           width: 1.sw,
                           color: Colors.white,
-                          child:
-                              TabBarView(controller: _tabController, children: [
-                            //Tab All
-                            //Tab All
-                            ListAllBillShop(
-                              shopID: widget.shopID,
-                            ),
-                            //Tab Paid
-                            ListCompleteBillShop(shopID: widget.shopID),
+                          child: TabBarView(
+                              physics: const NeverScrollableScrollPhysics(),
+                              controller: _tabController,
+                              children: [
+                                ListAllBillShop(
+                                  shopID: widget.shopID,
+                                ),
+                                //Tab Paid
+                                ListCompleteBillShop(shopID: widget.shopID),
 
-                            //Tab Unpaid
-                            PendingWidget(shopID: widget.shopID),
-                            //Tab Cancle
-                            ListCancleBillShop(shopID: widget.shopID),
-                          ]),
+                                //Tab Unpaid
+                                PendingWidget(shopID: widget.shopID),
+                                //Tab Cancle
+                                ListCancleBillShop(shopID: widget.shopID),
+                              ]),
                         )),
                         SizedBox(
                           height: 15.h,
@@ -331,7 +331,7 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                   return Padding(
                     padding: EdgeInsets.only(left: 5.w, right: 5.w),
                     child: BillInforContainer(
-                        tableName: "TEN BAN", //check ghep ban cho nay
+                        tableName: tableNameBill, //check ghep ban cho nay
                         roomName:
                             newListAllBillShop[index]?.room?.storeRoomName ??
                                 '',
@@ -498,7 +498,7 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                   return Padding(
                     padding: EdgeInsets.only(left: 5.w, right: 5.w),
                     child: BillInforContainer(
-                        tableName: "TEN BAN", //check ghep ban cho nay
+                        tableName: tableNameBill, //check ghep ban cho nay
                         roomName:
                             listBillComplete[index]?.room?.storeRoomName ?? '',
                         dateTime: formatDateTime(
@@ -667,7 +667,7 @@ class _PendingWidgetState extends State<PendingWidget>
                   return Padding(
                     padding: EdgeInsets.only(left: 5.w, right: 5.w),
                     child: BillInforContainer(
-                        tableName: "TEN BAN", //check ghep ban cho nay
+                        tableName: tableNameBill, //check ghep ban cho nay
                         roomName:
                             listBillPending[index]?.room?.storeRoomName ?? '',
                         dateTime: formatDateTime(
@@ -834,7 +834,7 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                   return Padding(
                     padding: EdgeInsets.only(left: 5.w, right: 5.w),
                     child: BillInforContainer(
-                        tableName: "TEN BAN", //check ghep ban cho nay
+                        tableName: tableNameBill, //check ghep ban cho nay
                         roomName:
                             listBillCancle[index]?.room?.storeRoomName ?? '',
                         dateTime: formatDateTime(

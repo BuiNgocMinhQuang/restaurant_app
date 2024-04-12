@@ -57,7 +57,7 @@ class _EditFoodState extends State<EditFood> {
   List<String> listStoreName = [];
   List<String> listFoodKind = [];
   List<FoodImage> listImageFood22 = [];
-  List<String> listImageFood33 = [];
+  List<String> imageStringList = [];
   int? currentFoodKind;
   int? currentStoreID;
   String? currentStoreText;
@@ -104,6 +104,13 @@ class _EditFoodState extends State<EditFood> {
     mounted
         ? listImageFood22 = widget.detailsDataFood?.food.foodImages ?? []
         : null;
+
+    mounted ? currentStoreID = widget.detailsDataFood?.food.storeId : null;
+    mounted ? currentFoodKind = widget.detailsDataFood?.food.foodKind : null;
+    mounted
+        ? priceFoodNumber =
+            widget.detailsDataFood?.food.foodPrice.toString() ?? ''
+        : null;
   }
 
   void pickImage() async {
@@ -113,12 +120,26 @@ class _EditFoodState extends State<EditFood> {
     setState(() {
       var pathImage = File(returndImage.path);
       imageFileList!.add(pathImage);
-      listImageFood33.add(pathImage.toString());
+      // log(listImageFood22.toString());
+
+      listImageFood22.where((element) {
+        if (element.name != null) {
+          print("ZOOO ADDD");
+          listImageFood.add(element.normal!);
+        } else {
+          print("element NULL");
+
+          return false;
+        }
+        return true;
+      }).toList();
+
       if (pathImage != null) {
         Uint8List imagebytes = pathImage.readAsBytesSync(); //convert to bytes
         String base64string = base64Encode(imagebytes);
         listImageFood.add(base64string);
       }
+      // log(listImageFood.toString());
     });
     // openImage();
   }
@@ -398,7 +419,7 @@ class _EditFoodState extends State<EditFood> {
 
                                     currentStoreID = widget
                                         .listStores[getIndexStore].storeId;
-                                    log(currentStoreID.toString());
+                                    // log(currentStoreID.toString());
                                   },
                                   dropdownDecoratorProps:
                                       DropDownDecoratorProps(
@@ -446,8 +467,8 @@ class _EditFoodState extends State<EditFood> {
                                   onChanged: (foodKindIndex) {
                                     currentFoodKind = categories
                                         .indexOf(foodKindIndex.toString());
-                                    log("CURRENT FOOD");
-                                    log(currentFoodKind.toString());
+                                    // log("CURRENT FOOD");
+                                    // log(currentFoodKind.toString());
                                   },
                                   dropdownDecoratorProps:
                                       DropDownDecoratorProps(
@@ -749,18 +770,18 @@ class _EditFoodState extends State<EditFood> {
                                           physics:
                                               const NeverScrollableScrollPhysics(),
                                           shrinkWrap: true,
-                                          itemCount: listImageFood22.length,
+                                          itemCount: imageFileList!.isEmpty
+                                              ? listImageFood22.length
+                                              : (imageFileList!.length),
                                           gridDelegate:
                                               const SliverGridDelegateWithFixedCrossAxisCount(
                                                   crossAxisCount: 2),
                                           itemBuilder: (BuildContext context,
                                               int index) {
                                             var imgTTTT =
+                                                listImageFood22[index].name;
+                                            var ddddd =
                                                 listImageFood22[index].path;
-                                            // listImageFood33
-                                            //     .add(imgTTTT.toString());
-                                            log(listImageFood33.toString());
-
                                             return Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
@@ -774,23 +795,37 @@ class _EditFoodState extends State<EditFood> {
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               15.w),
-                                                      child: CachedNetworkImage(
-                                                        fit: BoxFit.fill,
-                                                        imageUrl: imgTTTT ?? '',
-                                                        placeholder:
-                                                            (context, url) =>
-                                                                SizedBox(
-                                                          height: 10.w,
-                                                          width: 10.w,
-                                                          child: const Center(
-                                                              child:
-                                                                  CircularProgressIndicator()),
-                                                        ),
-                                                        errorWidget: (context,
-                                                                url, error) =>
-                                                            const Icon(
-                                                                Icons.error),
-                                                      ),
+                                                      child: (imgTTTT!.length <
+                                                                  150 &&
+                                                              imageFileList!
+                                                                  .isEmpty)
+                                                          ? CachedNetworkImage(
+                                                              fit: BoxFit.fill,
+                                                              imageUrl:
+                                                                  ddddd ?? '',
+                                                              placeholder:
+                                                                  (context,
+                                                                          url) =>
+                                                                      SizedBox(
+                                                                height: 10.w,
+                                                                width: 10.w,
+                                                                child: const Center(
+                                                                    child:
+                                                                        CircularProgressIndicator()),
+                                                              ),
+                                                              errorWidget: (context,
+                                                                      url,
+                                                                      error) =>
+                                                                  const Icon(Icons
+                                                                      .error),
+                                                            )
+                                                          : Image.file(
+                                                              File(
+                                                                  imageFileList![
+                                                                          index]
+                                                                      .path),
+                                                              fit: BoxFit.cover,
+                                                            ),
                                                     )),
                                                 space10H,
                                                 InkWell(
@@ -890,8 +925,7 @@ class _EditFoodState extends State<EditFood> {
                     color2: red,
                     event: () {
                       if (_formField.currentState!.validate()) {
-                        if (imageFileList != null &&
-                            imageFileList!.isNotEmpty) {
+                        if (listImageFood.isNotEmpty) {
                           handleEditFood(
                               foodID: widget.detailsDataFood?.food.foodId
                                       .toString() ??

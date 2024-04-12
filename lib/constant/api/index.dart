@@ -28,7 +28,9 @@ const String createFood = 'user/foods/create';
 const String editFood = 'user/foods/edit';
 const String getDetailsFood = 'user/foods/detail';
 const String detailStore = 'user/stores/detail/data';
-
+const String detailEditStore = 'user/stores/detail';
+const String getChartData = 'user/stores/detail/chart-column-overview-by-store';
+const String createStoreApi = 'user/stores/create';
 //Shared API
 const String userInformationApi = 'information';
 const String areas = 'areas';

@@ -136,6 +136,7 @@ class _StaffListBillState extends State<StaffListBill>
                             width: 1.sw,
                             color: Colors.white,
                             child: TabBarView(
+                                physics: const NeverScrollableScrollPhysics(),
                                 controller: _tabController,
                                 children: const [
                                   //Tab All

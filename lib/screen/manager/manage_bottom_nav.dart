@@ -260,6 +260,9 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                                 : const ImportInventory();
 
     return Scaffold(
+      onDrawerChanged: (isOpened) {
+        getListStore();
+      },
       appBar: AppBar(
         backgroundColor: Colors.blue,
         centerTitle: true,
