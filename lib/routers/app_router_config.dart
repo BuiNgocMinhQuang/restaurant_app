@@ -194,7 +194,9 @@ class NyAppRouter {
         //     name: AppRouterContants.managerListFoodRouterName,
         //     path: '/manager_list_food',
         //     builder: (BuildContext context, GoRouterState state) {
-        //       return const ListFoodManager();
+        //       return const ListFoodManager(
+        //         listStores: [],
+        //       );
         //     });
         return '/manager_home';
       }

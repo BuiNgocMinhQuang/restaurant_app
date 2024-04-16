@@ -43,6 +43,7 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   quill_html_converter: ^9.3.6
   fl_chart: ^0.67.0
+  quill_html_editor: ^2.2.8
 
 dev_dependencies:
   flutter_test:

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/fake_data.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
@@ -132,7 +131,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
           'stores': listStore,
           'food_name': foodName,
           'food_kind': foodKind,
-          'food_description': desText,
+          'description': desText,
           'food_price': int.parse(priceFoodNumber),
           'active_flg': activeFlag,
           'is_api': true,
@@ -157,10 +156,12 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
             noteController.clear();
             imageFileList?.clear();
             listStoreId.clear();
+
             _popupCustomValidationKey.currentState?.clear();
             _popupCustomValidationKey2.currentState?.clear();
             light = false;
           });
+          // navigatorKey.currentContext?.go('/manager_list_food');
         } else {
           print("ERROR CREATE FOOOD");
           showCustomDialogModal(

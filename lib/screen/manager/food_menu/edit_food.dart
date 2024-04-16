@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/fake_data.dart';
@@ -15,6 +14,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
@@ -23,6 +23,7 @@ import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
 import 'package:intl/intl.dart';
 import 'package:app_restaurant/model/manager/food/details_food_model.dart';
+import 'package:quill_html_editor/quill_html_editor.dart';
 
 class EditFood extends StatefulWidget {
   final List<DataListStore> listStores;
@@ -41,7 +42,6 @@ class _EditFoodState extends State<EditFood> {
   bool light = false;
 
   final _formField = GlobalKey<FormState>();
-  // final _formField2 = GlobalKey<FormState>();
   final priceOfFood = TextEditingController();
   final foodNameController = TextEditingController();
   final desTextController = TextEditingController();
@@ -50,25 +50,19 @@ class _EditFoodState extends State<EditFood> {
       GlobalKey<DropdownSearchState<List<String>>>();
   final ImagePicker imagePicker = ImagePicker();
   String priceFoodNumber = '0';
-  // List<int> listStoreId = [];
   List<String> listImageFood = [];
   List<String> listStoreName = [];
   List<String> listFoodKind = [];
-  List<FoodImage> listImageFood22 = [];
-  List<String> imageStringList = [];
-  List<dynamic> caiListMoi = [];
+  List<FoodImage> listDataImage = [];
+  List<dynamic> listDynamicImage = [];
   int? currentFoodKind;
   int? currentStoreID;
   String? currentStoreText;
   String? currentFoodKindText;
-
   String priceFoodString = '';
   static const _locale = 'en';
   String _formatNumber(String s) =>
       NumberFormat.decimalPattern(_locale).format(int.parse(s));
-
-  // List<XFile>? imageFileList = [];
-  List<File>? imageFileList = [];
 
   @override
   void dispose() {
@@ -88,7 +82,6 @@ class _EditFoodState extends State<EditFood> {
         ? desTextController.text =
             widget.detailsDataFood?.food.foodDescription ?? ''
         : null;
-
     mounted
         ? widget.detailsDataFood?.food.activeFlg == 1
             ? light = true
@@ -101,7 +94,7 @@ class _EditFoodState extends State<EditFood> {
     var myFoodKind = foodKindMap?[widget.detailsDataFood?.food.foodKind];
     mounted ? currentFoodKindText = myFoodKind ?? '' : null;
     mounted
-        ? listImageFood22 = widget.detailsDataFood?.food.foodImages ?? []
+        ? listDataImage = widget.detailsDataFood?.food.foodImages ?? []
         : null;
 
     mounted ? currentStoreID = widget.detailsDataFood?.food.storeId : null;
@@ -114,11 +107,19 @@ class _EditFoodState extends State<EditFood> {
     mounted
         ? widget.detailsDataFood?.food.foodImages.where((element) {
               var heheh = element.path;
-              caiListMoi.add(heheh ?? '');
+              listDynamicImage.add(heheh ?? '');
               return true;
             }).toList() ??
             []
         : null;
+    listDataImage.where((element) {
+      if (element.name != null) {
+        listImageFood.add(element.normal!);
+      } else {
+        return false;
+      }
+      return true;
+    }).toList();
   }
 
   void pickImage() async {
@@ -128,36 +129,19 @@ class _EditFoodState extends State<EditFood> {
     setState(() {
       var pathImage = File(returndImage.path);
 
-      imageFileList!.add(pathImage);
-      caiListMoi.add(pathImage.toString());
-      log("CAI PATH FILE");
-      log(caiListMoi.toString());
-      // log(listImageFood22.toString());
-
-      listImageFood22.where((element) {
-        if (element.name != null) {
-          // print("ZOOO ADDD");
-          listImageFood.add(element.normal!);
-        } else {
-          // print("element NULL");
-
-          return false;
-        }
-        return true;
-      }).toList();
+      listDynamicImage.add(pathImage);
 
       if (pathImage != null) {
         Uint8List imagebytes = pathImage.readAsBytesSync(); //convert to bytes
         String base64string = base64Encode(imagebytes);
         listImageFood.add(base64string);
       }
-      // log(listImageFood.toString());
     });
-    // openImage();
   }
 
   void deleteImages(data) {
-    listImageFood22.remove(data);
+    listDynamicImage.remove(data);
+    listImageFood.remove(data);
     setState(() {});
   }
 
@@ -178,14 +162,14 @@ class _EditFoodState extends State<EditFood> {
     required int foodKind,
   }) async {
     print({
-      'store': currentStoreID,
-      'food_id': foodID,
-      'food_name': foodName,
-      'food_kind': foodKind,
-      'food_description': desText,
-      'food_price': int.parse(priceFoodNumber),
-      'active_flg': activeFlag,
-      'is_api': true,
+      // 'store': currentStoreID,
+      // 'food_id': foodID,
+      // 'food_name': foodName,
+      // 'food_kind': foodKind,
+      // 'description': desText,
+      // 'food_price': int.parse(priceFoodNumber),
+      // 'active_flg': activeFlag,
+      // 'is_api': true,
       'food_images': images,
     });
     try {
@@ -204,7 +188,7 @@ class _EditFoodState extends State<EditFood> {
           'images': images,
           'food_name': foodName,
           'food_kind': foodKind,
-          'food_description': desText,
+          'description': desText,
           'food_price': int.parse(priceFoodNumber),
           'active_flg': activeFlag,
           'is_api': true,
@@ -264,7 +248,7 @@ class _EditFoodState extends State<EditFood> {
     }).toList();
     // log("NEW LISSTTTTt");
 
-    // log(caiListMoi.toString());
+    // log(listDynamicImage.toString());
 
     return Scaffold(
       appBar: AppBar(
@@ -766,9 +750,17 @@ class _EditFoodState extends State<EditFood> {
                               ),
                               onPressed: () {
                                 // selectImages();
-                                pickImage();
+                                listDynamicImage.length >= 3
+                                    ? showCustomDialogModal(
+                                        context: navigatorKey.currentContext,
+                                        textDesc: "Số ảnh tối đa là 3",
+                                        title: "Thất bại",
+                                        colorButton: Colors.red,
+                                        btnText: "OK",
+                                        typeDialog: "error")
+                                    : pickImage();
                               },
-                              child: listImageFood22.isEmpty
+                              child: listDataImage.isEmpty
                                   ? SizedBox(
                                       width: double.infinity,
                                       height: 200.h,
@@ -786,27 +778,17 @@ class _EditFoodState extends State<EditFood> {
                                           physics:
                                               const NeverScrollableScrollPhysics(),
                                           shrinkWrap: true,
-                                          // itemCount: listImageFood22.length,
-                                          itemCount: caiListMoi.length,
+                                          itemCount: listDynamicImage.length,
                                           gridDelegate:
                                               const SliverGridDelegateWithFixedCrossAxisCount(
                                                   crossAxisCount: 2),
                                           itemBuilder: (BuildContext context,
                                               int index) {
-                                            // var imgTTTT =
-                                            //     listImageFood22[index].name;
-                                            // var ddddd =
-                                            //     listImageFood22[index].path;
-                                            if (caiListMoi[index].length >
+                                            if (listDynamicImage[index]
+                                                    .toString()
+                                                    .length >
                                                 150) {
-                                              log("FILE2");
-
-                                              log(caiListMoi[index]);
-                                              print(caiListMoi[index]
-                                                  .runtimeType);
-
-                                              return Container();
-                                              Column(
+                                              return Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
                                                 crossAxisAlignment:
@@ -820,8 +802,8 @@ class _EditFoodState extends State<EditFood> {
                                                             BorderRadius
                                                                 .circular(15.w),
                                                         child: Image.file(
-                                                          caiListMoi[index]
-                                                              .path,
+                                                          listDynamicImage[
+                                                              index],
                                                           fit: BoxFit.cover,
                                                         )),
                                                   ),
@@ -829,8 +811,10 @@ class _EditFoodState extends State<EditFood> {
                                                   InkWell(
                                                     onTap: () {
                                                       deleteImages(
-                                                          listImageFood22[
+                                                          listDynamicImage[
                                                               index]);
+                                                      deleteImages(
+                                                          listImageFood[index]);
                                                     },
                                                     child: TextApp(
                                                       text: deleteImage,
@@ -840,9 +824,6 @@ class _EditFoodState extends State<EditFood> {
                                                 ],
                                               );
                                             } else {
-                                              log("PATH");
-
-                                              log(caiListMoi[index]);
                                               return Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
@@ -859,9 +840,8 @@ class _EditFoodState extends State<EditFood> {
                                                       child: CachedNetworkImage(
                                                         fit: BoxFit.fill,
                                                         imageUrl:
-                                                            listImageFood22[
-                                                                        index]
-                                                                    .path ??
+                                                            listDynamicImage[
+                                                                    index] ??
                                                                 '',
                                                         placeholder:
                                                             (context, url) =>
@@ -883,8 +863,10 @@ class _EditFoodState extends State<EditFood> {
                                                   InkWell(
                                                     onTap: () {
                                                       deleteImages(
-                                                          listImageFood22[
+                                                          listDynamicImage[
                                                               index]);
+                                                      deleteImages(
+                                                          listImageFood[index]);
                                                     },
                                                     child: TextApp(
                                                       text: deleteImage,
@@ -894,117 +876,8 @@ class _EditFoodState extends State<EditFood> {
                                                 ],
                                               );
                                             }
-
-                                            // var bienso1 = caiListMoi[index];
-
-                                            // return Column(
-                                            //   mainAxisAlignment:
-                                            //       MainAxisAlignment.center,
-                                            //   crossAxisAlignment:
-                                            //       CrossAxisAlignment.center,
-                                            //   children: [
-                                            //     SizedBox(
-                                            //       width: 100.w,
-                                            //       height: 100.w,
-                                            //       child: ClipRRect(
-                                            //         borderRadius:
-                                            //             BorderRadius.circular(
-                                            //                 15.w),
-                                            //         child: CachedNetworkImage(
-                                            //           fit: BoxFit.fill,
-                                            //           imageUrl: ddddd ?? '',
-                                            //           placeholder:
-                                            //               (context, url) =>
-                                            //                   SizedBox(
-                                            //             height: 10.w,
-                                            //             width: 10.w,
-                                            //             child: const Center(
-                                            //                 child:
-                                            //                     CircularProgressIndicator()),
-                                            //           ),
-                                            //           errorWidget: (context,
-                                            //                   url, error) =>
-                                            //               const Icon(
-                                            //                   Icons.error),
-                                            //         ),
-                                            //       ),
-                                            //     ),
-                                            //     space10H,
-                                            //     InkWell(
-                                            //       onTap: () {
-                                            //         deleteImages(
-                                            //             listImageFood22[index]);
-                                            //       },
-                                            //       child: TextApp(
-                                            //         text: deleteImage,
-                                            //         color: Colors.blue,
-                                            //       ),
-                                            //     )
-                                            //   ],
-                                            // );
                                           }),
                                     ),
-                              // imageFileList!.isEmpty
-                              //     ? SizedBox(
-                              //         width: double.infinity,
-                              //         height: 200.h,
-                              //         // color: Colors.red,
-                              //         child: Center(
-                              //           child: TextApp(
-                              //             text: addPictureHere,
-                              //             textAlign: TextAlign.center,
-                              //           ),
-                              //         ),
-                              //       )
-                              //     : SizedBox(
-                              //         width: double.infinity,
-                              //         child: GridView.builder(
-                              //             physics:
-                              //                 const NeverScrollableScrollPhysics(),
-                              //             shrinkWrap: true,
-                              //             itemCount: imageFileList!.length,
-                              //             gridDelegate:
-                              //                 const SliverGridDelegateWithFixedCrossAxisCount(
-                              //                     crossAxisCount: 2),
-                              //             itemBuilder: (BuildContext context,
-                              //                 int index) {
-
-                              //               return Column(
-                              //                 mainAxisAlignment:
-                              //                     MainAxisAlignment.center,
-                              //                 crossAxisAlignment:
-                              //                     CrossAxisAlignment.center,
-                              //                 children: [
-                              //                   SizedBox(
-                              //                       width: 100.w,
-                              //                       height: 100.w,
-                              //                       child: ClipRRect(
-                              //                         borderRadius:
-                              //                             BorderRadius
-                              //                                 .circular(15.w),
-                              //                         child: Image.file(
-                              //                           File(imageFileList![
-                              //                                   index]
-                              //                               .path),
-                              //                           fit: BoxFit.cover,
-                              //                         ),
-                              //                       )),
-                              //                   space10H,
-                              //                   InkWell(
-                              //                     onTap: () {
-                              //                       deleteImages(
-                              //                           imageFileList![
-                              //                               index]);
-                              //                     },
-                              //                     child: TextApp(
-                              //                       text: deleteImage,
-                              //                       color: Colors.blue,
-                              //                     ),
-                              //                   )
-                              //                 ],
-                              //               );
-                              //             }),
-                              //       ),
                             ),
                             space20H,
                           ],

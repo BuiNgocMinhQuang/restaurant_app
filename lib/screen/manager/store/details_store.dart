@@ -139,14 +139,14 @@ class _DetailsStoreState extends State<DetailsStore> {
                                 color1: color1DarkButton,
                                 color2: color2DarkButton,
                                 event: () {
-                                  // showDialog(
-                                  //     context: context,
-                                  //     builder: (BuildContext context) {
-                                  //       return OverviewChartDialog(
-                                  //           shopID: widget.detailsStoreModel
-                                  //                   ?.shopId ??
-                                  //               '');
-                                  //     });
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return OverviewChartDialog(
+                                            shopID: widget.detailsStoreModel
+                                                    ?.shopId ??
+                                                '');
+                                      });
                                 },
                                 text: "Biểu đồ tổng quan".toUpperCase(),
                                 fontSize: 12.sp,

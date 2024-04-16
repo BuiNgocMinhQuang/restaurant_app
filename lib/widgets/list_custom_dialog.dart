@@ -1320,7 +1320,28 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                         blueText2,
                                                                   ),
                                                                 ),
-                                                                space10H,
+                                                                // space10H,
+                                                                // SizedBox(
+                                                                //   width: 80.w,
+                                                                //   child:
+                                                                //       TextApp(
+                                                                //     softWrap:
+                                                                //         true,
+                                                                //     isOverFlow:
+                                                                //         false,
+                                                                //     text:
+                                                                //         filterProducts[
+                                                                //             index]
+                                                                //         .foodDescription,
+                                                                //     fontsize:
+                                                                //         14.sp,
+                                                                //     fontWeight:
+                                                                //         FontWeight
+                                                                //             .bold,
+                                                                //     color:
+                                                                //         blueText2,
+                                                                //   ),
+                                                                // ),
                                                               ],
                                                             ),
                                                           ],

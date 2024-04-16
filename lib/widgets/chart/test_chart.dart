@@ -29,7 +29,7 @@ class BarChartSample4State extends State<BarChartSample4> {
     return Container(
       color: Colors.amber,
       width: 50,
-      height: 50,
+      height: 100,
       child: ListView.builder(
           itemCount: widget.chartDataModel.categories.length,
           itemBuilder: (context, index) {
@@ -177,7 +177,7 @@ class BarChartSample4State extends State<BarChartSample4> {
       //list cac thang cuar bieu do
 
       BarChartGroupData(
-        x: 1, //cho nay dien categori
+        x: 0, //cho nay dien categori
         barsSpace: barsSpace,
         barRods: [
           //list series
@@ -204,32 +204,69 @@ class BarChartSample4State extends State<BarChartSample4> {
           ),
         ],
       ),
-      // BarChartGroupData(
-      //   x: 2,
-      //   barsSpace: barsSpace,
-      //   barRods: [
-      //     BarChartRodData(
-      //       toY: 2,
-      //       // rodStackItems: [
-      //       //   BarChartRodStackItem(0, 2000000000, widget.dark),
-      //       //   BarChartRodStackItem(2000000000, 12000000000, widget.normal),
-      //       //   BarChartRodStackItem(12000000000, 17000000000, widget.light),
-      //       // ],
-      //       borderRadius: BorderRadius.zero,
-      //       width: barsWidth,
-      //     ),
-      //     BarChartRodData(
-      //       toY: 19,
-      //       // rodStackItems: [
-      //       //   BarChartRodStackItem(0, 2000000000, widget.dark),
-      //       //   BarChartRodStackItem(2000000000, 12000000000, widget.normal),
-      //       //   BarChartRodStackItem(12000000000, 17000000000, widget.light),
-      //       // ],
-      //       borderRadius: BorderRadius.zero,
-      //       width: barsWidth,
-      //     ),
-      //   ],
-      // ),
+      BarChartGroupData(
+        x: 1, //cho nay dien categori
+        barsSpace: barsSpace,
+        barRods: [
+          //list series
+          BarChartRodData(
+            toY: widget.chartDataModel.series[0].data[1].toDouble(),
+            // rodStackItems: [
+            //   BarChartRodStackItem(0, 2000000000, widget.dark),
+            //   BarChartRodStackItem(2000000000, 12000000000, widget.normal),
+            //   BarChartRodStackItem(12000000000, 17000000000, widget.light),
+            // ],
+            borderRadius: BorderRadius.zero,
+            width: barsWidth,
+          ),
+          BarChartRodData(
+            toY: widget.chartDataModel.series[1].data[1].toDouble(),
+            color: Colors.green,
+            // rodStackItems: [
+            //   BarChartRodStackItem(0, 2000000000, widget.dark),
+            //   BarChartRodStackItem(2000000000, 12000000000, widget.normal),
+            //   BarChartRodStackItem(12000000000, 17000000000, widget.light),
+            // ],
+            borderRadius: BorderRadius.zero,
+            width: barsWidth,
+          ),
+        ],
+      ),
     ];
   }
+  // List<BarChartGroupData> getData(double barsWidth, double barsSpace) {
+  //   return [
+  //     //list cac thang cuar bieu do
+
+  //     BarChartGroupData(
+  //       x: 1, //cho nay dien categori
+  //       barsSpace: barsSpace,
+  //       barRods: [
+  //         //list series
+  //         BarChartRodData(
+  //           toY: widget.chartDataModel.series[0].data[0].toDouble(),
+  //           // rodStackItems: [
+  //           //   BarChartRodStackItem(0, 2000000000, widget.dark),
+  //           //   BarChartRodStackItem(2000000000, 12000000000, widget.normal),
+  //           //   BarChartRodStackItem(12000000000, 17000000000, widget.light),
+  //           // ],
+  //           borderRadius: BorderRadius.zero,
+  //           width: barsWidth,
+  //         ),
+  //         BarChartRodData(
+  //           toY: widget.chartDataModel.series[1].data[0].toDouble(),
+  //           color: Colors.green,
+  //           // rodStackItems: [
+  //           //   BarChartRodStackItem(0, 2000000000, widget.dark),
+  //           //   BarChartRodStackItem(2000000000, 12000000000, widget.normal),
+  //           //   BarChartRodStackItem(12000000000, 17000000000, widget.light),
+  //           // ],
+  //           borderRadius: BorderRadius.zero,
+  //           width: barsWidth,
+  //         ),
+  //       ],
+  //     ),
+
+  //   ];
+  // }
 }
