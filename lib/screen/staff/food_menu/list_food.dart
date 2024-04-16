@@ -183,7 +183,7 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                                       right: 15.w,
                                       top: 8.w,
                                       bottom: 8.w),
-                                  disabledColor: Colors.grey,
+                                  disabledColor: Colors.blue,
                                   selectedColor: Colors.blue,
                                   backgroundColor: Colors.white,
                                   shadowColor: Colors.black,
@@ -191,7 +191,10 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.w),
                                     side: BorderSide(
-                                      color: Colors.grey.withOpacity(0.5),
+                                      color:
+                                          selectedCategories.contains(lableFood)
+                                              ? Colors.grey.withOpacity(0.5)
+                                              : Colors.blue,
                                       width: 1.0,
                                     ),
                                   ),
@@ -199,15 +202,16 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                                       color:
                                           selectedCategories.contains(lableFood)
                                               ? Colors.white
-                                              : Colors.black),
+                                              : Colors.blue),
                                   showCheckmark: false,
-                                  label: TextApp(
-                                    text: lableFood.toUpperCase(),
-                                    fontsize: 14.sp,
-                                    color: blueText,
-                                    fontWeight: FontWeight.bold,
-                                    textAlign: TextAlign.center,
-                                  ),
+                                  label: Text(lableFood.toUpperCase()),
+                                  // TextApp(
+                                  //   text: lableFood.toUpperCase(),
+                                  //   fontsize: 14.sp,
+                                  //   color: blueText,
+                                  //   fontWeight: FontWeight.bold,
+                                  //   textAlign: TextAlign.center,
+                                  // ),
                                   selected:
                                       selectedCategories.contains(lableFood),
                                   onSelected: (bool selected) {
@@ -298,69 +302,88 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                           var imagePath1 = filterProducts[index]?.foodImages;
                           var listImagePath = jsonDecode(imagePath1);
                           // var imagePath2 = imagePath1.replaceAll('"]', '');
-                          return Card(
-                            elevation: 8.0,
-                            margin: EdgeInsets.all(10.w),
-                            child: Container(
-                                width: 1.sw,
-                                height: 100.h,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(20.w)),
-                                child: Row(
-                                  children: [
-                                    space20W,
-                                    SizedBox(
-                                        width: 100.w,
-                                        height: 60.w,
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(10.r),
-                                              topRight: Radius.circular(10.r)),
-                                          child: CachedNetworkImage(
-                                            fit: BoxFit.fill,
-                                            imageUrl:
-                                                httpImage + listImagePath[0],
-                                            placeholder: (context, url) =>
-                                                SizedBox(
-                                              height: 10.w,
-                                              width: 10.w,
-                                              child: const Center(
-                                                  child:
-                                                      CircularProgressIndicator()),
-                                            ),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    const Icon(Icons.error),
-                                          ),
+                          return Container(
+                              width: 1.sw,
 
-                                          // Image.network(
-                                          //   httpImage + imagePath2,
-                                          //   fit: BoxFit.contain,
-                                          // ),
-                                        )),
-                                    space50W,
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        TextApp(
+                              // height: 100.h,
+                              padding: EdgeInsets.all(10.w),
+                              margin: EdgeInsets.only(
+                                  bottom: 15.h, left: 5.w, right: 5.w),
+                              decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 2,
+                                      blurRadius: 4,
+                                      offset: const Offset(
+                                          0, 3), // changes position of shadow
+                                    ),
+                                  ],
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15.r)),
+                              child: Row(
+                                children: [
+                                  space20W,
+                                  SizedBox(
+                                      width: 80.w,
+                                      height: 80.w,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(40.w),
+                                        child: CachedNetworkImage(
+                                          fit: BoxFit.fill,
+                                          imageUrl:
+                                              httpImage + listImagePath[0],
+                                          placeholder: (context, url) =>
+                                              SizedBox(
+                                            height: 10.w,
+                                            width: 10.w,
+                                            child: const Center(
+                                                child:
+                                                    CircularProgressIndicator()),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
+                                        ),
+
+                                        // Image.network(
+                                        //   httpImage + imagePath2,
+                                        //   fit: BoxFit.contain,
+                                        // ),
+                                      )),
+                                  space50W,
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        width: 200.w,
+                                        child: TextApp(
+                                            color: blueText2,
+                                            fontsize: 16.sp,
+                                            fontWeight: FontWeight.bold,
+                                            softWrap: true,
+                                            isOverFlow: false,
                                             text: filterProducts[index]
                                                     .foodName ??
                                                 ''),
-                                        TextApp(
+                                      ),
+                                      SizedBox(
+                                        width: 200.w,
+                                        child: TextApp(
+                                          softWrap: true,
+                                          isOverFlow: false,
                                           text:
                                               "${MoneyFormatter(amount: (filterProducts[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                          fontsize: 20.sp,
+                                          fontsize: 18.sp,
                                           fontWeight: FontWeight.bold,
                                         ),
-                                      ],
-                                    )
-                                  ],
-                                )),
-                          );
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ));
                         } else {
                           return Center(
                             child: hasMore

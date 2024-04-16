@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/fake_data.dart';
 import 'package:app_restaurant/config/space.dart';
@@ -19,7 +18,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
-import 'package:app_restaurant/model/manager/manager_list_food_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
@@ -58,6 +56,7 @@ class _EditFoodState extends State<EditFood> {
   List<String> listFoodKind = [];
   List<FoodImage> listImageFood22 = [];
   List<String> imageStringList = [];
+  List<dynamic> caiListMoi = [];
   int? currentFoodKind;
   int? currentStoreID;
   String? currentStoreText;
@@ -111,6 +110,15 @@ class _EditFoodState extends State<EditFood> {
         ? priceFoodNumber =
             widget.detailsDataFood?.food.foodPrice.toString() ?? ''
         : null;
+
+    mounted
+        ? widget.detailsDataFood?.food.foodImages.where((element) {
+              var heheh = element.path;
+              caiListMoi.add(heheh ?? '');
+              return true;
+            }).toList() ??
+            []
+        : null;
   }
 
   void pickImage() async {
@@ -119,15 +127,19 @@ class _EditFoodState extends State<EditFood> {
     if (returndImage == null) return;
     setState(() {
       var pathImage = File(returndImage.path);
+
       imageFileList!.add(pathImage);
+      caiListMoi.add(pathImage.toString());
+      log("CAI PATH FILE");
+      log(caiListMoi.toString());
       // log(listImageFood22.toString());
 
       listImageFood22.where((element) {
         if (element.name != null) {
-          print("ZOOO ADDD");
+          // print("ZOOO ADDD");
           listImageFood.add(element.normal!);
         } else {
-          print("element NULL");
+          // print("element NULL");
 
           return false;
         }
@@ -250,6 +262,10 @@ class _EditFoodState extends State<EditFood> {
       });
       return true;
     }).toList();
+    // log("NEW LISSTTTTt");
+
+    // log(caiListMoi.toString());
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Chỉnh sửa món ăn"),
@@ -770,76 +786,162 @@ class _EditFoodState extends State<EditFood> {
                                           physics:
                                               const NeverScrollableScrollPhysics(),
                                           shrinkWrap: true,
-                                          itemCount: imageFileList!.isEmpty
-                                              ? listImageFood22.length
-                                              : (imageFileList!.length),
+                                          // itemCount: listImageFood22.length,
+                                          itemCount: caiListMoi.length,
                                           gridDelegate:
                                               const SliverGridDelegateWithFixedCrossAxisCount(
                                                   crossAxisCount: 2),
                                           itemBuilder: (BuildContext context,
                                               int index) {
-                                            var imgTTTT =
-                                                listImageFood22[index].name;
-                                            var ddddd =
-                                                listImageFood22[index].path;
-                                            return Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                SizedBox(
+                                            // var imgTTTT =
+                                            //     listImageFood22[index].name;
+                                            // var ddddd =
+                                            //     listImageFood22[index].path;
+                                            if (caiListMoi[index].length >
+                                                150) {
+                                              log("FILE2");
+
+                                              log(caiListMoi[index]);
+                                              print(caiListMoi[index]
+                                                  .runtimeType);
+
+                                              return Container();
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  SizedBox(
+                                                    width: 100.w,
+                                                    height: 100.w,
+                                                    child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15.w),
+                                                        child: Image.file(
+                                                          caiListMoi[index]
+                                                              .path,
+                                                          fit: BoxFit.cover,
+                                                        )),
+                                                  ),
+                                                  space10H,
+                                                  InkWell(
+                                                    onTap: () {
+                                                      deleteImages(
+                                                          listImageFood22[
+                                                              index]);
+                                                    },
+                                                    child: TextApp(
+                                                      text: deleteImage,
+                                                      color: Colors.blue,
+                                                    ),
+                                                  )
+                                                ],
+                                              );
+                                            } else {
+                                              log("PATH");
+
+                                              log(caiListMoi[index]);
+                                              return Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  SizedBox(
                                                     width: 100.w,
                                                     height: 100.w,
                                                     child: ClipRRect(
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               15.w),
-                                                      child: (imgTTTT!.length <
-                                                                  150 &&
-                                                              imageFileList!
-                                                                  .isEmpty)
-                                                          ? CachedNetworkImage(
-                                                              fit: BoxFit.fill,
-                                                              imageUrl:
-                                                                  ddddd ?? '',
-                                                              placeholder:
-                                                                  (context,
-                                                                          url) =>
-                                                                      SizedBox(
-                                                                height: 10.w,
-                                                                width: 10.w,
-                                                                child: const Center(
-                                                                    child:
-                                                                        CircularProgressIndicator()),
-                                                              ),
-                                                              errorWidget: (context,
-                                                                      url,
-                                                                      error) =>
-                                                                  const Icon(Icons
-                                                                      .error),
-                                                            )
-                                                          : Image.file(
-                                                              File(
-                                                                  imageFileList![
-                                                                          index]
-                                                                      .path),
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                    )),
-                                                space10H,
-                                                InkWell(
-                                                  onTap: () {
-                                                    deleteImages(
-                                                        listImageFood22[index]);
-                                                  },
-                                                  child: TextApp(
-                                                    text: deleteImage,
-                                                    color: Colors.blue,
+                                                      child: CachedNetworkImage(
+                                                        fit: BoxFit.fill,
+                                                        imageUrl:
+                                                            listImageFood22[
+                                                                        index]
+                                                                    .path ??
+                                                                '',
+                                                        placeholder:
+                                                            (context, url) =>
+                                                                SizedBox(
+                                                          height: 10.w,
+                                                          width: 10.w,
+                                                          child: const Center(
+                                                              child:
+                                                                  CircularProgressIndicator()),
+                                                        ),
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            const Icon(
+                                                                Icons.error),
+                                                      ),
+                                                    ),
                                                   ),
-                                                )
-                                              ],
-                                            );
+                                                  space10H,
+                                                  InkWell(
+                                                    onTap: () {
+                                                      deleteImages(
+                                                          listImageFood22[
+                                                              index]);
+                                                    },
+                                                    child: TextApp(
+                                                      text: deleteImage,
+                                                      color: Colors.blue,
+                                                    ),
+                                                  )
+                                                ],
+                                              );
+                                            }
+
+                                            // var bienso1 = caiListMoi[index];
+
+                                            // return Column(
+                                            //   mainAxisAlignment:
+                                            //       MainAxisAlignment.center,
+                                            //   crossAxisAlignment:
+                                            //       CrossAxisAlignment.center,
+                                            //   children: [
+                                            //     SizedBox(
+                                            //       width: 100.w,
+                                            //       height: 100.w,
+                                            //       child: ClipRRect(
+                                            //         borderRadius:
+                                            //             BorderRadius.circular(
+                                            //                 15.w),
+                                            //         child: CachedNetworkImage(
+                                            //           fit: BoxFit.fill,
+                                            //           imageUrl: ddddd ?? '',
+                                            //           placeholder:
+                                            //               (context, url) =>
+                                            //                   SizedBox(
+                                            //             height: 10.w,
+                                            //             width: 10.w,
+                                            //             child: const Center(
+                                            //                 child:
+                                            //                     CircularProgressIndicator()),
+                                            //           ),
+                                            //           errorWidget: (context,
+                                            //                   url, error) =>
+                                            //               const Icon(
+                                            //                   Icons.error),
+                                            //         ),
+                                            //       ),
+                                            //     ),
+                                            //     space10H,
+                                            //     InkWell(
+                                            //       onTap: () {
+                                            //         deleteImages(
+                                            //             listImageFood22[index]);
+                                            //       },
+                                            //       child: TextApp(
+                                            //         text: deleteImage,
+                                            //         color: Colors.blue,
+                                            //       ),
+                                            //     )
+                                            //   ],
+                                            // );
                                           }),
                                     ),
                               // imageFileList!.isEmpty

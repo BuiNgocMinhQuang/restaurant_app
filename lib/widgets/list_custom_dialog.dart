@@ -981,7 +981,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                               top: 8.w,
                                                               bottom: 8.w),
                                                       disabledColor:
-                                                          Colors.grey,
+                                                          Colors.blue,
                                                       selectedColor:
                                                           Colors.blue,
                                                       backgroundColor:
@@ -995,8 +995,13 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                             BorderRadius
                                                                 .circular(10.w),
                                                         side: BorderSide(
-                                                          color: Colors.grey
-                                                              .withOpacity(0.5),
+                                                          color: selectedCategories
+                                                                  .contains(
+                                                                      lableFood)
+                                                              ? Colors.grey
+                                                                  .withOpacity(
+                                                                      0.5)
+                                                              : Colors.blue,
                                                           width: 1.0,
                                                         ),
                                                       ),
@@ -1005,18 +1010,10 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                   .contains(
                                                                       lableFood)
                                                               ? Colors.white
-                                                              : Colors.black),
+                                                              : Colors.blue),
                                                       showCheckmark: false,
-                                                      label: TextApp(
-                                                        text: lableFood
-                                                            .toUpperCase(),
-                                                        fontsize: 14.sp,
-                                                        color: blueText,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
+                                                      label: Text(lableFood
+                                                          .toUpperCase()),
                                                       selected:
                                                           selectedCategories
                                                               .contains(
@@ -1136,20 +1133,26 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                               width: 80.w,
                                               height: 45.w,
                                               decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.r),
-                                                  gradient:
-                                                      const LinearGradient(
-                                                    begin: Alignment.topRight,
-                                                    end: Alignment.bottomLeft,
-                                                    colors: [
-                                                      Color.fromRGBO(
-                                                          33, 82, 255, 1),
-                                                      Color.fromRGBO(
-                                                          33, 212, 253, 1)
-                                                    ],
-                                                  )),
+                                                borderRadius:
+                                                    BorderRadius.circular(10.r),
+                                                border: Border.all(
+                                                  color: Colors
+                                                      .blue, //                   <--- border color
+                                                  width: 2.0,
+                                                ),
+                                                // color: Colors.blue,
+                                                // gradient:
+                                                //     const LinearGradient(
+                                                //   begin: Alignment.topRight,
+                                                //   end: Alignment.bottomLeft,
+                                                //   colors: [
+                                                //     Color.fromRGBO(
+                                                //         33, 82, 255, 1),
+                                                //     Color.fromRGBO(
+                                                //         33, 212, 253, 1)
+                                                //   ],
+                                                // ),
+                                              ),
                                               child: Row(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.center,
@@ -1165,7 +1168,8 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                   ),
                                                   space5W,
                                                   const Icon(
-                                                    Icons.shopping_cart,
+                                                    Icons
+                                                        .shopping_basket_rounded,
                                                     color: Colors.white,
                                                   )
                                                 ],
@@ -1200,260 +1204,367 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                 // var imagePath2 = imagePath1
                                                 //     .replaceAll('"]', '');
 
-                                                return Card(
-                                                  elevation: 8.0,
-                                                  margin:
-                                                      const EdgeInsets.all(8),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15.r),
-                                                  ),
-                                                  child: Container(
-                                                      width: 1.sw,
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      15.r)),
-                                                      child: Column(
-                                                        children: [
-                                                          space15H,
-                                                          SizedBox(
-                                                              width: 1.sw,
-                                                              height: 160.w,
-                                                              child: ClipRRect(
-                                                                borderRadius: BorderRadius.only(
-                                                                    topLeft: Radius
-                                                                        .circular(15
-                                                                            .r),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            15.r)),
-                                                                child: Image
-                                                                    .network(
-                                                                  httpImage +
-                                                                      listImagePath[
-                                                                          0],
-                                                                  fit: BoxFit
-                                                                      .cover,
+                                                return Container(
+                                                  width: 1.sw,
+                                                  margin: EdgeInsets.only(
+                                                      bottom: 15.h,
+                                                      left: 5.w,
+                                                      right: 5.w),
+                                                  padding: EdgeInsets.all(10.w),
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                          color: Colors.grey
+                                                              .withOpacity(0.5),
+                                                          spreadRadius: 2,
+                                                          blurRadius: 4,
+                                                          offset: const Offset(
+                                                              0,
+                                                              3), // changes position of shadow
+                                                        ),
+                                                      ],
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15.r)),
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+                                                          width: 80.w,
+                                                          height: 80.w,
+                                                          // color: Colors.amber,
+                                                          child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        40.w),
+                                                            child:
+                                                                CachedNetworkImage(
+                                                              fit: BoxFit.fill,
+                                                              imageUrl: httpImage +
+                                                                  listImagePath[
+                                                                      0],
+                                                              placeholder:
+                                                                  (context,
+                                                                          url) =>
+                                                                      SizedBox(
+                                                                height: 10.w,
+                                                                width: 10.w,
+                                                                child: const Center(
+                                                                    child:
+                                                                        CircularProgressIndicator()),
+                                                              ),
+                                                              errorWidget: (context,
+                                                                      url,
+                                                                      error) =>
+                                                                  const Icon(Icons
+                                                                      .error),
+                                                            ),
+                                                          )),
+                                                      space15W,
+                                                      Expanded(
+                                                        child: Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .end,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                SizedBox(
+                                                                  width: 80.w,
+                                                                  child:
+                                                                      TextApp(
+                                                                    softWrap:
+                                                                        true,
+                                                                    isOverFlow:
+                                                                        false,
+                                                                    text: filterProducts[
+                                                                            index]
+                                                                        .foodName,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
                                                                 ),
-                                                              )),
-                                                          space10H,
-                                                          Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              TextApp(
-                                                                  text: filterProducts[
-                                                                          index]
-                                                                      .foodName),
-                                                              TextApp(
-                                                                text:
-                                                                    "${MoneyFormatter(amount: (filterProducts[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                                fontsize: 20.sp,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          const Divider(),
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    20.w),
-                                                            child: Container(
-                                                              width: 1.sw,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            8.r)),
-                                                              ),
-                                                              child: SizedBox(
-                                                                width: 250.w,
-                                                                height: 30.h,
-                                                                child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .stretch,
-                                                                  children: [
-                                                                    InkWell(
-                                                                      onTap:
-                                                                          () {
-                                                                        minusQuantytiFoodToTable(
-                                                                            tokenReq:
-                                                                                widget.token,
-                                                                            foodID: filterProducts[index].foodId);
-                                                                      },
-                                                                      onDoubleTap:
-                                                                          () {
-                                                                        showCustomDialogModal(
-                                                                          typeDialog:
-                                                                              "error",
-                                                                          context:
-                                                                              navigatorKey.currentContext,
-                                                                          textDesc:
-                                                                              "Bạn thao tác quá nhanh",
-                                                                          title:
-                                                                              "Thành công",
-                                                                          colorButton:
-                                                                              Colors.red,
-                                                                          btnText:
-                                                                              "OK",
-                                                                        );
-                                                                      },
-                                                                      child:
-                                                                          Container(
-                                                                        width:
-                                                                            70.w,
-                                                                        height:
-                                                                            35.w,
-                                                                        decoration: BoxDecoration(
-                                                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(8.r), bottomLeft: Radius.circular(8.r)),
-                                                                            gradient: const LinearGradient(
-                                                                              begin: Alignment.topRight,
-                                                                              end: Alignment.bottomLeft,
-                                                                              colors: [
-                                                                                Color.fromRGBO(33, 82, 255, 1),
-                                                                                Color.fromRGBO(33, 212, 253, 1)
-                                                                              ],
-                                                                            )),
-                                                                        child:
-                                                                            Center(
-                                                                          child:
-                                                                              TextApp(
-                                                                            text:
-                                                                                "-",
-                                                                            textAlign:
-                                                                                TextAlign.center,
-                                                                            color:
-                                                                                Colors.white,
-                                                                            fontsize:
-                                                                                18.sp,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Flexible(
-                                                                        fit: FlexFit
-                                                                            .tight,
-                                                                        child:
-                                                                            Container(
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            border:
-                                                                                Border.all(width: 0.4, color: Colors.grey),
-                                                                          ),
-                                                                          child:
-                                                                              Center(
-                                                                            child:
-                                                                                TextField(
-                                                                              textAlign: TextAlign.center,
-                                                                              keyboardType: TextInputType.number,
-                                                                              inputFormatters: <TextInputFormatter>[
-                                                                                FilteringTextInputFormatter.allow(RegExp("[0-9]")),
-                                                                              ], // Only numbers can be entered,
-                                                                              style: TextStyle(fontSize: 12.sp, color: grey),
-                                                                              controller: _foodQuantityController[index],
-
-                                                                              onTapOutside: (event) {
-                                                                                FocusManager.instance.primaryFocus?.unfocus();
-
-                                                                                updateQuantytiFoodToTable(tokenReq: widget.token, foodID: filterProducts[index].foodId, quantityFood: _foodQuantityController[index].text);
-                                                                              },
-                                                                              cursorColor: grey,
-                                                                              decoration: const InputDecoration(
-                                                                                fillColor: Color.fromARGB(255, 226, 104, 159),
-                                                                                focusedBorder: OutlineInputBorder(
-                                                                                  borderSide: BorderSide(color: Color.fromRGBO(214, 51, 123, 0.6), width: 2.0),
-                                                                                ),
-
-                                                                                hintText: '',
-                                                                                isDense: true, // Added this
-                                                                                contentPadding: EdgeInsets.all(8), // Added this
-                                                                              ),
-                                                                            ),
-                                                                          ),
+                                                                space10H,
+                                                                SizedBox(
+                                                                  width: 80.w,
+                                                                  child:
+                                                                      TextApp(
+                                                                    softWrap:
+                                                                        true,
+                                                                    isOverFlow:
+                                                                        false,
+                                                                    text:
+                                                                        "${MoneyFormatter(amount: (filterProducts[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                                    fontsize:
+                                                                        14.sp,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    color:
+                                                                        blueText2,
+                                                                  ),
+                                                                ),
+                                                                space10H,
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        // color: Colors.green,
+                                                        width: 80.w,
+                                                        // height: 20.h,
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            InkWell(
+                                                              onTap: () {
+                                                                minusQuantytiFoodToTable(
+                                                                    tokenReq:
+                                                                        widget
+                                                                            .token,
+                                                                    foodID: filterProducts[
+                                                                            index]
+                                                                        .foodId);
+                                                              },
+                                                              onDoubleTap: () {
+                                                                showCustomDialogModal(
+                                                                  typeDialog:
+                                                                      "error",
+                                                                  context:
+                                                                      navigatorKey
+                                                                          .currentContext,
+                                                                  textDesc:
+                                                                      "Bạn thao tác quá nhanh",
+                                                                  title:
+                                                                      "Thành công",
+                                                                  colorButton:
+                                                                      Colors
+                                                                          .red,
+                                                                  btnText: "OK",
+                                                                );
+                                                              },
+                                                              child: Container(
+                                                                width: 20.w,
+                                                                // height: 20.w,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                        borderRadius: BorderRadius.only(
+                                                                            topLeft: Radius.circular(8
+                                                                                .r),
+                                                                            bottomLeft: Radius.circular(8
+                                                                                .r)),
+                                                                        gradient:
+                                                                            const LinearGradient(
+                                                                          begin:
+                                                                              Alignment.topRight,
+                                                                          end: Alignment
+                                                                              .bottomLeft,
+                                                                          colors: [
+                                                                            Color.fromRGBO(
+                                                                                33,
+                                                                                82,
+                                                                                255,
+                                                                                1),
+                                                                            Color.fromRGBO(
+                                                                                33,
+                                                                                212,
+                                                                                253,
+                                                                                1)
+                                                                          ],
                                                                         )),
-                                                                    InkWell(
-                                                                      onTap:
-                                                                          () {
-                                                                        plusQuantytiFoodToTable(
-                                                                            tokenReq:
-                                                                                widget.token,
-                                                                            foodID: filterProducts[index].foodId);
-                                                                      },
-                                                                      onDoubleTap:
-                                                                          () {
-                                                                        showCustomDialogModal(
-                                                                          typeDialog:
-                                                                              "error",
-                                                                          context:
-                                                                              navigatorKey.currentContext,
-                                                                          textDesc:
-                                                                              "Bạn thao tác quá nhanh",
-                                                                          title:
-                                                                              "Thành công",
-                                                                          colorButton:
-                                                                              Colors.red,
-                                                                          btnText:
-                                                                              "OK",
-                                                                        );
-                                                                      },
-                                                                      child:
-                                                                          Container(
-                                                                        width:
-                                                                            70.w,
-                                                                        height:
-                                                                            35.w,
-                                                                        decoration: BoxDecoration(
-                                                                            borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), bottomRight: Radius.circular(8.r)),
-                                                                            gradient: const LinearGradient(
-                                                                              begin: Alignment.topRight,
-                                                                              end: Alignment.bottomLeft,
-                                                                              colors: [
-                                                                                Color.fromRGBO(33, 82, 255, 1),
-                                                                                Color.fromRGBO(33, 212, 253, 1)
-                                                                              ],
-                                                                            )),
-                                                                        child:
-                                                                            Center(
-                                                                          child:
-                                                                              TextApp(
-                                                                            text:
-                                                                                "+",
-                                                                            textAlign:
-                                                                                TextAlign.center,
-                                                                            color:
-                                                                                Colors.white,
-                                                                            fontsize:
-                                                                                18.sp,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    )
-                                                                  ],
+                                                                child: Center(
+                                                                  child:
+                                                                      TextApp(
+                                                                    text: "-",
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontsize:
+                                                                        18.sp,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),
-                                                          )
-                                                        ],
-                                                      )),
+                                                            Flexible(
+                                                                fit: FlexFit
+                                                                    .tight,
+                                                                child:
+                                                                    Container(
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    border: Border.all(
+                                                                        width:
+                                                                            0.4,
+                                                                        color: Colors
+                                                                            .grey),
+                                                                  ),
+                                                                  child: Center(
+                                                                    child:
+                                                                        TextField(
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      keyboardType:
+                                                                          TextInputType
+                                                                              .number,
+                                                                      inputFormatters: <TextInputFormatter>[
+                                                                        FilteringTextInputFormatter.allow(
+                                                                            RegExp("[0-9]")),
+                                                                      ], // Only numbers can be entered,
+                                                                      style: TextStyle(
+                                                                          fontSize: 12
+                                                                              .sp,
+                                                                          color:
+                                                                              grey),
+                                                                      controller:
+                                                                          _foodQuantityController[
+                                                                              index],
+
+                                                                      onTapOutside:
+                                                                          (event) {
+                                                                        FocusManager
+                                                                            .instance
+                                                                            .primaryFocus
+                                                                            ?.unfocus();
+
+                                                                        updateQuantytiFoodToTable(
+                                                                            tokenReq:
+                                                                                widget.token,
+                                                                            foodID: filterProducts[index].foodId,
+                                                                            quantityFood: _foodQuantityController[index].text);
+                                                                      },
+                                                                      cursorColor:
+                                                                          grey,
+                                                                      decoration:
+                                                                          const InputDecoration(
+                                                                        fillColor: Color.fromARGB(
+                                                                            255,
+                                                                            226,
+                                                                            104,
+                                                                            159),
+                                                                        focusedBorder:
+                                                                            OutlineInputBorder(
+                                                                          borderSide: BorderSide(
+                                                                              color: Color.fromRGBO(214, 51, 123, 0.6),
+                                                                              width: 2.0),
+                                                                        ),
+
+                                                                        hintText:
+                                                                            '',
+                                                                        isDense:
+                                                                            true, // Added this
+                                                                        contentPadding:
+                                                                            EdgeInsets.all(3), // Added this
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                )),
+                                                            InkWell(
+                                                              onTap: () {
+                                                                plusQuantytiFoodToTable(
+                                                                    tokenReq:
+                                                                        widget
+                                                                            .token,
+                                                                    foodID: filterProducts[
+                                                                            index]
+                                                                        .foodId);
+                                                              },
+                                                              onDoubleTap: () {
+                                                                showCustomDialogModal(
+                                                                  typeDialog:
+                                                                      "error",
+                                                                  context:
+                                                                      navigatorKey
+                                                                          .currentContext,
+                                                                  textDesc:
+                                                                      "Bạn thao tác quá nhanh",
+                                                                  title:
+                                                                      "Thành công",
+                                                                  colorButton:
+                                                                      Colors
+                                                                          .red,
+                                                                  btnText: "OK",
+                                                                );
+                                                              },
+                                                              child: Container(
+                                                                width: 20.w,
+                                                                // height: 20.w,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                        borderRadius: BorderRadius.only(
+                                                                            topRight: Radius.circular(8
+                                                                                .r),
+                                                                            bottomRight: Radius.circular(8
+                                                                                .r)),
+                                                                        gradient:
+                                                                            const LinearGradient(
+                                                                          begin:
+                                                                              Alignment.topRight,
+                                                                          end: Alignment
+                                                                              .bottomLeft,
+                                                                          colors: [
+                                                                            Color.fromRGBO(
+                                                                                33,
+                                                                                82,
+                                                                                255,
+                                                                                1),
+                                                                            Color.fromRGBO(
+                                                                                33,
+                                                                                212,
+                                                                                253,
+                                                                                1)
+                                                                          ],
+                                                                        )),
+                                                                child: Center(
+                                                                  child:
+                                                                      TextApp(
+                                                                    text: "+",
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontsize:
+                                                                        18.sp,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 );
                                               } else {
                                                 return Center(
@@ -3165,7 +3276,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                         text: widget.currentTable?.tableName ??
                                             'Thanh toán hoá đơn',
                                         fontsize: 18.sp,
-                                        color: blueText,
+                                        color: orangeColorApp,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     )
@@ -3178,7 +3289,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                       child: TextApp(
                                         text: widget.nameRoom,
                                         fontsize: 14.sp,
-                                        color: blueText,
+                                        color: greyText,
                                         fontWeight: FontWeight.normal,
                                       ),
                                     )
@@ -3190,593 +3301,587 @@ class _PayBillDialogState extends State<PayBillDialog> {
                       Divider(height: 1, color: Colors.black),
                       Flexible(
                           fit: FlexFit.tight,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(10.w),
-                                  child: Container(
-                                    width: 1.sw,
-                                    // height: 100.h,
-                                    // color: Colors.green,
+                          child: Container(
+                            // color: Colors.green,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(10.w),
+                                    child: Container(
+                                      width: 1.sw,
+                                      // height: 100.h,
+                                      // color: Colors.green,
+                                      child: Column(
+                                        children: [
+                                          space15H,
+                                          ListView.builder(
+                                              shrinkWrap: true,
+                                              itemCount: state.paymentInforModel
+                                                      ?.data?.length ??
+                                                  0,
+                                              itemBuilder: (context, index) {
+                                                var priceOfFood = state
+                                                        .paymentInforModel
+                                                        ?.data?[index]
+                                                        .foodPrice ??
+                                                    0;
+                                                var totalMoneyFood = (state
+                                                            .paymentInforModel
+                                                            ?.data?[index]
+                                                            .foodPrice ??
+                                                        1) *
+                                                    (state
+                                                            .paymentInforModel
+                                                            ?.data?[index]
+                                                            .quantityFood ??
+                                                        1);
+
+                                                var imagePath1 = state
+                                                        .paymentInforModel
+                                                        ?.data?[index]
+                                                        .foodImages ??
+                                                    '';
+                                                var listImagePath =
+                                                    jsonDecode(imagePath1);
+
+                                                return Container(
+                                                  width: 1.sw,
+                                                  padding: EdgeInsets.all(10.w),
+                                                  margin: EdgeInsets.only(
+                                                      bottom: 20.h),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.r),
+                                                    color: Colors.white,
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.grey
+                                                            .withOpacity(0.5),
+                                                        spreadRadius: 2,
+                                                        blurRadius: 4,
+                                                        offset: const Offset(0,
+                                                            3), // changes position of shadow
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+                                                          width: 80.w,
+                                                          height: 80.w,
+                                                          // color: Colors.amber,
+                                                          child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        40.w),
+                                                            child:
+                                                                CachedNetworkImage(
+                                                              fit: BoxFit.fill,
+                                                              imageUrl: httpImage +
+                                                                  listImagePath[
+                                                                      0],
+                                                              placeholder:
+                                                                  (context,
+                                                                          url) =>
+                                                                      SizedBox(
+                                                                height: 10.w,
+                                                                width: 10.w,
+                                                                child: const Center(
+                                                                    child:
+                                                                        CircularProgressIndicator()),
+                                                              ),
+                                                              errorWidget: (context,
+                                                                      url,
+                                                                      error) =>
+                                                                  const Icon(Icons
+                                                                      .error),
+                                                            ),
+                                                          )),
+                                                      space15W,
+                                                      Expanded(
+                                                          child: Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .end,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              SizedBox(
+                                                                width: 100.w,
+                                                                child: TextApp(
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  softWrap:
+                                                                      true,
+                                                                  isOverFlow:
+                                                                      false,
+                                                                  text: state
+                                                                          .paymentInforModel
+                                                                          ?.data?[
+                                                                              index]
+                                                                          .foodName ??
+                                                                      '',
+                                                                  color:
+                                                                      blueText,
+                                                                  fontsize:
+                                                                      16.sp,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                              space10H,
+                                                              SizedBox(
+                                                                width: 100.w,
+                                                                child: TextApp(
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  softWrap:
+                                                                      true,
+                                                                  isOverFlow:
+                                                                      false,
+                                                                  text:
+                                                                      "${MoneyFormatter(amount: priceOfFood.toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                                  color:
+                                                                      greyText,
+                                                                  fontsize:
+                                                                      14.sp,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                              space10H,
+                                                              Container(
+                                                                  width: 35.w,
+                                                                  height: 30.w,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            10),
+                                                                    color:
+                                                                        greyLight,
+                                                                  ),
+                                                                  child: Center(
+                                                                    child:
+                                                                        TextApp(
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      text:
+                                                                          "x ${state.paymentInforModel?.data?[index].quantityFood.toString() ?? ''}",
+                                                                      color:
+                                                                          blueText,
+                                                                      fontsize:
+                                                                          14.sp,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                    ),
+                                                                  )),
+                                                            ],
+                                                          ),
+                                                          Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .end,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .end,
+                                                            children: [
+                                                              // MoneyFormatter(amount:
+
+                                                              SizedBox(
+                                                                // width: 80.w,
+                                                                child: TextApp(
+                                                                  softWrap:
+                                                                      true,
+                                                                  isOverFlow:
+                                                                      false,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  text:
+                                                                      "${MoneyFormatter(amount: totalMoneyFood.toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                                  color:
+                                                                      blueText2,
+                                                                  fontsize:
+                                                                      16.sp,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ))
+                                                    ],
+                                                  ),
+                                                );
+                                              })
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Divider(
+                                    height: 1,
+                                    color: menuGrey,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(10.w),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Icon(
+                                              Icons.post_add_rounded,
+                                              size: 20.sp,
+                                              color: Colors.grey,
+                                            ),
+                                            space5W,
+                                            TextApp(
+                                              text: "Giảm giá",
+                                              color: Colors.black,
+                                              fontsize: 14.sp,
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          width: 120.w,
+                                          child: TextField(
+                                            keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter.allow(
+                                                  RegExp("[0-9]")),
+                                            ], // Only numbers can be entered,
+                                            style: TextStyle(
+                                                fontSize: 12.sp, color: grey),
+                                            controller: discountController,
+                                            onChanged: (string) {
+                                              discountMoney = string;
+                                              if (string.isNotEmpty) {
+                                                string =
+                                                    '${_formatNumber(string.replaceAll(',', ''))}';
+                                                discountController.value =
+                                                    TextEditingValue(
+                                                  text: string,
+                                                  selection:
+                                                      TextSelection.collapsed(
+                                                          offset:
+                                                              string.length),
+                                                );
+                                              }
+                                            },
+                                            onEditingComplete: () {},
+                                            cursorColor: grey,
+                                            decoration: InputDecoration(
+                                                fillColor: const Color.fromARGB(
+                                                    255, 226, 104, 159),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Color.fromRGBO(
+                                                          214, 51, 123, 0.6),
+                                                      width: 2.0),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.r),
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.r),
+                                                ),
+                                                hintText: '',
+                                                isDense: true,
+                                                contentPadding:
+                                                    EdgeInsets.all(15.w)),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Divider(
+                                    height: 1,
+                                    color: menuGrey,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(10.w),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons
+                                                  .account_balance_wallet_outlined,
+                                              size: 20.sp,
+                                              color: Colors.grey,
+                                            ),
+                                            space5W,
+                                            TextApp(
+                                              text: "Khách thanh toán",
+                                              color: Colors.black,
+                                              fontsize: 14.sp,
+                                            ),
+                                          ],
+                                        ),
+                                        // space15W,
+                                        Container(
+                                          width: 120.w,
+                                          child: TextField(
+                                            keyboardType: TextInputType.number,
+                                            inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter.allow(
+                                                  RegExp("[0-9]")),
+                                            ], // Only numbers can be entered,
+                                            controller: clientPayController,
+                                            onChanged: (string) {
+                                              if (string.isNotEmpty) {
+                                                payMoney = string;
+
+                                                string =
+                                                    '${_formatNumber(string.replaceAll(',', ''))}';
+                                                clientPayController.value =
+                                                    TextEditingValue(
+                                                  text: string,
+                                                  selection:
+                                                      TextSelection.collapsed(
+                                                          offset:
+                                                              string.length),
+                                                );
+                                              }
+                                            },
+                                            style: TextStyle(
+                                                fontSize: 12.sp, color: grey),
+                                            cursorColor: grey,
+                                            decoration: InputDecoration(
+                                                fillColor: const Color.fromARGB(
+                                                    255, 226, 104, 159),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Color.fromRGBO(
+                                                          214, 51, 123, 0.6),
+                                                      width: 2.0),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.r),
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.r),
+                                                ),
+                                                hintText: '',
+                                                isDense: true,
+                                                contentPadding:
+                                                    EdgeInsets.all(15.w)),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  space20H,
+                                  Wrap(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Radio(
+                                            activeColor: Colors.black,
+                                            value: optionsPayment[0],
+                                            groupValue: currentOptions,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                currentOptions =
+                                                    value.toString();
+                                                paymentMethod = 0;
+                                              });
+                                            },
+                                          ),
+                                          TextApp(
+                                            text: optionsPayment[0],
+                                            color: Colors.black,
+                                            fontsize: 14.sp,
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Radio(
+                                            activeColor: Colors.black,
+                                            value: optionsPayment[1],
+                                            groupValue: currentOptions,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                currentOptions =
+                                                    value.toString();
+                                                paymentMethod = 1;
+                                              });
+                                            },
+                                          ),
+                                          TextApp(
+                                            text: optionsPayment[1],
+                                            color: Colors.black,
+                                            fontsize: 14.sp,
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Radio(
+                                            activeColor: Colors.black,
+                                            value: optionsPayment[2],
+                                            groupValue: currentOptions,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                currentOptions =
+                                                    value.toString();
+                                                paymentMethod = 2;
+                                              });
+                                            },
+                                          ),
+                                          TextApp(
+                                            text: optionsPayment[2],
+                                            color: Colors.black,
+                                            fontsize: 14.sp,
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  Divider(
+                                    height: 1,
+                                    color: menuGrey,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(10.w),
                                     child: Column(
                                       children: [
-                                        Container(
-                                            width: 1.sw,
-                                            height: 40.h,
-                                            color: Colors.grey,
-                                            child: Padding(
-                                                padding:
-                                                    EdgeInsets.only(left: 5.h),
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    TextApp(
-                                                      text: "Hóa đơn",
-                                                      color: Colors.white,
-                                                      fontsize: 14.sp,
-                                                    ),
-                                                  ],
-                                                ))),
                                         Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  // color: Colors.amber,
-                                                  width: 120.w,
-                                                  child: TextApp(
-                                                    textAlign: TextAlign.center,
-                                                    softWrap: true,
-                                                    isOverFlow: false,
-                                                    text: "Tên món ăn",
-                                                    color: Colors.black,
-                                                    fontsize: 14.sp,
-                                                  ),
-                                                )
-                                              ],
+                                            TextApp(
+                                              text: "Tạm tính",
+                                              color: greyText,
+                                              fontsize: 14.sp,
+                                              fontWeight: FontWeight.bold,
                                             ),
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  width: 30.w,
-                                                  // color: Colors.red,
-                                                  child: TextApp(
-                                                    textAlign: TextAlign.center,
-                                                    softWrap: true,
-                                                    isOverFlow: false,
-                                                    text: "SL",
-                                                    color: Colors.black,
-                                                    fontsize: 14.sp,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  width: 80.w,
-                                                  // color: Colors.green,
-                                                  child: TextApp(
-                                                    textAlign: TextAlign.center,
-                                                    softWrap: true,
-                                                    isOverFlow: false,
-                                                    text: "Giá",
-                                                    color: Colors.black,
-                                                    fontsize: 14.sp,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  width: 80.w,
-                                                  // color: Colors.pink,
-                                                  child: TextApp(
-                                                    textAlign: TextAlign.center,
-                                                    softWrap: true,
-                                                    isOverFlow: false,
-                                                    text: "Tổng",
-                                                    color: Colors.black,
-                                                    fontsize: 14.sp,
-                                                  ),
-                                                ),
-                                              ],
+                                            TextApp(
+                                              text:
+                                                  "${MoneyFormatter(amount: (state.paymentInforModel?.order?.orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                              color: Colors.black,
+                                              fontsize: 14.sp,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           ],
                                         ),
-                                        space15H,
-                                        ListView.builder(
-                                            shrinkWrap: true,
-                                            itemCount: state.paymentInforModel
-                                                    ?.data?.length ??
-                                                0,
-                                            itemBuilder: (context, index) {
-                                              var priceOfFood = state
-                                                      .paymentInforModel
-                                                      ?.data?[index]
-                                                      .foodPrice ??
-                                                  0;
-                                              var totalMoneyFood = (state
-                                                          .paymentInforModel
-                                                          ?.data?[index]
-                                                          .foodPrice ??
-                                                      1) *
-                                                  (state
-                                                          .paymentInforModel
-                                                          ?.data?[index]
-                                                          .quantityFood ??
-                                                      1);
+                                        space20H,
 
-                                              return Padding(
-                                                padding: EdgeInsets.only(
-                                                    bottom: 10.h),
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        SizedBox(
-                                                          width: 120.w,
-                                                          child: TextApp(
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            softWrap: true,
-                                                            isOverFlow: false,
-                                                            text: state
-                                                                    .paymentInforModel
-                                                                    ?.data?[
-                                                                        index]
-                                                                    .foodName ??
-                                                                '',
-                                                            color: Colors.black,
-                                                            fontsize: 14.sp,
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                    Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        SizedBox(
-                                                          width: 30.w,
-                                                          child: TextApp(
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            text: state
-                                                                    .paymentInforModel
-                                                                    ?.data?[
-                                                                        index]
-                                                                    .quantityFood
-                                                                    .toString() ??
-                                                                '',
-                                                            color: Colors.black,
-                                                            fontsize: 14.sp,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        SizedBox(
-                                                          width: 80.w,
-                                                          child: TextApp(
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            softWrap: true,
-                                                            isOverFlow: false,
-                                                            text:
-                                                                "${MoneyFormatter(amount: priceOfFood.toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                            color: Colors.black,
-                                                            fontsize: 14.sp,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        // MoneyFormatter(amount:
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            TextApp(
+                                              text: "Tiền thừa trả khách",
+                                              color: greyText,
+                                              fontsize: 14.sp,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            TextApp(
+                                              text:
+                                                  "${MoneyFormatter(amount: (state.paymentInforModel?.order?.guestPayClient ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                              color: Colors.black,
+                                              fontsize: 14.sp,
+                                            ),
+                                          ],
+                                        ),
 
-                                                        SizedBox(
-                                                          width: 80.w,
-                                                          child: TextApp(
-                                                            softWrap: true,
-                                                            isOverFlow: false,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            text:
-                                                                "${MoneyFormatter(amount: totalMoneyFood.toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                            color: Colors.black,
-                                                            fontsize: 14.sp,
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            })
+                                        // Row(
+                                        //   mainAxisAlignment:
+                                        //       MainAxisAlignment.end,
+                                        //   children: [
+                                        //     TextApp(
+                                        //         text: formatDateTime(state
+                                        //                 .paymentInforModel
+                                        //                 ?.order
+                                        //                 ?.createdAt
+                                        //                 .toString() ??
+                                        //             ''),
+                                        //         fontsize: 14.sp),
+                                        //     space5W,
+                                        //     Icon(
+                                        //       Icons.access_time_filled,
+                                        //       size: 14.sp,
+                                        //       color: Colors.grey,
+                                        //     )
+                                        //   ],
+                                        // ),
+                                        space20H,
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            TextApp(
+                                              text: "Tổng cộng",
+                                              color: blueText2,
+                                              fontsize: 16.sp,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            TextApp(
+                                              text:
+                                                  "${MoneyFormatter(amount: (state.paymentInforModel?.order?.clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                              color: blueText2,
+                                              fontsize: 16.sp,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ],
+                                        ),
+                                        space20H,
                                       ],
                                     ),
-                                  ),
-                                ),
-                                Divider(
-                                  height: 1,
-                                  color: Colors.black,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(10.w),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          TextApp(
-                                            text: "Tổng",
-                                            color: Colors.black,
-                                            fontsize: 14.sp,
-                                          ),
-                                          TextApp(
-                                            text:
-                                                "${MoneyFormatter(amount: (state.paymentInforModel?.order?.orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                            color: Colors.black,
-                                            fontsize: 14.sp,
-                                          ),
-                                        ],
-                                      ),
-                                      space20H,
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          TextApp(
-                                              text: formatDateTime(state
-                                                      .paymentInforModel
-                                                      ?.order
-                                                      ?.createdAt
-                                                      .toString() ??
-                                                  ''),
-                                              fontsize: 14.sp),
-                                          space5W,
-                                          Icon(
-                                            Icons.access_time_filled,
-                                            size: 14.sp,
-                                            color: Colors.grey,
-                                          )
-                                        ],
-                                      ),
-                                      space20H,
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          TextApp(
-                                            text: "Tổng tiền món",
-                                            color: Colors.black,
-                                            fontsize: 14.sp,
-                                          ),
-                                          TextApp(
-                                            text:
-                                                "${MoneyFormatter(amount: (state.paymentInforModel?.order?.orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                            color: Colors.black,
-                                            fontsize: 14.sp,
-                                          ),
-                                        ],
-                                      ),
-                                      space20H,
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          TextApp(
-                                            text: "Giảm giá",
-                                            color: Colors.black,
-                                            fontsize: 14.sp,
-                                          ),
-                                          // space35W,
-                                          SizedBox(
-                                            width: 120.w,
-                                            child: TextField(
-                                              keyboardType:
-                                                  TextInputType.number,
-                                              inputFormatters: <TextInputFormatter>[
-                                                FilteringTextInputFormatter
-                                                    .allow(RegExp("[0-9]")),
-                                              ], // Only numbers can be entered,
-                                              style: TextStyle(
-                                                  fontSize: 12.sp, color: grey),
-                                              controller: discountController,
-                                              onChanged: (string) {
-                                                discountMoney = string;
-                                                if (string.isNotEmpty) {
-                                                  string =
-                                                      '${_formatNumber(string.replaceAll(',', ''))}';
-                                                  discountController.value =
-                                                      TextEditingValue(
-                                                    text: string,
-                                                    selection:
-                                                        TextSelection.collapsed(
-                                                            offset:
-                                                                string.length),
-                                                  );
-                                                }
-                                              },
-                                              onEditingComplete: () {},
-                                              cursorColor: grey,
-                                              decoration: InputDecoration(
-                                                  fillColor:
-                                                      const Color.fromARGB(
-                                                          255, 226, 104, 159),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide:
-                                                        const BorderSide(
-                                                            color:
-                                                                Color.fromRGBO(
-                                                                    214,
-                                                                    51,
-                                                                    123,
-                                                                    0.6),
-                                                            width: 2.0),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.r),
-                                                  ),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.r),
-                                                  ),
-                                                  hintText: '',
-                                                  isDense: true,
-                                                  contentPadding:
-                                                      EdgeInsets.all(15.w)),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      space20H,
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          TextApp(
-                                            text: "Khách cần trả",
-                                            color: Colors.black,
-                                            fontsize: 14.sp,
-                                          ),
-                                          TextApp(
-                                            text:
-                                                "${MoneyFormatter(amount: (state.paymentInforModel?.order?.clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                            color: Colors.black,
-                                            fontsize: 14.sp,
-                                          ),
-                                        ],
-                                      ),
-                                      space20H,
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          TextApp(
-                                            text: "Khách thanh toán",
-                                            color: Colors.black,
-                                            fontsize: 14.sp,
-                                          ),
-                                          // space15W,
-                                          Container(
-                                            width: 120.w,
-                                            child: TextField(
-                                              keyboardType:
-                                                  TextInputType.number,
-                                              inputFormatters: <TextInputFormatter>[
-                                                FilteringTextInputFormatter
-                                                    .allow(RegExp("[0-9]")),
-                                              ], // Only numbers can be entered,
-                                              controller: clientPayController,
-                                              onChanged: (string) {
-                                                if (string.isNotEmpty) {
-                                                  payMoney = string;
-
-                                                  string =
-                                                      '${_formatNumber(string.replaceAll(',', ''))}';
-                                                  clientPayController.value =
-                                                      TextEditingValue(
-                                                    text: string,
-                                                    selection:
-                                                        TextSelection.collapsed(
-                                                            offset:
-                                                                string.length),
-                                                  );
-                                                }
-                                              },
-                                              style: TextStyle(
-                                                  fontSize: 12.sp, color: grey),
-                                              cursorColor: grey,
-                                              decoration: InputDecoration(
-                                                  fillColor:
-                                                      const Color.fromARGB(
-                                                          255, 226, 104, 159),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide:
-                                                        const BorderSide(
-                                                            color:
-                                                                Color.fromRGBO(
-                                                                    214,
-                                                                    51,
-                                                                    123,
-                                                                    0.6),
-                                                            width: 2.0),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.r),
-                                                  ),
-                                                  border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.r),
-                                                  ),
-                                                  hintText: '',
-                                                  isDense: true,
-                                                  contentPadding:
-                                                      EdgeInsets.all(15.w)),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      space20H,
-                                      Wrap(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Radio(
-                                                activeColor: Colors.black,
-                                                value: optionsPayment[0],
-                                                groupValue: currentOptions,
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    currentOptions =
-                                                        value.toString();
-                                                    paymentMethod = 0;
-                                                  });
-                                                },
-                                              ),
-                                              TextApp(
-                                                text: optionsPayment[0],
-                                                color: Colors.black,
-                                                fontsize: 14.sp,
-                                              )
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              Radio(
-                                                activeColor: Colors.black,
-                                                value: optionsPayment[1],
-                                                groupValue: currentOptions,
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    currentOptions =
-                                                        value.toString();
-                                                    paymentMethod = 1;
-                                                  });
-                                                },
-                                              ),
-                                              TextApp(
-                                                text: optionsPayment[1],
-                                                color: Colors.black,
-                                                fontsize: 14.sp,
-                                              )
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              Radio(
-                                                activeColor: Colors.black,
-                                                value: optionsPayment[2],
-                                                groupValue: currentOptions,
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    currentOptions =
-                                                        value.toString();
-                                                    paymentMethod = 2;
-                                                  });
-                                                },
-                                              ),
-                                              TextApp(
-                                                text: optionsPayment[2],
-                                                color: Colors.black,
-                                                fontsize: 14.sp,
-                                              )
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                      space20H,
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          TextApp(
-                                            text: "Tiền thừa trả khách",
-                                            color: Colors.black,
-                                            fontsize: 14.sp,
-                                          ),
-                                          TextApp(
-                                            text:
-                                                "${MoneyFormatter(amount: (state.paymentInforModel?.order?.guestPayClient ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                            color: Colors.black,
-                                            fontsize: 14.sp,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
+                                  )
+                                ],
+                              ),
                             ),
                           )),
                       Container(
@@ -3796,9 +3901,9 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                 Navigator.of(context).pop();
                               },
                               text: "Đóng",
-                              colorText: Colors.white,
-                              backgroundColor: Color.fromRGBO(131, 146, 171, 1),
-                              outlineColor: Color.fromRGBO(131, 146, 171, 1),
+                              colorText: Colors.blue,
+                              backgroundColor: Colors.transparent,
+                              outlineColor: Colors.blue,
                             ),
                             space15W,
                             ButtonApp(
@@ -3821,8 +3926,8 @@ class _PayBillDialogState extends State<PayBillDialog> {
                               },
                               text: "Thanh toán",
                               colorText: Colors.white,
-                              backgroundColor: Color.fromRGBO(23, 173, 55, 1),
-                              outlineColor: Color.fromRGBO(152, 236, 45, 1),
+                              backgroundColor: Colors.blue,
+                              outlineColor: Colors.blue,
                             ),
                           ],
                         ),
@@ -4327,7 +4432,7 @@ class _ManageBroughtReceiptDialogState
                                       right: 15.w,
                                       top: 8.w,
                                       bottom: 8.w),
-                                  disabledColor: Colors.grey,
+                                  disabledColor: Colors.blue,
                                   selectedColor: Colors.blue,
                                   backgroundColor: Colors.white,
                                   shadowColor: Colors.black,
@@ -4335,7 +4440,10 @@ class _ManageBroughtReceiptDialogState
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.w),
                                     side: BorderSide(
-                                      color: Colors.grey.withOpacity(0.5),
+                                      color:
+                                          selectedCategories.contains(lableFood)
+                                              ? Colors.grey.withOpacity(0.5)
+                                              : Colors.blue,
                                       width: 1.0,
                                     ),
                                   ),
@@ -4343,15 +4451,16 @@ class _ManageBroughtReceiptDialogState
                                       color:
                                           selectedCategories.contains(lableFood)
                                               ? Colors.white
-                                              : Colors.black),
+                                              : Colors.blue),
                                   showCheckmark: false,
-                                  label: TextApp(
-                                    text: lableFood.toUpperCase(),
-                                    fontsize: 14.sp,
-                                    color: blueText,
-                                    fontWeight: FontWeight.bold,
-                                    textAlign: TextAlign.center,
-                                  ),
+                                  label: Text(lableFood.toUpperCase()),
+                                  // TextApp(
+                                  //   text: lableFood.toUpperCase(),
+                                  //   fontsize: 14.sp,
+                                  //   color: blueText,
+                                  //   fontWeight: FontWeight.bold,
+                                  //   textAlign: TextAlign.center,
+                                  // ),
                                   selected:
                                       selectedCategories.contains(lableFood),
                                   onSelected: (bool selected) {
@@ -4458,29 +4567,27 @@ class _ManageBroughtReceiptDialogState
                           width: 80.w,
                           height: 45.w,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.r),
-                              gradient: const LinearGradient(
-                                begin: Alignment.topRight,
-                                end: Alignment.bottomLeft,
-                                colors: [
-                                  Color.fromRGBO(33, 82, 255, 1),
-                                  Color.fromRGBO(33, 212, 253, 1)
-                                ],
-                              )),
+                            borderRadius: BorderRadius.circular(10.r),
+                            border: Border.all(
+                              color: Colors
+                                  .blue, //                   <--- border color
+                              width: 2.0,
+                            ),
+                          ),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               TextApp(
                                 text: currentCartBroughtReceipt.toString(),
-                                color: Colors.white,
+                                color: Colors.blue,
                                 fontsize: 14.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                               space5W,
                               const Icon(
-                                Icons.shopping_cart,
-                                color: Colors.white,
+                                Icons.shopping_basket_rounded,
+                                color: Colors.blue,
                               )
                             ],
                           ))
@@ -4531,7 +4638,305 @@ class _ManageBroughtReceiptDialogState
                                 // var imagePath2 =
                                 //     imagePath1.replaceAll('"]', '');
                                 var listImagePath = jsonDecode(imagePath1);
-                                return Card(
+                                return Container(
+                                  width: 1.sw,
+                                  margin: EdgeInsets.only(
+                                      bottom: 15.h, left: 5.w, right: 5.w),
+                                  padding: EdgeInsets.all(10.w),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 2,
+                                          blurRadius: 4,
+                                          offset: const Offset(0,
+                                              3), // changes position of shadow
+                                        ),
+                                      ],
+                                      borderRadius:
+                                          BorderRadius.circular(15.r)),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                          width: 80.w,
+                                          height: 80.w,
+                                          // color: Colors.amber,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(40.w),
+                                            child: CachedNetworkImage(
+                                              fit: BoxFit.fill,
+                                              imageUrl:
+                                                  httpImage + listImagePath[0],
+                                              placeholder: (context, url) =>
+                                                  SizedBox(
+                                                height: 10.w,
+                                                width: 10.w,
+                                                child: const Center(
+                                                    child:
+                                                        CircularProgressIndicator()),
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      const Icon(Icons.error),
+                                            ),
+                                          )),
+                                      space15W,
+                                      Expanded(
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                SizedBox(
+                                                  width: 80.w,
+                                                  child: TextApp(
+                                                    softWrap: true,
+                                                    isOverFlow: false,
+                                                    text: filterProducts2[index]
+                                                            .foodName ??
+                                                        '',
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                space10H,
+                                                SizedBox(
+                                                  width: 80.w,
+                                                  child: TextApp(
+                                                    softWrap: true,
+                                                    isOverFlow: false,
+                                                    text:
+                                                        "${MoneyFormatter(amount: (filterProducts2[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                    fontsize: 14.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: blueText2,
+                                                  ),
+                                                ),
+                                                space10H,
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 80.w,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                if (filterProducts2[index]
+                                                        .quantityFood !=
+                                                    0) {
+                                                  minusQuantityFoodToBroughtReceipt(
+                                                    tokenReq: widget.token,
+                                                    foodID:
+                                                        filterProducts2[index]
+                                                            .foodId,
+                                                  );
+                                                } else {
+                                                  showSnackBarTopCustom(
+                                                      title: "",
+                                                      context: navigatorKey
+                                                          .currentContext,
+                                                      mess:
+                                                          "Thao tác không thể thực hiện",
+                                                      color: Colors.red);
+                                                }
+                                              },
+                                              onDoubleTap: () {
+                                                showCustomDialogModal(
+                                                  typeDialog: "error",
+                                                  context: navigatorKey
+                                                      .currentContext,
+                                                  textDesc:
+                                                      "Bạn thao tác quá nhanh",
+                                                  title: "Thành công",
+                                                  colorButton: Colors.red,
+                                                  btnText: "OK",
+                                                );
+                                              },
+                                              child: Container(
+                                                width: 20.w,
+                                                // height: 35.w,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    8.r),
+                                                            bottomLeft: Radius
+                                                                .circular(8.r)),
+                                                    gradient:
+                                                        const LinearGradient(
+                                                      begin: Alignment.topRight,
+                                                      end: Alignment.bottomLeft,
+                                                      colors: [
+                                                        Color.fromRGBO(
+                                                            33, 82, 255, 1),
+                                                        Color.fromRGBO(
+                                                            33, 212, 253, 1)
+                                                      ],
+                                                    )),
+                                                child: Center(
+                                                  child: TextApp(
+                                                    text: "-",
+                                                    textAlign: TextAlign.center,
+                                                    color: Colors.white,
+                                                    fontsize: 18.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Flexible(
+                                                fit: FlexFit.tight,
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        width: 0.4,
+                                                        color: Colors.grey),
+                                                  ),
+                                                  child: Center(
+                                                    child: TextField(
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      keyboardType:
+                                                          TextInputType.number,
+                                                      inputFormatters: <TextInputFormatter>[
+                                                        FilteringTextInputFormatter
+                                                            .allow(RegExp(
+                                                                "[0-9]")),
+                                                      ], // Only numbers can be entered,
+                                                      style: TextStyle(
+                                                          fontSize: 12.sp,
+                                                          color: grey),
+                                                      controller:
+                                                          _foodQuantityController[
+                                                              index],
+
+                                                      onTapOutside: (event) {
+                                                        print('onTapOutside');
+                                                        FocusManager.instance
+                                                            .primaryFocus
+                                                            ?.unfocus();
+                                                        updateQuantityFoodToBroughtReceipt(
+                                                          tokenReq:
+                                                              widget.token,
+                                                          foodID:
+                                                              filterProducts2[
+                                                                      index]
+                                                                  .foodId,
+                                                          quantityFood:
+                                                              _foodQuantityController[
+                                                                      index]
+                                                                  .text,
+                                                        );
+                                                      },
+                                                      cursorColor: grey,
+                                                      decoration:
+                                                          const InputDecoration(
+                                                        fillColor:
+                                                            Color.fromARGB(255,
+                                                                226, 104, 159),
+                                                        focusedBorder:
+                                                            OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide(
+                                                                  color: Color
+                                                                      .fromRGBO(
+                                                                          214,
+                                                                          51,
+                                                                          123,
+                                                                          0.6),
+                                                                  width: 2.0),
+                                                        ),
+
+                                                        hintText: '',
+                                                        isDense:
+                                                            true, // Added this
+                                                        contentPadding:
+                                                            EdgeInsets.all(
+                                                                3), // Added this
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )),
+                                            InkWell(
+                                              onTap: () {
+                                                plusQuantityFoodToBroughtReceipt(
+                                                  tokenReq: widget.token,
+                                                  foodID: filterProducts2[index]
+                                                      .foodId,
+                                                );
+                                              },
+                                              onDoubleTap: () {
+                                                showCustomDialogModal(
+                                                  typeDialog: "error",
+                                                  context: navigatorKey
+                                                      .currentContext,
+                                                  textDesc:
+                                                      "Bạn thao tác quá nhanh",
+                                                  title: "Thành công",
+                                                  colorButton: Colors.red,
+                                                  btnText: "OK",
+                                                );
+                                              },
+                                              child: Container(
+                                                width: 20.w,
+                                                // height: 35.w,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    8.r),
+                                                            bottomRight: Radius
+                                                                .circular(8.r)),
+                                                    gradient:
+                                                        const LinearGradient(
+                                                      begin: Alignment.topRight,
+                                                      end: Alignment.bottomLeft,
+                                                      colors: [
+                                                        Color.fromRGBO(
+                                                            33, 82, 255, 1),
+                                                        Color.fromRGBO(
+                                                            33, 212, 253, 1)
+                                                      ],
+                                                    )),
+                                                child: Center(
+                                                  child: TextApp(
+                                                    text: "+",
+                                                    textAlign: TextAlign.center,
+                                                    color: Colors.white,
+                                                    fontsize: 18.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+
+                                Card(
                                   elevation: 8.0,
                                   margin: const EdgeInsets.all(8),
                                   shape: RoundedRectangleBorder(

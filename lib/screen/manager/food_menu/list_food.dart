@@ -882,8 +882,8 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                                             1),
                                                                         event:
                                                                             () {
-                                                                          // handleGetDetailsFood(
-                                                                          //     foodID: product.foodId ?? 0);
+                                                                          handleGetDetailsFood(
+                                                                              foodID: product.foodId ?? 0);
                                                                         },
                                                                         icon: Icons
                                                                             .edit),

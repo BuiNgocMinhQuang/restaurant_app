@@ -71,7 +71,7 @@ class PopUpMenuUsingTable extends StatelessWidget {
     return PopupMenuButton(
       icon: const Icon(
         Icons.edit,
-        color: Colors.white,
+        color: newBlueText,
       ),
       itemBuilder: (context) => [
         PopupMenuItem(

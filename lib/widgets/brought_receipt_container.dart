@@ -1,3 +1,4 @@
+import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class BroughtReceiptContainer extends StatelessWidget {
               ],
             ),
             child: Padding(
-              padding: EdgeInsets.all(20.w),
+              padding: EdgeInsets.all(10.w),
               child: Column(
                 children: [
                   Row(
@@ -47,14 +48,14 @@ class BroughtReceiptContainer extends StatelessWidget {
                         children: [
                           TextApp(
                             text: "Tên khách hàng: ",
-                            color: Colors.blue,
+                            color: orangeColorApp,
                             fontWeight: FontWeight.bold,
                             fontsize: 14.sp,
                           ),
                           TextApp(
                             text: "Khách lẻ",
                             fontsize: 14.sp,
-                            color: Colors.blue,
+                            color: menuGrey,
                             fontWeight: FontWeight.bold,
                           )
                         ],
@@ -62,9 +63,9 @@ class BroughtReceiptContainer extends StatelessWidget {
                       typePopMenu
                     ],
                   ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
+                  // SizedBox(
+                  //   height: 10.h,
+                  // ),
                   Row(
                     children: [TextApp(text: dateTime)],
                   ),
@@ -88,7 +89,7 @@ class BroughtReceiptContainer extends StatelessWidget {
                       else if (statusText == "Đang chế biến")
                         TextApp(
                           text: statusText,
-                          color: Color.fromARGB(255, 215, 184, 6),
+                          color: newBlueText,
                           fontsize: 14.sp,
                         )
                       else if (statusText == "Đã huỷ")
@@ -100,7 +101,7 @@ class BroughtReceiptContainer extends StatelessWidget {
                       else
                         TextApp(
                           text: statusText,
-                          color: Color.fromARGB(255, 215, 184, 6),
+                          color: newBlueText,
                           fontsize: 14.sp,
                         )
                     ],

@@ -1,3 +1,4 @@
+import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/cupertino.dart';
@@ -41,7 +42,7 @@ class BillInforContainer extends StatelessWidget {
               ],
             ),
             child: Padding(
-              padding: EdgeInsets.all(20.w),
+              padding: EdgeInsets.all(10.w),
               child: Column(
                 children: [
                   Row(
@@ -51,20 +52,25 @@ class BillInforContainer extends StatelessWidget {
                         children: [
                           TextApp(
                             text: tableName,
-                            color: Colors.blue,
+                            color: orangeColorApp,
                             fontWeight: FontWeight.bold,
                             fontsize: 14.sp,
                           ),
                           TextApp(text: " | "),
-                          TextApp(text: roomName, fontsize: 14.sp)
+                          TextApp(
+                            text: roomName,
+                            fontsize: 14.sp,
+                            color: menuGrey,
+                            fontWeight: FontWeight.bold,
+                          )
                         ],
                       ),
                       typePopMenu
                     ],
                   ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
+                  // SizedBox(
+                  //   height: 10.h,
+                  // ),
                   Row(
                     children: [TextApp(text: dateTime)],
                   ),
@@ -88,7 +94,7 @@ class BillInforContainer extends StatelessWidget {
                       else if (statusText == "Chưa thanh toán")
                         TextApp(
                           text: statusText,
-                          color: Color.fromARGB(255, 215, 184, 6),
+                          color: newBlueText,
                           fontsize: 14.sp,
                         )
                       else if (statusText == "Hoá đơn bị huỷ")
@@ -100,7 +106,7 @@ class BillInforContainer extends StatelessWidget {
                       else
                         TextApp(
                           text: statusText,
-                          color: Color.fromARGB(255, 215, 184, 6),
+                          color: newBlueText,
                           fontsize: 14.sp,
                         )
                     ],
