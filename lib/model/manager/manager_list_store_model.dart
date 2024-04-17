@@ -41,7 +41,7 @@ class DataListStore {
   String? storeName;
   String? storeAddress;
   String? storeDescription;
-  String storeImages;
+  String? storeImages;
   String? storeLogo;
   int? activeFlg;
   int? deleteFlg;

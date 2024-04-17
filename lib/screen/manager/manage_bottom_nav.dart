@@ -97,6 +97,16 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
     }
   }
 
+  void handleGetBannerList() async {
+    setState(() {
+      listImageBanner.clear();
+      listStoreManagerData.where((element) {
+        listImageBanner.add(element.storeLogo ?? '');
+        return true;
+      }).toList();
+    });
+  }
+
   void getListStore() async {
     var token = StorageUtils.instance.getString(key: 'token_manager');
     final responseListStore = await http.post(
@@ -108,8 +118,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
       },
     );
     final dataListStore = jsonDecode(responseListStore.body);
-    log(token.toString());
-    print("DATA LIST STORES $dataListStore");
+    // log(token.toString());
 
     try {
       if (dataListStore['status'] == 200) {
@@ -117,12 +126,16 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
           listStoreManagerData.clear();
           var listStoreManagerDataRes = ListStoreModel.fromJson(dataListStore);
           listStoreManagerData.addAll(listStoreManagerDataRes.data);
-          listStoreManagerData.where((imageStore) {
-            final image1 = imageStore.storeImages.replaceAll('["', '');
-            final image2 = image1.replaceAll('"]', '');
-            listImageBanner.add(image2);
-            return true;
-          }).toList();
+          // print("DATA LIST STORES $listStoreManagerData");
+
+          // listStoreManagerData.where((imageStore) {
+          //   log("HHHHH");
+          //   log(imageStore.storeLogo.toString());
+          //   // final image1 = imageStore.storeLogo;
+          //   // final image2 = jsonDecode(image1 ?? '');
+          //   listImageBanner.add(imageStore.storeLogo ?? '');
+          //   return true;
+          // }).toList();
         });
       } else {
         print("ERRRO GET LIST STORE 111111");
@@ -184,7 +197,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
           var managerInforDataRes = ManagerInforModel.fromJson(data);
           setState(() {
             managerInforData = managerInforDataRes.data;
-            log(managerInforData?.userAvatar.toString() ?? '');
+            // log(managerInforData?.userAvatar.toString() ?? '');
             // avatarUser = imagePath2;
           });
 
@@ -422,6 +435,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                 selectedStoreIndex = null;
 
                                 // getListStore();
+                                handleGetBannerList();
 
                                 tapDrawerChangeBotNav(0);
                               });
@@ -523,7 +537,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             textColor:
                                 currentIndex == 3 ? Colors.black : menuGrey,
                             event: () {
-                              log("PRESSS");
+                              // log("PRESSS");
                               setState(() {
                                 checkTokenExpires();
 
@@ -581,7 +595,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                     itemBuilder: (context, index) {
                       var imagePath1 =
                           (listStoreManagerData[index].storeImages);
-                      var listImagePath = jsonDecode(imagePath1);
+                      var listImagePath = jsonDecode(imagePath1 ?? '');
                       // var imagePath2 = imagePath1.replaceAll('"]', '');
                       return InkWell(
                         onTap: () {},
@@ -864,6 +878,9 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
               color: currentIndex == 4 ? Colors.white : Colors.black),
         ],
         onTap: (index) {
+          if (index == 0) {
+            getInfor();
+          }
           setState(() {
             currentIndex = index;
             checkTokenExpires();

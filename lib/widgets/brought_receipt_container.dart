@@ -63,9 +63,9 @@ class BroughtReceiptContainer extends StatelessWidget {
                       typePopMenu
                     ],
                   ),
-                  // SizedBox(
-                  //   height: 10.h,
-                  // ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
                   Row(
                     children: [TextApp(text: dateTime)],
                   ),

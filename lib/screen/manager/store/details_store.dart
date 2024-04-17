@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app_restaurant/bloc/manager/stores/list_stores_bloc.dart';
 import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
@@ -12,17 +13,18 @@ import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/chart/chart_dialog.dart';
 import 'package:app_restaurant/widgets/list_custom_dialog.dart';
-import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app_restaurant/model/manager/store/details_stores_model.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/constant/api/index.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
 
 class DetailsStore extends StatefulWidget {
@@ -39,9 +41,15 @@ class _DetailsStoreState extends State<DetailsStore> {
   List<XFile>? imageFileList = [];
   EditDetailsStoreModel? editDetailsStoreModel;
   void createRoom() {}
+  void getListStore() async {
+    BlocProvider.of<ListStoresBloc>(context).add(GetListStores(
+      token: StorageUtils.instance.getString(key: 'token_manager') ?? '',
+    ));
+  }
+
   void hanldeGetEditDetailsStore({required shopID}) async {
     print({
-      'shopID': shopID,
+      'shopID TRUYNE ': shopID,
     });
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
@@ -79,10 +87,10 @@ class _DetailsStoreState extends State<DetailsStore> {
           print("ERROR CREATE FOOOD");
         }
       } catch (error) {
-        print("ERROR CREATE $error");
+        print("ERROR CREATE 112212 $error");
       }
     } catch (error) {
-      print("ERROR CREATE $error");
+      print("ERROR CREATE 44444 $error");
     }
   }
 
@@ -326,11 +334,11 @@ class _DetailsStoreState extends State<DetailsStore> {
                                             color2: const Color.fromRGBO(
                                                 58, 65, 111, 1),
                                             event: () {
-                                              // hanldeGetEditDetailsStore(
-                                              //     shopID: widget
-                                              //             .detailsStoreModel
-                                              //             ?.shopId ??
-                                              //         1);
+                                              hanldeGetEditDetailsStore(
+                                                  shopID: widget
+                                                          .detailsStoreModel
+                                                          ?.shopId ??
+                                                      1);
                                             },
                                             icon: Icons.edit),
                                       )
@@ -475,32 +483,128 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                   children: [
                                                     TextApp(text: "Phong 1"),
                                                     // Icon(Icons.more),
-                                                    PopUpMenuManageRoom(
-                                                      eventButton1: () {
-                                                        showDialog(
-                                                            context: context,
-                                                            builder:
-                                                                (BuildContext
-                                                                    context) {
-                                                              return CreateRoomDialog(
-                                                                  eventSaveButton:
-                                                                      createRoom);
-                                                            });
-                                                      },
-                                                      eventButton2: () {
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  ManageRoom()),
-                                                        );
-                                                      },
-                                                      eventButton3: () {
-                                                        showConfirmDialog(
-                                                            context, () {
-                                                          print("ConFIRM");
-                                                        });
-                                                      },
+                                                    Container(
+                                                      width: 20.w,
+                                                      height: 20.w,
+                                                      child: InkWell(
+                                                        onTap: () {
+                                                          showMaterialModalBottomSheet(
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .only(
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          25.r),
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          25.r),
+                                                                ),
+                                                              ),
+                                                              clipBehavior: Clip
+                                                                  .antiAliasWithSaveLayer,
+                                                              context: context,
+                                                              builder:
+                                                                  (context) =>
+                                                                      Container(
+                                                                        height:
+                                                                            1.sh /
+                                                                                3,
+                                                                        padding:
+                                                                            EdgeInsets.all(20.w),
+                                                                        child:
+                                                                            Column(
+                                                                          children: [
+                                                                            InkWell(
+                                                                              onTap: () {
+                                                                                Navigator.pop(context);
+
+                                                                                showDialog(
+                                                                                    context: context,
+                                                                                    builder: (BuildContext context) {
+                                                                                      return CreateRoomDialog(eventSaveButton: createRoom);
+                                                                                    });
+                                                                              },
+                                                                              child: Row(
+                                                                                children: [
+                                                                                  Icon(
+                                                                                    Icons.edit,
+                                                                                    size: 35.sp,
+                                                                                  ),
+                                                                                  space10W,
+                                                                                  TextApp(
+                                                                                    text: "Chỉnh sửa phòng",
+                                                                                    color: Colors.black,
+                                                                                    fontsize: 18.sp,
+                                                                                  )
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                            space10H,
+                                                                            Divider(),
+                                                                            space10H,
+                                                                            InkWell(
+                                                                              onTap: () {
+                                                                                Navigator.pop(context);
+
+                                                                                Navigator.push(
+                                                                                  context,
+                                                                                  MaterialPageRoute(builder: (context) => ManageRoom()),
+                                                                                );
+                                                                              },
+                                                                              child: Row(
+                                                                                children: [
+                                                                                  Icon(
+                                                                                    Icons.settings,
+                                                                                    size: 35.sp,
+                                                                                  ),
+                                                                                  space10W,
+                                                                                  TextApp(
+                                                                                    text: "Quản lí bàn",
+                                                                                    color: Colors.black,
+                                                                                    fontsize: 18.sp,
+                                                                                  )
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                            space10H,
+                                                                            Divider(),
+                                                                            space10H,
+                                                                            InkWell(
+                                                                              onTap: () {
+                                                                                Navigator.pop(context);
+
+                                                                                showConfirmDialog(context, () {
+                                                                                  print("ConFIRM");
+                                                                                });
+                                                                              },
+                                                                              child: Row(
+                                                                                children: [
+                                                                                  Icon(
+                                                                                    Icons.delete,
+                                                                                    size: 35.sp,
+                                                                                  ),
+                                                                                  space10W,
+                                                                                  TextApp(
+                                                                                    text: "Xoá phòng",
+                                                                                    color: Colors.black,
+                                                                                    fontsize: 18.sp,
+                                                                                  )
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ));
+                                                        },
+                                                        child: Icon(
+                                                          Icons
+                                                              .more_horiz_outlined,
+                                                          size: 25.sp,
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
                                                     )
                                                   ],
                                                 ),

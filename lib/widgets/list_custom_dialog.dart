@@ -236,7 +236,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
         }),
       );
       final data = jsonDecode(respons.body);
-      log(currentPage.toString());
+
       try {
         if (data['status'] == 200) {
           if (mounted) {
@@ -6983,14 +6983,6 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
     });
   }
 
-  // void selectImages() async {
-  //   final List<XFile> selectedImages = await imagePicker.pickMultiImage();
-  //   if (selectedImages.isNotEmpty) {
-  //     widget.imageFileList!.addAll(selectedImages);
-  //   }
-  //   setState(() {});
-  // } //selecte multi image
-
   void getListStore() async {
     BlocProvider.of<ListStoresBloc>(context).add(GetListStores(
       token: StorageUtils.instance.getString(key: 'token_manager') ?? '',
@@ -7426,7 +7418,6 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                               side: BorderSide(color: Colors.grey, width: 1), //
                             ),
                             onPressed: () {
-                              // selectImages();
                               pickImage();
                             },
                             child: Column(
@@ -7520,8 +7511,6 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                                   color: Colors.grey, width: 1), //
                             ),
                             onPressed: () {
-                              // selectImages();
-                              // pickImage();
                               pickImageLogoStore();
                             },
                             child: Container(
@@ -7534,30 +7523,14 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                                       width: 100.w,
                                       height: 100.w,
                                       child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(15.w),
-                                        child: selectedImage != null
-                                            ? Image.file(
-                                                selectedImage!,
-                                                fit: BoxFit.cover,
-                                              )
-                                            : CachedNetworkImage(
-                                                fit: BoxFit.cover,
-                                                imageUrl: httpImage +
-                                                    currentStoreLogo,
-                                                placeholder: (context, url) =>
-                                                    SizedBox(
-                                                  height: 10.w,
-                                                  width: 10.w,
-                                                  child: const Center(
-                                                      child:
-                                                          CircularProgressIndicator()),
-                                                ),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        const Icon(Icons.error),
-                                              ),
-                                      )),
+                                          borderRadius:
+                                              BorderRadius.circular(15.w),
+                                          child: selectedImage != null
+                                              ? Image.file(
+                                                  selectedImage!,
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : Container())),
                                 ))),
                       ],
                     ),
@@ -7609,7 +7582,8 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                           //   activeFlag: light,
                           // );
                           if (_formField.currentState!.validate()) {
-                            if (listImageStore.isNotEmpty) {
+                            if (listImageStore.isNotEmpty &&
+                                selectedImage != null) {
                               handleCreateStore(
                                 nameStore: nameStoreController.text,
                                 addressStore: addressStoreController.text,
@@ -7623,7 +7597,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                               showCustomDialogModal(
                                   context: navigatorKey.currentContext,
                                   textDesc:
-                                      "Bạn cần ít nhất một ảnh cho cửa hàng",
+                                      "Bạn cần ít nhất một ảnh và logo cho cửa hàng ",
                                   title: "Thất bại",
                                   colorButton: Colors.red,
                                   btnText: "OK",
@@ -7639,7 +7613,24 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                                   colorButton: Colors.red,
                                   btnText: "OK",
                                   typeDialog: "error");
-                            } else {}
+                            } else if (selectedImage == null) {
+                              showCustomDialogModal(
+                                  context: navigatorKey.currentContext,
+                                  textDesc: "Bạn cần logo cho cửa hàng",
+                                  title: "Thất bại",
+                                  colorButton: Colors.red,
+                                  btnText: "OK",
+                                  typeDialog: "error");
+                            } else {
+                              showCustomDialogModal(
+                                  context: navigatorKey.currentContext,
+                                  textDesc:
+                                      "Vui lòng kiểm tra lại các thông tin đã điền",
+                                  title: "Thất bại",
+                                  colorButton: Colors.red,
+                                  btnText: "OK",
+                                  typeDialog: "error");
+                            }
                           }
                         },
                         text: save,
@@ -7680,16 +7671,18 @@ class EditDetailStoreDialog extends StatefulWidget {
 
 class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
   bool light = false;
-  File? selectedImage;
+  File? selectedLogoImage;
   final _formField = GlobalKey<FormState>();
   final idStoreController = TextEditingController();
   final nameStoreController = TextEditingController();
   final addressStoreController = TextEditingController();
+  final desStoreController = TextEditingController();
   final ImagePicker imagePicker = ImagePicker();
-  QuillController _controllerQuill = QuillController.basic();
+
   String currentStoreLogo = 'assets/img/no-image.png';
-  List<StoreImage> listImageFood22 = [];
-  List<File>? imageFileList = [];
+  List<StoreImage> listDataImage = [];
+  // List<File>? imageFileList = [];
+  List<dynamic> listDynamicImage = [];
   List<String> listImageStore = [];
 
   void pickImageLogoStore() async {
@@ -7697,9 +7690,9 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (returndImage == null) return;
     setState(() {
-      selectedImage = File(returndImage.path);
-      if (selectedImage != null) {
-        Uint8List imagebytes = selectedImage!.readAsBytesSync();
+      selectedLogoImage = File(returndImage.path);
+      if (selectedLogoImage != null) {
+        Uint8List imagebytes = selectedLogoImage!.readAsBytesSync();
         String base64string = base64Encode(imagebytes);
         currentStoreLogo = base64string;
       }
@@ -7713,21 +7706,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
     if (returndImage == null) return;
     setState(() {
       var pathImage = File(returndImage.path);
-      imageFileList!.add(pathImage);
-      // log(listImageFood22.toString());
-
-      listImageFood22.where((element) {
-        if (element.name != null) {
-          print("ZOOO ADDD");
-          listImageStore.add(element.normal!);
-        } else {
-          print("element NULL");
-
-          return false;
-        }
-        return true;
-      }).toList();
-
+      listDynamicImage.add(pathImage);
       if (pathImage != null) {
         Uint8List imagebytes = pathImage.readAsBytesSync(); //convert to bytes
         String base64string = base64Encode(imagebytes);
@@ -7736,26 +7715,9 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
     });
   } //selecte one picture
 
-  void takeImage() async {
-    final returndImage =
-        await ImagePicker().pickImage(source: ImageSource.camera);
-    if (returndImage == null) return;
-    setState(() {
-      selectedImage = File(returndImage.path);
-    });
-  }
-
-  void selectImages() async {
-    final List<XFile> selectedImages = await imagePicker.pickMultiImage();
-    if (selectedImages.isNotEmpty) {
-      widget.imageFileList!.addAll(selectedImages);
-    }
-    setState(() {});
-  } //selecte multi image
-
   void deleteImages(data) {
-    listImageFood22.remove(data);
-    // widget.imageFileList!.remove(data);
+    listDynamicImage.remove(data);
+    listImageStore.remove(data);
     setState(() {});
   }
 
@@ -7778,13 +7740,131 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
             ? light = true
             : light = false
         : null;
+
+    mounted
+        ? widget.editDetailsStoreModel?.data.storeImages.where((element) {
+              var heheh = element.path;
+              listDynamicImage.add(heheh);
+              return true;
+            }).toList() ??
+            []
+        : null;
     mounted
         ? currentStoreLogo =
-            widget.editDetailsStoreModel?.data.storeLogo ?? currentStoreLogo
+            widget.editDetailsStoreModel?.data.storeLogo.normal ??
+                currentStoreLogo
         : currentStoreLogo;
     mounted
-        ? listImageFood22 = widget.editDetailsStoreModel?.data.storeImages ?? []
+        ? listDataImage = widget.editDetailsStoreModel?.data.storeImages ?? []
         : null;
+    mounted
+        ? desStoreController.text =
+            widget.editDetailsStoreModel?.data.storeDescription ?? ''
+        : null;
+    listDataImage.where((element) {
+      if (element.name != null) {
+        listImageStore.add(element.normal);
+      } else {
+        return false;
+      }
+      return true;
+    }).toList();
+  }
+
+  void getListStore() async {
+    BlocProvider.of<ListStoresBloc>(context).add(GetListStores(
+      token: StorageUtils.instance.getString(key: 'token_manager') ?? '',
+    ));
+  }
+
+  void handleEditStore({
+    required String storeID,
+    required String shopId,
+    required String nameStore,
+    required String addressStore,
+    required String descStore,
+    required List<String> imagesStore,
+    required String imageLogoStore,
+    required bool activeFlag,
+  }) async {
+    print({
+      'store_id': storeID,
+      'shop_id': shopId,
+      'name': nameStore,
+      'address': addressStore,
+      'description': descStore,
+      'store_logo': imageLogoStore,
+      'active_flg': activeFlag,
+      'images': imagesStore,
+    });
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$editDetailsStoreApi'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'store_id': storeID,
+          'shop_id': shopId,
+          'name': nameStore,
+          'address': addressStore,
+          'description': descStore,
+          'images': imagesStore,
+          'store_logo': imageLogoStore,
+          'active_flg': activeFlag,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print("UPDATE DATA STORE ${data}");
+      try {
+        if (data['status'] == 200) {
+          Navigator.of(navigatorKey.currentContext!).pop();
+          Navigator.pop(navigatorKey.currentContext!);
+          getListStore();
+          Future.delayed(Duration(milliseconds: 300), () {
+            showCustomDialogModal(
+              typeDialog: "succes",
+              context: navigatorKey.currentContext,
+              textDesc: "Cập nhật cửa hàng thành công",
+              title: "Thành công",
+              colorButton: Colors.green,
+              btnText: "OK",
+            );
+          });
+        } else {
+          print("ERROR LIST FOOOD RECEIPT PAGE 1");
+          showCustomDialogModal(
+              context: navigatorKey.currentContext,
+              textDesc: "Có lỗi xảy ra",
+              title: "Thất bại",
+              colorButton: Colors.red,
+              btnText: "OK",
+              typeDialog: "error");
+        }
+      } catch (error) {
+        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        showCustomDialogModal(
+            context: navigatorKey.currentContext,
+            textDesc: "Có lỗi xảy ra",
+            title: "Thất bại",
+            colorButton: Colors.red,
+            btnText: "OK",
+            typeDialog: "error");
+      }
+    } catch (error) {
+      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      showCustomDialogModal(
+          context: navigatorKey.currentContext,
+          textDesc: "Có lỗi xảy ra",
+          title: "Thất bại",
+          colorButton: Colors.red,
+          btnText: "OK",
+          typeDialog: "error");
+    }
   }
 
   @override
@@ -7797,7 +7877,6 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _controllerQuill;
   }
 
   @override
@@ -7868,6 +7947,9 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                           height: 10.h,
                         ),
                         TextFormField(
+                          onTapOutside: (event) {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          },
                           controller: idStoreController,
                           cursorColor: const Color.fromRGBO(73, 80, 87, 1),
                           validator: (value) {
@@ -7917,6 +7999,9 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                               return null;
                             }
                           },
+                          onTapOutside: (event) {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          },
                           cursorColor: const Color.fromRGBO(73, 80, 87, 1),
                           decoration: InputDecoration(
                               fillColor:
@@ -7958,6 +8043,9 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                             } else {
                               return null;
                             }
+                          },
+                          onTapOutside: (event) {
+                            FocusManager.instance.primaryFocus?.unfocus();
                           },
                           decoration: InputDecoration(
                               fillColor:
@@ -8041,105 +8129,36 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                         SizedBox(
                           height: 20.h,
                         ),
-                        Container(
-                            width: 1.sw,
-                            // height: 250.h,
+                        TextFormField(
+                          maxLength: 255,
+                          onTapOutside: (event) {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          },
+                          controller: desStoreController,
+                          keyboardType: TextInputType.multiline,
+                          minLines: 1,
+                          maxLines: 3,
+                          cursorColor: const Color.fromRGBO(73, 80, 87, 1),
+                          decoration: InputDecoration(
+                              fillColor:
+                                  const Color.fromARGB(255, 226, 104, 159),
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color.fromRGBO(214, 51, 123, 0.6),
+                                    width: 2.0),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              hintText: '',
+                              isDense: true,
+                              contentPadding: EdgeInsets.only(
+                                  bottom: 1.sw > 600 ? 50.w : 40.w,
+                                  top: 0,
+                                  left: 1.sw > 600 ? 20.w : 15.w,
+                                  right: 1.sw > 600 ? 20.w : 15.w)),
+                        ),
 
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-
-                              borderRadius: BorderRadius.circular(15.w),
-                              // color: Colors.amber,
-                            ),
-                            child: Column(
-                              children: [
-                                QuillProvider(
-                                    configurations: QuillConfigurations(
-                                        controller: _controllerQuill),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            width: 1.sw,
-                                            decoration: const BoxDecoration(
-                                              // border: Border.all(
-                                              //     color: Colors.grey),
-
-                                              border: Border(
-                                                  top: BorderSide(
-                                                      width: 0,
-                                                      color: Colors.grey),
-                                                  bottom: BorderSide(
-                                                      width: 1,
-                                                      color: Colors.grey),
-                                                  left: BorderSide(
-                                                      width: 0,
-                                                      color: Colors.grey),
-                                                  right: BorderSide(
-                                                      width: 0,
-                                                      color: Colors.grey)),
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsets.all(10.w),
-                                              child: const QuillToolbar(
-                                                configurations:
-                                                    QuillToolbarConfigurations(
-                                                        toolbarIconAlignment:
-                                                            WrapAlignment
-                                                                .center,
-                                                        showFontFamily: true,
-                                                        showFontSize: false,
-                                                        showBoldButton: true,
-                                                        showItalicButton: true,
-                                                        showSmallButton: false,
-                                                        showUnderLineButton:
-                                                            true,
-                                                        showStrikeThrough:
-                                                            false,
-                                                        showInlineCode: false,
-                                                        showColorButton: false,
-                                                        showBackgroundColorButton:
-                                                            false,
-                                                        showClearFormat: false,
-                                                        showAlignmentButtons:
-                                                            true,
-                                                        showLeftAlignment: true,
-                                                        showCenterAlignment:
-                                                            true,
-                                                        showRightAlignment:
-                                                            true,
-                                                        showJustifyAlignment:
-                                                            true,
-                                                        showHeaderStyle: false,
-                                                        showListNumbers: true,
-                                                        showListBullets: true,
-                                                        showListCheck: false,
-                                                        showCodeBlock: false,
-                                                        showQuote: false,
-                                                        showIndent: false,
-                                                        showLink: true,
-                                                        showUndo: false,
-                                                        showRedo: false,
-                                                        showDirection: false,
-                                                        showSearchButton: false,
-                                                        showSubscript: false,
-                                                        showSuperscript: false),
-                                              ),
-                                            )),
-                                        // space20H,
-                                        Container(
-                                          margin: EdgeInsets.all(5.w),
-                                          height: 200.h,
-                                          child: QuillEditor.basic(
-                                            configurations:
-                                                const QuillEditorConfigurations(
-                                              readOnly: false,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    )),
-                              ],
-                            )),
                         SizedBox(
                           height: 30.h,
                         ),
@@ -8163,10 +8182,17 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                                 color: Colors.grey, width: 1), //
                           ),
                           onPressed: () {
-                            // selectImages();
-                            pickImage();
+                            listDynamicImage.length >= 3
+                                ? showCustomDialogModal(
+                                    context: navigatorKey.currentContext,
+                                    textDesc: "Số ảnh tối đa là 3",
+                                    title: "Thất bại",
+                                    colorButton: Colors.red,
+                                    btnText: "OK",
+                                    typeDialog: "error")
+                                : pickImage();
                           },
-                          child: listImageFood22.isEmpty
+                          child: listDataImage.isEmpty
                               ? SizedBox(
                                   width: double.infinity,
                                   height: 200.h,
@@ -8184,71 +8210,99 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                                       physics:
                                           const NeverScrollableScrollPhysics(),
                                       shrinkWrap: true,
-                                      itemCount: imageFileList!.isEmpty
-                                          ? listImageFood22.length
-                                          : (imageFileList!.length),
+                                      itemCount: listDynamicImage.length,
                                       gridDelegate:
                                           const SliverGridDelegateWithFixedCrossAxisCount(
                                               crossAxisCount: 2),
                                       itemBuilder:
                                           (BuildContext context, int index) {
-                                        var imgTTTT =
-                                            listImageFood22[index].name;
-                                        var ddddd = listImageFood22[index].path;
-                                        return Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            SizedBox(
+                                        if (listDynamicImage[index]
+                                                .toString()
+                                                .length >
+                                            150) {
+                                          return Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              SizedBox(
+                                                width: 100.w,
+                                                height: 100.w,
+                                                child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15.w),
+                                                    child: Image.file(
+                                                      listDynamicImage[index],
+                                                      fit: BoxFit.cover,
+                                                    )),
+                                              ),
+                                              space10H,
+                                              InkWell(
+                                                onTap: () {
+                                                  deleteImages(
+                                                      listDynamicImage[index]);
+                                                  deleteImages(
+                                                      listImageStore[index]);
+                                                },
+                                                child: TextApp(
+                                                  text: deleteImage,
+                                                  color: Colors.blue,
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        } else {
+                                          return Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              SizedBox(
                                                 width: 100.w,
                                                 height: 100.w,
                                                 child: ClipRRect(
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           15.w),
-                                                  child: (imgTTTT!.length <
-                                                              150 &&
-                                                          imageFileList!
-                                                              .isEmpty)
-                                                      ? CachedNetworkImage(
-                                                          fit: BoxFit.fill,
-                                                          imageUrl: ddddd ?? '',
-                                                          placeholder:
-                                                              (context, url) =>
-                                                                  SizedBox(
-                                                            height: 10.w,
-                                                            width: 10.w,
-                                                            child: const Center(
-                                                                child:
-                                                                    CircularProgressIndicator()),
-                                                          ),
-                                                          errorWidget: (context,
-                                                                  url, error) =>
-                                                              const Icon(
-                                                                  Icons.error),
-                                                        )
-                                                      : Image.file(
-                                                          File(imageFileList![
-                                                                  index]
-                                                              .path),
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                )),
-                                            space10H,
-                                            InkWell(
-                                              onTap: () {
-                                                deleteImages(
-                                                    listImageFood22[index]);
-                                              },
-                                              child: TextApp(
-                                                text: deleteImage,
-                                                color: Colors.blue,
+                                                  child: CachedNetworkImage(
+                                                    fit: BoxFit.fill,
+                                                    imageUrl: listDynamicImage[
+                                                            index] ??
+                                                        '',
+                                                    placeholder:
+                                                        (context, url) =>
+                                                            SizedBox(
+                                                      height: 10.w,
+                                                      width: 10.w,
+                                                      child: const Center(
+                                                          child:
+                                                              CircularProgressIndicator()),
+                                                    ),
+                                                    errorWidget: (context, url,
+                                                            error) =>
+                                                        const Icon(Icons.error),
+                                                  ),
+                                                ),
                                               ),
-                                            )
-                                          ],
-                                        );
+                                              space10H,
+                                              InkWell(
+                                                onTap: () {
+                                                  deleteImages(
+                                                      listDynamicImage[index]);
+                                                  deleteImages(
+                                                      listImageStore[index]);
+                                                },
+                                                child: TextApp(
+                                                  text: deleteImage,
+                                                  color: Colors.blue,
+                                                ),
+                                              )
+                                            ],
+                                          );
+                                        }
                                       }),
                                 ),
                         ),
@@ -8276,8 +8330,6 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                                   color: Colors.grey, width: 1), //
                             ),
                             onPressed: () {
-                              // selectImages();
-                              // pickImage();
                               pickImageLogoStore();
                             },
                             child: Container(
@@ -8292,9 +8344,9 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                                       child: ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(15.w),
-                                        child: selectedImage != null
+                                        child: selectedLogoImage != null
                                             ? Image.file(
-                                                selectedImage!,
+                                                selectedLogoImage!,
                                                 fit: BoxFit.cover,
                                               )
                                             : CachedNetworkImage(
@@ -8352,10 +8404,41 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                       ButtonApp(
                         event: () {
                           if (_formField.currentState!.validate()) {
-                            widget.eventSaveButton();
-                            idStoreController.clear();
-                            nameStoreController.clear();
-                            addressStoreController.clear();
+                            // widget.eventSaveButton();
+                            // idStoreController.clear();
+                            // nameStoreController.clear();
+                            // addressStoreController.clear();
+                            if (listImageStore.isNotEmpty) {
+                              handleEditStore(
+                                  storeID: widget
+                                          .editDetailsStoreModel?.data.storeId
+                                          .toString() ??
+                                      '',
+                                  shopId: idStoreController.text,
+                                  nameStore: nameStoreController.text,
+                                  addressStore: addressStoreController.text,
+                                  descStore: desStoreController.text,
+                                  imagesStore: listImageStore,
+                                  imageLogoStore: currentStoreLogo,
+                                  activeFlag: light);
+                            } else {
+                              showCustomDialogModal(
+                                  context: navigatorKey.currentContext,
+                                  textDesc:
+                                      "Bạn cần ít nhất một ảnh cho món ăn",
+                                  title: "Thất bại",
+                                  colorButton: Colors.red,
+                                  btnText: "OK",
+                                  typeDialog: "error");
+                            }
+                          } else {
+                            showCustomDialogModal(
+                                context: navigatorKey.currentContext,
+                                textDesc: "Bạn o món ăn",
+                                title: "Thất bại",
+                                colorButton: Colors.red,
+                                btnText: "OK",
+                                typeDialog: "error");
                           }
                         },
                         text: save,

@@ -2,10 +2,10 @@ import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/list_custom_dialog.dart';
-import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ManageRoom extends StatefulWidget {
   const ManageRoom({super.key});
@@ -174,23 +174,88 @@ class _ManageRoomState extends State<ManageRoom> {
                                     ),
                                   )),
                               Positioned(
-                                  top: 0,
-                                  right: 0,
-                                  child: PopUpEditTable(
-                                    eventButton1: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return CreateTableDialog(
-                                                eventSaveButton: () {});
-                                          });
-                                    },
-                                    eventButton2: () {
-                                      showConfirmDialog(context, () {
-                                        print("ConFIRM");
-                                      });
-                                    },
-                                  )),
+                                  top: 5.w,
+                                  right: 5.w,
+                                  child: Container(
+                                    width: 20.w,
+                                    height: 20.w,
+                                    child: InkWell(
+                                      onTap: () {
+                                        showMaterialModalBottomSheet(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(25.r),
+                                                topLeft: Radius.circular(25.r),
+                                              ),
+                                            ),
+                                            clipBehavior:
+                                                Clip.antiAliasWithSaveLayer,
+                                            context: context,
+                                            builder: (context) => Container(
+                                                  height: 1.sh / 3,
+                                                  padding: EdgeInsets.all(20.w),
+                                                  child: Column(
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () {
+                                                          showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                                return CreateTableDialog(
+                                                                    eventSaveButton:
+                                                                        () {});
+                                                              });
+                                                        },
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(
+                                                              Icons.edit,
+                                                              size: 35.sp,
+                                                            ),
+                                                            space10W,
+                                                            TextApp(
+                                                              text: "Cập nhật",
+                                                              color:
+                                                                  Colors.black,
+                                                              fontsize: 18.sp,
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      space10H,
+                                                      Divider(),
+                                                      space10H,
+                                                      InkWell(
+                                                        onTap: () {
+                                                          showConfirmDialog(
+                                                              context, () {
+                                                            print("ConFIRM");
+                                                          });
+                                                        },
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(
+                                                              Icons.edit,
+                                                              size: 35.sp,
+                                                            ),
+                                                            space10W,
+                                                            TextApp(
+                                                              text: "Xoá",
+                                                              color:
+                                                                  Colors.black,
+                                                              fontsize: 18.sp,
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ));
+                                      },
+                                    ),
+                                  ))
                             ],
                           )),
                       space25H,

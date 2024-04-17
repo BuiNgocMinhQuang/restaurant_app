@@ -12,13 +12,13 @@ import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/brought_receipt_container.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/list_custom_dialog.dart';
-import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/custom_tab.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
@@ -415,95 +415,293 @@ class _AllWidgetState extends State<AllWidget>
                         price:
                             "${MoneyFormatter(amount: (newListFood[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                         typePopMenu: statusTextBill == "Đang chế biến"
-                            ? PopUpMenuBroughtReceipt(
-                                eventButton1: () async {
-                                  getDetailsBroughtReceiptData(
-                                      orderID: newListFood[index].orderId);
-                                  await showDialog(
-                                      context: navigatorKey.currentContext!,
-                                      builder: (BuildContext context) {
-                                        return ManageBroughtReceiptDialog(
-                                          token: tokenStaff,
-                                          role: 'staff',
-                                          orderID: newListFood[index].orderId,
-                                          shopID: getStaffShopID,
-                                        );
-                                      });
-                                },
-                                eventButton2: () async {
-                                  getPaymentData(
-                                    tableId: '',
-                                    orderID:
-                                        newListFood[index].orderId.toString(),
-                                  );
-                                  await showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return PayBillDialog(
-                                          token: tokenStaff,
-                                          role: 'staff',
-                                          shopID: getStaffShopID,
-                                          orderID: newListFood[index]
-                                              .orderId
-                                              .toString(),
-                                          roomID: '',
-                                          nameRoom: '',
-                                          eventSaveButton: () {
-                                            getListBroughtReceiptData(
-                                                filtersFlg: {"pay_flg": null});
-                                          },
-                                        );
-                                      });
-                                },
-                                eventButton3: () async {
-                                  printBroughtReceipt(
-                                      orderID: newListFood[index].orderId);
-                                  await showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return PrintBroughtReceiptDialog(
-                                          role: 'staff',
-                                          shopID: getStaffShopID,
-                                          orderID: newListFood[index]
-                                              .orderId
-                                              .toString(),
-                                        );
-                                      });
-                                },
-                                eventButton4: () async {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return CancleBillDialog(
-                                          token: tokenStaff,
-                                          eventSaveButton: () {
-                                            Navigator.of(context).pop();
-                                            getListBroughtReceiptData(
-                                                filtersFlg: {"pay_flg": null});
-                                          },
-                                          role: 'staff',
-                                          shopID: getStaffShopID,
-                                          orderID: newListFood[index].orderId,
-                                        );
-                                      });
-                                },
+                            ? Container(
+                                width: 20.w,
+                                height: 20.w,
+                                // color: Colors.amber,
+                                child: InkWell(
+                                  onTap: () {
+                                    showMaterialModalBottomSheet(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(25.r),
+                                            topLeft: Radius.circular(25.r),
+                                          ),
+                                        ),
+                                        clipBehavior:
+                                            Clip.antiAliasWithSaveLayer,
+                                        context: context,
+                                        builder: (context) => Container(
+                                              height: 1.sh / 3,
+                                              padding: EdgeInsets.all(20.w),
+                                              child: Column(
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () async {
+                                                      Navigator.pop(context);
+                                                      getDetailsBroughtReceiptData(
+                                                          orderID:
+                                                              newListFood[index]
+                                                                  .orderId);
+                                                      await showDialog(
+                                                          context: navigatorKey
+                                                              .currentContext!,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return ManageBroughtReceiptDialog(
+                                                              token: tokenStaff,
+                                                              role: 'staff',
+                                                              orderID:
+                                                                  newListFood[
+                                                                          index]
+                                                                      .orderId,
+                                                              shopID:
+                                                                  getStaffShopID,
+                                                            );
+                                                          });
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.receipt,
+                                                          size: 35.sp,
+                                                        ),
+                                                        space10W,
+                                                        TextApp(
+                                                          text:
+                                                              "Quản lý hoá đơn",
+                                                          color: Colors.black,
+                                                          fontsize: 18.sp,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  space10H,
+                                                  Divider(),
+                                                  space10H,
+                                                  InkWell(
+                                                    onTap: () async {
+                                                      Navigator.pop(context);
+                                                      getPaymentData(
+                                                        tableId: '',
+                                                        orderID:
+                                                            newListFood[index]
+                                                                .orderId
+                                                                .toString(),
+                                                      );
+                                                      await showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return PayBillDialog(
+                                                              token: tokenStaff,
+                                                              role: 'staff',
+                                                              shopID:
+                                                                  getStaffShopID,
+                                                              orderID:
+                                                                  newListFood[
+                                                                          index]
+                                                                      .orderId
+                                                                      .toString(),
+                                                              roomID: '',
+                                                              nameRoom: '',
+                                                              eventSaveButton:
+                                                                  () {
+                                                                getListBroughtReceiptData(
+                                                                    filtersFlg: {
+                                                                      "pay_flg":
+                                                                          null
+                                                                    });
+                                                              },
+                                                            );
+                                                          });
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.monetization_on,
+                                                          size: 35.sp,
+                                                        ),
+                                                        space10W,
+                                                        TextApp(
+                                                          text:
+                                                              "Thanh toán hoá đơn",
+                                                          color: Colors.black,
+                                                          fontsize: 18.sp,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  space10H,
+                                                  Divider(),
+                                                  space10H,
+                                                  InkWell(
+                                                    onTap: () async {
+                                                      Navigator.pop(context);
+                                                      printBroughtReceipt(
+                                                          orderID:
+                                                              newListFood[index]
+                                                                  .orderId);
+                                                      await showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return PrintBroughtReceiptDialog(
+                                                              role: 'staff',
+                                                              shopID:
+                                                                  getStaffShopID,
+                                                              orderID:
+                                                                  newListFood[
+                                                                          index]
+                                                                      .orderId
+                                                                      .toString(),
+                                                            );
+                                                          });
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.print,
+                                                          size: 35.sp,
+                                                        ),
+                                                        space10W,
+                                                        TextApp(
+                                                          text: "In hoá đơn",
+                                                          color: Colors.black,
+                                                          fontsize: 18.sp,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  space10H,
+                                                  Divider(),
+                                                  space10H,
+                                                  InkWell(
+                                                    onTap: () async {
+                                                      Navigator.pop(context);
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return CancleBillDialog(
+                                                              token: tokenStaff,
+                                                              eventSaveButton:
+                                                                  () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                                getListBroughtReceiptData(
+                                                                    filtersFlg: {
+                                                                      "pay_flg":
+                                                                          null
+                                                                    });
+                                                              },
+                                                              role: 'staff',
+                                                              shopID:
+                                                                  getStaffShopID,
+                                                              orderID:
+                                                                  newListFood[
+                                                                          index]
+                                                                      .orderId,
+                                                            );
+                                                          });
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.cancel,
+                                                          size: 35.sp,
+                                                        ),
+                                                        space10W,
+                                                        TextApp(
+                                                          text: "Huỷ hoá đơn",
+                                                          color: Colors.black,
+                                                          fontsize: 18.sp,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ));
+                                  },
+                                  child: Icon(
+                                    Icons.more_horiz_outlined,
+                                    size: 25.sp,
+                                  ),
+                                ),
                               )
-                            : PopUpMenuPrintBill(
-                                eventButton1: () {
-                                  printBroughtReceipt(
-                                      orderID: newListFood[index].orderId);
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return PrintBroughtReceiptDialog(
-                                          role: 'staff',
-                                          shopID: getStaffShopID,
-                                          orderID: newListFood[index]
-                                              .orderId
-                                              .toString(),
-                                        );
-                                      });
-                                },
+                            : Container(
+                                width: 20,
+                                height: 20,
+                                // color: Colors.amber,
+                                child: InkWell(
+                                  onTap: () {
+                                    showMaterialModalBottomSheet(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(25.r),
+                                            topLeft: Radius.circular(25.r),
+                                          ),
+                                        ),
+                                        clipBehavior:
+                                            Clip.antiAliasWithSaveLayer,
+                                        context: context,
+                                        builder: (context) => Container(
+                                              height: 1.sh / 3,
+                                              padding: EdgeInsets.all(20.w),
+                                              child: Column(
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () async {
+                                                      Navigator.pop(context);
+                                                      printBroughtReceipt(
+                                                          orderID:
+                                                              newListFood[index]
+                                                                  .orderId);
+                                                      await showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return PrintBroughtReceiptDialog(
+                                                              role: 'staff',
+                                                              shopID:
+                                                                  getStaffShopID,
+                                                              orderID:
+                                                                  newListFood[
+                                                                          index]
+                                                                      .orderId
+                                                                      .toString(),
+                                                            );
+                                                          });
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.print,
+                                                          size: 35.sp,
+                                                        ),
+                                                        space10W,
+                                                        TextApp(
+                                                          text: "In hoá đơn",
+                                                          color: Colors.black,
+                                                          fontsize: 18.sp,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  space10H,
+                                                  Divider(),
+                                                  space10H,
+                                                ],
+                                              ),
+                                            ));
+                                  },
+                                  child: Icon(
+                                    Icons.more_horiz_outlined,
+                                    size: 25.sp,
+                                  ),
+                                ),
                               ),
                         statusText: statusTextBill),
                   );
@@ -700,25 +898,74 @@ class _CompleteWidgetState extends State<CompleteWidget>
                             listBillComplete[index].createdAt.toString()),
                         price:
                             "${MoneyFormatter(amount: (listBillComplete[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: PopUpMenuPrintBill(
-                          eventButton1: () async {
-                            print("ZO DAY NEEE");
-
-                            await showDialog(
+                        typePopMenu: Container(
+                          width: 20.w,
+                          height: 20.w,
+                          child: InkWell(
+                            onTap: () {
+                              showMaterialModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(25.r),
+                                    topLeft: Radius.circular(25.r),
+                                  ),
+                                ),
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
                                 context: context,
-                                builder: (BuildContext context) {
-                                  printBroughtReceipt(
-                                      orderID: listBillComplete[index].orderId);
+                                builder: (context) => Container(
+                                  height: 1.sh / 3,
+                                  padding: EdgeInsets.all(20.w),
+                                  child: Column(
+                                    children: [
+                                      InkWell(
+                                        onTap: () async {
+                                          Navigator.pop(context);
+                                          await showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                printBroughtReceipt(
+                                                    orderID:
+                                                        listBillComplete[index]
+                                                            .orderId);
 
-                                  return PrintBroughtReceiptDialog(
-                                    role: 'staff',
-                                    shopID: getStaffShopID,
-                                    orderID: listBillComplete[index]
-                                        .orderId
-                                        .toString(),
-                                  );
-                                });
-                          },
+                                                return PrintBroughtReceiptDialog(
+                                                  role: 'staff',
+                                                  shopID: getStaffShopID,
+                                                  orderID:
+                                                      listBillComplete[index]
+                                                          .orderId
+                                                          .toString(),
+                                                );
+                                              });
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.receipt,
+                                              size: 35.sp,
+                                            ),
+                                            space10W,
+                                            TextApp(
+                                              text: "In hoá đơn",
+                                              color: Colors.black,
+                                              fontsize: 18.sp,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      space10H,
+                                      Divider(),
+                                      space10H,
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Icon(
+                              Icons.more_horiz_outlined,
+                              size: 25.sp,
+                            ),
+                          ),
                         ),
                         statusText: "Hoàn thành"),
                   );
@@ -906,80 +1153,210 @@ class _PendingWidgetState extends State<PendingWidget>
                             listBillPending[index].createdAt.toString()),
                         price:
                             "${MoneyFormatter(amount: (listBillPending[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: PopUpMenuBroughtReceipt(
-                          eventButton1: () async {
-                            getDetailsBroughtReceiptData(
-                                orderID: listBillPending[index].orderId);
-                            await showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return ManageBroughtReceiptDialog(
-                                    token: tokenStaff,
-                                    role: 'staff',
-                                    orderID: listBillPending[index].orderId,
-                                    shopID: getStaffShopID,
-                                  );
-                                });
-                          },
-                          eventButton2: () async {
-                            getPaymentData(
-                              tableId: '',
-                              orderID:
-                                  listBillPending[index].orderId.toString(),
-                            );
-                            await showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return PayBillDialog(
-                                    token: tokenStaff,
-                                    role: 'staff',
-                                    shopID: getStaffShopID,
-                                    orderID: listBillPending[index]
-                                        .orderId
-                                        .toString(),
-                                    roomID: '',
-                                    nameRoom: '',
-                                    eventSaveButton: () {
-                                      getListBroughtReceiptData(
-                                          filtersFlg: {"pay_flg": null});
-                                    },
-                                  );
-                                });
-                          },
-                          eventButton3: () async {
-                            printBroughtReceipt(
-                                orderID: listBillPending[index].orderId);
+                        typePopMenu: Container(
+                          width: 20.w,
+                          height: 20.w,
+                          // color: Colors.amber,
+                          child: InkWell(
+                            onTap: () {
+                              showMaterialModalBottomSheet(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(25.r),
+                                      topLeft: Radius.circular(25.r),
+                                    ),
+                                  ),
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  context: context,
+                                  builder: (context) => Container(
+                                        height: 1.sh / 3,
+                                        padding: EdgeInsets.all(20.w),
+                                        child: Column(
+                                          children: [
+                                            InkWell(
+                                              onTap: () async {
+                                                Navigator.pop(context);
+                                                getDetailsBroughtReceiptData(
+                                                    orderID:
+                                                        listBillPending[index]
+                                                            .orderId);
+                                                await showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return ManageBroughtReceiptDialog(
+                                                        token: tokenStaff,
+                                                        role: 'staff',
+                                                        orderID:
+                                                            listBillPending[
+                                                                    index]
+                                                                .orderId,
+                                                        shopID: getStaffShopID,
+                                                      );
+                                                    });
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.receipt,
+                                                    size: 35.sp,
+                                                  ),
+                                                  space10W,
+                                                  TextApp(
+                                                    text: "Quản lý hoá đơn",
+                                                    color: Colors.black,
+                                                    fontsize: 18.sp,
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            space10H,
+                                            Divider(),
+                                            space10H,
+                                            InkWell(
+                                              onTap: () async {
+                                                Navigator.pop(context);
+                                                getPaymentData(
+                                                  tableId: '',
+                                                  orderID:
+                                                      listBillPending[index]
+                                                          .orderId
+                                                          .toString(),
+                                                );
+                                                await showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return PayBillDialog(
+                                                        token: tokenStaff,
+                                                        role: 'staff',
+                                                        shopID: getStaffShopID,
+                                                        orderID:
+                                                            listBillPending[
+                                                                    index]
+                                                                .orderId
+                                                                .toString(),
+                                                        roomID: '',
+                                                        nameRoom: '',
+                                                        eventSaveButton: () {
+                                                          getListBroughtReceiptData(
+                                                              filtersFlg: {
+                                                                "pay_flg": null
+                                                              });
+                                                        },
+                                                      );
+                                                    });
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.monetization_on,
+                                                    size: 35.sp,
+                                                  ),
+                                                  space10W,
+                                                  TextApp(
+                                                    text: "Thanh toán hoá đơn",
+                                                    color: Colors.black,
+                                                    fontsize: 18.sp,
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            space10H,
+                                            Divider(),
+                                            space10H,
+                                            InkWell(
+                                              onTap: () async {
+                                                Navigator.pop(context);
+                                                printBroughtReceipt(
+                                                    orderID:
+                                                        listBillPending[index]
+                                                            .orderId);
 
-                            await showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return PrintBroughtReceiptDialog(
-                                    role: 'staff',
-                                    shopID: getStaffShopID,
-                                    orderID: listBillPending[index]
-                                        .orderId
-                                        .toString(),
-                                  );
-                                });
-                          },
-                          eventButton4: () async {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return CancleBillDialog(
-                                    token: tokenStaff,
-                                    eventSaveButton: () {
-                                      Navigator.of(context).pop();
+                                                await showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return PrintBroughtReceiptDialog(
+                                                        role: 'staff',
+                                                        shopID: getStaffShopID,
+                                                        orderID:
+                                                            listBillPending[
+                                                                    index]
+                                                                .orderId
+                                                                .toString(),
+                                                      );
+                                                    });
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.print,
+                                                    size: 35.sp,
+                                                  ),
+                                                  space10W,
+                                                  TextApp(
+                                                    text: "In hoá đơn",
+                                                    color: Colors.black,
+                                                    fontsize: 18.sp,
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            space10H,
+                                            Divider(),
+                                            space10H,
+                                            InkWell(
+                                              onTap: () async {
+                                                Navigator.pop(context);
+                                                showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return CancleBillDialog(
+                                                        token: tokenStaff,
+                                                        eventSaveButton: () {
+                                                          Navigator.of(context)
+                                                              .pop();
 
-                                      getListBroughtReceiptData(
-                                          filtersFlg: {"pay_flg": 0});
-                                    },
-                                    role: 'staff',
-                                    shopID: getStaffShopID,
-                                    orderID: listBillPending[index].orderId,
-                                  );
-                                });
-                          },
+                                                          getListBroughtReceiptData(
+                                                              filtersFlg: {
+                                                                "pay_flg": 0
+                                                              });
+                                                        },
+                                                        role: 'staff',
+                                                        shopID: getStaffShopID,
+                                                        orderID:
+                                                            listBillPending[
+                                                                    index]
+                                                                .orderId,
+                                                      );
+                                                    });
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.cancel,
+                                                    size: 35.sp,
+                                                  ),
+                                                  space10W,
+                                                  TextApp(
+                                                    text: "Huỷ hoá đơn",
+                                                    color: Colors.black,
+                                                    fontsize: 18.sp,
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ));
+                            },
+                            child: Icon(
+                              Icons.more_horiz_outlined,
+                              size: 25.sp,
+                            ),
+                          ),
                         ),
                         statusText: "Đang chế biến"),
                   );
@@ -1131,22 +1508,71 @@ class _CancleWidgetState extends State<CancleWidget>
                             listBillCancle[index].createdAt.toString()),
                         price:
                             "${MoneyFormatter(amount: (listBillCancle[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: PopUpMenuPrintBill(
-                          eventButton1: () async {
-                            printBroughtReceipt(
-                                orderID: listBillCancle[index].orderId);
-                            await showDialog(
+                        typePopMenu: Container(
+                          width: 20.w,
+                          height: 20.w,
+                          child: InkWell(
+                            onTap: () {
+                              showMaterialModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(25.r),
+                                    topLeft: Radius.circular(25.r),
+                                  ),
+                                ),
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
                                 context: context,
-                                builder: (BuildContext context) {
-                                  return PrintBroughtReceiptDialog(
-                                    role: 'staff',
-                                    shopID: getStaffShopID,
-                                    orderID: listBillCancle[index]
-                                        .orderId
-                                        .toString(),
-                                  );
-                                });
-                          },
+                                builder: (context) => Container(
+                                  height: 1.sh / 3,
+                                  padding: EdgeInsets.all(20.w),
+                                  child: Column(
+                                    children: [
+                                      InkWell(
+                                        onTap: () async {
+                                          Navigator.pop(context);
+                                          printBroughtReceipt(
+                                              orderID: listBillCancle[index]
+                                                  .orderId);
+                                          await showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return PrintBroughtReceiptDialog(
+                                                  role: 'staff',
+                                                  shopID: getStaffShopID,
+                                                  orderID: listBillCancle[index]
+                                                      .orderId
+                                                      .toString(),
+                                                );
+                                              });
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.receipt,
+                                              size: 35.sp,
+                                            ),
+                                            space10W,
+                                            TextApp(
+                                              text: "In hoá đơn",
+                                              color: Colors.black,
+                                              fontsize: 18.sp,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      space10H,
+                                      Divider(),
+                                      space10H,
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Icon(
+                              Icons.more_horiz_outlined,
+                              size: 25.sp,
+                            ),
+                          ),
                         ),
                         statusText: "Đã huỷ"),
                   );

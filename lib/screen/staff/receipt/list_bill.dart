@@ -10,18 +10,16 @@ import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/bill_infor_container.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/list_custom_dialog.dart';
-import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/custom_tab.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
 
 class StaffListBill extends StatefulWidget {
@@ -337,23 +335,74 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                             newListAllBillShop[index].createdAt.toString()),
                         price:
                             "${MoneyFormatter(amount: (newListAllBillShop[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: PopUpMenuPrintBill(
-                          eventButton1: () {
-                            showDialog(
+                        typePopMenu: Container(
+                          width: 20.w,
+                          height: 20.w,
+                          child: InkWell(
+                            onTap: () {
+                              showMaterialModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(25.r),
+                                    topLeft: Radius.circular(25.r),
+                                  ),
+                                ),
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
                                 context: context,
-                                builder: (BuildContext context) {
-                                  return PrintBillDialog(
-                                    role: 'staff',
-                                    token: tokenStaff,
-                                    orderID: newListAllBillShop[index].orderId,
-                                    roomName: newListAllBillShop[index]
-                                            ?.room
-                                            ?.storeRoomName ??
-                                        '',
-                                    tableName: tableNameBill,
-                                  );
-                                });
-                          },
+                                builder: (context) => Container(
+                                  height: 1.sh / 3,
+                                  padding: EdgeInsets.all(20.w),
+                                  child: Column(
+                                    children: [
+                                      InkWell(
+                                        onTap: () async {
+                                          Navigator.pop(context);
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return PrintBillDialog(
+                                                  role: 'staff',
+                                                  token: tokenStaff,
+                                                  orderID:
+                                                      newListAllBillShop[index]
+                                                          .orderId,
+                                                  roomName:
+                                                      newListAllBillShop[index]
+                                                              ?.room
+                                                              ?.storeRoomName ??
+                                                          '',
+                                                  tableName: tableNameBill,
+                                                );
+                                              });
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.receipt,
+                                              size: 35.sp,
+                                            ),
+                                            space10W,
+                                            TextApp(
+                                              text: "In hoá đơn",
+                                              color: Colors.black,
+                                              fontsize: 18.sp,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      space10H,
+                                      Divider(),
+                                      space10H,
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Icon(
+                              Icons.more_horiz_outlined,
+                              size: 25.sp,
+                            ),
+                          ),
                         ),
                         statusText: statusTextBill),
                   );
@@ -499,23 +548,74 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                             listBillComplete[index].createdAt.toString()),
                         price:
                             "${MoneyFormatter(amount: (listBillComplete[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: PopUpMenuPrintBill(
-                          eventButton1: () {
-                            showDialog(
+                        typePopMenu: Container(
+                          width: 20.w,
+                          height: 20.w,
+                          child: InkWell(
+                            onTap: () {
+                              showMaterialModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(25.r),
+                                    topLeft: Radius.circular(25.r),
+                                  ),
+                                ),
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
                                 context: context,
-                                builder: (BuildContext context) {
-                                  return PrintBillDialog(
-                                    role: 'staff',
-                                    token: tokenStaff,
-                                    orderID: listBillComplete[index].orderId,
-                                    roomName: listBillComplete[index]
-                                            ?.room
-                                            ?.storeRoomName ??
-                                        '',
-                                    tableName: tableNameBill,
-                                  );
-                                });
-                          },
+                                builder: (context) => Container(
+                                  height: 1.sh / 3,
+                                  padding: EdgeInsets.all(20.w),
+                                  child: Column(
+                                    children: [
+                                      InkWell(
+                                        onTap: () async {
+                                          Navigator.pop(context);
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return PrintBillDialog(
+                                                  role: 'staff',
+                                                  token: tokenStaff,
+                                                  orderID:
+                                                      listBillComplete[index]
+                                                          .orderId,
+                                                  roomName:
+                                                      listBillComplete[index]
+                                                              ?.room
+                                                              ?.storeRoomName ??
+                                                          '',
+                                                  tableName: tableNameBill,
+                                                );
+                                              });
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.receipt,
+                                              size: 35.sp,
+                                            ),
+                                            space10W,
+                                            TextApp(
+                                              text: "In hoá đơn",
+                                              color: Colors.black,
+                                              fontsize: 18.sp,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      space10H,
+                                      Divider(),
+                                      space10H,
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Icon(
+                              Icons.more_horiz_outlined,
+                              size: 25.sp,
+                            ),
+                          ),
                         ),
                         statusText: statusCloseBill == "1"
                             ? "Hoá đơn bị huỷ"
@@ -665,23 +765,74 @@ class _PendingWidgetState extends State<PendingWidget>
                             listBillPending[index].createdAt.toString()),
                         price:
                             "${MoneyFormatter(amount: (listBillPending[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: PopUpMenuPrintBill(
-                          eventButton1: () {
-                            showDialog(
+                        typePopMenu: Container(
+                          width: 20.w,
+                          height: 20.w,
+                          child: InkWell(
+                            onTap: () {
+                              showMaterialModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(25.r),
+                                    topLeft: Radius.circular(25.r),
+                                  ),
+                                ),
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
                                 context: context,
-                                builder: (BuildContext context) {
-                                  return PrintBillDialog(
-                                    role: 'staff',
-                                    token: tokenStaff,
-                                    orderID: listBillPending[index].orderId,
-                                    roomName: listBillPending[index]
-                                            ?.room
-                                            ?.storeRoomName ??
-                                        '',
-                                    tableName: tableNameBill,
-                                  );
-                                });
-                          },
+                                builder: (context) => Container(
+                                  height: 1.sh / 3,
+                                  padding: EdgeInsets.all(20.w),
+                                  child: Column(
+                                    children: [
+                                      InkWell(
+                                        onTap: () async {
+                                          Navigator.pop(context);
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return PrintBillDialog(
+                                                  role: 'staff',
+                                                  token: tokenStaff,
+                                                  orderID:
+                                                      listBillPending[index]
+                                                          .orderId,
+                                                  roomName:
+                                                      listBillPending[index]
+                                                              ?.room
+                                                              ?.storeRoomName ??
+                                                          '',
+                                                  tableName: tableNameBill,
+                                                );
+                                              });
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.receipt,
+                                              size: 35.sp,
+                                            ),
+                                            space10W,
+                                            TextApp(
+                                              text: "In hoá đơn",
+                                              color: Colors.black,
+                                              fontsize: 18.sp,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      space10H,
+                                      Divider(),
+                                      space10H,
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Icon(
+                              Icons.more_horiz_outlined,
+                              size: 25.sp,
+                            ),
+                          ),
                         ),
                         statusText: "Chưa thanh toán"),
                   );
@@ -829,23 +980,73 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                             listBillCancle[index].createdAt.toString()),
                         price:
                             "${MoneyFormatter(amount: (listBillCancle[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: PopUpMenuPrintBill(
-                          eventButton1: () {
-                            showDialog(
+                        typePopMenu: Container(
+                          width: 20.w,
+                          height: 20.w,
+                          child: InkWell(
+                            onTap: () {
+                              showMaterialModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(25.r),
+                                    topLeft: Radius.circular(25.r),
+                                  ),
+                                ),
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
                                 context: context,
-                                builder: (BuildContext context) {
-                                  return PrintBillDialog(
-                                    role: 'staff',
-                                    token: tokenStaff,
-                                    orderID: listBillCancle[index].orderId,
-                                    roomName: listBillCancle[index]
-                                            ?.room
-                                            ?.storeRoomName ??
-                                        '',
-                                    tableName: tableNameBill,
-                                  );
-                                });
-                          },
+                                builder: (context) => Container(
+                                  height: 1.sh / 3,
+                                  padding: EdgeInsets.all(20.w),
+                                  child: Column(
+                                    children: [
+                                      InkWell(
+                                        onTap: () async {
+                                          Navigator.pop(context);
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return PrintBillDialog(
+                                                  role: 'staff',
+                                                  token: tokenStaff,
+                                                  orderID: listBillCancle[index]
+                                                      .orderId,
+                                                  roomName:
+                                                      listBillCancle[index]
+                                                              ?.room
+                                                              ?.storeRoomName ??
+                                                          '',
+                                                  tableName: tableNameBill,
+                                                );
+                                              });
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.receipt,
+                                              size: 35.sp,
+                                            ),
+                                            space10W,
+                                            TextApp(
+                                              text: "In hoá đơn",
+                                              color: Colors.black,
+                                              fontsize: 18.sp,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      space10H,
+                                      Divider(),
+                                      space10H,
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Icon(
+                              Icons.more_horiz_outlined,
+                              size: 25.sp,
+                            ),
+                          ),
                         ),
                         statusText: "Hoá đơn bị huỷ"),
                   );

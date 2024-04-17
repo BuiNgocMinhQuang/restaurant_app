@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:app_restaurant/bloc/manager/stores/list_stores_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/env/index.dart';
+import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
 import 'package:app_restaurant/model/manager/store/details_stores_model.dart';
 import 'package:app_restaurant/model/manager_infor_model.dart';
 import 'package:app_restaurant/screen/manager/store/details_store.dart';
@@ -50,6 +52,8 @@ class _ListStoresState extends State<ListStores> {
   List<String>? avatarStaff;
   // DataManagerInfor? managerInforData;
   DetailsStoreModel? detailsStoreModel;
+
+  List<String> listImageBanner = [];
 
   final ImagePicker imagePicker = ImagePicker();
   @override
@@ -116,6 +120,7 @@ class _ListStoresState extends State<ListStores> {
 
   @override
   Widget build(BuildContext context) {
+    log(listImageBanner.length.toString());
     return BlocBuilder<ListStoresBloc, ListStoresState>(
       builder: (context, state) {
         return Scaffold(
@@ -137,28 +142,30 @@ class _ListStoresState extends State<ListStores> {
                                 space25H,
                                 Stack(
                                   children: [
-                                    //Carousel
-                                    CarouselSlider.builder(
-                                        itemCount: widget.bannerList.length,
-                                        itemBuilder:
-                                            (context, index, realIndex) {
-                                          final currentBanner =
-                                              widget.bannerList[index];
-                                          return buildImage(
-                                              currentBanner, index);
-                                        },
-                                        options: CarouselOptions(
-                                            height: 300.h,
-                                            autoPlay: true,
-                                            reverse: false,
-                                            autoPlayInterval:
-                                                const Duration(seconds: 3),
-                                            onPageChanged: (index, reason) {
-                                              setState(() {
-                                                activeIndex = index;
-                                              });
-                                            },
-                                            viewportFraction: 1)),
+                                    // Carousel
+                                    // listImageBanner.isNotEmpty
+                                    //     ? CarouselSlider.builder(
+                                    //         itemCount: listImageBanner.length,
+                                    //         itemBuilder:
+                                    //             (context, index, realIndex) {
+                                    //           final currentBanner =
+                                    //               listImageBanner[index];
+                                    //           return buildImage(
+                                    //               currentBanner, index);
+                                    //         },
+                                    //         options: CarouselOptions(
+                                    //             height: 300.h,
+                                    //             autoPlay: true,
+                                    //             reverse: false,
+                                    //             autoPlayInterval:
+                                    //                 const Duration(seconds: 3),
+                                    //             onPageChanged: (index, reason) {
+                                    //               setState(() {
+                                    //                 activeIndex = index;
+                                    //               });
+                                    //             },
+                                    //             viewportFraction: 1))
+                                    //     : Container(),
 
                                     // buildIndicator(),
 
@@ -167,7 +174,7 @@ class _ListStoresState extends State<ListStores> {
                                             padding: EdgeInsets.only(
                                                 left: 20.w,
                                                 right: 20.w,
-                                                top: 250.h),
+                                                top: 20.h),
                                             child: Container(
                                               width: 1.sw,
                                               // height: 120.h,
@@ -617,26 +624,26 @@ class _ListStoresState extends State<ListStores> {
   //       ),
   //     );
 
-  Widget buildImage(String currentBanner, int index) => ClipRRect(
-        borderRadius: BorderRadius.circular(15.r),
-        child: Container(
-          color: Colors.grey,
-          child: CachedNetworkImage(
-            fit: BoxFit.cover,
-            imageUrl: httpImage + currentBanner,
-            placeholder: (context, url) => SizedBox(
-              height: 30.w,
-              width: 30.w,
-              child: const Center(child: CircularProgressIndicator()),
-            ),
-            errorWidget: (context, url, error) => const Icon(Icons.error),
-          ),
-        ),
-      );
-  Widget buildIndicator() => AnimatedSmoothIndicator(
-        activeIndex: activeIndex,
-        count: widget.bannerList.length,
-      );
+  // Widget buildImage(String currentBanner, int index) => ClipRRect(
+  //       borderRadius: BorderRadius.circular(15.r),
+  //       child: Container(
+  //         color: Colors.grey,
+  //         child: CachedNetworkImage(
+  //           fit: BoxFit.cover,
+  //           imageUrl: httpImage + currentBanner,
+  //           placeholder: (context, url) => SizedBox(
+  //             height: 30.w,
+  //             width: 30.w,
+  //             child: const Center(child: CircularProgressIndicator()),
+  //           ),
+  //           errorWidget: (context, url, error) => const Icon(Icons.error),
+  //         ),
+  //       ),
+  //     );
+  // Widget buildIndicator() => AnimatedSmoothIndicator(
+  //       activeIndex: activeIndex,
+  //       count: listImageBanner.length,
+  //     );
 }
 
 class Example2MaxAmount extends StatelessWidget {

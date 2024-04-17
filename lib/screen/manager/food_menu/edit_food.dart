@@ -161,17 +161,6 @@ class _EditFoodState extends State<EditFood> {
     required String desText,
     required int foodKind,
   }) async {
-    print({
-      // 'store': currentStoreID,
-      // 'food_id': foodID,
-      // 'food_name': foodName,
-      // 'food_kind': foodKind,
-      // 'description': desText,
-      // 'food_price': int.parse(priceFoodNumber),
-      // 'active_flg': activeFlag,
-      // 'is_api': true,
-      'food_images': images,
-    });
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
 
@@ -198,14 +187,18 @@ class _EditFoodState extends State<EditFood> {
       print("GET DATA LIST FOOD ${data}");
       try {
         if (data['status'] == 200) {
-          showCustomDialogModal(
-            typeDialog: "succes",
-            context: navigatorKey.currentContext,
-            textDesc: "Cập nhật món thành công",
-            title: "Thành công",
-            colorButton: Colors.green,
-            btnText: "OK",
-          );
+          // Navigator.of(navigatorKey.currentContext!).pop();
+          Navigator.pop(navigatorKey.currentContext!);
+          Future.delayed(Duration(milliseconds: 300), () {
+            showCustomDialogModal(
+              typeDialog: "succes",
+              context: navigatorKey.currentContext,
+              textDesc: "Cập nhật món thành công",
+              title: "Thành công",
+              colorButton: Colors.green,
+              btnText: "OK",
+            );
+          });
         } else {
           print("ERROR LIST FOOOD RECEIPT PAGE 1");
           showCustomDialogModal(

@@ -31,6 +31,7 @@ const String detailStore = 'user/stores/detail/data';
 const String detailEditStore = 'user/stores/detail';
 const String getChartData = 'user/stores/detail/chart-column-overview-by-store';
 const String createStoreApi = 'user/stores/create';
+const String editDetailsStoreApi = 'user/stores/detail/edit';
 //Shared API
 const String userInformationApi = 'information';
 const String areas = 'areas';

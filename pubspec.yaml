@@ -44,6 +44,7 @@ dependencies:
   quill_html_converter: ^9.3.6
   fl_chart: ^0.67.0
   quill_html_editor: ^2.2.8
+  modal_bottom_sheet: ^3.0.0
 
 dev_dependencies:
   flutter_test:

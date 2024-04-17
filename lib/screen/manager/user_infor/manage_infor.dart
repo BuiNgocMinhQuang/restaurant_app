@@ -10,7 +10,6 @@ import 'package:app_restaurant/model/manager_infor_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
-import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -23,6 +22,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/constant/api/index.dart';
 import 'package:app_restaurant/env/index.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ManagerInformation extends StatefulWidget {
   const ManagerInformation({super.key});
@@ -745,18 +745,97 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                           ),
                                   ),
                                   Positioned(
-                                      top: 0.w,
-                                      right: 0.w,
-                                      child: PopUpSettingAvatar(
-                                        eventButton1: () {
-                                          pickImage();
+                                    top: 5.w,
+                                    right: 5.w,
+                                    child: Container(
+                                      width: 20.w,
+                                      height: 20.w,
+                                      child: InkWell(
+                                        onTap: () {
+                                          showMaterialModalBottomSheet(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topRight:
+                                                      Radius.circular(25.r),
+                                                  topLeft:
+                                                      Radius.circular(25.r),
+                                                ),
+                                              ),
+                                              clipBehavior:
+                                                  Clip.antiAliasWithSaveLayer,
+                                              context: context,
+                                              builder: (context) => Container(
+                                                    height: 1.sh / 3,
+                                                    padding:
+                                                        EdgeInsets.all(20.w),
+                                                    child: Column(
+                                                      children: [
+                                                        InkWell(
+                                                          onTap: () async {
+                                                            Navigator.pop(
+                                                                context);
+                                                            pickImage();
+                                                          },
+                                                          child: Row(
+                                                            children: [
+                                                              Icon(
+                                                                Icons.image,
+                                                                size: 35.sp,
+                                                              ),
+                                                              space10W,
+                                                              TextApp(
+                                                                text:
+                                                                    "Thay đổi ảnh đại diện",
+                                                                color: Colors
+                                                                    .black,
+                                                                fontsize: 18.sp,
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        space10H,
+                                                        Divider(),
+                                                        space10H,
+                                                        InkWell(
+                                                          onTap: () async {
+                                                            Navigator.pop(
+                                                                context);
+                                                            showConfirmDialog(
+                                                                navigatorKey
+                                                                    .currentContext!,
+                                                                () {
+                                                              deletedAvatarManager();
+                                                            });
+                                                          },
+                                                          child: Row(
+                                                            children: [
+                                                              Icon(
+                                                                Icons.delete,
+                                                                size: 35.sp,
+                                                              ),
+                                                              space10W,
+                                                              TextApp(
+                                                                text:
+                                                                    "Xoá ảnh đại diện",
+                                                                color: Colors
+                                                                    .black,
+                                                                fontsize: 18.sp,
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ));
                                         },
-                                        eventButton2: () {
-                                          showConfirmDialog(context, () {
-                                            deletedAvatarManager();
-                                          });
-                                        },
-                                      )),
+                                        child: Icon(
+                                          Icons.edit,
+                                          size: 25.sp,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ),
                               space25W,

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:app_restaurant/bloc/bill_table/bill_table_bloc.dart';
 import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
@@ -7,12 +9,12 @@ import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/list_custom_dialog.dart';
-import 'package:app_restaurant/widgets/list_pop_menu.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ManagerBookingTable extends StatefulWidget {
   final String shopID;
@@ -289,12 +291,14 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                 currentRoomIndex]
                                                             .tables
                                                             ?.length ??
-                                                        1,
+                                                        0,
                                                     itemBuilder:
                                                         (context, index) {
+                                                      log(index.toString());
                                                       var roomName = state
-                                                              .listRoomModel!
-                                                              .rooms![index]
+                                                              .listRoomModel
+                                                              ?.rooms?[
+                                                                  currentRoomIndex]
                                                               .storeRoomName ??
                                                           '';
 
@@ -417,7 +421,232 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                               ))
                                                             : Container(
                                                                 child: InkWell(
-                                                                onTap: () {},
+                                                                onTap: () {
+                                                                  showMaterialModalBottomSheet(
+                                                                    shape:
+                                                                        RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topRight:
+                                                                            Radius.circular(25.r),
+                                                                        topLeft:
+                                                                            Radius.circular(25.r),
+                                                                      ),
+                                                                    ),
+                                                                    clipBehavior:
+                                                                        Clip.antiAliasWithSaveLayer,
+                                                                    context:
+                                                                        context,
+                                                                    builder:
+                                                                        (context) =>
+                                                                            Container(
+                                                                      // decoration:
+                                                                      //     BoxDecoration(
+                                                                      //   borderRadius: BorderRadius.only(
+                                                                      //       topRight:
+                                                                      //           Radius.circular(10.r),
+                                                                      //       topLeft: Radius.circular(10.r)),
+                                                                      //   color: Colors
+                                                                      //       .red,
+                                                                      // ),
+                                                                      height:
+                                                                          1.sh /
+                                                                              3,
+                                                                      padding: EdgeInsets
+                                                                          .all(20
+                                                                              .w),
+                                                                      child:
+                                                                          Column(
+                                                                        children: [
+                                                                          InkWell(
+                                                                            onTap:
+                                                                                () {
+                                                                              Navigator.pop(context);
+                                                                              getTableInfor(
+                                                                                roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
+                                                                                tableId: state.listRoomModel!.rooms![currentRoomIndex].tables![index].roomTableId.toString(),
+                                                                              );
+                                                                              showDialog(
+                                                                                context: context,
+                                                                                builder: (BuildContext context) {
+                                                                                  return BookingTableDialog(
+                                                                                    eventSaveButton: () {
+                                                                                      getDataTabIndex(
+                                                                                        roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
+                                                                                      );
+                                                                                    },
+                                                                                    token: tokenManager,
+                                                                                    role: 'user',
+                                                                                    shopID: widget.shopID,
+                                                                                    idRoom: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId,
+                                                                                    listTableOfRoom: state.listRoomModel!.rooms![currentRoomIndex].tables,
+                                                                                    currentTable: state.listRoomModel!.rooms![currentRoomIndex].tables![index],
+                                                                                  );
+                                                                                },
+                                                                              );
+                                                                            },
+                                                                            child:
+                                                                                Row(
+                                                                              children: [
+                                                                                Icon(
+                                                                                  Icons.receipt,
+                                                                                  size: 35.sp,
+                                                                                ),
+                                                                                space10W,
+                                                                                TextApp(
+                                                                                  text: "Quản lý hoá đơn",
+                                                                                  color: Colors.black,
+                                                                                  fontsize: 18.sp,
+                                                                                )
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                          space10H,
+                                                                          Divider(),
+                                                                          space10H,
+                                                                          InkWell(
+                                                                            onTap:
+                                                                                () {
+                                                                              Navigator.pop(context);
+
+                                                                              getSwitchTableData(
+                                                                                roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
+                                                                                tableId: state.listRoomModel!.rooms![currentRoomIndex].tables![index].roomTableId.toString(),
+                                                                                orderID: state.listRoomModel!.rooms![currentRoomIndex].tables![index].orderId.toString(),
+                                                                              );
+                                                                              showDialog(
+                                                                                  context: context,
+                                                                                  builder: (BuildContext context) {
+                                                                                    return MoveTableDialog(
+                                                                                      token: tokenManager,
+                                                                                      role: 'user',
+                                                                                      shopID: widget.shopID,
+                                                                                      orderID: state.listRoomModel!.rooms![currentRoomIndex].tables![index].orderId.toString(),
+                                                                                      currentTable: state.listRoomModel!.rooms![currentRoomIndex].tables![index],
+                                                                                      nameRoom: roomName,
+                                                                                      roomID: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
+                                                                                      listIdRoom: listRoomID,
+                                                                                      eventSaveButton: () {
+                                                                                        getDataTabIndex(
+                                                                                          roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
+                                                                                        );
+                                                                                      },
+                                                                                    );
+                                                                                  });
+                                                                            },
+                                                                            child:
+                                                                                Row(
+                                                                              children: [
+                                                                                Icon(
+                                                                                  Icons.monetization_on,
+                                                                                  size: 35.sp,
+                                                                                ),
+                                                                                space10W,
+                                                                                TextApp(
+                                                                                  text: "Thanh toán hoá đơn",
+                                                                                  color: Colors.black,
+                                                                                  fontsize: 18.sp,
+                                                                                )
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                          space10H,
+                                                                          Divider(),
+                                                                          space10H,
+                                                                          InkWell(
+                                                                            onTap:
+                                                                                () {
+                                                                              Navigator.pop(context);
+
+                                                                              getBillData(
+                                                                                roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
+                                                                                tableId: state.listRoomModel!.rooms![currentRoomIndex].tables![index].roomTableId.toString(),
+                                                                                orderID: state.listRoomModel!.rooms![currentRoomIndex].tables![index].orderId.toString(),
+                                                                              );
+                                                                              showDialog(
+                                                                                  useRootNavigator: false,
+                                                                                  context: context,
+                                                                                  builder: (BuildContext context) {
+                                                                                    return SeeBillDialog(
+                                                                                      token: tokenManager,
+                                                                                      role: 'user',
+                                                                                      shopID: widget.shopID,
+                                                                                      orderID: state.listRoomModel!.rooms![currentRoomIndex].tables?[index].orderId,
+                                                                                      roomID: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
+                                                                                      currentTable: state.listRoomModel!.rooms![currentRoomIndex].tables![index],
+                                                                                      nameRoom: roomName,
+                                                                                    );
+                                                                                  });
+                                                                            },
+                                                                            child:
+                                                                                Row(
+                                                                              children: [
+                                                                                Icon(
+                                                                                  Icons.print,
+                                                                                  size: 35.sp,
+                                                                                ),
+                                                                                space10W,
+                                                                                TextApp(
+                                                                                  text: "In hoá đơn",
+                                                                                  color: Colors.black,
+                                                                                  fontsize: 18.sp,
+                                                                                )
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                          space10H,
+                                                                          Divider(),
+                                                                          space10H,
+                                                                          InkWell(
+                                                                            onTap:
+                                                                                () {
+                                                                              Navigator.pop(context);
+
+                                                                              getPaymentData(
+                                                                                tableId: state.listRoomModel!.rooms![currentRoomIndex].tables![index].roomTableId.toString(),
+                                                                                orderID: state.listRoomModel!.rooms![currentRoomIndex].tables![index].orderId.toString(),
+                                                                              );
+                                                                              showDialog(
+                                                                                  context: context,
+                                                                                  builder: (BuildContext context) {
+                                                                                    return PayBillDialog(
+                                                                                      token: tokenManager,
+                                                                                      role: 'user',
+                                                                                      shopID: widget.shopID,
+                                                                                      orderID: state.listRoomModel!.rooms![currentRoomIndex].tables?[index].orderId.toString(),
+                                                                                      roomID: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
+                                                                                      currentTable: state.listRoomModel!.rooms![currentRoomIndex].tables![index],
+                                                                                      nameRoom: roomName,
+                                                                                      eventSaveButton: () {
+                                                                                        getDataTabIndex(
+                                                                                          roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
+                                                                                        );
+                                                                                      },
+                                                                                    );
+                                                                                  });
+                                                                            },
+                                                                            child:
+                                                                                Row(
+                                                                              children: [
+                                                                                Icon(
+                                                                                  Icons.cancel,
+                                                                                  size: 35.sp,
+                                                                                ),
+                                                                                space10W,
+                                                                                TextApp(
+                                                                                  text: "Huỷ hoá đơn",
+                                                                                  color: Colors.black,
+                                                                                  fontsize: 18.sp,
+                                                                                )
+                                                                              ],
+                                                                            ),
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                },
                                                                 child: Stack(
                                                                   alignment:
                                                                       Alignment
@@ -460,118 +689,6 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                         )
                                                                       ],
                                                                     ),
-                                                                    Positioned(
-                                                                        top: 0,
-                                                                        right:
-                                                                            0,
-                                                                        child: PopUpMenuUsingTable(eventButton1:
-                                                                            () {
-                                                                          getTableInfor(
-                                                                            roomId:
-                                                                                state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
-                                                                            tableId:
-                                                                                state.listRoomModel!.rooms![currentRoomIndex].tables![index].roomTableId.toString(),
-                                                                          );
-                                                                          showDialog(
-                                                                            context:
-                                                                                context,
-                                                                            builder:
-                                                                                (BuildContext context) {
-                                                                              return BookingTableDialog(
-                                                                                eventSaveButton: () {
-                                                                                  getDataTabIndex(
-                                                                                    roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
-                                                                                  );
-                                                                                },
-                                                                                token: tokenManager,
-                                                                                role: 'user',
-                                                                                shopID: widget.shopID,
-                                                                                idRoom: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId,
-                                                                                listTableOfRoom: state.listRoomModel!.rooms![currentRoomIndex].tables,
-                                                                                currentTable: state.listRoomModel!.rooms![currentRoomIndex].tables![index],
-                                                                              );
-                                                                            },
-                                                                          );
-                                                                        }, eventButton2:
-                                                                            () {
-                                                                          getSwitchTableData(
-                                                                            roomId:
-                                                                                state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
-                                                                            tableId:
-                                                                                state.listRoomModel!.rooms![currentRoomIndex].tables![index].roomTableId.toString(),
-                                                                            orderID:
-                                                                                state.listRoomModel!.rooms![currentRoomIndex].tables![index].orderId.toString(),
-                                                                          );
-                                                                          showDialog(
-                                                                              context: context,
-                                                                              builder: (BuildContext context) {
-                                                                                return MoveTableDialog(
-                                                                                  token: tokenManager,
-                                                                                  role: 'user',
-                                                                                  shopID: widget.shopID,
-                                                                                  orderID: state.listRoomModel!.rooms![currentRoomIndex].tables![index].orderId.toString(),
-                                                                                  currentTable: state.listRoomModel!.rooms![currentRoomIndex].tables![index],
-                                                                                  nameRoom: roomName,
-                                                                                  roomID: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
-                                                                                  listIdRoom: listRoomID,
-                                                                                  eventSaveButton: () {
-                                                                                    getDataTabIndex(
-                                                                                      roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
-                                                                                    );
-                                                                                  },
-                                                                                );
-                                                                              });
-                                                                        }, eventButton3:
-                                                                            () {
-                                                                          getBillData(
-                                                                            roomId:
-                                                                                state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
-                                                                            tableId:
-                                                                                state.listRoomModel!.rooms![currentRoomIndex].tables![index].roomTableId.toString(),
-                                                                            orderID:
-                                                                                state.listRoomModel!.rooms![currentRoomIndex].tables![index].orderId.toString(),
-                                                                          );
-                                                                          showDialog(
-                                                                              useRootNavigator: false,
-                                                                              context: context,
-                                                                              builder: (BuildContext context) {
-                                                                                return SeeBillDialog(
-                                                                                  token: tokenManager,
-                                                                                  role: 'user',
-                                                                                  shopID: widget.shopID,
-                                                                                  orderID: state.listRoomModel!.rooms![currentRoomIndex].tables?[index].orderId,
-                                                                                  roomID: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
-                                                                                  currentTable: state.listRoomModel!.rooms![currentRoomIndex].tables![index],
-                                                                                  nameRoom: roomName,
-                                                                                );
-                                                                              });
-                                                                        }, eventButton4:
-                                                                            () {
-                                                                          getPaymentData(
-                                                                            tableId:
-                                                                                state.listRoomModel!.rooms![currentRoomIndex].tables![index].roomTableId.toString(),
-                                                                            orderID:
-                                                                                state.listRoomModel!.rooms![currentRoomIndex].tables![index].orderId.toString(),
-                                                                          );
-                                                                          showDialog(
-                                                                              context: context,
-                                                                              builder: (BuildContext context) {
-                                                                                return PayBillDialog(
-                                                                                  token: tokenManager,
-                                                                                  role: 'user',
-                                                                                  shopID: widget.shopID,
-                                                                                  orderID: state.listRoomModel!.rooms![currentRoomIndex].tables?[index].orderId.toString(),
-                                                                                  roomID: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
-                                                                                  currentTable: state.listRoomModel!.rooms![currentRoomIndex].tables![index],
-                                                                                  nameRoom: roomName,
-                                                                                  eventSaveButton: () {
-                                                                                    getDataTabIndex(
-                                                                                      roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
-                                                                                    );
-                                                                                  },
-                                                                                );
-                                                                              });
-                                                                        }))
                                                                   ],
                                                                 ),
                                                               )),
