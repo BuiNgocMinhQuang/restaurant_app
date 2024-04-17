@@ -6930,8 +6930,9 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
   final idStoreController = TextEditingController();
   final nameStoreController = TextEditingController();
   final addressStoreController = TextEditingController();
+  final desController = TextEditingController();
   final ImagePicker imagePicker = ImagePicker();
-  QuillController _controllerQuill = QuillController.basic();
+  // QuillController _controllerQuill = QuillController.basic();
   String currentStoreLogo = 'assets/img/no-image.png';
   List<File>? imageFileList = [];
   List<String> listImageStore = [];
@@ -6940,7 +6941,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _controllerQuill;
+    // _controllerQuill;
   }
 
   void pickImageLogoStore() async {
@@ -6990,8 +6991,15 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
   //   setState(() {});
   // } //selecte multi image
 
+  void getListStore() async {
+    BlocProvider.of<ListStoresBloc>(context).add(GetListStores(
+      token: StorageUtils.instance.getString(key: 'token_manager') ?? '',
+    ));
+  }
+
   void deleteImages(data) {
     imageFileList!.remove(data);
+    listImageStore.remove(data);
     setState(() {});
   }
 
@@ -7037,7 +7045,9 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
       log(data.toString());
       try {
         if (data['status'] == 200) {
+          getListStore();
           Navigator.of(navigatorKey.currentContext!).pop();
+
           Future.delayed(Duration(milliseconds: 500), () {
             showCustomDialogModal(
               typeDialog: "succes",
@@ -7164,6 +7174,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                           height: 10.h,
                         ),
                         TextFormField(
+                          maxLength: 12,
                           onTapOutside: (event) {
                             FocusManager.instance.primaryFocus?.unfocus();
                           },
@@ -7210,6 +7221,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                           height: 10.h,
                         ),
                         TextFormField(
+                          maxLength: 32,
                           onTapOutside: (event) {
                             FocusManager.instance.primaryFocus?.unfocus();
                           },
@@ -7348,105 +7360,50 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                         SizedBox(
                           height: 20.h,
                         ),
-                        Container(
-                            width: 1.sw,
-                            // height: 250.h,
-
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-
-                              borderRadius: BorderRadius.circular(15.w),
-                              // color: Colors.amber,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextApp(
+                              text: " Mô tả",
+                              fontsize: 12.sp,
+                              fontWeight: FontWeight.bold,
+                              color: blueText,
                             ),
-                            child: Column(
-                              children: [
-                                QuillProvider(
-                                    configurations: QuillConfigurations(
-                                        controller: _controllerQuill),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            width: 1.sw,
-                                            decoration: const BoxDecoration(
-                                              // border: Border.all(
-                                              //     color: Colors.grey),
-
-                                              border: Border(
-                                                  top: BorderSide(
-                                                      width: 0,
-                                                      color: Colors.grey),
-                                                  bottom: BorderSide(
-                                                      width: 1,
-                                                      color: Colors.grey),
-                                                  left: BorderSide(
-                                                      width: 0,
-                                                      color: Colors.grey),
-                                                  right: BorderSide(
-                                                      width: 0,
-                                                      color: Colors.grey)),
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsets.all(10.w),
-                                              child: const QuillToolbar(
-                                                configurations:
-                                                    QuillToolbarConfigurations(
-                                                        toolbarIconAlignment:
-                                                            WrapAlignment
-                                                                .center,
-                                                        showFontFamily: true,
-                                                        showFontSize: false,
-                                                        showBoldButton: true,
-                                                        showItalicButton: true,
-                                                        showSmallButton: false,
-                                                        showUnderLineButton:
-                                                            true,
-                                                        showStrikeThrough:
-                                                            false,
-                                                        showInlineCode: false,
-                                                        showColorButton: false,
-                                                        showBackgroundColorButton:
-                                                            false,
-                                                        showClearFormat: false,
-                                                        showAlignmentButtons:
-                                                            true,
-                                                        showLeftAlignment: true,
-                                                        showCenterAlignment:
-                                                            true,
-                                                        showRightAlignment:
-                                                            true,
-                                                        showJustifyAlignment:
-                                                            true,
-                                                        showHeaderStyle: false,
-                                                        showListNumbers: true,
-                                                        showListBullets: true,
-                                                        showListCheck: false,
-                                                        showCodeBlock: false,
-                                                        showQuote: false,
-                                                        showIndent: false,
-                                                        showLink: true,
-                                                        showUndo: false,
-                                                        showRedo: false,
-                                                        showDirection: false,
-                                                        showSearchButton: false,
-                                                        showSubscript: false,
-                                                        showSuperscript: false),
-                                              ),
-                                            )),
-                                        // space20H,
-                                        Container(
-                                          margin: EdgeInsets.all(5.w),
-                                          height: 200.h,
-                                          child: QuillEditor.basic(
-                                            configurations:
-                                                const QuillEditorConfigurations(
-                                              readOnly: false,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    )),
-                              ],
-                            )),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            TextFormField(
+                              maxLength: 255,
+                              onTapOutside: (event) {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
+                              controller: desController,
+                              keyboardType: TextInputType.multiline,
+                              minLines: 1,
+                              maxLines: 3,
+                              cursorColor: const Color.fromRGBO(73, 80, 87, 1),
+                              decoration: InputDecoration(
+                                  fillColor:
+                                      const Color.fromARGB(255, 226, 104, 159),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color:
+                                            Color.fromRGBO(214, 51, 123, 0.6),
+                                        width: 2.0),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8.r),
+                                  ),
+                                  hintText: '',
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.only(
+                                      bottom: 1.sw > 600 ? 50.w : 40.w,
+                                      top: 0,
+                                      left: 1.sw > 600 ? 20.w : 15.w,
+                                      right: 1.sw > 600 ? 20.w : 15.w)),
+                            ),
+                          ],
+                        ),
                         SizedBox(
                           height: 30.h,
                         ),
@@ -7523,6 +7480,9 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                                                     onTap: () {
                                                       deleteImages(
                                                           imageFileList![
+                                                              index]);
+                                                      deleteImages(
+                                                          listImageStore[
                                                               index]);
                                                     },
                                                     child: TextApp(
@@ -7635,39 +7595,52 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                       ),
                       ButtonApp(
                         event: () {
-                          handleCreateStore(
-                            nameStore: "ndahibuidj",
-                            addressStore: "addressStoreController.text",
-                            shopID: "22224e0053",
-                            descriptionStore: "descriptionStore",
-                            logoStore: currentStoreLogo,
-                            imagesStore: listImageStore,
-                            activeFlag: light,
-                          );
-                          // if (_formField.currentState!.validate() &&
-                          //     listImageStore.isNotEmpty) {
-                          //   if (listImageStore.isNotEmpty) {
-                          //     handleCreateStore(
-                          //       nameStore: nameStoreController.text,
-                          //       addressStore: addressStoreController.text,
-                          //       shopID: idStoreController.text,
-                          //       descriptionStore: "descriptionStore",
-                          //       logoStore: currentStoreLogo,
-                          //       imagesStore: listImageStore,
-                          //       activeFlag: light,
-                          //     );
-
-                          //   }
-                          // } else {
-                          //   showCustomDialogModal(
-                          //       context: navigatorKey.currentContext,
-                          //       textDesc:
-                          //           "Bạn cần ít nhất một ảnh cho cửa hàng",
-                          //       title: "Thất bại",
-                          //       colorButton: Colors.red,
-                          //       btnText: "OK",
-                          //       typeDialog: "error");
-                          // }
+                          log("IMGAE");
+                          print(listImageStore.toString());
+                          // log("LOGO");
+                          // print(currentStoreLogo.toString());
+                          // handleCreateStore(
+                          //   nameStore: "ndahibuidj",
+                          //   addressStore: "addressStoreController.text",
+                          //   shopID: "22224e0053",
+                          //   descriptionStore: "descriptionStore",
+                          //   logoStore: currentStoreLogo,
+                          //   imagesStore: listImageStore,
+                          //   activeFlag: light,
+                          // );
+                          if (_formField.currentState!.validate()) {
+                            if (listImageStore.isNotEmpty) {
+                              handleCreateStore(
+                                nameStore: nameStoreController.text,
+                                addressStore: addressStoreController.text,
+                                shopID: idStoreController.text,
+                                descriptionStore: desController.text,
+                                logoStore: currentStoreLogo,
+                                imagesStore: listImageStore,
+                                activeFlag: light,
+                              );
+                            } else {
+                              showCustomDialogModal(
+                                  context: navigatorKey.currentContext,
+                                  textDesc:
+                                      "Bạn cần ít nhất một ảnh cho cửa hàng",
+                                  title: "Thất bại",
+                                  colorButton: Colors.red,
+                                  btnText: "OK",
+                                  typeDialog: "error");
+                            }
+                          } else {
+                            if (listImageStore.isEmpty) {
+                              showCustomDialogModal(
+                                  context: navigatorKey.currentContext,
+                                  textDesc:
+                                      "Bạn cần ít nhất một ảnh cho cửa hàng",
+                                  title: "Thất bại",
+                                  colorButton: Colors.red,
+                                  btnText: "OK",
+                                  typeDialog: "error");
+                            } else {}
+                          }
                         },
                         text: save,
                         colorText: Colors.white,

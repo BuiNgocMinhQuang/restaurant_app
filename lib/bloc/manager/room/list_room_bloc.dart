@@ -62,7 +62,7 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
                 // handleLogout();
                 BlocProvider.of<LoginBloc>(navigatorKey.currentContext!)
                     .add(const LogoutStaff());
-                StorageUtils.instance.removeKey(key: 'token_staff');
+                // StorageUtils.instance.removeKey(key: 'token_staff');
                 navigatorKey.currentContext!.go("/staff_sign_in");
               });
         }
