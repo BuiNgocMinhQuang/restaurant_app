@@ -18,7 +18,6 @@ import 'package:app_restaurant/model/bill_infor_model.dart';
 import 'package:app_restaurant/model/brought_receipt/manage_brought_receipt_model.dart';
 import 'package:app_restaurant/model/food_table_data_model.dart';
 import 'package:app_restaurant/model/list_room_model.dart';
-import 'package:app_restaurant/model/manager/store/details_stores_model.dart';
 import 'package:app_restaurant/model/manager/store/edit_details_store_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/share_getString.dart';
@@ -171,6 +170,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
     _tabController = TabController(length: 3, vsync: this);
     _tabController!.addListener(_handleTabSelection);
     //
+    getListFoodTable(page: 1, tokenReq: widget.token);
 
     scrollListFoodController.addListener(() {
       log("ENDDDDDD");
@@ -546,21 +546,6 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                         '',
                                   ));
                                 } else if (index == 1) {
-                                  // setState(() {
-                                  //   currentPage = 1;
-                                  // });
-                                  // getListFoodTable(
-                                  //     tokenReq: widget.token, page: 1);
-                                  // BlocProvider.of<TableBloc>(context).add(
-                                  //     GetTableFoods(
-                                  //         token: widget.token,
-                                  //         client: widget.role,
-                                  //         shopId: widget.shopID,
-                                  //         roomId: widget.idRoom,
-                                  //         tableId:
-                                  //             widget.currentTable?.roomTableId,
-                                  //         limit: 15,
-                                  //         page: 1));
                                   getDetailFoodTable(tokenReq: widget.token);
                                 }
                                 // else if (index == 2) {
@@ -1140,18 +1125,6 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                       .blue, //                   <--- border color
                                                   width: 2.0,
                                                 ),
-                                                // color: Colors.blue,
-                                                // gradient:
-                                                //     const LinearGradient(
-                                                //   begin: Alignment.topRight,
-                                                //   end: Alignment.bottomLeft,
-                                                //   colors: [
-                                                //     Color.fromRGBO(
-                                                //         33, 82, 255, 1),
-                                                //     Color.fromRGBO(
-                                                //         33, 212, 253, 1)
-                                                //   ],
-                                                // ),
                                               ),
                                               child: Row(
                                                 crossAxisAlignment:
@@ -1162,7 +1135,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                   TextApp(
                                                     text:
                                                         currentCart.toString(),
-                                                    color: Colors.white,
+                                                    color: Colors.blue,
                                                     fontsize: 14.sp,
                                                     fontWeight: FontWeight.bold,
                                                   ),
@@ -1170,15 +1143,14 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                   const Icon(
                                                     Icons
                                                         .shopping_basket_rounded,
-                                                    color: Colors.white,
+                                                    color: Colors.blue,
                                                   )
                                                 ],
                                               ))
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(height: 5.0),
-                                    const SizedBox(height: 10.0),
+                                    space15H,
                                     Expanded(
                                         child: ListView.builder(
                                             controller:
@@ -1320,28 +1292,6 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                         blueText2,
                                                                   ),
                                                                 ),
-                                                                // space10H,
-                                                                // SizedBox(
-                                                                //   width: 80.w,
-                                                                //   child:
-                                                                //       TextApp(
-                                                                //     softWrap:
-                                                                //         true,
-                                                                //     isOverFlow:
-                                                                //         false,
-                                                                //     text:
-                                                                //         filterProducts[
-                                                                //             index]
-                                                                //         .foodDescription,
-                                                                //     fontsize:
-                                                                //         14.sp,
-                                                                //     fontWeight:
-                                                                //         FontWeight
-                                                                //             .bold,
-                                                                //     color:
-                                                                //         blueText2,
-                                                                //   ),
-                                                                // ),
                                                               ],
                                                             ),
                                                           ],
@@ -4956,335 +4906,6 @@ class _ManageBroughtReceiptDialogState
                                     ],
                                   ),
                                 );
-
-                                Card(
-                                  elevation: 8.0,
-                                  margin: const EdgeInsets.all(8),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.r),
-                                  ),
-                                  child: Container(
-                                      width: 1.sw,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(15.r)),
-                                      child: Column(
-                                        children: [
-                                          space15H,
-                                          SizedBox(
-                                              height: 160.w,
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(15.r),
-                                                    topRight:
-                                                        Radius.circular(15.r)),
-                                                child: CachedNetworkImage(
-                                                  fit: BoxFit.fill,
-                                                  imageUrl: httpImage +
-                                                      listImagePath[0],
-                                                  placeholder: (context, url) =>
-                                                      SizedBox(
-                                                    height: 10.w,
-                                                    width: 10.w,
-                                                    child: const Center(
-                                                        child:
-                                                            CircularProgressIndicator()),
-                                                  ),
-                                                  errorWidget: (context, url,
-                                                          error) =>
-                                                      const Icon(Icons.error),
-                                                ),
-
-                                                // Image.network(
-                                                //   httpImage + imagePath2,
-                                                //   fit: BoxFit.cover,
-                                                // ),
-                                              )),
-                                          space10H,
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              TextApp(
-                                                  //fix day
-                                                  text: filterProducts2[index]
-                                                          .foodName ??
-                                                      ''),
-                                              TextApp(
-                                                text:
-                                                    "${MoneyFormatter(amount: (filterProducts2[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                fontsize: 20.sp,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ],
-                                          ),
-                                          const Divider(),
-                                          Padding(
-                                            padding: EdgeInsets.all(20.w),
-                                            child: Container(
-                                                width: 1.sw,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(8.r)),
-                                                ),
-                                                child: IntrinsicHeight(
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .stretch,
-                                                    children: [
-                                                      InkWell(
-                                                        onTap: () {
-                                                          if (filterProducts2[
-                                                                      index]
-                                                                  .quantityFood !=
-                                                              0) {
-                                                            minusQuantityFoodToBroughtReceipt(
-                                                              tokenReq:
-                                                                  widget.token,
-                                                              foodID:
-                                                                  filterProducts2[
-                                                                          index]
-                                                                      .foodId,
-                                                            );
-                                                          } else {
-                                                            showSnackBarTopCustom(
-                                                                title: "",
-                                                                context:
-                                                                    navigatorKey
-                                                                        .currentContext,
-                                                                mess:
-                                                                    "Thao tác không thể thực hiện",
-                                                                color:
-                                                                    Colors.red);
-                                                          }
-                                                        },
-                                                        onDoubleTap: () {
-                                                          showCustomDialogModal(
-                                                            typeDialog: "error",
-                                                            context: navigatorKey
-                                                                .currentContext,
-                                                            textDesc:
-                                                                "Bạn thao tác quá nhanh",
-                                                            title: "Thành công",
-                                                            colorButton:
-                                                                Colors.red,
-                                                            btnText: "OK",
-                                                          );
-                                                        },
-                                                        child: Container(
-                                                          width: 70.w,
-                                                          height: 35.w,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                                  borderRadius: BorderRadius.only(
-                                                                      topLeft: Radius
-                                                                          .circular(8
-                                                                              .r),
-                                                                      bottomLeft:
-                                                                          Radius.circular(8
-                                                                              .r)),
-                                                                  gradient:
-                                                                      const LinearGradient(
-                                                                    begin: Alignment
-                                                                        .topRight,
-                                                                    end: Alignment
-                                                                        .bottomLeft,
-                                                                    colors: [
-                                                                      Color.fromRGBO(
-                                                                          33,
-                                                                          82,
-                                                                          255,
-                                                                          1),
-                                                                      Color.fromRGBO(
-                                                                          33,
-                                                                          212,
-                                                                          253,
-                                                                          1)
-                                                                    ],
-                                                                  )),
-                                                          child: Center(
-                                                            child: TextApp(
-                                                              text: "-",
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              color:
-                                                                  Colors.white,
-                                                              fontsize: 18.sp,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                          child: Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          border: Border.all(
-                                                              width: 0.4,
-                                                              color:
-                                                                  Colors.grey),
-                                                        ),
-                                                        child: Center(
-                                                          child: TextField(
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            keyboardType:
-                                                                TextInputType
-                                                                    .number,
-                                                            inputFormatters: <TextInputFormatter>[
-                                                              FilteringTextInputFormatter
-                                                                  .allow(RegExp(
-                                                                      "[0-9]")),
-                                                            ], // Only numbers can be entered,
-                                                            style: TextStyle(
-                                                                fontSize: 12.sp,
-                                                                color: grey),
-                                                            controller:
-                                                                _foodQuantityController[
-                                                                    index],
-
-                                                            onTapOutside:
-                                                                (event) {
-                                                              print(
-                                                                  'onTapOutside');
-                                                              FocusManager
-                                                                  .instance
-                                                                  .primaryFocus
-                                                                  ?.unfocus();
-                                                              updateQuantityFoodToBroughtReceipt(
-                                                                tokenReq: widget
-                                                                    .token,
-                                                                foodID:
-                                                                    filterProducts2[
-                                                                            index]
-                                                                        .foodId,
-                                                                quantityFood:
-                                                                    _foodQuantityController[
-                                                                            index]
-                                                                        .text,
-                                                              );
-                                                            },
-                                                            cursorColor: grey,
-                                                            decoration:
-                                                                const InputDecoration(
-                                                              fillColor: Color
-                                                                  .fromARGB(
-                                                                      255,
-                                                                      226,
-                                                                      104,
-                                                                      159),
-                                                              focusedBorder:
-                                                                  OutlineInputBorder(
-                                                                borderSide: BorderSide(
-                                                                    color: Color
-                                                                        .fromRGBO(
-                                                                            214,
-                                                                            51,
-                                                                            123,
-                                                                            0.6),
-                                                                    width: 2.0),
-                                                              ),
-
-                                                              hintText: '',
-                                                              isDense:
-                                                                  true, // Added this
-                                                              contentPadding:
-                                                                  EdgeInsets.all(
-                                                                      8), // Added this
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      )),
-                                                      InkWell(
-                                                        onTap: () {
-                                                          plusQuantityFoodToBroughtReceipt(
-                                                            tokenReq:
-                                                                widget.token,
-                                                            foodID:
-                                                                filterProducts2[
-                                                                        index]
-                                                                    .foodId,
-                                                          );
-                                                        },
-                                                        onDoubleTap: () {
-                                                          showCustomDialogModal(
-                                                            typeDialog: "error",
-                                                            context: navigatorKey
-                                                                .currentContext,
-                                                            textDesc:
-                                                                "Bạn thao tác quá nhanh",
-                                                            title: "Thành công",
-                                                            colorButton:
-                                                                Colors.red,
-                                                            btnText: "OK",
-                                                          );
-                                                        },
-                                                        child: Container(
-                                                          width: 70.w,
-                                                          height: 35.w,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                                  borderRadius: BorderRadius.only(
-                                                                      topRight:
-                                                                          Radius.circular(8
-                                                                              .r),
-                                                                      bottomRight:
-                                                                          Radius.circular(8
-                                                                              .r)),
-                                                                  gradient:
-                                                                      const LinearGradient(
-                                                                    begin: Alignment
-                                                                        .topRight,
-                                                                    end: Alignment
-                                                                        .bottomLeft,
-                                                                    colors: [
-                                                                      Color.fromRGBO(
-                                                                          33,
-                                                                          82,
-                                                                          255,
-                                                                          1),
-                                                                      Color.fromRGBO(
-                                                                          33,
-                                                                          212,
-                                                                          253,
-                                                                          1)
-                                                                    ],
-                                                                  )),
-                                                          child: Center(
-                                                            child: TextApp(
-                                                              text: "+",
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              color:
-                                                                  Colors.white,
-                                                              fontsize: 18.sp,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                )),
-                                          )
-                                        ],
-                                      )),
-                                );
                               } else {
                                 return Center(
                                   child: hasMore
@@ -8404,10 +8025,6 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                       ButtonApp(
                         event: () {
                           if (_formField.currentState!.validate()) {
-                            // widget.eventSaveButton();
-                            // idStoreController.clear();
-                            // nameStoreController.clear();
-                            // addressStoreController.clear();
                             if (listImageStore.isNotEmpty) {
                               handleEditStore(
                                   storeID: widget
@@ -9119,7 +8736,6 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                                           borderRadius:
                                               BorderRadius.circular(8.r),
                                         ),
-                                        // hintText: storeAddress,
                                         isDense: true,
                                         contentPadding: EdgeInsets.all(
                                             1.sw > 600 ? 20.w : 15.w)),

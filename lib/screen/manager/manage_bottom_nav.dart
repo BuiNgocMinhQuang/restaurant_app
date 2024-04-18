@@ -64,6 +64,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
     BlocProvider.of<ManagerLoginBloc>(context).add(const ManagerLogout());
     StorageUtils.instance.removeKey(key: 'token_manager');
     context.go("/");
+    setState(() {});
   }
 
   void checkTokenExpires() async {
@@ -277,7 +278,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
         getListStore();
       },
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.white,
         centerTitle: true,
         title: Container(
           // width: 100.w,
@@ -287,8 +289,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
             fit: BoxFit.cover,
           ),
         ),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(35.w))),
+        // shape: RoundedRectangleBorder(
+        //     borderRadius: BorderRadius.vertical(bottom: Radius.circular(35.w))),
         leading: InkWell(
           onTap: () {},
           child: Builder(
@@ -296,8 +298,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                 IconButton(
                     icon: Icon(
                       Icons.menu,
-                      size: 35.w,
-                      color: Colors.white,
+                      size: 30.w,
+                      color: Colors.black,
                     ),
                     onPressed: () => Scaffold.of(context).openDrawer()),
           ),
@@ -319,7 +321,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                         Icon(
                           Icons.notifications,
                           size: 35.w,
-                          color: Colors.white,
+                          color: Colors.black,
                         ),
                         Positioned(
                           top: 0,
@@ -729,58 +731,59 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                 SizedBox(
                   height: 25.h,
                 ),
-                TextApp(
-                  text: 'Kho hàng',
-                  color: grey,
-                  fontsize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: 25.h,
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: ItemDrawer(
-                      isExpand: true,
-                      text: 'Cửa hàng 1',
-                      iconColor: currentIndex == 10 || currentIndex == 11
-                          ? Colors.white
-                          : Colors.black,
-                      backgroundIconColor:
-                          currentIndex == 10 || currentIndex == 11
-                              ? Colors.blue
-                              : const Color.fromRGBO(233, 236, 239, 1),
-                      subItem: [
-                        SubItemDrawer(
-                            text: "Danh sách tồn kho",
-                            textColor:
-                                currentIndex == 10 ? Colors.blue : Colors.grey,
-                            event: () {
-                              setState(() {
-                                currentIndex = 10;
-                              });
-                              checkTokenExpires();
+                //ko xoa
+                // TextApp(
+                //   text: 'Kho hàng',
+                //   color: grey,
+                //   fontsize: 20,
+                //   fontWeight: FontWeight.bold,
+                // ),
+                // SizedBox(
+                //   height: 25.h,
+                // ),
+                // InkWell(
+                //   onTap: () {},
+                //   child: ItemDrawer(
+                //       isExpand: true,
+                //       text: 'Cửa hàng 1',
+                //       iconColor: currentIndex == 10 || currentIndex == 11
+                //           ? Colors.white
+                //           : Colors.black,
+                //       backgroundIconColor:
+                //           currentIndex == 10 || currentIndex == 11
+                //               ? Colors.blue
+                //               : const Color.fromRGBO(233, 236, 239, 1),
+                //       subItem: [
+                //         SubItemDrawer(
+                //             text: "Danh sách tồn kho",
+                //             textColor:
+                //                 currentIndex == 10 ? Colors.blue : Colors.grey,
+                //             event: () {
+                //               setState(() {
+                //                 currentIndex = 10;
+                //               });
+                //               checkTokenExpires();
 
-                              Navigator.pop(context);
-                            }),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        SubItemDrawer(
-                            text: "Nhập kho",
-                            textColor:
-                                currentIndex == 11 ? Colors.blue : Colors.grey,
-                            event: () {
-                              setState(() {
-                                currentIndex = 11;
-                              });
-                              checkTokenExpires();
+                //               Navigator.pop(context);
+                //             }),
+                //         SizedBox(
+                //           height: 10.h,
+                //         ),
+                //         SubItemDrawer(
+                //             text: "Nhập kho",
+                //             textColor:
+                //                 currentIndex == 11 ? Colors.blue : Colors.grey,
+                //             event: () {
+                //               setState(() {
+                //                 currentIndex = 11;
+                //               });
+                //               checkTokenExpires();
 
-                              Navigator.pop(context);
-                            })
-                      ],
-                      icon: Icons.person),
-                )
+                //               Navigator.pop(context);
+                //             })
+                //       ],
+                //       icon: Icons.person),
+                // )
               ],
             ),
             SizedBox(

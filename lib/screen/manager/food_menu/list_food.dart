@@ -151,6 +151,11 @@ class _ListFoodManagerState extends State<ListFoodManager> {
     if (picked != null) {
       setState(() {
         _dateStartController.text = picked.toString().split(" ")[0];
+        log(_dateStartController.text);
+        refeshListFood(
+            page: 1,
+            dateStart: _dateStartController.text,
+            dateEnd: _dateEndController.text);
       });
     }
   }
@@ -177,6 +182,10 @@ class _ListFoodManagerState extends State<ListFoodManager> {
     if (picked != null) {
       setState(() {
         _dateEndController.text = picked.toString().split(" ")[0];
+        refeshListFood(
+            page: 1,
+            dateStart: _dateStartController.text,
+            dateEnd: _dateEndController.text);
       });
     }
   }
@@ -253,6 +262,8 @@ class _ListFoodManagerState extends State<ListFoodManager> {
     List<int>? foodKinds,
     int? filtersFlg,
     int? activeFlg,
+    String? dateStart,
+    String? dateEnd,
   }) async {
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
@@ -274,6 +285,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
             "food_kinds": foodKinds,
             "pay_flg": filtersFlg,
             "active_flg": activeFlg,
+            "date_range": {"start_date": dateStart, "end_date": dateEnd}
           },
         }),
       );
@@ -314,6 +326,8 @@ class _ListFoodManagerState extends State<ListFoodManager> {
     List<int>? foodKinds,
     int? filtersFlg,
     int? activeFlg,
+    String? dateStart,
+    String? dateEnd,
   }) async {
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
@@ -335,6 +349,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
             "food_kinds": foodKinds,
             "pay_flg": filtersFlg,
             "active_flg": activeFlg,
+            "date_range": {"start_date": dateStart, "end_date": dateEnd}
           },
         }),
       );
@@ -595,7 +610,6 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                   ? 0
                                                   : listState.indexOf(
                                                       changeFlag ?? '');
-                                          log(hehe.toString());
                                           currentFoodList.clear();
 
                                           loadMoreMenuFood(

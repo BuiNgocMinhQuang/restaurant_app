@@ -42,6 +42,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
     BlocProvider.of<LoginBloc>(context).add(const LogoutStaff());
     StorageUtils.instance.removeKey(key: 'token_staff');
     context.go("/staff_sign_in");
+    setState(() {});
   }
 
   void checkTokenExpires() async {

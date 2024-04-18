@@ -54,14 +54,6 @@ class NyAppRouter {
           } else if (StorageUtils.instance.getString(key: 'token_manager') !=
               null) {
             print("HOME MANAGER");
-            // GoRoute(
-            //     name: AppRouterContants.managerListFoodRouterName,
-            //     path: '/manager_list_food',
-            //     builder: (BuildContext context, GoRouterState state) {
-            //       return const ListFoodManager(
-            //         listStores: [],
-            //       );
-            //     });
             return ManagerFabTab(
               selectedIndex: 2,
             );

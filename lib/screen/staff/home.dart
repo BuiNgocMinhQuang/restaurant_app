@@ -126,6 +126,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                             child: Align(
                               alignment: Alignment.center,
                               child: Container(
+                                // width: 1.sw,
                                 height: 40.h,
                                 color: newGreyApp,
                                 child: ListView.builder(
@@ -157,10 +158,6 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                             children: [
                                               space5H,
                                               TextApp(
-                                                // isUnderLine:
-                                                //     currentRoomIndex == index
-                                                //         ? true
-                                                //         : false,
                                                 text: state
                                                         .listRoomModel
                                                         ?.rooms?[index]
@@ -175,12 +172,6 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                         : FontWeight.normal,
                                                 fontsize: 14.sp,
                                               ),
-                                              // Container(
-                                              //   width: 30,
-                                              //   height: 10,
-                                              //   color: Colors.red,
-                                              // ),
-                                              // space20H,
                                               currentRoomIndex == index
                                                   ? Container(
                                                       width: 70.w,
@@ -212,16 +203,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                     decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(2.r),
-                                        color: newGreyApp
-                                        // gradient: const LinearGradient(
-                                        //   begin: Alignment.topLeft,
-                                        //   end: Alignment.bottomRight,
-                                        //   colors: <Color>[
-                                        //     color1DarkGreyButton,
-                                        //     color2DarkGreyButton
-                                        //   ],
-                                        // ),
-                                        ),
+                                        color: newGreyApp),
                                   ),
                                   SizedBox(
                                     width: 5.w,
@@ -245,13 +227,6 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                       borderRadius: BorderRadius.circular(2.r),
                                       border: Border.all(
                                           width: 1, color: newBlueText),
-                                      // gradient: const LinearGradient(
-                                      //     begin: Alignment.topLeft,
-                                      //     end: Alignment.bottomRight,
-                                      //     colors: <Color>[
-                                      //       color2BlueButton,
-                                      //       color1BlueButton
-                                      //     ]),
                                     ),
                                   ),
                                   SizedBox(
@@ -290,7 +265,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                         left: 30.w, right: 30.w),
                                     child: Container(
                                       width: 1.sw,
-                                      height: 500,
+                                      height: 600.h,
                                       // color: Colors.amber,
                                       child: state
                                               .listRoomModel!
@@ -347,12 +322,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                       index]
                                                                   .bookingStatus ==
                                                               true
-                                                          ? Container(
-                                                              // width: 100.h,
-                                                              // height: 100.h,
-                                                              // color:
-                                                              //     Colors.amber,
-                                                              child: InkWell(
+                                                          ? InkWell(
                                                               onTap: () {
                                                                 getTableInfor(
                                                                   roomId: state
@@ -450,12 +420,8 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                   )
                                                                 ],
                                                               ),
-                                                            ))
-                                                          : Container(
-                                                              // width: 100.h,
-                                                              // height: 100.h,
-                                                              // color: Colors.amber,
-                                                              child: InkWell(
+                                                            )
+                                                          : InkWell(
                                                               onTap: () {
                                                                 showMaterialModalBottomSheet(
                                                                     shape:
@@ -705,7 +671,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                   ),
                                                                 ],
                                                               ),
-                                                            )),
+                                                            ),
                                                     );
                                                   }),
                                             )
