@@ -143,23 +143,34 @@ class TableBloc extends Bloc<TableEvent, TableState> {
 
     try {
       var token = event.token;
+      log(token.toString());
+      print({
+        'client': event.client,
+        'shop_id': event.shopId,
+        'is_api': true,
+        'room_id': event.roomId,
+        'table_id': event.tableId
+      });
       final respons = await http.post(
         Uri.parse('$baseUrl$tableApi'),
         headers: {
           'Content-type': 'application/json',
           'Accept': 'application/json',
-          "Authorization": "Bearer $token"
+          "Authorization": 'Bearer $token'
         },
         body: jsonEncode({
           'client': event.client,
           'shop_id': event.shopId,
-          'is_api': event.isApi.toString(),
+          'is_api': true,
           'room_id': event.roomId,
-          'table_id': event.tableId
+          'table_id': event.tableId,
+          'order_id': event.orderID,
         }),
       );
       final data = jsonDecode(respons.body);
       var message = data['message'];
+      print("DATA Table $data");
+
       try {
         if (data['status'] == 200) {
           // print("DATA Table $data");

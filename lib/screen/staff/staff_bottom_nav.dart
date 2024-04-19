@@ -1,5 +1,6 @@
 import 'package:app_restaurant/bloc/login/staff_login_bloc.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/screen/staff/receipt/brought_receipt.dart';
 import 'package:app_restaurant/screen/staff/home.dart';
 import 'package:app_restaurant/screen/staff/receipt/list_bill.dart';
@@ -41,8 +42,10 @@ class _StaffFabTabState extends State<StaffFabTab> {
   void handleLogout() async {
     BlocProvider.of<LoginBloc>(context).add(const LogoutStaff());
     StorageUtils.instance.removeKey(key: 'token_staff');
-    context.go("/staff_sign_in");
-    setState(() {});
+    // context.go("/staff_sign_in");
+    navigatorKey.currentContext!.go('/staff_sign_in');
+
+    // setState(() {});
   }
 
   void checkTokenExpires() async {

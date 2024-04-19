@@ -535,16 +535,18 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                           child: TabBar(
                               onTap: (index) {
                                 if (index == 0) {
-                                  BlocProvider.of<TableBloc>(context)
-                                      .add(GetTableInfor(
-                                    token: widget.token,
-                                    client: widget.role,
-                                    shopId: widget.shopID,
-                                    roomId: widget.idRoom.toString(),
-                                    tableId: widget.currentTable?.roomTableId
-                                            .toString() ??
-                                        '',
-                                  ));
+                                  BlocProvider.of<TableBloc>(context).add(
+                                      GetTableInfor(
+                                          token: widget.token,
+                                          client: widget.role,
+                                          shopId: widget.shopID,
+                                          roomId: widget.idRoom.toString(),
+                                          tableId: widget
+                                                  .currentTable?.roomTableId
+                                                  .toString() ??
+                                              '',
+                                          orderID: widget.currentTable?.orderId
+                                              .toString()));
                                 } else if (index == 1) {
                                   getDetailFoodTable(tokenReq: widget.token);
                                 }

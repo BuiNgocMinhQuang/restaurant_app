@@ -71,13 +71,17 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
     );
   }
 
-  void getTableInfor({required String roomId, required String tableId}) {
+  void getTableInfor(
+      {required String roomId,
+      required String tableId,
+      required String? orderID}) {
     BlocProvider.of<TableBloc>(context).add(GetTableInfor(
         token: tokenManager,
         client: "user",
         shopId: widget.shopID,
         roomId: roomId,
-        tableId: tableId));
+        tableId: tableId,
+        orderID: orderID));
   }
 
   void getPaymentData(
@@ -324,21 +328,28 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                 child: InkWell(
                                                                 onTap: () {
                                                                   getTableInfor(
-                                                                    roomId: state
-                                                                        .listRoomModel!
-                                                                        .rooms![
-                                                                            currentRoomIndex]
-                                                                        .storeRoomId
-                                                                        .toString(),
-                                                                    tableId: state
-                                                                        .listRoomModel!
-                                                                        .rooms![
-                                                                            currentRoomIndex]
-                                                                        .tables![
-                                                                            index]
-                                                                        .roomTableId
-                                                                        .toString(),
-                                                                  );
+                                                                      roomId: state
+                                                                          .listRoomModel!
+                                                                          .rooms![
+                                                                              currentRoomIndex]
+                                                                          .storeRoomId
+                                                                          .toString(),
+                                                                      tableId: state
+                                                                          .listRoomModel!
+                                                                          .rooms![
+                                                                              currentRoomIndex]
+                                                                          .tables![
+                                                                              index]
+                                                                          .roomTableId
+                                                                          .toString(),
+                                                                      orderID: state
+                                                                          .listRoomModel!
+                                                                          .rooms![
+                                                                              currentRoomIndex]
+                                                                          .tables![
+                                                                              index]
+                                                                          .orderId
+                                                                          .toString());
 
                                                                   showDialog(
                                                                       context:
@@ -463,10 +474,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                             onTap:
                                                                                 () {
                                                                               Navigator.pop(context);
-                                                                              getTableInfor(
-                                                                                roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
-                                                                                tableId: state.listRoomModel!.rooms![currentRoomIndex].tables![index].roomTableId.toString(),
-                                                                              );
+                                                                              getTableInfor(roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(), tableId: state.listRoomModel!.rooms![currentRoomIndex].tables![index].roomTableId.toString(), orderID: state.listRoomModel!.rooms![currentRoomIndex].tables![index].orderId.toString());
                                                                               showDialog(
                                                                                 context: context,
                                                                                 builder: (BuildContext context) {

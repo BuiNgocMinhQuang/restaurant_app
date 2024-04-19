@@ -53,7 +53,7 @@ class _ListStoresState extends State<ListStores> {
   // DataManagerInfor? managerInforData;
   DetailsStoreModel? detailsStoreModel;
 
-  List<String> listImageBanner = [];
+  // List<String> listImageBanner = [];
 
   final ImagePicker imagePicker = ImagePicker();
   @override
@@ -120,7 +120,6 @@ class _ListStoresState extends State<ListStores> {
 
   @override
   Widget build(BuildContext context) {
-    log(listImageBanner.length.toString());
     return BlocBuilder<ListStoresBloc, ListStoresState>(
       builder: (context, state) {
         return Scaffold(
@@ -143,29 +142,29 @@ class _ListStoresState extends State<ListStores> {
                                 Stack(
                                   children: [
                                     // Carousel
-                                    // listImageBanner.isNotEmpty
-                                    //     ? CarouselSlider.builder(
-                                    //         itemCount: listImageBanner.length,
-                                    //         itemBuilder:
-                                    //             (context, index, realIndex) {
-                                    //           final currentBanner =
-                                    //               listImageBanner[index];
-                                    //           return buildImage(
-                                    //               currentBanner, index);
-                                    //         },
-                                    //         options: CarouselOptions(
-                                    //             height: 300.h,
-                                    //             autoPlay: true,
-                                    //             reverse: false,
-                                    //             autoPlayInterval:
-                                    //                 const Duration(seconds: 3),
-                                    //             onPageChanged: (index, reason) {
-                                    //               setState(() {
-                                    //                 activeIndex = index;
-                                    //               });
-                                    //             },
-                                    //             viewportFraction: 1))
-                                    //     : Container(),
+                                    widget.bannerList.isNotEmpty
+                                        ? CarouselSlider.builder(
+                                            itemCount: widget.bannerList.length,
+                                            itemBuilder:
+                                                (context, index, realIndex) {
+                                              final currentBanner =
+                                                  widget.bannerList[index];
+                                              return buildImage(
+                                                  currentBanner, index);
+                                            },
+                                            options: CarouselOptions(
+                                                height: 300.h,
+                                                autoPlay: true,
+                                                reverse: false,
+                                                autoPlayInterval:
+                                                    const Duration(seconds: 4),
+                                                onPageChanged: (index, reason) {
+                                                  setState(() {
+                                                    activeIndex = index;
+                                                  });
+                                                },
+                                                viewportFraction: 1))
+                                        : Container(),
 
                                     // buildIndicator(),
 
@@ -174,7 +173,7 @@ class _ListStoresState extends State<ListStores> {
                                             padding: EdgeInsets.only(
                                                 left: 20.w,
                                                 right: 20.w,
-                                                top: 20.h),
+                                                top: 150.h),
                                             child: Container(
                                               width: 1.sw,
                                               // height: 120.h,
@@ -570,32 +569,6 @@ class _ListStoresState extends State<ListStores> {
     );
   }
 
-  // void pickImage() async {
-  //   final returndImage =
-  //       await ImagePicker().pickImage(source: ImageSource.gallery);
-  //   if (returndImage == null) return;
-  //   setState(() {
-  //     selectedImage = File(returndImage.path);
-  //   });
-  // } //selecte one picture
-
-  // void takeImage() async {
-  //   final returndImage =
-  //       await ImagePicker().pickImage(source: ImageSource.camera);
-  //   if (returndImage == null) return;
-  //   setState(() {
-  //     selectedImage = File(returndImage.path);
-  //   });
-  // }
-
-  // void selectImages() async {
-  //   final List<XFile>? selectedImages = await imagePicker.pickMultiImage();
-  //   if (selectedImages!.isNotEmpty) {
-  //     imageFileList!.addAll(selectedImages);
-  //   }
-  //   setState(() {});
-  // } //selecte multiple images
-
   Widget contentStores() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -616,33 +589,25 @@ class _ListStoresState extends State<ListStores> {
         ],
       );
 
-  // Widget buildImage(String currentBanner, int index) => Container(
-  //       color: Colors.grey,
-  //       child: Image.asset(
-  //         currentBanner,
-  //         fit: BoxFit.cover,
-  //       ),
-  //     );
-
-  // Widget buildImage(String currentBanner, int index) => ClipRRect(
-  //       borderRadius: BorderRadius.circular(15.r),
-  //       child: Container(
-  //         color: Colors.grey,
-  //         child: CachedNetworkImage(
-  //           fit: BoxFit.cover,
-  //           imageUrl: httpImage + currentBanner,
-  //           placeholder: (context, url) => SizedBox(
-  //             height: 30.w,
-  //             width: 30.w,
-  //             child: const Center(child: CircularProgressIndicator()),
-  //           ),
-  //           errorWidget: (context, url, error) => const Icon(Icons.error),
-  //         ),
-  //       ),
-  //     );
+  Widget buildImage(String currentBanner, int index) => ClipRRect(
+        borderRadius: BorderRadius.circular(15.r),
+        child: Container(
+          color: Colors.grey,
+          child: CachedNetworkImage(
+            fit: BoxFit.cover,
+            imageUrl: httpImage + currentBanner,
+            placeholder: (context, url) => SizedBox(
+              height: 30.w,
+              width: 30.w,
+              child: const Center(child: CircularProgressIndicator()),
+            ),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+          ),
+        ),
+      );
   // Widget buildIndicator() => AnimatedSmoothIndicator(
   //       activeIndex: activeIndex,
-  //       count: listImageBanner.length,
+  //       count: widget.bannerList.length,
   //     );
 }
 

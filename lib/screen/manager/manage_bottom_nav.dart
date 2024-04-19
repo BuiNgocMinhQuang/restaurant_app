@@ -10,6 +10,7 @@ import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
 import 'package:app_restaurant/model/manager_infor_model.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/screen/manager/food_menu/add_food.dart';
 import 'package:app_restaurant/screen/manager/staff/add_staff.dart';
 import 'package:app_restaurant/screen/manager/store/booking_table.dart';
@@ -63,8 +64,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
   void hanldeLogOut() async {
     BlocProvider.of<ManagerLoginBloc>(context).add(const ManagerLogout());
     StorageUtils.instance.removeKey(key: 'token_manager');
-    context.go("/");
-    setState(() {});
+    navigatorKey.currentContext!.go('/');
+    // setState(() {});
   }
 
   void checkTokenExpires() async {
@@ -106,6 +107,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
         return true;
       }).toList();
     });
+    log("BANNER");
+    log(listImageBanner.toString());
   }
 
   void getListStore() async {
@@ -127,16 +130,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
           listStoreManagerData.clear();
           var listStoreManagerDataRes = ListStoreModel.fromJson(dataListStore);
           listStoreManagerData.addAll(listStoreManagerDataRes.data);
-          // print("DATA LIST STORES $listStoreManagerData");
-
-          // listStoreManagerData.where((imageStore) {
-          //   log("HHHHH");
-          //   log(imageStore.storeLogo.toString());
-          //   // final image1 = imageStore.storeLogo;
-          //   // final image2 = jsonDecode(image1 ?? '');
-          //   listImageBanner.add(imageStore.storeLogo ?? '');
-          //   return true;
-          // }).toList();
         });
       } else {
         print("ERRRO GET LIST STORE 111111");
@@ -433,10 +426,9 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                               setState(() {
                                 // currentScreen = const ListStores();
                                 currentIndex = 0;
-                                getInfor();
+                                // getInfor();
                                 selectedStoreIndex = null;
 
-                                // getListStore();
                                 handleGetBannerList();
 
                                 tapDrawerChangeBotNav(0);
@@ -883,6 +875,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
         onTap: (index) {
           if (index == 0) {
             getInfor();
+            handleGetBannerList();
           }
           setState(() {
             currentIndex = index;

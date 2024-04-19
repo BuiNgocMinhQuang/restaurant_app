@@ -22,54 +22,68 @@ class BarChartSample4 extends StatefulWidget {
 }
 
 class BarChartSample4State extends State<BarChartSample4> {
+  List<String> kkk = [];
+
   Widget bottomTitles(double value, TitleMeta meta) {
     const style = TextStyle(fontSize: 10);
     String text;
 
-    switch (value.toInt()) {
-      case 1:
-        text = '1';
-        break;
-      case 2:
-        text = '2';
-        break;
-      case 3:
-        text = '3';
-        break;
-      case 4:
-        text = '4';
-        break;
-      case 5:
-        text = '5';
-        break;
-      case 6:
-        text = '6';
-        break;
-      case 7:
-        text = '7';
-        break;
-      case 8:
-        text = '8';
-        break;
-      case 9:
-        text = '9';
-        break;
-      case 10:
-        text = '10';
-        break;
-      case 11:
-        text = '11';
-        break;
-      case 12:
-        text = '12';
-        break;
-      default:
-        text = '';
-        break;
-    }
+    // switch (value.toInt()) {
+    //   case 1:
+    //     text = '1';
+    //     break;
+    //   case 2:
+    //     text = '2';
+    //     break;
+    //   case 3:
+    //     text = '3';
+    //     break;
+    //   case 4:
+    //     text = '4';
+    //     break;
+    //   case 5:
+    //     text = '5';
+    //     break;
+    //   case 6:
+    //     text = '6';
+    //     break;
+    //   case 7:
+    //     text = '7';
+    //     break;
+    //   case 8:
+    //     text = '8';
+    //     break;
+    //   case 9:
+    //     text = '9';
+    //     break;
+    //   case 10:
+    //     text = '10';
+    //     break;
+    //   case 11:
+    //     text = '11';
+    //     break;
+    //   case 12:
+    //     text = '12';
+    //     break;
+    //   default:
+    //     text = '';
+    //     break;
+    // }
+    int index = value.toInt(); // Adjust value to match zero-based index
+    // log("INDEX");
+    // log(index.toString());
+    if (index >= 0 && index < widget.chartDataModel.categories.length) {
+      // print("ZOO IFFF");
 
+      text = widget.chartDataModel.categories[index];
+      // log(text);
+    } else {
+      // print("ZOO ELDLLDLE");
+      text = '';
+    }
     return SideTitleWidget(
       axisSide: meta.axisSide,
+      angle: widget.chartDataModel.categories.length >= 3 ? -45 : 0,
       child: Text(text, style: style),
     );
   }
@@ -88,17 +102,20 @@ class BarChartSample4State extends State<BarChartSample4> {
   }
 
   int touchedGroupIndex = -1;
+
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1.66,
+      aspectRatio: 1,
       child: Padding(
         padding: const EdgeInsets.only(top: 16),
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final barsSpace = 4.0 * constraints.maxWidth / 200;
+            final barsSpace = (4.0 * constraints.maxWidth) /
+                (widget.chartDataModel.categories.length * 30);
             // final barsWidth = 8.0 * constraints.maxWidth / 400;
-            final barsWidth = 8.0 * constraints.maxWidth / 100;
+            final barsWidth = (8.0 * constraints.maxWidth) /
+                (widget.chartDataModel.categories.length * 30);
             return widget.chartDataModel.series.isEmpty
                 ? Container(
                     width: 1.sw,
@@ -129,7 +146,7 @@ class BarChartSample4State extends State<BarChartSample4> {
                             int rodIndex,
                           ) {
                             return BarTooltipItem(
-                              "${MoneyFormatter(amount: rod.toY.toDouble()).output.withoutFractionDigits.toString()} đ",
+                              "${MoneyFormatter(amount: rod.toY.toDouble()).output.withoutFractionDigits.toString()} đ}",
                               // rod.toY.toString(),
                               TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -140,35 +157,35 @@ class BarChartSample4State extends State<BarChartSample4> {
                             );
                           },
                         ),
-                        touchCallback: (event, response) {
-                          if (event.isInterestedForInteractions &&
-                              response != null &&
-                              response.spot != null) {
-                            log("TOUCHCHHHCHCHC");
-                            log(response.spot?.touchedRodData.toY.toString() ??
-                                'NOOO');
-                            setState(() {
-                              touchedGroupIndex =
-                                  response.spot!.touchedBarGroupIndex;
-                            });
-                          } else {
-                            log("COKKKK");
-                          }
-                        },
+                        // touchCallback: (event, response) {
+                        //   if (event.isInterestedForInteractions &&
+                        //       response != null &&
+                        //       response.spot != null) {
+                        //     log("TOUCHCHHHCHCHC");
+                        //     log(response.spot?.touchedRodData.toY.toString() ??
+                        //         'NOOO');
+                        //     setState(() {
+                        //       touchedGroupIndex =
+                        //           response.spot!.touchedBarGroupIndex;
+                        //     });
+                        //   } else {
+                        //     log("COKKKK");
+                        //   }
+                        // },
                       ),
                       titlesData: FlTitlesData(
                         show: true,
                         bottomTitles: AxisTitles(
                           sideTitles: SideTitles(
                             showTitles: true,
-                            reservedSize: 28,
+                            reservedSize: 80,
                             getTitlesWidget: bottomTitles,
                           ),
                         ),
                         leftTitles: AxisTitles(
                           sideTitles: SideTitles(
                             showTitles: true,
-                            reservedSize: 50,
+                            reservedSize: 35,
                             getTitlesWidget: leftTitles,
                           ),
                         ),
@@ -195,7 +212,7 @@ class BarChartSample4State extends State<BarChartSample4> {
                           bottom: BorderSide(width: 1, color: Colors.black),
                         ),
                       ),
-                      groupsSpace: 4,
+                      groupsSpace: barsSpace,
                       barGroups: getData(
                         barsWidth,
                         barsSpace,
@@ -207,6 +224,11 @@ class BarChartSample4State extends State<BarChartSample4> {
       ),
     );
   }
+  // final _categories = widget.chartDataModel.categories;
+
+  // for (var k = 0; k < _categories.length; k++) {
+  //     kkk.add(widget.chartDataModel.categories[k]);
+  //   }
 
   List<BarChartGroupData> getData(double barsWidth, double barsSpace) {
     final _categories = widget.chartDataModel.categories;
@@ -215,14 +237,16 @@ class BarChartSample4State extends State<BarChartSample4> {
     return [
       for (var i = 0; i < _categories.length; i++)
         BarChartGroupData(
-          showingTooltipIndicators: touchedGroupIndex ==
-                  getMonthFromDateString(
-                      dateString: widget.chartDataModel.categories[i])
-              ? [0]
-              : [],
-          x: getMonthFromDateString(
-              dateString:
-                  widget.chartDataModel.categories[i]), //cho nay dien categori
+          // showingTooltipIndicators: touchedGroupIndex ==
+          //         getMonthFromDateString(
+          //             dateString: widget.chartDataModel.categories[i])
+          //     ? [0]
+          //     : [],
+          x: widget.chartDataModel.categories
+              .indexOf(widget.chartDataModel.categories[i]),
+          // x: getMonthFromDateString(
+          //     dateString:
+          //         widget.chartDataModel.categories[i]), //cho nay dien categori
           barsSpace: barsSpace,
           barRods: [
             for (var j = 0;
@@ -235,7 +259,7 @@ class BarChartSample4State extends State<BarChartSample4> {
                       .toDouble(),
                   borderRadius: BorderRadius.zero,
                   width: barsWidth,
-                  color: j == 0 ? Colors.green : Colors.blue),
+                  color: j == 0 ? Colors.blue : Colors.green),
           ],
         ),
     ];

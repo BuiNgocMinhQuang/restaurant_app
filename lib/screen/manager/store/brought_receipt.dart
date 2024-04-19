@@ -443,6 +443,7 @@ class _AllWidgetState extends State<AllWidget>
                       statusTextBill = "Đã huỷ";
                       break;
                   }
+                  log(newListFood[index].createdAt.toString());
                   return Padding(
                     padding: EdgeInsets.only(left: 5.w, right: 5.w),
                     child: BroughtReceiptContainer(

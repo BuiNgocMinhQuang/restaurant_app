@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:app_restaurant/config/colors.dart';
+import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/model/manager/chart/chart_data_model.dart';
@@ -30,23 +31,53 @@ class OverviewChartDialog extends StatefulWidget {
 class _OverviewChartDialogState extends State<OverviewChartDialog> {
   TextEditingController _dateStartController = TextEditingController();
   TextEditingController _dateEndController = TextEditingController();
-
+  final bieudotheolistKey = GlobalKey<DropdownSearchState>();
+  final loailistKey = GlobalKey<DropdownSearchState>();
+  int currentChartWith = 0;
+  String currentDataType = "%m-%Y";
   ChartDataModel? chartDataModel;
   bool isShowChart = false;
   @override
   void initState() {
     super.initState();
-    handleGetChartData();
+
+    initEndDay();
+    initStartDay();
+    handleGetChartData(
+        chartWith: 0,
+        shopID: widget.shopID,
+        startDate: _dateStartController.text,
+        endDate: _dateEndController.text,
+        dataType: currentDataType);
   }
 
-  void handleGetChartData() async {
+  void initEndDay() async {
+    _dateEndController.text = DateTime.now().toString().split(" ")[0];
+  }
+
+  void initStartDay() async {
+    DateTime now = DateTime.now();
+    DateTime firstDayOfYear = DateTime(now.year, 1, 1);
+    _dateStartController.text = firstDayOfYear.toString().split(" ")[0];
+  }
+
+  void handleGetChartData({
+    required int chartWith,
+    required String? startDate,
+    required String? endDate,
+    required String shopID,
+    required String dataType // theo thang nam
+    //theo ngay thang nam "%d-%m-%Y"
+    //theo nam "%Y",
+    ,
+  }) async {
     log({
-      'chart_with': 0,
+      'chart_with': chartWith,
       'filters': {
-        'date_range': {"start_date": null, "end_date": null}
+        'date_range': {"start_date": startDate, "end_date": endDate}
       },
-      'shop_id': widget.shopID,
-      'date_type': "%m-%Y",
+      'shop_id': shopID,
+      'date_type': dataType,
       'is_api': true
     }.toString());
     try {
@@ -60,12 +91,12 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({
-          'chart_with': 0,
+          'chart_with': chartWith,
           'filters': {
-            'date_range': {"start_date": null, "end_date": null}
+            'date_range': {"start_date": startDate, "end_date": endDate}
           },
-          'shop_id': widget.shopID,
-          'date_type': "%m-%Y",
+          'shop_id': shopID,
+          'date_type': dataType,
           'is_api': true
         }),
       );
@@ -124,6 +155,12 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
       setState(() {
         _dateStartController.text = picked.toString().split(" ")[0];
       });
+      handleGetChartData(
+          chartWith: currentChartWith,
+          shopID: widget.shopID,
+          startDate: _dateStartController.text,
+          endDate: _dateEndController.text,
+          dataType: currentDataType);
     }
   }
 
@@ -150,6 +187,12 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
       setState(() {
         _dateEndController.text = picked.toString().split(" ")[0];
       });
+      handleGetChartData(
+          chartWith: currentChartWith,
+          shopID: widget.shopID,
+          startDate: _dateStartController.text,
+          endDate: _dateEndController.text,
+          dataType: currentDataType);
     }
   }
 
@@ -236,6 +279,7 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                             height: 10.h,
                           ),
                           DropdownSearch(
+                            key: bieudotheolistKey,
                             // validator: (value) {
                             //   if (value == chooseStore) {
                             //     return canNotNull;
@@ -243,10 +287,19 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                             //   return null;
                             // },
                             onChanged: (bieudotheoListIndex) {
+                              var hehe = bieudotheoList
+                                  .indexOf(bieudotheoListIndex ?? '');
+                              setState(() {
+                                currentChartWith = hehe;
+                              });
                               // currentFoodKind =
                               //     categories.indexOf(foodKindIndex ?? '');
-
-                              // log(currentFoodKind.toString());
+                              handleGetChartData(
+                                  chartWith: currentChartWith,
+                                  shopID: widget.shopID,
+                                  startDate: _dateStartController.text,
+                                  endDate: _dateEndController.text,
+                                  dataType: currentDataType);
                             },
                             items: bieudotheoList,
                             dropdownDecoratorProps: DropDownDecoratorProps(
@@ -295,11 +348,28 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                             //   }
                             //   return null;
                             // },
+                            key: loailistKey,
                             onChanged: (loaiListIndex) {
-                              // currentFoodKind =
-                              //     categories.indexOf(foodKindIndex ?? '');
-
-                              // log(currentFoodKind.toString());
+                              var haha = loaiList.indexOf(loaiListIndex ?? '');
+                              if (haha == 0) {
+                                setState(() {
+                                  currentDataType = "%d-%m-%Y";
+                                });
+                              } else if (haha == 2) {
+                                setState(() {
+                                  currentDataType = "%Y";
+                                });
+                              } else {
+                                setState(() {
+                                  currentDataType = "%m-%Y";
+                                });
+                              }
+                              handleGetChartData(
+                                  chartWith: currentChartWith,
+                                  shopID: widget.shopID,
+                                  startDate: _dateStartController.text,
+                                  endDate: _dateEndController.text,
+                                  dataType: currentDataType);
                             },
                             items: loaiList,
                             dropdownDecoratorProps: DropDownDecoratorProps(
@@ -320,7 +390,7 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                               ),
                             ),
                             // onChanged: print,
-                            selectedItem: loaiList[0],
+                            selectedItem: loaiList[1],
                           ),
                         ],
                       ),

@@ -29,7 +29,7 @@ class ManagerLoginBloc extends Bloc<ManagerLoginEvent, ManagerLoginState> {
 
     var token = StorageUtils.instance.getString(key: 'token_manager');
     await http.post(
-      Uri.parse('$baseUrl$staffLogout'),
+      Uri.parse('$baseUrl$managerLogout'),
       headers: {"Authorization": "Bearer $token"},
     );
   }
