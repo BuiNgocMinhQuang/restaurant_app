@@ -377,11 +377,6 @@ class _ListFoodManagerState extends State<ListFoodManager> {
   @override
   void initState() {
     super.initState();
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   WidgetsBinding.instance.addPostFrameCallback(
-    //       (_) => loadMoreMenuFood(page: 1, filtersFlg: null));
-    // });
     loadMoreMenuFood(page: 1, filtersFlg: null);
     scrollListFoodController.addListener(() {
       print("SCROLL END");
@@ -418,545 +413,551 @@ class _ListFoodManagerState extends State<ListFoodManager> {
           child: RefreshIndicator(
         color: Colors.blue,
         onRefresh: () async {
-          // loadMoreMenuFood(page: 1, filtersFlg: null);
           refeshListFood(page: 1, filtersFlg: null);
           // Implement logic to refresh data for Tab 1
         },
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(20.w),
-            child: Container(
-              width: 1.sw,
-              // height: 1.sh,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.r),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.r),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: const Offset(
-                                0, 3), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(20.w),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextApp(
-                                    text: "Tất cả món ăn",
-                                    fontsize: 18.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: blueText),
-                                TextApp(
-                                  text: allYourFoodHere,
-                                  fontsize: 14.sp,
-                                  color: blueText.withOpacity(0.6),
-                                ),
-                              ],
+        child: Container(
+          width: 1.sw,
+          color: Colors.white,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(20.w),
+              child: Container(
+                width: 1.sw,
+                // height: 1.sh,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.r),
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.r),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: const Offset(
+                                  0, 3), // changes position of shadow
                             ),
-                            space40H,
-                            Row(
-                              children: [
-                                Flexible(
-                                  fit: FlexFit.tight,
-                                  flex: 1,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      TextApp(
-                                        text: " Từ ngày",
-                                        fontsize: 12.sp,
-                                        fontWeight: FontWeight.bold,
-                                        color: blueText,
-                                      ),
-                                      SizedBox(
-                                        height: 10.h,
-                                      ),
-                                      TextField(
-                                        readOnly: true,
-                                        controller: _dateStartController,
-                                        onTap: selectDayStart,
-                                        style: TextStyle(
-                                            fontSize: 14.sp, color: grey),
-                                        cursorColor: grey,
-                                        decoration: InputDecoration(
-                                            suffixIcon:
-                                                Icon(Icons.calendar_month),
-                                            fillColor: const Color.fromARGB(
-                                                255, 226, 104, 159),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  color: Color.fromRGBO(
-                                                      214, 51, 123, 0.6),
-                                                  width: 2.0),
-                                              borderRadius:
-                                                  BorderRadius.circular(8.r),
-                                            ),
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8.r),
-                                            ),
-                                            hintText: 'dd/mm/yy',
-                                            isDense: true,
-                                            contentPadding:
-                                                EdgeInsets.all(15.w)),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                space20W,
-                                Flexible(
-                                  fit: FlexFit.tight,
-                                  flex: 1,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      TextApp(
-                                        text: " Đến ngày",
-                                        fontsize: 12.sp,
-                                        fontWeight: FontWeight.bold,
-                                        color: blueText,
-                                      ),
-                                      SizedBox(
-                                        height: 10.h,
-                                      ),
-                                      TextField(
-                                        readOnly: true,
-                                        controller: _dateEndController,
-                                        onTap: selectDayEnd,
-                                        style: TextStyle(
-                                            fontSize: 14.sp, color: grey),
-                                        cursorColor: grey,
-                                        decoration: InputDecoration(
-                                            suffixIcon:
-                                                Icon(Icons.calendar_month),
-                                            fillColor: const Color.fromARGB(
-                                                255, 226, 104, 159),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  color: Color.fromRGBO(
-                                                      214, 51, 123, 0.6),
-                                                  width: 2.0),
-                                              borderRadius:
-                                                  BorderRadius.circular(8.r),
-                                            ),
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8.r),
-                                            ),
-                                            hintText: 'dd/mm/yy',
-                                            isDense: true,
-                                            contentPadding:
-                                                EdgeInsets.all(15.w)),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                            space20H,
-                            Row(
-                              children: [
-                                Flexible(
-                                  fit: FlexFit.tight,
-                                  flex: 1,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      TextApp(
-                                        text: " Trạng thái",
-                                        fontsize: 12.sp,
-                                        fontWeight: FontWeight.bold,
-                                        color: blueText,
-                                      ),
-                                      SizedBox(
-                                        height: 10.h,
-                                      ),
-                                      DropdownSearch(
-                                        items: listState,
-                                        onChanged: (changeFlag) {
-                                          // getListArea(
-                                          //     city: listState.indexOf(changeCity),
-                                          //     district: null);
-                                          setState(() {
-                                            selectedFlitterFlag = changeFlag;
-                                            currentPage = 1;
-                                          });
-                                          var hehe = listState.indexOf(
-                                                      changeFlag ?? '') ==
-                                                  0
-                                              ? null
-                                              : listState.indexOf(
-                                                          changeFlag ?? '') ==
-                                                      2
-                                                  ? 0
-                                                  : listState.indexOf(
-                                                      changeFlag ?? '');
-                                          currentFoodList.clear();
-
-                                          loadMoreMenuFood(
-                                            page: currentPage,
-                                            keywords: query,
-                                            // filtersFlg: hehe,
-                                            activeFlg: hehe,
-                                          );
-                                        },
-                                        dropdownDecoratorProps:
-                                            DropDownDecoratorProps(
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            fillColor: const Color.fromARGB(
-                                                255, 226, 104, 159),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  color: Color.fromRGBO(
-                                                      214, 51, 123, 0.6),
-                                                  width: 2.0),
-                                              borderRadius:
-                                                  BorderRadius.circular(8.r),
-                                            ),
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8.r),
-                                            ),
-                                            isDense: true,
-                                            contentPadding:
-                                                EdgeInsets.all(15.w),
-                                            hintText: "Tất cả",
-                                          ),
-                                        ),
-                                        // onChanged: print,
-                                        selectedItem: selectedFlitterFlag,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                space20W,
-                                Flexible(
-                                  fit: FlexFit.tight,
-                                  flex: 1,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      TextApp(
-                                        text: " Tìm kiếm",
-                                        fontsize: 12.sp,
-                                        fontWeight: FontWeight.bold,
-                                        color: blueText,
-                                      ),
-                                      SizedBox(
-                                        height: 10.h,
-                                      ),
-                                      TextFormField(
-                                        onTapOutside: (event) {
-                                          FocusManager.instance.primaryFocus
-                                              ?.unfocus();
-                                        },
-                                        onChanged: searchProduct,
-                                        controller: searchController,
-                                        style: TextStyle(
-                                            fontSize: 14.sp, color: grey),
-                                        cursorColor: grey,
-                                        decoration: InputDecoration(
-                                            fillColor: const Color.fromARGB(
-                                                255, 226, 104, 159),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  color: Color.fromRGBO(
-                                                      214, 51, 123, 0.6),
-                                                  width: 2.0),
-                                              borderRadius:
-                                                  BorderRadius.circular(8.r),
-                                            ),
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8.r),
-                                            ),
-                                            // hintText: 'Instagram',
-                                            isDense: true,
-                                            contentPadding:
-                                                EdgeInsets.all(15.w)),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                            space20H,
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        // Container(
-                                        //   width: 1.sw * 2.4,
-                                        //   height: 50.h,
-                                        //   color: Colors.amber,
-                                        // ),
-                                        SizedBox(
-                                          width: 1.sw * 2.5,
-                                          height: 500.h,
-                                          child: ListView.builder(
-                                              physics:
-                                                  const ClampingScrollPhysics(),
-                                              // scrollDirection: Axis.horizontal,
-                                              controller:
-                                                  scrollListFoodController,
-                                              shrinkWrap: true,
-                                              itemCount:
-                                                  filterProducts.length + 1,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                var dataLength =
-                                                    filterProducts.length;
-
-                                                if (index < dataLength) {
-                                                  DataFoodAllStore product =
-                                                      filterProducts[index];
-                                                  var imagePath1 =
-                                                      filterProducts[index]
-                                                          ?.foodImages;
-                                                  var listImagePath =
-                                                      jsonDecode(imagePath1);
-
-                                                  return Theme(
-                                                    data: Theme.of(context)
-                                                        .copyWith(
-                                                            dividerColor: Colors
-                                                                .transparent),
-                                                    child: DataTable(
-                                                      dividerThickness: 0.0,
-                                                      columns: const [
-                                                        DataColumn(
-                                                            label: Text('')),
-                                                        DataColumn(
-                                                            label: Text('')),
-                                                        DataColumn(
-                                                            label: Text('')),
-                                                        DataColumn(
-                                                            label: Text('')),
-                                                        DataColumn(
-                                                            label: Text('')),
-                                                        DataColumn(
-                                                          label: Center(
-                                                              child: Text('')),
-                                                        ),
-                                                      ],
-                                                      rows: [
-                                                        DataRow(cells: [
-                                                          DataCell(Center(
-                                                              child:
-                                                                  IntrinsicHeight(
-                                                            child: Row(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Container(
-                                                                  width: 80.w,
-                                                                  height: 80.w,
-                                                                  // color: Colors.amber,
-                                                                  child:
-                                                                      CachedNetworkImage(
-                                                                    fit: BoxFit
-                                                                        .fill,
-                                                                    imageUrl: httpImage +
-                                                                        listImagePath[
-                                                                            0],
-                                                                    placeholder:
-                                                                        (context,
-                                                                                url) =>
-                                                                            SizedBox(
-                                                                      height:
-                                                                          10.w,
-                                                                      width:
-                                                                          10.w,
-                                                                      child: const Center(
-                                                                          child:
-                                                                              CircularProgressIndicator()),
-                                                                    ),
-                                                                    errorWidget: (context,
-                                                                            url,
-                                                                            error) =>
-                                                                        const Icon(
-                                                                            Icons.error),
-                                                                  ),
-                                                                ),
-                                                                space10W,
-                                                                SizedBox(
-                                                                  width: 120.w,
-                                                                  child:
-                                                                      TextApp(
-                                                                    isOverFlow:
-                                                                        false,
-                                                                    softWrap:
-                                                                        true,
-                                                                    text: product
-                                                                            .foodName ??
-                                                                        '',
-                                                                    fontsize:
-                                                                        14.sp,
-                                                                    color:
-                                                                        blueText,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ))),
-                                                          DataCell(Center(
-                                                            child: SizedBox(
-                                                              width: 80.w,
-                                                              child: TextApp(
-                                                                isOverFlow:
-                                                                    false,
-                                                                softWrap: true,
-                                                                text: product
-                                                                        .storeName ??
-                                                                    '',
-                                                                fontsize: 14.sp,
-                                                              ),
-                                                            ),
-                                                          )),
-                                                          DataCell(Center(
-                                                            child: SizedBox(
-                                                              width: 120.w,
-                                                              child: TextApp(
-                                                                isOverFlow:
-                                                                    false,
-                                                                softWrap: true,
-                                                                text:
-                                                                    "${MoneyFormatter(amount: (product.foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                                fontsize: 14.sp,
-                                                              ),
-                                                            ),
-                                                          )),
-                                                          DataCell(Center(
-                                                              child: product
-                                                                          .activeFlg ==
-                                                                      1
-                                                                  ? StatusBoxIsSelling()
-                                                                  : StatusBoxNoMoreSelling())),
-                                                          DataCell(Center(
-                                                            child: SizedBox(
-                                                              width: 120.w,
-                                                              child: TextApp(
-                                                                isOverFlow:
-                                                                    false,
-                                                                softWrap: true,
-                                                                text: formatDateTime(
-                                                                    product.createdAt ??
-                                                                        ''),
-                                                                fontsize: 14.sp,
-                                                              ),
-                                                            ),
-                                                          )),
-                                                          DataCell(Row(
-                                                            children: [
-                                                              SizedBox(
-                                                                height: 30.h,
-                                                                child:
-                                                                    ButtonIcon(
-                                                                        isIconCircle:
-                                                                            false,
-                                                                        color1: const Color.fromRGBO(
-                                                                            23,
-                                                                            193,
-                                                                            232,
-                                                                            1),
-                                                                        color2: const Color
-                                                                            .fromRGBO(
-                                                                            23,
-                                                                            193,
-                                                                            232,
-                                                                            1),
-                                                                        event:
-                                                                            () {
-                                                                          handleGetDetailsFood(
-                                                                              foodID: product.foodId ?? 0);
-                                                                        },
-                                                                        icon: Icons
-                                                                            .edit),
-                                                              ),
-                                                              space15W,
-                                                              SizedBox(
-                                                                height: 30.h,
-                                                                child:
-                                                                    ButtonIcon(
-                                                                        isIconCircle:
-                                                                            false,
-                                                                        color1: const Color.fromRGBO(
-                                                                            234,
-                                                                            6,
-                                                                            6,
-                                                                            1),
-                                                                        color2: const Color
-                                                                            .fromRGBO(
-                                                                            234,
-                                                                            6,
-                                                                            6,
-                                                                            1),
-                                                                        event:
-                                                                            () {
-                                                                          showConfirmDialog(
-                                                                              context,
-                                                                              () {
-                                                                            handleDeleteFood(foodID: product.foodId.toString());
-                                                                            print("Delete Food");
-                                                                          });
-                                                                        },
-                                                                        icon: Icons
-                                                                            .delete),
-                                                              )
-                                                            ],
-                                                          ))
-                                                        ]),
-                                                      ],
-                                                    ),
-                                                  );
-                                                } else {
-                                                  return Center(
-                                                    child: hasMore
-                                                        ? CircularProgressIndicator()
-                                                        : Container(),
-                                                  );
-                                                }
-                                              }),
-                                        )
-                                      ],
-                                    )
-                                  ]),
-                            )
                           ],
                         ),
-                      )),
-                  space30H,
-                  const CopyRightText()
-                ],
+                        child: Padding(
+                          padding: EdgeInsets.all(20.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextApp(
+                                      text: "Tất cả món ăn",
+                                      fontsize: 18.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: blueText),
+                                  TextApp(
+                                    text: allYourFoodHere,
+                                    fontsize: 14.sp,
+                                    color: blueText.withOpacity(0.6),
+                                  ),
+                                ],
+                              ),
+                              space40H,
+                              Row(
+                                children: [
+                                  Flexible(
+                                    fit: FlexFit.tight,
+                                    flex: 1,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        TextApp(
+                                          text: " Từ ngày",
+                                          fontsize: 12.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: blueText,
+                                        ),
+                                        SizedBox(
+                                          height: 10.h,
+                                        ),
+                                        TextField(
+                                          readOnly: true,
+                                          controller: _dateStartController,
+                                          onTap: selectDayStart,
+                                          style: TextStyle(
+                                              fontSize: 14.sp, color: grey),
+                                          cursorColor: grey,
+                                          decoration: InputDecoration(
+                                              suffixIcon:
+                                                  Icon(Icons.calendar_month),
+                                              fillColor: const Color.fromARGB(
+                                                  255, 226, 104, 159),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color.fromRGBO(
+                                                        214, 51, 123, 0.6),
+                                                    width: 2.0),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              hintText: 'dd/mm/yy',
+                                              isDense: true,
+                                              contentPadding:
+                                                  EdgeInsets.all(15.w)),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  space20W,
+                                  Flexible(
+                                    fit: FlexFit.tight,
+                                    flex: 1,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        TextApp(
+                                          text: " Đến ngày",
+                                          fontsize: 12.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: blueText,
+                                        ),
+                                        SizedBox(
+                                          height: 10.h,
+                                        ),
+                                        TextField(
+                                          readOnly: true,
+                                          controller: _dateEndController,
+                                          onTap: selectDayEnd,
+                                          style: TextStyle(
+                                              fontSize: 14.sp, color: grey),
+                                          cursorColor: grey,
+                                          decoration: InputDecoration(
+                                              suffixIcon:
+                                                  Icon(Icons.calendar_month),
+                                              fillColor: const Color.fromARGB(
+                                                  255, 226, 104, 159),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color.fromRGBO(
+                                                        214, 51, 123, 0.6),
+                                                    width: 2.0),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              hintText: 'dd/mm/yy',
+                                              isDense: true,
+                                              contentPadding:
+                                                  EdgeInsets.all(15.w)),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                              space20H,
+                              Row(
+                                children: [
+                                  Flexible(
+                                    fit: FlexFit.tight,
+                                    flex: 1,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        TextApp(
+                                          text: " Trạng thái",
+                                          fontsize: 12.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: blueText,
+                                        ),
+                                        SizedBox(
+                                          height: 10.h,
+                                        ),
+                                        DropdownSearch(
+                                          items: listState,
+                                          onChanged: (changeFlag) {
+                                            // getListArea(
+                                            //     city: listState.indexOf(changeCity),
+                                            //     district: null);
+                                            setState(() {
+                                              selectedFlitterFlag = changeFlag;
+                                              currentPage = 1;
+                                            });
+                                            var hehe = listState.indexOf(
+                                                        changeFlag ?? '') ==
+                                                    0
+                                                ? null
+                                                : listState.indexOf(
+                                                            changeFlag ?? '') ==
+                                                        2
+                                                    ? 0
+                                                    : listState.indexOf(
+                                                        changeFlag ?? '');
+                                            currentFoodList.clear();
+
+                                            loadMoreMenuFood(
+                                              page: currentPage,
+                                              keywords: query,
+                                              // filtersFlg: hehe,
+                                              activeFlg: hehe,
+                                            );
+                                          },
+                                          dropdownDecoratorProps:
+                                              DropDownDecoratorProps(
+                                            dropdownSearchDecoration:
+                                                InputDecoration(
+                                              fillColor: const Color.fromARGB(
+                                                  255, 226, 104, 159),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color.fromRGBO(
+                                                        214, 51, 123, 0.6),
+                                                    width: 2.0),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              isDense: true,
+                                              contentPadding:
+                                                  EdgeInsets.all(15.w),
+                                              hintText: "Tất cả",
+                                            ),
+                                          ),
+                                          // onChanged: print,
+                                          selectedItem: selectedFlitterFlag,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  space20W,
+                                  Flexible(
+                                    fit: FlexFit.tight,
+                                    flex: 1,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        TextApp(
+                                          text: " Tìm kiếm",
+                                          fontsize: 12.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: blueText,
+                                        ),
+                                        SizedBox(
+                                          height: 10.h,
+                                        ),
+                                        TextFormField(
+                                          onTapOutside: (event) {
+                                            FocusManager.instance.primaryFocus
+                                                ?.unfocus();
+                                          },
+                                          onChanged: searchProduct,
+                                          controller: searchController,
+                                          style: TextStyle(
+                                              fontSize: 14.sp, color: grey),
+                                          cursorColor: grey,
+                                          decoration: InputDecoration(
+                                              fillColor: const Color.fromARGB(
+                                                  255, 226, 104, 159),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color.fromRGBO(
+                                                        214, 51, 123, 0.6),
+                                                    width: 2.0),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              // hintText: 'Instagram',
+                                              isDense: true,
+                                              contentPadding:
+                                                  EdgeInsets.all(15.w)),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                              space20H,
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          SizedBox(
+                                            width: 1.sw * 2.5,
+                                            height: 500.h,
+                                            child: ListView.builder(
+                                                physics:
+                                                    const ClampingScrollPhysics(),
+                                                // scrollDirection: Axis.horizontal,
+                                                controller:
+                                                    scrollListFoodController,
+                                                shrinkWrap: true,
+                                                itemCount:
+                                                    filterProducts.length + 1,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  var dataLength =
+                                                      filterProducts.length;
+
+                                                  if (index < dataLength) {
+                                                    DataFoodAllStore product =
+                                                        filterProducts[index];
+                                                    var imagePath1 =
+                                                        filterProducts[index]
+                                                            ?.foodImages;
+                                                    var listImagePath =
+                                                        jsonDecode(imagePath1);
+
+                                                    return Theme(
+                                                      data: Theme.of(context)
+                                                          .copyWith(
+                                                              dividerColor: Colors
+                                                                  .transparent),
+                                                      child: DataTable(
+                                                        dividerThickness: 0.0,
+                                                        columns: const [
+                                                          DataColumn(
+                                                              label: Text('')),
+                                                          DataColumn(
+                                                              label: Text('')),
+                                                          DataColumn(
+                                                              label: Text('')),
+                                                          DataColumn(
+                                                              label: Text('')),
+                                                          DataColumn(
+                                                              label: Text('')),
+                                                          DataColumn(
+                                                            label: Center(
+                                                                child:
+                                                                    Text('')),
+                                                          ),
+                                                        ],
+                                                        rows: [
+                                                          DataRow(cells: [
+                                                            DataCell(Center(
+                                                                child:
+                                                                    IntrinsicHeight(
+                                                              child: Row(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: [
+                                                                  Container(
+                                                                    width: 80.w,
+                                                                    height:
+                                                                        80.w,
+                                                                    // color: Colors.amber,
+                                                                    child:
+                                                                        CachedNetworkImage(
+                                                                      fit: BoxFit
+                                                                          .fill,
+                                                                      imageUrl:
+                                                                          httpImage +
+                                                                              listImagePath[0],
+                                                                      placeholder:
+                                                                          (context, url) =>
+                                                                              SizedBox(
+                                                                        height:
+                                                                            10.w,
+                                                                        width:
+                                                                            10.w,
+                                                                        child: const Center(
+                                                                            child:
+                                                                                CircularProgressIndicator()),
+                                                                      ),
+                                                                      errorWidget: (context,
+                                                                              url,
+                                                                              error) =>
+                                                                          const Icon(
+                                                                              Icons.error),
+                                                                    ),
+                                                                  ),
+                                                                  space10W,
+                                                                  SizedBox(
+                                                                    width:
+                                                                        120.w,
+                                                                    child:
+                                                                        TextApp(
+                                                                      isOverFlow:
+                                                                          false,
+                                                                      softWrap:
+                                                                          true,
+                                                                      text: product
+                                                                              .foodName ??
+                                                                          '',
+                                                                      fontsize:
+                                                                          14.sp,
+                                                                      color:
+                                                                          blueText,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ))),
+                                                            DataCell(Center(
+                                                              child: SizedBox(
+                                                                width: 80.w,
+                                                                child: TextApp(
+                                                                  isOverFlow:
+                                                                      false,
+                                                                  softWrap:
+                                                                      true,
+                                                                  text: product
+                                                                          .storeName ??
+                                                                      '',
+                                                                  fontsize:
+                                                                      14.sp,
+                                                                ),
+                                                              ),
+                                                            )),
+                                                            DataCell(Center(
+                                                              child: SizedBox(
+                                                                width: 120.w,
+                                                                child: TextApp(
+                                                                  isOverFlow:
+                                                                      false,
+                                                                  softWrap:
+                                                                      true,
+                                                                  text:
+                                                                      "${MoneyFormatter(amount: (product.foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                                  fontsize:
+                                                                      14.sp,
+                                                                ),
+                                                              ),
+                                                            )),
+                                                            DataCell(Center(
+                                                                child: product
+                                                                            .activeFlg ==
+                                                                        1
+                                                                    ? StatusBoxIsSelling()
+                                                                    : StatusBoxNoMoreSelling())),
+                                                            DataCell(Center(
+                                                              child: SizedBox(
+                                                                width: 120.w,
+                                                                child: TextApp(
+                                                                  isOverFlow:
+                                                                      false,
+                                                                  softWrap:
+                                                                      true,
+                                                                  text: formatDateTime(
+                                                                      product.createdAt ??
+                                                                          ''),
+                                                                  fontsize:
+                                                                      14.sp,
+                                                                ),
+                                                              ),
+                                                            )),
+                                                            DataCell(Row(
+                                                              children: [
+                                                                SizedBox(
+                                                                  height: 30.h,
+                                                                  child:
+                                                                      ButtonIcon(
+                                                                          isIconCircle:
+                                                                              false,
+                                                                          color1: const Color
+                                                                              .fromRGBO(
+                                                                              23,
+                                                                              193,
+                                                                              232,
+                                                                              1),
+                                                                          color2: const Color
+                                                                              .fromRGBO(
+                                                                              23,
+                                                                              193,
+                                                                              232,
+                                                                              1),
+                                                                          event:
+                                                                              () {
+                                                                            handleGetDetailsFood(foodID: product.foodId ?? 0);
+                                                                          },
+                                                                          icon:
+                                                                              Icons.edit),
+                                                                ),
+                                                                space15W,
+                                                                SizedBox(
+                                                                  height: 30.h,
+                                                                  child:
+                                                                      ButtonIcon(
+                                                                          isIconCircle:
+                                                                              false,
+                                                                          color1: const Color
+                                                                              .fromRGBO(
+                                                                              234,
+                                                                              6,
+                                                                              6,
+                                                                              1),
+                                                                          color2: const Color
+                                                                              .fromRGBO(
+                                                                              234,
+                                                                              6,
+                                                                              6,
+                                                                              1),
+                                                                          event:
+                                                                              () {
+                                                                            showConfirmDialog(context,
+                                                                                () {
+                                                                              handleDeleteFood(foodID: product.foodId.toString());
+                                                                              print("Delete Food");
+                                                                            });
+                                                                          },
+                                                                          icon:
+                                                                              Icons.delete),
+                                                                )
+                                                              ],
+                                                            ))
+                                                          ]),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    return Center(
+                                                      child: hasMore
+                                                          ? CircularProgressIndicator()
+                                                          : Container(),
+                                                    );
+                                                  }
+                                                }),
+                                          )
+                                        ],
+                                      )
+                                    ]),
+                              )
+                            ],
+                          ),
+                        )),
+                    space30H,
+                    const CopyRightText()
+                  ],
+                ),
               ),
             ),
           ),

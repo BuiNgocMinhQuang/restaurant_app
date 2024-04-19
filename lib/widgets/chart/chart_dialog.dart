@@ -1,14 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/config/space.dart';
-import 'package:app_restaurant/config/text.dart';
-import 'package:app_restaurant/model/manager/chart/chart_data_model.dart';
+import 'package:app_restaurant/model/manager/chart/chart_data_each_store_model.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
-import 'package:app_restaurant/widgets/chart/test_chart.dart';
+import 'package:app_restaurant/widgets/chart/chart_each_store.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -240,19 +237,6 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                               )
                             ],
                           ),
-                          // Row(
-                          //   children: [
-                          //     Padding(
-                          //       padding: EdgeInsets.only(left: 20.w),
-                          //       child: TextApp(
-                          //         text: "widget.nameRoom",
-                          //         fontsize: 14.sp,
-                          //         color: blueText,
-                          //         fontWeight: FontWeight.normal,
-                          //       ),
-                          //     )
-                          //   ],
-                          // )
                         ],
                       )),
                 ),
@@ -342,12 +326,6 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                             height: 10.h,
                           ),
                           DropdownSearch(
-                            // validator: (value) {
-                            //   if (value == chooseStore) {
-                            //     return canNotNull;
-                            //   }
-                            //   return null;
-                            // },
                             key: loailistKey,
                             onChanged: (loaiListIndex) {
                               var haha = loaiList.indexOf(loaiListIndex ?? '');

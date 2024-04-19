@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/date_time_format.dart';
-import 'package:app_restaurant/model/manager/chart/chart_data_model.dart';
+import 'package:app_restaurant/model/manager/chart/chart_data_each_store_model.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -146,7 +146,7 @@ class BarChartSample4State extends State<BarChartSample4> {
                             int rodIndex,
                           ) {
                             return BarTooltipItem(
-                              "${MoneyFormatter(amount: rod.toY.toDouble()).output.withoutFractionDigits.toString()} đ}",
+                              "${MoneyFormatter(amount: rod.toY.toDouble()).output.withoutFractionDigits.toString()} đ",
                               TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: rod.color,
