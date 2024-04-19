@@ -3,8 +3,7 @@ import 'package:app_restaurant/config/fake_data.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
-import 'package:app_restaurant/widgets/item_drawer.dart';
-import 'package:app_restaurant/widgets/sub_item_drawer.dart';
+
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +32,14 @@ class _AddStaffState extends State<AddStaff> {
   final passworldController = TextEditingController();
   final rePassworldController = TextEditingController();
   final addressController = TextEditingController();
+  List<String> listRole = [
+    "Nhân viên phục vụ",
+    "Đầu bếp",
+    "Trưởng nhóm",
+    "Quản lý",
+    "Kế toán"
+  ];
+
   sectionController() {
     switch (currentSection) {
       case 1:
@@ -94,37 +101,37 @@ class _AddStaffState extends State<AddStaff> {
                               SizedBox(
                                 height: 10.h,
                               ),
-                              DropdownSearch(
-                                validator: (value) {
-                                  if (value == "Chọn cửa hàng") {
-                                    return canNotNull;
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                items: listStore,
-                                dropdownDecoratorProps: DropDownDecoratorProps(
-                                  dropdownSearchDecoration: InputDecoration(
-                                    fillColor: const Color.fromARGB(
-                                        255, 226, 104, 159),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color:
-                                              Color.fromRGBO(214, 51, 123, 0.6),
-                                          width: 2.0),
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.all(15.w),
-                                    hintText: "Chọn cửa hàng",
-                                  ),
-                                ),
-                                onChanged: print,
-                                selectedItem: "Chọn cửa hàng",
-                              ),
+                              // DropdownSearch(
+                              //   validator: (value) {
+                              //     if (value == "Chọn cửa hàng") {
+                              //       return canNotNull;
+                              //     } else {
+                              //       return null;
+                              //     }
+                              //   },
+                              //   items: listStore,
+                              //   dropdownDecoratorProps: DropDownDecoratorProps(
+                              //     dropdownSearchDecoration: InputDecoration(
+                              //       fillColor: const Color.fromARGB(
+                              //           255, 226, 104, 159),
+                              //       focusedBorder: OutlineInputBorder(
+                              //         borderSide: const BorderSide(
+                              //             color:
+                              //                 Color.fromRGBO(214, 51, 123, 0.6),
+                              //             width: 2.0),
+                              //         borderRadius: BorderRadius.circular(8.r),
+                              //       ),
+                              //       border: OutlineInputBorder(
+                              //         borderRadius: BorderRadius.circular(8.r),
+                              //       ),
+                              //       isDense: true,
+                              //       contentPadding: EdgeInsets.all(15.w),
+                              //       hintText: "Chọn cửa hàng",
+                              //     ),
+                              //   ),
+                              //   onChanged: print,
+                              //   selectedItem: "Chọn cửa hàng",
+                              // ),
                             ],
                           ),
                           space20H,
@@ -633,37 +640,37 @@ class _AddStaffState extends State<AddStaff> {
                               SizedBox(
                                 height: 10.h,
                               ),
-                              DropdownSearch(
-                                validator: (value) {
-                                  if (value == "Chọn tỉnh/thành phố") {
-                                    return canNotNull;
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                items: listProvinces,
-                                dropdownDecoratorProps: DropDownDecoratorProps(
-                                  dropdownSearchDecoration: InputDecoration(
-                                    fillColor: const Color.fromARGB(
-                                        255, 226, 104, 159),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color:
-                                              Color.fromRGBO(214, 51, 123, 0.6),
-                                          width: 2.0),
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.all(15.w),
-                                    hintText: "Chọn tỉnh/thành phố",
-                                  ),
-                                ),
-                                onChanged: print,
-                                selectedItem: "Chọn tỉnh/thành phố",
-                              ),
+                              // DropdownSearch(
+                              //   validator: (value) {
+                              //     if (value == "Chọn tỉnh/thành phố") {
+                              //       return canNotNull;
+                              //     } else {
+                              //       return null;
+                              //     }
+                              //   },
+                              //   items: listProvinces,
+                              //   dropdownDecoratorProps: DropDownDecoratorProps(
+                              //     dropdownSearchDecoration: InputDecoration(
+                              //       fillColor: const Color.fromARGB(
+                              //           255, 226, 104, 159),
+                              //       focusedBorder: OutlineInputBorder(
+                              //         borderSide: const BorderSide(
+                              //             color:
+                              //                 Color.fromRGBO(214, 51, 123, 0.6),
+                              //             width: 2.0),
+                              //         borderRadius: BorderRadius.circular(8.r),
+                              //       ),
+                              //       border: OutlineInputBorder(
+                              //         borderRadius: BorderRadius.circular(8.r),
+                              //       ),
+                              //       isDense: true,
+                              //       contentPadding: EdgeInsets.all(15.w),
+                              //       hintText: "Chọn tỉnh/thành phố",
+                              //     ),
+                              //   ),
+                              //   onChanged: print,
+                              //   selectedItem: "Chọn tỉnh/thành phố",
+                              // ),
                             ],
                           ),
                           space20H,
@@ -1057,17 +1064,17 @@ class _AddStaffState extends State<AddStaff> {
     }
   }
 
-  void closeListStores() {
-    setState(() {
-      isShowListStores = false;
-    });
-  }
+  // void closeListStores() {
+  //   setState(() {
+  //     isShowListStores = false;
+  //   });
+  // }
 
-  void closeListRoles() {
-    setState(() {
-      isShowListRoles = false;
-    });
-  }
+  // void closeListRoles() {
+  //   setState(() {
+  //     isShowListRoles = false;
+  //   });
+  // }
 
   List<Step> getStep() => [
         Step(

@@ -55,7 +55,6 @@ class ManagerLoginBloc extends Bloc<ManagerLoginEvent, ManagerLoginState> {
 
     final data = jsonDecode(response.body);
     var message = data['message'];
-    print("LLLLL $data");
     try {
       if (data['status'] == 200) {
         var authManagerDataRes = ManagerInforModel.fromJson(data);
@@ -71,7 +70,7 @@ class ManagerLoginBloc extends Bloc<ManagerLoginEvent, ManagerLoginState> {
         emit(state.copyWith(loginStatus: ManagerLoginStatus.success));
         log(token.toString());
         navigatorKey.currentContext?.go("/manager_home");
-        Future.delayed(Duration(milliseconds: 500), () {
+        Future.delayed(const Duration(milliseconds: 300), () {
           print("DANG NHAP THNAH CONG");
           showLoginSuccesDialog();
         });

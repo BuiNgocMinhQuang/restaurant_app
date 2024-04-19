@@ -9,10 +9,10 @@ import 'package:app_restaurant/model/brought_receipt/list_brought_receipt_model.
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/share_getString.dart';
 import 'package:app_restaurant/utils/storage.dart';
-import 'package:app_restaurant/widgets/brought_receipt_container.dart';
+import 'package:app_restaurant/widgets/card/card_receipt_container.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
-import 'package:app_restaurant/widgets/list_custom_dialog.dart';
-import 'package:app_restaurant/widgets/custom_tab.dart';
+import 'package:app_restaurant/widgets/tabs&drawer/item_drawer_and_tab.dart';
+import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

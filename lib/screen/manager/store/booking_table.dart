@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:app_restaurant/bloc/bill_table/bill_table_bloc.dart';
 import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
@@ -8,7 +7,7 @@ import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
-import 'package:app_restaurant/widgets/list_custom_dialog.dart';
+import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,7 +59,6 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
   }
 
   void getDataTabIndex({required String roomId}) async {
-    await Future.delayed(const Duration(seconds: 0));
     BlocProvider.of<ListRoomBloc>(context).add(
       GetListRoom(
           token: tokenManager,
@@ -97,19 +95,9 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
         orderId: orderID));
   }
 
-  // late TabController _tabController;
-
   @override
   Widget build(BuildContext context) {
-    // TabController _tabController = TabController(
-    //   length: 3,
-    //   vsync: this,
-    // );
     return BlocBuilder<ListRoomBloc, ListRoomState>(builder: (context, state) {
-      // TabController _tabController = TabController(
-      //   length: state.listRoomModel?.rooms?.length ?? 1,
-      //   vsync: this,
-      // );
       return Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -263,7 +251,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                 Padding(
                                   padding:
                                       EdgeInsets.only(left: 30.w, right: 30.w),
-                                  child: Container(
+                                  child: SizedBox(
                                     width: 1.sw,
                                     height: 500,
                                     // color: Colors.amber,
@@ -324,8 +312,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                         index]
                                                                     .bookingStatus ==
                                                                 true
-                                                            ? Container(
-                                                                child: InkWell(
+                                                            ? InkWell(
                                                                 onTap: () {
                                                                   getTableInfor(
                                                                       roomId: state
@@ -429,9 +416,8 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                     )
                                                                   ],
                                                                 ),
-                                                              ))
-                                                            : Container(
-                                                                child: InkWell(
+                                                              )
+                                                            : InkWell(
                                                                 onTap: () {
                                                                   showMaterialModalBottomSheet(
                                                                     shape:
@@ -452,15 +438,6 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                     builder:
                                                                         (context) =>
                                                                             Container(
-                                                                      // decoration:
-                                                                      //     BoxDecoration(
-                                                                      //   borderRadius: BorderRadius.only(
-                                                                      //       topRight:
-                                                                      //           Radius.circular(10.r),
-                                                                      //       topLeft: Radius.circular(10.r)),
-                                                                      //   color: Colors
-                                                                      //       .red,
-                                                                      // ),
                                                                       height:
                                                                           1.sh /
                                                                               3,
@@ -511,7 +488,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                             ),
                                                                           ),
                                                                           space10H,
-                                                                          Divider(),
+                                                                          const Divider(),
                                                                           space10H,
                                                                           InkWell(
                                                                             onTap:
@@ -560,7 +537,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                             ),
                                                                           ),
                                                                           space10H,
-                                                                          Divider(),
+                                                                          const Divider(),
                                                                           space10H,
                                                                           InkWell(
                                                                             onTap:
@@ -604,7 +581,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                             ),
                                                                           ),
                                                                           space10H,
-                                                                          Divider(),
+                                                                          const Divider(),
                                                                           space10H,
                                                                           InkWell(
                                                                             onTap:
@@ -699,7 +676,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                     ),
                                                                   ],
                                                                 ),
-                                                              )),
+                                                              ),
                                                       );
                                                     }),
                                               )
@@ -768,7 +745,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
+                          SizedBox(
                             width: 100,
                             height: 100,
                             child: Lottie.asset('assets/lottie/error.json'),
@@ -780,7 +757,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                             fontWeight: FontWeight.bold,
                           ),
                           space30H,
-                          Container(
+                          SizedBox(
                             width: 200,
                             child: ButtonGradient(
                               color1: color1BlueButton,

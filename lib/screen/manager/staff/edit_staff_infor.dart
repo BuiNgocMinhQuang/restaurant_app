@@ -36,6 +36,14 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
   final currentPassworldController = TextEditingController();
   final newPassworldController = TextEditingController();
   final reNewPassworldController = TextEditingController();
+  List<String> listRole = [
+    "Nhân viên phục vụ",
+    "Đầu bếp",
+    "Trưởng nhóm",
+    "Quản lý",
+    "Kế toán"
+  ];
+
   File? selectedImage;
 
   void pickImage() async {
@@ -618,58 +626,58 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                 SizedBox(
                                                   height: 10.h,
                                                 ),
-                                                DropdownSearch(
-                                                  validator: (value) {
-                                                    if (value ==
-                                                        "Chọn tỉnh/thành phố") {
-                                                      return canNotNull;
-                                                    }
-                                                  },
-                                                  items: listProvinces,
-                                                  dropdownDecoratorProps:
-                                                      DropDownDecoratorProps(
-                                                    dropdownSearchDecoration:
-                                                        InputDecoration(
-                                                      // isCollapsed: true,
-                                                      hintMaxLines: 1,
-                                                      fillColor:
-                                                          const Color.fromARGB(
-                                                              255,
-                                                              226,
-                                                              104,
-                                                              159),
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide:
-                                                            const BorderSide(
-                                                                color: Color
-                                                                    .fromRGBO(
-                                                                        214,
-                                                                        51,
-                                                                        123,
-                                                                        0.6),
-                                                                width: 2.0),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8.r),
-                                                      ),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8.r),
-                                                      ),
-                                                      isDense: true,
-                                                      contentPadding:
-                                                          EdgeInsets.all(15.w),
-                                                      hintStyle: TextStyle(
-                                                          fontSize: 14.sp),
-                                                      hintText:
-                                                          "Chọn tỉnh/thành phố",
-                                                    ),
-                                                  ),
-                                                  onChanged: print,
-                                                ),
+                                                // DropdownSearch(
+                                                //   validator: (value) {
+                                                //     if (value ==
+                                                //         "Chọn tỉnh/thành phố") {
+                                                //       return canNotNull;
+                                                //     }
+                                                //   },
+                                                //   items: listProvinces,
+                                                //   dropdownDecoratorProps:
+                                                //       DropDownDecoratorProps(
+                                                //     dropdownSearchDecoration:
+                                                //         InputDecoration(
+                                                //       // isCollapsed: true,
+                                                //       hintMaxLines: 1,
+                                                //       fillColor:
+                                                //           const Color.fromARGB(
+                                                //               255,
+                                                //               226,
+                                                //               104,
+                                                //               159),
+                                                //       focusedBorder:
+                                                //           OutlineInputBorder(
+                                                //         borderSide:
+                                                //             const BorderSide(
+                                                //                 color: Color
+                                                //                     .fromRGBO(
+                                                //                         214,
+                                                //                         51,
+                                                //                         123,
+                                                //                         0.6),
+                                                //                 width: 2.0),
+                                                //         borderRadius:
+                                                //             BorderRadius
+                                                //                 .circular(8.r),
+                                                //       ),
+                                                //       border:
+                                                //           OutlineInputBorder(
+                                                //         borderRadius:
+                                                //             BorderRadius
+                                                //                 .circular(8.r),
+                                                //       ),
+                                                //       isDense: true,
+                                                //       contentPadding:
+                                                //           EdgeInsets.all(15.w),
+                                                //       hintStyle: TextStyle(
+                                                //           fontSize: 14.sp),
+                                                //       hintText:
+                                                //           "Chọn tỉnh/thành phố",
+                                                //     ),
+                                                //   ),
+                                                //   onChanged: print,
+                                                // ),
                                               ],
                                             ),
                                           ),

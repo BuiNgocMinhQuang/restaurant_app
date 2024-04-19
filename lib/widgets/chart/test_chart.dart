@@ -147,7 +147,6 @@ class BarChartSample4State extends State<BarChartSample4> {
                           ) {
                             return BarTooltipItem(
                               "${MoneyFormatter(amount: rod.toY.toDouble()).output.withoutFractionDigits.toString()} đ}",
-                              // rod.toY.toString(),
                               TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: rod.color,
@@ -157,21 +156,6 @@ class BarChartSample4State extends State<BarChartSample4> {
                             );
                           },
                         ),
-                        // touchCallback: (event, response) {
-                        //   if (event.isInterestedForInteractions &&
-                        //       response != null &&
-                        //       response.spot != null) {
-                        //     log("TOUCHCHHHCHCHC");
-                        //     log(response.spot?.touchedRodData.toY.toString() ??
-                        //         'NOOO');
-                        //     setState(() {
-                        //       touchedGroupIndex =
-                        //           response.spot!.touchedBarGroupIndex;
-                        //     });
-                        //   } else {
-                        //     log("COKKKK");
-                        //   }
-                        // },
                       ),
                       titlesData: FlTitlesData(
                         show: true,

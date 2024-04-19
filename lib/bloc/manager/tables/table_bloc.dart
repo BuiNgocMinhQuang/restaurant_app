@@ -143,14 +143,7 @@ class TableBloc extends Bloc<TableEvent, TableState> {
 
     try {
       var token = event.token;
-      log(token.toString());
-      print({
-        'client': event.client,
-        'shop_id': event.shopId,
-        'is_api': true,
-        'room_id': event.roomId,
-        'table_id': event.tableId
-      });
+
       final respons = await http.post(
         Uri.parse('$baseUrl$tableApi'),
         headers: {
@@ -182,8 +175,6 @@ class TableBloc extends Bloc<TableEvent, TableState> {
           StorageUtils.instance.setStringList(
               key: 'food_kinds_list',
               val: tableDataRes.foodKinds ?? []); //luu danh muc thuc an
-          log("FOOOOD");
-          log(tableDataRes.foodKinds.toString());
 
           emit(state.copyWith(tableStatus: TableStatus.succes));
         } else {

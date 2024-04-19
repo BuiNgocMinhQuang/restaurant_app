@@ -12,7 +12,7 @@ import 'package:app_restaurant/screen/manager/store/details_store.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
-import 'package:app_restaurant/widgets/list_custom_dialog.dart';
+import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:avatar_stack/avatar_stack.dart';

@@ -54,15 +54,13 @@ class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
       );
       final data = jsonDecode(respons.body);
 
-      print("DADATATA $data");
       if (data['status'] == 200) {
-        print("HANLDE FOGOT PASSWORD OK");
         StorageUtils.instance.setString(key: 'OTPtoManager', val: otp ?? '');
         final messRes = data['message'];
         final messText = messRes['text'];
         navigatorKey.currentContext?.go('/manager_change_password');
 
-        Future.delayed(Duration(milliseconds: 300), () {
+        Future.delayed(const Duration(milliseconds: 300), () {
           showCustomDialogModal(
             typeDialog: "succes",
             context: navigatorKey.currentContext,

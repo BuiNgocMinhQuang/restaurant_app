@@ -11,7 +11,7 @@ import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/screen/manager/food_menu/edit_food.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
-import 'package:app_restaurant/widgets/status_box.dart';
+import 'package:app_restaurant/widgets/box/status_box.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';

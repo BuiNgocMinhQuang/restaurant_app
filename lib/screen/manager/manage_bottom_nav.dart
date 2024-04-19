@@ -26,8 +26,7 @@ import 'package:app_restaurant/screen/manager/inventory/list_inventory.dart';
 import 'package:app_restaurant/screen/manager/user_infor/notifications.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
-import 'package:app_restaurant/widgets/item_drawer.dart';
-import 'package:app_restaurant/widgets/sub_item_drawer.dart';
+import 'package:app_restaurant/widgets/tabs&drawer/item_drawer_and_tab.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
@@ -107,8 +106,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
         return true;
       }).toList();
     });
-    log("BANNER");
-    log(listImageBanner.toString());
   }
 
   void getListStore() async {
@@ -191,8 +188,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
           var managerInforDataRes = ManagerInforModel.fromJson(data);
           setState(() {
             managerInforData = managerInforDataRes.data;
-            // log(managerInforData?.userAvatar.toString() ?? '');
-            // avatarUser = imagePath2;
           });
 
           print("GET INFOR MANGAER OK 1");
@@ -531,7 +526,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             textColor:
                                 currentIndex == 3 ? Colors.black : menuGrey,
                             event: () {
-                              // log("PRESSS");
                               setState(() {
                                 checkTokenExpires();
 
@@ -539,7 +533,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                 tapDrawerChangeBotNav(3);
                                 selectedStoreIndex = null;
                               });
-                              // checkTokenExpires();
 
                               Navigator.pop(context);
                             }),

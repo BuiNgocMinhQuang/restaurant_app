@@ -20,7 +20,6 @@ import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
 import 'package:intl/intl.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
-import 'package:go_router/go_router.dart';
 
 class ManagerAddFood extends StatefulWidget {
   final List<DataListStore> listStores;
@@ -78,21 +77,9 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
         String base64string = base64Encode(imagebytes);
         listImageFood.add(base64string);
       }
-      log(imageFileList.toString());
-      // selectedImage = File(returndImage.path);
     });
     // openImage();
   }
-
-  // List<XFile>? imageFileList = [];
-
-  // void selectImages() async {
-  //   final List<XFile> selectedImages = await imagePicker.pickMultiImage();
-  //   if (selectedImages.isNotEmpty) {
-  //     imageFileList!.addAll(selectedImages);
-  //   }
-  //   setState(() {});
-  // } //selecte multi image
 
   void deleteImages(data) {
     imageFileList!.remove(data);
@@ -196,13 +183,6 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
 
   @override
   Widget build(BuildContext context) {
-    //  widget.listStores.where((element) {
-    //   setState(() {
-    //     listStoreName.add(element.storeName ?? '');
-    //   });
-    //   return true;
-    // }).toList();
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -330,8 +310,6 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                             currentFoodKind =
                                                 categories2.indexOf(
                                                     foodKindIndex.toString());
-                                            log("CURRENT FOOD");
-                                            log(currentFoodKind.toString());
                                           },
                                           items: categories2,
                                           dropdownDecoratorProps:

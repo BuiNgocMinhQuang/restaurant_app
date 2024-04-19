@@ -3,7 +3,7 @@ import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/screen/manager/staff/edit_staff_infor.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
-import 'package:app_restaurant/widgets/status_box.dart';
+import 'package:app_restaurant/widgets/box/status_box.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:dropdown_search/dropdown_search.dart';

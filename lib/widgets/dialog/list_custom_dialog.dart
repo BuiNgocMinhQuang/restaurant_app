@@ -24,7 +24,7 @@ import 'package:app_restaurant/utils/share_getString.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
-import 'package:app_restaurant/widgets/custom_tab.dart';
+import 'package:app_restaurant/widgets/tabs&drawer/item_drawer_and_tab.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -33,7 +33,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -7191,19 +7190,6 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                       ),
                       ButtonApp(
                         event: () {
-                          log("IMGAE");
-                          print(listImageStore.toString());
-                          // log("LOGO");
-                          // print(currentStoreLogo.toString());
-                          // handleCreateStore(
-                          //   nameStore: "ndahibuidj",
-                          //   addressStore: "addressStoreController.text",
-                          //   shopID: "22224e0053",
-                          //   descriptionStore: "descriptionStore",
-                          //   logoStore: currentStoreLogo,
-                          //   imagesStore: listImageStore,
-                          //   activeFlag: light,
-                          // );
                           if (_formField.currentState!.validate()) {
                             if (listImageStore.isNotEmpty &&
                                 selectedImage != null) {
@@ -8099,12 +8085,10 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
   final nameTableController = TextEditingController();
   final chairsOfTableController = TextEditingController();
   final ImagePicker imagePicker = ImagePicker();
-  QuillController _controllerQuill = QuillController.basic();
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _controllerQuill;
   }
 
   @override
@@ -8267,85 +8251,7 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                             // color: Colors.amber,
                           ),
                           child: Column(
-                            children: [
-                              QuillProvider(
-                                  configurations: QuillConfigurations(
-                                      controller: _controllerQuill),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                          width: 1.sw,
-                                          decoration: const BoxDecoration(
-                                            border: Border(
-                                                top: BorderSide(
-                                                    width: 0,
-                                                    color: Colors.grey),
-                                                bottom: BorderSide(
-                                                    width: 1,
-                                                    color: Colors.grey),
-                                                left: BorderSide(
-                                                    width: 0,
-                                                    color: Colors.grey),
-                                                right: BorderSide(
-                                                    width: 0,
-                                                    color: Colors.grey)),
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(10.w),
-                                            child: const QuillToolbar(
-                                              configurations:
-                                                  QuillToolbarConfigurations(
-                                                      toolbarIconAlignment:
-                                                          WrapAlignment.center,
-                                                      showFontFamily: true,
-                                                      showFontSize: false,
-                                                      showBoldButton: true,
-                                                      showItalicButton: true,
-                                                      showSmallButton: false,
-                                                      showUnderLineButton: true,
-                                                      showStrikeThrough: false,
-                                                      showInlineCode: false,
-                                                      showColorButton: false,
-                                                      showBackgroundColorButton:
-                                                          false,
-                                                      showClearFormat: false,
-                                                      showAlignmentButtons:
-                                                          true,
-                                                      showLeftAlignment: true,
-                                                      showCenterAlignment: true,
-                                                      showRightAlignment: true,
-                                                      showJustifyAlignment:
-                                                          true,
-                                                      showHeaderStyle: false,
-                                                      showListNumbers: true,
-                                                      showListBullets: true,
-                                                      showListCheck: false,
-                                                      showCodeBlock: false,
-                                                      showQuote: false,
-                                                      showIndent: false,
-                                                      showLink: true,
-                                                      showUndo: false,
-                                                      showRedo: false,
-                                                      showDirection: false,
-                                                      showSearchButton: false,
-                                                      showSubscript: false,
-                                                      showSuperscript: false),
-                                            ),
-                                          )),
-                                      // space20H,
-                                      Container(
-                                        margin: EdgeInsets.all(5.w),
-                                        height: 100.h,
-                                        child: QuillEditor.basic(
-                                          configurations:
-                                              const QuillEditorConfigurations(
-                                            readOnly: false,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  )),
-                            ],
+                            children: [],
                           )),
 
                       SizedBox(
@@ -8471,13 +8377,12 @@ class _CreateItemDialogState extends State<CreateItemDialog>
   final initalQuantityController = TextEditingController();
   final minQuantityController = TextEditingController();
   final ImagePicker imagePicker = ImagePicker();
-  QuillController _controllerQuill = QuillController.basic();
+
   bool isHaveddddd = false;
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _controllerQuill;
   }
 
   @override

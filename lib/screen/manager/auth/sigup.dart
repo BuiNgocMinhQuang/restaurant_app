@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
-import 'package:app_restaurant/widgets/background_welcome.dart';
+import 'package:app_restaurant/widgets/background/background_welcome.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:flutter/gestures.dart';

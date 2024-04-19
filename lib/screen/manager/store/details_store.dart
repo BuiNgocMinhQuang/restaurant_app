@@ -12,11 +12,12 @@ import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/chart/chart_dialog.dart';
-import 'package:app_restaurant/widgets/list_custom_dialog.dart';
+import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app_restaurant/model/manager/store/details_stores_model.dart';
@@ -67,10 +68,8 @@ class _DetailsStoreState extends State<DetailsStore> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print(" DATA CREATE FOOD ${data}");
       try {
         if (data['status'] == 200) {
-          // var hahah = DetailsStoreModel.fromJson(data);
           setState(() {
             editDetailsStoreModel = EditDetailsStoreModel.fromJson(data);
           });
@@ -115,7 +114,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                         height: 200,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15.w),
-                            gradient: LinearGradient(
+                            gradient: const LinearGradient(
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                               colors: [
@@ -141,7 +140,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                             space20H,
-                            Container(
+                            SizedBox(
                               width: 220.w,
                               child: ButtonGradient(
                                 color1: color1DarkButton,
@@ -168,7 +167,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                       space20H,
                       Card(
                         elevation: 8.0,
-                        margin: EdgeInsets.all(8),
+                        margin: const EdgeInsets.all(8),
                         child: Container(
                             width: 1.sw,
                             height: 100.h,
@@ -209,7 +208,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                       space15H,
                       Card(
                         elevation: 8.0,
-                        margin: EdgeInsets.all(8),
+                        margin: const EdgeInsets.all(8),
                         child: Container(
                             width: 1.sw,
                             height: 100.h,
@@ -252,7 +251,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                       space25H,
                       Card(
                         elevation: 8.0,
-                        margin: EdgeInsets.all(8),
+                        margin: const EdgeInsets.all(8),
                         child: Container(
                             width: 1.sw,
                             // height: 100.h,
@@ -274,7 +273,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Container(
+                                          SizedBox(
                                               width: 50.w,
                                               height: 50.w,
                                               child: ClipRRect(
@@ -324,7 +323,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                                           )
                                         ],
                                       ),
-                                      Container(
+                                      SizedBox(
                                         width: 30,
                                         height: 30,
                                         child: ButtonIcon(
@@ -362,12 +361,6 @@ class _DetailsStoreState extends State<DetailsStore> {
                                     ],
                                   ),
                                   space10H,
-                                  // TextApp(
-                                  //   text:
-                                  //   desStoreText,
-
-                                  //   fontsize: 14.sp,
-                                  // ),
                                   HtmlWidget(
                                     '''
                                                        ${widget.detailsStoreModel?.store.storeDescription ?? ''}
@@ -404,7 +397,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                       space25H,
                       Card(
                           elevation: 8.0,
-                          margin: EdgeInsets.all(8),
+                          margin: const EdgeInsets.all(8),
                           child: Padding(
                             padding: EdgeInsets.all(20.w),
                             child: Column(
@@ -423,7 +416,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    Container(
+                                    SizedBox(
                                       width: 150.w,
                                       child: ButtonGradient(
                                         radius: 8.w,
@@ -454,7 +447,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                                     itemBuilder: (context, index) {
                                       return Column(
                                         children: [
-                                          Divider(),
+                                          const Divider(),
                                           space10H,
                                           Container(
                                             width: 1.sw,
@@ -483,7 +476,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                   children: [
                                                     TextApp(text: "Phong 1"),
                                                     // Icon(Icons.more),
-                                                    Container(
+                                                    SizedBox(
                                                       width: 20.w,
                                                       height: 20.w,
                                                       child: InkWell(

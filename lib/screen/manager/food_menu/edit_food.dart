@@ -14,7 +14,6 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
@@ -23,7 +22,6 @@ import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
 import 'package:intl/intl.dart';
 import 'package:app_restaurant/model/manager/food/details_food_model.dart';
-import 'package:quill_html_editor/quill_html_editor.dart';
 
 class EditFood extends StatefulWidget {
   final List<DataListStore> listStores;
@@ -239,9 +237,6 @@ class _EditFoodState extends State<EditFood> {
       });
       return true;
     }).toList();
-    // log("NEW LISSTTTTt");
-
-    // log(listDynamicImage.toString());
 
     return Scaffold(
       appBar: AppBar(
@@ -404,7 +399,6 @@ class _EditFoodState extends State<EditFood> {
                                   },
                                   selectedItem: currentStoreText,
                                   key: _popupCustomValidationKey1,
-                                  // itemAsString: (item) => item.storeName,
                                   items: listStoreName,
                                   onChanged: (listSelectedStore) {
                                     var getIndexStore = listStoreName
@@ -412,7 +406,6 @@ class _EditFoodState extends State<EditFood> {
 
                                     currentStoreID = widget
                                         .listStores[getIndexStore].storeId;
-                                    // log(currentStoreID.toString());
                                   },
                                   dropdownDecoratorProps:
                                       DropDownDecoratorProps(
@@ -460,8 +453,6 @@ class _EditFoodState extends State<EditFood> {
                                   onChanged: (foodKindIndex) {
                                     currentFoodKind = categories
                                         .indexOf(foodKindIndex.toString());
-                                    // log("CURRENT FOOD");
-                                    // log(currentFoodKind.toString());
                                   },
                                   dropdownDecoratorProps:
                                       DropDownDecoratorProps(

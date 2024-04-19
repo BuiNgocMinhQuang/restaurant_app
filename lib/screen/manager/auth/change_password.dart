@@ -58,7 +58,6 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
       );
       final data = jsonDecode(respons.body);
 
-      print("DADATATA $data");
       if (data['status'] == 200) {
         print("HANLDE FOGOT PASSWORD OK");
         final messRes = data['message'];

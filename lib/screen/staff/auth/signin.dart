@@ -1,6 +1,6 @@
 import 'package:app_restaurant/bloc/login/staff_login_bloc.dart';
 import 'package:app_restaurant/config/text.dart';
-import 'package:app_restaurant/widgets/background_welcome.dart';
+import 'package:app_restaurant/widgets/background/background_welcome.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';

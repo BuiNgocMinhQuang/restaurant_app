@@ -8,7 +8,7 @@ import 'package:app_restaurant/screen/staff/food_menu/list_food.dart';
 import 'package:app_restaurant/screen/staff/user_infor/user_infor.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
-import 'package:app_restaurant/widgets/item_drawer.dart';
+import 'package:app_restaurant/widgets/tabs&drawer/item_drawer_and_tab.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 

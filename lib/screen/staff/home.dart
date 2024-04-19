@@ -8,7 +8,7 @@ import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/utils/share_getString.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
-import 'package:app_restaurant/widgets/list_custom_dialog.dart';
+import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
