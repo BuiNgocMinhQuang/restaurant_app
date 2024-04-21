@@ -1,15 +1,22 @@
-import 'package:app_restaurant/config/void_show_dialog.dart';
+import 'dart:convert';
+
 import 'package:app_restaurant/config/colors.dart';
+import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/config/space.dart';
-import 'package:app_restaurant/screen/manager/staff/edit_staff_infor.dart';
-import 'package:app_restaurant/widgets/button/button_icon.dart';
+import 'package:app_restaurant/model/manager/staff/list_staff_model.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/box/status_box.dart';
+import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:http/http.dart' as http;
+import 'package:app_restaurant/env/index.dart';
+import 'package:app_restaurant/constant/api/index.dart';
 
 List<String> listState = ["Tất cả", "Đang hoạt động", "Đã chặn"];
 
@@ -24,6 +31,29 @@ class _ListStaffState extends State<ListStaff> {
   TextEditingController _dateStartController = TextEditingController();
   TextEditingController _dateEndController = TextEditingController();
   String accountStatus = "isActive";
+  ListStaffDataModel? listStaffDataModel;
+  List currentStaffList = [];
+  int currentActiveFlag = 1;
+  bool hasMore = true;
+  bool isRefesh = false;
+  int currentPage = 1;
+  String query = '';
+
+  final scrollListStaffController = ScrollController();
+  void searchStaff(String query) {
+    setState(() {
+      this.query = query;
+      currentPage = 1;
+    });
+    currentStaffList.clear();
+    handleGetListStaff(
+      page: currentPage,
+      keywords: query,
+      activeFlg: currentActiveFlag,
+      dateStart: _dateStartController.text,
+      dateEnd: _dateEndController.text,
+    );
+  }
 
   void selectDayStart() async {
     DateTime? picked = await showDatePicker(
@@ -53,6 +83,84 @@ class _ListStaffState extends State<ListStaff> {
         _dateEndController.text = picked.toString().split(" ")[0];
       });
     }
+  }
+
+  void handleGetListStaff({
+    required int page,
+    String? keywords,
+    int? activeFlg,
+    String? dateStart,
+    String? dateEnd,
+  }) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$getListStaffApi'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': {
+            "keywords": keywords,
+            "active_flg": activeFlg,
+            "date_range": {"start_date": dateStart, "end_date": dateEnd}
+          },
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print(" DATA CREATE FOOD ${data}");
+      try {
+        if (data['status'] == 200) {
+          // var hahah = DetailsStoreModel.fromJson(data);
+          setState(() {
+            listStaffDataModel = ListStaffDataModel.fromJson(data);
+            currentStaffList.addAll(listStaffDataModel!.staffs.data);
+            currentPage++;
+            if (listStaffDataModel!.staffs.data.isEmpty ||
+                listStaffDataModel!.staffs.data.length <= 15) {
+              hasMore = false;
+            }
+          });
+        } else {
+          print("ERROR CREATE FOOOD");
+        }
+      } catch (error) {
+        print("ERROR CREATE $error");
+      }
+    } catch (error) {
+      print("ERROR CREATE $error");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    handleGetListStaff(page: 1);
+    scrollListStaffController.addListener(() {
+      if (scrollListStaffController.position.maxScrollExtent ==
+              scrollListStaffController.offset &&
+          isRefesh == false) {
+        print("LOADD MORE FOOD");
+        handleGetListStaff(
+          page: currentPage,
+          keywords: query,
+          activeFlg: currentActiveFlag,
+          dateStart: _dateStartController.text,
+          dateEnd: _dateEndController.text,
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -258,6 +366,10 @@ class _ListStaffState extends State<ListStaff> {
                                       height: 10.h,
                                     ),
                                     TextField(
+                                      onTapOutside: (event) {
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
+                                      },
                                       style: TextStyle(
                                           fontSize: 14.sp, color: grey),
                                       cursorColor: grey,
@@ -289,137 +401,503 @@ class _ListStaffState extends State<ListStaff> {
                           SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  DataTable(columns: const [
-                                    DataColumn(
-                                      label: Center(
-                                        child: Text('Tên nhân viên',
-                                            textAlign: TextAlign.center),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Center(
-                                        child: Text('Chức vụ',
-                                            textAlign: TextAlign.center),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Center(
-                                        child: Text('Làm việc tại cửa hàng',
-                                            textAlign: TextAlign.center),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Center(
-                                        child: Text('Trạng thái',
-                                            textAlign: TextAlign.center),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Center(
-                                        child: Text('Số điện thoại',
-                                            textAlign: TextAlign.center),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Center(
-                                        child: Text('Email',
-                                            textAlign: TextAlign.center),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Center(
-                                        child: Text('Ngày tạo',
-                                            textAlign: TextAlign.center),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Center(child: Text('')),
-                                    ),
-                                  ], rows: [
-                                    DataRow(cells: [
-                                      DataCell(Center(
-                                        child: Text('Nhan vien 1',
-                                            textAlign: TextAlign.center),
-                                      )),
-                                      DataCell(Center(
-                                        child: Text('Nhan vien',
-                                            textAlign: TextAlign.center),
-                                      )),
-                                      DataCell(Center(
-                                        child: Text('shop 1',
-                                            textAlign: TextAlign.center),
-                                      )),
-                                      DataCell(Center(
-                                        child: accountStatus == "isActive"
-                                            ? StatusBoxIsActive()
-                                            : StatusBoxIsLock(),
-                                      )),
-                                      DataCell(Center(
-                                        child: Text('0987653663',
-                                            textAlign: TextAlign.center),
-                                      )),
-                                      DataCell(Center(
-                                        child: Text('Dang@gmail.com',
-                                            textAlign: TextAlign.center),
-                                      )),
-                                      DataCell(Center(
-                                        child: Text('26/02/2024 11:35:12',
-                                            textAlign: TextAlign.center),
-                                      )),
-                                      DataCell(Row(
-                                        children: [
-                                          SizedBox(
-                                            height: 30.h,
-                                            child: ButtonIcon(
-                                                isIconCircle: false,
-                                                color1: Color.fromRGBO(
-                                                    23, 193, 232, 1),
-                                                color2: Color.fromRGBO(
-                                                    23, 193, 232, 1),
-                                                event: () {
-                                                  // context.go(
-                                                  //     "/manager_edit_staff_info");
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            const EditStaffInformation()),
-                                                  );
-                                                },
-                                                icon: Icons.edit),
-                                          ),
-                                          space15W,
-                                          SizedBox(
-                                            height: 30.h,
-                                            child: ButtonIcon(
-                                                isIconCircle: false,
-                                                color1: accountStatus ==
-                                                        "isActive"
-                                                    ? Color.fromRGBO(
-                                                        251, 207, 51, 1)
-                                                    : Color.fromRGBO(
-                                                        103, 177, 8, 1),
-                                                color2:
-                                                    accountStatus == "isActive"
-                                                        ? Color.fromRGBO(
-                                                            251, 207, 51, 1)
-                                                        : Color.fromRGBO(
-                                                            103, 177, 8, 1),
-                                                event: () {
-                                                  showConfirmDialog(context,
-                                                      () {
-                                                    print("ConFIRM");
-                                                  });
-                                                },
-                                                icon: Icons.lock),
-                                          )
-                                        ],
-                                      ))
-                                    ]),
-                                  ]),
+                                  Column(
+                                    children: [
+                                      Container(
+                                        width: 1.sw * 3.5,
+                                        height: 400.h,
+                                        // color: Colors.amber,
+                                        padding: EdgeInsets.all(20.w),
+                                        child: ListView.builder(
+                                            shrinkWrap: true,
+                                            controller:
+                                                scrollListStaffController,
+                                            physics:
+                                                const ClampingScrollPhysics(),
+                                            itemCount: (listStaffDataModel
+                                                        ?.staffs.data.length ??
+                                                    0) +
+                                                1,
+                                            itemBuilder: (context, index) {
+                                              var dataLength =
+                                                  listStaffDataModel?.staffs
+                                                          .data.length ??
+                                                      0;
+                                              if (index < dataLength) {
+                                                DataListStaff staffData =
+                                                    listStaffDataModel!
+                                                        .staffs.data[index];
+                                                var avatarStaff =
+                                                    staffData.staffAvatar ?? '';
+                                                return Theme(
+                                                  data: Theme.of(context)
+                                                      .copyWith(
+                                                          dividerColor: Colors
+                                                              .transparent),
+                                                  child: index > 0
+                                                      ? DataTable(
+                                                          dividerThickness: 0.0,
+                                                          columns: [
+                                                            DataColumn(
+                                                                label:
+                                                                    Text('')),
+                                                            DataColumn(
+                                                                label:
+                                                                    Text('')),
+                                                            DataColumn(
+                                                                label:
+                                                                    Text('')),
+                                                            DataColumn(
+                                                                label:
+                                                                    Text('')),
+                                                            DataColumn(
+                                                                label:
+                                                                    Text('')),
+                                                            DataColumn(
+                                                                label:
+                                                                    Text('')),
+                                                            DataColumn(
+                                                                label:
+                                                                    Text('')),
+                                                            DataColumn(
+                                                              label: Center(
+                                                                  child:
+                                                                      Text('')),
+                                                            ),
+                                                          ],
+                                                          rows: [
+                                                            DataRow(cells: [
+                                                              DataCell(Center(
+                                                                  child:
+                                                                      IntrinsicHeight(
+                                                                child: Row(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .center,
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    Container(
+                                                                      width:
+                                                                          80.w,
+                                                                      height:
+                                                                          80.w,
+                                                                      // color: Colors.amber,
+                                                                      child:
+                                                                          CachedNetworkImage(
+                                                                        fit: BoxFit
+                                                                            .fill,
+                                                                        imageUrl:
+                                                                            httpImage +
+                                                                                avatarStaff,
+                                                                        placeholder:
+                                                                            (context, url) =>
+                                                                                SizedBox(
+                                                                          height:
+                                                                              10.w,
+                                                                          width:
+                                                                              10.w,
+                                                                          child:
+                                                                              const Center(child: CircularProgressIndicator()),
+                                                                        ),
+                                                                        errorWidget: (context,
+                                                                                url,
+                                                                                error) =>
+                                                                            const Icon(Icons.error),
+                                                                      ),
+                                                                    ),
+                                                                    space10W,
+                                                                    SizedBox(
+                                                                      width:
+                                                                          120.w,
+                                                                      child:
+                                                                          TextApp(
+                                                                        isOverFlow:
+                                                                            false,
+                                                                        softWrap:
+                                                                            true,
+                                                                        text: staffData.staffFullName ??
+                                                                            '',
+                                                                        fontsize:
+                                                                            14.sp,
+                                                                        color:
+                                                                            blueText,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ))),
+                                                              DataCell(Center(
+                                                                child: SizedBox(
+                                                                  width: 80.w,
+                                                                  child:
+                                                                      TextApp(
+                                                                    isOverFlow:
+                                                                        false,
+                                                                    softWrap:
+                                                                        true,
+                                                                    text: staffData
+                                                                        .staffPosition
+                                                                        .toString(),
+                                                                    fontsize:
+                                                                        14.sp,
+                                                                  ),
+                                                                ),
+                                                              )),
+                                                              DataCell(Center(
+                                                                child: SizedBox(
+                                                                  width: 120.w,
+                                                                  child:
+                                                                      TextApp(
+                                                                    isOverFlow:
+                                                                        false,
+                                                                    softWrap:
+                                                                        true,
+                                                                    text: staffData
+                                                                        .storeName,
+                                                                    fontsize:
+                                                                        14.sp,
+                                                                  ),
+                                                                ),
+                                                              )),
+                                                              DataCell(Center(
+                                                                  child: staffData
+                                                                              .activeFlg ==
+                                                                          1
+                                                                      ? StatusBoxIsSelling()
+                                                                      : StatusBoxNoMoreSelling())),
+                                                              DataCell(Center(
+                                                                child: SizedBox(
+                                                                  width: 120.w,
+                                                                  child:
+                                                                      TextApp(
+                                                                    isOverFlow:
+                                                                        false,
+                                                                    softWrap:
+                                                                        true,
+                                                                    text: formatDateTime(
+                                                                        staffData.createdAt ??
+                                                                            ''),
+                                                                    fontsize:
+                                                                        14.sp,
+                                                                  ),
+                                                                ),
+                                                              )),
+                                                              DataCell(Center(
+                                                                child: SizedBox(
+                                                                  width: 120.w,
+                                                                  child:
+                                                                      TextApp(
+                                                                    isOverFlow:
+                                                                        false,
+                                                                    softWrap:
+                                                                        true,
+                                                                    text: formatDateTime(
+                                                                        staffData.createdAt ??
+                                                                            ''),
+                                                                    fontsize:
+                                                                        14.sp,
+                                                                  ),
+                                                                ),
+                                                              )),
+                                                              DataCell(Center(
+                                                                child: SizedBox(
+                                                                  width: 120.w,
+                                                                  child:
+                                                                      TextApp(
+                                                                    isOverFlow:
+                                                                        false,
+                                                                    softWrap:
+                                                                        true,
+                                                                    text: formatDateTime(
+                                                                        staffData.createdAt ??
+                                                                            ''),
+                                                                    fontsize:
+                                                                        14.sp,
+                                                                  ),
+                                                                ),
+                                                              )),
+                                                              DataCell(Row(
+                                                                children: [
+                                                                  SizedBox(
+                                                                    height:
+                                                                        30.h,
+                                                                    child: ButtonIcon(
+                                                                        isIconCircle: false,
+                                                                        color1: const Color.fromRGBO(23, 193, 232, 1),
+                                                                        color2: const Color.fromRGBO(23, 193, 232, 1),
+                                                                        event: () {
+                                                                          // handleGetDetailsFood(foodID: product.foodId ?? 0);
+                                                                        },
+                                                                        icon: Icons.edit),
+                                                                  ),
+                                                                  space15W,
+                                                                  SizedBox(
+                                                                    height:
+                                                                        30.h,
+                                                                    child: ButtonIcon(
+                                                                        isIconCircle: false,
+                                                                        color1: const Color.fromRGBO(234, 6, 6, 1),
+                                                                        color2: const Color.fromRGBO(234, 6, 6, 1),
+                                                                        event: () {
+                                                                          // showConfirmDialog(context, () {
+                                                                          //   handleDeleteFood(foodID: product.foodId.toString());
+                                                                          //   print("Delete Food");
+                                                                          // });
+                                                                        },
+                                                                        icon: Icons.delete),
+                                                                  )
+                                                                ],
+                                                              ))
+                                                            ]),
+                                                          ],
+                                                        )
+                                                      : DataTable(
+                                                          dividerThickness: 0.0,
+                                                          columns: [
+                                                            DataColumn(
+                                                                label: Text(
+                                                                    'TÊN NHÂN VIÊN')),
+                                                            DataColumn(
+                                                                label: Text(
+                                                                    'CHỨC VỤ')),
+                                                            DataColumn(
+                                                                label: Text(
+                                                                    'LÀM VIỆC TẠI CỬA HÀNG')),
+                                                            DataColumn(
+                                                                label: Text(
+                                                                    'TRẠNG THÁI')),
+                                                            DataColumn(
+                                                                label: Text(
+                                                                    'SÔ ĐIỆN THOẠI')),
+                                                            DataColumn(
+                                                                label: Text(
+                                                                    'EMAIL')),
+                                                            DataColumn(
+                                                                label: Text(
+                                                                    'NGÀY TẠO')),
+                                                            DataColumn(
+                                                              label: Center(
+                                                                  child:
+                                                                      Text('')),
+                                                            ),
+                                                          ],
+                                                          rows: [
+                                                            DataRow(cells: [
+                                                              DataCell(Center(
+                                                                  child:
+                                                                      IntrinsicHeight(
+                                                                child: Row(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .center,
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    Container(
+                                                                      width:
+                                                                          80.w,
+                                                                      height:
+                                                                          80.w,
+                                                                      // color: Colors.amber,
+                                                                      child:
+                                                                          CachedNetworkImage(
+                                                                        fit: BoxFit
+                                                                            .fill,
+                                                                        imageUrl:
+                                                                            httpImage +
+                                                                                avatarStaff,
+                                                                        placeholder:
+                                                                            (context, url) =>
+                                                                                SizedBox(
+                                                                          height:
+                                                                              10.w,
+                                                                          width:
+                                                                              10.w,
+                                                                          child:
+                                                                              const Center(child: CircularProgressIndicator()),
+                                                                        ),
+                                                                        errorWidget: (context,
+                                                                                url,
+                                                                                error) =>
+                                                                            const Icon(Icons.error),
+                                                                      ),
+                                                                    ),
+                                                                    space10W,
+                                                                    SizedBox(
+                                                                      width:
+                                                                          120.w,
+                                                                      child:
+                                                                          TextApp(
+                                                                        isOverFlow:
+                                                                            false,
+                                                                        softWrap:
+                                                                            true,
+                                                                        text: staffData.staffFullName ??
+                                                                            '',
+                                                                        fontsize:
+                                                                            14.sp,
+                                                                        color:
+                                                                            blueText,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ))),
+                                                              DataCell(Center(
+                                                                child: SizedBox(
+                                                                  width: 80.w,
+                                                                  child:
+                                                                      TextApp(
+                                                                    isOverFlow:
+                                                                        false,
+                                                                    softWrap:
+                                                                        true,
+                                                                    text: staffData
+                                                                            .staffPosition
+                                                                            .toString() ??
+                                                                        '',
+                                                                    fontsize:
+                                                                        14.sp,
+                                                                  ),
+                                                                ),
+                                                              )),
+                                                              DataCell(Center(
+                                                                child: SizedBox(
+                                                                  width: 120.w,
+                                                                  child:
+                                                                      TextApp(
+                                                                    isOverFlow:
+                                                                        false,
+                                                                    softWrap:
+                                                                        true,
+                                                                    text: staffData
+                                                                        .storeName,
+                                                                    fontsize:
+                                                                        14.sp,
+                                                                  ),
+                                                                ),
+                                                              )),
+                                                              DataCell(Center(
+                                                                  child: staffData
+                                                                              .activeFlg ==
+                                                                          1
+                                                                      ? StatusBoxIsSelling()
+                                                                      : StatusBoxNoMoreSelling())),
+                                                              DataCell(Center(
+                                                                child: SizedBox(
+                                                                  width: 120.w,
+                                                                  child:
+                                                                      TextApp(
+                                                                    isOverFlow:
+                                                                        false,
+                                                                    softWrap:
+                                                                        true,
+                                                                    text: formatDateTime(
+                                                                        staffData.createdAt ??
+                                                                            ''),
+                                                                    fontsize:
+                                                                        14.sp,
+                                                                  ),
+                                                                ),
+                                                              )),
+                                                              DataCell(Center(
+                                                                child: SizedBox(
+                                                                  width: 120.w,
+                                                                  child:
+                                                                      TextApp(
+                                                                    isOverFlow:
+                                                                        false,
+                                                                    softWrap:
+                                                                        true,
+                                                                    text: formatDateTime(
+                                                                        staffData.createdAt ??
+                                                                            ''),
+                                                                    fontsize:
+                                                                        14.sp,
+                                                                  ),
+                                                                ),
+                                                              )),
+                                                              DataCell(Center(
+                                                                child: SizedBox(
+                                                                  width: 120.w,
+                                                                  child:
+                                                                      TextApp(
+                                                                    isOverFlow:
+                                                                        false,
+                                                                    softWrap:
+                                                                        true,
+                                                                    text: formatDateTime(
+                                                                        staffData.createdAt ??
+                                                                            ''),
+                                                                    fontsize:
+                                                                        14.sp,
+                                                                  ),
+                                                                ),
+                                                              )),
+                                                              DataCell(Row(
+                                                                children: [
+                                                                  SizedBox(
+                                                                    height:
+                                                                        30.h,
+                                                                    child: ButtonIcon(
+                                                                        isIconCircle:
+                                                                            false,
+                                                                        color1: const Color.fromRGBO(
+                                                                            23,
+                                                                            193,
+                                                                            232,
+                                                                            1),
+                                                                        color2: const Color
+                                                                            .fromRGBO(
+                                                                            23,
+                                                                            193,
+                                                                            232,
+                                                                            1),
+                                                                        event:
+                                                                            () {},
+                                                                        icon: Icons
+                                                                            .edit),
+                                                                  ),
+                                                                  space15W,
+                                                                  SizedBox(
+                                                                    height:
+                                                                        30.h,
+                                                                    child: ButtonIcon(
+                                                                        isIconCircle: false,
+                                                                        color1: const Color.fromRGBO(234, 6, 6, 1),
+                                                                        color2: const Color.fromRGBO(234, 6, 6, 1),
+                                                                        event: () {
+                                                                          // showConfirmDialog(context, () {
+                                                                          //   handleDeleteFood(foodID: product.foodId.toString());
+                                                                          //   print("Delete Food");
+                                                                          // });
+                                                                        },
+                                                                        icon: Icons.delete),
+                                                                  )
+                                                                ],
+                                                              ))
+                                                            ]),
+                                                          ],
+                                                        ),
+                                                );
+                                              } else {
+                                                return Center(
+                                                  child: hasMore
+                                                      ? CircularProgressIndicator()
+                                                      : Container(),
+                                                );
+                                              }
+                                            }),
+                                      )
+                                    ],
+                                  )
                                 ],
-                              ))
+                              )),
                         ],
                       ),
                     )),

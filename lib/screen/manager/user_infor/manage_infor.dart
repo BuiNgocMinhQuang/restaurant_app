@@ -302,10 +302,6 @@ class _ManagerInformationState extends State<ManagerInformation> {
     required int? city,
     required int? district,
   }) async {
-    print("DATA TRUYEN NN ${{
-      'city': city,
-      'district': district,
-    }}");
     try {
       final response = await http.post(
         Uri.parse('$baseUrl$areas'),

@@ -708,7 +708,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                         children: [
                                           SizedBox(
                                             width: 1.sw * 2.5,
-                                            height: 500.h,
+                                            height: 400.h,
                                             child: ListView.builder(
                                                 physics:
                                                     const ClampingScrollPhysics(),
@@ -738,205 +738,365 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                           .copyWith(
                                                               dividerColor: Colors
                                                                   .transparent),
-                                                      child: DataTable(
-                                                        dividerThickness: 0.0,
-                                                        columns: const [
-                                                          DataColumn(
-                                                              label: Text('')),
-                                                          DataColumn(
-                                                              label: Text('')),
-                                                          DataColumn(
-                                                              label: Text('')),
-                                                          DataColumn(
-                                                              label: Text('')),
-                                                          DataColumn(
-                                                              label: Text('')),
-                                                          DataColumn(
-                                                            label: Center(
-                                                                child:
-                                                                    Text('')),
-                                                          ),
-                                                        ],
-                                                        rows: [
-                                                          DataRow(cells: [
-                                                            DataCell(Center(
-                                                                child:
-                                                                    IntrinsicHeight(
-                                                              child: Row(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                children: [
-                                                                  Container(
-                                                                    width: 80.w,
-                                                                    height:
-                                                                        80.w,
-                                                                    // color: Colors.amber,
-                                                                    child:
-                                                                        CachedNetworkImage(
-                                                                      fit: BoxFit
-                                                                          .fill,
-                                                                      imageUrl:
-                                                                          httpImage +
-                                                                              listImagePath[0],
-                                                                      placeholder:
-                                                                          (context, url) =>
-                                                                              SizedBox(
-                                                                        height:
-                                                                            10.w,
-                                                                        width:
-                                                                            10.w,
-                                                                        child: const Center(
-                                                                            child:
-                                                                                CircularProgressIndicator()),
-                                                                      ),
-                                                                      errorWidget: (context,
-                                                                              url,
-                                                                              error) =>
-                                                                          const Icon(
-                                                                              Icons.error),
-                                                                    ),
-                                                                  ),
-                                                                  space10W,
-                                                                  SizedBox(
-                                                                    width:
-                                                                        120.w,
-                                                                    child:
-                                                                        TextApp(
-                                                                      isOverFlow:
-                                                                          false,
-                                                                      softWrap:
-                                                                          true,
-                                                                      text: product
-                                                                              .foodName ??
-                                                                          '',
-                                                                      fontsize:
-                                                                          14.sp,
-                                                                      color:
-                                                                          blueText,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ))),
-                                                            DataCell(Center(
-                                                              child: SizedBox(
-                                                                width: 80.w,
-                                                                child: TextApp(
-                                                                  isOverFlow:
-                                                                      false,
-                                                                  softWrap:
-                                                                      true,
-                                                                  text: product
-                                                                          .storeName ??
-                                                                      '',
-                                                                  fontsize:
-                                                                      14.sp,
+                                                      child: index > 0
+                                                          ? DataTable(
+                                                              dividerThickness:
+                                                                  0.0,
+                                                              columns: [
+                                                                DataColumn(
+                                                                    label: Text(
+                                                                        '')),
+                                                                DataColumn(
+                                                                    label: Text(
+                                                                        '')),
+                                                                DataColumn(
+                                                                    label: Text(
+                                                                        '')),
+                                                                DataColumn(
+                                                                    label: Text(
+                                                                        '')),
+                                                                DataColumn(
+                                                                    label: Text(
+                                                                        '')),
+                                                                DataColumn(
+                                                                  label: Center(
+                                                                      child: Text(
+                                                                          '')),
                                                                 ),
-                                                              ),
-                                                            )),
-                                                            DataCell(Center(
-                                                              child: SizedBox(
-                                                                width: 120.w,
-                                                                child: TextApp(
-                                                                  isOverFlow:
-                                                                      false,
-                                                                  softWrap:
-                                                                      true,
-                                                                  text:
-                                                                      "${MoneyFormatter(amount: (product.foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                                  fontsize:
-                                                                      14.sp,
-                                                                ),
-                                                              ),
-                                                            )),
-                                                            DataCell(Center(
-                                                                child: product
-                                                                            .activeFlg ==
-                                                                        1
-                                                                    ? StatusBoxIsSelling()
-                                                                    : StatusBoxNoMoreSelling())),
-                                                            DataCell(Center(
-                                                              child: SizedBox(
-                                                                width: 120.w,
-                                                                child: TextApp(
-                                                                  isOverFlow:
-                                                                      false,
-                                                                  softWrap:
-                                                                      true,
-                                                                  text: formatDateTime(
-                                                                      product.createdAt ??
-                                                                          ''),
-                                                                  fontsize:
-                                                                      14.sp,
-                                                                ),
-                                                              ),
-                                                            )),
-                                                            DataCell(Row(
-                                                              children: [
-                                                                SizedBox(
-                                                                  height: 30.h,
-                                                                  child:
-                                                                      ButtonIcon(
-                                                                          isIconCircle:
-                                                                              false,
-                                                                          color1: const Color
-                                                                              .fromRGBO(
-                                                                              23,
-                                                                              193,
-                                                                              232,
-                                                                              1),
-                                                                          color2: const Color
-                                                                              .fromRGBO(
-                                                                              23,
-                                                                              193,
-                                                                              232,
-                                                                              1),
-                                                                          event:
-                                                                              () {
-                                                                            handleGetDetailsFood(foodID: product.foodId ?? 0);
-                                                                          },
-                                                                          icon:
-                                                                              Icons.edit),
-                                                                ),
-                                                                space15W,
-                                                                SizedBox(
-                                                                  height: 30.h,
-                                                                  child:
-                                                                      ButtonIcon(
-                                                                          isIconCircle:
-                                                                              false,
-                                                                          color1: const Color
-                                                                              .fromRGBO(
-                                                                              234,
-                                                                              6,
-                                                                              6,
-                                                                              1),
-                                                                          color2: const Color
-                                                                              .fromRGBO(
-                                                                              234,
-                                                                              6,
-                                                                              6,
-                                                                              1),
-                                                                          event:
-                                                                              () {
-                                                                            showConfirmDialog(context,
-                                                                                () {
-                                                                              handleDeleteFood(foodID: product.foodId.toString());
-                                                                              print("Delete Food");
-                                                                            });
-                                                                          },
-                                                                          icon:
-                                                                              Icons.delete),
-                                                                )
                                                               ],
-                                                            ))
-                                                          ]),
-                                                        ],
-                                                      ),
+                                                              rows: [
+                                                                DataRow(cells: [
+                                                                  DataCell(
+                                                                      Center(
+                                                                          child:
+                                                                              IntrinsicHeight(
+                                                                    child: Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .center,
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                      children: [
+                                                                        Container(
+                                                                          width:
+                                                                              80.w,
+                                                                          height:
+                                                                              80.w,
+                                                                          // color: Colors.amber,
+                                                                          child:
+                                                                              CachedNetworkImage(
+                                                                            fit:
+                                                                                BoxFit.fill,
+                                                                            imageUrl:
+                                                                                httpImage + listImagePath[0],
+                                                                            placeholder: (context, url) =>
+                                                                                SizedBox(
+                                                                              height: 10.w,
+                                                                              width: 10.w,
+                                                                              child: const Center(child: CircularProgressIndicator()),
+                                                                            ),
+                                                                            errorWidget: (context, url, error) =>
+                                                                                const Icon(Icons.error),
+                                                                          ),
+                                                                        ),
+                                                                        space10W,
+                                                                        SizedBox(
+                                                                          width:
+                                                                              120.w,
+                                                                          child:
+                                                                              TextApp(
+                                                                            isOverFlow:
+                                                                                false,
+                                                                            softWrap:
+                                                                                true,
+                                                                            text:
+                                                                                product.foodName ?? '',
+                                                                            fontsize:
+                                                                                14.sp,
+                                                                            color:
+                                                                                blueText,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ))),
+                                                                  DataCell(
+                                                                      Center(
+                                                                    child:
+                                                                        SizedBox(
+                                                                      width:
+                                                                          80.w,
+                                                                      child:
+                                                                          TextApp(
+                                                                        isOverFlow:
+                                                                            false,
+                                                                        softWrap:
+                                                                            true,
+                                                                        text: product.storeName ??
+                                                                            '',
+                                                                        fontsize:
+                                                                            14.sp,
+                                                                      ),
+                                                                    ),
+                                                                  )),
+                                                                  DataCell(
+                                                                      Center(
+                                                                    child:
+                                                                        SizedBox(
+                                                                      width:
+                                                                          120.w,
+                                                                      child:
+                                                                          TextApp(
+                                                                        isOverFlow:
+                                                                            false,
+                                                                        softWrap:
+                                                                            true,
+                                                                        text:
+                                                                            "${MoneyFormatter(amount: (product.foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                                        fontsize:
+                                                                            14.sp,
+                                                                      ),
+                                                                    ),
+                                                                  )),
+                                                                  DataCell(Center(
+                                                                      child: product.activeFlg ==
+                                                                              1
+                                                                          ? StatusBoxIsSelling()
+                                                                          : StatusBoxNoMoreSelling())),
+                                                                  DataCell(
+                                                                      Center(
+                                                                    child:
+                                                                        SizedBox(
+                                                                      width:
+                                                                          120.w,
+                                                                      child:
+                                                                          TextApp(
+                                                                        isOverFlow:
+                                                                            false,
+                                                                        softWrap:
+                                                                            true,
+                                                                        text: formatDateTime(product.createdAt ??
+                                                                            ''),
+                                                                        fontsize:
+                                                                            14.sp,
+                                                                      ),
+                                                                    ),
+                                                                  )),
+                                                                  DataCell(Row(
+                                                                    children: [
+                                                                      SizedBox(
+                                                                        height:
+                                                                            30.h,
+                                                                        child: ButtonIcon(
+                                                                            isIconCircle: false,
+                                                                            color1: const Color.fromRGBO(23, 193, 232, 1),
+                                                                            color2: const Color.fromRGBO(23, 193, 232, 1),
+                                                                            event: () {
+                                                                              handleGetDetailsFood(foodID: product.foodId ?? 0);
+                                                                            },
+                                                                            icon: Icons.edit),
+                                                                      ),
+                                                                      space15W,
+                                                                      SizedBox(
+                                                                        height:
+                                                                            30.h,
+                                                                        child: ButtonIcon(
+                                                                            isIconCircle: false,
+                                                                            color1: const Color.fromRGBO(234, 6, 6, 1),
+                                                                            color2: const Color.fromRGBO(234, 6, 6, 1),
+                                                                            event: () {
+                                                                              showConfirmDialog(context, () {
+                                                                                handleDeleteFood(foodID: product.foodId.toString());
+                                                                                print("Delete Food");
+                                                                              });
+                                                                            },
+                                                                            icon: Icons.delete),
+                                                                      )
+                                                                    ],
+                                                                  ))
+                                                                ]),
+                                                              ],
+                                                            )
+                                                          : DataTable(
+                                                              dividerThickness:
+                                                                  0.0,
+                                                              columns: [
+                                                                DataColumn(
+                                                                    label: Text(
+                                                                        'Món ăn')),
+                                                                DataColumn(
+                                                                    label: Text(
+                                                                        'Cửa hàng')),
+                                                                DataColumn(
+                                                                    label: Text(
+                                                                        'Giá tiền')),
+                                                                DataColumn(
+                                                                    label: Text(
+                                                                        'Trạng thái')),
+                                                                DataColumn(
+                                                                    label: Text(
+                                                                        'Ngày tạo')),
+                                                                DataColumn(
+                                                                  label: Center(
+                                                                      child: Text(
+                                                                          '')),
+                                                                ),
+                                                              ],
+                                                              rows: [
+                                                                DataRow(cells: [
+                                                                  DataCell(
+                                                                      Center(
+                                                                          child:
+                                                                              IntrinsicHeight(
+                                                                    child: Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .center,
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                      children: [
+                                                                        Container(
+                                                                          width:
+                                                                              80.w,
+                                                                          height:
+                                                                              80.w,
+                                                                          // color: Colors.amber,
+                                                                          child:
+                                                                              CachedNetworkImage(
+                                                                            fit:
+                                                                                BoxFit.fill,
+                                                                            imageUrl:
+                                                                                httpImage + listImagePath[0],
+                                                                            placeholder: (context, url) =>
+                                                                                SizedBox(
+                                                                              height: 10.w,
+                                                                              width: 10.w,
+                                                                              child: const Center(child: CircularProgressIndicator()),
+                                                                            ),
+                                                                            errorWidget: (context, url, error) =>
+                                                                                const Icon(Icons.error),
+                                                                          ),
+                                                                        ),
+                                                                        space10W,
+                                                                        SizedBox(
+                                                                          width:
+                                                                              120.w,
+                                                                          child:
+                                                                              TextApp(
+                                                                            isOverFlow:
+                                                                                false,
+                                                                            softWrap:
+                                                                                true,
+                                                                            text:
+                                                                                product.foodName ?? '',
+                                                                            fontsize:
+                                                                                14.sp,
+                                                                            color:
+                                                                                blueText,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ))),
+                                                                  DataCell(
+                                                                      Center(
+                                                                    child:
+                                                                        SizedBox(
+                                                                      width:
+                                                                          80.w,
+                                                                      child:
+                                                                          TextApp(
+                                                                        isOverFlow:
+                                                                            false,
+                                                                        softWrap:
+                                                                            true,
+                                                                        text: product.storeName ??
+                                                                            '',
+                                                                        fontsize:
+                                                                            14.sp,
+                                                                      ),
+                                                                    ),
+                                                                  )),
+                                                                  DataCell(
+                                                                      Center(
+                                                                    child:
+                                                                        SizedBox(
+                                                                      width:
+                                                                          120.w,
+                                                                      child:
+                                                                          TextApp(
+                                                                        isOverFlow:
+                                                                            false,
+                                                                        softWrap:
+                                                                            true,
+                                                                        text:
+                                                                            "${MoneyFormatter(amount: (product.foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                                        fontsize:
+                                                                            14.sp,
+                                                                      ),
+                                                                    ),
+                                                                  )),
+                                                                  DataCell(Center(
+                                                                      child: product.activeFlg ==
+                                                                              1
+                                                                          ? StatusBoxIsSelling()
+                                                                          : StatusBoxNoMoreSelling())),
+                                                                  DataCell(
+                                                                      Center(
+                                                                    child:
+                                                                        SizedBox(
+                                                                      width:
+                                                                          120.w,
+                                                                      child:
+                                                                          TextApp(
+                                                                        isOverFlow:
+                                                                            false,
+                                                                        softWrap:
+                                                                            true,
+                                                                        text: formatDateTime(product.createdAt ??
+                                                                            ''),
+                                                                        fontsize:
+                                                                            14.sp,
+                                                                      ),
+                                                                    ),
+                                                                  )),
+                                                                  DataCell(Row(
+                                                                    children: [
+                                                                      SizedBox(
+                                                                        height:
+                                                                            30.h,
+                                                                        child: ButtonIcon(
+                                                                            isIconCircle: false,
+                                                                            color1: const Color.fromRGBO(23, 193, 232, 1),
+                                                                            color2: const Color.fromRGBO(23, 193, 232, 1),
+                                                                            event: () {
+                                                                              handleGetDetailsFood(foodID: product.foodId ?? 0);
+                                                                            },
+                                                                            icon: Icons.edit),
+                                                                      ),
+                                                                      space15W,
+                                                                      SizedBox(
+                                                                        height:
+                                                                            30.h,
+                                                                        child: ButtonIcon(
+                                                                            isIconCircle: false,
+                                                                            color1: const Color.fromRGBO(234, 6, 6, 1),
+                                                                            color2: const Color.fromRGBO(234, 6, 6, 1),
+                                                                            event: () {
+                                                                              showConfirmDialog(context, () {
+                                                                                handleDeleteFood(foodID: product.foodId.toString());
+                                                                                print("Delete Food");
+                                                                              });
+                                                                            },
+                                                                            icon: Icons.delete),
+                                                                      )
+                                                                    ],
+                                                                  ))
+                                                                ]),
+                                                              ],
+                                                            ),
                                                     );
                                                   } else {
                                                     return Center(

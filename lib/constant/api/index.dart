@@ -34,6 +34,26 @@ const String detailEditStore = 'user/stores/detail';
 const String getChartData = 'user/stores/detail/chart-column-overview-by-store';
 const String createStoreApi = 'user/stores/create';
 const String editDetailsStoreApi = 'user/stores/detail/edit';
+const String getListStaffApi = 'user/staffs/list';
+const String addStaffApi = 'user/staffs/add';
+const String getStaffInforByManager = 'user/staffs/edit/show';
+const String handleEditStaffInforByManager = 'user/staffs/edit/handle';
+const String updateStatusStaff = 'user/staffs/active';
+
+//room
+const String getDetailsRoomApi = 'user/stores/rooms/detail';
+const String getListRoomByManager = 'user/stores/rooms/list';
+const String createRoomByManager = 'user/stores/rooms/add';
+const String editRoomByManager = 'user/stores/rooms/edit';
+const String deleteRoomByManager = 'user/stores/rooms/delete';
+
+//table
+
+const String getListTableOfRoomByManager = 'user/stores/rooms/tables/list';
+const String updateOrCreateRoom = 'user/stores/rooms/tables/update-or-create';
+const String getDetailsDataOfTable = 'user/stores/rooms/tables/detail';
+const String deleteTableByManager = 'user/stores/rooms/tables/delete';
+
 //Shared API
 const String userInformationApi = 'information';
 const String areas = 'areas';
