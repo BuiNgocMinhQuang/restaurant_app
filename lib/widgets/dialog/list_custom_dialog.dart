@@ -19,6 +19,7 @@ import 'package:app_restaurant/model/brought_receipt/manage_brought_receipt_mode
 import 'package:app_restaurant/model/food_table_data_model.dart';
 import 'package:app_restaurant/model/list_room_model.dart';
 import 'package:app_restaurant/model/manager/store/edit_details_store_model.dart';
+import 'package:app_restaurant/model/manager/store/rooms/data_room_details_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/share_getString.dart';
 import 'package:app_restaurant/utils/storage.dart';
@@ -6336,10 +6337,12 @@ class _CancleBillDialogState extends State<CancleBillDialog> {
 
 class CreateRoomDialog extends StatefulWidget {
   final Function eventSaveButton;
+  final String shopID;
 
   const CreateRoomDialog({
     Key? key,
     required this.eventSaveButton,
+    required this.shopID,
   }) : super(key: key);
 
   @override
@@ -6350,6 +6353,57 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
   bool light = false;
   final _formField = GlobalKey<FormState>();
   final roomFieldController = TextEditingController();
+  void handleCreateRoom({
+    required String roomName,
+    required String shopID,
+    required int activeFlg,
+  }) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$createRoomByManager'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'is_api': true,
+          'room_name': roomName,
+          'shop_id': shopID,
+          'room_active_flg': activeFlg
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print(data);
+
+      try {
+        if (data['status'] == 200) {
+          roomFieldController.clear();
+          Navigator.of(navigatorKey.currentContext!).pop();
+
+          Future.delayed(Duration(milliseconds: 500), () {
+            showCustomDialogModal(
+              typeDialog: "succes",
+              context: navigatorKey.currentContext,
+              textDesc: "Thêm mới phòng thành công",
+              title: "Thành công",
+              colorButton: Colors.green,
+              btnText: "OK",
+            );
+          });
+        } else {
+          print("ERROR CREATE FOOOD");
+        }
+      } catch (error) {
+        print("ERROR CREATE 112212 $error");
+      }
+    } catch (error) {
+      print("ERROR CREATE 44444 $error");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -6364,17 +6418,6 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
           Container(
               width: 1.sw,
               height: 50,
-              decoration: BoxDecoration(
-                border: const Border(
-                    top: BorderSide(width: 0, color: Colors.grey),
-                    bottom: BorderSide(width: 1, color: Colors.grey),
-                    left: BorderSide(width: 0, color: Colors.grey),
-                    right: BorderSide(width: 0, color: Colors.grey)),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15.w),
-                    topRight: Radius.circular(15.w)),
-                // color: Colors.amber,
-              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -6479,17 +6522,6 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
           Container(
             width: 1.sw,
             height: 80,
-            decoration: BoxDecoration(
-              border: const Border(
-                  top: BorderSide(width: 1, color: Colors.grey),
-                  bottom: BorderSide(width: 0, color: Colors.grey),
-                  left: BorderSide(width: 0, color: Colors.grey),
-                  right: BorderSide(width: 0, color: Colors.grey)),
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(15.w),
-                  bottomRight: Radius.circular(15.w)),
-              // color: Colors.green,
-            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -6508,8 +6540,312 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
                 ButtonApp(
                   event: () {
                     if (_formField.currentState!.validate()) {
+                      handleCreateRoom(
+                          roomName: roomFieldController.text,
+                          shopID: widget.shopID,
+                          activeFlg: light ? 1 : 0);
+
                       widget.eventSaveButton();
-                      roomFieldController.clear();
+                    }
+                  },
+                  text: save,
+                  colorText: Colors.white,
+                  backgroundColor: const Color.fromRGBO(23, 193, 232, 1),
+                  outlineColor: const Color.fromRGBO(23, 193, 232, 1),
+                ),
+                SizedBox(
+                  width: 20.w,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+//Modal chinh sua phong
+
+class EditRoomDataDialog extends StatefulWidget {
+  final Function eventSaveButton;
+  final String roomID;
+  final String shopID;
+
+  const EditRoomDataDialog({
+    Key? key,
+    required this.eventSaveButton,
+    required this.roomID,
+    required this.shopID,
+  }) : super(key: key);
+
+  @override
+  State<EditRoomDataDialog> createState() => _EditRoomDataDialogState();
+}
+
+class _EditRoomDataDialogState extends State<EditRoomDataDialog> {
+  bool light = false;
+  final _formField = GlobalKey<FormState>();
+  final roomFieldController = TextEditingController();
+  DataRoomDetailsModel? dataRoomDetailsModel;
+  void handleGetDataRoom() async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$getDetailsRoomApi'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'is_api': true,
+          'room_id': widget.roomID,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print(data);
+
+      try {
+        if (data['status'] == 200) {
+          // roomFieldController.clear();
+          // Navigator.of(navigatorKey.currentContext!).pop();
+
+          // Future.delayed(Duration(milliseconds: 500), () {
+          //   showCustomDialogModal(
+          //     typeDialog: "succes",
+          //     context: navigatorKey.currentContext,
+          //     textDesc: "Cập nhật dữ liệu thành công",
+          //     title: "Thành công",
+          //     colorButton: Colors.green,
+          //     btnText: "OK",
+          //   );
+          // });
+          setState(() {
+            dataRoomDetailsModel = DataRoomDetailsModel.fromJson(data);
+            roomFieldController.text =
+                dataRoomDetailsModel?.data.storeRoomName ?? '';
+            light = dataRoomDetailsModel?.data.activeFlg == 1 ? true : false;
+          });
+        } else {
+          print("ERROR CREATE FOOOD");
+        }
+      } catch (error) {
+        print("ERROR CREATE 112212 $error");
+      }
+    } catch (error) {
+      print("ERROR CREATE 44444 $error");
+    }
+  }
+
+  void handleEditRoomData({
+    required String nameRoom,
+    required int activeFlg,
+  }) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$editRoomByManager'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'is_api': true,
+          'store_room_id': widget.roomID,
+          'room_name': nameRoom,
+          'room_active_flg': activeFlg,
+          'shop_id': widget.shopID
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print(data);
+
+      try {
+        if (data['status'] == 200) {
+          // roomFieldController.clear();
+          Navigator.of(navigatorKey.currentContext!).pop();
+
+          Future.delayed(Duration(milliseconds: 500), () {
+            showCustomDialogModal(
+              typeDialog: "succes",
+              context: navigatorKey.currentContext,
+              textDesc: "Cập nhật dữ liệu thành công",
+              title: "Thành công",
+              colorButton: Colors.green,
+              btnText: "OK",
+            );
+          });
+          // setState(() {
+          //   dataRoomDetailsModel = DataRoomDetailsModel.fromJson(data);
+          //   roomFieldController.text =
+          //       dataRoomDetailsModel?.data.storeRoomName ?? '';
+          //   light = dataRoomDetailsModel?.data.activeFlg == 1 ? true : false;
+          // });
+        } else {
+          print("ERROR CREATE FOOOD");
+        }
+      } catch (error) {
+        print("ERROR CREATE 112212 $error");
+      }
+    } catch (error) {
+      print("ERROR CREATE 44444 $error");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    handleGetDataRoom();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      scrollable: true,
+      contentPadding: const EdgeInsets.all(0),
+      surfaceTintColor: Colors.white,
+      backgroundColor: Colors.white,
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+              width: 1.sw,
+              height: 50,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 20.w),
+                        child: TextApp(
+                          text: "Phòng",
+                          fontsize: 18.sp,
+                          color: blueText,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              )),
+          Padding(
+            padding: EdgeInsets.all(20.w),
+            child: Form(
+              key: _formField,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextApp(
+                    text: "Tên phòng",
+                    fontsize: 12.sp,
+                    fontWeight: FontWeight.bold,
+                    color: blueText,
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  TextFormField(
+                    controller: roomFieldController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return canNotNull;
+                      } else {
+                        return null;
+                      }
+                    },
+                    cursorColor: const Color.fromRGBO(73, 80, 87, 1),
+                    decoration: InputDecoration(
+                        fillColor: const Color.fromARGB(255, 226, 104, 159),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromRGBO(214, 51, 123, 0.6),
+                              width: 2.0),
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        hintText: "Tên phòng",
+                        isDense: true,
+                        contentPadding:
+                            EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
+                  ),
+                  space20H,
+                  TextApp(
+                    text: "Chế độ hiển thị",
+                    fontsize: 12.sp,
+                    fontWeight: FontWeight.bold,
+                    color: blueText,
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  TextApp(
+                    text: allowFoodReady,
+                    fontsize: 12.sp,
+                    fontWeight: FontWeight.normal,
+                    color: blueText,
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  SizedBox(
+                    width: 50.w,
+                    height: 30.w,
+                    child: FittedBox(
+                      fit: BoxFit.fill,
+                      child: CupertinoSwitch(
+                        value: light,
+                        activeColor: const Color.fromRGBO(58, 65, 111, .95),
+                        onChanged: (bool value) {
+                          if (mounted) {
+                            setState(() {
+                              light = value;
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            width: 1.sw,
+            height: 80,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ButtonApp(
+                  event: () {
+                    Navigator.of(context).pop();
+                  },
+                  text: "Đóng",
+                  colorText: Colors.white,
+                  backgroundColor: const Color.fromRGBO(131, 146, 171, 1),
+                  outlineColor: const Color.fromRGBO(131, 146, 171, 1),
+                ),
+                SizedBox(
+                  width: 20.w,
+                ),
+                ButtonApp(
+                  event: () {
+                    if (_formField.currentState!.validate()) {
+                      // handleCreateRoom(
+                      //     roomName: roomFieldController.text,
+                      //     shopID: widget.shopID,
+                      //     activeFlg: light ? 1 : 0);
+                      handleEditRoomData(
+                          nameRoom: roomFieldController.text,
+                          activeFlg: light ? 1 : 0);
+                      widget.eventSaveButton();
                     }
                   },
                   text: save,
@@ -7263,13 +7599,13 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
 }
 
 class EditDetailStoreDialog extends StatefulWidget {
-  final List<XFile>? imageFileList;
+  // final List<XFile>? imageFileList;
   final Function eventSaveButton;
   EditDetailsStoreModel? editDetailsStoreModel;
 
   EditDetailStoreDialog({
     Key? key,
-    required this.imageFileList,
+    // required this.imageFileList,
     required this.eventSaveButton,
     required this.editDetailsStoreModel,
   }) : super(key: key);

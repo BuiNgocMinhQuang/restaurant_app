@@ -1,14 +1,32 @@
+import 'dart:convert';
+
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/space.dart';
+import 'package:app_restaurant/model/manager/store/rooms/table/list_table_of_room_model.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:http/http.dart' as http;
+import 'package:app_restaurant/constant/api/index.dart';
+import 'package:app_restaurant/env/index.dart';
 
 class ManageRoom extends StatefulWidget {
-  const ManageRoom({super.key});
+  final String roomID;
+  final String roomName;
+  final String numberTable;
+  // final ListRoomOfStoreModel? listRoomOfStoreModel;
+  const ManageRoom(
+      {Key? key,
+      required this.roomID,
+      required this.roomName,
+      required this.numberTable})
+      : super(key: key);
 
   @override
   State<ManageRoom> createState() => _ManageRoomState();
@@ -16,6 +34,77 @@ class ManageRoom extends StatefulWidget {
 
 class _ManageRoomState extends State<ManageRoom> {
   void createRoom() {}
+  ListTableOfRoomModel? listTableOfRoomModel;
+  void getDataInit() async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$getListTableOfRoomByManager'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'room_id': widget.roomID,
+          'is_api': true,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      try {
+        if (data['status'] == 200) {
+          setState(() {
+            listTableOfRoomModel = ListTableOfRoomModel.fromJson(data);
+            // handleGetListRoom(shopID: widget.detailsStoreModel?.shopId ?? '');
+          });
+        } else {
+          print("ERROR CREATE FOOOD");
+        }
+      } catch (error) {
+        print("ERROR CREATE 112212 $error");
+      }
+    } catch (error) {
+      print("ERROR CREATE 44444 $error");
+    }
+  }
+
+  void handleDeleteTable({required String tableID}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$deleteTableByManager'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'room_table_id': tableID,
+          'is_api': true,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      try {
+        if (data['status'] == 200) {
+          getDataInit();
+        } else {
+          print("ERROR CREATE FOOOD");
+        }
+      } catch (error) {
+        print("ERROR CREATE 112212 $error");
+      }
+    } catch (error) {
+      print("ERROR CREATE 44444 $error");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getDataInit();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +145,7 @@ class _ManageRoomState extends State<ManageRoom> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     TextApp(
-                                      text: "Phong 1",
+                                      text: widget.roomName,
                                       fontsize: 20.sp,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -68,7 +157,7 @@ class _ManageRoomState extends State<ManageRoom> {
                                           fontWeight: FontWeight.normal,
                                         ),
                                         TextApp(
-                                          text: "1",
+                                          text: widget.numberTable,
                                           fontsize: 16.sp,
                                           fontWeight: FontWeight.normal,
                                         ),
@@ -80,184 +169,273 @@ class _ManageRoomState extends State<ManageRoom> {
                             )),
                       ),
                       space15H,
-                      Card(
-                          elevation: 8.0,
-                          margin: const EdgeInsets.all(8),
-                          child: Stack(
-                            children: [
-                              space30H,
-                              SizedBox(
-                                  width: 1.sw,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 15.w, right: 15.w),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount:
+                                  listTableOfRoomModel?.tables.length ?? 0,
+                              itemBuilder: (context, index) {
+                                return Card(
+                                    elevation: 8.0,
+                                    margin: const EdgeInsets.all(8),
+                                    child: Stack(
                                       children: [
                                         space30H,
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            space20W,
-                                            Container(
-                                              width: 50.w,
-                                              height: 50.w,
-                                              child: Icon(
-                                                Icons.table_bar,
-                                                size: 45.w,
-                                              ),
-                                            ),
-                                            space20W,
-                                            TextApp(
-                                              text: "Ban 1",
-                                              fontsize: 16.sp,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                          ],
-                                        ),
-                                        const Divider(
-                                          height: 1,
-                                          color: Colors.black,
-                                        ),
-                                        space30H,
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                TextApp(
-                                                  text: "Số ghế",
-                                                  fontsize: 16.sp,
-                                                  fontWeight: FontWeight.normal,
-                                                ),
-                                                TextApp(
-                                                  text: "10",
-                                                  fontsize: 16.sp,
-                                                  fontWeight: FontWeight.normal,
+                                        Container(
+                                            width: 1.sw,
+                                            //color: Colors.white,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(15.r),
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.5),
+                                                  spreadRadius: 2,
+                                                  blurRadius: 4,
+                                                  offset: const Offset(0,
+                                                      3), // changes position of shadow
                                                 ),
                                               ],
                                             ),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                TextApp(
-                                                  text: "Trạng thái",
-                                                  fontsize: 16.sp,
-                                                  fontWeight: FontWeight.normal,
-                                                ),
-                                                TextApp(
-                                                  text: "Hoạt động",
-                                                  fontsize: 16.sp,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Colors.green,
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                        space30H,
-                                      ],
-                                    ),
-                                  )),
-                              Positioned(
-                                  top: 5.w,
-                                  right: 5.w,
-                                  child: Container(
-                                    width: 20.w,
-                                    height: 20.w,
-                                    child: InkWell(
-                                      onTap: () {
-                                        showMaterialModalBottomSheet(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.only(
-                                                topRight: Radius.circular(25.r),
-                                                topLeft: Radius.circular(25.r),
-                                              ),
-                                            ),
-                                            clipBehavior:
-                                                Clip.antiAliasWithSaveLayer,
-                                            context: context,
-                                            builder: (context) => Container(
-                                                  height: 1.sh / 3,
-                                                  padding: EdgeInsets.all(20.w),
-                                                  child: Column(
+                                            child: Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 15.w, right: 15.w),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  space30H,
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
                                                     children: [
-                                                      InkWell(
-                                                        onTap: () {
-                                                          showDialog(
-                                                              context: context,
-                                                              builder:
-                                                                  (BuildContext
-                                                                      context) {
-                                                                return CreateTableDialog(
-                                                                    eventSaveButton:
-                                                                        () {});
-                                                              });
-                                                        },
-                                                        child: Row(
-                                                          children: [
-                                                            Icon(
-                                                              Icons.edit,
-                                                              size: 35.sp,
-                                                            ),
-                                                            space10W,
-                                                            TextApp(
-                                                              text: "Cập nhật",
-                                                              color:
-                                                                  Colors.black,
-                                                              fontsize: 18.sp,
-                                                            )
-                                                          ],
+                                                      space20W,
+                                                      Container(
+                                                        width: 50.w,
+                                                        height: 50.w,
+                                                        child: Icon(
+                                                          Icons.table_bar,
+                                                          size: 45.w,
                                                         ),
                                                       ),
-                                                      space10H,
-                                                      Divider(),
-                                                      space10H,
-                                                      InkWell(
-                                                        onTap: () {
-                                                          showConfirmDialog(
-                                                              context, () {
-                                                            print("ConFIRM");
-                                                          });
-                                                        },
-                                                        child: Row(
-                                                          children: [
-                                                            Icon(
-                                                              Icons.edit,
-                                                              size: 35.sp,
-                                                            ),
-                                                            space10W,
-                                                            TextApp(
-                                                              text: "Xoá",
-                                                              color:
-                                                                  Colors.black,
-                                                              fontsize: 18.sp,
-                                                            )
-                                                          ],
-                                                        ),
+                                                      space20W,
+                                                      TextApp(
+                                                        text:
+                                                            listTableOfRoomModel
+                                                                    ?.tables[
+                                                                        index]
+                                                                    .tableName ??
+                                                                '',
+                                                        fontsize: 16.sp,
+                                                        fontWeight:
+                                                            FontWeight.normal,
                                                       ),
                                                     ],
                                                   ),
-                                                ));
-                                      },
-                                    ),
-                                  ))
-                            ],
-                          )),
+                                                  const Divider(
+                                                    height: 1,
+                                                    color: Colors.black,
+                                                  ),
+                                                  space30H,
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          TextApp(
+                                                            text: "Số ghế",
+                                                            fontsize: 16.sp,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                          ),
+                                                          TextApp(
+                                                            text: listTableOfRoomModel
+                                                                    ?.tables[
+                                                                        index]
+                                                                    .numberOfSeats
+                                                                    .toString() ??
+                                                                '',
+                                                            fontsize: 16.sp,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .end,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          TextApp(
+                                                            text: "Trạng thái",
+                                                            fontsize: 16.sp,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                          ),
+                                                          TextApp(
+                                                            text: listTableOfRoomModel
+                                                                        ?.tables[
+                                                                            index]
+                                                                        .activeFlg ==
+                                                                    1
+                                                                ? "Hoạt động"
+                                                                : "Ngưng hoạt động",
+                                                            fontsize: 16.sp,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            color: Colors.green,
+                                                          ),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                  space30H,
+                                                ],
+                                              ),
+                                            )),
+                                        Positioned(
+                                            top: 15.w,
+                                            right: 15.w,
+                                            child: Container(
+                                              width: 20.w,
+                                              height: 20.w,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  showMaterialModalBottomSheet(
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  25.r),
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  25.r),
+                                                        ),
+                                                      ),
+                                                      clipBehavior: Clip
+                                                          .antiAliasWithSaveLayer,
+                                                      context: context,
+                                                      builder:
+                                                          (context) =>
+                                                              Container(
+                                                                height:
+                                                                    1.sh / 3,
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(20
+                                                                            .w),
+                                                                child: Column(
+                                                                  children: [
+                                                                    InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        showDialog(
+                                                                            context:
+                                                                                context,
+                                                                            builder:
+                                                                                (BuildContext context) {
+                                                                              return CreateTableDialog(eventSaveButton: () {});
+                                                                            });
+                                                                      },
+                                                                      child:
+                                                                          Row(
+                                                                        children: [
+                                                                          Icon(
+                                                                            Icons.edit,
+                                                                            size:
+                                                                                35.sp,
+                                                                          ),
+                                                                          space10W,
+                                                                          TextApp(
+                                                                            text:
+                                                                                "Cập nhật",
+                                                                            color:
+                                                                                Colors.black,
+                                                                            fontsize:
+                                                                                18.sp,
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    space10H,
+                                                                    Divider(),
+                                                                    space10H,
+                                                                    InkWell(
+                                                                      onTap:
+                                                                          () {
+                                                                        Navigator.pop(
+                                                                            context);
+
+                                                                        showConfirmDialog(
+                                                                            navigatorKey.currentContext,
+                                                                            () {
+                                                                          handleDeleteTable(
+                                                                              tableID: listTableOfRoomModel?.tables[index].roomTableId.toString() ?? '');
+                                                                        });
+                                                                      },
+                                                                      child:
+                                                                          Row(
+                                                                        children: [
+                                                                          Icon(
+                                                                            Icons.delete,
+                                                                            size:
+                                                                                35.sp,
+                                                                          ),
+                                                                          space10W,
+                                                                          TextApp(
+                                                                            text:
+                                                                                "Xoá",
+                                                                            color:
+                                                                                Colors.black,
+                                                                            fontsize:
+                                                                                18.sp,
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ));
+                                                },
+                                                child: Icon(
+                                                  Icons.more_vert_outlined,
+                                                  size: 25.sp,
+                                                ),
+                                              ),
+                                            ))
+                                      ],
+                                    ));
+                              })
+                        ],
+                      ),
                       space25H,
                       Card(
                           elevation: 8.0,

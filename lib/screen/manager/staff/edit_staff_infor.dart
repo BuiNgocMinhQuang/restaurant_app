@@ -6,6 +6,7 @@ import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
@@ -295,15 +296,6 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
     }
   }
 
-  void pickImage() async {
-    final returndImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (returndImage == null) return;
-    setState(() {
-      selectedImage = File(returndImage.path);
-    });
-  }
-
   void getListStore() async {
     var token = StorageUtils.instance.getString(key: 'token_manager');
     final responseListStore = await http.post(
@@ -396,8 +388,77 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
           // var hahah = DetailsStoreModel.fromJson(data);
           light = false;
           getDataStaff(staffNo: widget.staffNo);
+          showUpdateDataSuccesDialog();
         } else {
           print("ERROR CREATE FOOOD");
+        }
+      } catch (error) {
+        print("ERROR CREATE $error");
+      }
+    } catch (error) {
+      print("ERROR CREATE $error");
+    }
+  }
+
+  void handleChangePassStaff({
+    required String staffNo,
+    required String staffPassword,
+    required String staffPasswordNew,
+    required String staffConfirmPassword,
+  }) async {
+    print({
+      'type': "changePassword",
+      'is_api': true,
+      'key': staffNo,
+      'data': {
+        'password': staffPassword,
+        'password_new': staffPasswordNew,
+        'confirm_password_new': staffConfirmPassword,
+      }
+    });
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$handleEditStaffInforByManager'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'type': "changePassword",
+          'is_api': true,
+          'key': staffNo,
+          'data': {
+            'password': staffPassword,
+            'password_new': staffPasswordNew,
+            'confirm_password_new': staffConfirmPassword,
+          }
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print(" DATA CREATE FOOD ${data}");
+      try {
+        if (data['status'] == 200) {
+          getDataStaff(staffNo: widget.staffNo);
+          showUpdateDataSuccesDialog();
+
+          currentPassworldController.clear();
+          newPassworldController.clear();
+          reNewPassworldController.clear();
+        } else {
+          print("ERROR CREATE FOOOD");
+          final messRes = data['message'];
+          final messFailed = messRes['text'];
+
+          showCustomDialogModal(
+              context: navigatorKey.currentContext,
+              textDesc: messFailed,
+              title: "Thất bại",
+              colorButton: Colors.red,
+              btnText: "OK",
+              typeDialog: "error");
         }
       } catch (error) {
         print("ERROR CREATE $error");
@@ -841,7 +902,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    space20H,
+                                    // space20H,
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -917,9 +978,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    SizedBox(
-                                      height: 20.h,
-                                    ),
+                                    // SizedBox(
+                                    //   height: 20.h,
+                                    // ),
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -1000,9 +1061,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    SizedBox(
-                                      height: 20.h,
-                                    ),
+                                    // SizedBox(
+                                    //   height: 20.h,
+                                    // ),
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -1022,6 +1083,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   height: 10.h,
                                                 ),
                                                 TextFormField(
+                                                  maxLength: 15,
                                                   onTapOutside: (event) {
                                                     FocusManager
                                                         .instance.primaryFocus
@@ -1087,9 +1149,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    SizedBox(
-                                      height: 20.h,
-                                    ),
+                                    // SizedBox(
+                                    //   height: 20.h,
+                                    // ),
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -1180,9 +1242,15 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                               ],
                                             ),
                                           ),
-                                          SizedBox(
-                                            width: 10.w,
-                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
+                                    IntrinsicHeight(
+                                      child: Row(
+                                        children: [
                                           Expanded(
                                             flex: 1,
                                             child: Column(
@@ -1280,9 +1348,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    SizedBox(
-                                      height: 20.h,
-                                    ),
+                                    space20H,
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -1380,9 +1446,13 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                               ],
                                             ),
                                           ),
-                                          SizedBox(
-                                            width: 10.w,
-                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    space20H,
+                                    IntrinsicHeight(
+                                      child: Row(
+                                        children: [
                                           Expanded(
                                             flex: 1,
                                             child: Column(
@@ -1452,7 +1522,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    space20H,
+
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -1669,72 +1739,6 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                               if (_formField1.currentState!
                                                   .validate()) {
                                                 showConfirmDialog(context, () {
-                                                  print({
-                                                    "type": "updateProfile",
-                                                    "is_api": true,
-                                                    "staff_no": staffDataModel
-                                                        ?.staff.staffNo,
-                                                    "data": {
-                                                      "shop_id": (selectedShopId ==
-                                                                  null ||
-                                                              selectedShopId ==
-                                                                  '')
-                                                          ? staffDataModel
-                                                              ?.staff.shopId
-                                                          : selectedShopId,
-                                                      "staff_position":
-                                                          currentRoleOfStaff ??
-                                                              staffDataModel
-                                                                  ?.staff
-                                                                  .staffPosition,
-                                                      "staff_first_name":
-                                                          surNameController
-                                                              .text,
-                                                      "staff_last_name":
-                                                          nameController.text,
-                                                      "staff_full_name":
-                                                          fullNameController
-                                                              .text,
-                                                      "staff_email":
-                                                          emailController.text,
-                                                      "staff_phone":
-                                                          phoneController.text,
-                                                      "staff_address_1":
-                                                          currentIndexCity,
-                                                      "staff_address_2":
-                                                          currentIndexDistric,
-                                                      "staff_address_3":
-                                                          currentIndexWard,
-                                                      "staff_address_4":
-                                                          address4Controller
-                                                                      .text ==
-                                                                  ''
-                                                              ? null
-                                                              : address4Controller
-                                                                  .text,
-                                                      "staff_twitter":
-                                                          twitterTextController
-                                                                      .text ==
-                                                                  ''
-                                                              ? null
-                                                              : twitterTextController
-                                                                  .text,
-                                                      "staff_facebook":
-                                                          facebookTextController
-                                                                      .text ==
-                                                                  ''
-                                                              ? null
-                                                              : facebookTextController
-                                                                  .text,
-                                                      "staff_instagram":
-                                                          instagramTextController
-                                                                      .text ==
-                                                                  ''
-                                                              ? null
-                                                              : instagramTextController
-                                                                  .text,
-                                                    }
-                                                  });
                                                   handleUpdateInforStaff(
                                                     staffNo: staffDataModel
                                                             ?.staff.staffNo
@@ -1873,6 +1877,10 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                       height: 10.h,
                                     ),
                                     TextFormField(
+                                      onTapOutside: (event) {
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
+                                      },
                                       controller: currentPassworldController,
                                       obscureText: currentPasswordVisible,
                                       style: TextStyle(
@@ -1937,6 +1945,10 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                       height: 10.h,
                                     ),
                                     TextFormField(
+                                      onTapOutside: (event) {
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
+                                      },
                                       controller: newPassworldController,
                                       obscureText: newPasswordVisible,
                                       style: TextStyle(
@@ -2004,6 +2016,10 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                       height: 10.h,
                                     ),
                                     TextFormField(
+                                      onTapOutside: (event) {
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
+                                      },
                                       controller: reNewPassworldController,
                                       obscureText: reNewPasswordVisible,
                                       style: TextStyle(
@@ -2070,11 +2086,21 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                           if (_formField2.currentState!
                                               .validate()) {
                                             showConfirmDialog(context, () {
-                                              print("ConFIRM");
+                                              handleChangePassStaff(
+                                                  staffNo: staffDataModel
+                                                          ?.staff.staffNo
+                                                          .toString() ??
+                                                      '',
+                                                  staffPassword:
+                                                      currentPassworldController
+                                                          .text,
+                                                  staffPasswordNew:
+                                                      newPassworldController
+                                                          .text,
+                                                  staffConfirmPassword:
+                                                      reNewPassworldController
+                                                          .text);
                                             });
-                                            currentPassworldController.clear();
-                                            newPassworldController.clear();
-                                            reNewPassworldController.clear();
                                           }
                                         },
                                         text: "Cập nhật mật khẩu",
@@ -2130,10 +2156,15 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                 ),
                               ),
                               space10H,
-                              TextApp(
-                                text: lockAccountDes,
-                                color: blueText,
-                                fontsize: 12.sp,
+                              Container(
+                                width: 1.sw,
+                                child: TextApp(
+                                  text: lockAccountDes,
+                                  color: blueText,
+                                  fontsize: 12.sp,
+                                  isOverFlow: false,
+                                  softWrap: true,
+                                ),
                               ),
                               SizedBox(
                                 height: 20.h,
