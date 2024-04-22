@@ -3,7 +3,10 @@ import 'dart:convert';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/config/space.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/manager/staff/list_staff_model.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
+import 'package:app_restaurant/screen/manager/staff/edit_staff_infor.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/box/status_box.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
@@ -13,6 +16,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
@@ -33,7 +37,7 @@ class _ListStaffState extends State<ListStaff> {
   String accountStatus = "isActive";
   ListStaffDataModel? listStaffDataModel;
   List currentStaffList = [];
-  int currentActiveFlag = 1;
+  int? currentActiveFlag;
   bool hasMore = true;
   bool isRefesh = false;
   int currentPage = 1;
@@ -68,6 +72,14 @@ class _ListStaffState extends State<ListStaff> {
     if (picked != null) {
       setState(() {
         _dateStartController.text = picked.toString().split(" ")[0];
+        currentPage = 1;
+        handleGetListStaff(
+          page: currentPage,
+          keywords: query,
+          activeFlg: currentActiveFlag,
+          dateStart: _dateStartController.text,
+          dateEnd: _dateEndController.text,
+        );
       });
     }
   }
@@ -81,6 +93,14 @@ class _ListStaffState extends State<ListStaff> {
     if (picked != null) {
       setState(() {
         _dateEndController.text = picked.toString().split(" ")[0];
+        currentPage = 1;
+        handleGetListStaff(
+          page: currentPage,
+          keywords: query,
+          activeFlg: currentActiveFlag,
+          dateStart: _dateStartController.text,
+          dateEnd: _dateEndController.text,
+        );
       });
     }
   }
@@ -119,6 +139,7 @@ class _ListStaffState extends State<ListStaff> {
         if (data['status'] == 200) {
           // var hahah = DetailsStoreModel.fromJson(data);
           setState(() {
+            currentStaffList.clear();
             listStaffDataModel = ListStaffDataModel.fromJson(data);
             currentStaffList.addAll(listStaffDataModel!.staffs.data);
             currentPage++;
@@ -127,6 +148,44 @@ class _ListStaffState extends State<ListStaff> {
               hasMore = false;
             }
           });
+        } else {
+          print("ERROR CREATE FOOOD");
+        }
+      } catch (error) {
+        print("ERROR CREATE $error");
+      }
+    } catch (error) {
+      print("ERROR CREATE $error");
+    }
+  }
+
+  void handleChangeStatusStaff({
+    required String staffNo,
+  }) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$updateStatusStaff'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({'is_api': true, 'staff_no': staffNo}),
+      );
+      final data = jsonDecode(respons.body);
+      print(" DATA CREATE FOOD ${data}");
+      try {
+        if (data['status'] == 200) {
+          // var hahah = DetailsStoreModel.fromJson(data);
+          handleGetListStaff(
+            page: 1,
+            keywords: query,
+            activeFlg: currentActiveFlag,
+            dateStart: _dateStartController.text,
+            dateEnd: _dateEndController.text,
+          );
         } else {
           print("ERROR CREATE FOOOD");
         }
@@ -167,743 +226,719 @@ class _ListStaffState extends State<ListStaff> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(20.w),
-          child: Container(
-            width: 1.sw,
-            // height: 1.sh,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.r),
-            ),
-            child: Column(
-              children: [
-                Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.r),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset:
-                              const Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(20.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Flexible(
-                                fit: FlexFit.tight,
-                                flex: 1,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TextApp(
-                                      text: " Từ ngày",
-                                      fontsize: 12.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: blueText,
-                                    ),
-                                    SizedBox(
-                                      height: 10.h,
-                                    ),
-                                    TextField(
-                                      readOnly: true,
-                                      controller: _dateStartController,
-                                      onTap: selectDayStart,
-                                      style: TextStyle(
-                                          fontSize: 14.sp, color: grey),
-                                      cursorColor: grey,
-                                      decoration: InputDecoration(
-                                          suffixIcon:
-                                              Icon(Icons.calendar_month),
-                                          fillColor: const Color.fromARGB(
-                                              255, 226, 104, 159),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    214, 51, 123, 0.6),
-                                                width: 2.0),
-                                            borderRadius:
-                                                BorderRadius.circular(8.r),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8.r),
-                                          ),
-                                          hintText: 'dd/mm/yy',
-                                          isDense: true,
-                                          contentPadding: EdgeInsets.all(15.w)),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              space20W,
-                              Flexible(
-                                fit: FlexFit.tight,
-                                flex: 1,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TextApp(
-                                      text: " Đến ngày",
-                                      fontsize: 12.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: blueText,
-                                    ),
-                                    SizedBox(
-                                      height: 10.h,
-                                    ),
-                                    TextField(
-                                      readOnly: true,
-                                      controller: _dateEndController,
-                                      onTap: selectDayEnd,
-                                      style: TextStyle(
-                                          fontSize: 14.sp, color: grey),
-                                      cursorColor: grey,
-                                      decoration: InputDecoration(
-                                          suffixIcon:
-                                              Icon(Icons.calendar_month),
-                                          fillColor: const Color.fromARGB(
-                                              255, 226, 104, 159),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    214, 51, 123, 0.6),
-                                                width: 2.0),
-                                            borderRadius:
-                                                BorderRadius.circular(8.r),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8.r),
-                                          ),
-                                          hintText: 'dd/mm/yy',
-                                          isDense: true,
-                                          contentPadding: EdgeInsets.all(15.w)),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
+          child: RefreshIndicator(
+        color: Colors.blue,
+        onRefresh: () async {
+          handleGetListStaff(page: 1);
+          // Implement logic to refresh data for Tab 1
+        },
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(20.w),
+            child: Container(
+              width: 1.sw,
+              // height: 1.sh,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.r),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15.r),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
                           ),
-                          space20H,
-                          Row(
-                            children: [
-                              Flexible(
-                                fit: FlexFit.tight,
-                                flex: 1,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TextApp(
-                                      text: " Trạng thái",
-                                      fontsize: 12.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: blueText,
-                                    ),
-                                    SizedBox(
-                                      height: 10.h,
-                                    ),
-                                    DropdownSearch(
-                                      // popupProps: PopupProps.menu(
-                                      //   showSelectedItems: true,
-                                      //   disabledItemFn: (String s) => s.startsWith(''),
-                                      // ),
-                                      items: listState,
-
-                                      dropdownDecoratorProps:
-                                          DropDownDecoratorProps(
-                                        dropdownSearchDecoration:
-                                            InputDecoration(
-                                          fillColor: const Color.fromARGB(
-                                              255, 226, 104, 159),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    214, 51, 123, 0.6),
-                                                width: 2.0),
-                                            borderRadius:
-                                                BorderRadius.circular(8.r),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8.r),
-                                          ),
-                                          isDense: true,
-                                          contentPadding: EdgeInsets.all(15.w),
-                                          hintText: "Tất cả",
-                                        ),
-                                      ),
-                                      onChanged: print,
-                                      selectedItem: "Tất cả",
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              space20W,
-                              Flexible(
-                                fit: FlexFit.tight,
-                                flex: 1,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TextApp(
-                                      text: " Tìm kiếm",
-                                      fontsize: 12.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: blueText,
-                                    ),
-                                    SizedBox(
-                                      height: 10.h,
-                                    ),
-                                    TextField(
-                                      onTapOutside: (event) {
-                                        FocusManager.instance.primaryFocus
-                                            ?.unfocus();
-                                      },
-                                      style: TextStyle(
-                                          fontSize: 14.sp, color: grey),
-                                      cursorColor: grey,
-                                      decoration: InputDecoration(
-                                          fillColor: const Color.fromARGB(
-                                              255, 226, 104, 159),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    214, 51, 123, 0.6),
-                                                width: 2.0),
-                                            borderRadius:
-                                                BorderRadius.circular(8.r),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8.r),
-                                          ),
-                                          // hintText: 'Instagram',
-                                          isDense: true,
-                                          contentPadding: EdgeInsets.all(15.w)),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          space20H,
-                          SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Column(
+                        ],
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(20.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Flexible(
+                                  fit: FlexFit.tight,
+                                  flex: 1,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Container(
-                                        width: 1.sw * 3.5,
-                                        height: 400.h,
-                                        // color: Colors.amber,
-                                        padding: EdgeInsets.all(20.w),
-                                        child: ListView.builder(
-                                            shrinkWrap: true,
-                                            controller:
-                                                scrollListStaffController,
-                                            physics:
-                                                const ClampingScrollPhysics(),
-                                            itemCount: (listStaffDataModel
-                                                        ?.staffs.data.length ??
-                                                    0) +
-                                                1,
-                                            itemBuilder: (context, index) {
-                                              var dataLength =
-                                                  listStaffDataModel?.staffs
-                                                          .data.length ??
-                                                      0;
-                                              if (index < dataLength) {
-                                                DataListStaff staffData =
-                                                    listStaffDataModel!
-                                                        .staffs.data[index];
-                                                var avatarStaff =
-                                                    staffData.staffAvatar ?? '';
-                                                return Theme(
-                                                  data: Theme.of(context)
-                                                      .copyWith(
-                                                          dividerColor: Colors
-                                                              .transparent),
-                                                  child: index > 0
-                                                      ? DataTable(
-                                                          dividerThickness: 0.0,
-                                                          columns: [
-                                                            DataColumn(
-                                                                label:
-                                                                    Text('')),
-                                                            DataColumn(
-                                                                label:
-                                                                    Text('')),
-                                                            DataColumn(
-                                                                label:
-                                                                    Text('')),
-                                                            DataColumn(
-                                                                label:
-                                                                    Text('')),
-                                                            DataColumn(
-                                                                label:
-                                                                    Text('')),
-                                                            DataColumn(
-                                                                label:
-                                                                    Text('')),
-                                                            DataColumn(
-                                                                label:
-                                                                    Text('')),
-                                                            DataColumn(
-                                                              label: Center(
+                                      TextApp(
+                                        text: " Từ ngày",
+                                        fontsize: 12.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: blueText,
+                                      ),
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                      TextField(
+                                        readOnly: true,
+                                        controller: _dateStartController,
+                                        onTap: selectDayStart,
+                                        style: TextStyle(
+                                            fontSize: 14.sp, color: grey),
+                                        cursorColor: grey,
+                                        decoration: InputDecoration(
+                                            suffixIcon:
+                                                Icon(Icons.calendar_month),
+                                            fillColor: const Color.fromARGB(
+                                                255, 226, 104, 159),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  color: Color.fromRGBO(
+                                                      214, 51, 123, 0.6),
+                                                  width: 2.0),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            hintText: 'dd/mm/yy',
+                                            isDense: true,
+                                            contentPadding:
+                                                EdgeInsets.all(15.w)),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                space20W,
+                                Flexible(
+                                  fit: FlexFit.tight,
+                                  flex: 1,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextApp(
+                                        text: " Đến ngày",
+                                        fontsize: 12.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: blueText,
+                                      ),
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                      TextField(
+                                        readOnly: true,
+                                        controller: _dateEndController,
+                                        onTap: selectDayEnd,
+                                        style: TextStyle(
+                                            fontSize: 14.sp, color: grey),
+                                        cursorColor: grey,
+                                        decoration: InputDecoration(
+                                            suffixIcon:
+                                                Icon(Icons.calendar_month),
+                                            fillColor: const Color.fromARGB(
+                                                255, 226, 104, 159),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  color: Color.fromRGBO(
+                                                      214, 51, 123, 0.6),
+                                                  width: 2.0),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            hintText: 'dd/mm/yy',
+                                            isDense: true,
+                                            contentPadding:
+                                                EdgeInsets.all(15.w)),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                            space20H,
+                            Row(
+                              children: [
+                                Flexible(
+                                  fit: FlexFit.tight,
+                                  flex: 1,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextApp(
+                                        text: " Trạng thái",
+                                        fontsize: 12.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: blueText,
+                                      ),
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                      DropdownSearch(
+                                        // popupProps: PopupProps.menu(
+                                        //   showSelectedItems: true,
+                                        //   disabledItemFn: (String s) => s.startsWith(''),
+                                        // ),
+                                        onChanged: (status) {
+                                          var kkk =
+                                              listState.indexOf(status ?? '');
+                                          if (kkk == 0) {
+                                            setState(() {
+                                              currentPage = 1;
+                                              currentActiveFlag = null;
+                                            });
+                                          } else if (kkk == 1) {
+                                            setState(() {
+                                              currentPage = 1;
+                                              currentActiveFlag = 1;
+                                            });
+                                          } else {
+                                            setState(() {
+                                              currentPage = 1;
+                                              currentActiveFlag = 0;
+                                            });
+                                          }
+                                          handleGetListStaff(
+                                            page: currentPage,
+                                            keywords: query,
+                                            activeFlg: currentActiveFlag,
+                                            dateStart:
+                                                _dateStartController.text,
+                                            dateEnd: _dateEndController.text,
+                                          );
+                                        },
+                                        items: listState,
+
+                                        dropdownDecoratorProps:
+                                            DropDownDecoratorProps(
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            fillColor: const Color.fromARGB(
+                                                255, 226, 104, 159),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  color: Color.fromRGBO(
+                                                      214, 51, 123, 0.6),
+                                                  width: 2.0),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            isDense: true,
+                                            contentPadding:
+                                                EdgeInsets.all(15.w),
+                                            hintText: "Tất cả",
+                                          ),
+                                        ),
+
+                                        selectedItem: "Tất cả",
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                space20W,
+                                Flexible(
+                                  fit: FlexFit.tight,
+                                  flex: 1,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      TextApp(
+                                        text: " Tìm kiếm",
+                                        fontsize: 12.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: blueText,
+                                      ),
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                      TextField(
+                                        onTapOutside: (event) {
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
+                                        },
+                                        onChanged: searchStaff,
+                                        style: TextStyle(
+                                            fontSize: 14.sp, color: grey),
+                                        cursorColor: grey,
+                                        decoration: InputDecoration(
+                                            fillColor: const Color.fromARGB(
+                                                255, 226, 104, 159),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  color: Color.fromRGBO(
+                                                      214, 51, 123, 0.6),
+                                                  width: 2.0),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.r),
+                                            ),
+                                            // hintText: 'Instagram',
+                                            isDense: true,
+                                            contentPadding:
+                                                EdgeInsets.all(15.w)),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                            space20H,
+                            SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Container(
+                                              width: 1.sw * 4.1,
+                                              height: 50.h,
+                                              // color: Colors.amber,
+                                              child: Row(
+                                                children: [
+                                                  // space35W,
+                                                  // space5W,
+                                                  Container(
+                                                    width: 200.w,
+                                                    // color: Colors.green,
+                                                    child: TextApp(
+                                                      text: 'TÊN NHÂN VIÊN',
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontsize: 14.sp,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      color: greyText,
+                                                    ),
+                                                  ),
+                                                  // space50W,
+                                                  space35W,
+                                                  Container(
+                                                    width: 150.w,
+                                                    // color: Colors.pink,
+                                                    child: TextApp(
+                                                      text: 'CHỨC VỤ',
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontsize: 14.sp,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      color: greyText,
+                                                    ),
+                                                  ),
+                                                  space35W,
+                                                  Container(
+                                                    width: 250.w,
+                                                    // color: Colors.purple,
+                                                    child: TextApp(
+                                                      text:
+                                                          'LÀM VIỆC TẠI CỬA HÀNG',
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontsize: 14.sp,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      color: greyText,
+                                                    ),
+                                                  ),
+                                                  space35W,
+                                                  Container(
+                                                    width: 150.w,
+                                                    // color: Colors.orange,
+                                                    child: TextApp(
+                                                      text: 'TRẠNG THÁI',
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontsize: 14.sp,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      color: greyText,
+                                                    ),
+                                                  ),
+                                                  space35W,
+                                                  Container(
+                                                    width: 150.w,
+                                                    // color: Colors.lime,
+                                                    child: TextApp(
+                                                      text: 'SỐ ĐIỆN THOẠI',
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontsize: 14.sp,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      color: greyText,
+                                                    ),
+                                                  ),
+                                                  space35W,
+                                                  Container(
+                                                    width: 250.w,
+                                                    // color: Colors.blueGrey,
+                                                    child: TextApp(
+                                                      text: 'EMAIL',
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontsize: 14.sp,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      color: greyText,
+                                                    ),
+                                                  ),
+                                                  space35W,
+                                                  Container(
+                                                    width: 200.w,
+                                                    // color: Colors.deepOrange,
+                                                    child: TextApp(
+                                                      text: 'NGÀY TẠO',
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontsize: 14.sp,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      color: greyText,
+                                                    ),
+                                                  ),
+                                                  space35W,
+                                                  Container(
+                                                    width: 150.w,
+                                                    // color: Colors.green,
+                                                    child: TextApp(
+                                                      text: '',
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      fontsize: 14.sp,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      color: greyText,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Container(
+                                          width: 1.sw * 4.1,
+                                          height: 400.h,
+                                          // color: Colors.amber,
+                                          // padding: EdgeInsets.all(20.w),
+                                          child: ListView.builder(
+                                              shrinkWrap: true,
+                                              controller:
+                                                  scrollListStaffController,
+                                              physics:
+                                                  const ClampingScrollPhysics(),
+                                              itemCount: (listStaffDataModel
+                                                          ?.staffs
+                                                          .data
+                                                          .length ??
+                                                      0) +
+                                                  1,
+                                              itemBuilder: (context, index) {
+                                                var dataLength =
+                                                    listStaffDataModel?.staffs
+                                                            .data.length ??
+                                                        0;
+                                                if (index < dataLength) {
+                                                  DataListStaff staffData =
+                                                      listStaffDataModel!
+                                                          .staffs.data[index];
+                                                  var avatarStaff =
+                                                      staffData.staffAvatar ??
+                                                          '';
+                                                  var intPosition =
+                                                      staffData.staffPosition;
+                                                  var staffPos = intPosition ==
+                                                          1
+                                                      ? "Nhân viên phục vụ"
+                                                      : intPosition == 2
+                                                          ? "Trưởng nhóm"
+                                                          : intPosition == 3
+                                                              ? "Quản lý"
+                                                              : intPosition == 4
+                                                                  ? "Kế toán"
+                                                                  : "Đầu bếp";
+                                                  return Theme(
+                                                      data: Theme.of(context)
+                                                          .copyWith(
+                                                              dividerColor: Colors
+                                                                  .transparent),
+                                                      child: Column(
+                                                        children: [
+                                                          space10H,
+                                                          Row(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                IntrinsicHeight(
                                                                   child:
-                                                                      Text('')),
-                                                            ),
-                                                          ],
-                                                          rows: [
-                                                            DataRow(cells: [
-                                                              DataCell(Center(
-                                                                  child:
-                                                                      IntrinsicHeight(
-                                                                child: Row(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceBetween,
-                                                                  children: [
-                                                                    Container(
-                                                                      width:
-                                                                          80.w,
-                                                                      height:
-                                                                          80.w,
-                                                                      // color: Colors.amber,
-                                                                      child:
-                                                                          CachedNetworkImage(
-                                                                        fit: BoxFit
-                                                                            .fill,
-                                                                        imageUrl:
-                                                                            httpImage +
-                                                                                avatarStaff,
-                                                                        placeholder:
-                                                                            (context, url) =>
-                                                                                SizedBox(
-                                                                          height:
-                                                                              10.w,
+                                                                      Container(
+                                                                    width:
+                                                                        200.w,
+                                                                    child: Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .center,
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                      children: [
+                                                                        Container(
                                                                           width:
-                                                                              10.w,
+                                                                              80.w,
+                                                                          height:
+                                                                              80.w,
+                                                                          // color: Colors.amber,
                                                                           child:
-                                                                              const Center(child: CircularProgressIndicator()),
+                                                                              CachedNetworkImage(
+                                                                            fit:
+                                                                                BoxFit.fill,
+                                                                            imageUrl:
+                                                                                httpImage + avatarStaff,
+                                                                            placeholder: (context, url) =>
+                                                                                SizedBox(
+                                                                              height: 10.w,
+                                                                              width: 10.w,
+                                                                              child: const Center(child: CircularProgressIndicator()),
+                                                                            ),
+                                                                            errorWidget: (context, url, error) =>
+                                                                                const Icon(Icons.error),
+                                                                          ),
                                                                         ),
-                                                                        errorWidget: (context,
-                                                                                url,
-                                                                                error) =>
-                                                                            const Icon(Icons.error),
-                                                                      ),
+                                                                        // space5W,
+                                                                        SizedBox(
+                                                                          width:
+                                                                              100.w,
+                                                                          child:
+                                                                              TextApp(
+                                                                            isOverFlow:
+                                                                                false,
+                                                                            softWrap:
+                                                                                true,
+                                                                            text:
+                                                                                staffData.staffFullName ?? '',
+                                                                            fontsize:
+                                                                                14.sp,
+                                                                            color:
+                                                                                blueText,
+                                                                          ),
+                                                                        ),
+                                                                      ],
                                                                     ),
-                                                                    space10W,
-                                                                    SizedBox(
-                                                                      width:
-                                                                          120.w,
-                                                                      child:
-                                                                          TextApp(
-                                                                        isOverFlow:
-                                                                            false,
-                                                                        softWrap:
-                                                                            true,
-                                                                        text: staffData.staffFullName ??
-                                                                            '',
-                                                                        fontsize:
-                                                                            14.sp,
-                                                                        color:
-                                                                            blueText,
-                                                                      ),
-                                                                    ),
-                                                                  ],
+                                                                  ),
                                                                 ),
-                                                              ))),
-                                                              DataCell(Center(
-                                                                child: SizedBox(
-                                                                  width: 80.w,
+                                                                space35W,
+                                                                Container(
+                                                                  width: 150.w,
+                                                                  // color:
+                                                                  //     Colors.red,
                                                                   child:
                                                                       TextApp(
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    isOverFlow:
+                                                                        false,
+                                                                    softWrap:
+                                                                        true,
+                                                                    text:
+                                                                        staffPos,
+                                                                    fontsize:
+                                                                        14.sp,
+                                                                  ),
+                                                                ),
+                                                                space35W,
+                                                                SizedBox(
+                                                                  width: 250.w,
+                                                                  child:
+                                                                      TextApp(
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
                                                                     isOverFlow:
                                                                         false,
                                                                     softWrap:
                                                                         true,
                                                                     text: staffData
-                                                                        .staffPosition
+                                                                        .storeName,
+                                                                    fontsize:
+                                                                        14.sp,
+                                                                  ),
+                                                                ),
+                                                                space35W,
+                                                                SizedBox(
+                                                                  width: 150.w,
+                                                                  child: Center(
+                                                                      child: staffData.activeFlg ==
+                                                                              1
+                                                                          ? StatusBoxIsActive()
+                                                                          : StatusBoxIsLock()),
+                                                                ),
+                                                                space35W,
+                                                                SizedBox(
+                                                                  width: 150.w,
+                                                                  child:
+                                                                      TextApp(
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    isOverFlow:
+                                                                        false,
+                                                                    softWrap:
+                                                                        true,
+                                                                    text: staffData
+                                                                        .staffPhone
                                                                         .toString(),
                                                                     fontsize:
                                                                         14.sp,
                                                                   ),
                                                                 ),
-                                                              )),
-                                                              DataCell(Center(
-                                                                child: SizedBox(
-                                                                  width: 120.w,
+                                                                space35W,
+                                                                Center(
                                                                   child:
-                                                                      TextApp(
-                                                                    isOverFlow:
-                                                                        false,
-                                                                    softWrap:
-                                                                        true,
-                                                                    text: staffData
-                                                                        .storeName,
-                                                                    fontsize:
-                                                                        14.sp,
-                                                                  ),
-                                                                ),
-                                                              )),
-                                                              DataCell(Center(
-                                                                  child: staffData
-                                                                              .activeFlg ==
-                                                                          1
-                                                                      ? StatusBoxIsSelling()
-                                                                      : StatusBoxNoMoreSelling())),
-                                                              DataCell(Center(
-                                                                child: SizedBox(
-                                                                  width: 120.w,
-                                                                  child:
-                                                                      TextApp(
-                                                                    isOverFlow:
-                                                                        false,
-                                                                    softWrap:
-                                                                        true,
-                                                                    text: formatDateTime(
-                                                                        staffData.createdAt ??
-                                                                            ''),
-                                                                    fontsize:
-                                                                        14.sp,
-                                                                  ),
-                                                                ),
-                                                              )),
-                                                              DataCell(Center(
-                                                                child: SizedBox(
-                                                                  width: 120.w,
-                                                                  child:
-                                                                      TextApp(
-                                                                    isOverFlow:
-                                                                        false,
-                                                                    softWrap:
-                                                                        true,
-                                                                    text: formatDateTime(
-                                                                        staffData.createdAt ??
-                                                                            ''),
-                                                                    fontsize:
-                                                                        14.sp,
-                                                                  ),
-                                                                ),
-                                                              )),
-                                                              DataCell(Center(
-                                                                child: SizedBox(
-                                                                  width: 120.w,
-                                                                  child:
-                                                                      TextApp(
-                                                                    isOverFlow:
-                                                                        false,
-                                                                    softWrap:
-                                                                        true,
-                                                                    text: formatDateTime(
-                                                                        staffData.createdAt ??
-                                                                            ''),
-                                                                    fontsize:
-                                                                        14.sp,
-                                                                  ),
-                                                                ),
-                                                              )),
-                                                              DataCell(Row(
-                                                                children: [
-                                                                  SizedBox(
-                                                                    height:
-                                                                        30.h,
-                                                                    child: ButtonIcon(
-                                                                        isIconCircle: false,
-                                                                        color1: const Color.fromRGBO(23, 193, 232, 1),
-                                                                        color2: const Color.fromRGBO(23, 193, 232, 1),
-                                                                        event: () {
-                                                                          // handleGetDetailsFood(foodID: product.foodId ?? 0);
-                                                                        },
-                                                                        icon: Icons.edit),
-                                                                  ),
-                                                                  space15W,
-                                                                  SizedBox(
-                                                                    height:
-                                                                        30.h,
-                                                                    child: ButtonIcon(
-                                                                        isIconCircle: false,
-                                                                        color1: const Color.fromRGBO(234, 6, 6, 1),
-                                                                        color2: const Color.fromRGBO(234, 6, 6, 1),
-                                                                        event: () {
-                                                                          // showConfirmDialog(context, () {
-                                                                          //   handleDeleteFood(foodID: product.foodId.toString());
-                                                                          //   print("Delete Food");
-                                                                          // });
-                                                                        },
-                                                                        icon: Icons.delete),
-                                                                  )
-                                                                ],
-                                                              ))
-                                                            ]),
-                                                          ],
-                                                        )
-                                                      : DataTable(
-                                                          dividerThickness: 0.0,
-                                                          columns: [
-                                                            DataColumn(
-                                                                label: Text(
-                                                                    'TÊN NHÂN VIÊN')),
-                                                            DataColumn(
-                                                                label: Text(
-                                                                    'CHỨC VỤ')),
-                                                            DataColumn(
-                                                                label: Text(
-                                                                    'LÀM VIỆC TẠI CỬA HÀNG')),
-                                                            DataColumn(
-                                                                label: Text(
-                                                                    'TRẠNG THÁI')),
-                                                            DataColumn(
-                                                                label: Text(
-                                                                    'SÔ ĐIỆN THOẠI')),
-                                                            DataColumn(
-                                                                label: Text(
-                                                                    'EMAIL')),
-                                                            DataColumn(
-                                                                label: Text(
-                                                                    'NGÀY TẠO')),
-                                                            DataColumn(
-                                                              label: Center(
-                                                                  child:
-                                                                      Text('')),
-                                                            ),
-                                                          ],
-                                                          rows: [
-                                                            DataRow(cells: [
-                                                              DataCell(Center(
-                                                                  child:
-                                                                      IntrinsicHeight(
-                                                                child: Row(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceBetween,
-                                                                  children: [
-                                                                    Container(
-                                                                      width:
-                                                                          80.w,
-                                                                      height:
-                                                                          80.w,
-                                                                      // color: Colors.amber,
-                                                                      child:
-                                                                          CachedNetworkImage(
-                                                                        fit: BoxFit
-                                                                            .fill,
-                                                                        imageUrl:
-                                                                            httpImage +
-                                                                                avatarStaff,
-                                                                        placeholder:
-                                                                            (context, url) =>
-                                                                                SizedBox(
-                                                                          height:
-                                                                              10.w,
-                                                                          width:
-                                                                              10.w,
-                                                                          child:
-                                                                              const Center(child: CircularProgressIndicator()),
-                                                                        ),
-                                                                        errorWidget: (context,
-                                                                                url,
-                                                                                error) =>
-                                                                            const Icon(Icons.error),
-                                                                      ),
+                                                                      SizedBox(
+                                                                    width:
+                                                                        250.w,
+                                                                    child:
+                                                                        TextApp(
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      isOverFlow:
+                                                                          false,
+                                                                      softWrap:
+                                                                          true,
+                                                                      text: staffData
+                                                                              .staffEmail ??
+                                                                          '',
+                                                                      fontsize:
+                                                                          14.sp,
                                                                     ),
-                                                                    space10W,
-                                                                    SizedBox(
-                                                                      width:
-                                                                          120.w,
-                                                                      child:
-                                                                          TextApp(
-                                                                        isOverFlow:
-                                                                            false,
-                                                                        softWrap:
-                                                                            true,
-                                                                        text: staffData.staffFullName ??
-                                                                            '',
-                                                                        fontsize:
-                                                                            14.sp,
-                                                                        color:
-                                                                            blueText,
-                                                                      ),
+                                                                  ),
+                                                                ),
+                                                                space35W,
+                                                                Center(
+                                                                  child:
+                                                                      SizedBox(
+                                                                    width:
+                                                                        200.w,
+                                                                    child:
+                                                                        TextApp(
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      isOverFlow:
+                                                                          false,
+                                                                      softWrap:
+                                                                          true,
+                                                                      text: formatDateTime(
+                                                                          staffData.createdAt ??
+                                                                              ''),
+                                                                      fontsize:
+                                                                          14.sp,
                                                                     ),
-                                                                  ],
+                                                                  ),
                                                                 ),
-                                                              ))),
-                                                              DataCell(Center(
-                                                                child: SizedBox(
-                                                                  width: 80.w,
+                                                                space35W,
+                                                                Center(
                                                                   child:
-                                                                      TextApp(
-                                                                    isOverFlow:
-                                                                        false,
-                                                                    softWrap:
-                                                                        true,
-                                                                    text: staffData
-                                                                            .staffPosition
-                                                                            .toString() ??
-                                                                        '',
-                                                                    fontsize:
-                                                                        14.sp,
+                                                                      SizedBox(
+                                                                    width:
+                                                                        150.w,
+                                                                    child: Row(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment
+                                                                                .center,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: [
+                                                                          SizedBox(
+                                                                            // width: 100.w,
+                                                                            height:
+                                                                                30.h,
+                                                                            child: ButtonIcon(
+                                                                                isIconCircle: false,
+                                                                                color1: color2BlueButton,
+                                                                                color2: color1BlueButton,
+                                                                                event: () {
+                                                                                  Navigator.push(
+                                                                                    navigatorKey.currentContext!,
+                                                                                    MaterialPageRoute(
+                                                                                        builder: (context) => EditStaffInformation(
+                                                                                              staffNo: staffData.staffNo.toString(),
+                                                                                            )),
+                                                                                  );
+                                                                                  // handleGetDetailsFood(foodID: product.foodId ?? 0);
+                                                                                },
+                                                                                icon: Icons.edit),
+                                                                          ),
+                                                                          space15W,
+                                                                          SizedBox(
+                                                                            // width: 100.w,
+                                                                            height:
+                                                                                30.h,
+                                                                            child: ButtonIcon(
+                                                                                isIconCircle: false,
+                                                                                color1: color2OrangeButton,
+                                                                                color2: color1OrganeButton,
+                                                                                event: () {
+                                                                                  showConfirmDialog(context, () {
+                                                                                    handleChangeStatusStaff(staffNo: staffData.staffNo.toString());
+                                                                                  });
+                                                                                  // handleGetDetailsFood(foodID: product.foodId ?? 0);
+                                                                                },
+                                                                                icon: Icons.lock),
+                                                                          ),
+                                                                        ]),
                                                                   ),
                                                                 ),
-                                                              )),
-                                                              DataCell(Center(
-                                                                child: SizedBox(
-                                                                  width: 120.w,
-                                                                  child:
-                                                                      TextApp(
-                                                                    isOverFlow:
-                                                                        false,
-                                                                    softWrap:
-                                                                        true,
-                                                                    text: staffData
-                                                                        .storeName,
-                                                                    fontsize:
-                                                                        14.sp,
-                                                                  ),
-                                                                ),
-                                                              )),
-                                                              DataCell(Center(
-                                                                  child: staffData
-                                                                              .activeFlg ==
-                                                                          1
-                                                                      ? StatusBoxIsSelling()
-                                                                      : StatusBoxNoMoreSelling())),
-                                                              DataCell(Center(
-                                                                child: SizedBox(
-                                                                  width: 120.w,
-                                                                  child:
-                                                                      TextApp(
-                                                                    isOverFlow:
-                                                                        false,
-                                                                    softWrap:
-                                                                        true,
-                                                                    text: formatDateTime(
-                                                                        staffData.createdAt ??
-                                                                            ''),
-                                                                    fontsize:
-                                                                        14.sp,
-                                                                  ),
-                                                                ),
-                                                              )),
-                                                              DataCell(Center(
-                                                                child: SizedBox(
-                                                                  width: 120.w,
-                                                                  child:
-                                                                      TextApp(
-                                                                    isOverFlow:
-                                                                        false,
-                                                                    softWrap:
-                                                                        true,
-                                                                    text: formatDateTime(
-                                                                        staffData.createdAt ??
-                                                                            ''),
-                                                                    fontsize:
-                                                                        14.sp,
-                                                                  ),
-                                                                ),
-                                                              )),
-                                                              DataCell(Center(
-                                                                child: SizedBox(
-                                                                  width: 120.w,
-                                                                  child:
-                                                                      TextApp(
-                                                                    isOverFlow:
-                                                                        false,
-                                                                    softWrap:
-                                                                        true,
-                                                                    text: formatDateTime(
-                                                                        staffData.createdAt ??
-                                                                            ''),
-                                                                    fontsize:
-                                                                        14.sp,
-                                                                  ),
-                                                                ),
-                                                              )),
-                                                              DataCell(Row(
-                                                                children: [
-                                                                  SizedBox(
-                                                                    height:
-                                                                        30.h,
-                                                                    child: ButtonIcon(
-                                                                        isIconCircle:
-                                                                            false,
-                                                                        color1: const Color.fromRGBO(
-                                                                            23,
-                                                                            193,
-                                                                            232,
-                                                                            1),
-                                                                        color2: const Color
-                                                                            .fromRGBO(
-                                                                            23,
-                                                                            193,
-                                                                            232,
-                                                                            1),
-                                                                        event:
-                                                                            () {},
-                                                                        icon: Icons
-                                                                            .edit),
-                                                                  ),
-                                                                  space15W,
-                                                                  SizedBox(
-                                                                    height:
-                                                                        30.h,
-                                                                    child: ButtonIcon(
-                                                                        isIconCircle: false,
-                                                                        color1: const Color.fromRGBO(234, 6, 6, 1),
-                                                                        color2: const Color.fromRGBO(234, 6, 6, 1),
-                                                                        event: () {
-                                                                          // showConfirmDialog(context, () {
-                                                                          //   handleDeleteFood(foodID: product.foodId.toString());
-                                                                          //   print("Delete Food");
-                                                                          // });
-                                                                        },
-                                                                        icon: Icons.delete),
-                                                                  )
-                                                                ],
-                                                              ))
-                                                            ]),
-                                                          ],
-                                                        ),
-                                                );
-                                              } else {
-                                                return Center(
-                                                  child: hasMore
-                                                      ? CircularProgressIndicator()
-                                                      : Container(),
-                                                );
-                                              }
-                                            }),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              )),
-                        ],
-                      ),
-                    )),
-                space30H,
-                CopyRightText()
-              ],
+                                                              ]),
+                                                          space10H,
+                                                          Divider(),
+                                                        ],
+                                                      ));
+                                                } else {
+                                                  return Center(
+                                                    child: hasMore
+                                                        ? CircularProgressIndicator()
+                                                        : Container(),
+                                                  );
+                                                }
+                                              }),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                )),
+                          ],
+                        ),
+                      )),
+                  space30H,
+                  CopyRightText()
+                ],
+              ),
             ),
           ),
         ),

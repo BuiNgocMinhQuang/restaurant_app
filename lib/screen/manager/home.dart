@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
-import 'package:app_restaurant/model/manager/chart/chart_data_each_store_model.dart';
 import 'package:app_restaurant/model/manager/chart/chart_data_home_model.dart';
 import 'package:app_restaurant/model/manager/home/home_data_model.dart';
 import 'package:app_restaurant/model/manager/store/details_stores_model.dart';
@@ -38,7 +37,7 @@ class _ManagerHomeState extends State<ManagerHome> {
   final loailistKey = GlobalKey<DropdownSearchState>();
   TextEditingController _dateStartController = TextEditingController();
   TextEditingController _dateEndController = TextEditingController();
-  String currentDataType = "%d-%m-%Y";
+  String currentDataType = "%m-%Y";
   ChartDataHomeModel? chartDataModel;
 
   List<String> loaiList = [
@@ -101,13 +100,11 @@ class _ManagerHomeState extends State<ManagerHome> {
     if (picked != null) {
       setState(() {
         _dateStartController.text = picked.toString().split(" ")[0];
+        handleGetChartDataHome(
+            startDate: _dateStartController.text,
+            endDate: _dateEndController.text,
+            dataType: currentDataType);
       });
-      // handleGetChartData(
-      //     chartWith: currentChartWith,
-      //     shopID: widget.shopID,
-      //     startDate: _dateStartController.text,
-      //     endDate: _dateEndController.text,
-      //     dataType: currentDataType);
     }
   }
 
@@ -133,13 +130,11 @@ class _ManagerHomeState extends State<ManagerHome> {
     if (picked != null) {
       setState(() {
         _dateEndController.text = picked.toString().split(" ")[0];
+        handleGetChartDataHome(
+            startDate: _dateStartController.text,
+            endDate: _dateEndController.text,
+            dataType: currentDataType);
       });
-      // handleGetChartData(
-      //     chartWith: currentChartWith,
-      //     shopID: widget.shopID,
-      //     startDate: _dateStartController.text,
-      //     endDate: _dateEndController.text,
-      //     dataType: currentDataType);
     }
   }
 
@@ -166,7 +161,6 @@ class _ManagerHomeState extends State<ManagerHome> {
       print(" DATA CREATE FOOD ${data}");
       try {
         if (data['status'] == 200) {
-          // var hahah = DetailsStoreModel.fromJson(data);
           setState(() {
             dataDetailsStoreModel = DetailsStoreModel.fromJson(data);
           });
@@ -520,165 +514,192 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                   dataHome!.stores[index];
                                               var imagePath1 =
                                                   storeData.storeImages;
-                                              var listImagePath =
-                                                  jsonDecode(imagePath1);
+                                              // var listImagePath =
+                                              //     jsonDecode(imagePath1);
+                                              var logoImageStore =
+                                                  storeData.storeLogo ?? '';
                                               return Theme(
                                                 data: Theme.of(context)
                                                     .copyWith(
                                                         dividerColor:
                                                             Colors.transparent),
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
+                                                child: Column(
                                                   children: [
-                                                    Container(
-                                                      width: 150.w,
-                                                      height: 100.w,
-                                                      // color: Colors.amber,
-                                                      child: CachedNetworkImage(
-                                                        fit: BoxFit.fill,
-                                                        imageUrl: httpImage +
-                                                            listImagePath[0],
-                                                        placeholder:
-                                                            (context, url) =>
-                                                                SizedBox(
-                                                          height: 10.w,
-                                                          width: 10.w,
-                                                          child: const Center(
-                                                              child:
-                                                                  CircularProgressIndicator()),
-                                                        ),
-                                                        errorWidget: (context,
-                                                                url, error) =>
-                                                            const Icon(
-                                                                Icons.error),
-                                                      ),
-                                                    ),
-                                                    space15W,
-                                                    Column(
+                                                    Row(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
-                                                              .start,
+                                                              .center,
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
-                                                              .center,
+                                                              .start,
                                                       children: [
-                                                        TextApp(
-                                                          isOverFlow: false,
-                                                          softWrap: true,
-                                                          text: 'Địa chỉ: ',
-                                                          fontsize: 14.sp,
-                                                        ),
                                                         Container(
                                                           width: 150.w,
-                                                          child: TextApp(
-                                                            isOverFlow: false,
-                                                            softWrap: true,
-                                                            text: storeData
-                                                                .storeAddress,
-                                                            fontsize: 14.sp,
-                                                            color: blueText,
+                                                          height: 100.w,
+                                                          // color: Colors.amber,
+                                                          child:
+                                                              CachedNetworkImage(
+                                                            fit: BoxFit.fill,
+                                                            imageUrl: httpImage +
+                                                                logoImageStore,
+                                                            placeholder:
+                                                                (context,
+                                                                        url) =>
+                                                                    SizedBox(
+                                                              height: 10.w,
+                                                              width: 10.w,
+                                                              child: const Center(
+                                                                  child:
+                                                                      CircularProgressIndicator()),
+                                                            ),
+                                                            errorWidget: (context,
+                                                                    url,
+                                                                    error) =>
+                                                                const Icon(Icons
+                                                                    .error),
                                                           ),
                                                         ),
-                                                      ],
-                                                    ),
-                                                    space15W,
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
+                                                        space15W,
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            TextApp(
+                                                              isOverFlow: false,
+                                                              softWrap: true,
+                                                              text: 'Địa chỉ: ',
+                                                              fontsize: 14.sp,
+                                                            ),
+                                                            Container(
+                                                              width: 150.w,
+                                                              child: TextApp(
+                                                                isOverFlow:
+                                                                    false,
+                                                                softWrap: true,
+                                                                text: storeData
+                                                                        .storeAddress ??
+                                                                    '',
+                                                                fontsize: 14.sp,
+                                                                color: blueText,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        space15W,
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Container(
+                                                              width: 100.w,
+                                                              child: TextApp(
+                                                                isOverFlow:
+                                                                    false,
+                                                                softWrap: true,
+                                                                text:
+                                                                    'Nhân viên',
+                                                                fontsize: 14.sp,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              width: 100.w,
+                                                              child: TextApp(
+                                                                isOverFlow:
+                                                                    false,
+                                                                softWrap: true,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                text: storeData
+                                                                    .staffsCount
+                                                                    .toString(),
+                                                                fontsize: 14.sp,
+                                                                color: blueText,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        space15W,
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Container(
+                                                              width: 100.w,
+                                                              child: TextApp(
+                                                                isOverFlow:
+                                                                    false,
+                                                                softWrap: true,
+                                                                text:
+                                                                    'Tổng tiền',
+                                                                fontsize: 14.sp,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              width: 100.w,
+                                                              child: TextApp(
+                                                                isOverFlow:
+                                                                    false,
+                                                                softWrap: true,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                text:
+                                                                    "${MoneyFormatter(amount: (storeData.ordersSumOrderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                                fontsize: 14.sp,
+                                                                color: blueText,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        space15W,
                                                         Container(
                                                           width: 100.w,
-                                                          child: TextApp(
-                                                            isOverFlow: false,
-                                                            softWrap: true,
-                                                            text: 'Nhân viên',
-                                                            fontsize: 14.sp,
-                                                            textAlign: TextAlign
-                                                                .center,
+                                                          height: 30.w,
+                                                          child: ButtonGradient(
+                                                            color1:
+                                                                color1BlueButton,
+                                                            color2:
+                                                                color2BlueButton,
+                                                            event: () {
+                                                              getDetailsStore(
+                                                                  shopID: storeData
+                                                                      .shopId);
+                                                            },
+                                                            text: "Chi tiết",
+                                                            fontSize: 12.sp,
+                                                            radius: 8.r,
+                                                            textColor:
+                                                                Colors.white,
                                                           ),
-                                                        ),
-                                                        SizedBox(
-                                                          width: 100.w,
-                                                          child: TextApp(
-                                                            isOverFlow: false,
-                                                            softWrap: true,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            text: storeData
-                                                                .staffsCount
-                                                                .toString(),
-                                                            fontsize: 14.sp,
-                                                            color: blueText,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                          ),
-                                                        ),
+                                                        )
                                                       ],
                                                     ),
-                                                    space15W,
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Container(
-                                                          width: 100.w,
-                                                          child: TextApp(
-                                                            isOverFlow: false,
-                                                            softWrap: true,
-                                                            text: 'Tổng tiền',
-                                                            fontsize: 14.sp,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          width: 100.w,
-                                                          child: TextApp(
-                                                            isOverFlow: false,
-                                                            softWrap: true,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            text:
-                                                                "${MoneyFormatter(amount: (storeData.ordersSumOrderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                            fontsize: 14.sp,
-                                                            color: blueText,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    space15W,
-                                                    Container(
-                                                      width: 100.w,
-                                                      height: 30.w,
-                                                      child: ButtonGradient(
-                                                        color1:
-                                                            color1BlueButton,
-                                                        color2:
-                                                            color2BlueButton,
-                                                        event: () {
-                                                          getDetailsStore(
-                                                              shopID: storeData
-                                                                  .shopId);
-                                                        },
-                                                        text: "Chi tiết",
-                                                        fontSize: 12.sp,
-                                                        radius: 8.r,
-                                                        textColor: Colors.white,
-                                                      ),
-                                                    )
+                                                    space20H
                                                   ],
                                                 ),
                                               );
@@ -738,27 +759,36 @@ class _ManagerHomeState extends State<ManagerHome> {
                                   DropdownSearch(
                                     key: loailistKey,
                                     onChanged: (loaiListIndex) {
-                                      var haha =
+                                      var indexType =
                                           loaiList.indexOf(loaiListIndex ?? '');
-                                      if (haha == 0) {
-                                        // setState(() {
-                                        //   currentDataType = "%d-%m-%Y";
-                                        // });
-                                      } else if (haha == 2) {
-                                        // setState(() {
-                                        //   currentDataType = "%Y";
-                                        // });
+                                      if (indexType == 0) {
+                                        setState(() {
+                                          currentDataType = "%d-%m-%Y";
+                                        });
+                                        handleGetChartDataHome(
+                                            startDate:
+                                                _dateStartController.text,
+                                            endDate: _dateEndController.text,
+                                            dataType: currentDataType);
+                                      } else if (indexType == 2) {
+                                        setState(() {
+                                          currentDataType = "%Y";
+                                        });
+                                        handleGetChartDataHome(
+                                            startDate:
+                                                _dateStartController.text,
+                                            endDate: _dateEndController.text,
+                                            dataType: currentDataType);
                                       } else {
-                                        // setState(() {
-                                        //   currentDataType = "%m-%Y";
-                                        // });
+                                        setState(() {
+                                          currentDataType = "%m-%Y";
+                                        });
+                                        handleGetChartDataHome(
+                                            startDate:
+                                                _dateStartController.text,
+                                            endDate: _dateEndController.text,
+                                            dataType: currentDataType);
                                       }
-                                      // handleGetChartData(
-                                      //     chartWith: currentChartWith,
-                                      //     shopID: widget.shopID,
-                                      //     startDate: _dateStartController.text,
-                                      //     endDate: _dateEndController.text,
-                                      //     dataType: currentDataType);
                                     },
                                     items: loaiList,
                                     dropdownDecoratorProps:

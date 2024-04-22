@@ -13,6 +13,9 @@ const lightGrey = Color.fromRGBO(235, 236, 240, 1);
 const color1BlueButton = Color.fromRGBO(33, 82, 255, 1);
 const color2BlueButton = Color.fromRGBO(33, 212, 253, 1);
 
+const color1OrganeButton = Color.fromRGBO(245, 57, 57, 1);
+const color2OrangeButton = Color.fromRGBO(251, 207, 51, 1);
+
 const color1DarkButton = Color.fromRGBO(20, 23, 39, 1);
 const color2DarkButton = Color.fromRGBO(58, 65, 111, 1);
 

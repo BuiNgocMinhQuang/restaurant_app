@@ -151,12 +151,12 @@ class NyAppRouter {
       //     builder: (BuildContext context, GoRouterState state) {
       //       return const ManagerAddFood();
       //     }),
-      GoRoute(
-          name: AppRouterContants.managerEditStaffInformationRouterName,
-          path: '/manager_edit_staff_info',
-          builder: (BuildContext context, GoRouterState state) {
-            return const EditStaffInformation();
-          }),
+      // GoRoute(
+      //     name: AppRouterContants.managerEditStaffInformationRouterName,
+      //     path: '/manager_edit_staff_info',
+      //     builder: (BuildContext context, GoRouterState state) {
+      //       return const EditStaffInformation();
+      //     }),
 //Router Staff
       GoRoute(
           name: AppRouterContants.staffSignInRouterName,

@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final listStaffDataModel = listStaffDataModelFromJson(jsonString);
+
 import 'dart:convert';
 
 ListStaffDataModel listStaffDataModelFromJson(String str) =>
@@ -8,94 +12,41 @@ String listStaffDataModelToJson(ListStaffDataModel data) =>
 
 class ListStaffDataModel {
   int status;
-  Staffs staffs;
+  Staff staff;
+  List<Store> stores;
 
   ListStaffDataModel({
     required this.status,
-    required this.staffs,
+    required this.staff,
+    required this.stores,
   });
 
   factory ListStaffDataModel.fromJson(Map<String, dynamic> json) =>
       ListStaffDataModel(
         status: json["status"],
-        staffs: Staffs.fromJson(json["staffs"]),
+        staff: Staff.fromJson(json["staff"]),
+        stores: List<Store>.from(json["stores"].map((x) => Store.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "staffs": staffs.toJson(),
+        "staff": staff.toJson(),
+        "stores": List<dynamic>.from(stores.map((x) => x.toJson())),
       };
 }
 
-class Staffs {
-  int currentPage;
-  List<DataListStaff> data;
-  String firstPageUrl;
-  int? from;
-  int? lastPage;
-  String lastPageUrl;
-  List<Link> links;
-  String path;
-  int? perPage;
-  int? to;
-  int? total;
-
-  Staffs({
-    required this.currentPage,
-    required this.data,
-    required this.firstPageUrl,
-    required this.from,
-    required this.lastPage,
-    required this.lastPageUrl,
-    required this.links,
-    required this.path,
-    required this.perPage,
-    required this.to,
-    required this.total,
-  });
-
-  factory Staffs.fromJson(Map<String, dynamic> json) => Staffs(
-        currentPage: json["current_page"],
-        data: List<DataListStaff>.from(
-            json["data"].map((x) => DataListStaff.fromJson(x))),
-        firstPageUrl: json["first_page_url"],
-        from: json["from"],
-        lastPage: json["last_page"],
-        lastPageUrl: json["last_page_url"],
-        links: List<Link>.from(json["links"].map((x) => Link.fromJson(x))),
-        path: json["path"],
-        perPage: json["per_page"],
-        to: json["to"],
-        total: json["total"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "current_page": currentPage,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
-        "first_page_url": firstPageUrl,
-        "from": from,
-        "last_page": lastPage,
-        "last_page_url": lastPageUrl,
-        "links": List<dynamic>.from(links.map((x) => x.toJson())),
-        "path": path,
-        "per_page": perPage,
-        "to": to,
-        "total": total,
-      };
-}
-
-class DataListStaff {
+class Staff {
   int staffId;
   int staffNo;
   int userId;
   int storeId;
   String shopId;
-  String? staffFirstName;
-  String? staffLastName;
-  String? staffFullName;
-  String? staffAvatar;
-  String? staffEmail;
-  String? staffPhone;
+  String staffFirstName;
+  String staffLastName;
+  String staffFullName;
+  String staffAvatar;
+  String staffEmail;
+  String staffPhone;
   String password;
   String? frontImageCccd;
   String? backImageCccd;
@@ -108,16 +59,15 @@ class DataListStaff {
   String? staffTwitter;
   String? staffFacebook;
   String? staffInstagram;
-  int? staffPosition;
-  int staffKind;
+  int staffPosition;
+  int? staffKind;
   int? activeFlg;
   int? deleteFlg;
   String? rememberToken;
   String? createdAt;
   String? updatedAt;
-  String storeName;
 
-  DataListStaff({
+  Staff({
     required this.staffId,
     required this.staffNo,
     required this.userId,
@@ -148,10 +98,9 @@ class DataListStaff {
     required this.rememberToken,
     required this.createdAt,
     required this.updatedAt,
-    required this.storeName,
   });
 
-  factory DataListStaff.fromJson(Map<String, dynamic> json) => DataListStaff(
+  factory Staff.fromJson(Map<String, dynamic> json) => Staff(
         staffId: json["staff_id"],
         staffNo: json["staff_no"],
         userId: json["user_id"],
@@ -182,7 +131,6 @@ class DataListStaff {
         rememberToken: json["remember_token"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
-        storeName: json["store_name"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -216,30 +164,65 @@ class DataListStaff {
         "remember_token": rememberToken,
         "created_at": createdAt,
         "updated_at": updatedAt,
-        "store_name": storeName,
       };
 }
 
-class Link {
-  String? url;
-  String label;
-  bool active;
+class Store {
+  int storeId;
+  int userId;
+  String shopId;
+  String? storeName;
+  String? storeAddress;
+  String? storeDescription;
+  String? storeImages;
+  String? storeLogo;
+  int? activeFlg;
+  int? deleteFlg;
+  String? createdAt;
+  String? updatedAt;
 
-  Link({
-    required this.url,
-    required this.label,
-    required this.active,
+  Store({
+    required this.storeId,
+    required this.userId,
+    required this.shopId,
+    required this.storeName,
+    required this.storeAddress,
+    required this.storeDescription,
+    required this.storeImages,
+    required this.storeLogo,
+    required this.activeFlg,
+    required this.deleteFlg,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
-  factory Link.fromJson(Map<String, dynamic> json) => Link(
-        url: json["url"],
-        label: json["label"],
-        active: json["active"],
+  factory Store.fromJson(Map<String, dynamic> json) => Store(
+        storeId: json["store_id"],
+        userId: json["user_id"],
+        shopId: json["shop_id"],
+        storeName: json["store_name"],
+        storeAddress: json["store_address"],
+        storeDescription: json["store_description"],
+        storeImages: json["store_images"],
+        storeLogo: json["store_logo"],
+        activeFlg: json["active_flg"],
+        deleteFlg: json["delete_flg"],
+        createdAt: json["created_at"],
+        updatedAt: json["updated_at"],
       );
 
   Map<String, dynamic> toJson() => {
-        "url": url,
-        "label": label,
-        "active": active,
+        "store_id": storeId,
+        "user_id": userId,
+        "shop_id": shopId,
+        "store_name": storeName,
+        "store_address": storeAddress,
+        "store_description": storeDescription,
+        "store_images": storeImages,
+        "store_logo": storeLogo,
+        "active_flg": activeFlg,
+        "delete_flg": deleteFlg,
+        "created_at": createdAt,
+        "updated_at": updatedAt,
       };
 }

@@ -368,7 +368,6 @@ class _AddStaffState extends State<AddStaff> {
                               setState(() {
                                 selectedShopId = shopIDList[indexSelected];
                               });
-                              log(selectedShopId.toString());
                             },
                             selectedItem: "Chọn cửa hàng",
                           ),
