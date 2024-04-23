@@ -4,17 +4,21 @@ import 'dart:developer';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
+import 'package:go_router/go_router.dart';
 
 class AddStaff extends StatefulWidget {
   const AddStaff({super.key});
@@ -41,8 +45,13 @@ class _AddStaffState extends State<AddStaff> {
   final twitterController = TextEditingController();
   final facebookController = TextEditingController();
   final instagramController = TextEditingController();
-  String selectedShopId = '';
-  int? currentRoleOfStaff;
+  final keyListStore = GlobalKey<DropdownSearchState<String>>();
+  final keyListRole = GlobalKey<DropdownSearchState<String>>();
+  final keyListCity = GlobalKey<DropdownSearchState<int>>();
+  final keyListDistric = GlobalKey<DropdownSearchState<int>>();
+  final keyListWard = GlobalKey<DropdownSearchState<int>>();
+  String? selectedShopId;
+  String? currentRoleOfStaff;
   List cityList = [];
   List districList = [];
   List wardList = [];
@@ -93,16 +102,16 @@ class _AddStaffState extends State<AddStaff> {
             wardList.addAll(data['wards']);
 
             //get current City
-            var cityListMap = cityList.asMap();
+            // var cityListMap = cityList.asMap();
             // var myCity = null;
             currentCity = null;
             //get current District
-            var districtListMap = districList.asMap();
+            // var districtListMap = districList.asMap();
             // var myDistrict = districtListMap[managerInforData?.userAddress2];
             currentDistric = null;
 
             //get Current Ward
-            var wardListMap = wardList.asMap();
+            // var wardListMap = wardList.asMap();
             // var myWard = wardListMap[managerInforData?.userAddress3];
             currentWard = null;
           });
@@ -138,7 +147,6 @@ class _AddStaffState extends State<AddStaff> {
         }),
       );
       final data = jsonDecode(response.body);
-
       try {
         if (response.statusCode == 200) {
           setState(() {
@@ -184,7 +192,6 @@ class _AddStaffState extends State<AddStaff> {
       },
     );
     final dataListStoreRes = jsonDecode(responseListStore.body);
-    // log(token.toString());
 
     try {
       if (dataListStoreRes['status'] == 200) {
@@ -206,13 +213,13 @@ class _AddStaffState extends State<AddStaff> {
         print("ERRRO GET LIST STORE 111111");
       }
     } catch (error) {
-      print("ERRRO GET LIST STORE $error");
+      print("ERRRO GET LIST STORE dadadoaiiw $error");
     }
   }
 
   void handleCreateNewStaff({
     required String shopID,
-    required int staffPosition,
+    required String staffPosition,
     required String staffFirstName,
     required String staffLastName,
     required String staffFullName,
@@ -228,6 +235,7 @@ class _AddStaffState extends State<AddStaff> {
     required String? staffFacebook,
     required String? staffInstagram,
   }) async {
+    log(shopID.toString());
     var token = StorageUtils.instance.getString(key: 'token_manager');
     final response = await http.post(Uri.parse('$baseUrl$addStaffApi'),
         headers: {
@@ -255,16 +263,57 @@ class _AddStaffState extends State<AddStaff> {
           'instagram': staffInstagram,
         }));
     final data = jsonDecode(response.body);
-
     log(data.toString());
 
     try {
       if (data['status'] == 200) {
+        showCustomDialogModal(
+          context: navigatorKey.currentContext,
+          textDesc: "Thêm nhân viên thành công",
+          title: "Thành công",
+          colorButton: Colors.green,
+          btnText: "OK",
+          typeDialog: "succes",
+        );
+        setState(() {
+          surNameController.clear();
+          nameController.clear();
+          fullNameController.clear();
+          phoneController.clear();
+          emailController.clear();
+          passworldController.clear();
+          rePassworldController.clear();
+          addressController.clear();
+          twitterController.clear();
+          facebookController.clear();
+          instagramController.clear();
+          currentCity = null;
+          currentDistric = null;
+          currentWard = null;
+          currentIndexCity = null;
+          currentIndexDistric = null;
+          currentIndexWard = null;
+          // selectedShopId = '';
+          // currentRoleOfStaff = null;
+          // keyListStore.currentState?.clear();
+          keyListRole.currentState?.clear();
+          keyListCity.currentState?.clear();
+          keyListDistric.currentState?.clear();
+          keyListWard.currentState?.clear();
+        });
       } else {
         print("ERRRO GET LIST STORE 111111");
+        showCustomDialogModal(
+          context: context,
+          textDesc: "Thông tin nhân viên đã tồn tại",
+          title: "Thất bại",
+          colorButton: Colors.red,
+          btnText: "OK",
+          typeDialog: "error",
+        );
       }
     } catch (error) {
-      print("ERRRO GET LIST STORE $error");
+      print("ERRRO GET LIST STORE lllll $error");
     }
   }
 
@@ -333,14 +382,17 @@ class _AddStaffState extends State<AddStaff> {
                           SizedBox(
                             height: 10.h,
                           ),
-                          DropdownSearch(
+                          DropdownSearch<String>(
                             validator: (value) {
-                              if (value == "Chọn cửa hàng") {
+                              if (value == "Chọn cửa hàng" ||
+                                  selectedShopId == null ||
+                                  selectedShopId == '') {
                                 return canNotNull;
                               } else {
                                 return null;
                               }
                             },
+                            // key: keyListStore,
                             items: nameListStore,
                             dropdownDecoratorProps: DropDownDecoratorProps(
                               dropdownSearchDecoration: InputDecoration(
@@ -361,12 +413,9 @@ class _AddStaffState extends State<AddStaff> {
                               ),
                             ),
                             onChanged: (store) {
-                              selectedShopId =
-                                  shopIDList.indexOf(store ?? '').toString();
-                              var indexSelected =
-                                  nameListStore.indexOf(store ?? '');
                               setState(() {
-                                selectedShopId = shopIDList[indexSelected];
+                                selectedShopId = shopIDList[
+                                    nameListStore.indexOf(store ?? '')];
                               });
                             },
                             selectedItem: "Chọn cửa hàng",
@@ -386,20 +435,23 @@ class _AddStaffState extends State<AddStaff> {
                           SizedBox(
                             height: 10.h,
                           ),
-                          DropdownSearch(
+                          DropdownSearch<String>(
                             validator: (value) {
-                              if (value == "Chọn chức vụ") {
+                              if (value == "Chọn chức vụ" ||
+                                  value == null ||
+                                  value == '') {
                                 return canNotNull;
                               } else {
                                 return null;
                               }
                             },
+                            key: keyListRole,
                             items: listRole,
                             onChanged: (role) {
                               setState(() {
                                 currentRoleOfStaff =
-                                    listRole.indexOf(role ?? '') + 1;
-                                log(currentRoleOfStaff.toString());
+                                    (listRole.indexOf(role ?? '') + 1)
+                                        .toString();
                               });
                             },
                             dropdownDecoratorProps: DropDownDecoratorProps(
@@ -438,6 +490,10 @@ class _AddStaffState extends State<AddStaff> {
                             height: 10.h,
                           ),
                           TextFormField(
+                            maxLength: 32,
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
                             controller: fullNameController,
                             style: TextStyle(fontSize: 14.sp, color: grey),
                             cursorColor: grey,
@@ -466,7 +522,7 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         ],
                       ),
-                      space20H,
+                      // space20H,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -480,6 +536,10 @@ class _AddStaffState extends State<AddStaff> {
                             height: 10.h,
                           ),
                           TextFormField(
+                            maxLength: 24,
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
                             controller: surNameController,
                             style: TextStyle(fontSize: 14.sp, color: grey),
                             cursorColor: grey,
@@ -509,7 +569,7 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         ],
                       ),
-                      space20H,
+                      // space20H,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -523,6 +583,10 @@ class _AddStaffState extends State<AddStaff> {
                             height: 10.h,
                           ),
                           TextFormField(
+                            maxLength: 8,
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
                             controller: nameController,
                             style: TextStyle(fontSize: 14.sp, color: grey),
                             cursorColor: grey,
@@ -552,7 +616,7 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         ],
                       ),
-                      space20H,
+                      // space20H,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -566,6 +630,14 @@ class _AddStaffState extends State<AddStaff> {
                             height: 10.h,
                           ),
                           TextFormField(
+                            maxLength: 15,
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(
+                                  RegExp("[0-9]")),
+                            ],
                             controller: phoneController,
                             style: TextStyle(fontSize: 14.sp, color: grey),
                             cursorColor: grey,
@@ -601,7 +673,7 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         ],
                       ),
-                      space20H,
+                      // space20H,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -615,6 +687,9 @@ class _AddStaffState extends State<AddStaff> {
                             height: 10.h,
                           ),
                           TextFormField(
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
                             controller: emailController,
                             style: TextStyle(fontSize: 14.sp, color: grey),
                             cursorColor: grey,
@@ -665,6 +740,9 @@ class _AddStaffState extends State<AddStaff> {
                             height: 10.h,
                           ),
                           TextFormField(
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
                             controller: passworldController,
                             obscureText: passwordVisible,
                             style: TextStyle(fontSize: 14.sp, color: grey),
@@ -724,6 +802,9 @@ class _AddStaffState extends State<AddStaff> {
                             height: 10.h,
                           ),
                           TextFormField(
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
                             controller: rePassworldController,
                             obscureText: rePasswordVisible,
                             style: TextStyle(fontSize: 14.sp, color: grey),
@@ -794,21 +875,13 @@ class _AddStaffState extends State<AddStaff> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextApp(
-                        text: "Về nhân viên",
+                        text: "Địa chỉ",
                         color: const Color.fromRGBO(52, 71, 103, 1),
                         fontFamily: "OpenSans",
                         fontWeight: FontWeight.bold,
                         fontsize: 20.sp,
                       ),
                       space10H,
-                      TextApp(
-                        text: "Thông tin bắt buộc",
-                        color: Colors.grey,
-                        fontFamily: "OpenSans",
-                        fontWeight: FontWeight.normal,
-                        fontsize: 14.sp,
-                      ),
-                      space20H,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -822,13 +895,6 @@ class _AddStaffState extends State<AddStaff> {
                             height: 10.h,
                           ),
                           DropdownSearch(
-                            // validator: (value) {
-                            //   if (value == "Chọn tỉnh/thành phố") {
-                            //     return canNotNull;
-                            //   } else {
-                            //     return null;
-                            //   }
-                            // },
                             onChanged: (changeCity) {
                               getListArea(
                                   city: cityList.indexOf(changeCity),
@@ -841,6 +907,7 @@ class _AddStaffState extends State<AddStaff> {
                                 currentIndexWard = null;
                               });
                             },
+                            key: keyListCity,
                             items: cityList,
                             dropdownDecoratorProps: DropDownDecoratorProps(
                               dropdownSearchDecoration: InputDecoration(
@@ -878,13 +945,7 @@ class _AddStaffState extends State<AddStaff> {
                             height: 10.h,
                           ),
                           DropdownSearch(
-                            // validator: (value) {
-                            //   if (value == "Chọn quận/huyện") {
-                            //     return canNotNull;
-                            //   } else {
-                            //     return null;
-                            //   }
-                            // },
+                            key: keyListDistric,
                             items: districList,
                             onChanged: (changeDistric) {
                               getListArea(
@@ -933,13 +994,7 @@ class _AddStaffState extends State<AddStaff> {
                             height: 10.h,
                           ),
                           DropdownSearch(
-                            // validator: (value) {
-                            //   if (value == "Chọn phường/xã") {
-                            //     return canNotNull;
-                            //   } else {
-                            //     return null;
-                            //   }
-                            // },
+                            key: keyListWard,
                             items: wardList,
                             onChanged: (changeWard) {
                               getListArea(
@@ -989,6 +1044,9 @@ class _AddStaffState extends State<AddStaff> {
                             height: 10.h,
                           ),
                           TextFormField(
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
                             controller: addressController,
                             style: TextStyle(fontSize: 14.sp, color: grey),
                             cursorColor: grey,
@@ -1055,6 +1113,9 @@ class _AddStaffState extends State<AddStaff> {
                             height: 10.h,
                           ),
                           TextField(
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
                             controller: twitterController,
                             style: TextStyle(fontSize: 14.sp, color: grey),
                             cursorColor: grey,
@@ -1090,6 +1151,9 @@ class _AddStaffState extends State<AddStaff> {
                             height: 10.h,
                           ),
                           TextField(
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
                             controller: facebookController,
                             style: TextStyle(fontSize: 14.sp, color: grey),
                             cursorColor: grey,
@@ -1125,6 +1189,9 @@ class _AddStaffState extends State<AddStaff> {
                             height: 10.h,
                           ),
                           TextField(
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
                             controller: instagramController,
                             style: TextStyle(fontSize: 14.sp, color: grey),
                             cursorColor: grey,
@@ -1155,19 +1222,6 @@ class _AddStaffState extends State<AddStaff> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // SizedBox(
-                //   width: 100.w,
-                //   child: ButtonGradient(
-                //     color1: color1GreyButton,
-                //     color2: color2GreyButton,
-                //     event: () {},
-                //     text: "Về trước",
-                //     fontSize: 12.sp,
-                //     radius: 8.r,
-                //     textColor: blueText,
-                //   ),
-                // ),
-                // space15W,
                 SizedBox(
                   width: 100.w,
                   child: ButtonGradient(
@@ -1176,8 +1230,8 @@ class _AddStaffState extends State<AddStaff> {
                     event: () {
                       if (_formField.currentState!.validate()) {
                         handleCreateNewStaff(
-                          shopID: selectedShopId,
-                          staffPosition: currentRoleOfStaff ?? 1,
+                          shopID: selectedShopId ?? '',
+                          staffPosition: currentRoleOfStaff ?? '1',
                           staffFirstName: surNameController.text,
                           staffLastName: nameController.text,
                           staffFullName: fullNameController.text,

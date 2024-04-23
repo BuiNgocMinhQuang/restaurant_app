@@ -368,6 +368,8 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                 currentShopId,
                                                                             idRoom:
                                                                                 state.listRoomModel!.rooms![currentRoomIndex].storeRoomId,
+                                                                            orderID:
+                                                                                null,
                                                                             eventSaveButton:
                                                                                 () {
                                                                               getDataTabIndex(
@@ -462,6 +464,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                                 roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
                                                                                               );
                                                                                             },
+                                                                                            orderID: state.listRoomModel!.rooms![currentRoomIndex].tables![index].orderId.toString(),
                                                                                             token: tokenStaff,
                                                                                             role: currentRole,
                                                                                             shopID: currentShopId,
@@ -522,12 +525,12 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                     child: Row(
                                                                                       children: [
                                                                                         Icon(
-                                                                                          Icons.monetization_on,
+                                                                                          Icons.table_bar,
                                                                                           size: 35.sp,
                                                                                         ),
                                                                                         space10W,
                                                                                         TextApp(
-                                                                                          text: "Thanh toán hoá đơn",
+                                                                                          text: "Ghép bàn",
                                                                                           color: Colors.black,
                                                                                           fontsize: 18.sp,
                                                                                         )
@@ -756,9 +759,12 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                 color2: color2BlueButton,
                                 event: () {
                                   getDataTabIndex(
-                                    roomId: state.listRoomModel!
-                                        .rooms![currentRoomIndex].storeRoomId
-                                        .toString(),
+                                    roomId: state
+                                            .listRoomModel
+                                            ?.rooms![currentRoomIndex]
+                                            .storeRoomId
+                                            .toString() ??
+                                        '',
                                   );
                                 },
                                 text: 'Thử lại',

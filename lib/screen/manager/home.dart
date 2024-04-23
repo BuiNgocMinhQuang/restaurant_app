@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/model/manager/chart/chart_data_home_model.dart';
@@ -13,13 +12,12 @@ import 'package:app_restaurant/widgets/chart/chart_home_all_store.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
+import 'package:lottie/lottie.dart';
 import 'package:money_formatter/money_formatter.dart';
 
 class ManagerHome extends StatefulWidget {
@@ -39,13 +37,18 @@ class _ManagerHomeState extends State<ManagerHome> {
   TextEditingController _dateEndController = TextEditingController();
   String currentDataType = "%m-%Y";
   ChartDataHomeModel? chartDataModel;
-
+  bool isLoading = true;
+  bool isError = false;
   List<String> loaiList = [
     "Ngày",
     "Tháng",
     "Năm",
   ];
   void handleGetDataHome() async {
+    setState(() {
+      isLoading = true;
+      isError = false;
+    });
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
       final respons = await http.post(
@@ -65,15 +68,45 @@ class _ManagerHomeState extends State<ManagerHome> {
         if (data['status'] == 200) {
           setState(() {
             dataHome = HomeDataModel.fromJson(data);
+            handleGetChartDataHome(
+                startDate: _dateStartController.text,
+                endDate: _dateEndController.text,
+                dataType: currentDataType);
+          });
+          Future.delayed(const Duration(milliseconds: 1000), () {
+            setState(() {
+              isLoading = false;
+            });
           });
         } else {
-          print("ERROR GET DATA HOME");
+          Future.delayed(const Duration(milliseconds: 1000), () {
+            setState(() {
+              isLoading = false;
+            });
+          });
+          setState(() {
+            isError = true;
+          });
         }
       } catch (error) {
-        print("ERROR GET DATA HOME $error");
+        Future.delayed(const Duration(milliseconds: 1000), () {
+          setState(() {
+            isLoading = false;
+          });
+        });
+        setState(() {
+          isError = true;
+        });
       }
     } catch (error) {
-      print("ERROR GET DATA HOME $error");
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        setState(() {
+          isLoading = false;
+        });
+      });
+      setState(() {
+        isError = true;
+      });
     }
   }
 
@@ -222,711 +255,855 @@ class _ManagerHomeState extends State<ManagerHome> {
     }
   }
 
-  void handleGetInitData() async {
-    handleGetDataHome();
-    handleGetChartDataHome(
-        startDate: _dateStartController.text,
-        endDate: _dateEndController.text,
-        dataType: currentDataType);
-  }
-
   @override
   void initState() {
     super.initState();
-    handleGetInitData();
+    handleGetDataHome();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-            child: RefreshIndicator(
-      color: Colors.blue,
-      onRefresh: () async {
-        handleGetDataHome();
-      },
-      child: Container(
-        width: 1.sw,
-        color: Colors.white,
-        child: SingleChildScrollView(
-          child: Padding(
-              padding: EdgeInsets.only(
-                  top: 20.w, left: 20.w, right: 20.w, bottom: 20.w),
-              child: Column(
-                children: [
-                  TextApp(
-                    text: "Thống kê chung",
-                    fontsize: 22.sp,
-                    color: menuGrey,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  space35H,
-                  Container(
-                      width: 1.sw,
-                      // height: 100.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.r),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: const Offset(
-                                0, 3), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                          padding: EdgeInsets.all(20.w),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  TextApp(
-                                    text: "Tổng tiền thu được",
-                                    fontsize: 14.sp,
-                                    color: menuGrey,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                  TextApp(
-                                    text:
-                                        "${MoneyFormatter(amount: (dataHome?.orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                    fontsize: 20.sp,
-                                    color: blueText2,
-                                    fontWeight: FontWeight.bold,
-                                  )
-                                ],
-                              ),
-                              InkWell(
-                                onTap: () {},
-                                child: Container(
-                                  width: 50,
-                                  height: 50,
-                                  color: Colors.amber,
-                                ),
-                              )
-                            ],
-                          ))),
-                  space20H,
-                  Container(
-                      width: 1.sw,
-                      // height: 100.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.r),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: const Offset(
-                                0, 3), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                          padding: EdgeInsets.all(20.w),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  TextApp(
-                                    text: "Tổng số nhân viên",
-                                    fontsize: 14.sp,
-                                    color: menuGrey,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                  TextApp(
-                                    text:
-                                        dataHome?.staffTotal.toString() ?? '0',
-                                    fontsize: 20.sp,
-                                    color: blueText2,
-                                    fontWeight: FontWeight.bold,
-                                  )
-                                ],
-                              ),
-                              Container(
-                                width: 50,
-                                height: 50,
-                                color: Colors.amber,
-                              )
-                            ],
-                          ))),
-                  space20H,
-                  Container(
-                      width: 1.sw,
-                      // height: 100.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.r),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: const Offset(
-                                0, 3), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                          padding: EdgeInsets.all(20.w),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  TextApp(
-                                    text: "Số đơn thành công",
-                                    fontsize: 14.sp,
-                                    color: menuGrey,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                  TextApp(
-                                    text: dataHome?.orderTotalSuccess
-                                            .toString() ??
-                                        '0',
-                                    fontsize: 20.sp,
-                                    color: blueText2,
-                                    fontWeight: FontWeight.bold,
-                                  )
-                                ],
-                              ),
-                              Container(
-                                width: 50,
-                                height: 50,
-                                color: Colors.amber,
-                              )
-                            ],
-                          ))),
-                  space20H,
-                  Container(
-                      width: 1.sw,
-                      // height: 100.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.r),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: const Offset(
-                                0, 3), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                          padding: EdgeInsets.all(20.w),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  TextApp(
-                                    text: "Số đơn bị huỷ",
-                                    fontsize: 14.sp,
-                                    color: menuGrey,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                  TextApp(
-                                    text:
-                                        dataHome?.orderTotalClose.toString() ??
-                                            '0',
-                                    fontsize: 20.sp,
-                                    color: blueText2,
-                                    fontWeight: FontWeight.bold,
-                                  )
-                                ],
-                              ),
-                              Container(
-                                width: 50,
-                                height: 50,
-                                color: Colors.amber,
-                              )
-                            ],
-                          ))),
-                  space20H,
-                  Container(
-                      width: 1.sw,
-                      // height: 100.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.r),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: const Offset(
-                                0, 3), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          space20H,
-                          TextApp(
-                            text: "Các cửa hàng của bạn",
-                            fontsize: 16.sp,
-                            color: blueText2,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Column(
-                                  children: [
-                                    Container(
-                                      width: 1.sw * 1.7,
-                                      // height: 300.h,
-                                      padding: EdgeInsets.all(20.w),
-                                      child: ListView.builder(
-                                          controller: scrollListStrore,
-                                          physics:
-                                              const ClampingScrollPhysics(),
-                                          shrinkWrap: true,
-                                          itemCount:
-                                              (dataHome?.stores.length ?? 0) +
-                                                  1,
-                                          itemBuilder: (context, index) {
-                                            var dataLenght =
-                                                dataHome?.stores.length ?? 0;
-                                            if (index < dataLenght) {
-                                              DetailsStoreHome storeData =
-                                                  dataHome!.stores[index];
-                                              var imagePath1 =
-                                                  storeData.storeImages;
-                                              // var listImagePath =
-                                              //     jsonDecode(imagePath1);
-                                              var logoImageStore =
-                                                  storeData.storeLogo ?? '';
-                                              return Theme(
-                                                data: Theme.of(context)
-                                                    .copyWith(
-                                                        dividerColor:
-                                                            Colors.transparent),
-                                                child: Column(
-                                                  children: [
-                                                    Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Container(
-                                                          width: 150.w,
-                                                          height: 100.w,
-                                                          // color: Colors.amber,
-                                                          child:
-                                                              CachedNetworkImage(
-                                                            fit: BoxFit.fill,
-                                                            imageUrl: httpImage +
-                                                                logoImageStore,
-                                                            placeholder:
-                                                                (context,
-                                                                        url) =>
-                                                                    SizedBox(
-                                                              height: 10.w,
-                                                              width: 10.w,
-                                                              child: const Center(
-                                                                  child:
-                                                                      CircularProgressIndicator()),
-                                                            ),
-                                                            errorWidget: (context,
-                                                                    url,
-                                                                    error) =>
-                                                                const Icon(Icons
-                                                                    .error),
-                                                          ),
-                                                        ),
-                                                        space15W,
-                                                        Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            TextApp(
-                                                              isOverFlow: false,
-                                                              softWrap: true,
-                                                              text: 'Địa chỉ: ',
-                                                              fontsize: 14.sp,
-                                                            ),
-                                                            Container(
-                                                              width: 150.w,
-                                                              child: TextApp(
-                                                                isOverFlow:
-                                                                    false,
-                                                                softWrap: true,
-                                                                text: storeData
-                                                                        .storeAddress ??
-                                                                    '',
-                                                                fontsize: 14.sp,
-                                                                color: blueText,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        space15W,
-                                                        Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Container(
-                                                              width: 100.w,
-                                                              child: TextApp(
-                                                                isOverFlow:
-                                                                    false,
-                                                                softWrap: true,
-                                                                text:
-                                                                    'Nhân viên',
-                                                                fontsize: 14.sp,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                              width: 100.w,
-                                                              child: TextApp(
-                                                                isOverFlow:
-                                                                    false,
-                                                                softWrap: true,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                text: storeData
-                                                                    .staffsCount
-                                                                    .toString(),
-                                                                fontsize: 14.sp,
-                                                                color: blueText,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        space15W,
-                                                        Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Container(
-                                                              width: 100.w,
-                                                              child: TextApp(
-                                                                isOverFlow:
-                                                                    false,
-                                                                softWrap: true,
-                                                                text:
-                                                                    'Tổng tiền',
-                                                                fontsize: 14.sp,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                              width: 100.w,
-                                                              child: TextApp(
-                                                                isOverFlow:
-                                                                    false,
-                                                                softWrap: true,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                text:
-                                                                    "${MoneyFormatter(amount: (storeData.ordersSumOrderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                                fontsize: 14.sp,
-                                                                color: blueText,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        space15W,
-                                                        Container(
-                                                          width: 100.w,
-                                                          height: 30.w,
-                                                          child: ButtonGradient(
-                                                            color1:
-                                                                color1BlueButton,
-                                                            color2:
-                                                                color2BlueButton,
-                                                            event: () {
-                                                              getDetailsStore(
-                                                                  shopID: storeData
-                                                                      .shopId);
-                                                            },
-                                                            text: "Chi tiết",
-                                                            fontSize: 12.sp,
-                                                            radius: 8.r,
-                                                            textColor:
-                                                                Colors.white,
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                    space20H
-                                                  ],
-                                                ),
-                                              );
-                                            } else {
-                                              return Container();
-                                            }
-                                          }),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      )),
-                  space30H,
-                  Container(
-                    width: 1.sw,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.r),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 2,
-                          blurRadius: 4,
-                          offset:
-                              const Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
-                    ),
+      body: SafeArea(
+        child: !isLoading
+            ? isError
+                ? Center(
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        space10H,
+                        Container(
+                          width: 100,
+                          height: 100,
+                          child: Lottie.asset('assets/lottie/error.json'),
+                        ),
+                        space30H,
                         TextApp(
-                          text: "Biểu đồ thu nhập",
-                          fontsize: 16.sp,
-                          color: blueText2,
+                          text: "Có lỗi xảy ra, vui lòng thử lại sau",
+                          fontsize: 20.sp,
                           fontWeight: FontWeight.bold,
                         ),
-                        Row(
-                          children: [
-                            space10W,
-                            Flexible(
-                              fit: FlexFit.tight,
-                              child: Column(
-                                children: [
-                                  TextApp(
-                                    text: " Loại",
-                                    fontsize: 12.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: blueText,
-                                  ),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                  DropdownSearch(
-                                    key: loailistKey,
-                                    onChanged: (loaiListIndex) {
-                                      var indexType =
-                                          loaiList.indexOf(loaiListIndex ?? '');
-                                      if (indexType == 0) {
-                                        setState(() {
-                                          currentDataType = "%d-%m-%Y";
-                                        });
-                                        handleGetChartDataHome(
-                                            startDate:
-                                                _dateStartController.text,
-                                            endDate: _dateEndController.text,
-                                            dataType: currentDataType);
-                                      } else if (indexType == 2) {
-                                        setState(() {
-                                          currentDataType = "%Y";
-                                        });
-                                        handleGetChartDataHome(
-                                            startDate:
-                                                _dateStartController.text,
-                                            endDate: _dateEndController.text,
-                                            dataType: currentDataType);
-                                      } else {
-                                        setState(() {
-                                          currentDataType = "%m-%Y";
-                                        });
-                                        handleGetChartDataHome(
-                                            startDate:
-                                                _dateStartController.text,
-                                            endDate: _dateEndController.text,
-                                            dataType: currentDataType);
-                                      }
-                                    },
-                                    items: loaiList,
-                                    dropdownDecoratorProps:
-                                        DropDownDecoratorProps(
-                                      dropdownSearchDecoration: InputDecoration(
-                                        fillColor: const Color.fromARGB(
-                                            255, 226, 104, 159),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                              color: Color.fromRGBO(
-                                                  214, 51, 123, 0.6),
-                                              width: 2.0),
-                                          borderRadius:
-                                              BorderRadius.circular(8.r),
-                                        ),
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8.r),
-                                        ),
-                                        isDense: true,
-                                        contentPadding: EdgeInsets.all(15.w),
-                                      ),
-                                    ),
-                                    // onChanged: print,
-                                    selectedItem: loaiList[1],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            space20W,
-                            Flexible(
-                              fit: FlexFit.tight,
-                              child: Column(
-                                children: [
-                                  TextApp(
-                                    text: " Từ ngày",
-                                    fontsize: 12.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: blueText,
-                                  ),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                  TextField(
-                                    readOnly: true,
-                                    controller: _dateStartController,
-                                    onTap: selectDayStart,
-                                    style:
-                                        TextStyle(fontSize: 14.sp, color: grey),
-                                    cursorColor: grey,
-                                    decoration: InputDecoration(
-                                        suffixIcon: Icon(Icons.calendar_month),
-                                        fillColor: const Color.fromARGB(
-                                            255, 226, 104, 159),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                              color: Color.fromRGBO(
-                                                  214, 51, 123, 0.6),
-                                              width: 2.0),
-                                          borderRadius:
-                                              BorderRadius.circular(8.r),
-                                        ),
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8.r),
-                                        ),
-                                        hintText: 'dd/mm/yy',
-                                        isDense: true,
-                                        contentPadding: EdgeInsets.all(15.w)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            space20W,
-                            Flexible(
-                              fit: FlexFit.tight,
-                              child: Column(
-                                children: [
-                                  TextApp(
-                                    text: " Đến ngày",
-                                    fontsize: 12.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: blueText,
-                                  ),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                  TextField(
-                                    readOnly: true,
-                                    controller: _dateEndController,
-                                    onTap: selectDayEnd,
-                                    style:
-                                        TextStyle(fontSize: 14.sp, color: grey),
-                                    cursorColor: grey,
-                                    decoration: InputDecoration(
-                                        suffixIcon: Icon(Icons.calendar_month),
-                                        fillColor: const Color.fromARGB(
-                                            255, 226, 104, 159),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                              color: Color.fromRGBO(
-                                                  214, 51, 123, 0.6),
-                                              width: 2.0),
-                                          borderRadius:
-                                              BorderRadius.circular(8.r),
-                                        ),
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8.r),
-                                        ),
-                                        hintText: 'dd/mm/yy',
-                                        isDense: true,
-                                        contentPadding: EdgeInsets.all(15.w)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            space10W,
-                          ],
-                        ),
-                        chartDataModel != null
-                            ? Container(
-                                width: 1.sw,
-                                child: Padding(
-                                  padding:
-                                      EdgeInsets.only(left: 0.w, right: 00.w),
-                                  child: ChartHomeAllStore(
-                                      chartDataModel: chartDataModel!),
-                                ),
-                              )
-                            : Container()
+                        space30H,
+                        Container(
+                          width: 200,
+                          child: ButtonGradient(
+                            color1: color1BlueButton,
+                            color2: color2BlueButton,
+                            event: () {
+                              handleGetDataHome();
+                            },
+                            text: 'Thử lại',
+                            fontSize: 12.sp,
+                            radius: 8.r,
+                            textColor: Colors.white,
+                          ),
+                        )
                       ],
                     ),
                   )
-                ],
-              )),
-        ),
+                : RefreshIndicator(
+                    color: Colors.blue,
+                    onRefresh: () async {
+                      handleGetDataHome();
+                    },
+                    child: Container(
+                      width: 1.sw,
+                      color: Colors.white,
+                      child: SingleChildScrollView(
+                        child: Padding(
+                            padding: EdgeInsets.only(
+                                top: 20.w,
+                                left: 20.w,
+                                right: 20.w,
+                                bottom: 20.w),
+                            child: Column(
+                              children: [
+                                TextApp(
+                                  text: "Thống kê chung",
+                                  fontsize: 22.sp,
+                                  color: menuGrey,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                space35H,
+                                Container(
+                                    width: 1.sw,
+                                    // height: 100.h,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15.r),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 2,
+                                          blurRadius: 4,
+                                          offset: const Offset(0,
+                                              3), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                    child: Padding(
+                                        padding: EdgeInsets.all(20.w),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                TextApp(
+                                                  text: "Tổng tiền thu được",
+                                                  fontsize: 14.sp,
+                                                  color: menuGrey,
+                                                  fontWeight: FontWeight.normal,
+                                                ),
+                                                TextApp(
+                                                  text:
+                                                      "${MoneyFormatter(amount: (dataHome?.orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                  fontsize: 20.sp,
+                                                  color: blueText2,
+                                                  fontWeight: FontWeight.bold,
+                                                )
+                                              ],
+                                            ),
+                                            InkWell(
+                                              onTap: () {},
+                                              child: Container(
+                                                width: 50,
+                                                height: 50,
+                                                // color: Colors.amber,
+                                                child: Image.asset(
+                                                  'assets/images/incomes.png',
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ))),
+                                space20H,
+                                Container(
+                                    width: 1.sw,
+                                    // height: 100.h,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15.r),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 2,
+                                          blurRadius: 4,
+                                          offset: const Offset(0,
+                                              3), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                    child: Padding(
+                                        padding: EdgeInsets.all(20.w),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                TextApp(
+                                                  text: "Tổng số nhân viên",
+                                                  fontsize: 14.sp,
+                                                  color: menuGrey,
+                                                  fontWeight: FontWeight.normal,
+                                                ),
+                                                TextApp(
+                                                  text: dataHome?.staffTotal
+                                                          .toString() ??
+                                                      '0',
+                                                  fontsize: 20.sp,
+                                                  color: blueText2,
+                                                  fontWeight: FontWeight.bold,
+                                                )
+                                              ],
+                                            ),
+                                            Container(
+                                              width: 50,
+                                              height: 50,
+                                              child: Image.asset(
+                                                'assets/images/staff.png',
+                                                fit: BoxFit.contain,
+                                              ),
+                                            )
+                                          ],
+                                        ))),
+                                space20H,
+                                Container(
+                                    width: 1.sw,
+                                    // height: 100.h,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15.r),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 2,
+                                          blurRadius: 4,
+                                          offset: const Offset(0,
+                                              3), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                    child: Padding(
+                                        padding: EdgeInsets.all(20.w),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                TextApp(
+                                                  text: "Số đơn thành công",
+                                                  fontsize: 14.sp,
+                                                  color: menuGrey,
+                                                  fontWeight: FontWeight.normal,
+                                                ),
+                                                TextApp(
+                                                  text: dataHome
+                                                          ?.orderTotalSuccess
+                                                          .toString() ??
+                                                      '0',
+                                                  fontsize: 20.sp,
+                                                  color: blueText2,
+                                                  fontWeight: FontWeight.bold,
+                                                )
+                                              ],
+                                            ),
+                                            Container(
+                                              width: 50,
+                                              height: 50,
+                                              child: Image.asset(
+                                                'assets/images/comeplete_receipt.png',
+                                                fit: BoxFit.contain,
+                                              ),
+                                            )
+                                          ],
+                                        ))),
+                                space20H,
+                                Container(
+                                    width: 1.sw,
+                                    // height: 100.h,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15.r),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 2,
+                                          blurRadius: 4,
+                                          offset: const Offset(0,
+                                              3), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                    child: Padding(
+                                        padding: EdgeInsets.all(20.w),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                TextApp(
+                                                  text: "Số đơn bị huỷ",
+                                                  fontsize: 14.sp,
+                                                  color: menuGrey,
+                                                  fontWeight: FontWeight.normal,
+                                                ),
+                                                TextApp(
+                                                  text: dataHome
+                                                          ?.orderTotalClose
+                                                          .toString() ??
+                                                      '0',
+                                                  fontsize: 20.sp,
+                                                  color: blueText2,
+                                                  fontWeight: FontWeight.bold,
+                                                )
+                                              ],
+                                            ),
+                                            Container(
+                                              width: 50,
+                                              height: 50,
+                                              child: Image.asset(
+                                                'assets/images/cancle_receipt.png',
+                                                fit: BoxFit.contain,
+                                              ),
+                                            )
+                                          ],
+                                        ))),
+                                space20H,
+                                Container(
+                                    width: 1.sw,
+                                    // height: 100.h,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15.r),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 2,
+                                          blurRadius: 4,
+                                          offset: const Offset(0,
+                                              3), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        space20H,
+                                        TextApp(
+                                          text: "Các cửa hàng của bạn",
+                                          fontsize: 16.sp,
+                                          color: blueText2,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Column(
+                                                children: [
+                                                  Container(
+                                                    width: 1.sw * 1.7,
+                                                    // height: 300.h,
+                                                    padding:
+                                                        EdgeInsets.all(20.w),
+                                                    child: ListView.builder(
+                                                        controller:
+                                                            scrollListStrore,
+                                                        physics:
+                                                            const ClampingScrollPhysics(),
+                                                        shrinkWrap: true,
+                                                        itemCount: (dataHome
+                                                                    ?.stores
+                                                                    .length ??
+                                                                0) +
+                                                            1,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          var dataLenght =
+                                                              dataHome?.stores
+                                                                      .length ??
+                                                                  0;
+                                                          if (index <
+                                                              dataLenght) {
+                                                            DetailsStoreHome
+                                                                storeData =
+                                                                dataHome!
+                                                                        .stores[
+                                                                    index];
+                                                            var imagePath1 =
+                                                                storeData
+                                                                    .storeImages;
+                                                            // var listImagePath =
+                                                            //     jsonDecode(imagePath1);
+                                                            var logoImageStore =
+                                                                storeData
+                                                                        .storeLogo ??
+                                                                    '';
+                                                            return Theme(
+                                                              data: Theme.of(
+                                                                      context)
+                                                                  .copyWith(
+                                                                      dividerColor:
+                                                                          Colors
+                                                                              .transparent),
+                                                              child: Column(
+                                                                children: [
+                                                                  Row(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .center,
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Container(
+                                                                        width:
+                                                                            150.w,
+                                                                        height:
+                                                                            100.w,
+                                                                        // color: Colors.amber,
+                                                                        child:
+                                                                            CachedNetworkImage(
+                                                                          fit: BoxFit
+                                                                              .fill,
+                                                                          imageUrl:
+                                                                              httpImage + logoImageStore,
+                                                                          placeholder: (context, url) =>
+                                                                              SizedBox(
+                                                                            height:
+                                                                                10.w,
+                                                                            width:
+                                                                                10.w,
+                                                                            child:
+                                                                                const Center(child: CircularProgressIndicator()),
+                                                                          ),
+                                                                          errorWidget: (context, url, error) =>
+                                                                              const Icon(Icons.error),
+                                                                        ),
+                                                                      ),
+                                                                      space15W,
+                                                                      Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.start,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: [
+                                                                          TextApp(
+                                                                            isOverFlow:
+                                                                                false,
+                                                                            softWrap:
+                                                                                true,
+                                                                            text:
+                                                                                'Địa chỉ: ',
+                                                                            fontsize:
+                                                                                14.sp,
+                                                                          ),
+                                                                          Container(
+                                                                            width:
+                                                                                150.w,
+                                                                            child:
+                                                                                TextApp(
+                                                                              isOverFlow: false,
+                                                                              softWrap: true,
+                                                                              text: storeData.storeAddress ?? '',
+                                                                              fontsize: 14.sp,
+                                                                              color: blueText,
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      space15W,
+                                                                      Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.start,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: [
+                                                                          Container(
+                                                                            width:
+                                                                                100.w,
+                                                                            child:
+                                                                                TextApp(
+                                                                              isOverFlow: false,
+                                                                              softWrap: true,
+                                                                              text: 'Nhân viên',
+                                                                              fontsize: 14.sp,
+                                                                              textAlign: TextAlign.center,
+                                                                            ),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            width:
+                                                                                100.w,
+                                                                            child:
+                                                                                TextApp(
+                                                                              isOverFlow: false,
+                                                                              softWrap: true,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              text: storeData.staffsCount.toString(),
+                                                                              fontsize: 14.sp,
+                                                                              color: blueText,
+                                                                              textAlign: TextAlign.center,
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      space15W,
+                                                                      Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.start,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: [
+                                                                          Container(
+                                                                            width:
+                                                                                100.w,
+                                                                            child:
+                                                                                TextApp(
+                                                                              isOverFlow: false,
+                                                                              softWrap: true,
+                                                                              text: 'Tổng tiền',
+                                                                              fontsize: 14.sp,
+                                                                              textAlign: TextAlign.center,
+                                                                            ),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            width:
+                                                                                100.w,
+                                                                            child:
+                                                                                TextApp(
+                                                                              isOverFlow: false,
+                                                                              softWrap: true,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              text: "${MoneyFormatter(amount: (storeData.ordersSumOrderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                                              fontsize: 14.sp,
+                                                                              color: blueText,
+                                                                              textAlign: TextAlign.center,
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      space15W,
+                                                                      Container(
+                                                                        width:
+                                                                            100.w,
+                                                                        height:
+                                                                            30.w,
+                                                                        child:
+                                                                            ButtonGradient(
+                                                                          color1:
+                                                                              color1BlueButton,
+                                                                          color2:
+                                                                              color2BlueButton,
+                                                                          event:
+                                                                              () {
+                                                                            getDetailsStore(shopID: storeData.shopId);
+                                                                          },
+                                                                          text:
+                                                                              "Chi tiết",
+                                                                          fontSize:
+                                                                              12.sp,
+                                                                          radius:
+                                                                              8.r,
+                                                                          textColor:
+                                                                              Colors.white,
+                                                                        ),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                  space20H
+                                                                ],
+                                                              ),
+                                                            );
+                                                          } else {
+                                                            return Container();
+                                                          }
+                                                        }),
+                                                  )
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    )),
+                                space30H,
+                                Container(
+                                  width: 1.sw,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15.r),
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 2,
+                                        blurRadius: 4,
+                                        offset: const Offset(
+                                            0, 3), // changes position of shadow
+                                      ),
+                                    ],
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      space20H,
+                                      TextApp(
+                                        text: "Biểu đồ thu nhập",
+                                        fontsize: 16.sp,
+                                        color: blueText2,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      space20H,
+                                      Row(
+                                        children: [
+                                          space10W,
+                                          Flexible(
+                                            fit: FlexFit.tight,
+                                            child: Column(
+                                              children: [
+                                                TextApp(
+                                                  text: " Loại",
+                                                  fontsize: 12.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: blueText,
+                                                ),
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
+                                                DropdownSearch(
+                                                  key: loailistKey,
+                                                  onChanged: (loaiListIndex) {
+                                                    var indexType =
+                                                        loaiList.indexOf(
+                                                            loaiListIndex ??
+                                                                '');
+                                                    if (indexType == 0) {
+                                                      setState(() {
+                                                        currentDataType =
+                                                            "%d-%m-%Y";
+                                                      });
+                                                      handleGetChartDataHome(
+                                                          startDate:
+                                                              _dateStartController
+                                                                  .text,
+                                                          endDate:
+                                                              _dateEndController
+                                                                  .text,
+                                                          dataType:
+                                                              currentDataType);
+                                                    } else if (indexType == 2) {
+                                                      setState(() {
+                                                        currentDataType = "%Y";
+                                                      });
+                                                      handleGetChartDataHome(
+                                                          startDate:
+                                                              _dateStartController
+                                                                  .text,
+                                                          endDate:
+                                                              _dateEndController
+                                                                  .text,
+                                                          dataType:
+                                                              currentDataType);
+                                                    } else {
+                                                      setState(() {
+                                                        currentDataType =
+                                                            "%m-%Y";
+                                                      });
+                                                      handleGetChartDataHome(
+                                                          startDate:
+                                                              _dateStartController
+                                                                  .text,
+                                                          endDate:
+                                                              _dateEndController
+                                                                  .text,
+                                                          dataType:
+                                                              currentDataType);
+                                                    }
+                                                  },
+                                                  items: loaiList,
+                                                  dropdownDecoratorProps:
+                                                      DropDownDecoratorProps(
+                                                    dropdownSearchDecoration:
+                                                        InputDecoration(
+                                                      fillColor:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              226,
+                                                              104,
+                                                              159),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color: Color
+                                                                    .fromRGBO(
+                                                                        214,
+                                                                        51,
+                                                                        123,
+                                                                        0.6),
+                                                                width: 2.0),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      isDense: true,
+                                                      contentPadding:
+                                                          EdgeInsets.all(15.w),
+                                                    ),
+                                                  ),
+                                                  // onChanged: print,
+                                                  selectedItem: loaiList[1],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          space20W,
+                                          Flexible(
+                                            fit: FlexFit.tight,
+                                            child: Column(
+                                              children: [
+                                                TextApp(
+                                                  text: " Từ ngày",
+                                                  fontsize: 12.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: blueText,
+                                                ),
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
+                                                TextField(
+                                                  readOnly: true,
+                                                  controller:
+                                                      _dateStartController,
+                                                  onTap: selectDayStart,
+                                                  style: TextStyle(
+                                                      fontSize: 14.sp,
+                                                      color: grey),
+                                                  cursorColor: grey,
+                                                  decoration: InputDecoration(
+                                                      suffixIcon: Icon(
+                                                          Icons.calendar_month),
+                                                      fillColor:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              226,
+                                                              104,
+                                                              159),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color: Color
+                                                                    .fromRGBO(
+                                                                        214,
+                                                                        51,
+                                                                        123,
+                                                                        0.6),
+                                                                width: 2.0),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      hintText: 'dd/mm/yy',
+                                                      isDense: true,
+                                                      contentPadding:
+                                                          EdgeInsets.all(15.w)),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          space20W,
+                                          Flexible(
+                                            fit: FlexFit.tight,
+                                            child: Column(
+                                              children: [
+                                                TextApp(
+                                                  text: " Đến ngày",
+                                                  fontsize: 12.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: blueText,
+                                                ),
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
+                                                TextField(
+                                                  readOnly: true,
+                                                  controller:
+                                                      _dateEndController,
+                                                  onTap: selectDayEnd,
+                                                  style: TextStyle(
+                                                      fontSize: 14.sp,
+                                                      color: grey),
+                                                  cursorColor: grey,
+                                                  decoration: InputDecoration(
+                                                      suffixIcon: Icon(
+                                                          Icons.calendar_month),
+                                                      fillColor:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              226,
+                                                              104,
+                                                              159),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color: Color
+                                                                    .fromRGBO(
+                                                                        214,
+                                                                        51,
+                                                                        123,
+                                                                        0.6),
+                                                                width: 2.0),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      hintText: 'dd/mm/yy',
+                                                      isDense: true,
+                                                      contentPadding:
+                                                          EdgeInsets.all(15.w)),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          space10W,
+                                        ],
+                                      ),
+                                      space20H,
+                                      chartDataModel != null
+                                          ? Container(
+                                              width: 1.sw,
+                                              child: Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 0.w, right: 00.w),
+                                                child: ChartHomeAllStore(
+                                                    chartDataModel:
+                                                        chartDataModel!),
+                                              ),
+                                            )
+                                          : Container()
+                                    ],
+                                  ),
+                                )
+                              ],
+                            )),
+                      ),
+                    ),
+                  )
+            : Center(
+                child: SizedBox(
+                  width: 200.w,
+                  height: 200.w,
+                  child: Lottie.asset('assets/lottie/loading_7_color.json'),
+                ),
+              ),
       ),
-    )));
+    );
   }
 }

@@ -357,12 +357,21 @@ class _ManageRoomState extends State<ManageRoom> {
                                                                     InkWell(
                                                                       onTap:
                                                                           () {
+                                                                        Navigator.pop(
+                                                                            context);
+
                                                                         showDialog(
                                                                             context:
                                                                                 context,
                                                                             builder:
                                                                                 (BuildContext context) {
-                                                                              return CreateTableDialog(eventSaveButton: () {});
+                                                                              return CreateTableDialog(
+                                                                                roomTableID: listTableOfRoomModel?.tables[index].roomTableId.toString(),
+                                                                                storeRoomID: listTableOfRoomModel?.tables[index].storeRoomId.toString(),
+                                                                                eventSaveButton: () {
+                                                                                  getDataInit();
+                                                                                },
+                                                                              );
                                                                             });
                                                                       },
                                                                       child:
@@ -446,12 +455,20 @@ class _ManageRoomState extends State<ManageRoom> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return CreateTableDialog(
-                                        eventSaveButton: () {});
+                                        roomTableID: null, //check this
+                                        storeRoomID: widget.roomID,
+                                        eventSaveButton: () {
+                                          getDataInit();
+                                        });
                                   });
                             },
                             child: Container(
                               width: 1.sw,
                               height: 150.h,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.r),
+                                color: Colors.white,
+                              ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -461,7 +478,7 @@ class _ManageRoomState extends State<ManageRoom> {
                                   ),
                                   space10H,
                                   TextApp(
-                                    text: "Tạo cửa hàng",
+                                    text: "Tạo bàn",
                                     fontWeight: FontWeight.bold,
                                     fontsize: 16.sp,
                                     color: Colors.grey,

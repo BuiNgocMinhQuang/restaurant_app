@@ -51,11 +51,11 @@ class Datum {
   int userId;
   int storeId;
   dynamic storeRoomId;
-  String foodName;
-  String foodDescription;
-  String foodImages;
+  String? foodName;
+  String? foodDescription;
+  String? foodImages;
   int foodPrice;
-  String foodContent;
+  String? foodContent;
   int foodRate;
   int foodKind;
   dynamic activeFlg;
@@ -63,7 +63,7 @@ class Datum {
   dynamic tableName;
   dynamic numberOfSeats;
   dynamic status;
-  dynamic description;
+  String? description;
 
   Datum({
     required this.orderFoodId,
@@ -278,11 +278,11 @@ class Order {
 class Store {
   int storeId;
   int userId;
-  String shopId;
-  String storeName;
-  String storeAddress;
-  String storeDescription;
-  String storeImages;
+  String? shopId;
+  String? storeName;
+  String? storeAddress;
+  String? storeDescription;
+  String? storeImages;
   dynamic storeLogo;
   int activeFlg;
   int deleteFlg;

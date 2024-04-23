@@ -40,8 +40,10 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
   String priceFoodString = '';
   List<String> listImageFood = [];
   List<int> listStoreId = [];
+  List<dynamic>? listStoreString = [];
   String priceFoodNumber = '0';
   List<File>? imageFileList = [];
+
   List<String> categories2 = [
     "Combo",
     "Món nướng",
@@ -53,16 +55,32 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
   final priceOfFood = TextEditingController();
   final noteController = TextEditingController();
   final ImagePicker imagePicker = ImagePicker();
-  final _popupCustomValidationKey = GlobalKey<DropdownSearchState<int>>();
-  final _popupCustomValidationKey2 =
-      GlobalKey<DropdownSearchState<List<String>>>();
+  final keyListStore = GlobalKey<DropdownSearchState<String>>();
+  final keyListFoodKind = GlobalKey<DropdownSearchState<String>>();
+  final List<String> nameStoreList = [];
+  final List<int> listStoreIdInIt = [];
 
   static const _locale = 'en';
   String _formatNumber(String s) =>
       NumberFormat.decimalPattern(_locale).format(int.parse(s));
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void init() {
+    log(widget.listStores.length.toString());
+    for (var i = 0; i < widget.listStores.length; i++) {
+      nameStoreList.add(widget.listStores[i].storeName ?? '');
+      listStoreIdInIt.add(widget.listStores[i].storeId ?? 0);
+    }
   }
 
   void pickImage() async {
@@ -95,15 +113,6 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
     required int activeFlag,
     required List<String> images,
   }) async {
-    print({
-      'stores': listStore,
-      'food_name': foodName,
-      'food_kind': foodKind,
-      'food_price': int.parse(priceFoodNumber),
-      'active_flg': activeFlag,
-      'is_api': true,
-      'images': images
-    });
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
 
@@ -143,12 +152,11 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
             noteController.clear();
             imageFileList?.clear();
             listStoreId.clear();
-
-            _popupCustomValidationKey.currentState?.clear();
-            _popupCustomValidationKey2.currentState?.clear();
+            listStoreString = null;
+            keyListStore.currentState?.clear();
+            keyListFoodKind.currentState?.clear();
             light = false;
           });
-          // navigatorKey.currentContext?.go('/manager_list_food');
         } else {
           print("ERROR CREATE FOOOD");
           showCustomDialogModal(
@@ -160,7 +168,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
               typeDialog: "error");
         }
       } catch (error) {
-        print("ERROR CREATE $error");
+        print("ERROR CREATE111 $error");
         showCustomDialogModal(
             context: navigatorKey.currentContext,
             textDesc: "Có lỗi xảy ra",
@@ -170,7 +178,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
             typeDialog: "error");
       }
     } catch (error) {
-      print("ERROR CREATE $error");
+      print("ERROR CREATE2222 $error");
       showCustomDialogModal(
           context: navigatorKey.currentContext,
           textDesc: "Có lỗi xảy ra",
@@ -299,9 +307,10 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                           height: 10.h,
                                         ),
                                         DropdownSearch<String>(
-                                          key: _popupCustomValidationKey2,
+                                          key: keyListFoodKind,
                                           validator: (value) {
-                                            if (value == chooseType) {
+                                            if (value == chooseType ||
+                                                value == null) {
                                               return canNotNull;
                                             }
                                             return null;
@@ -427,28 +436,31 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                         space10H,
                                         Wrap(
                                           children: [
-                                            DropdownSearch.multiSelection(
+                                            DropdownSearch<
+                                                String>.multiSelection(
                                               validator: (value) {
                                                 if (listStoreId.isEmpty) {
                                                   return canNotNull;
                                                 }
                                                 return null;
                                               },
-                                              key: _popupCustomValidationKey,
-                                              itemAsString: (item) =>
-                                                  item.storeName,
-                                              items: (widget.listStores),
+                                              key: keyListStore,
+                                              items: nameStoreList,
                                               onChanged: (listSelectedStore) {
                                                 listStoreId.clear();
+
                                                 listSelectedStore.where((e) {
-                                                  listStoreId
-                                                      .add(e.storeId ?? 0);
+                                                  listStoreId.add(
+                                                      listStoreIdInIt[
+                                                          nameStoreList
+                                                              .indexOf(e)]);
+
                                                   return true;
                                                 }).toList();
                                               },
                                               popupProps:
                                                   PopupPropsMultiSelection
-                                                      .dialog(
+                                                      .bottomSheet(
                                                 title: Padding(
                                                   padding: EdgeInsets.only(
                                                       left: 15.w, top: 10.h),

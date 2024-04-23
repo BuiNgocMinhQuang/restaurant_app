@@ -20,6 +20,7 @@ import 'package:app_restaurant/model/food_table_data_model.dart';
 import 'package:app_restaurant/model/list_room_model.dart';
 import 'package:app_restaurant/model/manager/store/edit_details_store_model.dart';
 import 'package:app_restaurant/model/manager/store/rooms/data_room_details_model.dart';
+import 'package:app_restaurant/model/manager/store/rooms/table/table_data_details_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/share_getString.dart';
 import 'package:app_restaurant/utils/storage.dart';
@@ -51,6 +52,7 @@ class BookingTableDialog extends StatefulWidget {
   final String role;
   final String shopID;
   final String token;
+  final String? orderID;
   const BookingTableDialog(
       {Key? key,
       this.idRoom,
@@ -59,6 +61,7 @@ class BookingTableDialog extends StatefulWidget {
       required this.role,
       required this.shopID,
       required this.token,
+      required this.orderID,
       required this.eventSaveButton})
       : super(key: key);
 
@@ -279,15 +282,20 @@ class _BookingTableDialogState extends State<BookingTableDialog>
           'table_id': widget.currentTable?.roomTableId,
           'limit': 15,
           'page': 1,
+          'order_id': widget.orderID,
         }),
       );
       final data = jsonDecode(respons.body);
+
       try {
         if (data['status'] == 200) {
           var foodTableDataRes = FoodTableDataModel.fromJson(data);
+          log(foodTableDataRes.countOrderFoods.toString());
+
           setState(() {
             listFoodTableCurrent.clear();
             currentCart = foodTableDataRes.countOrderFoods;
+
             listFoodTableCurrent.addAll(foodTableDataRes.foods.data);
           });
         } else {
@@ -7259,11 +7267,16 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                         SizedBox(
                           height: 10.h,
                         ),
-                        TextApp(
-                          text: allowOpenStore,
-                          fontsize: 12.sp,
-                          fontWeight: FontWeight.normal,
-                          color: blueText,
+                        SizedBox(
+                          width: 1.sw,
+                          child: TextApp(
+                            isOverFlow: false,
+                            softWrap: true,
+                            text: allowOpenStore,
+                            fontsize: 12.sp,
+                            fontWeight: FontWeight.normal,
+                            color: blueText,
+                          ),
                         ),
                         SizedBox(
                           height: 10.h,
@@ -7301,11 +7314,16 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                         SizedBox(
                           height: 10.h,
                         ),
-                        TextApp(
-                          text: describeDetailSotre,
-                          fontsize: 12.sp,
-                          fontWeight: FontWeight.normal,
-                          color: blueText,
+                        SizedBox(
+                          width: 1.sw,
+                          child: TextApp(
+                            isOverFlow: false,
+                            softWrap: true,
+                            text: describeDetailSotre,
+                            fontsize: 12.sp,
+                            fontWeight: FontWeight.normal,
+                            color: blueText,
+                          ),
                         ),
                         SizedBox(
                           height: 20.h,
@@ -8405,9 +8423,13 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
 //Modal tạo bàn
 class CreateTableDialog extends StatefulWidget {
   final Function eventSaveButton;
+  final String? roomTableID;
+  final String? storeRoomID;
   const CreateTableDialog({
     Key? key,
     required this.eventSaveButton,
+    required this.roomTableID,
+    required this.storeRoomID,
   }) : super(key: key);
 
   @override
@@ -8416,14 +8438,126 @@ class CreateTableDialog extends StatefulWidget {
 
 class _CreateTableDialogState extends State<CreateTableDialog> {
   bool light = false;
-  File? selectedImage;
   final _formField = GlobalKey<FormState>();
   final nameTableController = TextEditingController();
   final chairsOfTableController = TextEditingController();
-  final ImagePicker imagePicker = ImagePicker();
+  final desController = TextEditingController();
+  TableDataDetailsModel? tableDataDetailsModel;
+  void handleGetDataTable() async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$getDetailsDataOfTable'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'room_table_id': widget.roomTableID,
+          'is_api': true,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+
+      try {
+        if (data['status'] == 200) {
+          setState(() {
+            tableDataDetailsModel = TableDataDetailsModel.fromJson(data);
+          });
+          intitData();
+        } else {
+          print("ERROR CREATE FOOOD");
+        }
+      } catch (error) {
+        print("ERROR CREATE 112212 $error");
+      }
+    } catch (error) {
+      print("ERROR CREATE 44444 $error");
+    }
+  }
+
+  void handleUpdateDataTable({
+    required String? roomTableID,
+    required String? storeRoomID,
+    required String numberOfSeat,
+    required String description,
+    required String tableName,
+    required bool activeFlg,
+  }) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$updateOrCreateRoom'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({
+          'is_api': true,
+          'room_table_id': roomTableID,
+          'store_room_id': storeRoomID,
+          'number_of_seats': numberOfSeat,
+          'description': description,
+          'table_name': tableName,
+          'table_active_flg': activeFlg
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      try {
+        if (data['status'] == 200) {
+          var mess = data['message'];
+          Navigator.of(navigatorKey.currentContext!).pop();
+
+          showCustomDialogModal(
+              context: navigatorKey.currentContext!,
+              textDesc: mess,
+              title: "Thành công",
+              colorButton: Colors.green,
+              btnText: "OK",
+              typeDialog: "succes");
+          widget.eventSaveButton();
+        } else {
+          print("ERROR CREATE FOOOD");
+        }
+      } catch (error) {
+        print("ERROR CREATE 112212 $error");
+      }
+    } catch (error) {
+      print("ERROR CREATE 44444 $error");
+    }
+  }
+
+  void intitData() async {
+    mounted
+        ? nameTableController.text = tableDataDetailsModel?.data.tableName ?? ''
+        : null;
+    mounted
+        ? chairsOfTableController.text =
+            tableDataDetailsModel?.data.numberOfSeats.toString() ?? ''
+        : null;
+    mounted
+        ? desController.text = tableDataDetailsModel?.data.description ?? ''
+        : null;
+    mounted
+        ? tableDataDetailsModel?.data.activeFlg == 1
+            ? light = true
+            : light = false
+        : null;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    handleGetDataTable();
+  }
+
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -8433,260 +8567,266 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
       contentPadding: const EdgeInsets.all(0),
       surfaceTintColor: Colors.white,
       backgroundColor: Colors.white,
-      content: SizedBox(
-        width: double.maxFinite,
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                    width: 1.sw,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      border: const Border(
-                          top: BorderSide(width: 0, color: Colors.grey),
-                          bottom: BorderSide(width: 1, color: Colors.grey),
-                          left: BorderSide(width: 0, color: Colors.grey),
-                          right: BorderSide(width: 0, color: Colors.grey)),
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15.w),
-                          topRight: Radius.circular(15.w)),
-                      // color: Colors.amber,
-                    ),
+      content: Padding(
+        padding: EdgeInsets.all(20.w),
+        child: SizedBox(
+          width: double.maxFinite,
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                      width: 1.sw,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              TextApp(
+                                text:
+                                    "Bàn ${tableDataDetailsModel?.data.tableName ?? ''}",
+                                fontsize: 18.sp,
+                                color: blueText,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ],
+                          ),
+                        ],
+                      )),
+                  Divider(),
+                  space10H,
+                  SingleChildScrollView(
+                      child: Form(
+                    key: _formField,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            TextApp(
-                              text: "Bàn",
-                              fontsize: 18.sp,
-                              color: blueText,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        TextApp(
+                          text: "Tên bàn",
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        TextFormField(
+                          maxLength: 12,
+                          onTapOutside: (event) {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          },
+                          controller: nameTableController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return canNotNull;
+                            } else {
+                              return null;
+                            }
+                          },
+                          cursorColor: const Color.fromRGBO(73, 80, 87, 1),
+                          decoration: InputDecoration(
+                              fillColor:
+                                  const Color.fromARGB(255, 226, 104, 159),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color.fromRGBO(214, 51, 123, 0.6),
+                                    width: 2.0),
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              // hintText: storeName,
+                              isDense: true,
+                              contentPadding:
+                                  EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
+                        ),
+                        /////
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        ////
+                        TextApp(
+                          text: "Số ghế trong bàn",
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        TextFormField(
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp("[0-9]")),
                           ],
+                          onTapOutside: (event) {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          },
+                          controller: chairsOfTableController,
+                          cursorColor: const Color.fromRGBO(73, 80, 87, 1),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return canNotNull;
+                            } else {
+                              return null;
+                            }
+                          },
+                          decoration: InputDecoration(
+                              fillColor:
+                                  const Color.fromARGB(255, 226, 104, 159),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color.fromRGBO(214, 51, 123, 0.6),
+                                    width: 2.0),
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              // hintText: storeAddress,
+                              isDense: true,
+                              contentPadding:
+                                  EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
+                        ),
+
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        TextApp(
+                          text: "Mô tả",
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: blueText,
+                        ),
+                        space10H,
+                        TextFormField(
+                          maxLength: 255,
+                          onTapOutside: (event) {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          },
+                          controller: desController,
+                          keyboardType: TextInputType.multiline,
+                          minLines: 1,
+                          maxLines: 3,
+                          cursorColor: const Color.fromRGBO(73, 80, 87, 1),
+                          decoration: InputDecoration(
+                              fillColor:
+                                  const Color.fromARGB(255, 226, 104, 159),
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color.fromRGBO(214, 51, 123, 0.6),
+                                    width: 2.0),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              hintText: '',
+                              isDense: true,
+                              contentPadding: EdgeInsets.only(
+                                  bottom: 1.sw > 600 ? 50.w : 40.w,
+                                  top: 0,
+                                  left: 1.sw > 600 ? 20.w : 15.w,
+                                  right: 1.sw > 600 ? 20.w : 15.w)),
+                        ),
+
+                        ////
+                        TextApp(
+                          isOverFlow: false,
+                          softWrap: true,
+                          text: displayMode,
+                          fontsize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color: blueText,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        SizedBox(
+                          width: 1.sw,
+                          child: TextApp(
+                            isOverFlow: false,
+                            softWrap: true,
+                            text: allowOpenTable,
+                            fontsize: 12.sp,
+                            fontWeight: FontWeight.normal,
+                            color: blueText,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        SizedBox(
+                          width: 50.w,
+                          height: 30.w,
+                          child: FittedBox(
+                            fit: BoxFit.fill,
+                            child: CupertinoSwitch(
+                              value: light,
+                              activeColor:
+                                  const Color.fromRGBO(58, 65, 111, .95),
+                              onChanged: (bool value) {
+                                setState(() {
+                                  light = value;
+                                });
+                              },
+                            ),
+                          ),
                         ),
                       ],
-                    )),
-                space15H,
-                SingleChildScrollView(
-                    child: Form(
-                  key: _formField,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ////////
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      //////
-                      TextApp(
-                        text: "Tên bàn",
-                        fontsize: 12.sp,
-                        fontWeight: FontWeight.bold,
-                        color: blueText,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      TextFormField(
-                        controller: nameTableController,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return canNotNull;
-                          } else {
-                            return null;
-                          }
-                        },
-                        cursorColor: const Color.fromRGBO(73, 80, 87, 1),
-                        decoration: InputDecoration(
-                            fillColor: const Color.fromARGB(255, 226, 104, 159),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Color.fromRGBO(214, 51, 123, 0.6),
-                                  width: 2.0),
-                              borderRadius: BorderRadius.circular(8.r),
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.r),
-                            ),
-                            // hintText: storeName,
-                            isDense: true,
-                            contentPadding:
-                                EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
-                      ),
-                      /////
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      ////
-                      TextApp(
-                        text: "Số ghế trong bàn",
-                        fontsize: 12.sp,
-                        fontWeight: FontWeight.bold,
-                        color: blueText,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      TextFormField(
-                        controller: chairsOfTableController,
-                        cursorColor: const Color.fromRGBO(73, 80, 87, 1),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return canNotNull;
-                          } else {
-                            return null;
-                          }
-                        },
-                        decoration: InputDecoration(
-                            fillColor: const Color.fromARGB(255, 226, 104, 159),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Color.fromRGBO(214, 51, 123, 0.6),
-                                  width: 2.0),
-                              borderRadius: BorderRadius.circular(8.r),
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.r),
-                            ),
-                            // hintText: storeAddress,
-                            isDense: true,
-                            contentPadding:
-                                EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
-                      ),
-
-                      SizedBox(
-                        height: 20.h,
-                      ),
-                      TextApp(
-                        text: "Mô tả",
-                        fontsize: 12.sp,
-                        fontWeight: FontWeight.bold,
-                        color: blueText,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Container(
-                          width: 1.sw,
-                          // height: 250.h,
-
-                          decoration: BoxDecoration(
-                            border: const Border(
-                                top: BorderSide(width: 1, color: Colors.grey),
-                                bottom:
-                                    BorderSide(width: 1, color: Colors.grey),
-                                left: BorderSide(width: 1, color: Colors.grey),
-                                right:
-                                    BorderSide(width: 1, color: Colors.grey)),
-                            borderRadius: BorderRadius.circular(15.w),
-                            // color: Colors.amber,
-                          ),
-                          child: Column(
-                            children: [],
-                          )),
-
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      ////
-                      TextApp(
-                        text: displayMode,
-                        fontsize: 12.sp,
-                        fontWeight: FontWeight.bold,
-                        color: blueText,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      TextApp(
-                        text: allowOpenTable,
-                        fontsize: 12.sp,
-                        fontWeight: FontWeight.normal,
-                        color: blueText,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      SizedBox(
-                        width: 50.w,
-                        height: 30.w,
-                        child: FittedBox(
-                          fit: BoxFit.fill,
-                          child: CupertinoSwitch(
-                            value: light,
-                            activeColor: const Color.fromRGBO(58, 65, 111, .95),
-                            onChanged: (bool value) {
-                              setState(() {
-                                light = value;
-                              });
-                            },
-                          ),
+                    ),
+                  )),
+                  space15H,
+                  Container(
+                    width: 1.sw,
+                    height: 80,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ButtonApp(
+                          event: () {
+                            Navigator.of(context).pop();
+                          },
+                          text: "Đóng",
+                          colorText: Colors.white,
+                          backgroundColor: Color.fromRGBO(131, 146, 171, 1),
+                          outlineColor: Color.fromRGBO(131, 146, 171, 1),
                         ),
-                      ),
-
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                    ],
+                        SizedBox(
+                          width: 20.w,
+                        ),
+                        ButtonApp(
+                          event: () {
+                            if (_formField.currentState!.validate()) {
+                              handleUpdateDataTable(
+                                roomTableID: widget.roomTableID,
+                                storeRoomID: widget.storeRoomID,
+                                numberOfSeat: chairsOfTableController.text,
+                                description: desController.text,
+                                tableName: nameTableController.text,
+                                activeFlg: light,
+                              );
+                              // nameTableController.clear();
+                              // chairsOfTableController.clear();
+                            }
+                          },
+                          text: save,
+                          colorText: Colors.white,
+                          backgroundColor: Color.fromRGBO(23, 193, 232, 1),
+                          outlineColor: Color.fromRGBO(23, 193, 232, 1),
+                        ),
+                        SizedBox(
+                          width: 20.w,
+                        ),
+                      ],
+                    ),
                   ),
-                )),
-                space15H,
-                Container(
-                  width: 1.sw,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    border: const Border(
-                        top: BorderSide(width: 1, color: Colors.grey),
-                        bottom: BorderSide(width: 0, color: Colors.grey),
-                        left: BorderSide(width: 0, color: Colors.grey),
-                        right: BorderSide(width: 0, color: Colors.grey)),
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(15.w),
-                        bottomRight: Radius.circular(15.w)),
-                    // color: Colors.green,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ButtonApp(
-                        event: () {
-                          Navigator.of(context).pop();
-                        },
-                        text: "Đóng",
-                        colorText: Colors.white,
-                        backgroundColor: Color.fromRGBO(131, 146, 171, 1),
-                        outlineColor: Color.fromRGBO(131, 146, 171, 1),
-                      ),
-                      SizedBox(
-                        width: 20.w,
-                      ),
-                      ButtonApp(
-                        event: () {
-                          if (_formField.currentState!.validate()) {
-                            widget.eventSaveButton();
-                            nameTableController.clear();
-                            chairsOfTableController.clear();
-                          }
-                        },
-                        text: save,
-                        colorText: Colors.white,
-                        backgroundColor: Color.fromRGBO(23, 193, 232, 1),
-                        outlineColor: Color.fromRGBO(23, 193, 232, 1),
-                      ),
-                      SizedBox(
-                        width: 20.w,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

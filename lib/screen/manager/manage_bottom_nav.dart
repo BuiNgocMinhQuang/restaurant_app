@@ -60,11 +60,22 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
     navBarState!.setPage(index);
   }
 
+  // void hanldeLogOut() async {
+  //   BlocProvider.of<ManagerLoginBloc>(context).add(const ManagerLogout());
+  //   StorageUtils.instance.removeKey(key: 'token_manager');
+  //   navigatorKey.currentContext!.go('/');
+  //   // setState(() {});
+  // }
+
   void hanldeLogOut() async {
-    BlocProvider.of<ManagerLoginBloc>(context).add(const ManagerLogout());
+    var token = StorageUtils.instance.getString(key: 'token_manager');
+    await http.post(
+      Uri.parse('$baseUrl$managerLogout'),
+      headers: {"Authorization": "Bearer $token"},
+    );
     StorageUtils.instance.removeKey(key: 'token_manager');
-    navigatorKey.currentContext!.go('/');
-    // setState(() {});
+    // navigatorKey.currentContext!.go('/');
+    mounted ? context.go('/') : null;
   }
 
   void checkTokenExpires() async {
@@ -583,6 +594,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                       var imagePath1 =
                           (listStoreManagerData[index].storeImages);
                       var listImagePath = jsonDecode(imagePath1 ?? '');
+                      var logoStore =
+                          listStoreManagerData[index].storeLogo ?? '';
                       // var imagePath2 = imagePath1.replaceAll('"]', '');
                       return InkWell(
                         onTap: () {},
@@ -595,7 +608,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                               : FontWeight.normal,
                           image: CachedNetworkImage(
                             fit: BoxFit.cover,
-                            imageUrl: httpImage + listImagePath[0],
+                            imageUrl: httpImage + logoStore,
                             placeholder: (context, url) => SizedBox(
                               height: 10.w,
                               width: 10.w,

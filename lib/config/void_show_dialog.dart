@@ -49,7 +49,8 @@ void showCustomDialogModal(
     required String title,
     required Color colorButton,
     required String btnText,
-    required String? typeDialog}) {
+    required String? typeDialog,
+    Function? eventButtonPress}) {
   AwesomeDialog(
     context: context,
     animType: AnimType.leftSlide,
@@ -68,7 +69,7 @@ void showCustomDialogModal(
     desc: textDesc,
     btnOkColor: colorButton,
     btnOkOnPress: () {
-      debugPrint('OnClcik');
+      eventButtonPress;
     },
     btnOkText: btnText,
     // btnOkIcon: Icons.check_circle,

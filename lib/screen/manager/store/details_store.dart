@@ -302,14 +302,15 @@ class _DetailsStoreState extends State<DetailsStore> {
                               child: Row(
                                 children: [
                                   space20W,
-                                  ButtonIcon(
-                                      isIconCircle: false,
-                                      color1:
-                                          const Color.fromRGBO(20, 23, 39, 1),
-                                      color2:
-                                          const Color.fromRGBO(58, 65, 111, 1),
-                                      event: () {},
-                                      icon: Icons.attach_money_sharp),
+                                  Container(
+                                    width: 50,
+                                    height: 50,
+                                    // color: Colors.amber,
+                                    child: Image.asset(
+                                      'assets/images/incomes.png',
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
                                   space20W,
                                   Column(
                                     crossAxisAlignment:
@@ -345,14 +346,14 @@ class _DetailsStoreState extends State<DetailsStore> {
                               child: Row(
                                 children: [
                                   space20W,
-                                  ButtonIcon(
-                                      isIconCircle: false,
-                                      color1:
-                                          const Color.fromRGBO(20, 23, 39, 1),
-                                      color2:
-                                          const Color.fromRGBO(58, 65, 111, 1),
-                                      event: () {},
-                                      icon: Icons.person_pin),
+                                  Container(
+                                    width: 50,
+                                    height: 50,
+                                    child: Image.asset(
+                                      'assets/images/staff.png',
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
                                   space20W,
                                   Column(
                                     crossAxisAlignment:

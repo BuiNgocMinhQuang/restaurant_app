@@ -46,18 +46,18 @@ class NyAppRouter {
         name: AppRouterContants.managerSignInRouterName,
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          if (StorageUtils.instance.getString(key: 'token_staff') != null) {
-            print("HOME STAFF");
-            return StaffFabTab(
-              selectedIndex: 2,
-            );
-          } else if (StorageUtils.instance.getString(key: 'token_manager') !=
-              null) {
-            print("HOME MANAGER");
-            return ManagerFabTab(
-              selectedIndex: 2,
-            );
-          }
+          // if (StorageUtils.instance.getString(key: 'token_staff') != null) {
+          //   print("HOME STAFF");
+          //   return StaffFabTab(
+          //     selectedIndex: 2,
+          //   );
+          // } else if (StorageUtils.instance.getString(key: 'token_manager') !=
+          //     null) {
+          //   print("HOME MANAGER");
+          //   return ManagerFabTab(
+          //     selectedIndex: 2,
+          //   );
+          // }
           return const ManagerSignIn();
         },
       ),
@@ -197,24 +197,24 @@ class NyAppRouter {
             return const ListFoodStaff();
           }),
     ],
-    // redirect: (BuildContext context, GoRouterState state) async {
-    //   if (StorageUtils.instance.getString(key: 'token_staff') != null) {
-    //     print("HOME STAFF");
-    //     return '/staff_home';
-    //   } else if (StorageUtils.instance.getString(key: 'token_manager') !=
-    //       null) {
-    //     print("HOME MANAGER");
-    //     // GoRoute(
-    //     //     name: AppRouterContants.managerListFoodRouterName,
-    //     //     path: '/manager_list_food',
-    //     //     builder: (BuildContext context, GoRouterState state) {
-    //     //       return const ListFoodManager(
-    //     //         listStores: [],
-    //     //       );
-    //     //     });
-    //     return '/manager_home';
-    //   }
-    //   return null;
-    // },
+    redirect: (BuildContext context, GoRouterState state) async {
+      if (StorageUtils.instance.getString(key: 'token_staff') != null) {
+        print("HOME STAFF");
+        return '/staff_home';
+      } else if (StorageUtils.instance.getString(key: 'token_manager') !=
+          null) {
+        print("HOME MANAGER");
+        // GoRoute(
+        //     name: AppRouterContants.managerListFoodRouterName,
+        //     path: '/manager_list_food',
+        //     builder: (BuildContext context, GoRouterState state) {
+        //       return const ListFoodManager(
+        //         listStores: [],
+        //       );
+        //     });
+        return '/manager_home';
+      }
+      return null;
+    },
   );
 }

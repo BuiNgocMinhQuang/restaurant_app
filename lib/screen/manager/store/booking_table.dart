@@ -361,6 +361,12 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                               roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
                                                                             );
                                                                           },
+                                                                          orderID: state
+                                                                              .listRoomModel!
+                                                                              .rooms![currentRoomIndex]
+                                                                              .tables![index]
+                                                                              .orderId
+                                                                              .toString(),
                                                                           listTableOfRoom: state
                                                                               .listRoomModel!
                                                                               .rooms![currentRoomIndex]
@@ -461,6 +467,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                                         roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
                                                                                       );
                                                                                     },
+                                                                                    orderID: null,
                                                                                     token: tokenManager,
                                                                                     role: 'user',
                                                                                     shopID: widget.shopID,
@@ -524,12 +531,12 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                                 Row(
                                                                               children: [
                                                                                 Icon(
-                                                                                  Icons.monetization_on,
+                                                                                  Icons.table_bar,
                                                                                   size: 35.sp,
                                                                                 ),
                                                                                 space10W,
                                                                                 TextApp(
-                                                                                  text: "Thanh toán hoá đơn",
+                                                                                  text: "Ghép bàn",
                                                                                   color: Colors.black,
                                                                                   fontsize: 18.sp,
                                                                                 )

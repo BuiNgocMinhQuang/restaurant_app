@@ -1,5 +1,4 @@
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/model/manager/chart/chart_data_each_store_model.dart';
 import 'package:app_restaurant/model/manager/chart/chart_data_home_model.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -58,7 +57,7 @@ class ChartHomeAllStoreState extends State<ChartHomeAllStore> {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1,
+      aspectRatio: 1.2,
       child: Padding(
         padding: const EdgeInsets.only(top: 16),
         child: LayoutBuilder(
