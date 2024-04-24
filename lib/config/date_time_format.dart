@@ -12,8 +12,6 @@ int getMonthFromDateString({
   required String dateString,
   String customFormat = "MM-yyyy",
 }) {
-  // const a = "04-2024";
-
   // Define a date format
   DateFormat format = DateFormat(customFormat);
 

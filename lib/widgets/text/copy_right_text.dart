@@ -1,7 +1,6 @@
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 
 class CopyRightText extends StatelessWidget {

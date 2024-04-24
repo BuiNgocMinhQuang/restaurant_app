@@ -205,11 +205,6 @@ void showWrongOtpDialog(context) {
           animType: AnimType.rightSlide,
           headerAnimationLoop: true,
           title: 'Mã OTP không đúng',
-          // desc: 'Sau khi bạn xác nhận sẽ không thể trở lại.',
-          // btnOkOnPress: () {
-          //   confirmEvent();
-          // },
-          // btnOkText: "Xác Nhận",
           btnCancelColor: Colors.blue,
           btnCancelOnPress: () {},
           btnCancelText: "OK")
@@ -224,10 +219,6 @@ void showExpiredOtpDialog(context) {
           headerAnimationLoop: true,
           title: 'OTP hết hạn',
           desc: 'Mã OTP của bạn đã hết hạn, vui lòng bấm Gửi lại mã mới!',
-          // btnOkOnPress: () {
-          //   confirmEvent();
-          // },
-          // btnOkText: "Xác Nhận",
           btnCancelColor: Colors.blue,
           btnCancelOnPress: () {},
           btnCancelText: "OK")
@@ -244,29 +235,12 @@ void showLoginSessionExpiredDialog(
           headerAnimationLoop: true,
           title: 'Hết thời gian đăng nhập',
           desc: 'Phiên đăng nhập của bạn đã hết. Vui lòng đăng nhập lại!',
-          // btnOkOnPress: () {
-          //   confirmEvent();
-          // },
-          // btnOkText: "Xác Nhận",
           btnCancelColor: Colors.blue,
           btnCancelOnPress: () {
             okEvent();
           },
           btnCancelText: "OK")
       .show();
-}
-
-showSnackBarTopUpdateSucces(context) async {
-  await Flushbar(
-    backgroundColor: Colors.green,
-    message: "Món ăn được cập nhật thành công",
-    duration: const Duration(seconds: 1),
-    margin: EdgeInsets.only(bottom: 1.sh - 150.h, left: 25.w, right: 25.w),
-
-    flushbarPosition: FlushbarPosition.TOP,
-    // forwardAnimationCurve: ,
-    // reverseAnimationCurve: Curves.easeInOutCirc,
-  ).show(context);
 }
 
 showSnackBarTopCustom(
@@ -281,10 +255,7 @@ showSnackBarTopCustom(
     message: mess,
     duration: const Duration(seconds: 1),
     margin: EdgeInsets.only(bottom: 1.sh - 150.h, left: 25.w, right: 25.w),
-
     flushbarPosition: FlushbarPosition.TOP,
-    // forwardAnimationCurve: ,
-    // reverseAnimationCurve: Curves.easeInOutCirc,
   ).show(context);
 }
 

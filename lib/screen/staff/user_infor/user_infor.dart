@@ -8,7 +8,7 @@ import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/env/index.dart';
-import 'package:app_restaurant/model/staff_infor_model.dart';
+import 'package:app_restaurant/model/staff/staff_infor_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';

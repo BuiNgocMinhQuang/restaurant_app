@@ -1,6 +1,5 @@
 //Auth Staff
 const String staffLoginApi = 'staff/login';
-const String staffLogout = 'logout';
 const String deleteAvatarStaff = 'staff/delete-avatar';
 const String forgotPasswordStaff = 'staff/forgot-password';
 const String checkOtpStaff = 'staff/check-otp';
@@ -10,7 +9,6 @@ const String changePasswordStaffApi = 'staff/update-password';
 const String updateAvatarStaffApi = 'staff/update-avatar';
 //Auth Manager
 const String managerLoginApi = 'user/login';
-const String managerLogout = 'logout';
 const String managerRegister = 'user/register';
 const String forgotPasswordManager = 'user/forgot-password';
 const String checkOtpManager = 'user/check-otp';
@@ -55,6 +53,7 @@ const String getDetailsDataOfTable = 'user/stores/rooms/tables/detail';
 const String deleteTableByManager = 'user/stores/rooms/tables/delete';
 
 //Shared API
+const String logoutApi = 'logout';
 const String userInformationApi = 'information';
 const String areas = 'areas';
 const String bookingApi = 'booking';

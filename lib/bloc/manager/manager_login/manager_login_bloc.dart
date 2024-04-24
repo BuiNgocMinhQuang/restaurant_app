@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
-import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
 import 'package:app_restaurant/model/manager_infor_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
@@ -28,7 +27,7 @@ class ManagerLoginBloc extends Bloc<ManagerLoginEvent, ManagerLoginState> {
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
       final response = await http.post(
-        Uri.parse('$baseUrl$managerLogout'),
+        Uri.parse('$baseUrl$logoutApi'),
         headers: {
           'Content-type': 'application/json',
           'Accept': 'application/json',
