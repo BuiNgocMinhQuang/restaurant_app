@@ -16,7 +16,6 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
@@ -307,7 +306,6 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
       },
     );
     final dataListStoreRes = jsonDecode(responseListStore.body);
-    // log(token.toString());
 
     try {
       if (dataListStoreRes['status'] == 200) {
@@ -406,16 +404,6 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
     required String staffPasswordNew,
     required String staffConfirmPassword,
   }) async {
-    print({
-      'type': "changePassword",
-      'is_api': true,
-      'key': staffNo,
-      'data': {
-        'password': staffPassword,
-        'password_new': staffPasswordNew,
-        'confirm_password_new': staffConfirmPassword,
-      }
-    });
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
 
@@ -438,7 +426,6 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print(" DATA CREATE FOOD ${data}");
       try {
         if (data['status'] == 200) {
           getDataStaff(staffNo: widget.staffNo);
@@ -448,7 +435,6 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
           newPassworldController.clear();
           reNewPassworldController.clear();
         } else {
-          print("ERROR CREATE FOOOD");
           final messRes = data['message'];
           final messFailed = messRes['text'];
 
@@ -484,10 +470,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
         body: jsonEncode({'is_api': true, 'staff_no': staffNo}),
       );
       final data = jsonDecode(respons.body);
-      print(" DATA CREATE FOOD ${data}");
+
       try {
         if (data['status'] == 200) {
-          // var hahah = DetailsStoreModel.fromJson(data);
           light = false;
           getDataStaff(staffNo: widget.staffNo);
         } else {
@@ -509,9 +494,24 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    // selectedShopId = dd;
+  void dispose() {
+    super.dispose();
+    surNameController.clear();
+    nameController.clear();
+    fullNameController.clear();
+    emailController.clear();
+    phoneController.clear();
+    currentPassworldController.clear();
+    newPassworldController.clear();
+    reNewPassworldController.clear();
+    address4Controller.clear();
+    twitterTextController.clear();
+    facebookTextController.clear();
+    instagramTextController.clear();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Thông tin nhân viên"),
@@ -659,9 +659,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
-                                                SizedBox(
-                                                  height: 10.h,
-                                                ),
+                                                space10H,
                                                 DropdownSearch(
                                                   validator: (value) {
                                                     if (value ==
@@ -748,9 +746,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
-                                                SizedBox(
-                                                  height: 10.h,
-                                                ),
+                                                space10H,
                                                 DropdownSearch(
                                                   validator: (value) {
                                                     if (value ==
@@ -836,9 +832,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
-                                                SizedBox(
-                                                  height: 10.h,
-                                                ),
+                                                space10H,
                                                 TextFormField(
                                                   maxLength: 255,
                                                   onTapOutside: (event) {
@@ -918,9 +912,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
-                                                SizedBox(
-                                                  height: 10.h,
-                                                ),
+                                                space10H,
                                                 TextFormField(
                                                   maxLength: 255,
                                                   onTapOutside: (event) {
@@ -978,9 +970,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    // SizedBox(
-                                    //   height: 20.h,
-                                    // ),
+
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -996,9 +986,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
-                                                SizedBox(
-                                                  height: 10.h,
-                                                ),
+                                                space10H,
                                                 TextFormField(
                                                   maxLength: 255,
                                                   onTapOutside: (event) {
@@ -1061,9 +1049,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    // SizedBox(
-                                    //   height: 20.h,
-                                    // ),
+
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -1079,9 +1065,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
-                                                SizedBox(
-                                                  height: 10.h,
-                                                ),
+                                                space10H,
                                                 TextFormField(
                                                   maxLength: 15,
                                                   onTapOutside: (event) {
@@ -1100,12 +1084,15 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                     if (value!.isEmpty) {
                                                       return phoneIsRequied;
                                                     }
+
                                                     bool phoneValid = RegExp(
                                                             r'^(?:[+0]9)?[0-9]{10}$')
                                                         .hasMatch(value);
 
                                                     if (!phoneValid) {
                                                       return invalidPhone;
+                                                    } else {
+                                                      return null;
                                                     }
                                                   },
                                                   decoration: InputDecoration(
@@ -1149,9 +1136,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    // SizedBox(
-                                    //   height: 20.h,
-                                    // ),
+
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -1167,14 +1152,14 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
-                                                SizedBox(
-                                                  height: 10.h,
-                                                ),
+                                                space10H,
                                                 DropdownSearch(
                                                   validator: (value) {
                                                     if (value ==
                                                         "Chọn tỉnh/thành phố") {
                                                       return canNotNull;
+                                                    } else {
+                                                      return null;
                                                     }
                                                   },
                                                   selectedItem: currentCity,
@@ -1245,9 +1230,8 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    SizedBox(
-                                      height: 20.h,
-                                    ),
+
+                                    space20H,
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -1263,22 +1247,19 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
-                                                SizedBox(
-                                                  height: 10.h,
-                                                ),
+                                                space10H,
                                                 DropdownSearch(
                                                   key: Key(currentDistric
                                                       .toString()),
-
                                                   validator: (value) {
                                                     if (value ==
                                                         "Chọn quận/huyện") {
                                                       return canNotNull;
+                                                    } else {
+                                                      return null;
                                                     }
                                                   },
-
                                                   selectedItem: currentDistric,
-
                                                   items: districList,
                                                   onChanged: (changeDistric) {
                                                     getListArea(
@@ -1297,7 +1278,6 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                       currentIndexWard = null;
                                                     });
                                                   },
-
                                                   dropdownDecoratorProps:
                                                       DropDownDecoratorProps(
                                                     dropdownSearchDecoration:
@@ -1339,8 +1319,6 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                           "Chọn quận/huyện",
                                                     ),
                                                   ),
-                                                  // selectedItem:
-                                                  //     "Chọn quận/huyện",
                                                 ),
                                               ],
                                             ),
@@ -1364,9 +1342,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
-                                                SizedBox(
-                                                  height: 10.h,
-                                                ),
+                                                space10H,
                                                 DropdownSearch(
                                                   key: Key(
                                                       currentWard.toString()),
@@ -1375,6 +1351,8 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                     if (value ==
                                                         "Chọn phường/xã") {
                                                       return canNotNull;
+                                                    } else {
+                                                      return null;
                                                     }
                                                   },
 
@@ -1465,9 +1443,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
-                                                SizedBox(
-                                                  height: 10.h,
-                                                ),
+                                                space10H,
                                                 TextFormField(
                                                   maxLength: 255,
                                                   onTapOutside: (event) {
@@ -1533,9 +1509,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
-                                        SizedBox(
-                                          height: 10.h,
-                                        ),
+                                        space10H,
                                         TextFormField(
                                           onTapOutside: (event) {
                                             FocusManager.instance.primaryFocus
@@ -1557,6 +1531,8 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
 
                                             if (!emailValid) {
                                               return invalidEmail;
+                                            } else {
+                                              return null;
                                             }
                                           },
                                           decoration: InputDecoration(
@@ -1583,9 +1559,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ),
                                       ],
                                     ),
-                                    SizedBox(
-                                      height: 20.h,
-                                    ),
+                                    space20H,
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -1596,9 +1570,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
-                                        SizedBox(
-                                          height: 10.h,
-                                        ),
+                                        space10H,
                                         TextField(
                                           onTapOutside: (event) {
                                             FocusManager.instance.primaryFocus
@@ -1643,9 +1615,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
-                                        SizedBox(
-                                          height: 10.h,
-                                        ),
+                                        space10H,
                                         TextField(
                                           onTapOutside: (event) {
                                             FocusManager.instance.primaryFocus
@@ -1690,9 +1660,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
-                                        SizedBox(
-                                          height: 10.h,
-                                        ),
+                                        space10H,
                                         TextField(
                                           onTapOutside: (event) {
                                             FocusManager.instance.primaryFocus
@@ -1814,9 +1782,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ),
                                       ],
                                     ),
-                                    SizedBox(
-                                      height: 20.h,
-                                    ),
+                                    space20H,
                                   ],
                                 ),
                               )),
@@ -1861,9 +1827,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                     fontSize: 24.sp,
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 20.h,
-                                ),
+                                space20H,
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -1873,9 +1837,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                       fontWeight: FontWeight.bold,
                                       color: blueText,
                                     ),
-                                    SizedBox(
-                                      height: 10.h,
-                                    ),
+                                    space10H,
                                     TextFormField(
                                       onTapOutside: (event) {
                                         FocusManager.instance.primaryFocus
@@ -1941,9 +1903,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                       fontWeight: FontWeight.bold,
                                       color: blueText,
                                     ),
-                                    SizedBox(
-                                      height: 10.h,
-                                    ),
+                                    space10H,
                                     TextFormField(
                                       onTapOutside: (event) {
                                         FocusManager.instance.primaryFocus
@@ -2012,9 +1972,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                       fontWeight: FontWeight.bold,
                                       color: blueText,
                                     ),
-                                    SizedBox(
-                                      height: 10.h,
-                                    ),
+                                    space10H,
                                     TextFormField(
                                       onTapOutside: (event) {
                                         FocusManager.instance.primaryFocus
@@ -2111,9 +2069,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(
-                                  height: 20.h,
-                                ),
+                                space20H,
                               ],
                             ),
                           )),
@@ -2166,9 +2122,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                   softWrap: true,
                                 ),
                               ),
-                              SizedBox(
-                                height: 20.h,
-                              ),
+                              space20H,
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -2256,9 +2210,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                   ),
                                 ],
                               ),
-                              SizedBox(
-                                height: 20.h,
-                              ),
+                              space20H
                             ],
                           ),
                         )),

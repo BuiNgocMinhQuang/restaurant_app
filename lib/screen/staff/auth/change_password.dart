@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/text.dart';
@@ -7,7 +7,6 @@ import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -56,15 +55,12 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
         }),
       );
       final data = jsonDecode(respons.body);
-
-      print("DADATATA $data");
       if (data['status'] == 200) {
-        print("HANLDE FOGOT PASSWORD OK");
         final messRes = data['message'];
         final messText = messRes['text'];
         navigatorKey.currentContext?.go('/staff_sign_in');
 
-        Future.delayed(Duration(milliseconds: 300), () {
+        Future.delayed(const Duration(milliseconds: 300), () {
           showCustomDialogModal(
             typeDialog: "succes",
             context: navigatorKey.currentContext,
@@ -91,6 +87,13 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
     } catch (error) {
       print("CHECK OTP ERROR ${error}");
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    passwordController.clear();
+    rePassworldController.clear();
   }
 
   @override
@@ -190,9 +193,7 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
                                                     fontSize: 24.sp,
                                                   ),
                                                 ),
-                                                SizedBox(
-                                                  height: 20.w,
-                                                ),
+                                                space20W,
                                                 TextFormField(
                                                   controller:
                                                       passwordController,
@@ -264,9 +265,7 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
                                                 ),
-                                                SizedBox(
-                                                  height: 20.h,
-                                                ),
+                                                space20H,
                                                 TextFormField(
                                                   controller:
                                                       rePassworldController,
@@ -341,12 +340,7 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
                                                 ),
-                                                SizedBox(
-                                                  height: 20.h,
-                                                ),
-                                                SizedBox(
-                                                  height: 20.h,
-                                                ),
+                                                space40H,
                                                 ButtonGradient(
                                                   color1: color1BlueButton,
                                                   color2: color2BlueButton,
@@ -361,14 +355,6 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
                                                             rePassworldController
                                                                 .text,
                                                       );
-                                                      // context
-                                                      //     .go("/staff_sign_in");
-                                                      // showChangePasswordSuccessDialog(
-                                                      //     context); //
-                                                      // passwordController
-                                                      //     .clear();
-                                                      // rePassworldController
-                                                      //     .clear();
                                                     }
                                                   },
                                                   text: "Xác nhận",
@@ -376,18 +362,14 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
                                                   radius: 8.r,
                                                   textColor: Colors.white,
                                                 ),
-                                                SizedBox(
-                                                  height: 20.h,
-                                                ),
+                                                space20H,
                                               ],
                                             ),
                                           )),
                                     ),
+                                    space30H,
                                     SizedBox(
-                                      height: 30.h,
-                                    ),
-                                    SizedBox(
-                                      width: 1.sw / 2,
+                                      width: 1.sw,
                                       child: const CopyRightText(),
                                     ),
                                   ],

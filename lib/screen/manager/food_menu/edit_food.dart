@@ -66,6 +66,9 @@ class _EditFoodState extends State<EditFood> {
   void dispose() {
     super.dispose();
     listStoreName.clear();
+    priceOfFood.clear();
+    foodNameController.clear();
+    desTextController.clear();
   }
 
   void init() async {

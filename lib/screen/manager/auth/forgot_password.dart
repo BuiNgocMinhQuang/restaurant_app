@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:app_restaurant/config/colors.dart';
+import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
@@ -44,9 +45,7 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
 
       print("DADATATA $data");
       if (data['status'] == 200) {
-        print("HANLDE FOGOT PASSWORD OK");
         final messRes = data['message'];
-
         final messText = messRes['text'];
         final otp = data['otp'];
         final tokenCheckOTP = otp['token'];
@@ -78,6 +77,12 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
     } catch (error) {
       print("FOGOT PASSWORD ERROR ${error}");
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.clear();
   }
 
   @override
@@ -183,9 +188,7 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                                             33, 82, 255, 1),
                                                       ]),
                                                 ),
-                                                SizedBox(
-                                                  height: 10.h,
-                                                ),
+                                                space10H,
                                                 Center(
                                                   child: TextApp(
                                                     softWrap: true,
@@ -194,9 +197,7 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                                     textAlign: TextAlign.center,
                                                   ),
                                                 ),
-                                                SizedBox(
-                                                  height: 30.h,
-                                                ),
+                                                space30H,
                                                 Column(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
@@ -272,9 +273,7 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                                     ),
                                                   ],
                                                 ),
-                                                SizedBox(
-                                                  height: 40.h,
-                                                ),
+                                                space40H,
                                                 ButtonGradient(
                                                   color1: color1BlueButton,
                                                   color2: color2BlueButton,
@@ -284,9 +283,6 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                                       handleForgotPassword(
                                                           email: emailController
                                                               .text);
-                                                      // emailController.clear();
-                                                      // context.go(
-                                                      //     "/manager_confirm_otp");
                                                     }
                                                   },
                                                   text: send,
@@ -297,11 +293,9 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                             ),
                                           )),
                                     ),
+                                    space30H,
                                     SizedBox(
-                                      height: 30.h,
-                                    ),
-                                    SizedBox(
-                                      width: 1.sw / 2,
+                                      width: 1.sw,
                                       // height: 80,
                                       child: const CopyRightText(),
                                     ),

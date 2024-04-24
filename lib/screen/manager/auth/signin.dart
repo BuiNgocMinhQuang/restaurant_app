@@ -1,4 +1,5 @@
 import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
+import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/background/background_welcome.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
@@ -24,6 +25,13 @@ class _ManagerSignInState extends State<ManagerSignIn> {
   final _formField = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passworldController = TextEditingController();
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.clear();
+    passworldController.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ManagerLoginBloc, ManagerLoginState>(
@@ -129,9 +137,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                       fontSize: 24.sp,
                                                     ),
                                                   ),
-                                                  SizedBox(
-                                                    height: 10.w,
-                                                  ),
+                                                  space10W,
                                                   Container(
                                                     height: 40.h,
                                                     decoration: BoxDecoration(
@@ -164,9 +170,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                           fontsize: 12.sp),
                                                     ),
                                                   ),
-                                                  SizedBox(
-                                                    height: 30.w,
-                                                  ),
+                                                  space30H,
                                                   TextFormField(
                                                     controller: emailController,
                                                     keyboardType: TextInputType
@@ -222,9 +226,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                             EdgeInsets.all(
                                                                 15.w)),
                                                   ),
-                                                  SizedBox(
-                                                    height: 20.w,
-                                                  ),
+                                                  space20H,
                                                   TextFormField(
                                                     controller:
                                                         passworldController,
@@ -294,9 +296,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                             EdgeInsets.all(
                                                                 15.w)),
                                                   ),
-                                                  SizedBox(
-                                                    height: 20.h,
-                                                  ),
+                                                  space10H,
                                                   Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment.start,
@@ -329,9 +329,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                           ),
                                                         ),
                                                       ),
-                                                      SizedBox(
-                                                        width: 10.w,
-                                                      ),
+                                                      space10W,
                                                       TextApp(
                                                           text: rememberAccount,
                                                           textAlign:
@@ -344,9 +342,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                           fontsize: 12.sp),
                                                     ],
                                                   ),
-                                                  SizedBox(
-                                                    height: 20.h,
-                                                  ),
+                                                  space30H,
                                                   ButtonGradient(
                                                     color1: color1BlueButton,
                                                     color2: color2BlueButton,
@@ -368,9 +364,6 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                               remember:
                                                                   isRemember),
                                                         );
-                                                        // emailController.clear();
-                                                        // passworldController
-                                                        //     .clear();
                                                       }
 
                                                       // BlocProvider.of<
@@ -379,9 +372,9 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                       //     .add(
                                                       //   ManagerLoginButtonPressed(
                                                       //       email:
-                                                      //           "buingocminhquang@gmail.com",
+                                                      //           "contact@thuonghieuvietsol.com",
                                                       //       password:
-                                                      //           "123456789",
+                                                      //           "thvTHV123!@#",
                                                       //       remember: true),
                                                       // );
                                                     },
@@ -420,9 +413,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                               103, 116, 142, 1),
                                                         ),
                                                       ),
-                                                      SizedBox(
-                                                        width: 12.w,
-                                                      ),
+                                                      space10W,
                                                       Container(
                                                         width: 100,
                                                         height: 1, // Thickness
@@ -432,9 +423,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                       )
                                                     ],
                                                   ),
-                                                  SizedBox(
-                                                    height: 20.h,
-                                                  ),
+                                                  space20H,
                                                   ButtonGradient(
                                                     color1: color1DarkButton,
                                                     color2: color2DarkButton,
@@ -447,9 +436,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                     radius: 8.r,
                                                     textColor: Colors.white,
                                                   ),
-                                                  SizedBox(
-                                                    height: 20.h,
-                                                  ),
+                                                  space20H,
                                                   InkWell(
                                                     onTap: () {
                                                       context.go(
@@ -469,11 +456,9 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                               ),
                                             )),
                                       ),
+                                      space30H,
                                       SizedBox(
-                                        height: 30.h,
-                                      ),
-                                      SizedBox(
-                                        width: 1.sw / 2,
+                                        width: 1.sw,
                                         child: const CopyRightText(),
                                       ),
                                     ],

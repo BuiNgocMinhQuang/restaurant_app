@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final chartDataHomeModel = chartDataHomeModelFromJson(jsonString);
-
 import 'dart:convert';
 
 ChartDataHomeModel chartDataHomeModelFromJson(String str) =>

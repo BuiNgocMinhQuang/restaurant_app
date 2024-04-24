@@ -16,6 +16,7 @@ import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -80,7 +81,6 @@ class _ListFoodManagerState extends State<ListFoodManager> {
         body: jsonEncode({'is_api': true, 'food_id': foodID}),
       );
       final data = jsonDecode(respons.body);
-      print("GET DETAILS  FOOD ${data}");
       try {
         if (data['status'] == 200) {
           setState(() {
@@ -90,7 +90,6 @@ class _ListFoodManagerState extends State<ListFoodManager> {
             context,
             MaterialPageRoute(
                 builder: (context) => EditFood(
-                      //  foodID: product.foodId,
                       detailsDataFood: detailsFoodData,
                       listStores: widget.listStores,
                     )),
@@ -408,8 +407,11 @@ class _ListFoodManagerState extends State<ListFoodManager> {
 
   @override
   void dispose() {
-    scrollListFoodController.dispose();
     super.dispose();
+    scrollListFoodController.dispose();
+    _dateStartController.clear();
+    _dateEndController.clear();
+    searchController.clear();
   }
 
   @override
@@ -537,9 +539,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                           FontWeight.bold,
                                                       color: blueText,
                                                     ),
-                                                    SizedBox(
-                                                      height: 10.h,
-                                                    ),
+                                                    space10H,
                                                     TextField(
                                                       readOnly: true,
                                                       controller:
@@ -608,9 +608,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                           FontWeight.bold,
                                                       color: blueText,
                                                     ),
-                                                    SizedBox(
-                                                      height: 10.h,
-                                                    ),
+                                                    space10H,
                                                     TextField(
                                                       readOnly: true,
                                                       controller:
@@ -683,9 +681,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                           FontWeight.bold,
                                                       color: blueText,
                                                     ),
-                                                    SizedBox(
-                                                      height: 10.h,
-                                                    ),
+                                                    space10H,
                                                     DropdownSearch(
                                                       items: listState,
                                                       onChanged: (changeFlag) {
@@ -773,9 +769,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                           FontWeight.bold,
                                                       color: blueText,
                                                     ),
-                                                    SizedBox(
-                                                      height: 10.h,
-                                                    ),
+                                                    space10H,
                                                     TextFormField(
                                                       onTapOutside: (event) {
                                                         FocusManager.instance
@@ -1070,7 +1064,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                                                 fontsize: 14.sp,
                                                                               ),
                                                                             ),
-                                                                            Container(
+                                                                            SizedBox(
                                                                               width: 150.w,
                                                                               child: Center(child: product.activeFlg == 1 ? StatusBoxIsSelling() : StatusBoxNoMoreSelling()),
                                                                             ),
@@ -1122,7 +1116,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                               } else {
                                                                 return Center(
                                                                   child: hasMore
-                                                                      ? CircularProgressIndicator()
+                                                                      ? const CircularProgressIndicator()
                                                                       : Container(),
                                                                 );
                                                               }

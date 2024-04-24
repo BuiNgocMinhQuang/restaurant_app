@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
-
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
@@ -11,7 +9,6 @@ import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -54,15 +51,13 @@ class _StaffConfirmOTPState extends State<StaffConfirmOTP> {
       );
       final data = jsonDecode(respons.body);
 
-      print("DADATATA $data");
       if (data['status'] == 200) {
-        print("HANLDE FOGOT PASSWORD OK");
         StorageUtils.instance.setString(key: 'OTPtoStaff', val: otp ?? '');
         final messRes = data['message'];
         final messText = messRes['text'];
         navigatorKey.currentContext?.go('/staff_change_password');
 
-        Future.delayed(Duration(milliseconds: 300), () {
+        Future.delayed(const Duration(milliseconds: 300), () {
           showCustomDialogModal(
             typeDialog: "succes",
             context: navigatorKey.currentContext,
@@ -244,7 +239,7 @@ class _StaffConfirmOTPState extends State<StaffConfirmOTP> {
                         ),
                         space30H,
                         SizedBox(
-                          width: 1.sw / 2,
+                          width: 1.sw,
                           child: const CopyRightText(),
                         ),
                       ],

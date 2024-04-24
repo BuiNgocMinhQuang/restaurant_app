@@ -19,7 +19,6 @@ class StaffSignIn extends StatefulWidget {
 }
 
 class _StaffSignInState extends State<StaffSignIn> {
-  // final _loginBloc = LoginBloc();
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
@@ -47,6 +46,15 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
   final storeIdController = TextEditingController();
   final emailController = TextEditingController();
   final passworldController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    storeIdController.clear();
+    emailController.clear();
+    passworldController.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
@@ -221,6 +229,8 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
 
                                               if (!emailValid) {
                                                 return invalidEmail;
+                                              } else {
+                                                return null;
                                               }
                                             },
                                             decoration: InputDecoration(
@@ -347,41 +357,41 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                                   color1: color1BlueButton,
                                                   color2: color2BlueButton,
                                                   event: () async {
-                                                    if (_formField.currentState!
-                                                        .validate()) {
-                                                      // context.go("/staff_home");
-                                                      BlocProvider.of<
-                                                                  LoginBloc>(
-                                                              context)
-                                                          .add(
-                                                        StaffLoginButtonPressed(
-                                                          remember: isRemember,
-                                                          shopId:
-                                                              storeIdController
-                                                                  .text,
-                                                          email: emailController
-                                                              .text,
-                                                          password:
-                                                              passworldController
-                                                                  .text,
-                                                        ),
-                                                      );
-                                                      storeIdController.clear();
-                                                      emailController.clear();
-                                                      passworldController
-                                                          .clear();
-                                                    }
+                                                    // if (_formField.currentState!
+                                                    //     .validate()) {
+                                                    //   // context.go("/staff_home");
+                                                    //   BlocProvider.of<
+                                                    //               LoginBloc>(
+                                                    //           context)
+                                                    //       .add(
+                                                    //     StaffLoginButtonPressed(
+                                                    //       remember: isRemember,
+                                                    //       shopId:
+                                                    //           storeIdController
+                                                    //               .text,
+                                                    //       email: emailController
+                                                    //           .text,
+                                                    //       password:
+                                                    //           passworldController
+                                                    //               .text,
+                                                    //     ),
+                                                    //   );
+                                                    //   storeIdController.clear();
+                                                    //   emailController.clear();
+                                                    //   passworldController
+                                                    //       .clear();
+                                                    // }
 
-                                                    // BlocProvider.of<LoginBloc>(
-                                                    //         context)
-                                                    //     .add(
-                                                    //   StaffLoginButtonPressed(
-                                                    //       shopId: "123456",
-                                                    //       email:
-                                                    //           "buingocminhquang2@gmail.com",
-                                                    //       password: "123456789",
-                                                    //       remember: true),
-                                                    // );
+                                                    BlocProvider.of<LoginBloc>(
+                                                            context)
+                                                        .add(
+                                                      StaffLoginButtonPressed(
+                                                          shopId: "123456",
+                                                          email:
+                                                              "buingocminhquang2@gmail.com",
+                                                          password: "123456789",
+                                                          remember: true),
+                                                    );
                                                     //khong xoa
                                                   },
                                                   text: "Đăng nhập",

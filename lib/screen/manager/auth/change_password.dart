@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/text.dart';
@@ -59,15 +60,12 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
       final data = jsonDecode(respons.body);
 
       if (data['status'] == 200) {
-        print("HANLDE FOGOT PASSWORD OK");
         final messRes = data['message'];
         final messText = messRes['text'];
 
-        passwordController.clear();
-        rePassworldController.clear();
         navigatorKey.currentContext?.go('/');
 
-        Future.delayed(Duration(milliseconds: 300), () {
+        Future.delayed(const Duration(milliseconds: 300), () {
           showCustomDialogModal(
             typeDialog: "succes",
             context: navigatorKey.currentContext,
@@ -94,6 +92,13 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
     } catch (error) {
       print("CHECK OTP ERROR ${error}");
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    passwordController.clear();
+    rePassworldController.clear();
   }
 
   @override
@@ -193,9 +198,7 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                     fontSize: 24.sp,
                                                   ),
                                                 ),
-                                                SizedBox(
-                                                  height: 20.w,
-                                                ),
+                                                space20W,
                                                 TextFormField(
                                                   controller:
                                                       passwordController,
@@ -267,9 +270,7 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
                                                 ),
-                                                SizedBox(
-                                                  height: 20.h,
-                                                ),
+                                                space20H,
                                                 TextFormField(
                                                   controller:
                                                       rePassworldController,
@@ -343,12 +344,7 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
                                                 ),
-                                                SizedBox(
-                                                  height: 20.h,
-                                                ),
-                                                SizedBox(
-                                                  height: 20.h,
-                                                ),
+                                                space40H,
                                                 ButtonGradient(
                                                   color1: color1BlueButton,
                                                   color2: color2BlueButton,
@@ -369,18 +365,14 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                   radius: 8.r,
                                                   textColor: Colors.white,
                                                 ),
-                                                SizedBox(
-                                                  height: 20.h,
-                                                ),
+                                                space20H,
                                               ],
                                             ),
                                           )),
                                     ),
+                                    space30H,
                                     SizedBox(
-                                      height: 30.h,
-                                    ),
-                                    SizedBox(
-                                      width: 1.sw / 2,
+                                      width: 1.sw,
                                       child: const CopyRightText(),
                                     ),
                                   ],

@@ -1,6 +1,7 @@
 import 'package:app_restaurant/bloc/login/staff_login_bloc.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
-import 'package:app_restaurant/routers/app_router_config.dart';
+import 'package:app_restaurant/screen/manager/user_infor/notifications.dart';
+
 import 'package:app_restaurant/screen/staff/receipt/brought_receipt.dart';
 import 'package:app_restaurant/screen/staff/home.dart';
 import 'package:app_restaurant/screen/staff/receipt/list_bill.dart';
@@ -15,7 +16,6 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 
 class StaffFabTab extends StatefulWidget {
   StaffFabTab({required this.selectedIndex});
@@ -41,11 +41,6 @@ class _StaffFabTabState extends State<StaffFabTab> {
 
   void handleLogout() async {
     BlocProvider.of<LoginBloc>(context).add(const LogoutStaff());
-    StorageUtils.instance.removeKey(key: 'token_staff');
-    mounted ? context.go("/staff_sign_in") : null;
-    //  navigatorKey.currentContext!.go('/staff_sign_in');
-
-    // setState(() {});
   }
 
   void checkTokenExpires() async {
@@ -94,6 +89,8 @@ class _StaffFabTabState extends State<StaffFabTab> {
   GlobalKey<CurvedNavigationBarState> bottomNavigationKey = GlobalKey();
 
   final PageStorageBucket bucket = PageStorageBucket();
+  bool isHaveNoti = true;
+
   @override
   Widget build(BuildContext context) {
     Widget currentScreen = currentIndex == 0
@@ -121,9 +118,6 @@ class _StaffFabTabState extends State<StaffFabTab> {
                 fit: BoxFit.cover,
               ),
             ),
-            // shape: RoundedRectangleBorder(
-            //     borderRadius:
-            //         BorderRadius.vertical(bottom: Radius.circular(35.w))),
             leading: InkWell(
               onTap: () {},
               child: Builder(
@@ -139,15 +133,48 @@ class _StaffFabTabState extends State<StaffFabTab> {
             ),
             actions: [
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ManagerNotifications()),
+                  );
+                },
                 child: Padding(
-                  padding: EdgeInsets.all(8.w),
-                  child: Icon(
-                    Icons.notifications_active_outlined,
-                    size: 30.w,
-                    color: Colors.black,
-                  ),
-                ),
+                    padding: EdgeInsets.all(8.w),
+                    child: isHaveNoti
+                        ? Stack(
+                            children: [
+                              Container(
+                                width: 30.w,
+                                height: 30.w,
+                                child: Image.asset(
+                                  'assets/images/bell.png',
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.red,
+                                  ),
+                                  width: 15.w,
+                                  height: 15.w,
+                                ),
+                              )
+                            ],
+                          )
+                        : Container(
+                            width: 30.w,
+                            height: 30.w,
+                            child: Image.asset(
+                              'assets/images/bell.png',
+                              fit: BoxFit.contain,
+                            ),
+                          )),
               )
             ],
             bottom: PreferredSize(

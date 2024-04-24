@@ -215,6 +215,8 @@ class _ListAllBillShopState extends State<ListAllBillShop>
   int currentPage = 1;
   List newListAllBillShop = [];
   bool hasMore = true;
+  bool isRefesh = false;
+
   var tokenStaff = StorageUtils.instance.getString(key: 'token_staff') ?? '';
 
   @override
@@ -242,15 +244,61 @@ class _ListAllBillShopState extends State<ListAllBillShop>
       // print("DAT BACK LOAD MORE ${data}");
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var listBillShopRes = ListBillShopModel.fromJson(data);
-            newListAllBillShop.addAll(listBillShopRes.data.data);
-            currentPage++;
-            if (listBillShopRes.data.data.isEmpty ||
-                listBillShopRes.data.data.length <= 15) {
-              hasMore = false;
-            }
-          });
+          mounted
+              ? setState(() {
+                  var listBillShopRes = ListBillShopModel.fromJson(data);
+                  newListAllBillShop.addAll(listBillShopRes.data.data);
+                  currentPage++;
+                  isRefesh = false;
+
+                  if (listBillShopRes.data.data.isEmpty ||
+                      listBillShopRes.data.data.length <= 15) {
+                    hasMore = false;
+                  }
+                })
+              : null;
+        } else {
+          print("ERROR BROUGHT RECEIPT PAGE 1");
+        }
+      } catch (error) {
+        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+    }
+  }
+
+  Future refeshBill(
+      {required int page, required Map<String, int?> filtersFlg}) async {
+    try {
+      final respons = await http.post(
+        Uri.parse('$baseUrl$listBill'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $tokenStaff"
+        },
+        body: jsonEncode({
+          'client': 'staff',
+          'shop_id': getStaffShopID,
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': filtersFlg,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      // print("DAT BACK LOAD MORE ${data}");
+      try {
+        if (data['status'] == 200) {
+          mounted
+              ? setState(() {
+                  newListAllBillShop.clear();
+                  var listBillShopRes = ListBillShopModel.fromJson(data);
+                  newListAllBillShop.addAll(listBillShopRes.data.data);
+                  isRefesh = true;
+                })
+              : null;
         } else {
           print("ERROR BROUGHT RECEIPT PAGE 1");
         }
@@ -270,7 +318,8 @@ class _ListAllBillShopState extends State<ListAllBillShop>
 
     scrollListBillController.addListener(() {
       if (scrollListBillController.position.maxScrollExtent ==
-          scrollListBillController.offset) {
+              scrollListBillController.offset &&
+          isRefesh == false) {
         loadMoreBill(page: currentPage, filtersFlg: {"pay_flg": null});
       }
     });
@@ -287,7 +336,7 @@ class _ListAllBillShopState extends State<ListAllBillShop>
     return RefreshIndicator(
       color: Colors.blue,
       onRefresh: () async {
-        // Implement logic to refresh data for Tab 1
+        refeshBill(page: 1, filtersFlg: {"pay_flg": null});
       },
       child: newListAllBillShop.isNotEmpty
           ? ListView.builder(
@@ -450,6 +499,8 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
   int currentPageComplete = 1;
   List listBillComplete = [];
   bool hasMoreComplete = true;
+  bool isRefesh = false;
+
   var tokenStaff = StorageUtils.instance.getString(key: 'token_staff') ?? '';
 
   final scrollTabCompleteController = ScrollController();
@@ -459,7 +510,8 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
     loadMoreCompleteBill(page: 1, filtersFlg: {"pay_flg": 1});
     scrollTabCompleteController.addListener(() {
       if (scrollTabCompleteController.position.maxScrollExtent ==
-          scrollTabCompleteController.offset) {
+              scrollTabCompleteController.offset &&
+          isRefesh == false) {
         loadMoreCompleteBill(
             page: currentPageComplete, filtersFlg: {"pay_flg": 1});
       }
@@ -498,15 +550,62 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
       // print("DAT BACK LOAD MORE ${data}");
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var listBillShopRes = ListBillShopModel.fromJson(data);
-            listBillComplete.addAll(listBillShopRes.data.data);
-            currentPageComplete++;
-            if (listBillShopRes.data.data.isEmpty ||
-                listBillShopRes.data.data.length <= 15) {
-              hasMoreComplete = false;
-            }
-          });
+          mounted
+              ? setState(() {
+                  var listBillShopRes = ListBillShopModel.fromJson(data);
+                  listBillComplete.addAll(listBillShopRes.data.data);
+                  currentPageComplete++;
+                  isRefesh = false;
+                  if (listBillShopRes.data.data.isEmpty ||
+                      listBillShopRes.data.data.length <= 15) {
+                    hasMoreComplete = false;
+                  }
+                })
+              : null;
+        } else {
+          print("ERROR BROUGHT RECEIPT PAGE 1");
+        }
+      } catch (error) {
+        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+    }
+  }
+
+  Future refeshCompleteBill(
+      {required int page, required Map<String, int?> filtersFlg}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_staff');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$listBill'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': 'staff',
+          'shop_id': getStaffShopID,
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': filtersFlg,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      // print("DAT BACK LOAD MORE ${data}");
+      try {
+        if (data['status'] == 200) {
+          mounted
+              ? setState(() {
+                  listBillComplete.clear();
+                  var listBillShopRes = ListBillShopModel.fromJson(data);
+                  listBillComplete.addAll(listBillShopRes.data.data);
+                  isRefesh = true;
+                })
+              : null;
         } else {
           print("ERROR BROUGHT RECEIPT PAGE 1");
         }
@@ -523,7 +622,7 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
     return RefreshIndicator(
       color: Colors.blue,
       onRefresh: () async {
-        // Implement logic to refresh data for Tab 1
+        refeshCompleteBill(page: 1, filtersFlg: {"pay_flg": 1});
       },
       child: listBillComplete.isNotEmpty
           ? ListView.builder(
@@ -670,6 +769,8 @@ class _PendingWidgetState extends State<PendingWidget>
   int currentPagePending = 1;
   List listBillPending = [];
   bool hasMoreComplete = true;
+  bool isRefesh = false;
+
   var tokenStaff = StorageUtils.instance.getString(key: 'token_staff') ?? '';
 
   final scrollTabPendingController = ScrollController();
@@ -679,7 +780,8 @@ class _PendingWidgetState extends State<PendingWidget>
     loadMorePending(page: 1, filtersFlg: {"pay_flg": 0});
     scrollTabPendingController.addListener(() {
       if (scrollTabPendingController.position.maxScrollExtent ==
-          scrollTabPendingController.offset) {
+              scrollTabPendingController.offset &&
+          isRefesh == false) {
         loadMorePending(page: currentPagePending, filtersFlg: {"pay_flg": 0});
       }
     });
@@ -716,16 +818,63 @@ class _PendingWidgetState extends State<PendingWidget>
 
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var listBillShopRes = ListBillShopModel.fromJson(data);
-            listBillPending.addAll(listBillShopRes.data.data);
-            currentPagePending++;
+          mounted
+              ? setState(() {
+                  var listBillShopRes = ListBillShopModel.fromJson(data);
+                  listBillPending.addAll(listBillShopRes.data.data);
+                  currentPagePending++;
+                  isRefesh = false;
 
-            if (listBillShopRes.data.data.isEmpty ||
-                listBillShopRes.data.data.length <= 15) {
-              hasMoreComplete = false;
-            }
-          });
+                  if (listBillShopRes.data.data.isEmpty ||
+                      listBillShopRes.data.data.length <= 15) {
+                    hasMoreComplete = false;
+                  }
+                })
+              : null;
+        } else {
+          print("ERROR BROUGHT RECEIPT PAGE 1");
+        }
+      } catch (error) {
+        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+    }
+  }
+
+  Future refeshPending(
+      {required int page, required Map<String, int?> filtersFlg}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_staff');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$listBill'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': 'staff',
+          'shop_id': getStaffShopID,
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': filtersFlg,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+
+      try {
+        if (data['status'] == 200) {
+          mounted
+              ? setState(() {
+                  listBillPending.clear();
+                  var listBillShopRes = ListBillShopModel.fromJson(data);
+                  listBillPending.addAll(listBillShopRes.data.data);
+                  isRefesh = true;
+                })
+              : null;
         } else {
           print("ERROR BROUGHT RECEIPT PAGE 1");
         }
@@ -742,7 +891,7 @@ class _PendingWidgetState extends State<PendingWidget>
     return RefreshIndicator(
       color: Colors.blue,
       onRefresh: () async {
-        // Implement logic to refresh data for Tab 1
+        refeshPending(page: 1, filtersFlg: {"pay_flg": 0});
       },
       child: listBillPending.isNotEmpty
           ? ListView.builder(
@@ -885,17 +1034,20 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
   int currentPageCancle = 1;
   List listBillCancle = [];
   bool hasMoreCancle = true;
+  bool isRefesh = false;
+
   var tokenStaff = StorageUtils.instance.getString(key: 'token_staff') ?? '';
 
   final scrollTabCancleController = ScrollController();
   @override
   void initState() {
     super.initState();
-    loadMoreCompleteBill(page: 1, filtersFlg: {"close_order": 1});
+    loadMoreCancleBill(page: 1, filtersFlg: {"close_order": 1});
     scrollTabCancleController.addListener(() {
       if (scrollTabCancleController.position.maxScrollExtent ==
-          scrollTabCancleController.offset) {
-        loadMoreCompleteBill(
+              scrollTabCancleController.offset &&
+          isRefesh == false) {
+        loadMoreCancleBill(
             page: currentPageCancle, filtersFlg: {"close_order": 1});
       }
     });
@@ -908,7 +1060,7 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
     super.dispose();
   }
 
-  Future loadMoreCompleteBill(
+  Future loadMoreCancleBill(
       {required int page, required Map<String, int?> filtersFlg}) async {
     try {
       var token = StorageUtils.instance.getString(key: 'token_staff');
@@ -932,15 +1084,62 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
       final data = jsonDecode(respons.body);
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var listBillShopRes = ListBillShopModel.fromJson(data);
-            listBillCancle.addAll(listBillShopRes.data.data);
-            currentPageCancle++;
-            if (listBillShopRes.data.data.isEmpty ||
-                listBillShopRes.data.data.length <= 15) {
-              hasMoreCancle = false;
-            }
-          });
+          mounted
+              ? setState(() {
+                  var listBillShopRes = ListBillShopModel.fromJson(data);
+                  listBillCancle.addAll(listBillShopRes.data.data);
+                  currentPageCancle++;
+                  isRefesh = false;
+
+                  if (listBillShopRes.data.data.isEmpty ||
+                      listBillShopRes.data.data.length <= 15) {
+                    hasMoreCancle = false;
+                  }
+                })
+              : null;
+        } else {
+          print("ERROR BROUGHT RECEIPT PAGE 1");
+        }
+      } catch (error) {
+        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+    }
+  }
+
+  Future refeshCancleBill(
+      {required int page, required Map<String, int?> filtersFlg}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_staff');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$listBill'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': 'staff',
+          'shop_id': getStaffShopID,
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': filtersFlg,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      try {
+        if (data['status'] == 200) {
+          mounted
+              ? setState(() {
+                  listBillCancle.clear();
+                  var listBillShopRes = ListBillShopModel.fromJson(data);
+                  listBillCancle.addAll(listBillShopRes.data.data);
+                  isRefesh = true;
+                })
+              : null;
         } else {
           print("ERROR BROUGHT RECEIPT PAGE 1");
         }
@@ -957,7 +1156,7 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
     return RefreshIndicator(
       color: Colors.blue,
       onRefresh: () async {
-        // Implement logic to refresh data for Tab 1
+        refeshCancleBill(page: 1, filtersFlg: {"close_order": 1});
       },
       child: listBillCancle.isNotEmpty
           ? ListView.builder(

@@ -6,9 +6,7 @@ import 'package:app_restaurant/utils/share_getString.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
@@ -56,10 +54,8 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
     super.initState();
     loadMoreMenuFood(page: 1, filtersFlg: null);
     scrollListFoodController.addListener(() {
-      print("SCROLL END");
       if (scrollListFoodController.position.maxScrollExtent ==
           scrollListFoodController.offset) {
-        print("LOADD MORE FOOD");
         loadMoreMenuFood(
             page: currentPage,
             keywords: query,
@@ -73,8 +69,9 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
 
   @override
   void dispose() {
-    scrollListFoodController.dispose();
     super.dispose();
+    scrollListFoodController.dispose();
+    searchController.clear();
   }
 
   void loadMoreMenuFood({
@@ -85,20 +82,7 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
   }) async {
     try {
       var token = StorageUtils.instance.getString(key: 'token_staff');
-      print("DATA TTTT ${{
-        {
-          'client': currentRole,
-          'shop_id': getStaffShopID,
-          'is_api': true,
-          'limit': 15,
-          'page': page,
-          'filters': {
-            "keywords": keywords,
-            "food_kinds": foodKinds,
-            "pay_flg": filtersFlg
-          },
-        }
-      }}");
+
       final respons = await http.post(
         Uri.parse('$baseUrl$foodList'),
         headers: {
@@ -120,7 +104,6 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print("GET DAT FOOD ${data}");
       try {
         if (data['status'] == 200) {
           mounted
@@ -205,13 +188,6 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                                               : Colors.blue),
                                   showCheckmark: false,
                                   label: Text(lableFood.toUpperCase()),
-                                  // TextApp(
-                                  //   text: lableFood.toUpperCase(),
-                                  //   fontsize: 14.sp,
-                                  //   color: blueText,
-                                  //   fontWeight: FontWeight.bold,
-                                  //   textAlign: TextAlign.center,
-                                  // ),
                                   selected:
                                       selectedCategories.contains(lableFood),
                                   onSelected: (bool selected) {
@@ -290,7 +266,6 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                     child: Container(
                   width: 1.sw,
                   child: ListView.builder(
-                      // physics: const ClampingScrollPhysics(),
                       controller: scrollListFoodController,
                       shrinkWrap: true,
                       itemCount: filterProducts.length + 1,
@@ -298,14 +273,10 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                         var dataLength = filterProducts.length;
 
                         if (index < dataLength) {
-                          // final product = filterProducts[index];
                           var imagePath1 = filterProducts[index]?.foodImages;
                           var listImagePath = jsonDecode(imagePath1);
-                          // var imagePath2 = imagePath1.replaceAll('"]', '');
                           return Container(
                               width: 1.sw,
-
-                              // height: 100.h,
                               padding: EdgeInsets.all(10.w),
                               margin: EdgeInsets.only(
                                   bottom: 15.h, left: 5.w, right: 5.w),
@@ -345,11 +316,6 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                                           errorWidget: (context, url, error) =>
                                               const Icon(Icons.error),
                                         ),
-
-                                        // Image.network(
-                                        //   httpImage + imagePath2,
-                                        //   fit: BoxFit.contain,
-                                        // ),
                                       )),
                                   space50W,
                                   Column(

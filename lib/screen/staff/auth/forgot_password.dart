@@ -8,7 +8,6 @@ import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/gradient_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -44,10 +43,7 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
         }),
       );
       final data = jsonDecode(respons.body);
-
-      print("DADATATA $data");
       if (data['status'] == 200) {
-        print("HANLDE FOGOT PASSWORD OK");
         final messRes = data['message'];
 
         final messText = messRes['text'];
@@ -76,15 +72,18 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
 
         showFailedModal(
             context: navigatorKey.currentContext, desWhyFail: messRes);
-        // showSnackBarTopCustom(
-        //     context: navigatorKey.currentContext,
-        //     mess: messText['text'],
-        //     color: Colors.red);
         print("FOGOT PASSWORD ERROR 1");
       }
     } catch (error) {
       print("FOGOT PASSWORD ERROR ${error}");
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    storeIdController.clear();
+    emailController.clear();
   }
 
   @override

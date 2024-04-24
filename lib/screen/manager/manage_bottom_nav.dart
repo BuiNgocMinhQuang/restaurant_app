@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:app_restaurant/bloc/brought_receipt/brought_receipt_bloc.dart';
 import 'package:app_restaurant/bloc/list_bill_shop/list_bill_shop_bloc.dart';
 import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
@@ -10,7 +8,6 @@ import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
 import 'package:app_restaurant/model/manager_infor_model.dart';
-import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/screen/manager/food_menu/add_food.dart';
 import 'package:app_restaurant/screen/manager/staff/add_staff.dart';
 import 'package:app_restaurant/screen/manager/store/booking_table.dart';
@@ -31,9 +28,9 @@ import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
@@ -60,22 +57,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
     navBarState!.setPage(index);
   }
 
-  // void hanldeLogOut() async {
-  //   BlocProvider.of<ManagerLoginBloc>(context).add(const ManagerLogout());
-  //   StorageUtils.instance.removeKey(key: 'token_manager');
-  //   navigatorKey.currentContext!.go('/');
-  //   // setState(() {});
-  // }
-
   void hanldeLogOut() async {
-    var token = StorageUtils.instance.getString(key: 'token_manager');
-    await http.post(
-      Uri.parse('$baseUrl$managerLogout'),
-      headers: {"Authorization": "Bearer $token"},
-    );
-    StorageUtils.instance.removeKey(key: 'token_manager');
-    // navigatorKey.currentContext!.go('/');
-    mounted ? context.go('/') : null;
+    BlocProvider.of<ManagerLoginBloc>(context).add(const ManagerLogout());
   }
 
   void checkTokenExpires() async {
@@ -83,10 +66,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
         StorageUtils.instance.getString(key: 'token_manager_expires');
     if (tokenExpiresTime != '') {
       DateTime now = DateTime.now().toUtc();
-      print("TIME NOW $now");
-
       var tokenExpires = DateTime.parse(tokenExpiresTime!);
-      print("TIME TOKEN $tokenExpires");
       if (now.year >= tokenExpires.year &&
           now.month >= tokenExpires.month &&
           now.day >= tokenExpires.day &&
@@ -130,8 +110,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
       },
     );
     final dataListStore = jsonDecode(responseListStore.body);
-    // log(token.toString());
-
     try {
       if (dataListStore['status'] == 200) {
         setState(() {
@@ -192,8 +170,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
         headers: {"Authorization": "Bearer $token"},
       );
       final data = jsonDecode(response.body);
-      // var message = data['message'];
-
       try {
         if (data['status'] == 200) {
           var managerInforDataRes = ManagerInforModel.fromJson(data);
@@ -313,35 +289,40 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
               );
             },
             child: Padding(
-              padding: EdgeInsets.all(8.w),
-              child: isHaveNoti
-                  ? Stack(
-                      children: [
-                        Icon(
-                          Icons.notifications,
-                          size: 35.w,
-                          color: Colors.black,
-                        ),
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.red,
+                padding: EdgeInsets.all(8.w),
+                child: isHaveNoti
+                    ? Stack(
+                        children: [
+                          SizedBox(
+                            width: 30.w,
+                            height: 30.w,
+                            child: Image.asset(
+                              'assets/images/bell.png',
+                              fit: BoxFit.contain,
                             ),
-                            width: 15.w,
-                            height: 15.w,
                           ),
-                        )
-                      ],
-                    )
-                  : Icon(
-                      Icons.notifications,
-                      size: 35.w,
-                      color: Colors.white,
-                    ),
-            ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.red,
+                              ),
+                              width: 15.w,
+                              height: 15.w,
+                            ),
+                          )
+                        ],
+                      )
+                    : SizedBox(
+                        width: 30.w,
+                        height: 30.w,
+                        child: Image.asset(
+                          'assets/images/bell.png',
+                          fit: BoxFit.contain,
+                        ),
+                      )),
           )
         ],
         bottom: PreferredSize(
@@ -591,12 +572,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                     shrinkWrap: true,
                     itemCount: listStoreManagerData.length,
                     itemBuilder: (context, index) {
-                      var imagePath1 =
-                          (listStoreManagerData[index].storeImages);
-                      var listImagePath = jsonDecode(imagePath1 ?? '');
                       var logoStore =
                           listStoreManagerData[index].storeLogo ?? '';
-                      // var imagePath2 = imagePath1.replaceAll('"]', '');
                       return InkWell(
                         onTap: () {},
                         child: ItemDrawer(
@@ -622,16 +599,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                           isExpand: true,
                           text:
                               listStoreManagerData[index].storeName.toString(),
-                          // iconColor: currentIndex == 7 ||
-                          //         currentIndex == 8 ||
-                          //         currentIndex == 9
-                          //     ? Colors.white
-                          //     : Colors.black,
-                          // backgroundIconColor: currentIndex == 7 ||
-                          //         currentIndex == 8 ||
-                          //         currentIndex == 9
-                          //     ? Colors.blue
-                          //     : const Color.fromRGBO(233, 236, 239, 1),
                           iconColor: index == selectedStoreIndex
                               ? Colors.white
                               : menuGrey,
@@ -665,8 +632,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                     currentIndex = 7;
                                   });
                                   checkTokenExpires();
-
-                                  // context.go("/manager_booking_table");
                                   Navigator.pop(context);
                                 }),
                             space20H,

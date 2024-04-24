@@ -18,7 +18,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
-import 'package:go_router/go_router.dart';
 
 class AddStaff extends StatefulWidget {
   const AddStaff({super.key});
@@ -100,19 +99,8 @@ class _AddStaffState extends State<AddStaff> {
             cityList.addAll(data['cities']);
             districList.addAll(data['districts']);
             wardList.addAll(data['wards']);
-
-            //get current City
-            // var cityListMap = cityList.asMap();
-            // var myCity = null;
             currentCity = null;
-            //get current District
-            // var districtListMap = districList.asMap();
-            // var myDistrict = districtListMap[managerInforData?.userAddress2];
             currentDistric = null;
-
-            //get Current Ward
-            // var wardListMap = wardList.asMap();
-            // var myWard = wardListMap[managerInforData?.userAddress3];
             currentWard = null;
           });
         } else {
@@ -324,10 +312,25 @@ class _AddStaffState extends State<AddStaff> {
     getListAreaInit(city: null, district: null);
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    surNameController.clear();
+    nameController.clear();
+    fullNameController.clear();
+    emailController.clear();
+    phoneController.clear();
+    passworldController.clear();
+    rePassworldController.clear();
+    addressController.clear();
+    twitterController.clear();
+    facebookController.clear();
+    instagramController.clear();
+  }
+
   sectionController() {
     return Container(
       width: 1.sw,
-      // height: 1.sh,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.r),
       ),
@@ -379,9 +382,7 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
+                          space10H,
                           DropdownSearch<String>(
                             validator: (value) {
                               if (value == "Chọn cửa hàng" ||
@@ -432,14 +433,11 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
+                          space10H,
                           DropdownSearch<String>(
                             validator: (value) {
                               if (value == "Chọn chức vụ" ||
-                                  value == null ||
-                                  value == '') {
+                                  currentRoleOfStaff == null) {
                                 return canNotNull;
                               } else {
                                 return null;
@@ -486,9 +484,7 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
+                          space10H,
                           TextFormField(
                             maxLength: 32,
                             onTapOutside: (event) {
@@ -532,9 +528,7 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
+                          space10H,
                           TextFormField(
                             maxLength: 24,
                             onTapOutside: (event) {
@@ -579,9 +573,7 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
+                          space10H,
                           TextFormField(
                             maxLength: 8,
                             onTapOutside: (event) {
@@ -626,9 +618,7 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
+                          space10H,
                           TextFormField(
                             maxLength: 15,
                             onTapOutside: (event) {
@@ -683,9 +673,7 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
+                          space10H,
                           TextFormField(
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
@@ -736,9 +724,7 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
+                          space10H,
                           TextFormField(
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
@@ -798,9 +784,7 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
+                          space10H,
                           TextFormField(
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
@@ -891,9 +875,7 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
+                          space10H,
                           DropdownSearch(
                             onChanged: (changeCity) {
                               getListArea(
@@ -941,9 +923,7 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
+                          space10H,
                           DropdownSearch(
                             key: keyListDistric,
                             items: districList,
@@ -990,9 +970,7 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
+                          space10H,
                           DropdownSearch(
                             key: keyListWard,
                             items: wardList,
@@ -1040,9 +1018,7 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
+                          space10H,
                           TextFormField(
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
@@ -1109,9 +1085,7 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
+                          space10H,
                           TextField(
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
@@ -1147,9 +1121,7 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
+                          space10H,
                           TextField(
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
@@ -1185,9 +1157,7 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
+                          space10H,
                           TextField(
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();

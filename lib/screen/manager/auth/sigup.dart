@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
+import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/widgets/background/background_welcome.dart';
@@ -44,14 +45,14 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
 
   @override
   void dispose() {
-    surNameController.dispose();
-    nameController.dispose();
-    fullNameController.dispose();
-    emailController.dispose();
-    phoneController.dispose();
-    passworldController.dispose();
-    rePassworldController.dispose();
     super.dispose();
+    surNameController.clear();
+    nameController.clear();
+    fullNameController.clear();
+    emailController.clear();
+    phoneController.clear();
+    passworldController.clear();
+    rePassworldController.clear();
   }
 
   void handleRegister({
@@ -81,15 +82,13 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
             "agree_conditon": agreeConditon
           }));
       final data = jsonDecode(response.body);
-      print("DAT DANG KIS $data");
+
       if (data['status'] == 200) {
-        print("DANG KI OK");
         BlocProvider.of<ManagerLoginBloc>(navigatorKey.currentContext!).add(
           ManagerLoginButtonPressed(
               email: email, password: password, remember: false),
         );
       } else if (data['status'] == 500) {
-        print("ZO ELSE 500");
         var messRes = data['message'];
         var messFailed = messRes['text'];
         showCustomDialogModal(
@@ -100,7 +99,6 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
             btnText: "OK",
             typeDialog: "error");
       } else {
-        print("ZO ELSE");
         var messRes = data['errors'];
         var messErrorEmail1 = messRes['email'].toString();
         var messErrorEmail2 = messErrorEmail1.replaceAll("[", "");
@@ -122,40 +120,12 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
             typeDialog: "error");
       }
     } catch (error) {
-      print("ZO ELSE $error");
+      // print("ZO ELSE $error");
     }
   }
 
-  // void pressButton() {
-  //   print("PRESS BUTOON");
-  //   print("STATE FORM ${_formField.currentState}");
-  //   if (_formField.currentState!.validate()) {
-  //     print("THONG TIN DANG KI ${{
-  //       "Ho": surNameController.text,
-  //       "Ten": nameController.text,
-  //       "Ho va ten": fullNameController.text,
-  //       "Email": emailController.text,
-  //       "So dien thoai": phoneController.text,
-  //       "Pass": passworldController.text,
-  //       "RePass": rePassworldController.text,
-  //       "AgreeConditon": isChecked,
-  //     }}");
-  //     handleRegister(
-  //       firstName: surNameController.text,
-  //       lastName: nameController.text,
-  //       fullName: fullNameController.text,
-  //       email: emailController.text,
-  //       phone: phoneController.text.toString(),
-  //       password: passworldController.text,
-  //       confirmPassword: rePassworldController.text,
-  //       agreeConditon: isChecked,
-  //     );
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
-    //style checkbox
     Color getColor(Set<MaterialState> states) {
       const Set<MaterialState> interactiveStates = <MaterialState>{
         MaterialState.pressed,
@@ -254,144 +224,119 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                     fontSize: 24.sp,
                                                   ),
                                                 ),
-                                                SizedBox(
-                                                  height: 30.h,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: TextFormField(
-                                                        onTapOutside: (event) {
-                                                          FocusManager.instance
-                                                              .primaryFocus
-                                                              ?.unfocus();
-                                                        },
-                                                        keyboardType:
-                                                            TextInputType.name,
-                                                        controller:
-                                                            surNameController,
-                                                        style: TextStyle(
-                                                            fontSize: 12.sp,
-                                                            color: grey),
-                                                        cursorColor: grey,
-                                                        validator: (value) {
-                                                          if (value!.isEmpty) {
-                                                            return surNameIsRequied;
-                                                          } else {
-                                                            return null;
-                                                          }
-                                                        },
-                                                        decoration:
-                                                            InputDecoration(
-                                                                fillColor:
-                                                                    const Color
-                                                                        .fromARGB(
-                                                                        255,
-                                                                        226,
-                                                                        104,
-                                                                        159),
-                                                                focusedBorder:
-                                                                    OutlineInputBorder(
-                                                                  borderSide: const BorderSide(
-                                                                      color: Color.fromRGBO(
-                                                                          214,
-                                                                          51,
-                                                                          123,
-                                                                          0.6),
-                                                                      width:
-                                                                          2.0),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              8.r),
-                                                                ),
-                                                                border:
-                                                                    OutlineInputBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              8.r),
-                                                                ),
-                                                                hintText: 'Họ',
-                                                                isDense: true,
-                                                                contentPadding:
-                                                                    EdgeInsets
-                                                                        .all(15
-                                                                            .w)),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 10.w,
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: TextFormField(
-                                                        onTapOutside: (event) {
-                                                          FocusManager.instance
-                                                              .primaryFocus
-                                                              ?.unfocus();
-                                                        },
-                                                        controller:
-                                                            nameController,
-                                                        keyboardType:
-                                                            TextInputType.name,
-                                                        style: TextStyle(
-                                                            fontSize: 12.sp,
-                                                            color: grey),
-                                                        cursorColor: grey,
-                                                        validator: (value) {
-                                                          if (value!.isEmpty) {
-                                                            return nameIsRequied;
-                                                          } else {
-                                                            return null;
-                                                          }
-                                                        },
-                                                        decoration:
-                                                            InputDecoration(
-                                                                fillColor:
-                                                                    const Color
-                                                                        .fromARGB(
-                                                                        255,
-                                                                        226,
-                                                                        104,
-                                                                        159),
-                                                                focusedBorder:
-                                                                    OutlineInputBorder(
-                                                                  borderSide: const BorderSide(
-                                                                      color: Color.fromRGBO(
-                                                                          214,
-                                                                          51,
-                                                                          123,
-                                                                          0.6),
-                                                                      width:
-                                                                          2.0),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              8.r),
-                                                                ),
-                                                                border:
-                                                                    OutlineInputBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              8.r),
-                                                                ),
-                                                                hintText: 'Tên',
-                                                                isDense: true,
-                                                                contentPadding:
-                                                                    EdgeInsets
-                                                                        .all(15
-                                                                            .w)),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 20.h,
-                                                ),
+                                                space30H,
                                                 TextFormField(
+                                                  maxLength: 8,
+                                                  onTapOutside: (event) {
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
+                                                  },
+                                                  keyboardType:
+                                                      TextInputType.name,
+                                                  controller: surNameController,
+                                                  style: TextStyle(
+                                                      fontSize: 12.sp,
+                                                      color: grey),
+                                                  cursorColor: grey,
+                                                  validator: (value) {
+                                                    if (value!.isEmpty) {
+                                                      return surNameIsRequied;
+                                                    } else {
+                                                      return null;
+                                                    }
+                                                  },
+                                                  decoration: InputDecoration(
+                                                      fillColor:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              226,
+                                                              104,
+                                                              159),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color: Color
+                                                                    .fromRGBO(
+                                                                        214,
+                                                                        51,
+                                                                        123,
+                                                                        0.6),
+                                                                width: 2.0),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      hintText: 'Họ',
+                                                      isDense: true,
+                                                      contentPadding:
+                                                          EdgeInsets.all(15.w)),
+                                                ),
+                                                space5H,
+                                                TextFormField(
+                                                  maxLength: 24,
+                                                  onTapOutside: (event) {
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
+                                                  },
+                                                  controller: nameController,
+                                                  keyboardType:
+                                                      TextInputType.name,
+                                                  style: TextStyle(
+                                                      fontSize: 12.sp,
+                                                      color: grey),
+                                                  cursorColor: grey,
+                                                  validator: (value) {
+                                                    if (value!.isEmpty) {
+                                                      return nameIsRequied;
+                                                    } else {
+                                                      return null;
+                                                    }
+                                                  },
+                                                  decoration: InputDecoration(
+                                                      fillColor:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              226,
+                                                              104,
+                                                              159),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color: Color
+                                                                    .fromRGBO(
+                                                                        214,
+                                                                        51,
+                                                                        123,
+                                                                        0.6),
+                                                                width: 2.0),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.r),
+                                                      ),
+                                                      hintText: 'Tên',
+                                                      isDense: true,
+                                                      contentPadding:
+                                                          EdgeInsets.all(15.w)),
+                                                ),
+                                                space5H,
+                                                TextFormField(
+                                                  maxLength: 32,
                                                   onTapOutside: (event) {
                                                     FocusManager
                                                         .instance.primaryFocus
@@ -445,9 +390,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
                                                 ),
-                                                SizedBox(
-                                                  height: 20.h,
-                                                ),
+                                                space5H,
                                                 TextFormField(
                                                   onTapOutside: (event) {
                                                     FocusManager
@@ -508,9 +451,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
                                                 ),
-                                                SizedBox(
-                                                  height: 20.h,
-                                                ),
+                                                space20H,
                                                 TextFormField(
                                                   onTapOutside: (event) {
                                                     FocusManager
@@ -580,9 +521,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
                                                 ),
-                                                SizedBox(
-                                                  height: 20.h,
-                                                ),
+                                                space20H,
                                                 TextFormField(
                                                   onTapOutside: (event) {
                                                     FocusManager
@@ -659,9 +598,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
                                                 ),
-                                                SizedBox(
-                                                  height: 20.h,
-                                                ),
+                                                space20H,
                                                 TextFormField(
                                                   onTapOutside: (event) {
                                                     FocusManager
@@ -740,9 +677,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                       contentPadding:
                                                           EdgeInsets.all(15.w)),
                                                 ),
-                                                SizedBox(
-                                                  height: 20.h,
-                                                ),
+                                                space20H,
                                                 Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,
@@ -811,38 +746,13 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                     ),
                                                   ],
                                                 ),
-                                                SizedBox(
-                                                  height: 20.h,
-                                                ),
+                                                space20H,
                                                 ButtonGradient(
                                                   color1: color1DarkButton,
                                                   color2: color2DarkButton,
                                                   event: () {
                                                     if (_formField.currentState!
                                                         .validate()) {
-                                                      print(
-                                                          "THONG TIN DANG KI ${{
-                                                        "Ho": surNameController
-                                                            .text,
-                                                        "Ten":
-                                                            nameController.text,
-                                                        "Ho va ten":
-                                                            fullNameController
-                                                                .text,
-                                                        "Email": emailController
-                                                            .text,
-                                                        "So dien thoai":
-                                                            phoneController
-                                                                .text,
-                                                        "Pass":
-                                                            passworldController
-                                                                .text,
-                                                        "RePass":
-                                                            rePassworldController
-                                                                .text,
-                                                        "AgreeConditon":
-                                                            isChecked,
-                                                      }}");
                                                       handleRegister(
                                                         firstName:
                                                             surNameController
@@ -867,28 +777,13 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                             isChecked,
                                                       );
                                                     }
-                                                    // handleRegister(
-                                                    //   firstName: "Quang",
-                                                    //   lastName: "MIdddd",
-                                                    //   fullName:
-                                                    //       "BUI NGOC MINH QUANG",
-                                                    //   email:
-                                                    //       "buingocminhquang@gmail1.com",
-                                                    //   phone: "0987654322",
-                                                    //   password: "123456789",
-                                                    //   confirmPassword:
-                                                    //       "123456789",
-                                                    //   agreeConditon: false,
-                                                    // );
                                                   },
                                                   text: "Đăng ký",
                                                   fontSize: 12.sp,
                                                   radius: 8.r,
                                                   textColor: Colors.white,
                                                 ),
-                                                SizedBox(
-                                                  height: 20.h,
-                                                ),
+                                                space20H,
                                                 RichText(
                                                   text: TextSpan(
                                                     children: [
@@ -907,7 +802,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                                 "OpenSans",
                                                           )),
                                                       TextSpan(
-                                                          text: login,
+                                                          text: " $login",
                                                           recognizer:
                                                               TapGestureRecognizer()
                                                                 ..onTap = () {
@@ -928,18 +823,14 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                     ],
                                                   ),
                                                 ),
-                                                SizedBox(
-                                                  height: 10.h,
-                                                ),
+                                                space10H
                                               ],
                                             ),
                                           )),
                                     ),
+                                    space30H,
                                     SizedBox(
-                                      height: 30.h,
-                                    ),
-                                    SizedBox(
-                                      width: 1.sw / 2,
+                                      width: 1.sw,
                                       child: const CopyRightText(),
                                     ),
                                   ],

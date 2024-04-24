@@ -20,7 +20,6 @@ class ManageRoom extends StatefulWidget {
   final String roomID;
   final String roomName;
   final String numberTable;
-  // final ListRoomOfStoreModel? listRoomOfStoreModel;
   const ManageRoom(
       {Key? key,
       required this.roomID,
@@ -56,7 +55,6 @@ class _ManageRoomState extends State<ManageRoom> {
         if (data['status'] == 200) {
           setState(() {
             listTableOfRoomModel = ListTableOfRoomModel.fromJson(data);
-            // handleGetListRoom(shopID: widget.detailsStoreModel?.shopId ?? '');
           });
         } else {
           print("ERROR CREATE FOOOD");

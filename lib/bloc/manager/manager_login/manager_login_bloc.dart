@@ -25,13 +25,30 @@ class ManagerLoginBloc extends Bloc<ManagerLoginEvent, ManagerLoginState> {
     ManagerLogout event,
     Emitter<ManagerLoginState> emit,
   ) async {
-    print("LOGOUT");
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+      final response = await http.post(
+        Uri.parse('$baseUrl$managerLogout'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': "Bearer $token",
+        },
+      );
+      final data = jsonDecode(response.body);
+      log(data.toString());
 
-    var token = StorageUtils.instance.getString(key: 'token_manager');
-    await http.post(
-      Uri.parse('$baseUrl$managerLogout'),
-      headers: {"Authorization": "Bearer $token"},
-    );
+      try {
+        if (data['status'] == 200) {
+          StorageUtils.instance.removeKey(key: 'token_manager');
+          navigatorKey.currentContext?.go('/');
+        }
+      } catch (error) {
+        print("ERROR LOGOUT 1");
+      }
+    } catch (error) {
+      print("ERROR LOGOUT 2");
+    }
   }
 
   void _onManagerLoginButtonPressed(

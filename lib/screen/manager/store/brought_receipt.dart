@@ -63,11 +63,6 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final TabController tabController = TabController(length: 4, vsync: this);
 
@@ -294,6 +289,8 @@ class _AllWidgetState extends State<AllWidget>
   int currentPage = 1;
   List newListFood = [];
   bool hasMore = true;
+  bool isRefesh = false;
+
   var tokenManager =
       StorageUtils.instance.getString(key: 'token_manager') ?? '';
 
@@ -306,7 +303,8 @@ class _AllWidgetState extends State<AllWidget>
 
     scrollListFoodController.addListener(() {
       if (scrollListFoodController.position.maxScrollExtent ==
-          scrollListFoodController.offset) {
+              scrollListFoodController.offset &&
+          isRefesh == false) {
         loadMoreFood(page: currentPage, filtersFlg: {"pay_flg": null});
       }
     });
@@ -393,10 +391,56 @@ class _AllWidgetState extends State<AllWidget>
                       ListBroughtReceiptModel.fromJson(data);
                   newListFood.addAll(broughtReceiptPageRes.data.data);
                   currentPage++;
+                  isRefesh = false;
+
                   if (broughtReceiptPageRes.data.data.isEmpty ||
                       broughtReceiptPageRes.data.data.length <= 15) {
                     hasMore = false;
                   }
+                })
+              : null;
+        } else {
+          log("ERROR BROUGHT RECEIPT ALL PAGE 1");
+        }
+      } catch (error) {
+        log("ERROR BROUGHT RECEIPT ALL PAGE 2 $error");
+      }
+    } catch (error) {
+      log("ERROR BROUGHT RECEIPT ALL PAGE 3 $error");
+    }
+  }
+
+  Future refeshFood(
+      {required int page, required Map<String, int?> filtersFlg}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$getListBroughtReceipt'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': 'user',
+          'shop_id': widget.shopID,
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': filtersFlg,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print("DATA $data");
+      try {
+        if (data['status'] == 200) {
+          mounted
+              ? setState(() {
+                  newListFood.clear();
+                  var broughtReceiptPageRes =
+                      ListBroughtReceiptModel.fromJson(data);
+                  newListFood.addAll(broughtReceiptPageRes.data.data);
+                  isRefesh = true;
                 })
               : null;
         } else {
@@ -415,7 +459,7 @@ class _AllWidgetState extends State<AllWidget>
     return RefreshIndicator(
       color: Colors.blue,
       onRefresh: () async {
-        loadMoreFood(page: 1, filtersFlg: {"pay_flg": null});
+        refeshFood(page: 1, filtersFlg: {"pay_flg": null});
       },
       child: newListFood.isNotEmpty
           ? ListView.builder(
@@ -1062,6 +1106,8 @@ class _PendingWidgetState extends State<PendingWidget>
   int currentPagePending = 1;
   List listBillPending = [];
   bool hasMoreComplete = true;
+  bool isRefesh = false;
+
   var tokenManager =
       StorageUtils.instance.getString(key: 'token_manager') ?? '';
 
@@ -1072,7 +1118,8 @@ class _PendingWidgetState extends State<PendingWidget>
     loadMorePending(page: 1, filtersFlg: {"pay_flg": 0});
     scrollTabPendingController.addListener(() {
       if (scrollTabPendingController.position.maxScrollExtent ==
-          scrollTabPendingController.offset) {
+              scrollTabPendingController.offset &&
+          isRefesh == false) {
         loadMorePending(page: currentPagePending, filtersFlg: {"pay_flg": 0});
       }
     });
@@ -1158,6 +1205,7 @@ class _PendingWidgetState extends State<PendingWidget>
             var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
             listBillPending.addAll(broughtReceiptPageRes.data.data);
             currentPagePending++;
+            isRefesh = false;
 
             if (broughtReceiptPageRes.data.data.isEmpty ||
                 broughtReceiptPageRes.data.data.length <= 15) {
@@ -1175,12 +1223,53 @@ class _PendingWidgetState extends State<PendingWidget>
     }
   }
 
+  void refeshPending(
+      {required int page, required Map<String, int?> filtersFlg}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$getListBroughtReceipt'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': 'user',
+          'shop_id': widget.shopID,
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': filtersFlg,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+
+      try {
+        if (data['status'] == 200) {
+          setState(() {
+            listBillPending.clear();
+            var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
+            listBillPending.addAll(broughtReceiptPageRes.data.data);
+            isRefesh = true;
+          });
+        } else {
+          print("ERROR BROUGHT RECEIPT PENDING PAGE 1");
+        }
+      } catch (error) {
+        print("ERROR BROUGHT RECEIPT PENDING PAGE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR BROUGHT RECEIPT  PENDING PAGE 3 $error");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       color: Colors.blue,
       onRefresh: () async {
-        // Implement logic to refresh data for Tab 1
+        refeshPending(page: 1, filtersFlg: {"pay_flg": 0});
       },
       child: listBillPending.isNotEmpty
           ? ListView.builder(
@@ -1444,6 +1533,8 @@ class _CancleWidgetState extends State<CancleWidget>
   int currentPageCancle = 1;
   List listBillCancle = [];
   bool hasMoreCanle = true;
+  bool isRefesh = false;
+
   var tokenManager =
       StorageUtils.instance.getString(key: 'token_manager') ?? '';
 
@@ -1454,7 +1545,8 @@ class _CancleWidgetState extends State<CancleWidget>
     loadMoreCancle(page: 1, filtersFlg: {"pay_flg": 2});
     scrollTabCancleController2.addListener(() {
       if (scrollTabCancleController2.position.maxScrollExtent ==
-          scrollTabCancleController2.offset) {
+              scrollTabCancleController2.offset &&
+          isRefesh == false) {
         loadMoreCancle(page: currentPageCancle, filtersFlg: {"pay_flg": 2});
       }
     });
@@ -1494,11 +1586,54 @@ class _CancleWidgetState extends State<CancleWidget>
             var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
             listBillCancle.addAll(broughtReceiptPageRes.data.data);
             currentPageCancle++;
+            isRefesh = false;
 
             if (broughtReceiptPageRes.data.data.isEmpty ||
                 broughtReceiptPageRes.data.data.length <= 15) {
               hasMoreCanle = false;
             }
+          });
+          print("DATA BACK ${data}");
+        } else {
+          print("ERROR BROUGHT RECEIPT CANCLE PAGE 1");
+        }
+      } catch (error) {
+        print("ERROR BROUGHT RECEIPT CANCLE PAGE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR BROUGHT RECEIPT  CANCLE PAGE 3 $error");
+    }
+  }
+
+  Future refeshCancle(
+      {required int page, required Map<String, int?> filtersFlg}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_manager');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$getListBroughtReceipt'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': 'user',
+          'shop_id': widget.shopID,
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': filtersFlg,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+
+      try {
+        if (data['status'] == 200) {
+          setState(() {
+            listBillCancle.clear();
+            var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
+            listBillCancle.addAll(broughtReceiptPageRes.data.data);
+            isRefesh = true;
           });
           print("DATA BACK ${data}");
         } else {
@@ -1526,7 +1661,7 @@ class _CancleWidgetState extends State<CancleWidget>
     return RefreshIndicator(
       color: Colors.blue,
       onRefresh: () async {
-        // Implement logic to refresh data for Tab 1
+        refeshCancle(page: 1, filtersFlg: {"pay_flg": 2});
       },
       child: listBillCancle.isNotEmpty
           ? ListView.builder(

@@ -40,7 +40,6 @@ class _DetailsStoreState extends State<DetailsStore> {
   ListRoomOfStoreModel? listRoomOfStoreModel;
   DetailsStoreModel? detailsStoreModel;
 
-  // void createRoom() {}
   void getListStore() async {
     BlocProvider.of<ListStoresBloc>(context).add(GetListStores(
       token: StorageUtils.instance.getString(key: 'token_manager') ?? '',
@@ -48,9 +47,6 @@ class _DetailsStoreState extends State<DetailsStore> {
   }
 
   void getDetailsStore({required shopID}) async {
-    print({
-      'shopID': shopID,
-    });
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
 
@@ -70,17 +66,9 @@ class _DetailsStoreState extends State<DetailsStore> {
       print(" DATA CREATE FOOD ${data}");
       try {
         if (data['status'] == 200) {
-          // var hahah = DetailsStoreModel.fromJson(data);
           setState(() {
             widget.detailsStoreModel = DetailsStoreModel.fromJson(data);
           });
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //       builder: (context) => DetailsStore(
-          //             detailsStoreModel: detailsStoreModel,
-          //           )),
-          // );
         } else {
           print("ERROR CREATE FOOOD");
         }
@@ -205,7 +193,6 @@ class _DetailsStoreState extends State<DetailsStore> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     handleGetListRoom(shopID: widget.detailsStoreModel?.shopId ?? '');
   }

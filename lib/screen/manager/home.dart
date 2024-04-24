@@ -262,6 +262,13 @@ class _ManagerHomeState extends State<ManagerHome> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _dateStartController.clear();
+    _dateEndController.clear();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(

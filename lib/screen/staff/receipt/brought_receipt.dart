@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:app_restaurant/bloc/brought_receipt/brought_receipt_bloc.dart';
 import 'package:app_restaurant/bloc/payment/payment_bloc.dart';
-import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/model/brought_receipt/list_brought_receipt_model.dart';
@@ -10,7 +9,6 @@ import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/share_getString.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/card/card_receipt_container.dart';
-import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/tabs&drawer/item_drawer_and_tab.dart';
 import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
@@ -227,19 +225,6 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                             fontsize: 20.sp,
                             fontWeight: FontWeight.bold,
                           ),
-                          space30H,
-                          SizedBox(
-                            width: 200,
-                            child: ButtonGradient(
-                              color1: color1BlueButton,
-                              color2: color2BlueButton,
-                              event: () {},
-                              text: 'Đóng',
-                              fontSize: 12.sp,
-                              radius: 8.r,
-                              textColor: Colors.white,
-                            ),
-                          )
                         ],
                       ),
                     ),
@@ -261,6 +246,8 @@ class _AllWidgetState extends State<AllWidget>
   int currentPage = 1;
   List newListFood = [];
   bool hasMore = true;
+  bool isRefesh = false;
+
   var tokenStaff = StorageUtils.instance.getString(key: 'token_staff') ?? '';
 
   @override
@@ -272,7 +259,8 @@ class _AllWidgetState extends State<AllWidget>
     newListFood.clear();
     scrollListFoodController.addListener(() {
       if (scrollListFoodController.position.maxScrollExtent ==
-          scrollListFoodController.offset) {
+              scrollListFoodController.offset &&
+          isRefesh == false) {
         loadMoreFood(page: currentPage, filtersFlg: {"pay_flg": null});
       }
     });
@@ -338,7 +326,7 @@ class _AllWidgetState extends State<AllWidget>
         headers: {
           'Content-type': 'application/json',
           'Accept': 'application/json',
-          "Authorization": "Bearer $token"
+          'Authorization': "Bearer $token"
         },
         body: jsonEncode({
           'client': 'staff',
@@ -359,10 +347,56 @@ class _AllWidgetState extends State<AllWidget>
                       ListBroughtReceiptModel.fromJson(data);
                   newListFood.addAll(broughtReceiptPageRes.data.data);
                   currentPage++;
+                  isRefesh = false;
+
                   if (broughtReceiptPageRes.data.data.isEmpty ||
                       broughtReceiptPageRes.data.data.length <= 15) {
                     hasMore = false;
                   }
+                })
+              : null;
+        } else {
+          log("ERROR BROUGHT RECEIPT PAGE 1");
+        }
+      } catch (error) {
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
+      }
+    } catch (error) {
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
+    }
+  }
+
+  void refeshFood(
+      {required int page, required Map<String, int?> filtersFlg}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_staff');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$getListBroughtReceipt'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': 'staff',
+          'shop_id': getStaffShopID,
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': filtersFlg,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+
+      try {
+        if (data['status'] == 200) {
+          mounted
+              ? setState(() {
+                  newListFood.clear();
+                  var broughtReceiptPageRes =
+                      ListBroughtReceiptModel.fromJson(data);
+                  newListFood.addAll(broughtReceiptPageRes.data.data);
+                  isRefesh = true;
                 })
               : null;
         } else {
@@ -381,7 +415,7 @@ class _AllWidgetState extends State<AllWidget>
     return RefreshIndicator(
       color: Colors.blue,
       onRefresh: () async {
-        loadMoreFood(page: 1, filtersFlg: {"pay_flg": null});
+        refeshFood(page: 1, filtersFlg: {"pay_flg": null});
       },
       child: newListFood.isNotEmpty
           ? ListView.builder(
@@ -723,9 +757,7 @@ class _AllWidgetState extends State<AllWidget>
                         Icons.receipt_long_rounded,
                         size: 50.h,
                       ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
+                      space10H,
                       TextApp(
                           text: "Chưa có hoá đơn :(",
                           textAlign: TextAlign.center,
@@ -987,9 +1019,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
                         Icons.receipt_long_rounded,
                         size: 50.h,
                       ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
+                      space10H,
                       TextApp(
                           text: "Chưa có hoá đơn :(",
                           textAlign: TextAlign.center,
@@ -1017,6 +1047,8 @@ class _PendingWidgetState extends State<PendingWidget>
   int currentPagePending = 1;
   List listBillPending = [];
   bool hasMoreComplete = true;
+  bool isRefesh = false;
+
   var tokenStaff = StorageUtils.instance.getString(key: 'token_staff') ?? '';
 
   final scrollTabPendingController = ScrollController();
@@ -1026,7 +1058,8 @@ class _PendingWidgetState extends State<PendingWidget>
     loadMorePending(page: 1, filtersFlg: {"pay_flg": 0});
     scrollTabPendingController.addListener(() {
       if (scrollTabPendingController.position.maxScrollExtent ==
-          scrollTabPendingController.offset) {
+              scrollTabPendingController.offset &&
+          isRefesh == false) {
         loadMorePending(page: currentPagePending, filtersFlg: {"pay_flg": 0});
       }
     });
@@ -1114,11 +1147,56 @@ class _PendingWidgetState extends State<PendingWidget>
                       ListBroughtReceiptModel.fromJson(data);
                   listBillPending.addAll(broughtReceiptPageRes.data.data);
                   currentPagePending++;
+                  isRefesh = false;
 
                   if (broughtReceiptPageRes.data.data.isEmpty ||
                       broughtReceiptPageRes.data.data.length <= 15) {
                     hasMoreComplete = false;
                   }
+                })
+              : null;
+        } else {
+          print("ERROR BROUGHT RECEIPT PAGE 1");
+        }
+      } catch (error) {
+        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+    }
+  }
+
+  void refeshPending(
+      {required int page, required Map<String, int?> filtersFlg}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_staff');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$getListBroughtReceipt'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': 'staff',
+          'shop_id': getStaffShopID,
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': filtersFlg,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+
+      try {
+        if (data['status'] == 200) {
+          mounted
+              ? setState(() {
+                  listBillPending.clear();
+                  var broughtReceiptPageRes =
+                      ListBroughtReceiptModel.fromJson(data);
+                  listBillPending.addAll(broughtReceiptPageRes.data.data);
+                  isRefesh = true;
                 })
               : null;
         } else {
@@ -1138,6 +1216,7 @@ class _PendingWidgetState extends State<PendingWidget>
       color: Colors.blue,
       onRefresh: () async {
         // Implement logic to refresh data for Tab 1
+        refeshPending(page: 1, filtersFlg: {"pay_flg": 0});
       },
       child: listBillPending.isNotEmpty
           ? ListView.builder(
@@ -1378,9 +1457,7 @@ class _PendingWidgetState extends State<PendingWidget>
                         Icons.receipt_long_rounded,
                         size: 50.h,
                       ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
+                      space10H,
                       TextApp(
                           text: "Chưa có hoá đơn :(",
                           textAlign: TextAlign.center,
@@ -1408,6 +1485,8 @@ class _CancleWidgetState extends State<CancleWidget>
   int currentPageCancle = 1;
   List listBillCancle = [];
   bool hasMoreCanle = true;
+  bool isRefesh = false;
+
   var tokenStaff = StorageUtils.instance.getString(key: 'token_staff') ?? '';
 
   final scrollTabCancleController2 = ScrollController();
@@ -1417,7 +1496,8 @@ class _CancleWidgetState extends State<CancleWidget>
     loadMoreCancle(page: 1, filtersFlg: {"pay_flg": 2});
     scrollTabCancleController2.addListener(() {
       if (scrollTabCancleController2.position.maxScrollExtent ==
-          scrollTabCancleController2.offset) {
+              scrollTabCancleController2.offset &&
+          isRefesh == false) {
         loadMoreCancle(page: currentPageCancle, filtersFlg: {"pay_flg": 2});
       }
     });
@@ -1459,6 +1539,7 @@ class _CancleWidgetState extends State<CancleWidget>
                       ListBroughtReceiptModel.fromJson(data);
                   listBillCancle.addAll(broughtReceiptPageRes.data.data);
                   currentPageCancle++;
+                  isRefesh = false;
 
                   if (broughtReceiptPageRes.data.data.isEmpty ||
                       broughtReceiptPageRes.data.data.length <= 15) {
@@ -1467,6 +1548,49 @@ class _CancleWidgetState extends State<CancleWidget>
                 })
               : null;
           print("DATA BACK ${data}");
+        } else {
+          print("ERROR BROUGHT RECEIPT PAGE 1");
+        }
+      } catch (error) {
+        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+    }
+  }
+
+  Future refeshCancle(
+      {required int page, required Map<String, int?> filtersFlg}) async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_staff');
+      final respons = await http.post(
+        Uri.parse('$baseUrl$getListBroughtReceipt'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': 'staff',
+          'shop_id': getStaffShopID,
+          'is_api': true,
+          'limit': 15,
+          'page': page,
+          'filters': filtersFlg,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+
+      try {
+        if (data['status'] == 200) {
+          mounted
+              ? setState(() {
+                  var broughtReceiptPageRes =
+                      ListBroughtReceiptModel.fromJson(data);
+                  listBillCancle.addAll(broughtReceiptPageRes.data.data);
+                  isRefesh = true;
+                })
+              : null;
         } else {
           print("ERROR BROUGHT RECEIPT PAGE 1");
         }
@@ -1492,7 +1616,7 @@ class _CancleWidgetState extends State<CancleWidget>
     return RefreshIndicator(
       color: Colors.blue,
       onRefresh: () async {
-        // Implement logic to refresh data for Tab 1
+        refeshCancle(page: 1, filtersFlg: {"pay_flg": 2});
       },
       child: listBillCancle.isNotEmpty
           ? ListView.builder(
@@ -1594,9 +1718,7 @@ class _CancleWidgetState extends State<CancleWidget>
                         Icons.receipt_long_rounded,
                         size: 50.h,
                       ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
+                      space10H,
                       TextApp(
                           text: "Chưa có hoá đơn :(",
                           textAlign: TextAlign.center,

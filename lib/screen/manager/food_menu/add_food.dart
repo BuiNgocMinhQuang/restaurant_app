@@ -73,6 +73,9 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
   @override
   void dispose() {
     super.dispose();
+    foodNameController.clear();
+    priceOfFood.clear();
+    noteController.clear();
   }
 
   void init() {
@@ -344,7 +347,6 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                                   EdgeInsets.all(15.w),
                                             ),
                                           ),
-                                          // onChanged: print,
                                           selectedItem: chooseType,
                                         ),
                                       ],

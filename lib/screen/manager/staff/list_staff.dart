@@ -138,7 +138,6 @@ class _ListStaffState extends State<ListStaff> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print(" DATA CREATE FOOD ${data}");
       try {
         if (data['status'] == 200) {
           setState(() {
@@ -204,10 +203,8 @@ class _ListStaffState extends State<ListStaff> {
         body: jsonEncode({'is_api': true, 'staff_no': staffNo}),
       );
       final data = jsonDecode(respons.body);
-      print(" DATA CREATE FOOD ${data}");
       try {
         if (data['status'] == 200) {
-          // var hahah = DetailsStoreModel.fromJson(data);
           currentStaffList.clear();
           handleGetListStaff(
             page: 1,
@@ -249,6 +246,8 @@ class _ListStaffState extends State<ListStaff> {
   @override
   void dispose() {
     super.dispose();
+    _dateStartController.clear();
+    _dateEndController.clear();
   }
 
   @override
@@ -478,9 +477,7 @@ class _ListStaffState extends State<ListStaff> {
                                                     fontWeight: FontWeight.bold,
                                                     color: blueText,
                                                   ),
-                                                  SizedBox(
-                                                    height: 10.h,
-                                                  ),
+                                                  space10H,
                                                   DropdownSearch(
                                                     onChanged: (status) {
                                                       var kkk =
@@ -582,9 +579,7 @@ class _ListStaffState extends State<ListStaff> {
                                                     fontWeight: FontWeight.bold,
                                                     color: blueText,
                                                   ),
-                                                  SizedBox(
-                                                    height: 10.h,
-                                                  ),
+                                                  space10H,
                                                   TextField(
                                                     onTapOutside: (event) {
                                                       FocusManager

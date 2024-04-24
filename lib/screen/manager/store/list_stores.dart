@@ -9,12 +9,9 @@ import 'package:app_restaurant/model/manager_infor_model.dart';
 import 'package:app_restaurant/screen/manager/store/details_store.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
-import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
-import 'package:avatar_stack/avatar_stack.dart';
-import 'package:avatar_stack/positions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -47,11 +44,7 @@ class _ListStoresState extends State<ListStores> {
   File? selectedImage;
   String avatarUser = '';
   List<String>? avatarStaff;
-  // DataManagerInfor? managerInforData;
   DetailsStoreModel? detailsStoreModel;
-
-  // List<String> listImageBanner = [];
-
   final ImagePicker imagePicker = ImagePicker();
   @override
   void initState() {
@@ -66,9 +59,6 @@ class _ListStoresState extends State<ListStores> {
   }
 
   void getDetailsStore({required shopID}) async {
-    print({
-      'shopID': shopID,
-    });
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
 
@@ -88,7 +78,6 @@ class _ListStoresState extends State<ListStores> {
       print(" DATA CREATE FOOD ${data}");
       try {
         if (data['status'] == 200) {
-          // var hahah = DetailsStoreModel.fromJson(data);
           setState(() {
             detailsStoreModel = DetailsStoreModel.fromJson(data);
           });
@@ -384,14 +373,6 @@ class _ListStoresState extends State<ListStores> {
                                                           fontsize: 16.sp,
                                                         ),
                                                         space15H,
-                                                        // TextApp(
-                                                        //   text: state
-                                                        //           .listStoreModel
-                                                        //           ?.data[index]
-                                                        //           .storeDescription ??
-                                                        //       '',
-                                                        //   fontsize: 14.sp,
-                                                        // ),
                                                         HtmlWidget(
                                                           '''
                                                            $desStore
@@ -490,9 +471,6 @@ class _ListStoresState extends State<ListStores> {
                                                     width: 1), //<-- SEE HERE
                                               ),
                                               onPressed: () {
-                                                // setState(() {
-                                                //   showModal = true;
-                                                // });
                                                 showDialog(
                                                     context: context,
                                                     builder:
@@ -562,19 +540,6 @@ class _ListStoresState extends State<ListStores> {
                                     fontsize: 20.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  space30H,
-                                  Container(
-                                    width: 200,
-                                    child: ButtonGradient(
-                                      color1: color1BlueButton,
-                                      color2: color2BlueButton,
-                                      event: () {},
-                                      text: 'Thử lại',
-                                      fontSize: 12.sp,
-                                      radius: 8.r,
-                                      textColor: Colors.white,
-                                    ),
-                                  )
                                 ],
                               ),
                             ),
@@ -624,31 +589,4 @@ class _ListStoresState extends State<ListStores> {
           ),
         ),
       );
-  // Widget buildIndicator() => AnimatedSmoothIndicator(
-  //       activeIndex: activeIndex,
-  //       count: widget.bannerList.length,
-  //     );
-}
-
-class Example2MaxAmount extends StatelessWidget {
-  final List<String> staffListAvatar;
-  const Example2MaxAmount({Key? key, required this.staffListAvatar})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final settings = RestrictedAmountPositions(
-      maxAmountItems: 4,
-      maxCoverage: 0.3,
-      minCoverage: 0.1,
-    );
-    return AvatarStack(
-      settings: settings,
-      height: 50.h,
-      avatars: [
-        for (int i = 0; i < staffListAvatar.length; i++)
-          AssetImage(staffListAvatar[i])
-      ],
-    );
-  }
 }

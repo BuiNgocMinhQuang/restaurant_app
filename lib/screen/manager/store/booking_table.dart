@@ -6,7 +6,6 @@ import 'package:app_restaurant/bloc/payment/payment_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/utils/storage.dart';
-import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/material.dart';
@@ -192,9 +191,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                       borderRadius: BorderRadius.circular(2.r),
                                       color: newGreyApp),
                                 ),
-                                SizedBox(
-                                  width: 5.w,
-                                ),
+                                space5W,
                                 TextApp(
                                   text: "Đang phục vụ",
                                   color: color1DarkGreyButton,
@@ -202,9 +199,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                 )
                               ],
                             ),
-                            SizedBox(
-                              width: 10.w,
-                            ),
+                            space10H,
                             Row(
                               children: [
                                 Container(
@@ -216,10 +211,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                         width: 1, color: newBlueText),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 5.w,
-                                ),
-                                // TextApp(text: "Bàn trống")
+                                space5W,
                                 TextApp(
                                   text: "Bàn trống",
                                   color: color1DarkGreyButton,
@@ -254,7 +246,6 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                   child: SizedBox(
                                     width: 1.sw,
                                     height: 500,
-                                    // color: Colors.amber,
                                     child:
                                         state
                                                 .listRoomModel!
@@ -361,12 +352,8 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                               roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
                                                                             );
                                                                           },
-                                                                          orderID: state
-                                                                              .listRoomModel!
-                                                                              .rooms![currentRoomIndex]
-                                                                              .tables![index]
-                                                                              .orderId
-                                                                              .toString(),
+                                                                          orderID:
+                                                                              null,
                                                                           listTableOfRoom: state
                                                                               .listRoomModel!
                                                                               .rooms![currentRoomIndex]
@@ -467,7 +454,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                                         roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
                                                                                       );
                                                                                     },
-                                                                                    orderID: null,
+                                                                                    orderID: state.listRoomModel!.rooms![currentRoomIndex].tables![index].orderId.toString(),
                                                                                     token: tokenManager,
                                                                                     role: 'user',
                                                                                     shopID: widget.shopID,
@@ -753,8 +740,8 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(
-                            width: 100,
-                            height: 100,
+                            width: 100.w,
+                            height: 100.w,
                             child: Lottie.asset('assets/lottie/error.json'),
                           ),
                           space30H,
@@ -764,18 +751,18 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                             fontWeight: FontWeight.bold,
                           ),
                           space30H,
-                          SizedBox(
-                            width: 200,
-                            child: ButtonGradient(
-                              color1: color1BlueButton,
-                              color2: color2BlueButton,
-                              event: () {},
-                              text: 'Thử lại',
-                              fontSize: 12.sp,
-                              radius: 8.r,
-                              textColor: Colors.white,
-                            ),
-                          )
+                          // SizedBox(
+                          //   width: 200.w,
+                          //   child: ButtonGradient(
+                          //     color1: color1BlueButton,
+                          //     color2: color2BlueButton,
+                          //     event: () {},
+                          //     text: 'Thử lại',
+                          //     fontSize: 12.sp,
+                          //     radius: 8.r,
+                          //     textColor: Colors.white,
+                          //   ),
+                          // )
                         ],
                       ),
                     ),

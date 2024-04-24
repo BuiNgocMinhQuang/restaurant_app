@@ -534,16 +534,15 @@ class _ManagerInformationState extends State<ManagerInformation> {
             headers: {
               'Content-type': 'application/json',
               'Accept': 'application/json',
-              "Authorization": "Bearer $token"
+              'Authorization': 'Bearer $token'
             },
             body: jsonEncode({
-              "front_image_cccd": base64SelectedImageFrontID,
-              "back_image_cccd": base64SelectedImageBackID,
-              "hold_image_cccd": base64SelectedImageHoldID,
+              'front_image_cccd': base64SelectedImageFrontID,
+              'back_image_cccd': base64SelectedImageBackID,
+              'hold_image_cccd': base64SelectedImageHoldID,
             }),
           );
           final data = jsonDecode(respons.body);
-          print("DATA UPDATE INFOR  ${data}}");
           try {
             if (data['status'] == 200) {
               print("UPDATE INFOR  OK");
@@ -603,17 +602,6 @@ class _ManagerInformationState extends State<ManagerInformation> {
     required int? address3,
     required String? address4,
   }) async {
-    print("CAI DONG TRUYEN LEN ${{
-      "first_name": firstName,
-      "last_name": lastName,
-      "full_name": fullName,
-      "email": email,
-      "phone": phone,
-      "address_1": address1,
-      "address_2": address2,
-      "address_3": address3,
-      "address_4": address4,
-    }}");
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
       final respons = await http.post(
@@ -636,12 +624,10 @@ class _ManagerInformationState extends State<ManagerInformation> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print("DATA UPDATE INFOR  ${data}}");
       final messText = data['message'];
 
       try {
         if (data['status'] == 200) {
-          print("UPDATE INFOR  OK");
           getInfor();
           showSnackBarTopCustom(
               title: "Thành công",
@@ -649,7 +635,6 @@ class _ManagerInformationState extends State<ManagerInformation> {
               mess: messText['text'],
               color: Colors.green);
         } else {
-          print("ERROR UPDATE INFOR  1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -667,7 +652,6 @@ class _ManagerInformationState extends State<ManagerInformation> {
   void init() async {
     var imagePath1 =
         (managerInforData?.userAvatar ?? 'assets/user/images/avt/no_image.png');
-    // var imagePath2 = imagePath1.replaceAll('"]', '');
     var listImagePath = imagePath1;
     var imageFrontID1 =
         (managerInforData?.frontImageCccd ?? 'assets/img/no-image.png')
@@ -719,9 +703,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          width: 100,
-                          height: 100,
+                        SizedBox(
+                          width: 100.w,
+                          height: 100.w,
                           child: Lottie.asset('assets/lottie/error.json'),
                         ),
                         space30H,
@@ -731,8 +715,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
                           fontWeight: FontWeight.bold,
                         ),
                         space30H,
-                        Container(
-                          width: 200,
+                        SizedBox(
+                          width: 200.w,
                           child: ButtonGradient(
                             color1: color1BlueButton,
                             color2: color2BlueButton,
@@ -817,7 +801,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                             Positioned(
                                               top: 5.w,
                                               right: 5.w,
-                                              child: Container(
+                                              child: SizedBox(
                                                 width: 20.w,
                                                 height: 20.w,
                                                 child: InkWell(
@@ -932,7 +916,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                               text:
                                                   "Tài khoản đã được xác nhận",
                                               fontsize: 14.sp,
-                                              color: Color.fromRGBO(
+                                              color: const Color.fromRGBO(
                                                   130, 214, 22, 1),
                                               fontWeight: FontWeight.bold,
                                             )
@@ -953,7 +937,6 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                         top: 40.h, left: 10.w, right: 10.w),
                                     child: Container(
                                         width: double.infinity,
-                                        // height: heightView / 2,
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(15.r),
@@ -1268,6 +1251,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
 
                                                       if (!phoneValid) {
                                                         return invalidPhone;
+                                                      } else {
+                                                        return null;
                                                       }
                                                     },
                                                     decoration: InputDecoration(
@@ -1326,6 +1311,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                       if (value ==
                                                           "Chọn tỉnh/thành phố") {
                                                         return canNotNull;
+                                                      } else {
+                                                        return null;
                                                       }
                                                     },
                                                     selectedItem: currentCity,
@@ -1351,8 +1338,6 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         DropDownDecoratorProps(
                                                       dropdownSearchDecoration:
                                                           InputDecoration(
-                                                        // isCollapsed: true,
-
                                                         hintMaxLines: 1,
                                                         fillColor: const Color
                                                             .fromARGB(
@@ -1415,6 +1400,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                       if (value ==
                                                           "Chọn quận/huyện") {
                                                         return canNotNull;
+                                                      } else {
+                                                        return null;
                                                       }
                                                     },
 
@@ -1509,6 +1496,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                       if (value ==
                                                           "Chọn phường/xã") {
                                                         return canNotNull;
+                                                      } else {
+                                                        return null;
                                                       }
                                                     },
 
@@ -1680,6 +1669,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
 
                                                       if (!emailValid) {
                                                         return invalidEmail;
+                                                      } else {
+                                                        return null;
                                                       }
                                                     },
                                                     decoration: InputDecoration(
@@ -2561,10 +2552,6 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                     passwordForOpenIDImage
                                                                         .text);
                                                           }
-
-                                                          // setState(() {
-                                                          //   isChangeUI = true;
-                                                          // });
                                                         },
                                                         text: "Xác nhận",
                                                         fontSize: 12.sp,

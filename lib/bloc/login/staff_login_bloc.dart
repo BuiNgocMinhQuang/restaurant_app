@@ -28,13 +28,35 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LogoutStaff event,
     Emitter<LoginState> emit,
   ) async {
-    print("LOGOUT HHHEHHE");
+    try {
+      // StorageUtils.instance.removeKey(key: 'token_staff');
+      // log(StorageUtils.instance.getString(key: 'token_staff').toString());
 
-    var token = StorageUtils.instance.getString(key: 'token_staff');
-    await http.post(
-      Uri.parse('$baseUrl$staffLogout'),
-      headers: {"Authorization": "Bearer $token"},
-    );
+      // navigatorKey.currentContext?.go('/staff_sign_in');
+
+      var token = StorageUtils.instance.getString(key: 'token_staff');
+      final response = await http.post(
+        Uri.parse('$baseUrl$staffLogout'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': "Bearer $token",
+        },
+      );
+      final data = jsonDecode(response.body);
+      log(data.toString());
+      try {
+        if (data['status'] == 200) {
+          StorageUtils.instance.removeKey(key: 'token_staff');
+          navigatorKey.currentContext?.go('/staff_sign_in');
+        }
+      } catch (error) {
+        print("ERROR LOGOUT 1");
+      }
+    } catch (error) {
+      print("ERROR LOGOUT 2");
+    }
+    // context.go('/staff_sign_in');
   }
 
   void _onStaffLoginButtonPressed(
