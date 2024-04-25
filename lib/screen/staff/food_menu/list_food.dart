@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/model/list_food_menu_model.dart';
@@ -133,7 +134,8 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
   @override
   Widget build(BuildContext context) {
     List<String> foodKindOfShop =
-        StorageUtils.instance.getStringList(key: 'food_kinds_list') ?? [];
+        StorageUtils.instance.getStringList(key: 'food_kinds_list') ??
+            ["Combo", "Món nướng", "Món lẩu", "Nước giải khát"];
     listAllCategoriesFood = foodKindOfShop;
     List filterProducts = currentFoodList.where((product) {
       final foodTitle = product.foodName.toLowerCase();
@@ -274,7 +276,8 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
 
                         if (index < dataLength) {
                           var imagePath1 = filterProducts[index]?.foodImages;
-                          var listImagePath = jsonDecode(imagePath1);
+                          var listImagePath = jsonDecode(imagePath1 ?? '[]');
+
                           return Container(
                               width: 1.sw,
                               padding: EdgeInsets.all(10.w),
@@ -301,21 +304,27 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                                       child: ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(40.w),
-                                        child: CachedNetworkImage(
-                                          fit: BoxFit.fill,
-                                          imageUrl:
-                                              httpImage + listImagePath[0],
-                                          placeholder: (context, url) =>
-                                              SizedBox(
-                                            height: 10.w,
-                                            width: 10.w,
-                                            child: const Center(
-                                                child:
-                                                    CircularProgressIndicator()),
-                                          ),
-                                          errorWidget: (context, url, error) =>
-                                              const Icon(Icons.error),
-                                        ),
+                                        child: imagePath1 == null
+                                            ? Image.asset(
+                                                'assets/images/dish.png',
+                                                fit: BoxFit.contain,
+                                              )
+                                            : CachedNetworkImage(
+                                                fit: BoxFit.fill,
+                                                imageUrl: httpImage +
+                                                    listImagePath[0],
+                                                placeholder: (context, url) =>
+                                                    SizedBox(
+                                                  height: 10.w,
+                                                  width: 10.w,
+                                                  child: const Center(
+                                                      child:
+                                                          CircularProgressIndicator()),
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        const Icon(Icons.error),
+                                              ),
                                       )),
                                   space50W,
                                   Column(

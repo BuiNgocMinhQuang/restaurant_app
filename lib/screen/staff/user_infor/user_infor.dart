@@ -479,7 +479,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                     ? 'Quản lý'
                     : staffInforData?.staffPosition == 4
                         ? 'Kế toán'
-                        : '')
+                        : 'Đầu bếp')
         : null;
     mounted
         ? twitterController.text = staffInforData?.staffTwitter ?? ''

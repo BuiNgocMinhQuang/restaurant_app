@@ -180,6 +180,7 @@ class CustomTab extends StatelessWidget {
   double sizeIcon;
   double fontSize;
   Color colorText;
+  bool isHaveIcon;
   CustomTab({
     Key? key,
     required this.text,
@@ -187,6 +188,7 @@ class CustomTab extends StatelessWidget {
     this.colorText = Colors.black,
     this.sizeIcon = 0,
     this.fontSize = 0,
+    this.isHaveIcon = true,
   }) : super(key: key);
 
   @override
@@ -198,10 +200,12 @@ class CustomTab extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: sizeIcon == 0 ? 20.w : sizeIcon,
-            ),
+            isHaveIcon
+                ? Icon(
+                    icon,
+                    size: sizeIcon == 0 ? 20.w : sizeIcon,
+                  )
+                : Container(),
             SizedBox(
               width: 3.w,
             ),

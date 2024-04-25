@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:app_restaurant/bloc/brought_receipt/brought_receipt_bloc.dart';
 import 'package:app_restaurant/bloc/payment/payment_bloc.dart';
+import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/model/brought_receipt/list_brought_receipt_model.dart';
@@ -1732,4 +1733,53 @@ class _CancleWidgetState extends State<CancleWidget>
 
   @override
   bool get wantKeepAlive => true;
+}
+
+class RecipeForChef extends StatefulWidget {
+  const RecipeForChef({super.key});
+
+  @override
+  State<RecipeForChef> createState() => _RecipeForChefState();
+}
+
+class _RecipeForChefState extends State<RecipeForChef> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Công thức món ăn"),
+        backgroundColor: Colors.white,
+      ),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Center(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: 300,
+              height: 300,
+              // color: Colors.amber,
+              child: Lottie.asset('assets/lottie/no_mess.json'),
+            ),
+            space15H,
+            TextApp(
+              text: "Tính năng đang phát triển",
+              fontsize: 16.sp,
+              fontWeight: FontWeight.bold,
+              color: orangeColorApp,
+            ),
+            space15H,
+            TextApp(
+              text: "Vui lòng quay lại sau",
+              fontsize: 16.sp,
+              fontWeight: FontWeight.bold,
+              color: blueText,
+            ),
+          ],
+        )),
+      ),
+    );
+  }
 }

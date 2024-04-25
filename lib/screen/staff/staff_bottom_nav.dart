@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:app_restaurant/bloc/staff/login/staff_login_bloc.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
+import 'package:app_restaurant/model/staff/staff_infor_model.dart';
 import 'package:app_restaurant/screen/manager/user_infor/notifications.dart';
 
 import 'package:app_restaurant/screen/staff/receipt/brought_receipt.dart';
@@ -7,15 +11,18 @@ import 'package:app_restaurant/screen/staff/home.dart';
 import 'package:app_restaurant/screen/staff/receipt/list_bill.dart';
 import 'package:app_restaurant/screen/staff/food_menu/list_food.dart';
 import 'package:app_restaurant/screen/staff/user_infor/user_infor.dart';
+import 'package:app_restaurant/utils/share_getString.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/tabs&drawer/item_drawer_and_tab.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-
+import 'package:app_restaurant/env/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:http/http.dart' as http;
+import 'package:app_restaurant/constant/api/index.dart';
 
 class StaffFabTab extends StatefulWidget {
   StaffFabTab({required this.selectedIndex});
@@ -26,12 +33,16 @@ class StaffFabTab extends StatefulWidget {
 
 class _StaffFabTabState extends State<StaffFabTab> {
   int currentIndex = 2;
+  DataStaffInfor? staffInforData;
+
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
       checkTokenExpires();
+      getInfor();
     });
+    // log(getStaffPosition);
   }
 
   @override
@@ -51,20 +62,20 @@ class _StaffFabTabState extends State<StaffFabTab> {
       print("TIME NOW $now");
 
       var tokenExpires = DateTime.parse(tokenExpiresTime!);
-      print("TIME TOKEN $tokenExpires");
-      if (now.year >= tokenExpires.year &&
-          now.month >= tokenExpires.month &&
-          now.day >= tokenExpires.day &&
-          now.hour >= tokenExpires.hour &&
-          now.minute >= tokenExpires.minute &&
-          now.second >= tokenExpires.second) {
-        print("Het han token");
-        showLoginSessionExpiredDialog(
-            context: context,
-            okEvent: () {
-              handleLogout();
-            });
-      } else {
+      if (now.compareTo(tokenExpires) > 0 || now.compareTo(tokenExpires) == 0) {
+        print("het han token");
+        // StorageUtils.instance.removeKey(key: 'token_manager');
+        // context.go('/');
+        mounted
+            ? setState(() {
+                showLoginSessionExpiredDialog(
+                    context: context,
+                    okEvent: () {
+                      handleLogout();
+                    });
+              })
+            : null;
+      } else if (now.compareTo(tokenExpires) < 0) {
         print("Giu phien dang nhap");
       }
     } else {
@@ -77,6 +88,41 @@ class _StaffFabTabState extends State<StaffFabTab> {
     final CurvedNavigationBarState? navBarState =
         bottomNavigationKey.currentState;
     navBarState!.setPage(index);
+  }
+
+  void getInfor() async {
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_staff');
+      print("TOKEN CURRENT $token");
+      final response = await http.post(
+        Uri.parse('$baseUrl$userInformationApi'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        // headers: {"Authorization": "Bearer $token"},
+      );
+      final data = jsonDecode(response.body);
+      // var message = data['message'];
+
+      try {
+        if (data['status'] == 200) {
+          var staffInforDataRes = StaffInfor.fromJson(data);
+          setState(() {
+            staffInforData = staffInforDataRes.data;
+          });
+
+          print("GET INFOR STAFF OK 1");
+        } else {
+          print("GET INFOR STAFF ERROR 1");
+        }
+      } catch (error) {
+        print("GET INFOR STAFF ERROR 2  $error");
+      }
+    } catch (error) {
+      print("GET INFOR STAFF ERROR 3 $error");
+    }
   }
 
   // final List<Widget> pages = [
@@ -93,12 +139,17 @@ class _StaffFabTabState extends State<StaffFabTab> {
 
   @override
   Widget build(BuildContext context) {
+    log(staffInforData?.staffPosition.toString() ?? 'dadadad');
     Widget currentScreen = currentIndex == 0
         ? const ListFoodStaff()
         : currentIndex == 1
-            ? const StaffBroughtReceipt()
+            ? (staffInforData?.staffPosition.toString() == '5'
+                ? const RecipeForChef()
+                : const StaffBroughtReceipt())
             : currentIndex == 2
-                ? const StaffBookingTable()
+                ? (staffInforData?.staffPosition.toString() == '5'
+                    ? const ChefHomeScreen()
+                    : const StaffBookingTable())
                 : currentIndex == 3
                     ? const StaffListBill()
                     : const StaffUserInformation();

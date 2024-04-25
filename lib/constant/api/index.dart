@@ -7,6 +7,8 @@ const String changePasswordStaffWhenForget = 'staff/change-password';
 const String updateStaffInfor = 'staff/update-profile';
 const String changePasswordStaffApi = 'staff/update-password';
 const String updateAvatarStaffApi = 'staff/update-avatar';
+const String chefListFoodOrder = 'foods-in-order/list';
+const String updateStatusFoodOrder = 'foods-in-order/update-status';
 //Auth Manager
 const String managerLoginApi = 'user/login';
 const String managerRegister = 'user/register';

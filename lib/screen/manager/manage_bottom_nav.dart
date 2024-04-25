@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:app_restaurant/bloc/brought_receipt/brought_receipt_bloc.dart';
 import 'package:app_restaurant/bloc/list_bill_shop/list_bill_shop_bloc.dart';
 import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
@@ -31,6 +32,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
@@ -67,21 +69,22 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
     if (tokenExpiresTime != '') {
       DateTime now = DateTime.now().toUtc();
       var tokenExpires = DateTime.parse(tokenExpiresTime!);
-      if (now.year >= tokenExpires.year &&
-          now.month >= tokenExpires.month &&
-          now.day >= tokenExpires.day &&
-          now.hour >= tokenExpires.hour &&
-          now.minute >= tokenExpires.minute &&
-          now.second >= tokenExpires.second) {
-        print("Het han token");
-        showLoginSessionExpiredDialog(
-            context: context,
-            okEvent: () {
-              hanldeLogOut();
-            });
-      } else {
+
+      if (now.compareTo(tokenExpires) > 0 || now.compareTo(tokenExpires) == 0) {
+        print("het han token");
+        // StorageUtils.instance.removeKey(key: 'token_manager');
+        // context.go('/');
+        mounted
+            ? setState(() {
+                showLoginSessionExpiredDialog(
+                    context: context,
+                    okEvent: () {
+                      hanldeLogOut();
+                    });
+              })
+            : null;
+      } else if (now.compareTo(tokenExpires) < 0) {
         print("Giu phien dang nhap");
-        // getListStore();
       }
     } else {
       print("Dang nhap hoai luon");
@@ -90,13 +93,15 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
   }
 
   void handleGetBannerList() async {
-    setState(() {
-      listImageBanner.clear();
-      listStoreManagerData.where((element) {
-        listImageBanner.add(element.storeLogo ?? '');
-        return true;
-      }).toList();
-    });
+    mounted
+        ? setState(() {
+            listImageBanner.clear();
+            listStoreManagerData.where((element) {
+              listImageBanner.add(element.storeLogo ?? '');
+              return true;
+            }).toList();
+          })
+        : null;
   }
 
   void getListStore() async {
@@ -112,13 +117,21 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
     final dataListStore = jsonDecode(responseListStore.body);
     try {
       if (dataListStore['status'] == 200) {
-        setState(() {
-          listStoreManagerData.clear();
-          var listStoreManagerDataRes = ListStoreModel.fromJson(dataListStore);
-          listStoreManagerData.addAll(listStoreManagerDataRes.data);
-        });
+        mounted
+            ? setState(() {
+                listStoreManagerData.clear();
+                var listStoreManagerDataRes =
+                    ListStoreModel.fromJson(dataListStore);
+                listStoreManagerData.addAll(listStoreManagerDataRes.data);
+              })
+            : null;
       } else {
         print("ERRRO GET LIST STORE 111111");
+        // showLoginSessionExpiredDialog(
+        //     context: context,
+        //     okEvent: () {
+        //       hanldeLogOut();
+        //     });
       }
     } catch (error) {
       print("ERRRO GET LIST STORE $error");
@@ -173,9 +186,11 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
       try {
         if (data['status'] == 200) {
           var managerInforDataRes = ManagerInforModel.fromJson(data);
-          setState(() {
-            managerInforData = managerInforDataRes.data;
-          });
+          mounted
+              ? setState(() {
+                  managerInforData = managerInforDataRes.data;
+                })
+              : null;
 
           print("GET INFOR MANGAER OK 1");
         } else {
