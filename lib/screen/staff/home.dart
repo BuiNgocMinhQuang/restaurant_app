@@ -823,6 +823,7 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
   int currentPage = 1;
   final scrollListOrderController = ScrollController();
   bool hasMore = true;
+
   Timer? timer;
   void getListOrderOfChef({
     required int page,
@@ -997,10 +998,6 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
     } catch (error) {
       print("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
-  }
-
-  checkForNewSharedLists() {
-    log("RUNNGGG");
   }
 
   @override
