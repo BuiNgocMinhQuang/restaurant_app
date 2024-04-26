@@ -20,7 +20,7 @@ class ManagerSignIn extends StatefulWidget {
 }
 
 class _ManagerSignInState extends State<ManagerSignIn> {
-  bool isRemember = false;
+  bool isRemember = true;
   bool passwordVisible = true;
   final _formField = GlobalKey<FormState>();
   final emailController = TextEditingController();

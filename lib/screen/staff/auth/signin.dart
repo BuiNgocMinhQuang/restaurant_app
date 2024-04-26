@@ -40,7 +40,7 @@ class StaffSignInFrom extends StatefulWidget {
 }
 
 class _StaffSignInFromState extends State<StaffSignInFrom> {
-  bool isRemember = false;
+  bool isRemember = true;
   bool passwordVisible = true;
   final _formField = GlobalKey<FormState>();
   final storeIdController = TextEditingController();
