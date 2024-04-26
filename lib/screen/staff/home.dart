@@ -818,23 +818,12 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
   int? currentStatus;
   int currentPage = 1;
   final scrollListOrderController = ScrollController();
-  bool hasMore = true;
   int currentLenghtCheckList = 0;
-  // String jsonTruocDo = '';
-  // String jsonSauDo = '';
   Timer? timer;
   void getListOrderOfChefInIt({
     required int page,
     required int? foodInOrderStatus,
   }) async {
-    log({
-      'shop_id': getStaffShopID,
-      'client': "staff",
-      'is_api': true,
-      'filters': {'food_in_order_status': foodInOrderStatus},
-      'limit': 15,
-      'page': page
-    }.toString());
     try {
       var token = StorageUtils.instance.getString(key: 'token_staff');
 
@@ -850,7 +839,7 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
           'client': "staff",
           'is_api': true,
           'filters': {'food_in_order_status': foodInOrderStatus},
-          'limit': 150,
+          'limit': 500,
           'page': page
         }),
       );
@@ -864,16 +853,10 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
         if (data['status'] == 200) {
           mounted
               ? setState(() {
-                  // currentListOrderBill.clear();
                   dataListFoodOrderModel =
                       DataListFoodOrderModel.fromJson(data);
                   currentListOrderBill
                       .addAll(dataListFoodOrderModel?.data.data ?? []);
-                  // currentPage++;
-                  if (dataListFoodOrderModel!.data.data.isEmpty ||
-                      dataListFoodOrderModel!.data.data.length <= 15) {
-                    hasMore = false;
-                  }
                   checkedList =
                       List<bool>.filled(currentListOrderBill.length, false);
                   currentLenghtCheckList = checkedList.length;
@@ -896,14 +879,6 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
     required int page,
     required int? foodInOrderStatus,
   }) async {
-    log({
-      'shop_id': getStaffShopID,
-      'client': "staff",
-      'is_api': true,
-      'filters': {'food_in_order_status': foodInOrderStatus},
-      'limit': 15,
-      'page': page
-    }.toString());
     try {
       var token = StorageUtils.instance.getString(key: 'token_staff');
 
@@ -919,171 +894,26 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
           'client': "staff",
           'is_api': true,
           'filters': {'food_in_order_status': foodInOrderStatus},
-          'limit': 15,
+          'limit': 500,
           'page': page
         }),
       );
       final data = jsonDecode(respons.body);
-      print(data);
-      // setState(() {
-      //             jsonTruocDo = data.toString();
 
-      // });
       try {
         if (data['status'] == 200) {
           mounted
               ? setState(() {
-                  // currentListOrderBill.clear();
                   dataListFoodOrderModel =
                       DataListFoodOrderModel.fromJson(data);
                   currentListOrderBill
                       .addAll(dataListFoodOrderModel?.data.data ?? []);
-                  // currentPage++;
-                  // if (dataListFoodOrderModel!.data.data.isEmpty ||
-                  //     dataListFoodOrderModel!.data.data.length <= 15) {
-                  //   hasMore = false;
-                  // }
+
                   if (currentLenghtCheckList != currentListOrderBill.length) {
                     log("THIS CASE");
                     checkedList =
                         List<bool>.filled(currentListOrderBill.length, false);
                   }
-
-                  isSelectedAll = false;
-                  listIdOrder = [];
-                })
-              : null;
-        } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
-        }
-      } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
-      }
-    } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
-    }
-  }
-
-  // void getListOrderOfChef2({
-  //   required int page,
-  //   required int? foodInOrderStatus,
-  // }) async {
-  //   log({
-  //     'shop_id': getStaffShopID,
-  //     'client': "staff",
-  //     'is_api': true,
-  //     'filters': {'food_in_order_status': foodInOrderStatus},
-  //     'limit': 15,
-  //     'page': page
-  //   }.toString());
-  //   try {
-  //     var token = StorageUtils.instance.getString(key: 'token_staff');
-
-  //     final respons = await http.post(
-  //       Uri.parse('$baseUrl$chefListFoodOrder'),
-  //       headers: {
-  //         'Content-type': 'application/json',
-  //         'Accept': 'application/json',
-  //         "Authorization": "Bearer $token"
-  //       },
-  //       body: jsonEncode({
-  //         'shop_id': getStaffShopID,
-  //         'client': "staff",
-  //         'is_api': true,
-  //         'filters': {'food_in_order_status': foodInOrderStatus},
-  //         'limit': 15,
-  //         'page': page
-  //       }),
-  //     );
-  //     final data = jsonDecode(respons.body);
-  //     print(data);
-  //     setState(() {
-  //                 jsonSauDo = data.toString();
-
-  //     });
-  //     try {
-  //       if (data['status'] == 200) {
-  //         mounted
-  //             ? setState(() {
-  //                 // jsonSauDo = data.toString();
-  //                 // currentListOrderBill.clear();
-  //                 // dataListFoodOrderModel =
-  //                 //     DataListFoodOrderModel.fromJson(data);
-  //                 // currentListOrderBill
-  //                 //     .addAll(dataListFoodOrderModel?.data.data ?? []);
-  //                 // // currentPage++;
-  //                 // if (dataListFoodOrderModel!.data.data.isEmpty ||
-  //                 //     dataListFoodOrderModel!.data.data.length <= 15) {
-  //                 //   hasMore = false;
-  //                 // }
-  //                 // checkedList =
-  //                 //     List<bool>.filled(currentListOrderBill.length, false);
-  //                 // isSelectedAll = false;
-  //                 // listIdOrder = [];
-  //               })
-  //             : null;
-  //       } else {
-  //         print("ERROR BROUGHT RECEIPT PAGE 1");
-  //       }
-  //     } catch (error) {
-  //       print("ERROR BROUGHT RECEIPT PAGE 2 $error");
-  //     }
-  //   } catch (error) {
-  //     print("ERROR BROUGHT RECEIPT PAGE 3 $error");
-  //   }
-  // }
-
-  void refeshListOrderOfChef({
-    required int page,
-    required int? foodInOrderStatus,
-  }) async {
-    log({
-      'shop_id': getStaffShopID,
-      'client': "staff",
-      'is_api': true,
-      'filters': {'food_in_order_status': foodInOrderStatus},
-      'limit': 15,
-      'page': page
-    }.toString());
-    try {
-      var token = StorageUtils.instance.getString(key: 'token_staff');
-
-      final respons = await http.post(
-        Uri.parse('$baseUrl$chefListFoodOrder'),
-        headers: {
-          'Content-type': 'application/json',
-          'Accept': 'application/json',
-          "Authorization": "Bearer $token"
-        },
-        body: jsonEncode({
-          'shop_id': getStaffShopID,
-          'client': "staff",
-          'is_api': true,
-          'filters': {'food_in_order_status': foodInOrderStatus},
-          'limit': 15,
-          'page': page
-        }),
-      );
-      final data = jsonDecode(respons.body);
-      print(data);
-      try {
-        if (data['status'] == 200) {
-          mounted
-              ? setState(() {
-                  currentListOrderBill.clear();
-                  dataListFoodOrderModel =
-                      DataListFoodOrderModel.fromJson(data);
-                  currentListOrderBill
-                      .addAll(dataListFoodOrderModel?.data.data ?? []);
-                  // currentPage++;
-                  // if (dataListFoodOrderModel!.data.data.isEmpty ||
-                  //     dataListFoodOrderModel!.data.data.length <= 15) {
-                  //   hasMore = false;
-                  // }
-                  // checkedList =
-                  //     List<bool>.filled(currentListOrderBill.length, false);
-                  // isSelectedAll = false;
-                  // listIdOrder = [];
                 })
               : null;
         } else {
@@ -1120,7 +950,7 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print(data);
+
       try {
         if (data['status'] == 200) {
           mounted
@@ -1149,29 +979,9 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
     super.initState();
 
     getListOrderOfChefInIt(foodInOrderStatus: null, page: 1);
-    // scrollListOrderController.addListener(() {
-    //   if (scrollListOrderController.position.maxScrollExtent ==
-    //       scrollListOrderController.offset) {
-    //     log("selectedCategoriesIndex");
 
-    //     log(selectedCategoriesIndex.toString());
-    //     getListOrderOfChefInIt(
-    //         foodInOrderStatus: selectedCategoriesIndex == 0
-    //             ? null
-    //             : selectedCategoriesIndex == 1
-    //                 ? 0
-    //                 : selectedCategoriesIndex == 2
-    //                     ? 1
-    //                     : selectedCategoriesIndex == 3
-    //                         ? 2
-    //                         : null,
-    //         page: currentPage);
-    //   }
-    // });
     timer = Timer.periodic(Duration(seconds: 2), (Timer t) {
-      currentPage = 1;
       currentListOrderBill.clear();
-
       getListOrderOfChef(
           foodInOrderStatus: selectedCategoriesIndex == 0
               ? null
@@ -1390,428 +1200,388 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
               ),
               space25H,
               Expanded(
-                child: RefreshIndicator(
-                  color: Colors.blue,
-                  onRefresh: () async {
-                    refeshListOrderOfChef(
-                      page: 1,
-                      foodInOrderStatus: selectedCategoriesIndex == 0
-                          ? null
-                          : selectedCategoriesIndex == 1
-                              ? 0
-                              : selectedCategoriesIndex == 2
-                                  ? 1
-                                  : selectedCategoriesIndex == 3
-                                      ? 2
-                                      : null,
-                    );
-                  },
-                  child: Container(
-                    width: 1.sw,
-                    color: Colors.white,
-                    child: ListView.builder(
-                      controller: scrollListOrderController,
-                      shrinkWrap: true,
-                      itemCount: filterOrderBill.length + 1,
-                      itemBuilder: (context, index) {
-                        var dataLength = filterOrderBill.length;
-                        log("DATAT LENGHT $dataLength");
-                        if (index < dataLength) {
-                          var statusText = filterOrderBill[index]
-                                      .foodInOrderStatus ==
-                                  0
-                              ? 'CHỜ XÁC NHẬN'
-                              : filterOrderBill[index].foodInOrderStatus == 1
-                                  ? 'ĐANG CHUẨN BỊ'
-                                  : 'ĐÃ XONG';
-                          Color color1 = filterOrderBill[index]
-                                      .foodInOrderStatus ==
-                                  0
-                              ? color1BlueButton
-                              : filterOrderBill[index].foodInOrderStatus == 1
-                                  ? color1OrganeButton
-                                  : color2GreenButton;
-                          Color color2 = filterOrderBill[index]
-                                      .foodInOrderStatus ==
-                                  0
-                              ? color2BlueButton
-                              : filterOrderBill[index].foodInOrderStatus == 1
-                                  ? color2OrangeButton
-                                  : color1GreenButton;
+                child: Container(
+                  width: 1.sw,
+                  color: Colors.white,
+                  child: ListView.builder(
+                    controller: scrollListOrderController,
+                    shrinkWrap: true,
+                    itemCount: filterOrderBill.length + 1,
+                    itemBuilder: (context, index) {
+                      var dataLength = filterOrderBill.length;
+                      log("DATAT LENGHT $dataLength");
+                      if (index < dataLength) {
+                        var statusText =
+                            filterOrderBill[index].foodInOrderStatus == 0
+                                ? 'CHỜ XÁC NHẬN'
+                                : filterOrderBill[index].foodInOrderStatus == 1
+                                    ? 'ĐANG CHUẨN BỊ'
+                                    : 'ĐÃ XONG';
+                        Color color1 =
+                            filterOrderBill[index].foodInOrderStatus == 0
+                                ? color1BlueButton
+                                : filterOrderBill[index].foodInOrderStatus == 1
+                                    ? color1OrganeButton
+                                    : color2GreenButton;
+                        Color color2 =
+                            filterOrderBill[index].foodInOrderStatus == 0
+                                ? color2BlueButton
+                                : filterOrderBill[index].foodInOrderStatus == 1
+                                    ? color2OrangeButton
+                                    : color1GreenButton;
 
-                          var imagePath1 = filterOrderBill[index]?.foodImages;
-                          var listImagePath = jsonDecode(imagePath1 ?? '[]');
-                          return Column(
-                            children: [
-                              space10H,
-                              Container(
-                                  width: 1.sw,
-                                  // height: 100.h,
-                                  margin:
-                                      EdgeInsets.only(left: 10.w, right: 10.w),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15.r),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 2,
-                                        blurRadius: 4,
-                                        offset: const Offset(
-                                            0, 3), // changes position of shadow
+                        var imagePath1 = filterOrderBill[index]?.foodImages;
+                        var listImagePath = jsonDecode(imagePath1 ?? '[]');
+                        return Column(
+                          children: [
+                            space10H,
+                            Container(
+                                width: 1.sw,
+                                // height: 100.h,
+                                margin:
+                                    EdgeInsets.only(left: 10.w, right: 10.w),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.r),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 2,
+                                      blurRadius: 4,
+                                      offset: const Offset(
+                                          0, 3), // changes position of shadow
+                                    ),
+                                  ],
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(10.w),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 20.w,
+                                            height: 20.w,
+                                            child: InkWell(
+                                              onTap: () {
+                                                showMaterialModalBottomSheet(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topRight:
+                                                          Radius.circular(25.r),
+                                                      topLeft:
+                                                          Radius.circular(25.r),
+                                                    ),
+                                                  ),
+                                                  clipBehavior: Clip
+                                                      .antiAliasWithSaveLayer,
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      Container(
+                                                    height: 1.sh / 3,
+                                                    padding:
+                                                        EdgeInsets.all(20.w),
+                                                    child: Column(
+                                                      children: [
+                                                        InkWell(
+                                                          onTap: () async {
+                                                            Navigator.pop(
+                                                                context);
+
+                                                            mounted
+                                                                ? setState(() {
+                                                                    listIdOrder
+                                                                        .clear();
+                                                                    listIdOrder.add(
+                                                                        filterOrderBill[index]
+                                                                            .foodInOrderId);
+                                                                    hanldeUpdateStatusOrderFood(
+                                                                        idList:
+                                                                            listIdOrder,
+                                                                        status:
+                                                                            0);
+                                                                  })
+                                                                : null;
+                                                          },
+                                                          child: Row(
+                                                            children: [
+                                                              Icon(
+                                                                Icons
+                                                                    .timer_outlined,
+                                                                size: 35.sp,
+                                                              ),
+                                                              space10W,
+                                                              TextApp(
+                                                                text:
+                                                                    "Chờ xác nhận",
+                                                                color: Colors
+                                                                    .black,
+                                                                fontsize: 18.sp,
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        space10H,
+                                                        Divider(),
+                                                        InkWell(
+                                                          onTap: () async {
+                                                            Navigator.pop(
+                                                                context);
+
+                                                            mounted
+                                                                ? setState(() {
+                                                                    listIdOrder
+                                                                        .clear();
+                                                                    listIdOrder.add(
+                                                                        filterOrderBill[index]
+                                                                            .foodInOrderId);
+                                                                    hanldeUpdateStatusOrderFood(
+                                                                        idList:
+                                                                            listIdOrder,
+                                                                        status:
+                                                                            1);
+                                                                  })
+                                                                : null;
+                                                          },
+                                                          child: Row(
+                                                            children: [
+                                                              Icon(
+                                                                Icons
+                                                                    .food_bank_outlined,
+                                                                size: 35.sp,
+                                                              ),
+                                                              space10W,
+                                                              TextApp(
+                                                                text:
+                                                                    "Đang chuẩn bị",
+                                                                color: Colors
+                                                                    .black,
+                                                                fontsize: 18.sp,
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Divider(),
+                                                        space10H,
+                                                        InkWell(
+                                                          onTap: () async {
+                                                            Navigator.pop(
+                                                                context);
+                                                            mounted
+                                                                ? setState(() {
+                                                                    listIdOrder
+                                                                        .clear();
+                                                                    listIdOrder.add(
+                                                                        filterOrderBill[index]
+                                                                            .foodInOrderId);
+                                                                    hanldeUpdateStatusOrderFood(
+                                                                        idList:
+                                                                            listIdOrder,
+                                                                        status:
+                                                                            2);
+                                                                  })
+                                                                : null;
+                                                          },
+                                                          child: Row(
+                                                            children: [
+                                                              Icon(
+                                                                Icons.done,
+                                                                size: 35.sp,
+                                                              ),
+                                                              space10W,
+                                                              TextApp(
+                                                                text: "Đã xong",
+                                                                color: Colors
+                                                                    .black,
+                                                                fontsize: 18.sp,
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              child: Icon(
+                                                Icons.more_horiz_outlined,
+                                                size: 25.sp,
+                                              ),
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              TextApp(
+                                                text: filterOrderBill[index]
+                                                    .foodName,
+                                                color: orangeColorApp,
+                                                fontWeight: FontWeight.bold,
+                                                fontsize: 12.sp,
+                                              ),
+                                              TextApp(text: " | "),
+                                              TextApp(
+                                                text: filterOrderBill[index]
+                                                    .tableName,
+                                                fontsize: 12.sp,
+                                                color: menuGrey,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              TextApp(text: " | "),
+                                              TextApp(
+                                                text: filterOrderBill[index]
+                                                    .storeRoomName,
+                                                fontsize: 12.sp,
+                                                color: menuGrey,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ],
+                                          ),
+                                          Checkbox(
+                                              value: checkedList[index],
+                                              onChanged: (bool? value) {
+                                                mounted
+                                                    ? setState(() {
+                                                        checkedList[index] =
+                                                            value!;
+                                                        if (checkedList[
+                                                                index] ==
+                                                            true) {
+                                                          listIdOrder.add(
+                                                              filterOrderBill[
+                                                                      index]
+                                                                  .foodInOrderId);
+                                                        } else if (checkedList[
+                                                                index] ==
+                                                            false) {
+                                                          listIdOrder.remove(
+                                                              filterOrderBill[
+                                                                      index]
+                                                                  .foodInOrderId);
+                                                        }
+                                                        log("listIdOrder");
+                                                        log(listIdOrder
+                                                            .toString());
+                                                      })
+                                                    : null;
+
+                                                // log(checkedList.toString());
+                                              }),
+                                          // typePopMenu
+                                        ],
+                                      ),
+                                      space10H,
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  TextApp(text: 'Người tạo: '),
+                                                  TextApp(
+                                                      text:
+                                                          filterOrderBill[index]
+                                                              .staffFullName),
+                                                ],
+                                              ),
+                                              space10H,
+                                              Row(
+                                                children: [
+                                                  TextApp(text: 'Thời gian: '),
+                                                  TextApp(
+                                                      text: formatDateTime(
+                                                          filterOrderBill[index]
+                                                              .createdAt))
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                              width: 60.w,
+                                              height: 60.w,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(30.w),
+                                                child: imagePath1 == null
+                                                    ? Image.asset(
+                                                        'assets/images/dish.png',
+                                                        fit: BoxFit.contain,
+                                                      )
+                                                    : CachedNetworkImage(
+                                                        fit: BoxFit.fill,
+                                                        imageUrl: httpImage +
+                                                            listImagePath[0],
+                                                        placeholder:
+                                                            (context, url) =>
+                                                                SizedBox(
+                                                          height: 10.w,
+                                                          width: 10.w,
+                                                          child: const Center(
+                                                              child:
+                                                                  CircularProgressIndicator()),
+                                                        ),
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            const Icon(
+                                                                Icons.error),
+                                                      ),
+                                              )),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              TextApp(
+                                                text: 'Giá tiền: ',
+                                                fontsize: 16.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              TextApp(
+                                                text:
+                                                    "${MoneyFormatter(amount: (filterOrderBill[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                fontsize: 16.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            width: 150.w,
+                                            height: 35.h,
+                                            child: ButtonGradient(
+                                              radius: 5.r,
+                                              color1: color1,
+                                              color2: color2,
+                                              event: () {},
+                                              text: statusText,
+                                              textColor: Colors.white,
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     ],
                                   ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(10.w),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Container(
-                                              width: 20.w,
-                                              height: 20.w,
-                                              child: InkWell(
-                                                onTap: () {
-                                                  showMaterialModalBottomSheet(
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                        topRight:
-                                                            Radius.circular(
-                                                                25.r),
-                                                        topLeft:
-                                                            Radius.circular(
-                                                                25.r),
-                                                      ),
-                                                    ),
-                                                    clipBehavior: Clip
-                                                        .antiAliasWithSaveLayer,
-                                                    context: context,
-                                                    builder: (context) =>
-                                                        Container(
-                                                      height: 1.sh / 3,
-                                                      padding:
-                                                          EdgeInsets.all(20.w),
-                                                      child: Column(
-                                                        children: [
-                                                          InkWell(
-                                                            onTap: () async {
-                                                              Navigator.pop(
-                                                                  context);
-
-                                                              mounted
-                                                                  ? setState(
-                                                                      () {
-                                                                      listIdOrder
-                                                                          .clear();
-                                                                      listIdOrder.add(
-                                                                          filterOrderBill[index]
-                                                                              .foodInOrderId);
-                                                                      hanldeUpdateStatusOrderFood(
-                                                                          idList:
-                                                                              listIdOrder,
-                                                                          status:
-                                                                              0);
-                                                                    })
-                                                                  : null;
-                                                            },
-                                                            child: Row(
-                                                              children: [
-                                                                Icon(
-                                                                  Icons
-                                                                      .timer_outlined,
-                                                                  size: 35.sp,
-                                                                ),
-                                                                space10W,
-                                                                TextApp(
-                                                                  text:
-                                                                      "Chờ xác nhận",
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontsize:
-                                                                      18.sp,
-                                                                )
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          space10H,
-                                                          Divider(),
-                                                          InkWell(
-                                                            onTap: () async {
-                                                              Navigator.pop(
-                                                                  context);
-
-                                                              mounted
-                                                                  ? setState(
-                                                                      () {
-                                                                      listIdOrder
-                                                                          .clear();
-                                                                      listIdOrder.add(
-                                                                          filterOrderBill[index]
-                                                                              .foodInOrderId);
-                                                                      hanldeUpdateStatusOrderFood(
-                                                                          idList:
-                                                                              listIdOrder,
-                                                                          status:
-                                                                              1);
-                                                                    })
-                                                                  : null;
-                                                            },
-                                                            child: Row(
-                                                              children: [
-                                                                Icon(
-                                                                  Icons
-                                                                      .food_bank_outlined,
-                                                                  size: 35.sp,
-                                                                ),
-                                                                space10W,
-                                                                TextApp(
-                                                                  text:
-                                                                      "Đang chuẩn bị",
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontsize:
-                                                                      18.sp,
-                                                                )
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Divider(),
-                                                          space10H,
-                                                          InkWell(
-                                                            onTap: () async {
-                                                              Navigator.pop(
-                                                                  context);
-                                                              mounted
-                                                                  ? setState(
-                                                                      () {
-                                                                      listIdOrder
-                                                                          .clear();
-                                                                      listIdOrder.add(
-                                                                          filterOrderBill[index]
-                                                                              .foodInOrderId);
-                                                                      hanldeUpdateStatusOrderFood(
-                                                                          idList:
-                                                                              listIdOrder,
-                                                                          status:
-                                                                              2);
-                                                                    })
-                                                                  : null;
-                                                            },
-                                                            child: Row(
-                                                              children: [
-                                                                Icon(
-                                                                  Icons.done,
-                                                                  size: 35.sp,
-                                                                ),
-                                                                space10W,
-                                                                TextApp(
-                                                                  text:
-                                                                      "Đã xong",
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontsize:
-                                                                      18.sp,
-                                                                )
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                                child: Icon(
-                                                  Icons.more_horiz_outlined,
-                                                  size: 25.sp,
-                                                ),
-                                              ),
-                                            ),
-                                            Row(
-                                              children: [
-                                                TextApp(
-                                                  text: filterOrderBill[index]
-                                                      .foodName,
-                                                  color: orangeColorApp,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontsize: 12.sp,
-                                                ),
-                                                TextApp(text: " | "),
-                                                TextApp(
-                                                  text: filterOrderBill[index]
-                                                      .tableName,
-                                                  fontsize: 12.sp,
-                                                  color: menuGrey,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                TextApp(text: " | "),
-                                                TextApp(
-                                                  text: filterOrderBill[index]
-                                                      .storeRoomName,
-                                                  fontsize: 12.sp,
-                                                  color: menuGrey,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ],
-                                            ),
-                                            Checkbox(
-                                                value: checkedList[index],
-                                                onChanged: (bool? value) {
-                                                  mounted
-                                                      ? setState(() {
-                                                          checkedList[index] =
-                                                              value!;
-                                                          if (checkedList[
-                                                                  index] ==
-                                                              true) {
-                                                            listIdOrder.add(
-                                                                filterOrderBill[
-                                                                        index]
-                                                                    .foodInOrderId);
-                                                          } else if (checkedList[
-                                                                  index] ==
-                                                              false) {
-                                                            listIdOrder.remove(
-                                                                filterOrderBill[
-                                                                        index]
-                                                                    .foodInOrderId);
-                                                          }
-                                                          log("listIdOrder");
-                                                          log(listIdOrder
-                                                              .toString());
-                                                        })
-                                                      : null;
-
-                                                  // log(checkedList.toString());
-                                                }),
-                                            // typePopMenu
-                                          ],
-                                        ),
-                                        space10H,
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    TextApp(
-                                                        text: 'Người tạo: '),
-                                                    TextApp(
-                                                        text: filterOrderBill[
-                                                                index]
-                                                            .staffFullName),
-                                                  ],
-                                                ),
-                                                space10H,
-                                                Row(
-                                                  children: [
-                                                    TextApp(
-                                                        text: 'Thời gian: '),
-                                                    TextApp(
-                                                        text: formatDateTime(
-                                                            filterOrderBill[
-                                                                    index]
-                                                                .createdAt))
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                                width: 60.w,
-                                                height: 60.w,
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          30.w),
-                                                  child: imagePath1 == null
-                                                      ? Image.asset(
-                                                          'assets/images/dish.png',
-                                                          fit: BoxFit.contain,
-                                                        )
-                                                      : CachedNetworkImage(
-                                                          fit: BoxFit.fill,
-                                                          imageUrl: httpImage +
-                                                              listImagePath[0],
-                                                          placeholder:
-                                                              (context, url) =>
-                                                                  SizedBox(
-                                                            height: 10.w,
-                                                            width: 10.w,
-                                                            child: const Center(
-                                                                child:
-                                                                    CircularProgressIndicator()),
-                                                          ),
-                                                          errorWidget: (context,
-                                                                  url, error) =>
-                                                              const Icon(
-                                                                  Icons.error),
-                                                        ),
-                                                )),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 10.h,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                TextApp(
-                                                  text: 'Giá tiền: ',
-                                                  fontsize: 16.sp,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                TextApp(
-                                                  text:
-                                                      "${MoneyFormatter(amount: (filterOrderBill[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                  fontsize: 16.sp,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              width: 150.w,
-                                              height: 35.h,
-                                              child: ButtonGradient(
-                                                radius: 5.r,
-                                                color1: color1,
-                                                color2: color2,
-                                                event: () {},
-                                                text: statusText,
-                                                textColor: Colors.white,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  )),
-                              space10H
-                            ],
-                          );
-                        } else {
-                          return Center(
-                            child: hasMore
-                                ? CircularProgressIndicator()
-                                : Container(),
-                          );
-                        }
-                      },
-                    ),
+                                )),
+                            space10H
+                          ],
+                        );
+                      }
+                    },
                   ),
                 ),
               ),
