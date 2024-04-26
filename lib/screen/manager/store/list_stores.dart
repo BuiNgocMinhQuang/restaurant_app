@@ -297,12 +297,12 @@ class _ListStoresState extends State<ListStores> {
                                                     (BuildContext context,
                                                         int index) {
                                                   var imagePath1 = (state
-                                                          .listStoreModel
-                                                          ?.data[index]
-                                                          .storeImages ??
-                                                      '');
+                                                      .listStoreModel
+                                                      ?.data[index]
+                                                      .storeImages);
                                                   var listImagePath =
-                                                      jsonDecode(imagePath1);
+                                                      jsonDecode(
+                                                          imagePath1 ?? '[]');
                                                   var desStore = state
                                                           .listStoreModel
                                                           ?.data[index]
@@ -328,30 +328,36 @@ class _ListStoresState extends State<ListStores> {
                                                             child: Container(
                                                               width: 1.sw,
                                                               height: 150.h,
-                                                              child:
-                                                                  CachedNetworkImage(
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                                imageUrl:
-                                                                    httpImage +
-                                                                        listImagePath[
-                                                                            0],
-                                                                placeholder:
-                                                                    (context,
-                                                                            url) =>
-                                                                        SizedBox(
-                                                                  height: 30.w,
-                                                                  width: 30.w,
-                                                                  child: const Center(
-                                                                      child:
-                                                                          CircularProgressIndicator()),
-                                                                ),
-                                                                errorWidget: (context,
-                                                                        url,
-                                                                        error) =>
-                                                                    const Icon(Icons
-                                                                        .error),
-                                                              ),
+                                                              child: imagePath1 ==
+                                                                      null
+                                                                  ? Image.asset(
+                                                                      'assets/images/store.png',
+                                                                      fit: BoxFit
+                                                                          .contain,
+                                                                    )
+                                                                  : CachedNetworkImage(
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                      imageUrl:
+                                                                          httpImage +
+                                                                              listImagePath[0],
+                                                                      placeholder:
+                                                                          (context, url) =>
+                                                                              SizedBox(
+                                                                        height:
+                                                                            30.w,
+                                                                        width:
+                                                                            30.w,
+                                                                        child: const Center(
+                                                                            child:
+                                                                                CircularProgressIndicator()),
+                                                                      ),
+                                                                      errorWidget: (context,
+                                                                              url,
+                                                                              error) =>
+                                                                          const Icon(
+                                                                              Icons.error),
+                                                                    ),
                                                             )),
                                                         space15H,
                                                         TextApp(

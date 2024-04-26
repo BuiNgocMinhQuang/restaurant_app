@@ -199,8 +199,8 @@ class _DetailsStoreState extends State<DetailsStore> {
 
   @override
   Widget build(BuildContext context) {
-    var imageStorePath = widget.detailsStoreModel?.store.storeImages ?? '';
-    var imageStore = jsonDecode(imageStorePath);
+    var imageStorePath = widget.detailsStoreModel?.store.storeImages;
+    var imageStore = jsonDecode(imageStorePath ?? '[]');
     return Scaffold(
         appBar: AppBar(
           title: Text("Quản lí cửa hàng"),
@@ -397,23 +397,29 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           8.0),
-                                                  child: CachedNetworkImage(
-                                                    fit: BoxFit.cover,
-                                                    imageUrl: httpImage +
-                                                        imageStore[0],
-                                                    placeholder:
-                                                        (context, url) =>
-                                                            SizedBox(
-                                                      height: 15.w,
-                                                      width: 15.w,
-                                                      child: const Center(
-                                                          child:
-                                                              CircularProgressIndicator()),
-                                                    ),
-                                                    errorWidget: (context, url,
-                                                            error) =>
-                                                        const Icon(Icons.error),
-                                                  ),
+                                                  child: imageStorePath == null
+                                                      ? Image.asset(
+                                                          'assets/images/store.png',
+                                                          fit: BoxFit.contain,
+                                                        )
+                                                      : CachedNetworkImage(
+                                                          fit: BoxFit.cover,
+                                                          imageUrl: httpImage +
+                                                              imageStore[0],
+                                                          placeholder:
+                                                              (context, url) =>
+                                                                  SizedBox(
+                                                            height: 15.w,
+                                                            width: 15.w,
+                                                            child: const Center(
+                                                                child:
+                                                                    CircularProgressIndicator()),
+                                                          ),
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              const Icon(
+                                                                  Icons.error),
+                                                        ),
                                                 )),
                                             space20W,
                                             Column(

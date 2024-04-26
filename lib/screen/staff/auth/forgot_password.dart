@@ -219,6 +219,11 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                       height: 10.h,
                                                     ),
                                                     TextFormField(
+                                                      onTapOutside: (event) {
+                                                        FocusManager.instance
+                                                            .primaryFocus
+                                                            ?.unfocus();
+                                                      },
                                                       controller:
                                                           storeIdController,
                                                       cursorColor:
@@ -287,6 +292,11 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                       height: 10.h,
                                                     ),
                                                     TextFormField(
+                                                      onTapOutside: (event) {
+                                                        FocusManager.instance
+                                                            .primaryFocus
+                                                            ?.unfocus();
+                                                      },
                                                       controller:
                                                           emailController,
                                                       cursorColor:
@@ -302,6 +312,8 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
 
                                                         if (!emailValid) {
                                                           return invalidEmail;
+                                                        } else {
+                                                          return null;
                                                         }
                                                       },
                                                       decoration:

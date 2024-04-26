@@ -304,6 +304,9 @@ class _SelectableDataTableState extends State<SelectableDataTable> {
           height: 50.h,
           width: 300.w,
           child: TextFormField(
+            onTapOutside: (event) {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
             onChanged: _handleSearch,
             // controller: searchController,
             style: TextStyle(fontSize: 12, color: Colors.grey),

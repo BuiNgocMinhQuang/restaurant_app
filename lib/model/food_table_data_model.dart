@@ -500,7 +500,6 @@ class Foods {
   int? from;
   int? lastPage;
   String? lastPageUrl;
-  List<Link> links;
   String? nextPageUrl;
   String? path;
   int? perPage;
@@ -515,7 +514,6 @@ class Foods {
     required this.from,
     required this.lastPage,
     required this.lastPageUrl,
-    required this.links,
     required this.nextPageUrl,
     required this.path,
     required this.perPage,
@@ -531,7 +529,6 @@ class Foods {
         from: json["from"],
         lastPage: json["last_page"],
         lastPageUrl: json["last_page_url"],
-        links: List<Link>.from(json["links"].map((x) => Link.fromJson(x))),
         nextPageUrl: json["next_page_url"],
         path: json["path"],
         perPage: json["per_page"],
@@ -547,7 +544,6 @@ class Foods {
         "from": from,
         "last_page": lastPage,
         "last_page_url": lastPageUrl,
-        "links": List<dynamic>.from(links.map((x) => x.toJson())),
         "next_page_url": nextPageUrl,
         "path": path,
         "per_page": perPage,
@@ -577,6 +573,10 @@ class Datum {
   dynamic orderFoodId;
   dynamic orderId;
   dynamic roomTableId;
+  int? foodsTotal;
+  String? foodsWaiting;
+  String? foodsCooking;
+  String? foodsCompleted;
 
   Datum({
     required this.foodId,
@@ -598,6 +598,10 @@ class Datum {
     required this.orderFoodId,
     required this.orderId,
     required this.roomTableId,
+    required this.foodsTotal,
+    required this.foodsWaiting,
+    required this.foodsCooking,
+    required this.foodsCompleted,
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
@@ -620,6 +624,10 @@ class Datum {
         orderFoodId: json["order_food_id"],
         orderId: json["order_id"],
         roomTableId: json["room_table_id"],
+        foodsTotal: json["foods_total"],
+        foodsWaiting: json["foods_waiting"],
+        foodsCooking: json["foods_cooking"],
+        foodsCompleted: json["foods_completed"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -642,29 +650,9 @@ class Datum {
         "order_food_id": orderFoodId,
         "order_id": orderId,
         "room_table_id": roomTableId,
-      };
-}
-
-class Link {
-  String? url;
-  String? label;
-  bool active;
-
-  Link({
-    required this.url,
-    required this.label,
-    required this.active,
-  });
-
-  factory Link.fromJson(Map<String, dynamic> json) => Link(
-        url: json["url"],
-        label: json["label"],
-        active: json["active"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "url": url,
-        "label": label,
-        "active": active,
+        "foods_total": foodsTotal,
+        "foods_waiting": foodsWaiting,
+        "foods_cooking": foodsCooking,
+        "foods_completed": foodsCompleted,
       };
 }

@@ -540,6 +540,11 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                     ),
                                                     space10H,
                                                     TextField(
+                                                      onTapOutside: (event) {
+                                                        FocusManager.instance
+                                                            .primaryFocus
+                                                            ?.unfocus();
+                                                      },
                                                       readOnly: true,
                                                       controller:
                                                           _dateStartController,
@@ -609,6 +614,11 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                     ),
                                                     space10H,
                                                     TextField(
+                                                      onTapOutside: (event) {
+                                                        FocusManager.instance
+                                                            .primaryFocus
+                                                            ?.unfocus();
+                                                      },
                                                       readOnly: true,
                                                       controller:
                                                           _dateEndController,
@@ -1017,16 +1027,21 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                                                     SizedBox(
                                                                                       width: 80.w,
                                                                                       height: 80.w,
-                                                                                      child: CachedNetworkImage(
-                                                                                        fit: BoxFit.fill,
-                                                                                        imageUrl: httpImage + listImagePath[0],
-                                                                                        placeholder: (context, url) => SizedBox(
-                                                                                          height: 10.w,
-                                                                                          width: 10.w,
-                                                                                          child: const Center(child: CircularProgressIndicator()),
-                                                                                        ),
-                                                                                        errorWidget: (context, url, error) => const Icon(Icons.error),
-                                                                                      ),
+                                                                                      child: listImagePath == null
+                                                                                          ? Image.asset(
+                                                                                              'assets/images/dish.png',
+                                                                                              fit: BoxFit.contain,
+                                                                                            )
+                                                                                          : CachedNetworkImage(
+                                                                                              fit: BoxFit.fill,
+                                                                                              imageUrl: httpImage + listImagePath[0],
+                                                                                              placeholder: (context, url) => SizedBox(
+                                                                                                height: 10.w,
+                                                                                                width: 10.w,
+                                                                                                child: const Center(child: CircularProgressIndicator()),
+                                                                                              ),
+                                                                                              errorWidget: (context, url, error) => const Icon(Icons.error),
+                                                                                            ),
                                                                                     ),
                                                                                     space10W,
                                                                                     SizedBox(

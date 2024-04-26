@@ -5,13 +5,11 @@ import 'package:app_restaurant/bloc/staff/login/staff_login_bloc.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/staff/staff_infor_model.dart';
 import 'package:app_restaurant/screen/manager/user_infor/notifications.dart';
-
 import 'package:app_restaurant/screen/staff/receipt/brought_receipt.dart';
 import 'package:app_restaurant/screen/staff/home.dart';
 import 'package:app_restaurant/screen/staff/receipt/list_bill.dart';
 import 'package:app_restaurant/screen/staff/food_menu/list_food.dart';
 import 'package:app_restaurant/screen/staff/user_infor/user_infor.dart';
-import 'package:app_restaurant/utils/share_getString.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/tabs&drawer/item_drawer_and_tab.dart';
@@ -38,11 +36,9 @@ class _StaffFabTabState extends State<StaffFabTab> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
-      checkTokenExpires();
-      getInfor();
-    });
-    // log(getStaffPosition);
+
+    checkTokenExpires();
+    getInfor();
   }
 
   @override
@@ -449,7 +445,10 @@ class _StaffFabTabState extends State<StaffFabTab> {
                 size: 30.h,
                 color: currentIndex == 0 ? Colors.white : Colors.black,
               ),
-              Icon(Icons.delivery_dining,
+              Icon(
+                  staffInforData?.staffPosition.toString() == '5'
+                      ? Icons.book
+                      : Icons.delivery_dining,
                   size: 30.h,
                   color: currentIndex == 1 ? Colors.white : Colors.black),
               Icon(Icons.home,

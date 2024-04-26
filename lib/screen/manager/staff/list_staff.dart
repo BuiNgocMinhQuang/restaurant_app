@@ -349,6 +349,11 @@ class _ListStaffState extends State<ListStaff> {
                                                     height: 10.h,
                                                   ),
                                                   TextField(
+                                                    onTapOutside: (event) {
+                                                      FocusManager
+                                                          .instance.primaryFocus
+                                                          ?.unfocus();
+                                                    },
                                                     readOnly: true,
                                                     controller:
                                                         _dateStartController,
@@ -413,6 +418,11 @@ class _ListStaffState extends State<ListStaff> {
                                                     height: 10.h,
                                                   ),
                                                   TextField(
+                                                    onTapOutside: (event) {
+                                                      FocusManager
+                                                          .instance.primaryFocus
+                                                          ?.unfocus();
+                                                    },
                                                     readOnly: true,
                                                     controller:
                                                         _dateEndController,

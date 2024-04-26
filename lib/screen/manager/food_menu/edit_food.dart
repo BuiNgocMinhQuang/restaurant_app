@@ -316,6 +316,10 @@ class _EditFoodState extends State<EditFood> {
                                     height: 10.h,
                                   ),
                                   TextFormField(
+                                    onTapOutside: (event) {
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
+                                    },
                                     controller: priceOfFood,
                                     keyboardType: TextInputType.number,
                                     onChanged: (string) {
@@ -335,10 +339,7 @@ class _EditFoodState extends State<EditFood> {
                                       FilteringTextInputFormatter.allow(
                                           RegExp("[0-9]")),
                                     ], // Only numbers can be entered,
-                                    onTapOutside: (event) {
-                                      FocusManager.instance.primaryFocus
-                                          ?.unfocus();
-                                    },
+
                                     style:
                                         TextStyle(fontSize: 14.sp, color: grey),
                                     cursorColor: grey,

@@ -394,6 +394,9 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                             height: 10.h,
                           ),
                           TextField(
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
                             readOnly: true,
                             controller: _dateStartController,
                             onTap: selectDayStart,
@@ -436,6 +439,9 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                             height: 10.h,
                           ),
                           TextField(
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
                             readOnly: true,
                             controller: _dateEndController,
                             onTap: selectDayEnd,

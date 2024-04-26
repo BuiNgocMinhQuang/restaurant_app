@@ -1181,372 +1181,447 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                 var imagePath1 =
                                                     filterProducts[index]
                                                         ?.foodImages;
-                                                var listImagePath =
-                                                    jsonDecode(imagePath1);
+                                                var listImagePath = jsonDecode(
+                                                    imagePath1 ?? '[]');
                                                 // var imagePath2 = imagePath1
                                                 //     .replaceAll('"]', '');
 
                                                 return Container(
-                                                  width: 1.sw,
-                                                  margin: EdgeInsets.only(
-                                                      bottom: 15.h,
-                                                      left: 5.w,
-                                                      right: 5.w),
-                                                  padding: EdgeInsets.all(10.w),
-                                                  decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                          color: Colors.grey
-                                                              .withOpacity(0.5),
-                                                          spreadRadius: 2,
-                                                          blurRadius: 4,
-                                                          offset: const Offset(
-                                                              0,
-                                                              3), // changes position of shadow
-                                                        ),
-                                                      ],
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15.r)),
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      Container(
-                                                          width: 80.w,
-                                                          height: 80.w,
-                                                          // color: Colors.amber,
-                                                          child: ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        40.w),
-                                                            child:
-                                                                CachedNetworkImage(
-                                                              fit: BoxFit.fill,
-                                                              imageUrl: httpImage +
-                                                                  listImagePath[
-                                                                      0],
-                                                              placeholder:
-                                                                  (context,
-                                                                          url) =>
-                                                                      SizedBox(
-                                                                height: 10.w,
-                                                                width: 10.w,
-                                                                child: const Center(
-                                                                    child:
-                                                                        CircularProgressIndicator()),
-                                                              ),
-                                                              errorWidget: (context,
-                                                                      url,
-                                                                      error) =>
-                                                                  const Icon(Icons
-                                                                      .error),
-                                                            ),
-                                                          )),
-                                                      space15W,
-                                                      Expanded(
-                                                        child: Row(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .end,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Column(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                SizedBox(
-                                                                  width: 80.w,
-                                                                  child:
-                                                                      TextApp(
-                                                                    softWrap:
-                                                                        true,
-                                                                    isOverFlow:
-                                                                        false,
-                                                                    text: filterProducts[
-                                                                            index]
-                                                                        .foodName,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                ),
-                                                                space10H,
-                                                                SizedBox(
-                                                                  width: 80.w,
-                                                                  child:
-                                                                      TextApp(
-                                                                    softWrap:
-                                                                        true,
-                                                                    isOverFlow:
-                                                                        false,
-                                                                    text:
-                                                                        "${MoneyFormatter(amount: (filterProducts[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                                    fontsize:
-                                                                        14.sp,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    color:
-                                                                        blueText2,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        // color: Colors.green,
-                                                        width: 80.w,
-                                                        // height: 20.h,
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
+                                                    width: 1.sw,
+                                                    margin: EdgeInsets.only(
+                                                        bottom: 15.h,
+                                                        left: 5.w,
+                                                        right: 5.w),
+                                                    padding:
+                                                        EdgeInsets.all(10.w),
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            color: Colors.grey
+                                                                .withOpacity(
+                                                                    0.5),
+                                                            spreadRadius: 2,
+                                                            blurRadius: 4,
+                                                            offset: const Offset(
+                                                                0,
+                                                                3), // changes position of shadow
+                                                          ),
+                                                        ],
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    15.r)),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Row(
                                                           crossAxisAlignment:
                                                               CrossAxisAlignment
                                                                   .center,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
                                                           children: [
-                                                            InkWell(
-                                                              onTap: () {
-                                                                minusQuantytiFoodToTable(
-                                                                    tokenReq:
-                                                                        widget
-                                                                            .token,
-                                                                    foodID: filterProducts[
-                                                                            index]
-                                                                        .foodId);
-                                                              },
-                                                              onDoubleTap: () {
-                                                                showCustomDialogModal(
-                                                                  typeDialog:
-                                                                      "error",
-                                                                  context:
-                                                                      navigatorKey
-                                                                          .currentContext,
-                                                                  textDesc:
-                                                                      "Bạn thao tác quá nhanh",
-                                                                  title:
-                                                                      "Thành công",
-                                                                  colorButton:
-                                                                      Colors
-                                                                          .red,
-                                                                  btnText: "OK",
-                                                                );
-                                                              },
-                                                              child: Container(
-                                                                width: 20.w,
-                                                                // height: 20.w,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                        borderRadius: BorderRadius.only(
-                                                                            topLeft: Radius.circular(8
-                                                                                .r),
-                                                                            bottomLeft: Radius.circular(8
-                                                                                .r)),
-                                                                        gradient:
-                                                                            const LinearGradient(
-                                                                          begin:
-                                                                              Alignment.topRight,
-                                                                          end: Alignment
-                                                                              .bottomLeft,
-                                                                          colors: [
-                                                                            Color.fromRGBO(
-                                                                                33,
-                                                                                82,
-                                                                                255,
-                                                                                1),
-                                                                            Color.fromRGBO(
-                                                                                33,
-                                                                                212,
-                                                                                253,
-                                                                                1)
-                                                                          ],
-                                                                        )),
-                                                                child: Center(
-                                                                  child:
-                                                                      TextApp(
-                                                                    text: "-",
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontsize:
-                                                                        18.sp,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Flexible(
-                                                                fit: FlexFit
-                                                                    .tight,
+                                                            SizedBox(
+                                                                width: 80.w,
+                                                                height: 80.w,
                                                                 child:
-                                                                    Container(
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    border: Border.all(
-                                                                        width:
-                                                                            0.4,
-                                                                        color: Colors
-                                                                            .grey),
-                                                                  ),
-                                                                  child: Center(
-                                                                    child:
-                                                                        TextField(
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      keyboardType:
-                                                                          TextInputType
-                                                                              .number,
-                                                                      inputFormatters: <TextInputFormatter>[
-                                                                        FilteringTextInputFormatter.allow(
-                                                                            RegExp("[0-9]")),
-                                                                      ], // Only numbers can be entered,
-                                                                      style: TextStyle(
-                                                                          fontSize: 12
-                                                                              .sp,
-                                                                          color:
-                                                                              grey),
-                                                                      controller:
-                                                                          _foodQuantityController[
-                                                                              index],
-
-                                                                      onTapOutside:
-                                                                          (event) {
-                                                                        FocusManager
-                                                                            .instance
-                                                                            .primaryFocus
-                                                                            ?.unfocus();
-
-                                                                        updateQuantytiFoodToTable(
-                                                                            tokenReq:
-                                                                                widget.token,
-                                                                            foodID: filterProducts[index].foodId,
-                                                                            quantityFood: _foodQuantityController[index].text);
-                                                                      },
-                                                                      cursorColor:
-                                                                          grey,
-                                                                      decoration:
-                                                                          const InputDecoration(
-                                                                        fillColor: Color.fromARGB(
-                                                                            255,
-                                                                            226,
-                                                                            104,
-                                                                            159),
-                                                                        focusedBorder:
-                                                                            OutlineInputBorder(
-                                                                          borderSide: BorderSide(
-                                                                              color: Color.fromRGBO(214, 51, 123, 0.6),
-                                                                              width: 2.0),
+                                                                    ClipRRect(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              40.w),
+                                                                  child: imagePath1 ==
+                                                                          null
+                                                                      ? Image
+                                                                          .asset(
+                                                                          'assets/images/dish.png',
+                                                                          fit: BoxFit
+                                                                              .contain,
+                                                                        )
+                                                                      : CachedNetworkImage(
+                                                                          fit: BoxFit
+                                                                              .fill,
+                                                                          imageUrl:
+                                                                              httpImage + listImagePath[0],
+                                                                          placeholder: (context, url) =>
+                                                                              SizedBox(
+                                                                            height:
+                                                                                10.w,
+                                                                            width:
+                                                                                10.w,
+                                                                            child:
+                                                                                const Center(child: CircularProgressIndicator()),
+                                                                          ),
+                                                                          errorWidget: (context, url, error) =>
+                                                                              const Icon(Icons.error),
                                                                         ),
-
-                                                                        hintText:
-                                                                            '',
-                                                                        isDense:
-                                                                            true, // Added this
-                                                                        contentPadding:
-                                                                            EdgeInsets.all(3), // Added this
+                                                                )),
+                                                            space15W,
+                                                            Expanded(
+                                                              child: Row(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .end,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: [
+                                                                  Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      SizedBox(
+                                                                        width:
+                                                                            80.w,
+                                                                        child:
+                                                                            TextApp(
+                                                                          softWrap:
+                                                                              true,
+                                                                          isOverFlow:
+                                                                              false,
+                                                                          text:
+                                                                              filterProducts[index].foodName,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
+                                                                      ),
+                                                                      space10H,
+                                                                      SizedBox(
+                                                                        width:
+                                                                            80.w,
+                                                                        child:
+                                                                            TextApp(
+                                                                          softWrap:
+                                                                              true,
+                                                                          isOverFlow:
+                                                                              false,
+                                                                          text:
+                                                                              "${MoneyFormatter(amount: (filterProducts[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                                          fontsize:
+                                                                              14.sp,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                          color:
+                                                                              blueText2,
+                                                                        ),
+                                                                      ),
+                                                                      space10H,
+                                                                    ],
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              // color: Colors.green,
+                                                              width: 80.w,
+                                                              // height: 20.h,
+                                                              child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  InkWell(
+                                                                    onTap: () {
+                                                                      minusQuantytiFoodToTable(
+                                                                          tokenReq: widget
+                                                                              .token,
+                                                                          foodID:
+                                                                              filterProducts[index].foodId);
+                                                                    },
+                                                                    onDoubleTap:
+                                                                        () {
+                                                                      showCustomDialogModal(
+                                                                        typeDialog:
+                                                                            "error",
+                                                                        context:
+                                                                            navigatorKey.currentContext,
+                                                                        textDesc:
+                                                                            "Bạn thao tác quá nhanh",
+                                                                        title:
+                                                                            "Thành công",
+                                                                        colorButton:
+                                                                            Colors.red,
+                                                                        btnText:
+                                                                            "OK",
+                                                                      );
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      width:
+                                                                          20.w,
+                                                                      // height: 20.w,
+                                                                      decoration: BoxDecoration(
+                                                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(8.r), bottomLeft: Radius.circular(8.r)),
+                                                                          gradient: const LinearGradient(
+                                                                            begin:
+                                                                                Alignment.topRight,
+                                                                            end:
+                                                                                Alignment.bottomLeft,
+                                                                            colors: [
+                                                                              Color.fromRGBO(33, 82, 255, 1),
+                                                                              Color.fromRGBO(33, 212, 253, 1)
+                                                                            ],
+                                                                          )),
+                                                                      child:
+                                                                          Center(
+                                                                        child:
+                                                                            TextApp(
+                                                                          text:
+                                                                              "-",
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          color:
+                                                                              Colors.white,
+                                                                          fontsize:
+                                                                              18.sp,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                )),
-                                                            InkWell(
-                                                              onTap: () {
-                                                                plusQuantytiFoodToTable(
-                                                                    tokenReq:
-                                                                        widget
-                                                                            .token,
-                                                                    foodID: filterProducts[
-                                                                            index]
-                                                                        .foodId);
-                                                              },
-                                                              onDoubleTap: () {
-                                                                showCustomDialogModal(
-                                                                  typeDialog:
-                                                                      "error",
-                                                                  context:
-                                                                      navigatorKey
-                                                                          .currentContext,
-                                                                  textDesc:
-                                                                      "Bạn thao tác quá nhanh",
-                                                                  title:
-                                                                      "Thành công",
-                                                                  colorButton:
-                                                                      Colors
-                                                                          .red,
-                                                                  btnText: "OK",
-                                                                );
-                                                              },
-                                                              child: Container(
-                                                                width: 20.w,
-                                                                // height: 20.w,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                        borderRadius: BorderRadius.only(
-                                                                            topRight: Radius.circular(8
-                                                                                .r),
-                                                                            bottomRight: Radius.circular(8
-                                                                                .r)),
-                                                                        gradient:
-                                                                            const LinearGradient(
-                                                                          begin:
-                                                                              Alignment.topRight,
-                                                                          end: Alignment
-                                                                              .bottomLeft,
-                                                                          colors: [
-                                                                            Color.fromRGBO(
-                                                                                33,
-                                                                                82,
-                                                                                255,
-                                                                                1),
-                                                                            Color.fromRGBO(
-                                                                                33,
-                                                                                212,
-                                                                                253,
-                                                                                1)
-                                                                          ],
-                                                                        )),
-                                                                child: Center(
-                                                                  child:
-                                                                      TextApp(
-                                                                    text: "+",
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontsize:
-                                                                        18.sp,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                ),
+                                                                  Flexible(
+                                                                      fit: FlexFit
+                                                                          .tight,
+                                                                      child:
+                                                                          Container(
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          border: Border.all(
+                                                                              width: 0.4,
+                                                                              color: Colors.grey),
+                                                                        ),
+                                                                        child:
+                                                                            Center(
+                                                                          child:
+                                                                              TextField(
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            keyboardType:
+                                                                                TextInputType.number,
+                                                                            inputFormatters: <TextInputFormatter>[
+                                                                              FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                                                                            ], // Only numbers can be entered,
+                                                                            style:
+                                                                                TextStyle(fontSize: 12.sp, color: grey),
+                                                                            controller:
+                                                                                _foodQuantityController[index],
+
+                                                                            onTapOutside:
+                                                                                (event) {
+                                                                              FocusManager.instance.primaryFocus?.unfocus();
+
+                                                                              updateQuantytiFoodToTable(tokenReq: widget.token, foodID: filterProducts[index].foodId, quantityFood: _foodQuantityController[index].text);
+                                                                            },
+                                                                            cursorColor:
+                                                                                grey,
+                                                                            decoration:
+                                                                                const InputDecoration(
+                                                                              fillColor: Color.fromARGB(255, 226, 104, 159),
+                                                                              focusedBorder: OutlineInputBorder(
+                                                                                borderSide: BorderSide(color: Color.fromRGBO(214, 51, 123, 0.6), width: 2.0),
+                                                                              ),
+
+                                                                              hintText: '',
+                                                                              isDense: true, // Added this
+                                                                              contentPadding: EdgeInsets.all(3), // Added this
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      )),
+                                                                  InkWell(
+                                                                    onTap: () {
+                                                                      plusQuantytiFoodToTable(
+                                                                          tokenReq: widget
+                                                                              .token,
+                                                                          foodID:
+                                                                              filterProducts[index].foodId);
+                                                                    },
+                                                                    onDoubleTap:
+                                                                        () {
+                                                                      showCustomDialogModal(
+                                                                        typeDialog:
+                                                                            "error",
+                                                                        context:
+                                                                            navigatorKey.currentContext,
+                                                                        textDesc:
+                                                                            "Bạn thao tác quá nhanh",
+                                                                        title:
+                                                                            "Thành công",
+                                                                        colorButton:
+                                                                            Colors.red,
+                                                                        btnText:
+                                                                            "OK",
+                                                                      );
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      width:
+                                                                          20.w,
+                                                                      // height: 20.w,
+                                                                      decoration: BoxDecoration(
+                                                                          borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), bottomRight: Radius.circular(8.r)),
+                                                                          gradient: const LinearGradient(
+                                                                            begin:
+                                                                                Alignment.topRight,
+                                                                            end:
+                                                                                Alignment.bottomLeft,
+                                                                            colors: [
+                                                                              Color.fromRGBO(33, 82, 255, 1),
+                                                                              Color.fromRGBO(33, 212, 253, 1)
+                                                                            ],
+                                                                          )),
+                                                                      child:
+                                                                          Center(
+                                                                        child:
+                                                                            TextApp(
+                                                                          text:
+                                                                              "+",
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          color:
+                                                                              Colors.white,
+                                                                          fontsize:
+                                                                              18.sp,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                ],
                                                               ),
-                                                            )
+                                                            ),
                                                           ],
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
+                                                        space15H,
+                                                        Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Row(
+                                                                  children: [
+                                                                    TextApp(
+                                                                        text:
+                                                                            "Tổng số món: "),
+                                                                    TextApp(
+                                                                      text: filterProducts[index]
+                                                                              ?.foodsTotal
+                                                                              .toString() ??
+                                                                          '0',
+                                                                      fontsize:
+                                                                          14.sp,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color:
+                                                                          blueText2,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    TextApp(
+                                                                        text:
+                                                                            "Chờ xác nhận: "),
+                                                                    TextApp(
+                                                                      text: filterProducts[index]
+                                                                              ?.foodsWaiting
+                                                                              .toString() ??
+                                                                          '0',
+                                                                      fontsize:
+                                                                          14.sp,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color:
+                                                                          blueText2,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            space20W,
+                                                            Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Row(
+                                                                  children: [
+                                                                    TextApp(
+                                                                        text:
+                                                                            "Đang chuẩn bị: "),
+                                                                    TextApp(
+                                                                      text: filterProducts[index]
+                                                                              ?.foodsCooking
+                                                                              .toString() ??
+                                                                          '0',
+                                                                      fontsize:
+                                                                          14.sp,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color:
+                                                                          blueText2,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    TextApp(
+                                                                        text:
+                                                                            "Đã xong: "),
+                                                                    TextApp(
+                                                                      text: filterProducts[index]
+                                                                              ?.foodsCompleted
+                                                                              .toString() ??
+                                                                          '0',
+                                                                      fontsize:
+                                                                          14.sp,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color:
+                                                                          blueText2,
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            )
+                                                          ],
+                                                        )
+                                                      ],
+                                                    ));
                                               } else {
                                                 return Center(
                                                   child: hasMore
@@ -1610,6 +1685,11 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                           Form(
                                             key: _formCancleTable,
                                             child: TextFormField(
+                                              onTapOutside: (event) {
+                                                FocusManager
+                                                    .instance.primaryFocus
+                                                    ?.unfocus();
+                                              },
                                               validator: (value) {
                                                 if (value!.isEmpty) {
                                                   return canNotNull;
@@ -3319,12 +3399,11 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                                         1);
 
                                                 var imagePath1 = state
-                                                        .paymentInforModel
-                                                        ?.data?[index]
-                                                        .foodImages ??
-                                                    '';
-                                                var listImagePath =
-                                                    jsonDecode(imagePath1);
+                                                    .paymentInforModel
+                                                    ?.data?[index]
+                                                    .foodImages;
+                                                var listImagePath = jsonDecode(
+                                                    imagePath1 ?? '[]');
 
                                                 return Container(
                                                   width: 1.sw,
@@ -3363,28 +3442,37 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                                                 BorderRadius
                                                                     .circular(
                                                                         40.w),
-                                                            child:
-                                                                CachedNetworkImage(
-                                                              fit: BoxFit.fill,
-                                                              imageUrl: httpImage +
-                                                                  listImagePath[
-                                                                      0],
-                                                              placeholder:
-                                                                  (context,
-                                                                          url) =>
-                                                                      SizedBox(
-                                                                height: 10.w,
-                                                                width: 10.w,
-                                                                child: const Center(
-                                                                    child:
-                                                                        CircularProgressIndicator()),
-                                                              ),
-                                                              errorWidget: (context,
-                                                                      url,
-                                                                      error) =>
-                                                                  const Icon(Icons
-                                                                      .error),
-                                                            ),
+                                                            child: imagePath1 ==
+                                                                    null
+                                                                ? Image.asset(
+                                                                    'assets/images/dish.png',
+                                                                    fit: BoxFit
+                                                                        .contain,
+                                                                  )
+                                                                : CachedNetworkImage(
+                                                                    fit: BoxFit
+                                                                        .fill,
+                                                                    imageUrl: httpImage +
+                                                                        listImagePath[
+                                                                            0],
+                                                                    placeholder:
+                                                                        (context,
+                                                                                url) =>
+                                                                            SizedBox(
+                                                                      height:
+                                                                          10.w,
+                                                                      width:
+                                                                          10.w,
+                                                                      child: const Center(
+                                                                          child:
+                                                                              CircularProgressIndicator()),
+                                                                    ),
+                                                                    errorWidget: (context,
+                                                                            url,
+                                                                            error) =>
+                                                                        const Icon(
+                                                                            Icons.error),
+                                                                  ),
                                                           )),
                                                       space15W,
                                                       Expanded(
@@ -3559,6 +3647,10 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                         SizedBox(
                                           width: 120.w,
                                           child: TextField(
+                                            onTapOutside: (event) {
+                                              FocusManager.instance.primaryFocus
+                                                  ?.unfocus();
+                                            },
                                             keyboardType: TextInputType.number,
                                             inputFormatters: <TextInputFormatter>[
                                               FilteringTextInputFormatter.allow(
@@ -3643,6 +3735,10 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                         Container(
                                           width: 120.w,
                                           child: TextField(
+                                            onTapOutside: (event) {
+                                              FocusManager.instance.primaryFocus
+                                                  ?.unfocus();
+                                            },
                                             keyboardType: TextInputType.number,
                                             inputFormatters: <TextInputFormatter>[
                                               FilteringTextInputFormatter.allow(
@@ -4618,7 +4714,8 @@ class _ManageBroughtReceiptDialogState
                                     filterProducts2[index]?.foodImages;
                                 // var imagePath2 =
                                 //     imagePath1.replaceAll('"]', '');
-                                var listImagePath = jsonDecode(imagePath1);
+                                var listImagePath =
+                                    jsonDecode(imagePath1 ?? '[]');
                                 return Container(
                                   width: 1.sw,
                                   margin: EdgeInsets.only(
@@ -4649,22 +4746,28 @@ class _ManageBroughtReceiptDialogState
                                           child: ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(40.w),
-                                            child: CachedNetworkImage(
-                                              fit: BoxFit.fill,
-                                              imageUrl:
-                                                  httpImage + listImagePath[0],
-                                              placeholder: (context, url) =>
-                                                  SizedBox(
-                                                height: 10.w,
-                                                width: 10.w,
-                                                child: const Center(
-                                                    child:
-                                                        CircularProgressIndicator()),
-                                              ),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      const Icon(Icons.error),
-                                            ),
+                                            child: imagePath1 == null
+                                                ? Image.asset(
+                                                    'assets/images/dish.png',
+                                                    fit: BoxFit.contain,
+                                                  )
+                                                : CachedNetworkImage(
+                                                    fit: BoxFit.fill,
+                                                    imageUrl: httpImage +
+                                                        listImagePath[0],
+                                                    placeholder:
+                                                        (context, url) =>
+                                                            SizedBox(
+                                                      height: 10.w,
+                                                      width: 10.w,
+                                                      child: const Center(
+                                                          child:
+                                                              CircularProgressIndicator()),
+                                                    ),
+                                                    errorWidget: (context, url,
+                                                            error) =>
+                                                        const Icon(Icons.error),
+                                                  ),
                                           )),
                                       space15W,
                                       Expanded(
@@ -5247,9 +5350,11 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                                     ),
                                     Container(
                                       // color: Colors.red,
-                                      width: 10.w,
+                                      width: 20.w,
                                       child: Center(
                                         child: TextApp(
+                                          isOverFlow: false,
+                                          softWrap: true,
                                           text: state.printBroughtReceiptModel
                                                   ?.data[index].quantityFood
                                                   .toString() ??
@@ -6461,6 +6566,9 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
                     height: 10.h,
                   ),
                   TextFormField(
+                    onTapOutside: (event) {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
                     controller: roomFieldController,
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -6759,6 +6867,9 @@ class _EditRoomDataDialogState extends State<EditRoomDataDialog> {
                     height: 10.h,
                   ),
                   TextFormField(
+                    onTapOutside: (event) {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
                     controller: roomFieldController,
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -8955,6 +9066,10 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                                   ),
 
                                   TextFormField(
+                                    onTapOutside: (event) {
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
+                                    },
                                     controller: nameItemController,
                                     validator: (value) {
                                       if (value!.isEmpty) {
@@ -9049,6 +9164,10 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                                     height: 10.h,
                                   ),
                                   TextFormField(
+                                    onTapOutside: (event) {
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
+                                    },
                                     controller: initalQuantityController,
                                     cursorColor:
                                         const Color.fromRGBO(73, 80, 87, 1),
@@ -9094,6 +9213,10 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                                     height: 10.h,
                                   ),
                                   TextFormField(
+                                    onTapOutside: (event) {
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
+                                    },
                                     controller: minQuantityController,
                                     cursorColor:
                                         const Color.fromRGBO(73, 80, 87, 1),

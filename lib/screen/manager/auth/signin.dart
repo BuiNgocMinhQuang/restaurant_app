@@ -172,6 +172,11 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                   ),
                                                   space30H,
                                                   TextFormField(
+                                                    onTapOutside: (event) {
+                                                      FocusManager
+                                                          .instance.primaryFocus
+                                                          ?.unfocus();
+                                                    },
                                                     controller: emailController,
                                                     keyboardType: TextInputType
                                                         .emailAddress,
@@ -228,6 +233,11 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                   ),
                                                   space20H,
                                                   TextFormField(
+                                                    onTapOutside: (event) {
+                                                      FocusManager
+                                                          .instance.primaryFocus
+                                                          ?.unfocus();
+                                                    },
                                                     controller:
                                                         passworldController,
                                                     obscureText:

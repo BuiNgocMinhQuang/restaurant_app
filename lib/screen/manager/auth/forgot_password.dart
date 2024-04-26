@@ -213,6 +213,11 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                                       height: 10.h,
                                                     ),
                                                     TextFormField(
+                                                      onTapOutside: (event) {
+                                                        FocusManager.instance
+                                                            .primaryFocus
+                                                            ?.unfocus();
+                                                      },
                                                       controller:
                                                           emailController,
                                                       style: TextStyle(

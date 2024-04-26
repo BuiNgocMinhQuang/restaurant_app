@@ -626,15 +626,14 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                                 dataHome!
                                                                         .stores[
                                                                     index];
-                                                            var imagePath1 =
-                                                                storeData
-                                                                    .storeImages;
+                                                            // var imagePath1 =
+                                                            //     storeData
+                                                            //         .storeImages;
                                                             // var listImagePath =
                                                             //     jsonDecode(imagePath1);
                                                             var logoImageStore =
                                                                 storeData
-                                                                        .storeLogo ??
-                                                                    '';
+                                                                    .storeLogo;
                                                             return Theme(
                                                               data: Theme.of(
                                                                       context)
@@ -658,24 +657,22 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                                         height:
                                                                             100.w,
                                                                         // color: Colors.amber,
-                                                                        child:
-                                                                            CachedNetworkImage(
-                                                                          fit: BoxFit
-                                                                              .fill,
-                                                                          imageUrl:
-                                                                              httpImage + logoImageStore,
-                                                                          placeholder: (context, url) =>
-                                                                              SizedBox(
-                                                                            height:
-                                                                                10.w,
-                                                                            width:
-                                                                                10.w,
-                                                                            child:
-                                                                                const Center(child: CircularProgressIndicator()),
-                                                                          ),
-                                                                          errorWidget: (context, url, error) =>
-                                                                              const Icon(Icons.error),
-                                                                        ),
+                                                                        child: logoImageStore ==
+                                                                                null
+                                                                            ? Image.asset(
+                                                                                'assets/images/store.png',
+                                                                                fit: BoxFit.contain,
+                                                                              )
+                                                                            : CachedNetworkImage(
+                                                                                fit: BoxFit.fill,
+                                                                                imageUrl: httpImage + logoImageStore,
+                                                                                placeholder: (context, url) => SizedBox(
+                                                                                  height: 10.w,
+                                                                                  width: 10.w,
+                                                                                  child: const Center(child: CircularProgressIndicator()),
+                                                                                ),
+                                                                                errorWidget: (context, url, error) => const Icon(Icons.error),
+                                                                              ),
                                                                       ),
                                                                       space15W,
                                                                       Column(
@@ -972,6 +969,11 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                   height: 10.h,
                                                 ),
                                                 TextField(
+                                                  onTapOutside: (event) {
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
+                                                  },
                                                   readOnly: true,
                                                   controller:
                                                       _dateStartController,
@@ -1033,6 +1035,11 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                   height: 10.h,
                                                 ),
                                                 TextField(
+                                                  onTapOutside: (event) {
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
+                                                  },
                                                   readOnly: true,
                                                   controller:
                                                       _dateEndController,

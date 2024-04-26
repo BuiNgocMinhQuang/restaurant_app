@@ -583,12 +583,11 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                   height: 25.h,
                 ),
                 ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: listStoreManagerData.length,
                     itemBuilder: (context, index) {
-                      var logoStore =
-                          listStoreManagerData[index].storeLogo ?? '';
+                      var logoStore = listStoreManagerData[index].storeLogo;
                       return InkWell(
                         onTap: () {},
                         child: ItemDrawer(
@@ -598,18 +597,23 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                           fontWeight: index == selectedStoreIndex
                               ? FontWeight.bold
                               : FontWeight.normal,
-                          image: CachedNetworkImage(
-                            fit: BoxFit.cover,
-                            imageUrl: httpImage + logoStore,
-                            placeholder: (context, url) => SizedBox(
-                              height: 10.w,
-                              width: 10.w,
-                              child: const Center(
-                                  child: CircularProgressIndicator()),
-                            ),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                          ),
+                          image: logoStore == null
+                              ? Image.asset(
+                                  'assets/images/store.png',
+                                  fit: BoxFit.contain,
+                                )
+                              : CachedNetworkImage(
+                                  fit: BoxFit.cover,
+                                  imageUrl: httpImage + logoStore,
+                                  placeholder: (context, url) => SizedBox(
+                                    height: 10.w,
+                                    width: 10.w,
+                                    child: const Center(
+                                        child: CircularProgressIndicator()),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                ),
                           isShowIcon: false,
                           isExpand: true,
                           text:

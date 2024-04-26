@@ -175,6 +175,10 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                             height: 30.h,
                                           ),
                                           TextFormField(
+                                            onTapOutside: (event) {
+                                              FocusManager.instance.primaryFocus
+                                                  ?.unfocus();
+                                            },
                                             controller: storeIdController,
                                             style: TextStyle(
                                                 fontSize: 14.sp, color: grey),
@@ -213,6 +217,10 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                             height: 20.h,
                                           ),
                                           TextFormField(
+                                            onTapOutside: (event) {
+                                              FocusManager.instance.primaryFocus
+                                                  ?.unfocus();
+                                            },
                                             controller: emailController,
                                             keyboardType:
                                                 TextInputType.emailAddress,
@@ -260,6 +268,10 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                             height: 20.h,
                                           ),
                                           TextFormField(
+                                            onTapOutside: (event) {
+                                              FocusManager.instance.primaryFocus
+                                                  ?.unfocus();
+                                            },
                                             controller: passworldController,
                                             obscureText: passwordVisible,
                                             style: TextStyle(
@@ -357,41 +369,41 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                                   color1: color1BlueButton,
                                                   color2: color2BlueButton,
                                                   event: () async {
-                                                    // if (_formField.currentState!
-                                                    //     .validate()) {
-                                                    //   // context.go("/staff_home");
-                                                    //   BlocProvider.of<
-                                                    //               LoginBloc>(
-                                                    //           context)
-                                                    //       .add(
-                                                    //     StaffLoginButtonPressed(
-                                                    //       remember: isRemember,
-                                                    //       shopId:
-                                                    //           storeIdController
-                                                    //               .text,
-                                                    //       email: emailController
-                                                    //           .text,
-                                                    //       password:
-                                                    //           passworldController
-                                                    //               .text,
-                                                    //     ),
-                                                    //   );
-                                                    //   storeIdController.clear();
-                                                    //   emailController.clear();
-                                                    //   passworldController
-                                                    //       .clear();
-                                                    // }
+                                                    if (_formField.currentState!
+                                                        .validate()) {
+                                                      // context.go("/staff_home");
+                                                      BlocProvider.of<
+                                                                  LoginBloc>(
+                                                              context)
+                                                          .add(
+                                                        StaffLoginButtonPressed(
+                                                          remember: isRemember,
+                                                          shopId:
+                                                              storeIdController
+                                                                  .text,
+                                                          email: emailController
+                                                              .text,
+                                                          password:
+                                                              passworldController
+                                                                  .text,
+                                                        ),
+                                                      );
+                                                      storeIdController.clear();
+                                                      emailController.clear();
+                                                      passworldController
+                                                          .clear();
+                                                    }
 
-                                                    BlocProvider.of<LoginBloc>(
-                                                            context)
-                                                        .add(
-                                                      StaffLoginButtonPressed(
-                                                          shopId: "123456",
-                                                          email:
-                                                              "buingocminhquang2@gmail.com",
-                                                          password: "123456789",
-                                                          remember: true),
-                                                    );
+                                                    // BlocProvider.of<LoginBloc>(
+                                                    //         context)
+                                                    //     .add(
+                                                    //   StaffLoginButtonPressed(
+                                                    //       shopId: "123456",
+                                                    //       email:
+                                                    //           "nhanavien@gmail.com",
+                                                    //       password: "123456789",
+                                                    //       remember: true),
+                                                    // );
                                                     //khong xoa
                                                   },
                                                   text: "Đăng nhập",

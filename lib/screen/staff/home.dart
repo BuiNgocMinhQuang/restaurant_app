@@ -11,18 +11,14 @@ import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/staff/list_food_order_model.dart';
 import 'package:app_restaurant/model/staff/staff_infor_model.dart';
-import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/share_getString.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
-import 'package:app_restaurant/widgets/card/card_receipt_container.dart';
 import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
-import 'package:app_restaurant/widgets/tabs&drawer/item_drawer_and_tab.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
@@ -823,8 +819,79 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
   int currentPage = 1;
   final scrollListOrderController = ScrollController();
   bool hasMore = true;
-
+  int currentLenghtCheckList = 0;
+  // String jsonTruocDo = '';
+  // String jsonSauDo = '';
   Timer? timer;
+  void getListOrderOfChefInIt({
+    required int page,
+    required int? foodInOrderStatus,
+  }) async {
+    log({
+      'shop_id': getStaffShopID,
+      'client': "staff",
+      'is_api': true,
+      'filters': {'food_in_order_status': foodInOrderStatus},
+      'limit': 15,
+      'page': page
+    }.toString());
+    try {
+      var token = StorageUtils.instance.getString(key: 'token_staff');
+
+      final respons = await http.post(
+        Uri.parse('$baseUrl$chefListFoodOrder'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'shop_id': getStaffShopID,
+          'client': "staff",
+          'is_api': true,
+          'filters': {'food_in_order_status': foodInOrderStatus},
+          'limit': 150,
+          'page': page
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      print(data);
+      // setState(() {
+      //             jsonTruocDo = data.toString();
+
+      // });
+      try {
+        if (data['status'] == 200) {
+          mounted
+              ? setState(() {
+                  // currentListOrderBill.clear();
+                  dataListFoodOrderModel =
+                      DataListFoodOrderModel.fromJson(data);
+                  currentListOrderBill
+                      .addAll(dataListFoodOrderModel?.data.data ?? []);
+                  // currentPage++;
+                  if (dataListFoodOrderModel!.data.data.isEmpty ||
+                      dataListFoodOrderModel!.data.data.length <= 15) {
+                    hasMore = false;
+                  }
+                  checkedList =
+                      List<bool>.filled(currentListOrderBill.length, false);
+                  currentLenghtCheckList = checkedList.length;
+                  isSelectedAll = false;
+                  listIdOrder = [];
+                })
+              : null;
+        } else {
+          print("ERROR BROUGHT RECEIPT PAGE 1");
+        }
+      } catch (error) {
+        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+      }
+    } catch (error) {
+      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+    }
+  }
+
   void getListOrderOfChef({
     required int page,
     required int? foodInOrderStatus,
@@ -858,6 +925,10 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
       );
       final data = jsonDecode(respons.body);
       print(data);
+      // setState(() {
+      //             jsonTruocDo = data.toString();
+
+      // });
       try {
         if (data['status'] == 200) {
           mounted
@@ -868,12 +939,16 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                   currentListOrderBill
                       .addAll(dataListFoodOrderModel?.data.data ?? []);
                   // currentPage++;
-                  if (dataListFoodOrderModel!.data.data.isEmpty ||
-                      dataListFoodOrderModel!.data.data.length <= 15) {
-                    hasMore = false;
+                  // if (dataListFoodOrderModel!.data.data.isEmpty ||
+                  //     dataListFoodOrderModel!.data.data.length <= 15) {
+                  //   hasMore = false;
+                  // }
+                  if (currentLenghtCheckList != currentListOrderBill.length) {
+                    log("THIS CASE");
+                    checkedList =
+                        List<bool>.filled(currentListOrderBill.length, false);
                   }
-                  checkedList =
-                      List<bool>.filled(currentListOrderBill.length, false);
+
                   isSelectedAll = false;
                   listIdOrder = [];
                 })
@@ -888,6 +963,75 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
       print("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
   }
+
+  // void getListOrderOfChef2({
+  //   required int page,
+  //   required int? foodInOrderStatus,
+  // }) async {
+  //   log({
+  //     'shop_id': getStaffShopID,
+  //     'client': "staff",
+  //     'is_api': true,
+  //     'filters': {'food_in_order_status': foodInOrderStatus},
+  //     'limit': 15,
+  //     'page': page
+  //   }.toString());
+  //   try {
+  //     var token = StorageUtils.instance.getString(key: 'token_staff');
+
+  //     final respons = await http.post(
+  //       Uri.parse('$baseUrl$chefListFoodOrder'),
+  //       headers: {
+  //         'Content-type': 'application/json',
+  //         'Accept': 'application/json',
+  //         "Authorization": "Bearer $token"
+  //       },
+  //       body: jsonEncode({
+  //         'shop_id': getStaffShopID,
+  //         'client': "staff",
+  //         'is_api': true,
+  //         'filters': {'food_in_order_status': foodInOrderStatus},
+  //         'limit': 15,
+  //         'page': page
+  //       }),
+  //     );
+  //     final data = jsonDecode(respons.body);
+  //     print(data);
+  //     setState(() {
+  //                 jsonSauDo = data.toString();
+
+  //     });
+  //     try {
+  //       if (data['status'] == 200) {
+  //         mounted
+  //             ? setState(() {
+  //                 // jsonSauDo = data.toString();
+  //                 // currentListOrderBill.clear();
+  //                 // dataListFoodOrderModel =
+  //                 //     DataListFoodOrderModel.fromJson(data);
+  //                 // currentListOrderBill
+  //                 //     .addAll(dataListFoodOrderModel?.data.data ?? []);
+  //                 // // currentPage++;
+  //                 // if (dataListFoodOrderModel!.data.data.isEmpty ||
+  //                 //     dataListFoodOrderModel!.data.data.length <= 15) {
+  //                 //   hasMore = false;
+  //                 // }
+  //                 // checkedList =
+  //                 //     List<bool>.filled(currentListOrderBill.length, false);
+  //                 // isSelectedAll = false;
+  //                 // listIdOrder = [];
+  //               })
+  //             : null;
+  //       } else {
+  //         print("ERROR BROUGHT RECEIPT PAGE 1");
+  //       }
+  //     } catch (error) {
+  //       print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+  //     }
+  //   } catch (error) {
+  //     print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+  //   }
+  // }
 
   void refeshListOrderOfChef({
     required int page,
@@ -985,7 +1129,7 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                   selectedCategoriesIndex = 0;
                   currentListOrderBill.clear();
                   currentPage = 1;
-                  getListOrderOfChef(
+                  getListOrderOfChefInIt(
                       page: currentPage, foodInOrderStatus: null);
                 })
               : null;
@@ -1004,42 +1148,42 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
   void initState() {
     super.initState();
 
-    getListOrderOfChef(foodInOrderStatus: null, page: 1);
-    scrollListOrderController.addListener(() {
-      if (scrollListOrderController.position.maxScrollExtent ==
-          scrollListOrderController.offset) {
-        log("selectedCategoriesIndex");
+    getListOrderOfChefInIt(foodInOrderStatus: null, page: 1);
+    // scrollListOrderController.addListener(() {
+    //   if (scrollListOrderController.position.maxScrollExtent ==
+    //       scrollListOrderController.offset) {
+    //     log("selectedCategoriesIndex");
 
-        log(selectedCategoriesIndex.toString());
-        getListOrderOfChef(
-            foodInOrderStatus: selectedCategoriesIndex == 0
-                ? null
-                : selectedCategoriesIndex == 1
-                    ? 0
-                    : selectedCategoriesIndex == 2
-                        ? 1
-                        : selectedCategoriesIndex == 3
-                            ? 2
-                            : null,
-            page: currentPage);
-      }
-    });
-    // timer = Timer.periodic(Duration(seconds: 2), (Timer t) {
-    //   currentPage = 1;
-    //   currentListOrderBill.clear();
-
-    //   getListOrderOfChef(
-    //       foodInOrderStatus: selectedCategoriesIndex == 0
-    //           ? null
-    //           : selectedCategoriesIndex == 1
-    //               ? 0
-    //               : selectedCategoriesIndex == 2
-    //                   ? 1
-    //                   : selectedCategoriesIndex == 3
-    //                       ? 2
-    //                       : null,
-    //       page: 1);
+    //     log(selectedCategoriesIndex.toString());
+    //     getListOrderOfChefInIt(
+    //         foodInOrderStatus: selectedCategoriesIndex == 0
+    //             ? null
+    //             : selectedCategoriesIndex == 1
+    //                 ? 0
+    //                 : selectedCategoriesIndex == 2
+    //                     ? 1
+    //                     : selectedCategoriesIndex == 3
+    //                         ? 2
+    //                         : null,
+    //         page: currentPage);
+    //   }
     // });
+    timer = Timer.periodic(Duration(seconds: 2), (Timer t) {
+      currentPage = 1;
+      currentListOrderBill.clear();
+
+      getListOrderOfChef(
+          foodInOrderStatus: selectedCategoriesIndex == 0
+              ? null
+              : selectedCategoriesIndex == 1
+                  ? 0
+                  : selectedCategoriesIndex == 2
+                      ? 1
+                      : selectedCategoriesIndex == 3
+                          ? 2
+                          : null,
+          page: 1);
+    });
   }
 
   @override
@@ -1121,7 +1265,7 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                                             // log(selectedCategoriesIndex
                                             //     .toString());
                                             currentListOrderBill.clear();
-                                            getListOrderOfChef(
+                                            getListOrderOfChefInIt(
                                                 foodInOrderStatus:
                                                     selectedCategoriesIndex == 0
                                                         ? null
@@ -1143,7 +1287,7 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
 
                                             currentListOrderBill.clear();
 
-                                            getListOrderOfChef(
+                                            getListOrderOfChefInIt(
                                                 foodInOrderStatus: null,
                                                 page: currentPage);
                                           }
@@ -1271,6 +1415,7 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                       itemCount: filterOrderBill.length + 1,
                       itemBuilder: (context, index) {
                         var dataLength = filterOrderBill.length;
+                        log("DATAT LENGHT $dataLength");
                         if (index < dataLength) {
                           var statusText = filterOrderBill[index]
                                       .foodInOrderStatus ==
@@ -1293,6 +1438,9 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                               : filterOrderBill[index].foodInOrderStatus == 1
                                   ? color2OrangeButton
                                   : color1GreenButton;
+
+                          var imagePath1 = filterOrderBill[index]?.foodImages;
+                          var listImagePath = jsonDecode(imagePath1 ?? '[]');
                           return Column(
                             children: [
                               space10H,
@@ -1545,25 +1693,72 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                                         ),
                                         space10H,
                                         Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            TextApp(text: 'Người tạo: '),
-                                            TextApp(
-                                                text: filterOrderBill[index]
-                                                    .staffFullName),
-                                          ],
-                                        ),
-                                        // SizedBox(
-                                        //   height: 10.h,
-                                        // ),
-                                        space10H,
-
-                                        Row(
-                                          children: [
-                                            TextApp(text: 'Thời gian: '),
-                                            TextApp(
-                                                text: formatDateTime(
-                                                    filterOrderBill[index]
-                                                        .createdAt))
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    TextApp(
+                                                        text: 'Người tạo: '),
+                                                    TextApp(
+                                                        text: filterOrderBill[
+                                                                index]
+                                                            .staffFullName),
+                                                  ],
+                                                ),
+                                                space10H,
+                                                Row(
+                                                  children: [
+                                                    TextApp(
+                                                        text: 'Thời gian: '),
+                                                    TextApp(
+                                                        text: formatDateTime(
+                                                            filterOrderBill[
+                                                                    index]
+                                                                .createdAt))
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(
+                                                width: 60.w,
+                                                height: 60.w,
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          30.w),
+                                                  child: imagePath1 == null
+                                                      ? Image.asset(
+                                                          'assets/images/dish.png',
+                                                          fit: BoxFit.contain,
+                                                        )
+                                                      : CachedNetworkImage(
+                                                          fit: BoxFit.fill,
+                                                          imageUrl: httpImage +
+                                                              listImagePath[0],
+                                                          placeholder:
+                                                              (context, url) =>
+                                                                  SizedBox(
+                                                            height: 10.w,
+                                                            width: 10.w,
+                                                            child: const Center(
+                                                                child:
+                                                                    CircularProgressIndicator()),
+                                                          ),
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              const Icon(
+                                                                  Icons.error),
+                                                        ),
+                                                )),
                                           ],
                                         ),
                                         SizedBox(

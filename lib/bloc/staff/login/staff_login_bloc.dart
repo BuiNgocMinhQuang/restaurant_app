@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
-import 'package:app_restaurant/model/list_room_model.dart';
 import 'package:app_restaurant/model/manager_infor_model.dart';
 import 'package:app_restaurant/model/staff/staff_infor_model.dart';
 import 'package:app_restaurant/model/staff/staff_auth_model.dart';
@@ -43,7 +42,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       try {
         if (data['status'] == 200) {
           StorageUtils.instance.removeKey(key: 'token_staff');
-          StorageUtils.instance.removeKey(key: 'position_staff');
           navigatorKey.currentContext?.go('/staff_sign_in');
         }
       } catch (error) {
@@ -75,14 +73,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         if (data['status'] == 200) {
           var authStaffDataRes = StaffAuthData.fromJson(data);
           var token = authStaffDataRes.token;
-          var position = authStaffDataRes.data?.staffPosition ?? '1';
           var staffShopID = authStaffDataRes.data!.shopId;
           var tokenExpiresAt = authStaffDataRes.tokenExpiresAt;
           StorageUtils.instance.setString(key: 'token_staff', val: token ?? '');
-          StorageUtils.instance.removeKey(key: 'position_staff');
-
-          StorageUtils.instance
-              .setString(key: 'position_staff', val: position.toString());
+          StorageUtils.instance.removeKey(key: 'staff_shop_id');
 
           StorageUtils.instance
               .setString(key: 'staff_shop_id', val: staffShopID!);

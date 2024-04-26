@@ -200,6 +200,11 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                 ),
                                                 space20W,
                                                 TextFormField(
+                                                  onTapOutside: (event) {
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
+                                                  },
                                                   controller:
                                                       passwordController,
                                                   obscureText: passwordVisible,
@@ -272,6 +277,11 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                 ),
                                                 space20H,
                                                 TextFormField(
+                                                  onTapOutside: (event) {
+                                                    FocusManager
+                                                        .instance.primaryFocus
+                                                        ?.unfocus();
+                                                  },
                                                   controller:
                                                       rePassworldController,
                                                   obscureText:
