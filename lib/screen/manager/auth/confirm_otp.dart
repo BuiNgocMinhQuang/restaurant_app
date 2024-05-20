@@ -205,13 +205,13 @@ class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
                                                 setState(() {
                                                   showButton = true;
                                                   otp = verificationCode;
-                                                  print("OTP $otp");
                                                 });
                                               }, // end onSubmit
                                             ),
                                             space20H,
                                             CountdownTimer(
-                                              duration: Duration(minutes: 5),
+                                              duration:
+                                                  const Duration(minutes: 5),
                                               onFinish: () {
                                                 showExpiredOtpDialog(context);
 
@@ -294,10 +294,10 @@ class _CountdownTimerState extends State<CountdownTimer> {
   Timer? _timer;
 
   void _startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (_remainingTime > Duration.zero) {
-          _remainingTime -= Duration(seconds: 1);
+          _remainingTime -= const Duration(seconds: 1);
         } else {
           _timer?.cancel();
           widget.onFinish?.call(); // Call the optional callback

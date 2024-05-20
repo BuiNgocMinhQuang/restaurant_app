@@ -18,6 +18,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
@@ -33,8 +34,8 @@ class ListStaff extends StatefulWidget {
 }
 
 class _ListStaffState extends State<ListStaff> {
-  TextEditingController _dateStartController = TextEditingController();
-  TextEditingController _dateEndController = TextEditingController();
+  final TextEditingController _dateStartController = TextEditingController();
+  final TextEditingController _dateEndController = TextEditingController();
   ListStaffDataModel? listStaffDataModel;
   List currentStaffList = [];
   int? currentActiveFlag;
@@ -363,11 +364,12 @@ class _ListStaffState extends State<ListStaff> {
                                                         color: grey),
                                                     cursorColor: grey,
                                                     decoration: InputDecoration(
-                                                        suffixIcon: Icon(Icons
-                                                            .calendar_month),
+                                                        suffixIcon: const Icon(
+                                                            Icons
+                                                                .calendar_month),
                                                         fillColor: const Color
-                                                            .fromARGB(
-                                                            255, 226, 104, 159),
+                                                            .fromARGB(255, 226,
+                                                            104, 159),
                                                         focusedBorder:
                                                             OutlineInputBorder(
                                                           borderSide:
@@ -432,11 +434,12 @@ class _ListStaffState extends State<ListStaff> {
                                                         color: grey),
                                                     cursorColor: grey,
                                                     decoration: InputDecoration(
-                                                        suffixIcon: Icon(Icons
-                                                            .calendar_month),
+                                                        suffixIcon: const Icon(
+                                                            Icons
+                                                                .calendar_month),
                                                         fillColor: const Color
-                                                            .fromARGB(
-                                                            255, 226, 104, 159),
+                                                            .fromARGB(255, 226,
+                                                            104, 159),
                                                         focusedBorder:
                                                             OutlineInputBorder(
                                                           borderSide:
@@ -639,401 +642,722 @@ class _ListStaffState extends State<ListStaff> {
                                           ],
                                         ),
                                         space20H,
-                                        SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Column(
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        SizedBox(
-                                                          width: 1.sw * 4.1,
-                                                          height: 50.h,
-                                                          child: Row(
-                                                            children: [
-                                                              SizedBox(
-                                                                width: 200.w,
-                                                                child: TextApp(
-                                                                  text:
-                                                                      'TÊN NHÂN VIÊN',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontsize:
-                                                                      14.sp,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  color:
-                                                                      greyText,
-                                                                ),
-                                                              ),
-                                                              // space50W,
-                                                              space35W,
-                                                              SizedBox(
-                                                                width: 150.w,
-                                                                // color: Colors.pink,
-                                                                child: TextApp(
-                                                                  text:
-                                                                      'CHỨC VỤ',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontsize:
-                                                                      14.sp,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  color:
-                                                                      greyText,
-                                                                ),
-                                                              ),
-                                                              space35W,
-                                                              SizedBox(
-                                                                width: 250.w,
-                                                                // color: Colors.purple,
-                                                                child: TextApp(
-                                                                  text:
-                                                                      'LÀM VIỆC TẠI CỬA HÀNG',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontsize:
-                                                                      14.sp,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  color:
-                                                                      greyText,
-                                                                ),
-                                                              ),
-                                                              space35W,
-                                                              SizedBox(
-                                                                width: 150.w,
-                                                                // color: Colors.orange,
-                                                                child: TextApp(
-                                                                  text:
-                                                                      'TRẠNG THÁI',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontsize:
-                                                                      14.sp,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  color:
-                                                                      greyText,
-                                                                ),
-                                                              ),
-                                                              space35W,
-                                                              SizedBox(
-                                                                width: 150.w,
-                                                                // color: Colors.lime,
-                                                                child: TextApp(
-                                                                  text:
-                                                                      'SỐ ĐIỆN THOẠI',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontsize:
-                                                                      14.sp,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  color:
-                                                                      greyText,
-                                                                ),
-                                                              ),
-                                                              space35W,
-                                                              SizedBox(
-                                                                width: 250.w,
-                                                                // color: Colors.blueGrey,
-                                                                child: TextApp(
-                                                                  text: 'EMAIL',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontsize:
-                                                                      14.sp,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  color:
-                                                                      greyText,
-                                                                ),
-                                                              ),
-                                                              space35W,
-                                                              SizedBox(
-                                                                width: 200.w,
-                                                                // color: Colors.deepOrange,
-                                                                child: TextApp(
-                                                                  text:
-                                                                      'NGÀY TẠO',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontsize:
-                                                                      14.sp,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  color:
-                                                                      greyText,
-                                                                ),
-                                                              ),
-                                                              space35W,
-                                                              SizedBox(
-                                                                width: 150.w,
-                                                                // color: Colors.green,
-                                                                child: TextApp(
-                                                                  text: '',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .normal,
-                                                                  fontsize:
-                                                                      14.sp,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  color:
-                                                                      greyText,
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                    SizedBox(
-                                                      width: 1.sw * 4.1,
-                                                      height: 400.h,
-                                                      child: ListView.builder(
-                                                          shrinkWrap: true,
-                                                          controller:
-                                                              scrollListStaffController,
-                                                          physics:
-                                                              const ClampingScrollPhysics(),
-                                                          itemCount:
-                                                              currentStaffList
-                                                                      .length +
-                                                                  1,
-                                                          itemBuilder:
-                                                              (context, index) {
-                                                            var dataLength =
-                                                                currentStaffList
-                                                                    .length;
-                                                            if (index <
-                                                                dataLength) {
-                                                              DataListStaff
-                                                                  staffData =
-                                                                  currentStaffList[
-                                                                      index];
-                                                              var avatarStaff =
-                                                                  staffData
-                                                                          .staffAvatar ??
-                                                                      '';
-                                                              var intPosition =
-                                                                  staffData
-                                                                      .staffPosition;
-                                                              var staffPos = intPosition ==
-                                                                      1
-                                                                  ? "Nhân viên phục vụ"
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              width: 1.sw,
+                                              child: ListView.builder(
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  shrinkWrap: true,
+                                                  itemCount:
+                                                      currentStaffList.length +
+                                                          1,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    if (index <
+                                                        currentStaffList
+                                                            .length) {
+                                                      DataListStaff staffData =
+                                                          currentStaffList[
+                                                              index];
+                                                      var avatarStaff = staffData
+                                                              .staffAvatar ??
+                                                          '';
+                                                      var intPosition =
+                                                          staffData
+                                                              .staffPosition;
+                                                      var staffPos = intPosition ==
+                                                              1
+                                                          ? "Nhân viên phục vụ"
+                                                          : intPosition == 2
+                                                              ? "Trưởng nhóm"
+                                                              : intPosition == 3
+                                                                  ? "Quản lý"
                                                                   : intPosition ==
-                                                                          2
-                                                                      ? "Trưởng nhóm"
-                                                                      : intPosition ==
-                                                                              3
-                                                                          ? "Quản lý"
-                                                                          : intPosition == 4
-                                                                              ? "Kế toán"
-                                                                              : "Đầu bếp";
-                                                              return Theme(
-                                                                  data: Theme.of(
-                                                                          context)
-                                                                      .copyWith(
-                                                                          dividerColor:
-                                                                              Colors.transparent),
-                                                                  child: Column(
+                                                                          4
+                                                                      ? "Kế toán"
+                                                                      : "Đầu bếp";
+                                                      return Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          const Divider(
+                                                            height: 1,
+                                                          ),
+                                                          space5H,
+                                                          Slidable(
+                                                            // Specify a key if the Slidable is dismissible.
+                                                            key: ValueKey(
+                                                                currentStaffList[
+                                                                    index]),
+
+                                                            // The start action pane is the one at the left or the top side.
+                                                            endActionPane:
+                                                                ActionPane(
+                                                              extentRatio: 0.6,
+                                                              // dismissible: SlidableDismissal.disabled,
+                                                              dragDismissible:
+                                                                  false,
+                                                              // A motion is a widget used to control how the pane animates.
+                                                              motion:
+                                                                  const ScrollMotion(),
+
+                                                              // A pane can dismiss the Slidable.
+                                                              dismissible:
+                                                                  DismissiblePane(
+                                                                      onDismissed:
+                                                                          () {}),
+
+                                                              // All actions are defined in the children parameter.
+                                                              children: [
+                                                                // A SlidableAction can have an icon and/or a label.
+                                                                // SlidableAction(
+                                                                //   onPressed:
+                                                                //       (dd) {},
+                                                                //   backgroundColor: Theme.of(
+                                                                //           context)
+                                                                //       .colorScheme
+                                                                //       .primary,
+                                                                //   foregroundColor:
+                                                                //       Colors
+                                                                //           .white,
+                                                                //   icon: Icons
+                                                                //       .info,
+                                                                //   label:
+                                                                //       'Thêm',
+                                                                // ),
+                                                                SlidableAction(
+                                                                  onPressed:
+                                                                      (context) {
+                                                                    // handleGetDetailsFood(
+                                                                    //     foodID:
+                                                                    //         product.foodId ?? 0);
+                                                                  },
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .blue,
+                                                                  foregroundColor:
+                                                                      Colors
+                                                                          .white,
+                                                                  icon: Icons
+                                                                      .edit,
+                                                                  label: 'Sửa',
+                                                                ),
+                                                                SlidableAction(
+                                                                  onPressed:
+                                                                      (context) {
+                                                                    // showConfirmDialog(
+                                                                    //     navigatorKey
+                                                                    //         .currentContext,
+                                                                    //     () {
+                                                                    //   handleDeleteFood(
+                                                                    //       foodID:
+                                                                    //           product.foodId.toString());
+                                                                    // });
+                                                                  },
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .red,
+                                                                  foregroundColor:
+                                                                      Colors
+                                                                          .white,
+                                                                  icon: Icons
+                                                                      .delete,
+                                                                  label: 'Xoá',
+                                                                ),
+                                                              ],
+                                                            ),
+
+                                                            // The end action pane is the one at the right or the bottom side.
+
+                                                            // The child of the Slidable is what the user sees when the
+                                                            // component is not dragged.
+                                                            child: ListTile(
+                                                                contentPadding:
+                                                                    EdgeInsets
+                                                                        .zero,
+                                                                minVerticalPadding:
+                                                                    0,
+                                                                horizontalTitleGap:
+                                                                    0,
+                                                                title:
+                                                                    Container(
+                                                                  width: 1.sw,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  child: Row(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .center,
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .start,
                                                                     children: [
-                                                                      space10H,
-                                                                      Row(
-                                                                          crossAxisAlignment: CrossAxisAlignment
-                                                                              .center,
+                                                                      SizedBox(
+                                                                        width:
+                                                                            100.w,
+                                                                        height:
+                                                                            100.w,
+                                                                        child:
+                                                                            ClipRRect(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(8.r),
+                                                                          child:
+                                                                              CachedNetworkImage(
+                                                                            fit:
+                                                                                BoxFit.fill,
+                                                                            imageUrl:
+                                                                                httpImage + avatarStaff,
+                                                                            placeholder: (context, url) =>
+                                                                                SizedBox(
+                                                                              height: 10.w,
+                                                                              width: 10.w,
+                                                                              child: const Center(child: CircularProgressIndicator()),
+                                                                            ),
+                                                                            errorWidget: (context, url, error) =>
+                                                                                const Icon(Icons.error),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width:
+                                                                            10.w,
+                                                                      ),
+                                                                      Container(
+                                                                        child:
+                                                                            Column(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.start,
                                                                           mainAxisAlignment:
                                                                               MainAxisAlignment.start,
                                                                           children: [
-                                                                            IntrinsicHeight(
-                                                                              child: Container(
-                                                                                width: 200.w,
-                                                                                child: Row(
-                                                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                  children: [
-                                                                                    Container(
-                                                                                      width: 80.w,
-                                                                                      height: 80.w,
-                                                                                      // color: Colors.amber,
-                                                                                      child: CachedNetworkImage(
-                                                                                        fit: BoxFit.fill,
-                                                                                        imageUrl: httpImage + avatarStaff,
-                                                                                        placeholder: (context, url) => SizedBox(
-                                                                                          height: 10.w,
-                                                                                          width: 10.w,
-                                                                                          child: const Center(child: CircularProgressIndicator()),
-                                                                                        ),
-                                                                                        errorWidget: (context, url, error) => const Icon(Icons.error),
-                                                                                      ),
-                                                                                    ),
-                                                                                    // space5W,
-                                                                                    SizedBox(
-                                                                                      width: 100.w,
-                                                                                      child: TextApp(
-                                                                                        isOverFlow: false,
-                                                                                        softWrap: true,
-                                                                                        text: staffData.staffFullName ?? '',
-                                                                                        fontsize: 14.sp,
-                                                                                        color: blueText,
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
+                                                                            Row(
+                                                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                              children: [
+                                                                                Container(
+                                                                                  // color: Colors.white,
+                                                                                  width: 140.w,
+                                                                                  child: TextApp(
+                                                                                    isOverFlow: false,
+                                                                                    softWrap: true,
+                                                                                    text: staffData.staffFullName ?? '',
+                                                                                    fontsize: 14.sp,
+                                                                                    color: blueText,
+                                                                                    fontWeight: FontWeight.bold,
+                                                                                  ),
                                                                                 ),
-                                                                              ),
+                                                                                staffData.activeFlg == 1 ? const StatusBoxIsActive() : const StatusBoxIsLock()
+                                                                              ],
                                                                             ),
-                                                                            space35W,
-                                                                            Container(
-                                                                              width: 150.w,
-                                                                              // color:
-                                                                              //     Colors.red,
-                                                                              child: TextApp(
-                                                                                textAlign: TextAlign.center,
-                                                                                isOverFlow: false,
-                                                                                softWrap: true,
-                                                                                text: staffPos,
-                                                                                fontsize: 14.sp,
-                                                                              ),
-                                                                            ),
-                                                                            space35W,
                                                                             SizedBox(
-                                                                              width: 250.w,
-                                                                              child: TextApp(
-                                                                                textAlign: TextAlign.center,
-                                                                                isOverFlow: false,
-                                                                                softWrap: true,
-                                                                                text: staffData.storeName,
-                                                                                fontsize: 14.sp,
-                                                                              ),
+                                                                              height: 10.h,
                                                                             ),
-                                                                            space35W,
+                                                                            Row(
+                                                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                              children: [
+                                                                                Container(
+                                                                                  // color: Colors.green,
+                                                                                  width: 140.w,
+                                                                                  child: TextApp(
+                                                                                    isOverFlow: false,
+                                                                                    softWrap: true,
+                                                                                    text: staffPos,
+                                                                                    fontsize: 14.sp,
+                                                                                  ),
+                                                                                ),
+                                                                                Container(
+                                                                                  // color: Colors.blue,
+                                                                                  width: 100.w,
+                                                                                  child: TextApp(
+                                                                                    isOverFlow: false,
+                                                                                    softWrap: true,
+                                                                                    text: staffData.storeName,
+                                                                                    fontsize: 14.sp,
+                                                                                    textAlign: TextAlign.end,
+                                                                                    fontWeight: FontWeight.bold,
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                            // SizedBox(
+                                                                            //   width: 150.w,
+                                                                            //   child: Center(child: staffData.activeFlg == 1 ? const StatusBoxIsActive() : const StatusBoxIsLock()),
+                                                                            // ),
                                                                             SizedBox(
-                                                                              width: 150.w,
-                                                                              child: Center(child: staffData.activeFlg == 1 ? StatusBoxIsActive() : StatusBoxIsLock()),
+                                                                              height: 10.h,
                                                                             ),
-                                                                            space35W,
-                                                                            SizedBox(
-                                                                              width: 150.w,
-                                                                              child: TextApp(
-                                                                                textAlign: TextAlign.center,
-                                                                                isOverFlow: false,
-                                                                                softWrap: true,
-                                                                                text: staffData.staffPhone.toString(),
-                                                                                fontsize: 14.sp,
-                                                                              ),
-                                                                            ),
-                                                                            space35W,
-                                                                            Center(
-                                                                              child: SizedBox(
-                                                                                width: 250.w,
-                                                                                child: TextApp(
-                                                                                  textAlign: TextAlign.center,
+                                                                            Row(
+                                                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                              children: [
+                                                                                TextApp(
                                                                                   isOverFlow: false,
                                                                                   softWrap: true,
                                                                                   text: staffData.staffEmail ?? '',
                                                                                   fontsize: 14.sp,
+                                                                                  textAlign: TextAlign.start,
+                                                                                  fontWeight: FontWeight.bold,
                                                                                 ),
-                                                                              ),
+                                                                              ],
                                                                             ),
-                                                                            space35W,
-                                                                            Center(
-                                                                              child: SizedBox(
-                                                                                width: 200.w,
-                                                                                child: TextApp(
-                                                                                  textAlign: TextAlign.center,
+                                                                            Row(
+                                                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                              children: [
+                                                                                TextApp(
+                                                                                  isOverFlow: false,
+                                                                                  softWrap: true,
+                                                                                  text: staffData.staffPhone.toString(),
+                                                                                  fontsize: 14.sp,
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                            Row(
+                                                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                              children: [
+                                                                                TextApp(
                                                                                   isOverFlow: false,
                                                                                   softWrap: true,
                                                                                   text: formatDateTime(staffData.createdAt ?? ''),
                                                                                   fontsize: 14.sp,
+                                                                                  textAlign: TextAlign.start,
+                                                                                  fontWeight: FontWeight.bold,
                                                                                 ),
-                                                                              ),
+                                                                              ],
                                                                             ),
-                                                                            space35W,
-                                                                            Center(
-                                                                              child: SizedBox(
-                                                                                width: 150.w,
-                                                                                child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center, children: [
-                                                                                  SizedBox(
-                                                                                    // width: 100.w,
-                                                                                    height: 30.h,
-                                                                                    child: ButtonIcon(
-                                                                                        isIconCircle: false,
-                                                                                        color1: color2BlueButton,
-                                                                                        color2: color1BlueButton,
-                                                                                        event: () {
-                                                                                          Navigator.push(
-                                                                                            navigatorKey.currentContext!,
-                                                                                            MaterialPageRoute(
-                                                                                                builder: (context) => EditStaffInformation(
-                                                                                                      staffNo: staffData.staffNo.toString(),
-                                                                                                    )),
-                                                                                          );
-                                                                                          // handleGetDetailsFood(foodID: product.foodId ?? 0);
-                                                                                        },
-                                                                                        icon: Icons.edit),
-                                                                                  ),
-                                                                                  space15W,
-                                                                                  SizedBox(
-                                                                                    // width: 100.w,
-                                                                                    height: 30.h,
-                                                                                    child: ButtonIcon(
-                                                                                        isIconCircle: false,
-                                                                                        color1: color2OrangeButton,
-                                                                                        color2: color1OrganeButton,
-                                                                                        event: () {
-                                                                                          showConfirmDialog(context, () {
-                                                                                            handleChangeStatusStaff(staffNo: staffData.staffNo.toString());
-                                                                                          });
-                                                                                          // handleGetDetailsFood(foodID: product.foodId ?? 0);
-                                                                                        },
-                                                                                        icon: Icons.lock),
-                                                                                  ),
-                                                                                ]),
-                                                                              ),
-                                                                            ),
-                                                                          ]),
-                                                                      space10H,
-                                                                      Divider(),
+                                                                          ],
+                                                                        ),
+                                                                      )
                                                                     ],
-                                                                  ));
-                                                            } else {
-                                                              return Center(
-                                                                child: hasMore
-                                                                    ? CircularProgressIndicator()
-                                                                    : Container(),
-                                                              );
-                                                            }
-                                                          }),
-                                                    )
-                                                  ],
-                                                )
-                                              ],
-                                            )),
+                                                                  ),
+                                                                )),
+                                                          ),
+                                                          space5H,
+                                                        ],
+                                                      );
+                                                    } else {
+                                                      return Center(
+                                                        child: hasMore
+                                                            ? Padding(
+                                                                padding: EdgeInsets
+                                                                    .only(
+                                                                        top: 10
+                                                                            .h,
+                                                                        bottom:
+                                                                            10.h),
+                                                                child:
+                                                                    const CircularProgressIndicator(),
+                                                              )
+                                                            : Container(),
+                                                      );
+                                                    }
+                                                  }),
+                                            )
+                                          ],
+                                        )
+                                        // SingleChildScrollView(
+                                        //     scrollDirection: Axis.horizontal,
+                                        //     child: Row(
+                                        //       mainAxisSize: MainAxisSize.min,
+                                        //       children: [
+                                        //         Column(
+                                        //           children: [
+                                        //             Row(
+                                        //               children: [
+                                        //                 SizedBox(
+                                        //                   width: 1.sw * 4.1,
+                                        //                   height: 50.h,
+                                        //                   child: Row(
+                                        //                     children: [
+                                        //                       SizedBox(
+                                        //                         width: 200.w,
+                                        //                         child: TextApp(
+                                        //                           text:
+                                        //                               'TÊN NHÂN VIÊN',
+                                        //                           fontWeight:
+                                        //                               FontWeight
+                                        //                                   .bold,
+                                        //                           fontsize:
+                                        //                               14.sp,
+                                        //                           textAlign:
+                                        //                               TextAlign
+                                        //                                   .center,
+                                        //                           color:
+                                        //                               greyText,
+                                        //                         ),
+                                        //                       ),
+                                        //                       // space50W,
+                                        //                       space35W,
+                                        //                       SizedBox(
+                                        //                         width: 150.w,
+                                        //                         // color: Colors.pink,
+                                        //                         child: TextApp(
+                                        //                           text:
+                                        //                               'CHỨC VỤ',
+                                        //                           fontWeight:
+                                        //                               FontWeight
+                                        //                                   .bold,
+                                        //                           fontsize:
+                                        //                               14.sp,
+                                        //                           textAlign:
+                                        //                               TextAlign
+                                        //                                   .center,
+                                        //                           color:
+                                        //                               greyText,
+                                        //                         ),
+                                        //                       ),
+                                        //                       space35W,
+                                        //                       SizedBox(
+                                        //                         width: 250.w,
+                                        //                         // color: Colors.purple,
+                                        //                         child: TextApp(
+                                        //                           text:
+                                        //                               'LÀM VIỆC TẠI CỬA HÀNG',
+                                        //                           fontWeight:
+                                        //                               FontWeight
+                                        //                                   .bold,
+                                        //                           fontsize:
+                                        //                               14.sp,
+                                        //                           textAlign:
+                                        //                               TextAlign
+                                        //                                   .center,
+                                        //                           color:
+                                        //                               greyText,
+                                        //                         ),
+                                        //                       ),
+                                        //                       space35W,
+                                        //                       SizedBox(
+                                        //                         width: 150.w,
+                                        //                         // color: Colors.orange,
+                                        //                         child: TextApp(
+                                        //                           text:
+                                        //                               'TRẠNG THÁI',
+                                        //                           fontWeight:
+                                        //                               FontWeight
+                                        //                                   .bold,
+                                        //                           fontsize:
+                                        //                               14.sp,
+                                        //                           textAlign:
+                                        //                               TextAlign
+                                        //                                   .center,
+                                        //                           color:
+                                        //                               greyText,
+                                        //                         ),
+                                        //                       ),
+                                        //                       space35W,
+                                        //                       SizedBox(
+                                        //                         width: 150.w,
+                                        //                         // color: Colors.lime,
+                                        //                         child: TextApp(
+                                        //                           text:
+                                        //                               'SỐ ĐIỆN THOẠI',
+                                        //                           fontWeight:
+                                        //                               FontWeight
+                                        //                                   .bold,
+                                        //                           fontsize:
+                                        //                               14.sp,
+                                        //                           textAlign:
+                                        //                               TextAlign
+                                        //                                   .center,
+                                        //                           color:
+                                        //                               greyText,
+                                        //                         ),
+                                        //                       ),
+                                        //                       space35W,
+                                        //                       SizedBox(
+                                        //                         width: 250.w,
+                                        //                         // color: Colors.blueGrey,
+                                        //                         child: TextApp(
+                                        //                           text: 'EMAIL',
+                                        //                           fontWeight:
+                                        //                               FontWeight
+                                        //                                   .bold,
+                                        //                           fontsize:
+                                        //                               14.sp,
+                                        //                           textAlign:
+                                        //                               TextAlign
+                                        //                                   .center,
+                                        //                           color:
+                                        //                               greyText,
+                                        //                         ),
+                                        //                       ),
+                                        //                       space35W,
+                                        //                       SizedBox(
+                                        //                         width: 200.w,
+                                        //                         // color: Colors.deepOrange,
+                                        //                         child: TextApp(
+                                        //                           text:
+                                        //                               'NGÀY TẠO',
+                                        //                           fontWeight:
+                                        //                               FontWeight
+                                        //                                   .bold,
+                                        //                           fontsize:
+                                        //                               14.sp,
+                                        //                           textAlign:
+                                        //                               TextAlign
+                                        //                                   .center,
+                                        //                           color:
+                                        //                               greyText,
+                                        //                         ),
+                                        //                       ),
+                                        //                       space35W,
+                                        //                       SizedBox(
+                                        //                         width: 150.w,
+                                        //                         // color: Colors.green,
+                                        //                         child: TextApp(
+                                        //                           text: '',
+                                        //                           fontWeight:
+                                        //                               FontWeight
+                                        //                                   .normal,
+                                        //                           fontsize:
+                                        //                               14.sp,
+                                        //                           textAlign:
+                                        //                               TextAlign
+                                        //                                   .center,
+                                        //                           color:
+                                        //                               greyText,
+                                        //                         ),
+                                        //                       ),
+                                        //                     ],
+                                        //                   ),
+                                        //                 )
+                                        //               ],
+                                        //             ),
+                                        //             SizedBox(
+                                        //               width: 1.sw * 4.1,
+                                        //               height: 400.h,
+                                        //               child: ListView.builder(
+                                        //                   shrinkWrap: true,
+                                        //                   controller:
+                                        //                       scrollListStaffController,
+                                        //                   physics:
+                                        //                       const ClampingScrollPhysics(),
+                                        //                   itemCount:
+                                        //                       currentStaffList
+                                        //                               .length +
+                                        //                           1,
+                                        //                   itemBuilder:
+                                        //                       (context, index) {
+                                        //                     var dataLength =
+                                        //                         currentStaffList
+                                        //                             .length;
+                                        //                     if (index <
+                                        //                         dataLength) {
+                                        //                       DataListStaff
+                                        //                           staffData =
+                                        //                           currentStaffList[
+                                        //                               index];
+                                        //                       var avatarStaff =
+                                        //                           staffData
+                                        //                                   .staffAvatar ??
+                                        //                               '';
+                                        //                       var intPosition =
+                                        //                           staffData
+                                        //                               .staffPosition;
+                                        //                       var staffPos = intPosition ==
+                                        //                               1
+                                        //                           ? "Nhân viên phục vụ"
+                                        //                           : intPosition ==
+                                        //                                   2
+                                        //                               ? "Trưởng nhóm"
+                                        //                               : intPosition ==
+                                        //                                       3
+                                        //                                   ? "Quản lý"
+                                        //                                   : intPosition == 4
+                                        //                                       ? "Kế toán"
+                                        //                                       : "Đầu bếp";
+                                        //                       return Theme(
+                                        //                           data: Theme.of(
+                                        //                                   context)
+                                        //                               .copyWith(
+                                        //                                   dividerColor:
+                                        //                                       Colors.transparent),
+                                        //                           child: Column(
+                                        //                             children: [
+                                        //                               space10H,
+                                        //                               Row(
+                                        //                                   crossAxisAlignment: CrossAxisAlignment
+                                        //                                       .center,
+                                        //                                   mainAxisAlignment:
+                                        //                                       MainAxisAlignment.start,
+                                        //                                   children: [
+                                        //                                     IntrinsicHeight(
+                                        //                                       child: Container(
+                                        //                                         width: 200.w,
+                                        //                                         child: Row(
+                                        //                                           crossAxisAlignment: CrossAxisAlignment.center,
+                                        //                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        //                                           children: [
+                                        //                                             Container(
+                                        //                                               width: 80.w,
+                                        //                                               height: 80.w,
+                                        //                                               // color: Colors.amber,
+                                        //                                               child: CachedNetworkImage(
+                                        //                                                 fit: BoxFit.fill,
+                                        //                                                 imageUrl: httpImage + avatarStaff,
+                                        //                                                 placeholder: (context, url) => SizedBox(
+                                        //                                                   height: 10.w,
+                                        //                                                   width: 10.w,
+                                        //                                                   child: const Center(child: CircularProgressIndicator()),
+                                        //                                                 ),
+                                        //                                                 errorWidget: (context, url, error) => const Icon(Icons.error),
+                                        //                                               ),
+                                        //                                             ),
+                                        //                                             // space5W,
+                                        //                                             SizedBox(
+                                        //                                               width: 100.w,
+                                        //                                               child: TextApp(
+                                        //                                                 isOverFlow: false,
+                                        //                                                 softWrap: true,
+                                        //                                                 text: staffData.staffFullName ?? '',
+                                        //                                                 fontsize: 14.sp,
+                                        //                                                 color: blueText,
+                                        //                                               ),
+                                        //                                             ),
+                                        //                                           ],
+                                        //                                         ),
+                                        //                                       ),
+                                        //                                     ),
+                                        //                                     space35W,
+                                        //                                     Container(
+                                        //                                       width: 150.w,
+                                        //                                       // color:
+                                        //                                       //     Colors.red,
+                                        //                                       child: TextApp(
+                                        //                                         textAlign: TextAlign.center,
+                                        //                                         isOverFlow: false,
+                                        //                                         softWrap: true,
+                                        //                                         text: staffPos,
+                                        //                                         fontsize: 14.sp,
+                                        //                                       ),
+                                        //                                     ),
+                                        //                                     space35W,
+                                        //                                     SizedBox(
+                                        //                                       width: 250.w,
+                                        //                                       child: TextApp(
+                                        //                                         textAlign: TextAlign.center,
+                                        //                                         isOverFlow: false,
+                                        //                                         softWrap: true,
+                                        //                                         text: staffData.storeName,
+                                        //                                         fontsize: 14.sp,
+                                        //                                       ),
+                                        //                                     ),
+                                        //                                     space35W,
+                                        //                                     SizedBox(
+                                        //                                       width: 150.w,
+                                        //                                       child: Center(child: staffData.activeFlg == 1 ? const StatusBoxIsActive() : const StatusBoxIsLock()),
+                                        //                                     ),
+                                        //                                     space35W,
+                                        //                                     SizedBox(
+                                        //                                       width: 150.w,
+                                        //                                       child: TextApp(
+                                        //                                         textAlign: TextAlign.center,
+                                        //                                         isOverFlow: false,
+                                        //                                         softWrap: true,
+                                        //                                         text: staffData.staffPhone.toString(),
+                                        //                                         fontsize: 14.sp,
+                                        //                                       ),
+                                        //                                     ),
+                                        //                                     space35W,
+                                        //                                     Center(
+                                        //                                       child: SizedBox(
+                                        //                                         width: 250.w,
+                                        //                                         child: TextApp(
+                                        //                                           textAlign: TextAlign.center,
+                                        //                                           isOverFlow: false,
+                                        //                                           softWrap: true,
+                                        //                                           text: staffData.staffEmail ?? '',
+                                        //                                           fontsize: 14.sp,
+                                        //                                         ),
+                                        //                                       ),
+                                        //                                     ),
+                                        //                                     space35W,
+                                        //                                     Center(
+                                        //                                       child: SizedBox(
+                                        //                                         width: 200.w,
+                                        //                                         child: TextApp(
+                                        //                                           textAlign: TextAlign.center,
+                                        //                                           isOverFlow: false,
+                                        //                                           softWrap: true,
+                                        //                                           text: formatDateTime(staffData.createdAt ?? ''),
+                                        //                                           fontsize: 14.sp,
+                                        //                                         ),
+                                        //                                       ),
+                                        //                                     ),
+                                        //                                     space35W,
+                                        //                                     Center(
+                                        //                                       child: SizedBox(
+                                        //                                         width: 150.w,
+                                        //                                         child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center, children: [
+                                        //                                           SizedBox(
+                                        //                                             // width: 100.w,
+                                        //                                             height: 30.h,
+                                        //                                             child: ButtonIcon(
+                                        //                                                 isIconCircle: false,
+                                        //                                                 color1: color2BlueButton,
+                                        //                                                 color2: color1BlueButton,
+                                        //                                                 event: () {
+                                        //                                                   Navigator.push(
+                                        //                                                     navigatorKey.currentContext!,
+                                        //                                                     MaterialPageRoute(
+                                        //                                                         builder: (context) => EditStaffInformation(
+                                        //                                                               staffNo: staffData.staffNo.toString(),
+                                        //                                                             )),
+                                        //                                                   );
+                                        //                                                   // handleGetDetailsFood(foodID: product.foodId ?? 0);
+                                        //                                                 },
+                                        //                                                 icon: Icons.edit),
+                                        //                                           ),
+                                        //                                           space15W,
+                                        //                                           SizedBox(
+                                        //                                             // width: 100.w,
+                                        //                                             height: 30.h,
+                                        //                                             child: ButtonIcon(
+                                        //                                                 isIconCircle: false,
+                                        //                                                 color1: color2OrangeButton,
+                                        //                                                 color2: color1OrganeButton,
+                                        //                                                 event: () {
+                                        //                                                   showConfirmDialog(context, () {
+                                        //                                                     handleChangeStatusStaff(staffNo: staffData.staffNo.toString());
+                                        //                                                   });
+                                        //                                                   // handleGetDetailsFood(foodID: product.foodId ?? 0);
+                                        //                                                 },
+                                        //                                                 icon: Icons.lock),
+                                        //                                           ),
+                                        //                                         ]),
+                                        //                                       ),
+                                        //                                     ),
+                                        //                                   ]),
+                                        //                               space10H,
+                                        //                               const Divider(),
+                                        //                             ],
+                                        //                           ));
+                                        //                     } else {
+                                        //                       return Center(
+                                        //                         child: hasMore
+                                        //                             ? const CircularProgressIndicator()
+                                        //                             : Container(),
+                                        //                       );
+                                        //                     }
+                                        //                   }),
+                                        //             )
+                                        //           ],
+                                        //         )
+                                        //       ],
+                                        //     )),
                                       ],
                                     ),
                                   )),
                               space30H,
-                              CopyRightText()
+                              const CopyRightText()
                             ],
                           ),
                         ),

@@ -406,8 +406,9 @@ class _ListStoresState extends State<ListStores> {
                                                               },
                                                               text:
                                                                   "Quản lý cửa hàng",
-                                                              colorText: Color
-                                                                  .fromRGBO(
+                                                              colorText:
+                                                                  const Color
+                                                                      .fromRGBO(
                                                                       23,
                                                                       193,
                                                                       232,
@@ -415,12 +416,12 @@ class _ListStoresState extends State<ListStores> {
                                                               backgroundColor:
                                                                   Colors.white,
                                                               outlineColor:
-                                                                  Color
+                                                                  const Color
                                                                       .fromRGBO(
-                                                                          23,
-                                                                          193,
-                                                                          232,
-                                                                          1),
+                                                                      23,
+                                                                      193,
+                                                                      232,
+                                                                      1),
                                                             ),
                                                             space25W,
                                                             Container(
@@ -472,7 +473,7 @@ class _ListStoresState extends State<ListStores> {
                                                           15.r),
                                                 ),
                                                 backgroundColor: Colors.white,
-                                                side: BorderSide(
+                                                side: const BorderSide(
                                                     color: Colors.grey,
                                                     width: 1), //<-- SEE HERE
                                               ),
@@ -486,14 +487,14 @@ class _ListStoresState extends State<ListStores> {
                                                               () {});
                                                     });
                                               },
-                                              child: Container(
+                                              child: SizedBox(
                                                 width: 1.sw,
                                                 height: 150.h,
                                                 child: Column(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
                                                   children: [
-                                                    Icon(
+                                                    const Icon(
                                                       Icons.add,
                                                       color: Colors.grey,
                                                     ),
@@ -553,7 +554,8 @@ class _ListStoresState extends State<ListStores> {
               )),
             ],
           ),
-          backgroundColor: Color.fromARGB(255, 246, 246, 246).withOpacity(1),
+          backgroundColor:
+              const Color.fromARGB(255, 246, 246, 246).withOpacity(1),
         );
       },
     );

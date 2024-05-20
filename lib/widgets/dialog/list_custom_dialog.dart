@@ -254,13 +254,13 @@ class _BookingTableDialogState extends State<BookingTableDialog>
             });
           }
         } else {
-          print("ERROR DATA FOOD TABLE 1 ${data}");
+          log("ERROR DATA FOOD TABLE 1 $data");
         }
       } catch (error) {
-        print("ERROR DATA FOOD TABLE 2 ${error}");
+        log("ERROR DATA FOOD TABLE 2 $error");
       }
     } catch (error) {
-      print("ERROR DATA FOOD TABLE 3 $error");
+      log("ERROR DATA FOOD TABLE 3 $error");
     }
   }
 
@@ -299,13 +299,13 @@ class _BookingTableDialogState extends State<BookingTableDialog>
             listFoodTableCurrent.addAll(foodTableDataRes.foods.data);
           });
         } else {
-          print("ERROR DATA FOOD TABLE 1 ${data}");
+          log("ERROR DATA FOOD TABLE 1 ${data}");
         }
       } catch (error) {
-        print("ERROR DATA FOOD TABLE 2 ${error}");
+        log("ERROR DATA FOOD TABLE 2 ${error}");
       }
     } catch (error) {
-      print("ERROR DATA FOOD TABLE 3 $error");
+      log("ERROR DATA FOOD TABLE 3 $error");
     }
   }
 
@@ -331,7 +331,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
         }),
       );
       final data = jsonDecode(respons.body);
-      print(" DATA ADD FOOD TO TABLE $data");
+      log(" DATA ADD FOOD TO TABLE $data");
       final message = data['message'];
 
       try {
@@ -342,7 +342,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
               mess: message['title'],
               color: Colors.green);
         } else {
-          print("ERROR ADD FOOD TO TABLE 1");
+          log("ERROR ADD FOOD TO TABLE 1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -350,10 +350,10 @@ class _BookingTableDialogState extends State<BookingTableDialog>
               color: Colors.red);
         }
       } catch (error) {
-        print("ERROR ADD FOOD TO TABLE 2 $error");
+        log("ERROR ADD FOOD TO TABLE 2 $error");
       }
     } catch (error) {
-      print("ERROR ADD FOOD TO TABLE 3 $error");
+      log("ERROR ADD FOOD TO TABLE 3 $error");
     }
     refeshHomePage();
     getDetailFoodTable(tokenReq: widget.token);
@@ -381,7 +381,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
         }),
       );
       final data = jsonDecode(respons.body);
-      print(" DATA ADD FOOD TO TABLE $data");
+      log(" DATA ADD FOOD TO TABLE $data");
       final message = data['message'];
 
       try {
@@ -392,7 +392,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
               mess: message['title'],
               color: Colors.green);
         } else {
-          print("ERROR ADD FOOD TO TABLE 1");
+          log("ERROR ADD FOOD TO TABLE 1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -400,10 +400,10 @@ class _BookingTableDialogState extends State<BookingTableDialog>
               color: Colors.red);
         }
       } catch (error) {
-        print("ERROR ADD FOOD TO TABLE 2 $error");
+        log("ERROR ADD FOOD TO TABLE 2 $error");
       }
     } catch (error) {
-      print("ERROR ADD FOOD TO TABLE 3 $error");
+      log("ERROR ADD FOOD TO TABLE 3 $error");
     }
     refeshHomePage();
     getDetailFoodTable(tokenReq: widget.token);
@@ -434,7 +434,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
         }),
       );
       final data = jsonDecode(respons.body);
-      print(" DATA ADD FOOD TO TABLE $data");
+      log(" DATA ADD FOOD TO TABLE $data");
       final message = data['message'];
 
       try {
@@ -445,7 +445,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
               mess: message['title'],
               color: Colors.green);
         } else {
-          print("ERROR ADD FOOD TO TABLE 1");
+          log("ERROR ADD FOOD TO TABLE 1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -453,10 +453,10 @@ class _BookingTableDialogState extends State<BookingTableDialog>
               color: Colors.red);
         }
       } catch (error) {
-        print("ERROR ADD FOOD TO TABLE 2 $error");
+        log("ERROR ADD FOOD TO TABLE 2 $error");
       }
     } catch (error) {
-      print("ERROR ADD FOOD TO TABLE 3 $error");
+      log("ERROR ADD FOOD TO TABLE 3 $error");
     }
     refeshHomePage();
     getDetailFoodTable(tokenReq: widget.token);
@@ -879,7 +879,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                       ),
                                     ],
                                   )),
-                                  Container(
+                                  SizedBox(
                                     width: 1.sw,
                                     height: 80,
                                     child: Row(
@@ -891,10 +891,10 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                           },
                                           text: "Đóng",
                                           colorText: Colors.white,
-                                          backgroundColor:
-                                              Color.fromRGBO(131, 146, 171, 1),
-                                          outlineColor:
-                                              Color.fromRGBO(131, 146, 171, 1),
+                                          backgroundColor: const Color.fromRGBO(
+                                              131, 146, 171, 1),
+                                          outlineColor: const Color.fromRGBO(
+                                              131, 146, 171, 1),
                                         ),
                                         SizedBox(
                                           width: 20.w,
@@ -1322,7 +1322,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                 ],
                                                               ),
                                                             ),
-                                                            Container(
+                                                            SizedBox(
                                                               // color: Colors.green,
                                                               width: 80.w,
                                                               // height: 20.h,
@@ -1625,12 +1625,12 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                               } else {
                                                 return Center(
                                                   child: hasMore
-                                                      ? CircularProgressIndicator()
+                                                      ? const CircularProgressIndicator()
                                                       : Container(),
                                                 );
                                               }
                                             })),
-                                    Container(
+                                    SizedBox(
                                       width: 1.sw,
                                       height: 80,
                                       child: Row(
@@ -1645,9 +1645,10 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                             },
                                             text: "Đóng",
                                             colorText: Colors.white,
-                                            backgroundColor: Color.fromRGBO(
-                                                131, 146, 171, 1),
-                                            outlineColor: Color.fromRGBO(
+                                            backgroundColor:
+                                                const Color.fromRGBO(
+                                                    131, 146, 171, 1),
+                                            outlineColor: const Color.fromRGBO(
                                                 131, 146, 171, 1),
                                           ),
                                           SizedBox(
@@ -1756,8 +1757,9 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                               backgroundColor:
                                                   const Color.fromRGBO(
                                                       131, 146, 171, 1),
-                                              outlineColor: Color.fromRGBO(
-                                                  131, 146, 171, 1),
+                                              outlineColor:
+                                                  const Color.fromRGBO(
+                                                      131, 146, 171, 1),
                                             ),
                                             SizedBox(
                                               width: 20.w,
@@ -1803,10 +1805,12 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                               },
                                               text: save,
                                               colorText: Colors.white,
-                                              backgroundColor: Color.fromRGBO(
-                                                  23, 193, 232, 1),
-                                              outlineColor: Color.fromRGBO(
-                                                  23, 193, 232, 1),
+                                              backgroundColor:
+                                                  const Color.fromRGBO(
+                                                      23, 193, 232, 1),
+                                              outlineColor:
+                                                  const Color.fromRGBO(
+                                                      23, 193, 232, 1),
                                             ),
                                             SizedBox(
                                               width: 20.w,
@@ -1826,7 +1830,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
               ));
         } else if (state.tableStatus == TableStatus.loading) {
           return AlertDialog(
-            contentPadding: EdgeInsets.all(0),
+            contentPadding: const EdgeInsets.all(0),
             surfaceTintColor: Colors.white,
             backgroundColor: Colors.white,
             content: Center(
@@ -1839,7 +1843,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
           );
         } else {
           return AlertDialog(
-              contentPadding: EdgeInsets.all(0),
+              contentPadding: const EdgeInsets.all(0),
               surfaceTintColor: Colors.white,
               backgroundColor: Colors.white,
               content: Center(
@@ -1849,7 +1853,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
+                    SizedBox(
                       width: 100,
                       height: 100,
                       child: Lottie.asset('assets/lottie/error.json'),
@@ -1862,7 +1866,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                       fontWeight: FontWeight.bold,
                     ),
                     space30H,
-                    Container(
+                    SizedBox(
                       width: 200,
                       child: ButtonGradient(
                         color1: color1BlueButton,
@@ -2299,7 +2303,7 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
         );
       } else if (state.tableStatus == TableStatus.loading) {
         return AlertDialog(
-          contentPadding: EdgeInsets.all(0),
+          contentPadding: const EdgeInsets.all(0),
           surfaceTintColor: Colors.white,
           backgroundColor: Colors.white,
           content: Center(
@@ -2312,7 +2316,7 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
         );
       } else {
         return AlertDialog(
-          contentPadding: EdgeInsets.all(0),
+          contentPadding: const EdgeInsets.all(0),
           surfaceTintColor: Colors.white,
           backgroundColor: Colors.white,
           content: Center(
@@ -2876,7 +2880,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                                                   })
                                               : ListView.builder(
                                                   physics:
-                                                      NeverScrollableScrollPhysics(),
+                                                      const NeverScrollableScrollPhysics(),
                                                   shrinkWrap: true,
                                                   itemCount: listFoodBillCurrent
                                                           ?.data?.length ??
@@ -3052,7 +3056,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                                                                                       controller: _foodQuantityController[index],
 
                                                                                       onTapOutside: (event) {
-                                                                                        print('onTapOutside');
+                                                                                        log('onTapOutside');
                                                                                         FocusManager.instance.primaryFocus?.unfocus();
                                                                                         // updateQuantytiFood();
                                                                                         updateQuantytiFoodToSeeBillTable(
@@ -3167,7 +3171,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
           );
         } else if (state.billStatus == BillInforStateStatus.loading) {
           return AlertDialog(
-            contentPadding: EdgeInsets.all(0),
+            contentPadding: const EdgeInsets.all(0),
             surfaceTintColor: Colors.white,
             backgroundColor: Colors.white,
             content: Center(
@@ -3180,7 +3184,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
           );
         } else {
           return AlertDialog(
-              contentPadding: EdgeInsets.all(0),
+              contentPadding: const EdgeInsets.all(0),
               surfaceTintColor: Colors.white,
               backgroundColor: Colors.white,
               content: Center(
@@ -3190,7 +3194,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
+                    SizedBox(
                       width: 100,
                       height: 100,
                       child: Lottie.asset('assets/lottie/error.json'),
@@ -3203,7 +3207,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                       fontWeight: FontWeight.bold,
                     ),
                     space30H,
-                    Container(
+                    SizedBox(
                       width: 200,
                       child: ButtonGradient(
                         color1: color1BlueButton,
@@ -3359,7 +3363,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                               ],
                             )),
                       ),
-                      Divider(height: 1, color: Colors.black),
+                      const Divider(height: 1, color: Colors.black),
                       Flexible(
                           fit: FlexFit.tight,
                           child: Container(
@@ -3369,7 +3373,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.all(10.w),
-                                    child: Container(
+                                    child: SizedBox(
                                       width: 1.sw,
                                       // height: 100.h,
                                       // color: Colors.green,
@@ -3433,7 +3437,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                                     mainAxisAlignment:
                                                         MainAxisAlignment.start,
                                                     children: [
-                                                      Container(
+                                                      SizedBox(
                                                           width: 80.w,
                                                           height: 80.w,
                                                           // color: Colors.amber,
@@ -3613,7 +3617,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                       ),
                                     ),
                                   ),
-                                  Divider(
+                                  const Divider(
                                     height: 1,
                                     color: menuGrey,
                                   ),
@@ -3703,7 +3707,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                       ],
                                     ),
                                   ),
-                                  Divider(
+                                  const Divider(
                                     height: 1,
                                     color: menuGrey,
                                   ),
@@ -3732,7 +3736,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                           ],
                                         ),
                                         // space15W,
-                                        Container(
+                                        SizedBox(
                                           width: 120.w,
                                           child: TextField(
                                             onTapOutside: (event) {
@@ -3859,7 +3863,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                       )
                                     ],
                                   ),
-                                  Divider(
+                                  const Divider(
                                     height: 1,
                                     color: menuGrey,
                                   ),
@@ -4015,7 +4019,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
           );
         } else if (state.paymentStatus == PaymentInforStateStatus.loading) {
           return AlertDialog(
-            contentPadding: EdgeInsets.all(0),
+            contentPadding: const EdgeInsets.all(0),
             surfaceTintColor: Colors.white,
             backgroundColor: Colors.white,
             content: Center(
@@ -4028,7 +4032,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
           );
         } else {
           return AlertDialog(
-              contentPadding: EdgeInsets.all(0),
+              contentPadding: const EdgeInsets.all(0),
               surfaceTintColor: Colors.white,
               backgroundColor: Colors.white,
               content: Center(
@@ -4038,7 +4042,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
+                    SizedBox(
                       width: 100,
                       height: 100,
                       child: Lottie.asset('assets/lottie/error.json'),
@@ -4051,7 +4055,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                       fontWeight: FontWeight.bold,
                     ),
                     space30H,
-                    Container(
+                    SizedBox(
                       width: 200,
                       child: ButtonGradient(
                         color1: color1BlueButton,
@@ -4238,7 +4242,7 @@ class _ManageBroughtReceiptDialogState
               mess: message['title'],
               color: Colors.green);
         } else {
-          print("ERROR ADD FOOD TO BROUGHT RECEIPT 1");
+          log("ERROR ADD FOOD TO BROUGHT RECEIPT 1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -4246,10 +4250,10 @@ class _ManageBroughtReceiptDialogState
               color: Colors.red);
         }
       } catch (error) {
-        print("ERROR ADD FOOD TO BROUGHT RECEIPT 2 $error");
+        log("ERROR ADD FOOD TO BROUGHT RECEIPT 2 $error");
       }
     } catch (error) {
-      print("ERROR ADD FOOD TO BROUGHT RECEIPT 3 $error");
+      log("ERROR ADD FOOD TO BROUGHT RECEIPT 3 $error");
     }
   }
 
@@ -4294,7 +4298,7 @@ class _ManageBroughtReceiptDialogState
               mess: message['title'],
               color: Colors.green);
         } else {
-          print("ERROR MINUS FOOD TO BROUGHT RECEIPT 1");
+          log("ERROR MINUS FOOD TO BROUGHT RECEIPT 1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -4302,10 +4306,10 @@ class _ManageBroughtReceiptDialogState
               color: Colors.red);
         }
       } catch (error) {
-        print("ERROR MINUS FOOD TO BROUGHT RECEIPT 2 $error");
+        log("ERROR MINUS FOOD TO BROUGHT RECEIPT 2 $error");
       }
     } catch (error) {
-      print("ERROR MINUS FOOD TO BROUGHT RECEIPT 3 $error");
+      log("ERROR MINUS FOOD TO BROUGHT RECEIPT 3 $error");
     }
   }
 
@@ -4358,7 +4362,7 @@ class _ManageBroughtReceiptDialogState
               mess: message['title'],
               color: Colors.green);
         } else {
-          print("ERROR MINUS FOOD TO BROUGHT RECEIPT 1");
+          log("ERROR MINUS FOOD TO BROUGHT RECEIPT 1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -4366,10 +4370,10 @@ class _ManageBroughtReceiptDialogState
               color: Colors.red);
         }
       } catch (error) {
-        print("ERROR MINUS FOOD TO BROUGHT RECEIPT 2 $error");
+        log("ERROR MINUS FOOD TO BROUGHT RECEIPT 2 $error");
       }
     } catch (error) {
-      print("ERROR MINUS FOOD TO BROUGHT RECEIPT 3 $error");
+      log("ERROR MINUS FOOD TO BROUGHT RECEIPT 3 $error");
     }
   }
 
@@ -4422,7 +4426,7 @@ class _ManageBroughtReceiptDialogState
         return AlertDialog(
           surfaceTintColor: Colors.white,
           backgroundColor: Colors.white,
-          content: Container(
+          content: SizedBox(
             width: 1.sw,
             child: Column(
               children: [
@@ -4739,7 +4743,7 @@ class _ManageBroughtReceiptDialogState
                                         CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Container(
+                                      SizedBox(
                                           width: 80.w,
                                           height: 80.w,
                                           // color: Colors.amber,
@@ -4813,7 +4817,7 @@ class _ManageBroughtReceiptDialogState
                                           ],
                                         ),
                                       ),
-                                      Container(
+                                      SizedBox(
                                         width: 80.w,
                                         child: Row(
                                           mainAxisAlignment:
@@ -4914,7 +4918,7 @@ class _ManageBroughtReceiptDialogState
                                                               index],
 
                                                       onTapOutside: (event) {
-                                                        print('onTapOutside');
+                                                        log('onTapOutside');
                                                         FocusManager.instance
                                                             .primaryFocus
                                                             ?.unfocus();
@@ -5022,7 +5026,7 @@ class _ManageBroughtReceiptDialogState
                               } else {
                                 return Center(
                                   child: hasMore
-                                      ? CircularProgressIndicator()
+                                      ? const CircularProgressIndicator()
                                       : Container(),
                                 );
                               }
@@ -5033,7 +5037,7 @@ class _ManageBroughtReceiptDialogState
         );
       } else if (state.broughtReceiptStatus == BroughtReceiptStatus.loading) {
         return AlertDialog(
-          contentPadding: EdgeInsets.all(0),
+          contentPadding: const EdgeInsets.all(0),
           surfaceTintColor: Colors.white,
           backgroundColor: Colors.white,
           content: Center(
@@ -5046,7 +5050,7 @@ class _ManageBroughtReceiptDialogState
         );
       } else {
         return AlertDialog(
-          contentPadding: EdgeInsets.all(0),
+          contentPadding: const EdgeInsets.all(0),
           surfaceTintColor: Colors.white,
           backgroundColor: Colors.white,
           content: Center(
@@ -5054,7 +5058,7 @@ class _ManageBroughtReceiptDialogState
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: 100,
                   height: 100,
                   child: Lottie.asset('assets/lottie/error.json'),
@@ -5066,7 +5070,7 @@ class _ManageBroughtReceiptDialogState
                   fontWeight: FontWeight.bold,
                 ),
                 space30H,
-                Container(
+                SizedBox(
                   width: 200,
                   child: ButtonGradient(
                     color1: color1BlueButton,
@@ -5348,7 +5352,7 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                                         ),
                                       ],
                                     ),
-                                    Container(
+                                    SizedBox(
                                       // color: Colors.red,
                                       width: 20.w,
                                       child: Center(
@@ -5364,7 +5368,7 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                                         ),
                                       ),
                                     ),
-                                    Container(
+                                    SizedBox(
                                       // color: Colors.green,
                                       width: 50.w,
                                       child: TextApp(
@@ -5376,7 +5380,7 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                                         color: blueText,
                                       ),
                                     ),
-                                    Container(
+                                    SizedBox(
                                       // color: Colors.yellow,
                                       width: 50.w,
                                       child: TextApp(
@@ -5594,7 +5598,7 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
         } else if (state.printBroughtReceiptStatus ==
             PrintBroughtReceiptStatus.loading) {
           return AlertDialog(
-            contentPadding: EdgeInsets.all(0),
+            contentPadding: const EdgeInsets.all(0),
             surfaceTintColor: Colors.white,
             backgroundColor: Colors.white,
             content: Center(
@@ -5607,7 +5611,7 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
           );
         } else {
           return AlertDialog(
-            contentPadding: EdgeInsets.all(0),
+            contentPadding: const EdgeInsets.all(0),
             surfaceTintColor: Colors.white,
             backgroundColor: Colors.white,
             content: Center(
@@ -5615,7 +5619,7 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 100,
                     height: 100,
                     child: Lottie.asset('assets/lottie/error.json'),
@@ -5627,7 +5631,7 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                     fontWeight: FontWeight.bold,
                   ),
                   space30H,
-                  Container(
+                  SizedBox(
                     width: 200,
                     child: ButtonGradient(
                       color1: color1BlueButton,
@@ -5890,7 +5894,7 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                                         ),
                                       ],
                                     ),
-                                    Container(
+                                    SizedBox(
                                       // color: Colors.red,
                                       width: 10.w,
                                       child: Center(
@@ -5904,7 +5908,7 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    Container(
+                                    SizedBox(
                                       // color: Colors.green,
                                       width: 50.w,
                                       child: TextApp(
@@ -5916,7 +5920,7 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                                         color: blueText,
                                       ),
                                     ),
-                                    Container(
+                                    SizedBox(
                                       // color: Colors.yellow,
                                       width: 50.w,
                                       child: TextApp(
@@ -6134,7 +6138,7 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
         } else if (state.printBroughtReceiptStatus ==
             PrintBroughtReceiptStatus.loading) {
           return AlertDialog(
-            contentPadding: EdgeInsets.all(0),
+            contentPadding: const EdgeInsets.all(0),
             surfaceTintColor: Colors.white,
             backgroundColor: Colors.white,
             content: Center(
@@ -6147,7 +6151,7 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
           );
         } else {
           return AlertDialog(
-            contentPadding: EdgeInsets.all(0),
+            contentPadding: const EdgeInsets.all(0),
             surfaceTintColor: Colors.white,
             backgroundColor: Colors.white,
             content: Center(
@@ -6155,7 +6159,7 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 100,
                     height: 100,
                     child: Lottie.asset('assets/lottie/error.json'),
@@ -6167,7 +6171,7 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                   space30H,
-                  Container(
+                  SizedBox(
                     width: 200,
                     child: ButtonGradient(
                       color1: color1BlueButton,
@@ -6489,14 +6493,12 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print(data);
-
       try {
         if (data['status'] == 200) {
           roomFieldController.clear();
           Navigator.of(navigatorKey.currentContext!).pop();
 
-          Future.delayed(Duration(milliseconds: 500), () {
+          Future.delayed(const Duration(milliseconds: 500), () {
             showCustomDialogModal(
               typeDialog: "succes",
               context: navigatorKey.currentContext,
@@ -6507,13 +6509,13 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
             );
           });
         } else {
-          print("ERROR CREATE FOOOD");
+          log("ERROR CREATE FOOOD");
         }
       } catch (error) {
-        print("ERROR CREATE 112212 $error");
+        log("ERROR CREATE 112212 $error");
       }
     } catch (error) {
-      print("ERROR CREATE 44444 $error");
+      log("ERROR CREATE 44444 $error");
     }
   }
 
@@ -6528,7 +6530,7 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
+          SizedBox(
               width: 1.sw,
               height: 50,
               child: Column(
@@ -6635,7 +6637,7 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
               ),
             ),
           ),
-          Container(
+          SizedBox(
             width: 1.sw,
             height: 80,
             child: Row(
@@ -6721,7 +6723,6 @@ class _EditRoomDataDialogState extends State<EditRoomDataDialog> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print(data);
 
       try {
         if (data['status'] == 200) {
@@ -6745,13 +6746,13 @@ class _EditRoomDataDialogState extends State<EditRoomDataDialog> {
             light = dataRoomDetailsModel?.data.activeFlg == 1 ? true : false;
           });
         } else {
-          print("ERROR CREATE FOOOD");
+          log("ERROR CREATE FOOOD");
         }
       } catch (error) {
-        print("ERROR CREATE 112212 $error");
+        log("ERROR CREATE 112212 $error");
       }
     } catch (error) {
-      print("ERROR CREATE 44444 $error");
+      log("ERROR CREATE 44444 $error");
     }
   }
 
@@ -6778,14 +6779,13 @@ class _EditRoomDataDialogState extends State<EditRoomDataDialog> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print(data);
 
       try {
         if (data['status'] == 200) {
           // roomFieldController.clear();
           Navigator.of(navigatorKey.currentContext!).pop();
 
-          Future.delayed(Duration(milliseconds: 500), () {
+          Future.delayed(const Duration(milliseconds: 500), () {
             showCustomDialogModal(
               typeDialog: "succes",
               context: navigatorKey.currentContext,
@@ -6802,13 +6802,13 @@ class _EditRoomDataDialogState extends State<EditRoomDataDialog> {
           //   light = dataRoomDetailsModel?.data.activeFlg == 1 ? true : false;
           // });
         } else {
-          print("ERROR CREATE FOOOD");
+          log("ERROR CREATE FOOOD");
         }
       } catch (error) {
-        print("ERROR CREATE 112212 $error");
+        log("ERROR CREATE 112212 $error");
       }
     } catch (error) {
-      print("ERROR CREATE 44444 $error");
+      log("ERROR CREATE 44444 $error");
     }
   }
 
@@ -6829,7 +6829,7 @@ class _EditRoomDataDialogState extends State<EditRoomDataDialog> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
+          SizedBox(
               width: 1.sw,
               height: 50,
               child: Column(
@@ -6936,7 +6936,7 @@ class _EditRoomDataDialogState extends State<EditRoomDataDialog> {
               ),
             ),
           ),
-          Container(
+          SizedBox(
             width: 1.sw,
             height: 80,
             child: Row(
@@ -7016,7 +7016,6 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     // _controllerQuill;
   }
@@ -7082,15 +7081,6 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
     required bool activeFlag,
   }) async {
     try {
-      print({
-        "active_flg": activeFlag,
-        'store_logo': logoStore,
-        'description': descriptionStore,
-        "shop_id": shopID,
-        'name': nameStore,
-        'address': addressStore,
-        'images': imagesStore,
-      });
       var token = StorageUtils.instance.getString(key: 'token_manager');
 
       final respons = await http.post(
@@ -7117,7 +7107,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
           getListStore();
           Navigator.of(navigatorKey.currentContext!).pop();
 
-          Future.delayed(Duration(milliseconds: 500), () {
+          Future.delayed(const Duration(milliseconds: 500), () {
             showCustomDialogModal(
               typeDialog: "succes",
               context: navigatorKey.currentContext,
@@ -7131,7 +7121,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
           // ignore: use_build_context_synchronously
           // Navigator.of(context).pop();
         } else {
-          print("ERROR DATA FOOD TABLE 1 ${data}");
+          log("ERROR DATA FOOD TABLE 1 $data");
           var messFailed = data['errors'];
           var messErrorShopId1 = messFailed['shop_id'].toString();
           var messErrorShopId2 = messErrorShopId1.replaceAll("[", "");
@@ -7162,7 +7152,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
               typeDialog: "error");
         }
       } catch (error) {
-        print("ERROR DATA FOOD TABLE 2 ${error}");
+        log("ERROR DATA FOOD TABLE 2 $error");
         showCustomDialogModal(
             context: navigatorKey.currentContext,
             textDesc: "Có lỗi xảy ra",
@@ -7172,7 +7162,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
             typeDialog: "error");
       }
     } catch (error) {
-      print("ERROR DATA FOOD TABLE 3 $error");
+      log("ERROR DATA FOOD TABLE 3 $error");
       showCustomDialogModal(
           context: navigatorKey.currentContext,
           textDesc: "Có lỗi xảy ra",
@@ -7191,6 +7181,10 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
       backgroundColor: Colors.white,
       content: Container(
         width: 1.sw,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.r),
+          color: Colors.white,
+        ),
         child: ListView(
           shrinkWrap: true,
           children: [
@@ -7207,7 +7201,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                       //   borderRadius: BorderRadius.only(
                       //       topLeft: Radius.circular(15.w),
                       //       topRight: Radius.circular(15.w)),
-                      //   // color: Colors.amber,
+                      //   color: Colors.amber,
                       // ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -7502,7 +7496,8 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                               ),
 
                               backgroundColor: Colors.white,
-                              side: BorderSide(color: Colors.grey, width: 1), //
+                              side: const BorderSide(
+                                  color: Colors.grey, width: 1), //
                             ),
                             onPressed: () {
                               pickImage();
@@ -7605,7 +7600,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                                 height: 150.h,
                                 margin: EdgeInsets.all(20.h),
                                 child: Padding(
-                                  padding: EdgeInsets.only(top: 0),
+                                  padding: const EdgeInsets.only(top: 0),
                                   child: SizedBox(
                                       width: 100.w,
                                       height: 100.w,
@@ -7647,8 +7642,8 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                         },
                         text: "Đóng",
                         colorText: Colors.white,
-                        backgroundColor: Color.fromRGBO(131, 146, 171, 1),
-                        outlineColor: Color.fromRGBO(131, 146, 171, 1),
+                        backgroundColor: const Color.fromRGBO(131, 146, 171, 1),
+                        outlineColor: const Color.fromRGBO(131, 146, 171, 1),
                       ),
                       SizedBox(
                         width: 20.w,
@@ -7709,8 +7704,8 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                         },
                         text: save,
                         colorText: Colors.white,
-                        backgroundColor: Color.fromRGBO(23, 193, 232, 1),
-                        outlineColor: Color.fromRGBO(23, 193, 232, 1),
+                        backgroundColor: const Color.fromRGBO(23, 193, 232, 1),
+                        outlineColor: const Color.fromRGBO(23, 193, 232, 1),
                       ),
                       SizedBox(
                         width: 20.w,
@@ -7861,16 +7856,6 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
     required String imageLogoStore,
     required bool activeFlag,
   }) async {
-    print({
-      'store_id': storeID,
-      'shop_id': shopId,
-      'name': nameStore,
-      'address': addressStore,
-      'description': descStore,
-      'store_logo': imageLogoStore,
-      'active_flg': activeFlag,
-      'images': imagesStore,
-    });
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
 
@@ -7893,13 +7878,12 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print("UPDATE DATA STORE ${data}");
       try {
         if (data['status'] == 200) {
           Navigator.of(navigatorKey.currentContext!).pop();
           Navigator.pop(navigatorKey.currentContext!);
           getListStore();
-          Future.delayed(Duration(milliseconds: 300), () {
+          Future.delayed(const Duration(milliseconds: 300), () {
             showCustomDialogModal(
               typeDialog: "succes",
               context: navigatorKey.currentContext,
@@ -7910,7 +7894,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
             );
           });
         } else {
-          print("ERROR LIST FOOOD RECEIPT PAGE 1");
+          log("ERROR LIST FOOOD RECEIPT PAGE 1");
           showCustomDialogModal(
               context: navigatorKey.currentContext,
               textDesc: "Có lỗi xảy ra",
@@ -7920,7 +7904,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
               typeDialog: "error");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
         showCustomDialogModal(
             context: navigatorKey.currentContext,
             textDesc: "Có lỗi xảy ra",
@@ -7930,7 +7914,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
             typeDialog: "error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
       showCustomDialogModal(
           context: navigatorKey.currentContext,
           textDesc: "Có lỗi xảy ra",
@@ -7959,7 +7943,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
       contentPadding: const EdgeInsets.all(0),
       surfaceTintColor: Colors.white,
       backgroundColor: Colors.white,
-      content: Container(
+      content: SizedBox(
         width: 1.sw,
         child: ListView(
           shrinkWrap: true,
@@ -7970,7 +7954,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(top: 15.w, left: 15.w, right: 15.w),
-                  child: Container(
+                  child: SizedBox(
                       width: 1.sw,
                       height: 50,
                       // decoration: BoxDecoration(
@@ -8411,7 +8395,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                                 height: 150.h,
                                 margin: EdgeInsets.all(20.h),
                                 child: Padding(
-                                  padding: EdgeInsets.only(top: 0),
+                                  padding: const EdgeInsets.only(top: 0),
                                   child: SizedBox(
                                       width: 100.w,
                                       height: 100.w,
@@ -8469,8 +8453,8 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                         },
                         text: "Đóng",
                         colorText: Colors.white,
-                        backgroundColor: Color.fromRGBO(131, 146, 171, 1),
-                        outlineColor: Color.fromRGBO(131, 146, 171, 1),
+                        backgroundColor: const Color.fromRGBO(131, 146, 171, 1),
+                        outlineColor: const Color.fromRGBO(131, 146, 171, 1),
                       ),
                       SizedBox(
                         width: 20.w,
@@ -8513,8 +8497,8 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                         },
                         text: save,
                         colorText: Colors.white,
-                        backgroundColor: Color.fromRGBO(23, 193, 232, 1),
-                        outlineColor: Color.fromRGBO(23, 193, 232, 1),
+                        backgroundColor: const Color.fromRGBO(23, 193, 232, 1),
+                        outlineColor: const Color.fromRGBO(23, 193, 232, 1),
                       ),
                       SizedBox(
                         width: 20.w,
@@ -8579,13 +8563,13 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
           });
           intitData();
         } else {
-          print("ERROR CREATE FOOOD");
+          log("ERROR CREATE FOOOD");
         }
       } catch (error) {
-        print("ERROR CREATE 112212 $error");
+        log("ERROR CREATE 112212 $error");
       }
     } catch (error) {
-      print("ERROR CREATE 44444 $error");
+      log("ERROR CREATE 44444 $error");
     }
   }
 
@@ -8632,13 +8616,13 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
               typeDialog: "succes");
           widget.eventSaveButton();
         } else {
-          print("ERROR CREATE FOOOD");
+          log("ERROR CREATE FOOOD");
         }
       } catch (error) {
-        print("ERROR CREATE 112212 $error");
+        log("ERROR CREATE 112212 $error");
       }
     } catch (error) {
-      print("ERROR CREATE 44444 $error");
+      log("ERROR CREATE 44444 $error");
     }
   }
 
@@ -8689,7 +8673,7 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
+                  SizedBox(
                       width: 1.sw,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -8707,7 +8691,7 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                           ),
                         ],
                       )),
-                  Divider(),
+                  const Divider(),
                   space10H,
                   SingleChildScrollView(
                       child: Form(
@@ -8890,7 +8874,7 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                     ),
                   )),
                   space15H,
-                  Container(
+                  SizedBox(
                     width: 1.sw,
                     height: 80,
                     child: Row(
@@ -8902,8 +8886,9 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                           },
                           text: "Đóng",
                           colorText: Colors.white,
-                          backgroundColor: Color.fromRGBO(131, 146, 171, 1),
-                          outlineColor: Color.fromRGBO(131, 146, 171, 1),
+                          backgroundColor:
+                              const Color.fromRGBO(131, 146, 171, 1),
+                          outlineColor: const Color.fromRGBO(131, 146, 171, 1),
                         ),
                         SizedBox(
                           width: 20.w,
@@ -8925,8 +8910,9 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                           },
                           text: save,
                           colorText: Colors.white,
-                          backgroundColor: Color.fromRGBO(23, 193, 232, 1),
-                          outlineColor: Color.fromRGBO(23, 193, 232, 1),
+                          backgroundColor:
+                              const Color.fromRGBO(23, 193, 232, 1),
+                          outlineColor: const Color.fromRGBO(23, 193, 232, 1),
                         ),
                         SizedBox(
                           width: 20.w,
@@ -9029,13 +9015,13 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                     controller: _tabController,
                     isScrollable: true,
                     indicatorSize: TabBarIndicatorSize.label,
-                    tabs: [
+                    tabs: const [
                       Tab(text: "Thông tin chung"),
                       Tab(
                         text: "Quy đổi đơn vị",
                       ),
                     ]),
-                Container(
+                SizedBox(
                   width: 1.sw,
                   height: 400.h,
                   child: TabBarView(

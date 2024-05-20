@@ -11,7 +11,7 @@ void main() async {
   await StorageUtils.instance.init();
   runApp(BlocProvider<InternetCubit>(
     create: (context) => InternetCubit(),
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }
 

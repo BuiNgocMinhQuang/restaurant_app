@@ -151,6 +151,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                         padding: EdgeInsets.only(left: 20.w, right: 20.w),
                         child: Column(
                           children: [
+                            space15H,
                             Stack(
                               children: [
                                 Stack(

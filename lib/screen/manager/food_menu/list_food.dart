@@ -19,6 +19,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
@@ -39,8 +40,8 @@ class ListFoodManager extends StatefulWidget {
 }
 
 class _ListFoodManagerState extends State<ListFoodManager> {
-  TextEditingController _dateStartController = TextEditingController();
-  TextEditingController _dateEndController = TextEditingController();
+  final TextEditingController _dateStartController = TextEditingController();
+  final TextEditingController _dateEndController = TextEditingController();
   final searchController = TextEditingController();
   final scrollListFoodController = ScrollController();
   int currentPage = 1;
@@ -54,10 +55,12 @@ class _ListFoodManagerState extends State<ListFoodManager> {
   bool isLoading = true;
   bool isError = false;
   void searchProduct(String query) {
-    setState(() {
-      this.query = query;
-      currentPage = 1;
-    });
+    mounted
+        ? setState(() {
+            this.query = query;
+            currentPage = 1;
+          })
+        : null;
     currentFoodList.clear();
     loadMoreMenuFood(
       page: currentPage,
@@ -468,7 +471,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                       color: Colors.white,
                       child: SingleChildScrollView(
                         child: Padding(
-                          padding: EdgeInsets.all(20.w),
+                          padding: EdgeInsets.zero,
                           child: Container(
                             width: 1.sw,
                             decoration: BoxDecoration(
@@ -481,15 +484,15 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(15.r),
                                       color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.5),
-                                          spreadRadius: 5,
-                                          blurRadius: 7,
-                                          offset: const Offset(0,
-                                              3), // changes position of shadow
-                                        ),
-                                      ],
+                                      // boxShadow: [
+                                      //   BoxShadow(
+                                      //     color: Colors.grey.withOpacity(0.5),
+                                      //     spreadRadius: 5,
+                                      //     blurRadius: 7,
+                                      //     offset: const Offset(0,
+                                      //         3), // changes position of shadow
+                                      //   ),
+                                      // ],
                                     ),
                                     child: Padding(
                                       padding: EdgeInsets.all(20.w),
@@ -555,8 +558,9 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                       cursorColor: grey,
                                                       decoration:
                                                           InputDecoration(
-                                                              suffixIcon: Icon(Icons
-                                                                  .calendar_month),
+                                                              suffixIcon:
+                                                                  const Icon(Icons
+                                                                      .calendar_month),
                                                               fillColor:
                                                                   const Color
                                                                       .fromARGB(
@@ -629,8 +633,9 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                       cursorColor: grey,
                                                       decoration:
                                                           InputDecoration(
-                                                              suffixIcon: Icon(Icons
-                                                                  .calendar_month),
+                                                              suffixIcon:
+                                                                  const Icon(Icons
+                                                                      .calendar_month),
                                                               fillColor:
                                                                   const Color
                                                                       .fromARGB(
@@ -835,316 +840,302 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                             ],
                                           ),
                                           space20H,
-                                          SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Column(
-                                                    children: [
-                                                      Row(
-                                                        children: [
-                                                          SizedBox(
-                                                            width: 1.sw * 2.6,
-                                                            height: 50.h,
-                                                            child: Row(
-                                                              children: [
-                                                                SizedBox(
-                                                                  width: 200.w,
-                                                                  child:
-                                                                      TextApp(
-                                                                    text:
-                                                                        'MÓN ĂN',
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontsize:
-                                                                        14.sp,
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    color:
-                                                                        greyText,
-                                                                  ),
-                                                                ),
-                                                                space35W,
-                                                                SizedBox(
-                                                                  width: 180.w,
-                                                                  child:
-                                                                      TextApp(
-                                                                    text:
-                                                                        'CỬA HÀNG',
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontsize:
-                                                                        14.sp,
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    color:
-                                                                        greyText,
-                                                                  ),
-                                                                ),
-                                                                space25W,
-                                                                SizedBox(
-                                                                  width: 120.w,
-                                                                  child:
-                                                                      TextApp(
-                                                                    text:
-                                                                        'GIÁ TIỀN',
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontsize:
-                                                                        14.sp,
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    color:
-                                                                        greyText,
-                                                                  ),
-                                                                ),
-                                                                space35W,
-                                                                SizedBox(
-                                                                  width: 150.w,
-                                                                  child:
-                                                                      TextApp(
-                                                                    text:
-                                                                        'TRẠNG THÁI',
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontsize:
-                                                                        14.sp,
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    color:
-                                                                        greyText,
-                                                                  ),
-                                                                ),
-                                                                space35W,
-                                                                SizedBox(
-                                                                  width: 150.w,
-                                                                  child:
-                                                                      TextApp(
-                                                                    text:
-                                                                        'NGÀY TẠO',
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontsize:
-                                                                        14.sp,
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    color:
-                                                                        greyText,
-                                                                  ),
-                                                                ),
-                                                                space35W,
-                                                                SizedBox(
-                                                                  width: 150.w,
-                                                                  child:
-                                                                      TextApp(
-                                                                    text: '',
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontsize:
-                                                                        14.sp,
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    color:
-                                                                        greyText,
-                                                                  ),
-                                                                ),
-                                                              ],
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                width: 1.sw,
+                                                child: ListView.builder(
+                                                    physics:
+                                                        const NeverScrollableScrollPhysics(),
+                                                    shrinkWrap: true,
+                                                    itemCount:
+                                                        filterProducts.length +
+                                                            1,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      if (index <
+                                                          filterProducts
+                                                              .length) {
+                                                        DataFoodAllStore
+                                                            product =
+                                                            filterProducts[
+                                                                index];
+                                                        var imagePath1 =
+                                                            filterProducts[
+                                                                    index]
+                                                                ?.foodImages;
+                                                        var listImagePath =
+                                                            jsonDecode(
+                                                                imagePath1);
+                                                        return Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            const Divider(
+                                                              height: 1,
                                                             ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                      SizedBox(
-                                                        width: 1.sw * 2.6,
-                                                        height: 400.h,
-                                                        child: ListView.builder(
-                                                            physics:
-                                                                const ClampingScrollPhysics(),
-                                                            controller:
-                                                                scrollListFoodController,
-                                                            shrinkWrap: true,
-                                                            itemCount:
-                                                                filterProducts
-                                                                        .length +
-                                                                    1,
-                                                            itemBuilder:
-                                                                (BuildContext
-                                                                        context,
-                                                                    int index) {
-                                                              var dataLength =
-                                                                  filterProducts
-                                                                      .length;
+                                                            space5H,
+                                                            Slidable(
+                                                              // Specify a key if the Slidable is dismissible.
+                                                              key: ValueKey(
+                                                                  filterProducts[
+                                                                      index]),
 
-                                                              if (index <
-                                                                  dataLength) {
-                                                                DataFoodAllStore
-                                                                    product =
-                                                                    filterProducts[
-                                                                        index];
-                                                                var imagePath1 =
-                                                                    filterProducts[
-                                                                            index]
-                                                                        ?.foodImages;
-                                                                var listImagePath =
-                                                                    jsonDecode(
-                                                                        imagePath1);
+                                                              // The start action pane is the one at the left or the top side.
+                                                              endActionPane:
+                                                                  ActionPane(
+                                                                extentRatio:
+                                                                    0.6,
+                                                                // dismissible: SlidableDismissal.disabled,
+                                                                dragDismissible:
+                                                                    false,
+                                                                // A motion is a widget used to control how the pane animates.
+                                                                motion:
+                                                                    const ScrollMotion(),
 
-                                                                return Theme(
-                                                                    data: Theme.of(
-                                                                            context)
-                                                                        .copyWith(
-                                                                            dividerColor: Colors
-                                                                                .transparent),
-                                                                    child:
-                                                                        Column(
+                                                                // A pane can dismiss the Slidable.
+                                                                dismissible:
+                                                                    DismissiblePane(
+                                                                        onDismissed:
+                                                                            () {}),
+
+                                                                // All actions are defined in the children parameter.
+                                                                children: [
+                                                                  // A SlidableAction can have an icon and/or a label.
+                                                                  // SlidableAction(
+                                                                  //   onPressed:
+                                                                  //       (dd) {},
+                                                                  //   backgroundColor: Theme.of(
+                                                                  //           context)
+                                                                  //       .colorScheme
+                                                                  //       .primary,
+                                                                  //   foregroundColor:
+                                                                  //       Colors
+                                                                  //           .white,
+                                                                  //   icon: Icons
+                                                                  //       .info,
+                                                                  //   label:
+                                                                  //       'Thêm',
+                                                                  // ),
+                                                                  SlidableAction(
+                                                                    onPressed:
+                                                                        (context) {
+                                                                      handleGetDetailsFood(
+                                                                          foodID:
+                                                                              product.foodId ?? 0);
+                                                                    },
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .blue,
+                                                                    foregroundColor:
+                                                                        Colors
+                                                                            .white,
+                                                                    icon: Icons
+                                                                        .edit,
+                                                                    label:
+                                                                        'Sửa',
+                                                                  ),
+                                                                  SlidableAction(
+                                                                    onPressed:
+                                                                        (context) {
+                                                                      showConfirmDialog(
+                                                                          navigatorKey
+                                                                              .currentContext,
+                                                                          () {
+                                                                        handleDeleteFood(
+                                                                            foodID:
+                                                                                product.foodId.toString());
+                                                                      });
+                                                                    },
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .red,
+                                                                    foregroundColor:
+                                                                        Colors
+                                                                            .white,
+                                                                    icon: Icons
+                                                                        .delete,
+                                                                    label:
+                                                                        'Xoá',
+                                                                  ),
+                                                                ],
+                                                              ),
+
+                                                              // The end action pane is the one at the right or the bottom side.
+
+                                                              // The child of the Slidable is what the user sees when the
+                                                              // component is not dragged.
+                                                              child: ListTile(
+                                                                  contentPadding:
+                                                                      EdgeInsets
+                                                                          .zero,
+                                                                  minVerticalPadding:
+                                                                      0,
+                                                                  horizontalTitleGap:
+                                                                      0,
+                                                                  title:
+                                                                      Container(
+                                                                    width: 1.sw,
+                                                                    color: Colors
+                                                                        .white,
+                                                                    child: Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .center,
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .start,
                                                                       children: [
-                                                                        space10H,
-                                                                        Row(
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.center,
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          children: [
-                                                                            IntrinsicHeight(
-                                                                              child: SizedBox(
-                                                                                width: 250.w,
-                                                                                child: Row(
-                                                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                  children: [
-                                                                                    SizedBox(
-                                                                                      width: 80.w,
-                                                                                      height: 80.w,
-                                                                                      child: listImagePath == null
-                                                                                          ? Image.asset(
-                                                                                              'assets/images/dish.png',
-                                                                                              fit: BoxFit.contain,
-                                                                                            )
-                                                                                          : CachedNetworkImage(
-                                                                                              fit: BoxFit.fill,
-                                                                                              imageUrl: httpImage + listImagePath[0],
-                                                                                              placeholder: (context, url) => SizedBox(
-                                                                                                height: 10.w,
-                                                                                                width: 10.w,
-                                                                                                child: const Center(child: CircularProgressIndicator()),
-                                                                                              ),
-                                                                                              errorWidget: (context, url, error) => const Icon(Icons.error),
-                                                                                            ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              100.w,
+                                                                          height:
+                                                                              100.w,
+                                                                          child: listImagePath == null
+                                                                              ? ClipRRect(
+                                                                                  borderRadius: BorderRadius.circular(8.r),
+                                                                                  child: Image.asset(
+                                                                                    'assets/images/dish.png',
+                                                                                    fit: BoxFit.contain,
+                                                                                  ))
+                                                                              : ClipRRect(
+                                                                                  borderRadius: BorderRadius.circular(8.r),
+                                                                                  child: CachedNetworkImage(
+                                                                                    fit: BoxFit.fill,
+                                                                                    imageUrl: httpImage + listImagePath[0],
+                                                                                    placeholder: (context, url) => SizedBox(
+                                                                                      height: 10.w,
+                                                                                      width: 10.w,
+                                                                                      child: const Center(child: CircularProgressIndicator()),
                                                                                     ),
-                                                                                    space10W,
-                                                                                    SizedBox(
-                                                                                      width: 150.w,
-                                                                                      child: TextApp(
-                                                                                        isOverFlow: false,
-                                                                                        softWrap: true,
-                                                                                        text: product.foodName ?? '',
-                                                                                        fontsize: 14.sp,
-                                                                                        color: blueText,
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
+                                                                                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                                                                                  ),
                                                                                 ),
-                                                                              ),
-                                                                            ),
-                                                                            space35W,
-                                                                            SizedBox(
-                                                                              width: 150.w,
-                                                                              child: TextApp(
-                                                                                isOverFlow: false,
-                                                                                softWrap: true,
-                                                                                text: product.storeName ?? '',
-                                                                                fontsize: 14.sp,
-                                                                              ),
-                                                                            ),
-                                                                            space35W,
-                                                                            SizedBox(
-                                                                              width: 120.w,
-                                                                              child: TextApp(
-                                                                                isOverFlow: false,
-                                                                                softWrap: true,
-                                                                                text: "${MoneyFormatter(amount: (product.foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                                                fontsize: 14.sp,
-                                                                              ),
-                                                                            ),
-                                                                            SizedBox(
-                                                                              width: 150.w,
-                                                                              child: Center(child: product.activeFlg == 1 ? StatusBoxIsSelling() : StatusBoxNoMoreSelling()),
-                                                                            ),
-                                                                            space50W,
-                                                                            Center(
-                                                                              child: SizedBox(
-                                                                                width: 200.w,
-                                                                                child: TextApp(
-                                                                                  isOverFlow: false,
-                                                                                  softWrap: true,
-                                                                                  text: formatDateTime(product.createdAt ?? ''),
-                                                                                  fontsize: 14.sp,
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            Row(
-                                                                              children: [
-                                                                                SizedBox(
-                                                                                  height: 30.h,
-                                                                                  child: ButtonIcon(
-                                                                                      isIconCircle: false,
-                                                                                      color1: const Color.fromRGBO(23, 193, 232, 1),
-                                                                                      color2: const Color.fromRGBO(23, 193, 232, 1),
-                                                                                      event: () {
-                                                                                        handleGetDetailsFood(foodID: product.foodId ?? 0);
-                                                                                      },
-                                                                                      icon: Icons.edit),
-                                                                                ),
-                                                                                space15W,
-                                                                                SizedBox(
-                                                                                  height: 30.h,
-                                                                                  child: ButtonIcon(
-                                                                                      isIconCircle: false,
-                                                                                      color1: const Color.fromRGBO(234, 6, 6, 1),
-                                                                                      color2: const Color.fromRGBO(234, 6, 6, 1),
-                                                                                      event: () {
-                                                                                        showConfirmDialog(context, () {
-                                                                                          handleDeleteFood(foodID: product.foodId.toString());
-                                                                                        });
-                                                                                      },
-                                                                                      icon: Icons.delete),
-                                                                                )
-                                                                              ],
-                                                                            )
-                                                                          ],
                                                                         ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              10.w,
+                                                                        ),
+                                                                        Container(
+                                                                          child:
+                                                                              Column(
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.start,
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.start,
+                                                                            children: [
+                                                                              Row(
+                                                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                children: [
+                                                                                  Container(
+                                                                                    // color: Colors.white,
+                                                                                    width: 180.w,
+                                                                                    child: TextApp(
+                                                                                      isOverFlow: false,
+                                                                                      softWrap: true,
+                                                                                      text: product.foodName ?? '',
+                                                                                      fontsize: 14.sp,
+                                                                                      color: blueText,
+                                                                                      fontWeight: FontWeight.bold,
+                                                                                    ),
+                                                                                  ),
+                                                                                  product.activeFlg == 1 ? const StatusBoxIsSelling() : const StatusBoxNoMoreSelling()
+                                                                                ],
+                                                                              ),
+                                                                              SizedBox(
+                                                                                height: 10.h,
+                                                                              ),
+                                                                              Row(
+                                                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                children: [
+                                                                                  Container(
+                                                                                    // color: Colors.green,
+                                                                                    width: 120.w,
+                                                                                    child: TextApp(
+                                                                                      isOverFlow: false,
+                                                                                      softWrap: true,
+                                                                                      text: product.storeName ?? '',
+                                                                                      fontsize: 14.sp,
+                                                                                    ),
+                                                                                  ),
+                                                                                  Container(
+                                                                                    // color: Colors.blue,
+                                                                                    width: 120.w,
+                                                                                    child: TextApp(
+                                                                                      isOverFlow: false,
+                                                                                      softWrap: true,
+                                                                                      text: "${MoneyFormatter(amount: (product.foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                                                      fontsize: 14.sp,
+                                                                                      textAlign: TextAlign.end,
+                                                                                      fontWeight: FontWeight.bold,
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                              SizedBox(
+                                                                                height: 10.h,
+                                                                              ),
+                                                                              Row(
+                                                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                children: [
+                                                                                  TextApp(
+                                                                                    isOverFlow: false,
+                                                                                    softWrap: true,
+                                                                                    text: "Ngày tạo: ",
+                                                                                    fontsize: 14.sp,
+                                                                                    textAlign: TextAlign.start,
+                                                                                    fontWeight: FontWeight.bold,
+                                                                                  ),
+                                                                                  space5W,
+                                                                                  SizedBox(
+                                                                                    width: 150.w,
+                                                                                    child: TextApp(
+                                                                                      isOverFlow: false,
+                                                                                      softWrap: true,
+                                                                                      text: formatDateTime(product.createdAt ?? ''),
+                                                                                      fontsize: 14.sp,
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        )
                                                                       ],
-                                                                    ));
-                                                              } else {
-                                                                return Center(
-                                                                  child: hasMore
-                                                                      ? const CircularProgressIndicator()
-                                                                      : Container(),
-                                                                );
-                                                              }
-                                                            }),
-                                                      )
-                                                    ],
-                                                  )
-                                                ]),
+                                                                    ),
+                                                                  )),
+                                                            ),
+                                                            space5H,
+                                                          ],
+                                                        );
+                                                      } else {
+                                                        return Center(
+                                                          child: hasMore
+                                                              ? Padding(
+                                                                  padding: EdgeInsets.only(
+                                                                      top: 10.h,
+                                                                      bottom:
+                                                                          10.h),
+                                                                  child:
+                                                                      const CircularProgressIndicator(),
+                                                                )
+                                                              : Container(),
+                                                        );
+                                                      }
+                                                    }),
+                                              )
+                                            ],
                                           )
                                         ],
                                       ),
                                     )),
-                                space30H,
-                                const CopyRightText()
                               ],
                             ),
                           ),

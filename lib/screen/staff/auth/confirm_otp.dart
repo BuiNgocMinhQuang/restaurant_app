@@ -208,7 +208,8 @@ class _StaffConfirmOTPState extends State<StaffConfirmOTP> {
                                             ),
                                             space20H,
                                             CountdownTimer(
-                                              duration: Duration(minutes: 5),
+                                              duration:
+                                                  const Duration(minutes: 5),
                                               onFinish: () {
                                                 showExpiredOtpDialog(context);
                                                 // Code to execute when the timer finishes
@@ -281,10 +282,10 @@ class _CountdownTimerState extends State<CountdownTimer> {
   Timer? _timer;
 
   void _startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (_remainingTime > Duration.zero) {
-          _remainingTime -= Duration(seconds: 1);
+          _remainingTime -= const Duration(seconds: 1);
         } else {
           _timer?.cancel();
           widget.onFinish?.call(); // Call the optional callback

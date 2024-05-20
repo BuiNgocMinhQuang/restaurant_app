@@ -514,7 +514,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Thông tin nhân viên"),
+        title: const Text("Thông tin nhân viên"),
       ),
       body: SafeArea(
           child: SingleChildScrollView(
@@ -935,18 +935,23 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                     }
                                                   },
                                                   decoration: InputDecoration(
-                                                      fillColor: Color.fromARGB(
-                                                          255, 226, 104, 159),
+                                                      fillColor:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              226,
+                                                              104,
+                                                              159),
                                                       focusedBorder:
                                                           OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color:
-                                                                Color.fromRGBO(
-                                                                    214,
-                                                                    51,
-                                                                    123,
-                                                                    0.6),
-                                                            width: 2.0),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color: Color
+                                                                    .fromRGBO(
+                                                                        214,
+                                                                        51,
+                                                                        123,
+                                                                        0.6),
+                                                                width: 2.0),
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(8.r),
@@ -1858,7 +1863,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         }
                                       },
                                       decoration: InputDecoration(
-                                          suffixIconColor: Color.fromARGB(
+                                          suffixIconColor: const Color.fromARGB(
                                               255, 226, 104, 159),
                                           suffixIcon: IconButton(
                                               onPressed: () {
@@ -1927,7 +1932,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         }
                                       },
                                       decoration: InputDecoration(
-                                          suffixIconColor: Color.fromARGB(
+                                          suffixIconColor: const Color.fromARGB(
                                               255, 226, 104, 159),
                                           suffixIcon: IconButton(
                                               onPressed: () {
@@ -1996,7 +2001,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         }
                                       },
                                       decoration: InputDecoration(
-                                          suffixIconColor: Color.fromARGB(
+                                          suffixIconColor: const Color.fromARGB(
                                               255, 226, 104, 159),
                                           suffixIcon: IconButton(
                                               onPressed: () {

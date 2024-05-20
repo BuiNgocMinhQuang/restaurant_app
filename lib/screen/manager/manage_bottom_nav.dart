@@ -29,10 +29,8 @@ import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
@@ -71,7 +69,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
       var tokenExpires = DateTime.parse(tokenExpiresTime!);
 
       if (now.compareTo(tokenExpires) > 0 || now.compareTo(tokenExpires) == 0) {
-        print("het han token");
+        log("het han token");
         // StorageUtils.instance.removeKey(key: 'token_manager');
         // context.go('/');
         mounted
@@ -84,10 +82,10 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
               })
             : null;
       } else if (now.compareTo(tokenExpires) < 0) {
-        print("Giu phien dang nhap");
+        log("Giu phien dang nhap");
       }
     } else {
-      print("Dang nhap hoai luon");
+      log("Dang nhap hoai luon");
       // getListStore();
     }
   }
@@ -126,7 +124,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
               })
             : null;
       } else {
-        print("ERRRO GET LIST STORE 111111");
+        log("ERRRO GET LIST STORE 111111");
         // showLoginSessionExpiredDialog(
         //     context: context,
         //     okEvent: () {
@@ -134,7 +132,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
         //     });
       }
     } catch (error) {
-      print("ERRRO GET LIST STORE $error");
+      log("ERRRO GET LIST STORE $error");
     }
   }
 
@@ -177,7 +175,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
   void getInfor() async {
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
-      print("TOKEN CURRENT $token");
+      log("TOKEN CURRENT $token");
       final response = await http.post(
         Uri.parse('$baseUrl$userInformationApi'),
         headers: {"Authorization": "Bearer $token"},
@@ -192,15 +190,15 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                 })
               : null;
 
-          print("GET INFOR MANGAER OK 1");
+          log("GET INFOR MANGAER OK 1");
         } else {
-          print("GET INFOR MANGAER ERROR 1");
+          log("GET INFOR MANGAER ERROR 1");
         }
       } catch (error) {
-        print("GET INFOR MANGAER ERROR 2  $error");
+        log("GET INFOR MANGAER ERROR 2  $error");
       }
     } catch (error) {
-      print("GET INFOR MANGAER ERROR 3 $error");
+      log("GET INFOR MANGAER ERROR 3 $error");
     }
   }
 
@@ -209,6 +207,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
     super.initState();
     Future.delayed(Duration.zero, () {
       checkTokenExpires();
+      getInfor();
       getListStore();
     });
   }
@@ -320,7 +319,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             top: 0,
                             right: 0,
                             child: Container(
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Colors.red,
                               ),
@@ -351,14 +350,16 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
         child: ListView(
           children: [
             Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  width: 100.w,
-                  height: 100.w,
-                  child: Image.asset(
-                    "assets/images/logo-thv.png",
-                    fit: BoxFit.contain,
+                Center(
+                  child: SizedBox(
+                    width: 100.w,
+                    height: 100.w,
+                    child: Image.asset(
+                      "assets/images/logo-thv.png",
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
                 const Divider(
@@ -391,15 +392,19 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                     subItem: const [],
                   ),
                 ),
-                TextApp(
-                  text: 'Quản lý',
-                  color: grey,
-                  fontsize: 20,
-                  fontWeight: FontWeight.bold,
+                Padding(
+                  padding: EdgeInsets.only(left: 15.w),
+                  child: TextApp(
+                    text: 'Quản lý',
+                    color: grey,
+                    fontsize: 20,
+                    fontWeight: FontWeight.bold,
+                    textAlign: TextAlign.start,
+                  ),
                 ),
-                SizedBox(
-                  height: 25.h,
-                ),
+                // SizedBox(
+                //   height: 25.h,
+                // ),
                 InkWell(
                   onTap: () {},
                   child: ItemDrawer(
@@ -443,9 +448,9 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                       ],
                       icon: Icons.store),
                 ),
-                SizedBox(
-                  height: 25.h,
-                ),
+                // SizedBox(
+                //   height: 25.h,
+                // ),
                 InkWell(
                   onTap: () {},
                   child: ItemDrawer(
@@ -510,9 +515,9 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                       ],
                       icon: Icons.group),
                 ),
-                SizedBox(
-                  height: 25.h,
-                ),
+                // SizedBox(
+                //   height: 25.h,
+                // ),
                 InkWell(
                   onTap: () {},
                   child: ItemDrawer(
@@ -570,18 +575,21 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                               : const Color.fromRGBO(233, 236, 239, 1),
                       icon: Icons.restaurant),
                 ),
-                SizedBox(
-                  height: 25.h,
+                // SizedBox(
+                //   height: 25.h,
+                // ),
+                Padding(
+                  padding: EdgeInsets.only(left: 15.w),
+                  child: TextApp(
+                    text: 'Tất cả cửa hàng',
+                    color: grey,
+                    fontsize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                TextApp(
-                  text: 'Tất cả cửa hàng',
-                  color: grey,
-                  fontsize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: 25.h,
-                ),
+                // SizedBox(
+                //   height: 25.h,
+                // ),
                 ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -711,7 +719,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                       );
                     }),
                 SizedBox(
-                  height: 25.h,
+                  height: 15.h,
                 ),
                 //ko xoa
                 // TextApp(
@@ -768,16 +776,13 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                 // )
               ],
             ),
-            SizedBox(
-              height: 20.h,
-            ),
             Padding(
                 padding: EdgeInsets.all(15.w),
                 child: Stack(
                   children: [
                     Container(
                       width: double.infinity,
-                      height: 180.h,
+                      height: 200.h,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           image: const DecorationImage(
@@ -805,14 +810,14 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                           ),
                           Center(
                             child: TextApp(
-                              text: "Tên chủ cửa hàng",
+                              text: managerInforData?.userFullName ?? '',
                               textAlign: TextAlign.center,
                               color: Colors.white,
                             ),
                           ),
                           Center(
                             child: TextApp(
-                                text: "chucuahang@gmail.com",
+                                text: managerInforData?.userEmail ?? '',
                                 textAlign: TextAlign.center,
                                 color: Colors.white),
                           ),
@@ -828,7 +833,10 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             text: "Đăng xuất",
                             textColor: Colors.black,
                             radius: 8.w,
-                          )
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
                         ],
                       ),
                     )

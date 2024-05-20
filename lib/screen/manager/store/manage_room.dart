@@ -171,7 +171,7 @@ class _ManageRoomState extends State<ManageRoom> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount:
                                   listTableOfRoomModel?.tables.length ?? 0,
@@ -393,7 +393,7 @@ class _ManageRoomState extends State<ManageRoom> {
                                                                       ),
                                                                     ),
                                                                     space10H,
-                                                                    Divider(),
+                                                                    const Divider(),
                                                                     space10H,
                                                                     InkWell(
                                                                       onTap:
@@ -470,7 +470,7 @@ class _ManageRoomState extends State<ManageRoom> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.add,
                                     color: Colors.grey,
                                   ),

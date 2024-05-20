@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/fake_data.dart';
@@ -7,8 +8,6 @@ import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/box/status_box.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -125,7 +124,7 @@ class _ImportInventoryState extends State<ImportInventory> {
                     ],
                   )),
               space25H,
-              Divider(
+              const Divider(
                 height: 1,
                 color: Colors.black,
               ),
@@ -161,8 +160,7 @@ class _ImportInventoryState extends State<ImportInventory> {
                                         data: myData,
                                         onSelectedRowsChanged: (selectedData) {
                                           // Handle the selected data here (e.g., print, update UI)
-                                          print(
-                                              'Selected data: ${selectedData.map((data) => data.name).toList()}');
+                                          log('Selected data: ${selectedData.map((data) => data.name).toList()}');
                                         },
                                       )
                                     ],
@@ -216,36 +214,6 @@ class _SelectableDataTableState extends State<SelectableDataTable> {
     }
   }
 
-  void _handleSelectAllChanged(bool? value) {
-    // Accept a nullable boolean
-    setState(() {
-      if (value != null) {
-        // Check for null before using
-        _selectAll = value;
-        for (var data in widget.data) {
-          data.isSelected = value;
-          if (value) {
-            _selectedData.add(data);
-          } else {
-            _selectedData.remove(data);
-          }
-        }
-      }
-    });
-    widget.onSelectedRowsChanged(_selectedData);
-  }
-
-  void _handleDelete(List<MyData> selectedData) {
-    // Implement your deletion logic here (e.g., remove from data source, update UI)
-    for (var data in selectedData) {
-      // Remove data from the data source (replace with your actual logic)
-      widget.data.remove(data);
-    }
-    setState(() {
-      _selectedData.clear(); // Clear selected data after deletion
-    });
-  }
-
   String _searchText = '';
 
   List<MyData> _filteredData = [];
@@ -275,7 +243,7 @@ class _SelectableDataTableState extends State<SelectableDataTable> {
             },
             onChanged: _handleSearch,
             // controller: searchController,
-            style: TextStyle(fontSize: 12, color: Colors.grey),
+            style: const TextStyle(fontSize: 12, color: Colors.grey),
             cursorColor: Colors.black,
             decoration: InputDecoration(
                 filled: true,
@@ -290,7 +258,7 @@ class _SelectableDataTableState extends State<SelectableDataTable> {
                 ),
                 isDense: true,
                 hintText: "Nhập nội dung bạn muốn tìm kiếm",
-                contentPadding: EdgeInsets.all(15)),
+                contentPadding: const EdgeInsets.all(15)),
           ),
         ),
         DataTable(

@@ -133,7 +133,7 @@ class ChartHomeAllStoreState extends State<ChartHomeAllStore> {
                       gridData: FlGridData(
                         show: true,
                         checkToShowHorizontalLine: (value) => value % 10 == 0,
-                        getDrawingHorizontalLine: (value) => FlLine(
+                        getDrawingHorizontalLine: (value) => const FlLine(
                           color: greyText,
                           strokeWidth: 1,
                         ),
@@ -141,7 +141,7 @@ class ChartHomeAllStoreState extends State<ChartHomeAllStore> {
                       ),
                       borderData: FlBorderData(
                         show: true,
-                        border: Border(
+                        border: const Border(
                           left: BorderSide(width: 1, color: Colors.black),
                           bottom: BorderSide(width: 1, color: Colors.black),
                         ),

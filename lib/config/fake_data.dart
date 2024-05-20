@@ -15,12 +15,12 @@ final List<String> categories = [
 ];
 
 List<DataColumn> dataColumn = [
-  DataColumn(label: Text('Tên mặt hàng')),
-  DataColumn(label: Text('Đơn vị')),
-  DataColumn(label: Text('SL tối thiểu')),
-  DataColumn(label: Text('SL tồn cuối')),
-  DataColumn(label: Text('Trạng thái')),
-  DataColumn(label: Text('Thao tác kho')),
+  const DataColumn(label: Text('Tên mặt hàng')),
+  const DataColumn(label: Text('Đơn vị')),
+  const DataColumn(label: Text('SL tối thiểu')),
+  const DataColumn(label: Text('SL tồn cuối')),
+  const DataColumn(label: Text('Trạng thái')),
+  const DataColumn(label: Text('Thao tác kho')),
 ];
 List<List<dynamic>> dataRow = [
   ['Mặt hàng 1', 'Kg', 1, 10, 'Còn hàng'],

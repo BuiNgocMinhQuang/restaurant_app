@@ -10,7 +10,7 @@ class StatusBoxIsActive extends StatelessWidget {
     return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5.w),
-          color: Color.fromRGBO(205, 245, 155, 1),
+          color: const Color.fromRGBO(205, 245, 155, 1),
         ),
         child: Padding(
           padding: EdgeInsets.all(5.w),
@@ -18,7 +18,7 @@ class StatusBoxIsActive extends StatelessWidget {
             text: "Đang hoạt động".toUpperCase(),
             fontsize: 8.sp,
             fontWeight: FontWeight.bold,
-            color: Color.fromRGBO(103, 177, 8, 1),
+            color: const Color.fromRGBO(103, 177, 8, 1),
           ),
         ));
   }
@@ -32,7 +32,7 @@ class StatusBoxIsSelling extends StatelessWidget {
     return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5.w),
-          color: Color.fromRGBO(205, 245, 155, 1),
+          color: const Color.fromRGBO(205, 245, 155, 1),
         ),
         child: Padding(
           padding: EdgeInsets.all(5.w),
@@ -40,7 +40,7 @@ class StatusBoxIsSelling extends StatelessWidget {
             text: "Đang bán".toUpperCase(),
             fontsize: 8.sp,
             fontWeight: FontWeight.bold,
-            color: Color.fromRGBO(103, 177, 8, 1),
+            color: const Color.fromRGBO(103, 177, 8, 1),
           ),
         ));
   }
@@ -54,7 +54,7 @@ class StatusBoxNoMoreSelling extends StatelessWidget {
     return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5.w),
-          color: Color.fromARGB(255, 242, 101, 83),
+          color: const Color.fromARGB(255, 242, 101, 83),
         ),
         child: Padding(
           padding: EdgeInsets.all(5.w),
@@ -62,7 +62,7 @@ class StatusBoxNoMoreSelling extends StatelessWidget {
             text: "Ngưng bán".toUpperCase(),
             fontsize: 8.sp,
             fontWeight: FontWeight.bold,
-            color: Color.fromARGB(255, 238, 41, 15),
+            color: const Color.fromARGB(255, 238, 41, 15),
           ),
         ));
   }
@@ -76,7 +76,7 @@ class StatusBoxIsLock extends StatelessWidget {
     return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5.w),
-          color: Color.fromRGBO(228, 232, 237, 1),
+          color: const Color.fromRGBO(228, 232, 237, 1),
         ),
         child: Padding(
           padding: EdgeInsets.all(5.w),
@@ -84,7 +84,7 @@ class StatusBoxIsLock extends StatelessWidget {
             text: "Đang bị khoá".toUpperCase(),
             fontsize: 8.sp,
             fontWeight: FontWeight.bold,
-            color: Color.fromRGBO(89, 116, 162, 1),
+            color: const Color.fromRGBO(89, 116, 162, 1),
           ),
         ));
   }
@@ -98,7 +98,7 @@ class StatusBoxStocking extends StatelessWidget {
     return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5.w),
-          color: Color.fromARGB(255, 144, 238, 30),
+          color: const Color.fromARGB(255, 144, 238, 30),
         ),
         child: Padding(
           padding: EdgeInsets.all(5.w),
@@ -120,7 +120,7 @@ class StatusBoxOutOfStock extends StatelessWidget {
     return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5.w),
-          color: Color.fromARGB(255, 238, 41, 15),
+          color: const Color.fromARGB(255, 238, 41, 15),
         ),
         child: Padding(
           padding: EdgeInsets.all(5.w),

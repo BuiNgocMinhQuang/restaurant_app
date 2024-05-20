@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/fake_data.dart';
@@ -73,8 +74,9 @@ class _EditFoodState extends State<EditFood> {
 
   void init() async {
     mounted
-        ? priceOfFood.text =
-            '${_formatNumber((widget.detailsDataFood?.food.foodPrice.toString() ?? '').replaceAll(',', ''))}'
+        ? priceOfFood.text = _formatNumber(
+            (widget.detailsDataFood?.food.foodPrice.toString() ?? '')
+                .replaceAll(',', ''))
         : null;
     mounted
         ? foodNameController.text = widget.detailsDataFood?.food.foodName ?? ''
@@ -185,12 +187,12 @@ class _EditFoodState extends State<EditFood> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print("GET DATA LIST FOOD ${data}");
+      log("GET DATA LIST FOOD $data");
       try {
         if (data['status'] == 200) {
           // Navigator.of(navigatorKey.currentContext!).pop();
           Navigator.pop(navigatorKey.currentContext!);
-          Future.delayed(Duration(milliseconds: 300), () {
+          Future.delayed(const Duration(milliseconds: 300), () {
             showCustomDialogModal(
               typeDialog: "succes",
               context: navigatorKey.currentContext,
@@ -201,7 +203,7 @@ class _EditFoodState extends State<EditFood> {
             );
           });
         } else {
-          print("ERROR LIST FOOOD RECEIPT PAGE 1");
+          log("ERROR LIST FOOOD RECEIPT PAGE 1");
           showCustomDialogModal(
               context: navigatorKey.currentContext,
               textDesc: "Có lỗi xảy ra",
@@ -211,7 +213,7 @@ class _EditFoodState extends State<EditFood> {
               typeDialog: "error");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
         showCustomDialogModal(
             context: navigatorKey.currentContext,
             textDesc: "Có lỗi xảy ra",
@@ -221,7 +223,7 @@ class _EditFoodState extends State<EditFood> {
             typeDialog: "error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
       showCustomDialogModal(
           context: navigatorKey.currentContext,
           textDesc: "Có lỗi xảy ra",
@@ -243,7 +245,7 @@ class _EditFoodState extends State<EditFood> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Chỉnh sửa món ăn"),
+        title: const Text("Chỉnh sửa món ăn"),
       ),
       body: SafeArea(
           child: SingleChildScrollView(
@@ -325,8 +327,8 @@ class _EditFoodState extends State<EditFood> {
                                     onChanged: (string) {
                                       priceFoodString = string;
                                       if (string.isNotEmpty) {
-                                        string =
-                                            '${_formatNumber(string.replaceAll(',', ''))}';
+                                        string = _formatNumber(
+                                            string.replaceAll(',', ''));
                                         priceFoodNumber = priceOfFood.text;
                                         priceOfFood.value = TextEditingValue(
                                           text: string,

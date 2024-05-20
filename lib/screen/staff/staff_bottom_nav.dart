@@ -55,11 +55,11 @@ class _StaffFabTabState extends State<StaffFabTab> {
         StorageUtils.instance.getString(key: 'token_staff_expires');
     if (tokenExpiresTime != '') {
       DateTime now = DateTime.now().toUtc();
-      print("TIME NOW $now");
+      log("TIME NOW $now");
 
       var tokenExpires = DateTime.parse(tokenExpiresTime!);
       if (now.compareTo(tokenExpires) > 0 || now.compareTo(tokenExpires) == 0) {
-        print("het han token");
+        log("het han token");
         // StorageUtils.instance.removeKey(key: 'token_manager');
         // context.go('/');
         mounted
@@ -72,10 +72,10 @@ class _StaffFabTabState extends State<StaffFabTab> {
               })
             : null;
       } else if (now.compareTo(tokenExpires) < 0) {
-        print("Giu phien dang nhap");
+        log("Giu phien dang nhap");
       }
     } else {
-      print("Dang nhap hoai luon");
+      log("Dang nhap hoai luon");
     }
   }
 
@@ -204,7 +204,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                                 top: 0,
                                 right: 0,
                                 child: Container(
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: Colors.red,
                                   ),
@@ -266,7 +266,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                             currentIndex == 2 ? Colors.white : Colors.black,
                         backgroundIconColor: currentIndex == 2
                             ? Colors.blue
-                            : Color.fromRGBO(233, 236, 239, 1),
+                            : const Color.fromRGBO(233, 236, 239, 1),
                         icon: Icons.home,
                         subItem: [],
                       ),
@@ -289,7 +289,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                               currentIndex == 0 ? Colors.white : Colors.black,
                           backgroundIconColor: currentIndex == 0
                               ? Colors.blue
-                              : Color.fromRGBO(233, 236, 239, 1),
+                              : const Color.fromRGBO(233, 236, 239, 1),
                           subItem: [],
                           icon: Icons.dinner_dining),
                     ),
@@ -311,7 +311,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                               currentIndex == 1 ? Colors.white : Colors.black,
                           backgroundIconColor: currentIndex == 1
                               ? Colors.blue
-                              : Color.fromRGBO(233, 236, 239, 1),
+                              : const Color.fromRGBO(233, 236, 239, 1),
                           subItem: [],
                           icon: Icons.receipt),
                     ),
@@ -334,7 +334,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                               currentIndex == 3 ? Colors.white : Colors.black,
                           backgroundIconColor: currentIndex == 3
                               ? Colors.blue
-                              : Color.fromRGBO(233, 236, 239, 1),
+                              : const Color.fromRGBO(233, 236, 239, 1),
                           icon: Icons.shopping_bag),
                     ),
                     SizedBox(
@@ -355,7 +355,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                               currentIndex == 4 ? Colors.white : Colors.black,
                           backgroundIconColor: currentIndex == 4
                               ? Colors.blue
-                              : Color.fromRGBO(233, 236, 239, 1),
+                              : const Color.fromRGBO(233, 236, 239, 1),
                           subItem: [],
                           icon: Icons.person),
                     ),
@@ -390,7 +390,8 @@ class _StaffFabTabState extends State<StaffFabTab> {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     color: Colors.white),
-                                child: Icon(Icons.power_settings_new_outlined),
+                                child: const Icon(
+                                    Icons.power_settings_new_outlined),
                               ),
                               SizedBox(
                                 height: 15.h,

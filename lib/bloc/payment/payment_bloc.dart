@@ -1,8 +1,9 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/model/payment_infor_model.dart';
-import 'package:app_restaurant/utils/storage.dart';
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart' as http;
@@ -48,26 +49,26 @@ class PaymentInforBloc extends Bloc<PaymentInforEvent, PaymentInforState> {
       );
       final data = jsonDecode(respons.body);
       var message = data['message'];
-      print("UPDATE PAYMENT ${data}");
+      log("UPDATE PAYMENT $data");
 
       try {
         if (data['status'] == 200) {
           // print("UPDATE PAYMENT ${data}");
           emit(state.copyWith(paymentStatus: PaymentInforStateStatus.succes));
         } else {
-          print("ERROR UPDATE PAYMENT INFOR 1");
+          log("ERROR UPDATE PAYMENT INFOR 1");
 
           emit(state.copyWith(paymentStatus: PaymentInforStateStatus.failed));
           emit(state.copyWith(errorText: message['text']));
         }
       } catch (error) {
-        print("ERROR UPDATE PAYMENT INFOR 2 $error");
+        log("ERROR UPDATE PAYMENT INFOR 2 $error");
 
         emit(state.copyWith(paymentStatus: PaymentInforStateStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      print("ERROR UPDATE PAYMENT INFOR 3 $error");
+      log("ERROR UPDATE PAYMENT INFOR 3 $error");
       emit(state.copyWith(paymentStatus: PaymentInforStateStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }
@@ -98,8 +99,8 @@ class PaymentInforBloc extends Bloc<PaymentInforEvent, PaymentInforState> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print("CONFIRM PAYMENT ${data}");
-      final message = data['message'];
+      log("CONFIRM PAYMENT $data");
+      // final message = data['message'];
       try {
         if (data['status'] == 200) {
           // print("UPDATE PAYMENT ${data}");
@@ -109,7 +110,7 @@ class PaymentInforBloc extends Bloc<PaymentInforEvent, PaymentInforState> {
           //     mess: message['title'],
           //     color: Colors.green);
         } else {
-          print("ERROR CONFIRM PAYMENT  1");
+          log("ERROR CONFIRM PAYMENT  1");
 
           emit(state.copyWith(paymentStatus: PaymentInforStateStatus.failed));
           emit(state.copyWith(errorText: someThingWrong));
@@ -119,13 +120,13 @@ class PaymentInforBloc extends Bloc<PaymentInforEvent, PaymentInforState> {
           //     color: Colors.red);
         }
       } catch (error) {
-        print("ERROR CONFIRM PAYMENT  2 $error");
+        log("ERROR CONFIRM PAYMENT  2 $error");
 
         emit(state.copyWith(paymentStatus: PaymentInforStateStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      print("ERROR CONFIRM PAYMENT  3 $error");
+      log("ERROR CONFIRM PAYMENT  3 $error");
       emit(state.copyWith(paymentStatus: PaymentInforStateStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }
@@ -161,25 +162,25 @@ class PaymentInforBloc extends Bloc<PaymentInforEvent, PaymentInforState> {
       var message = data['message'];
       try {
         if (data['status'] == 200) {
-          print("DATA PAYMENT ${data['order']}");
+          log("DATA PAYMENT ${data['order']}");
 
           var paymentInforDataRes = PaymentInforModel.fromJson(data);
           emit(state.copyWith(paymentInforModel: paymentInforDataRes));
           emit(state.copyWith(paymentStatus: PaymentInforStateStatus.succes));
         } else {
-          print("ERROR PAYMENT INFOR 1");
+          log("ERROR PAYMENT INFOR 1");
 
           emit(state.copyWith(paymentStatus: PaymentInforStateStatus.failed));
           emit(state.copyWith(errorText: message['text']));
         }
       } catch (error) {
-        print("ERROR PAYMENT INFOR 2 $error");
+        log("ERROR PAYMENT INFOR 2 $error");
 
         emit(state.copyWith(paymentStatus: PaymentInforStateStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      print("ERROR PAYMENT INFOR 3 $error");
+      log("ERROR PAYMENT INFOR 3 $error");
       emit(state.copyWith(paymentStatus: PaymentInforStateStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }

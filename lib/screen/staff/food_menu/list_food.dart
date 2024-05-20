@@ -244,7 +244,7 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                   },
                   onChanged: searchProduct,
                   controller: searchController,
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
                   cursorColor: Colors.black,
                   decoration: InputDecoration(
                       filled: true,
@@ -260,7 +260,7 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                       ),
                       isDense: true,
                       hintText: "Nhập nội dung bạn muốn tìm kiếm",
-                      contentPadding: EdgeInsets.all(15)),
+                      contentPadding: const EdgeInsets.all(15)),
                 ),
                 space15H,
                 Expanded(
@@ -361,7 +361,7 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                         } else {
                           return Center(
                             child: hasMore
-                                ? CircularProgressIndicator()
+                                ? const CircularProgressIndicator()
                                 : Container(),
                           );
                         }

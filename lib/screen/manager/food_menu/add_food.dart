@@ -138,7 +138,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print(" DATA CREATE FOOD ${data}");
+      log(" DATA CREATE FOOD $data");
       try {
         if (data['status'] == 200) {
           showCustomDialogModal(
@@ -161,7 +161,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
             light = false;
           });
         } else {
-          print("ERROR CREATE FOOOD");
+          log("ERROR CREATE FOOOD");
           showCustomDialogModal(
               context: navigatorKey.currentContext,
               textDesc: "Có lỗi xảy ra",
@@ -171,7 +171,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
               typeDialog: "error");
         }
       } catch (error) {
-        print("ERROR CREATE111 $error");
+        log("ERROR CREATE111 $error");
         showCustomDialogModal(
             context: navigatorKey.currentContext,
             textDesc: "Có lỗi xảy ra",
@@ -181,7 +181,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
             typeDialog: "error");
       }
     } catch (error) {
-      print("ERROR CREATE2222 $error");
+      log("ERROR CREATE2222 $error");
       showCustomDialogModal(
           context: navigatorKey.currentContext,
           textDesc: "Có lỗi xảy ra",
@@ -379,8 +379,8 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                           onChanged: (string) {
                                             priceFoodString = string;
                                             if (string.isNotEmpty) {
-                                              string =
-                                                  '${_formatNumber(string.replaceAll(',', ''))}';
+                                              string = _formatNumber(
+                                                  string.replaceAll(',', ''));
                                               priceFoodNumber =
                                                   priceOfFood.text;
                                               priceOfFood.value =

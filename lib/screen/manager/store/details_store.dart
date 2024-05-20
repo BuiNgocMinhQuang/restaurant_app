@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:app_restaurant/bloc/manager/stores/list_stores_bloc.dart';
 import 'package:app_restaurant/config/date_time_format.dart';
@@ -63,20 +64,20 @@ class _DetailsStoreState extends State<DetailsStore> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print(" DATA CREATE FOOD ${data}");
+      log(" DATA CREATE FOOD $data");
       try {
         if (data['status'] == 200) {
           setState(() {
             widget.detailsStoreModel = DetailsStoreModel.fromJson(data);
           });
         } else {
-          print("ERROR CREATE FOOOD");
+          log("ERROR CREATE FOOOD");
         }
       } catch (error) {
-        print("ERROR CREATE $error");
+        log("ERROR CREATE $error");
       }
     } catch (error) {
-      print("ERROR CREATE $error");
+      log("ERROR CREATE $error");
     }
   }
 
@@ -111,13 +112,13 @@ class _DetailsStoreState extends State<DetailsStore> {
                 );
               });
         } else {
-          print("ERROR CREATE FOOOD");
+          log("ERROR CREATE FOOOD");
         }
       } catch (error) {
-        print("ERROR CREATE 112212 $error");
+        log("ERROR CREATE 112212 $error");
       }
     } catch (error) {
-      print("ERROR CREATE 44444 $error");
+      log("ERROR CREATE 44444 $error");
     }
   }
 
@@ -146,13 +147,13 @@ class _DetailsStoreState extends State<DetailsStore> {
             listRoomOfStoreModel = ListRoomOfStoreModel.fromJson(data);
           });
         } else {
-          print("ERROR CREATE FOOOD");
+          log("ERROR CREATE FOOOD");
         }
       } catch (error) {
-        print("ERROR CREATE 112212 $error");
+        log("ERROR CREATE 112212 $error");
       }
     } catch (error) {
-      print("ERROR CREATE 44444 $error");
+      log("ERROR CREATE 44444 $error");
     }
   }
 
@@ -181,13 +182,13 @@ class _DetailsStoreState extends State<DetailsStore> {
             handleGetListRoom(shopID: widget.detailsStoreModel?.shopId ?? '');
           });
         } else {
-          print("ERROR CREATE FOOOD");
+          log("ERROR CREATE FOOOD");
         }
       } catch (error) {
-        print("ERROR CREATE 112212 $error");
+        log("ERROR CREATE 112212 $error");
       }
     } catch (error) {
-      print("ERROR CREATE 44444 $error");
+      log("ERROR CREATE 44444 $error");
     }
   }
 
@@ -203,7 +204,7 @@ class _DetailsStoreState extends State<DetailsStore> {
     var imageStore = jsonDecode(imageStorePath ?? '[]');
     return Scaffold(
         appBar: AppBar(
-          title: Text("Quản lí cửa hàng"),
+          title: const Text("Quản lí cửa hàng"),
         ),
         body: Stack(
           children: [
@@ -687,7 +688,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                                                 ),
                                                                               ),
                                                                               space10H,
-                                                                              Divider(),
+                                                                              const Divider(),
                                                                               space10H,
                                                                               InkWell(
                                                                                 onTap: () {
@@ -719,7 +720,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                                                 ),
                                                                               ),
                                                                               space10H,
-                                                                              Divider(),
+                                                                              const Divider(),
                                                                               space10H,
                                                                               InkWell(
                                                                                 onTap: () {

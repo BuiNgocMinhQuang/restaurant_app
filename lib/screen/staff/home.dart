@@ -500,7 +500,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                     ),
                                                                                   ),
                                                                                   space10H,
-                                                                                  Divider(),
+                                                                                  const Divider(),
                                                                                   space10H,
                                                                                   InkWell(
                                                                                     onTap: () {
@@ -547,7 +547,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                     ),
                                                                                   ),
                                                                                   space10H,
-                                                                                  Divider(),
+                                                                                  const Divider(),
                                                                                   space10H,
                                                                                   InkWell(
                                                                                     onTap: () {
@@ -589,7 +589,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                     ),
                                                                                   ),
                                                                                   space10H,
-                                                                                  Divider(),
+                                                                                  const Divider(),
                                                                                   space10H,
                                                                                   InkWell(
                                                                                     onTap: () {
@@ -964,13 +964,13 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                 })
               : null;
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR BROUGHT RECEIPT PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
   }
 
@@ -980,7 +980,7 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
 
     getListOrderOfChefInIt(foodInOrderStatus: null, page: 1);
 
-    timer = Timer.periodic(Duration(seconds: 2), (Timer t) {
+    timer = Timer.periodic(const Duration(seconds: 2), (Timer t) {
       currentListOrderBill.clear();
       getListOrderOfChef(
           foodInOrderStatus: selectedCategoriesIndex == 0
@@ -1325,7 +1325,7 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                                                           ),
                                                         ),
                                                         space10H,
-                                                        Divider(),
+                                                        const Divider(),
                                                         InkWell(
                                                           onTap: () async {
                                                             Navigator.pop(
@@ -1364,7 +1364,7 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                                                             ],
                                                           ),
                                                         ),
-                                                        Divider(),
+                                                        const Divider(),
                                                         space10H,
                                                         InkWell(
                                                           onTap: () async {

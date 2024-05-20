@@ -143,14 +143,14 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
 
           try {
             if (data['status'] == 200) {
-              print("CHANGE AVATAR STAFF  OK");
+              log("CHANGE AVATAR STAFF  OK");
               showSnackBarTopCustom(
                   title: "Thành công",
                   context: navigatorKey.currentContext,
                   mess: "Cập nhật ảnh đại diện thành công",
                   color: Colors.green);
             } else {
-              print("ERROR CHANGE AVATAR STAFF  1");
+              log("ERROR CHANGE AVATAR STAFF  1");
               showSnackBarTopCustom(
                   title: "Thất bại",
                   context: navigatorKey.currentContext,
@@ -158,23 +158,23 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                   color: Colors.red);
             }
           } catch (error) {
-            print("ERROR CHANGE AVATAR STAFF  2 ${error}");
+            log("ERROR CHANGE AVATAR STAFF  2 ${error}");
           }
         } catch (error) {
-          print("ERROR CHANGE AVATAR STAFF  3 $error");
+          log("ERROR CHANGE AVATAR STAFF  3 $error");
         }
       } else {
-        print("No image is selected.");
+        log("No image is selected.");
       }
     } catch (e) {
-      print("error while picking file.");
+      log("error while picking file.");
     }
   }
 
   void getInfor() async {
     try {
       var token = StorageUtils.instance.getString(key: 'token_staff');
-      print("TOKEN CURRENT $token");
+      log("TOKEN CURRENT $token");
       final response = await http.post(
         Uri.parse('$baseUrl$userInformationApi'),
         headers: {
@@ -195,15 +195,15 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
           });
           init();
 
-          print("GET INFOR STAFF OK 1");
+          log("GET INFOR STAFF OK 1");
         } else {
-          print("GET INFOR STAFF ERROR 1");
+          log("GET INFOR STAFF ERROR 1");
         }
       } catch (error) {
-        print("GET INFOR STAFF ERROR 2  $error");
+        log("GET INFOR STAFF ERROR 2  $error");
       }
     } catch (error) {
-      print("GET INFOR STAFF ERROR 3 $error");
+      log("GET INFOR STAFF ERROR 3 $error");
     }
   }
 
@@ -260,12 +260,12 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print("DATA UPDATE INFOR  ${data}}");
+      log("DATA UPDATE INFOR  $data}");
       final messText = data['message'];
 
       try {
         if (data['status'] == 200) {
-          print("UPDATE INFOR  OK");
+          log("UPDATE INFOR  OK");
           getInfor();
           showSnackBarTopCustom(
               title: "Thành công",
@@ -273,7 +273,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
               mess: messText['text'],
               color: Colors.green);
         } else {
-          print("ERROR UPDATE INFOR  1");
+          log("ERROR UPDATE INFOR  1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -281,10 +281,10 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
               color: Colors.red);
         }
       } catch (error) {
-        print("ERROR UPDATE INFOR  2 ${error}");
+        log("ERROR UPDATE INFOR  2 ${error}");
       }
     } catch (error) {
-      print("ERROR UPDATE INFOR  3 $error");
+      log("ERROR UPDATE INFOR  3 $error");
     }
   }
 
@@ -294,7 +294,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
     required String? confirmNewPassword,
   }) async {
     try {
-      print("TRUYEN NNNN ${{
+      log("TRUYEN NNNN ${{
         "password": currentPassword,
         "password_new": newPassword,
         "confirm_password_new": confirmNewPassword
@@ -314,11 +314,11 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print("DATA CHANGE PASS STAFF  ${data}}");
+      log("DATA CHANGE PASS STAFF  $data}");
       final messText = data['message'];
       try {
         if (data['status'] == 200) {
-          print("CHANGE PASS STAFF  OK");
+          log("CHANGE PASS STAFF  OK");
           currentPassworldController.clear();
           newPassworldController.clear();
           reNewPassworldController.clear();
@@ -329,7 +329,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
               mess: messText['text'],
               color: Colors.green);
         } else {
-          print("ERROR CHANGE PASS STAFF  1");
+          log("ERROR CHANGE PASS STAFF  1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -337,10 +337,10 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
               color: Colors.red);
         }
       } catch (error) {
-        print("ERROR CHANGE PASS STAFF  2 ${error}");
+        log("ERROR CHANGE PASS STAFF  2 ${error}");
       }
     } catch (error) {
-      print("ERROR CHANGE PASS STAFF  3 $error");
+      log("ERROR CHANGE PASS STAFF  3 $error");
     }
   }
 
@@ -348,7 +348,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
     required int? city,
     required int? district,
   }) async {
-    print("DATA TRUYEN NN ${{
+    log("DATA TRUYEN NN ${{
       'city': city,
       'district': district,
     }}");
@@ -390,13 +390,13 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
             currentWard = myWard;
           });
         } else {
-          print("LOI GI DO dadadadadadadada");
+          log("LOI GI DO dadadadadadadada");
         }
       } catch (error) {
-        print("LOI GI DO $error");
+        log("LOI GI DO $error");
       }
     } catch (error) {
-      print("LOI GI DO $error");
+      log("LOI GI DO $error");
     }
   }
 
@@ -404,7 +404,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
     required int? city,
     required int? district,
   }) async {
-    print("DATA TRUYEN NN ${{
+    log("DATA TRUYEN NN ${{
       'city': city,
       'district': district,
     }}");
@@ -626,7 +626,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                         ),
                                                       ),
                                                       space10H,
-                                                      Divider(),
+                                                      const Divider(),
                                                       space10H,
                                                       InkWell(
                                                         onTap: () async {
@@ -770,17 +770,20 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                     color: grey),
                                                 cursorColor: grey,
                                                 decoration: InputDecoration(
-                                                    fillColor: Color.fromARGB(
-                                                        255, 226, 104, 159),
+                                                    fillColor:
+                                                        const Color.fromARGB(
+                                                            255, 226, 104, 159),
                                                     focusedBorder:
                                                         OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: Color.fromRGBO(
-                                                              214,
-                                                              51,
-                                                              123,
-                                                              0.6),
-                                                          width: 2.0),
+                                                      borderSide:
+                                                          const BorderSide(
+                                                              color: Color
+                                                                  .fromRGBO(
+                                                                      214,
+                                                                      51,
+                                                                      123,
+                                                                      0.6),
+                                                              width: 2.0),
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               8.r),
@@ -916,17 +919,20 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                   }
                                                 },
                                                 decoration: InputDecoration(
-                                                    fillColor: Color.fromARGB(
-                                                        255, 226, 104, 159),
+                                                    fillColor:
+                                                        const Color.fromARGB(
+                                                            255, 226, 104, 159),
                                                     focusedBorder:
                                                         OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: Color.fromRGBO(
-                                                              214,
-                                                              51,
-                                                              123,
-                                                              0.6),
-                                                          width: 2.0),
+                                                      borderSide:
+                                                          const BorderSide(
+                                                              color: Color
+                                                                  .fromRGBO(
+                                                                      214,
+                                                                      51,
+                                                                      123,
+                                                                      0.6),
+                                                              width: 2.0),
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               8.r),
@@ -1057,17 +1063,20 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                     color: grey),
                                                 cursorColor: grey,
                                                 decoration: InputDecoration(
-                                                    fillColor: Color.fromARGB(
-                                                        255, 226, 104, 159),
+                                                    fillColor:
+                                                        const Color.fromARGB(
+                                                            255, 226, 104, 159),
                                                     focusedBorder:
                                                         OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: Color.fromRGBO(
-                                                              214,
-                                                              51,
-                                                              123,
-                                                              0.6),
-                                                          width: 2.0),
+                                                      borderSide:
+                                                          const BorderSide(
+                                                              color: Color
+                                                                  .fromRGBO(
+                                                                      214,
+                                                                      51,
+                                                                      123,
+                                                                      0.6),
+                                                              width: 2.0),
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               8.r),
@@ -1764,8 +1773,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                       }
                                     },
                                     decoration: InputDecoration(
-                                        suffixIconColor:
-                                            Color.fromARGB(255, 226, 104, 159),
+                                        suffixIconColor: const Color.fromARGB(
+                                            255, 226, 104, 159),
                                         suffixIcon: IconButton(
                                             onPressed: () {
                                               setState(
@@ -1835,8 +1844,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                       }
                                     },
                                     decoration: InputDecoration(
-                                        suffixIconColor:
-                                            Color.fromARGB(255, 226, 104, 159),
+                                        suffixIconColor: const Color.fromARGB(
+                                            255, 226, 104, 159),
                                         suffixIcon: IconButton(
                                             onPressed: () {
                                               setState(
@@ -1906,8 +1915,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                       }
                                     },
                                     decoration: InputDecoration(
-                                        suffixIconColor:
-                                            Color.fromARGB(255, 226, 104, 159),
+                                        suffixIconColor: const Color.fromARGB(
+                                            255, 226, 104, 159),
                                         suffixIcon: IconButton(
                                             onPressed: () {
                                               setState(
@@ -1984,7 +1993,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                 ),
                 space25H,
 
-                CopyRightText(),
+                const CopyRightText(),
                 space35H,
               ],
             )),

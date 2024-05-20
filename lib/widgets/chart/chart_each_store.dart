@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/model/manager/chart/chart_data_each_store_model.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -183,7 +180,7 @@ class BarChartSample4State extends State<BarChartSample4> {
                       gridData: FlGridData(
                         show: true,
                         checkToShowHorizontalLine: (value) => value % 10 == 0,
-                        getDrawingHorizontalLine: (value) => FlLine(
+                        getDrawingHorizontalLine: (value) => const FlLine(
                           color: greyText,
                           strokeWidth: 1,
                         ),
@@ -191,7 +188,7 @@ class BarChartSample4State extends State<BarChartSample4> {
                       ),
                       borderData: FlBorderData(
                         show: true,
-                        border: Border(
+                        border: const Border(
                           left: BorderSide(width: 1, color: Colors.black),
                           bottom: BorderSide(width: 1, color: Colors.black),
                         ),

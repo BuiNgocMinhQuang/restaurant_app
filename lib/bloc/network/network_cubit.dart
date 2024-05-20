@@ -1,7 +1,4 @@
-// import 'package:bloc/bloc.dart';
 import 'dart:async';
-
-import 'package:equatable/equatable.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 part 'network_state.dart';

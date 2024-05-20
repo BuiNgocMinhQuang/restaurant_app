@@ -38,13 +38,6 @@ class _ListInventoryState extends State<ListInventory> {
     ['Lê Văn C', 30, 'Kỹ sư'],
   ];
 
-  bool _isSelected = false; // Tracks selection state
-  void _onSelectedRowChanged(int selectedIndex) {
-    setState(() {
-      _isSelected = selectedIndex != null;
-    });
-  }
-
   final searchController = TextEditingController();
 
   String query = '';
@@ -56,12 +49,12 @@ class _ListInventoryState extends State<ListInventory> {
 
   @override
   Widget build(BuildContext context) {
-    final filterItem = myData.where((nameItem) {
-      final itemTitle = nameItem.name.toLowerCase();
-      final input = query.toLowerCase();
+    // final filterItem = myData.where((nameItem) {
+    //   final itemTitle = nameItem.name.toLowerCase();
+    //   final input = query.toLowerCase();
 
-      return itemTitle.contains(input);
-    }).toList();
+    //   return itemTitle.contains(input);
+    // }).toList();
 
     return Scaffold(
       body: Padding(
@@ -136,7 +129,7 @@ class _ListInventoryState extends State<ListInventory> {
                     ],
                   )),
               space25H,
-              Divider(
+              const Divider(
                 height: 1,
                 color: Colors.black,
               ),
@@ -250,24 +243,24 @@ class _SelectableDataTableState extends State<SelectableDataTable> {
     }
   }
 
-  void _handleSelectAllChanged(bool? value) {
-    // Accept a nullable boolean
-    setState(() {
-      if (value != null) {
-        // Check for null before using
-        _selectAll = value;
-        for (var data in widget.data) {
-          data.isSelected = value;
-          if (value) {
-            _selectedData.add(data);
-          } else {
-            _selectedData.remove(data);
-          }
-        }
-      }
-    });
-    widget.onSelectedRowsChanged(_selectedData);
-  }
+  // void _handleSelectAllChanged(bool? value) {
+  //   // Accept a nullable boolean
+  //   setState(() {
+  //     if (value != null) {
+  //       // Check for null before using
+  //       _selectAll = value;
+  //       for (var data in widget.data) {
+  //         data.isSelected = value;
+  //         if (value) {
+  //           _selectedData.add(data);
+  //         } else {
+  //           _selectedData.remove(data);
+  //         }
+  //       }
+  //     }
+  //   });
+  //   widget.onSelectedRowsChanged(_selectedData);
+  // }
 
   void _handleDelete(List<MyData> selectedData) {
     // Implement your deletion logic here (e.g., remove from data source, update UI)
@@ -309,7 +302,7 @@ class _SelectableDataTableState extends State<SelectableDataTable> {
             },
             onChanged: _handleSearch,
             // controller: searchController,
-            style: TextStyle(fontSize: 12, color: Colors.grey),
+            style: const TextStyle(fontSize: 12, color: Colors.grey),
             cursorColor: Colors.black,
             decoration: InputDecoration(
                 filled: true,
@@ -324,7 +317,7 @@ class _SelectableDataTableState extends State<SelectableDataTable> {
                 ),
                 isDense: true,
                 hintText: "Nhập nội dung bạn muốn tìm kiếm",
-                contentPadding: EdgeInsets.all(15)),
+                contentPadding: const EdgeInsets.all(15)),
           ),
         ),
         ButtonGradient(

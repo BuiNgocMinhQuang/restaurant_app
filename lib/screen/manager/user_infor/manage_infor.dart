@@ -857,7 +857,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                         ),
                                                                       ),
                                                                       space10H,
-                                                                      Divider(),
+                                                                      const Divider(),
                                                                       space10H,
                                                                       InkWell(
                                                                         onTap:
@@ -1854,7 +1854,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                 },
                                                 decoration: InputDecoration(
                                                     suffixIconColor:
-                                                        Color.fromARGB(
+                                                        const Color.fromARGB(
                                                             255, 226, 104, 159),
                                                     suffixIcon: IconButton(
                                                         onPressed: () {
@@ -1871,9 +1871,12 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                     .visibility_off
                                                                 : Icons
                                                                     .visibility)),
-                                                    fillColor: const Color
-                                                        .fromARGB(
-                                                        255, 226, 104, 159),
+                                                    fillColor:
+                                                        const Color.fromARGB(
+                                                            255,
+                                                            226,
+                                                            104,
+                                                            159),
                                                     focusedBorder:
                                                         OutlineInputBorder(
                                                       borderSide:
@@ -1944,7 +1947,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                 },
                                                 decoration: InputDecoration(
                                                     suffixIconColor:
-                                                        Color.fromARGB(
+                                                        const Color.fromARGB(
                                                             255, 226, 104, 159),
                                                     suffixIcon: IconButton(
                                                         onPressed: () {
@@ -2032,10 +2035,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                   }
                                                 },
                                                 decoration: InputDecoration(
-                                                    suffixIconColor:
-                                                        Color
-                                                            .fromARGB(255, 226,
-                                                                104, 159),
+                                                    suffixIconColor: const Color
+                                                        .fromARGB(
+                                                        255, 226, 104, 159),
                                                     suffixIcon: IconButton(
                                                         onPressed: () {
                                                           setState(
@@ -2051,9 +2053,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                     .visibility_off
                                                                 : Icons
                                                                     .visibility)),
-                                                    fillColor: const Color
-                                                        .fromARGB(
-                                                        255, 226, 104, 159),
+                                                    fillColor:
+                                                        const Color.fromARGB(
+                                                            255, 226, 104, 159),
                                                     focusedBorder:
                                                         OutlineInputBorder(
                                                       borderSide:
@@ -2219,19 +2221,19 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                         (context,
                                                                                 url) =>
                                                                             SizedBox(
-                                                                      child: Center(
-                                                                          child:
-                                                                              CircularProgressIndicator()),
                                                                       height:
                                                                           10.w,
                                                                       width:
                                                                           10.w,
+                                                                      child: const Center(
+                                                                          child:
+                                                                              CircularProgressIndicator()),
                                                                     ),
                                                                     errorWidget: (context,
                                                                             url,
                                                                             error) =>
-                                                                        Icon(Icons
-                                                                            .error),
+                                                                        const Icon(
+                                                                            Icons.error),
                                                                   ),
                                                           ),
                                                         )
@@ -2470,12 +2472,11 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                       decoration:
                                                           InputDecoration(
                                                               suffixIconColor:
-                                                                  Color
-                                                                      .fromARGB(
-                                                                          255,
-                                                                          226,
-                                                                          104,
-                                                                          159),
+                                                                  const Color.fromARGB(
+                                                                      255,
+                                                                      226,
+                                                                      104,
+                                                                      159),
                                                               suffixIcon:
                                                                   IconButton(
                                                                       onPressed:
@@ -2571,7 +2572,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                   ),
                             space25H,
 
-                            CopyRightText(),
+                            const CopyRightText(),
                             space35H,
                           ],
                         )),

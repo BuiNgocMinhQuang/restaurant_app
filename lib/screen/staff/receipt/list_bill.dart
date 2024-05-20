@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:app_restaurant/bloc/list_bill_shop/list_bill_shop_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
@@ -94,13 +95,13 @@ class _StaffListBillState extends State<StaffListBill>
                                               });
                                             }
                                           },
-                                          labelPadding: EdgeInsets.only(
+                                          labelPadding: const EdgeInsets.only(
                                               left: 20, right: 20),
                                           labelColor: Colors.white,
                                           unselectedLabelColor:
                                               Colors.black.withOpacity(0.5),
-                                          labelStyle:
-                                              TextStyle(color: Colors.red),
+                                          labelStyle: const TextStyle(
+                                              color: Colors.red),
                                           controller: _tabController,
                                           isScrollable: true,
                                           indicatorSize:
@@ -441,7 +442,7 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                                         ),
                                       ),
                                       space10H,
-                                      Divider(),
+                                      const Divider(),
                                       space10H,
                                     ],
                                   ),
@@ -458,7 +459,9 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                   );
                 } else {
                   return Center(
-                    child: hasMore ? CircularProgressIndicator() : Container(),
+                    child: hasMore
+                        ? const CircularProgressIndicator()
+                        : Container(),
                   );
                 }
               })
@@ -704,7 +707,7 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                                         ),
                                       ),
                                       space10H,
-                                      Divider(),
+                                      const Divider(),
                                       space10H,
                                     ],
                                   ),
@@ -724,7 +727,7 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                 } else {
                   return Center(
                     child: hasMoreComplete
-                        ? CircularProgressIndicator()
+                        ? const CircularProgressIndicator()
                         : Container(),
                   );
                 }
@@ -832,13 +835,13 @@ class _PendingWidgetState extends State<PendingWidget>
                 })
               : null;
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR BROUGHT RECEIPT PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
   }
 
@@ -971,7 +974,7 @@ class _PendingWidgetState extends State<PendingWidget>
                                         ),
                                       ),
                                       space10H,
-                                      Divider(),
+                                      const Divider(),
                                       space10H,
                                     ],
                                   ),
@@ -989,7 +992,7 @@ class _PendingWidgetState extends State<PendingWidget>
                 } else {
                   return Center(
                     child: hasMoreComplete
-                        ? CircularProgressIndicator()
+                        ? const CircularProgressIndicator()
                         : Container(),
                   );
                 }
@@ -1235,7 +1238,7 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                                         ),
                                       ),
                                       space10H,
-                                      Divider(),
+                                      const Divider(),
                                       space10H,
                                     ],
                                   ),
@@ -1253,7 +1256,7 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                 } else {
                   return Center(
                     child: hasMoreCancle
-                        ? CircularProgressIndicator()
+                        ? const CircularProgressIndicator()
                         : Container(),
                   );
                 }

@@ -8,14 +8,13 @@ class StaffInfor {
   StaffInfor.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    data =
-        json['data'] != null ? new DataStaffInfor.fromJson(json['data']) : null;
+    data = json['data'] != null ? DataStaffInfor.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -36,9 +35,9 @@ class DataStaffInfor {
   String? staffEmail;
   String? staffPhone;
   String? password;
-  Null? frontImageCccd;
-  Null? backImageCccd;
-  Null? holdImageCccd;
+  String? frontImageCccd;
+  String? backImageCccd;
+  String? holdImageCccd;
   int? staffAddress1;
   int? staffAddress2;
   int? staffAddress3;
@@ -121,37 +120,37 @@ class DataStaffInfor {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['staff_id'] = this.staffId;
-    data['staff_no'] = this.staffNo;
-    data['user_id'] = this.userId;
-    data['store_id'] = this.storeId;
-    data['shop_id'] = this.shopId;
-    data['staff_first_name'] = this.staffFirstName;
-    data['staff_last_name'] = this.staffLastName;
-    data['staff_full_name'] = this.staffFullName;
-    data['staff_avatar'] = this.staffAvatar;
-    data['staff_email'] = this.staffEmail;
-    data['staff_phone'] = this.staffPhone;
-    data['password'] = this.password;
-    data['front_image_cccd'] = this.frontImageCccd;
-    data['back_image_cccd'] = this.backImageCccd;
-    data['hold_image_cccd'] = this.holdImageCccd;
-    data['staff_address_1'] = this.staffAddress1;
-    data['staff_address_2'] = this.staffAddress2;
-    data['staff_address_3'] = this.staffAddress3;
-    data['staff_address_4'] = this.staffAddress4;
-    data['staff_full_address'] = this.staffFullAddress;
-    data['staff_twitter'] = this.staffTwitter;
-    data['staff_facebook'] = this.staffFacebook;
-    data['staff_instagram'] = this.staffInstagram;
-    data['staff_position'] = this.staffPosition;
-    data['staff_kind'] = this.staffKind;
-    data['active_flg'] = this.activeFlg;
-    data['delete_flg'] = this.deleteFlg;
-    data['remember_token'] = this.rememberToken;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['staff_id'] = staffId;
+    data['staff_no'] = staffNo;
+    data['user_id'] = userId;
+    data['store_id'] = storeId;
+    data['shop_id'] = shopId;
+    data['staff_first_name'] = staffFirstName;
+    data['staff_last_name'] = staffLastName;
+    data['staff_full_name'] = staffFullName;
+    data['staff_avatar'] = staffAvatar;
+    data['staff_email'] = staffEmail;
+    data['staff_phone'] = staffPhone;
+    data['password'] = password;
+    data['front_image_cccd'] = frontImageCccd;
+    data['back_image_cccd'] = backImageCccd;
+    data['hold_image_cccd'] = holdImageCccd;
+    data['staff_address_1'] = staffAddress1;
+    data['staff_address_2'] = staffAddress2;
+    data['staff_address_3'] = staffAddress3;
+    data['staff_address_4'] = staffAddress4;
+    data['staff_full_address'] = staffFullAddress;
+    data['staff_twitter'] = staffTwitter;
+    data['staff_facebook'] = staffFacebook;
+    data['staff_instagram'] = staffInstagram;
+    data['staff_position'] = staffPosition;
+    data['staff_kind'] = staffKind;
+    data['active_flg'] = activeFlg;
+    data['delete_flg'] = deleteFlg;
+    data['remember_token'] = rememberToken;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
     return data;
   }
 }

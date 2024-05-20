@@ -403,7 +403,7 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                             style: TextStyle(fontSize: 14.sp, color: grey),
                             cursorColor: grey,
                             decoration: InputDecoration(
-                                suffixIcon: Icon(Icons.calendar_month),
+                                suffixIcon: const Icon(Icons.calendar_month),
                                 fillColor:
                                     const Color.fromARGB(255, 226, 104, 159),
                                 focusedBorder: OutlineInputBorder(
@@ -448,7 +448,7 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                             style: TextStyle(fontSize: 14.sp, color: grey),
                             cursorColor: grey,
                             decoration: InputDecoration(
-                                suffixIcon: Icon(Icons.calendar_month),
+                                suffixIcon: const Icon(Icons.calendar_month),
                                 fillColor:
                                     const Color.fromARGB(255, 226, 104, 159),
                                 focusedBorder: OutlineInputBorder(

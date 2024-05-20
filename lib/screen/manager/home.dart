@@ -66,47 +66,63 @@ class _ManagerHomeState extends State<ManagerHome> {
       print(" DATA HOME ${data}");
       try {
         if (data['status'] == 200) {
-          setState(() {
-            dataHome = HomeDataModel.fromJson(data);
-            handleGetChartDataHome(
-                startDate: _dateStartController.text,
-                endDate: _dateEndController.text,
-                dataType: currentDataType);
-          });
+          mounted
+              ? setState(() {
+                  dataHome = HomeDataModel.fromJson(data);
+                  handleGetChartDataHome(
+                      startDate: _dateStartController.text,
+                      endDate: _dateEndController.text,
+                      dataType: currentDataType);
+                })
+              : null;
           Future.delayed(const Duration(milliseconds: 1000), () {
-            setState(() {
-              isLoading = false;
-            });
+            mounted
+                ? setState(() {
+                    isLoading = false;
+                  })
+                : null;
           });
         } else {
           Future.delayed(const Duration(milliseconds: 1000), () {
-            setState(() {
-              isLoading = false;
-            });
+            mounted
+                ? setState(() {
+                    isLoading = false;
+                  })
+                : null;
           });
-          setState(() {
-            isError = true;
-          });
+          mounted
+              ? setState(() {
+                  isError = true;
+                })
+              : null;
         }
       } catch (error) {
         Future.delayed(const Duration(milliseconds: 1000), () {
-          setState(() {
-            isLoading = false;
-          });
+          mounted
+              ? setState(() {
+                  isLoading = false;
+                })
+              : null;
         });
-        setState(() {
-          isError = true;
-        });
+        mounted
+            ? setState(() {
+                isError = true;
+              })
+            : null;
       }
     } catch (error) {
       Future.delayed(const Duration(milliseconds: 1000), () {
-        setState(() {
-          isLoading = false;
-        });
+        mounted
+            ? setState(() {
+                isLoading = false;
+              })
+            : null;
       });
-      setState(() {
-        isError = true;
-      });
+      mounted
+          ? setState(() {
+              isError = true;
+            })
+          : null;
     }
   }
 
@@ -131,13 +147,15 @@ class _ManagerHomeState extends State<ManagerHome> {
             ));
 
     if (picked != null) {
-      setState(() {
-        _dateStartController.text = picked.toString().split(" ")[0];
-        handleGetChartDataHome(
-            startDate: _dateStartController.text,
-            endDate: _dateEndController.text,
-            dataType: currentDataType);
-      });
+      mounted
+          ? setState(() {
+              _dateStartController.text = picked.toString().split(" ")[0];
+              handleGetChartDataHome(
+                  startDate: _dateStartController.text,
+                  endDate: _dateEndController.text,
+                  dataType: currentDataType);
+            })
+          : null;
     }
   }
 
@@ -983,7 +1001,7 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                       color: grey),
                                                   cursorColor: grey,
                                                   decoration: InputDecoration(
-                                                      suffixIcon: Icon(
+                                                      suffixIcon: const Icon(
                                                           Icons.calendar_month),
                                                       fillColor:
                                                           const Color.fromARGB(
@@ -1049,7 +1067,7 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                       color: grey),
                                                   cursorColor: grey,
                                                   decoration: InputDecoration(
-                                                      suffixIcon: Icon(
+                                                      suffixIcon: const Icon(
                                                           Icons.calendar_month),
                                                       fillColor:
                                                           const Color.fromARGB(

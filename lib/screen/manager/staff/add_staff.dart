@@ -744,7 +744,7 @@ class _AddStaffState extends State<AddStaff> {
                             },
                             decoration: InputDecoration(
                               suffixIconColor:
-                                  Color.fromARGB(255, 226, 104, 159),
+                                  const Color.fromARGB(255, 226, 104, 159),
                               suffixIcon: IconButton(
                                   onPressed: () {
                                     setState(
@@ -804,7 +804,7 @@ class _AddStaffState extends State<AddStaff> {
                             },
                             decoration: InputDecoration(
                               suffixIconColor:
-                                  Color.fromARGB(255, 226, 104, 159),
+                                  const Color.fromARGB(255, 226, 104, 159),
                               suffixIcon: IconButton(
                                   onPressed: () {
                                     setState(

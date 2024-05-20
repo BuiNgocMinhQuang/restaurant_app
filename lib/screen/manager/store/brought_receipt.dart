@@ -557,7 +557,7 @@ class _AllWidgetState extends State<AllWidget>
                                                     ),
                                                   ),
                                                   space10H,
-                                                  Divider(),
+                                                  const Divider(),
                                                   space10H,
                                                   InkWell(
                                                     onTap: () async {
@@ -615,7 +615,7 @@ class _AllWidgetState extends State<AllWidget>
                                                     ),
                                                   ),
                                                   space10H,
-                                                  Divider(),
+                                                  const Divider(),
                                                   space10H,
                                                   InkWell(
                                                     onTap: () async {
@@ -657,7 +657,7 @@ class _AllWidgetState extends State<AllWidget>
                                                     ),
                                                   ),
                                                   space10H,
-                                                  Divider(),
+                                                  const Divider(),
                                                   space10H,
                                                   InkWell(
                                                     onTap: () async {
@@ -776,7 +776,7 @@ class _AllWidgetState extends State<AllWidget>
                                                     ),
                                                   ),
                                                   space10H,
-                                                  Divider(),
+                                                  const Divider(),
                                                   space10H,
                                                 ],
                                               ),
@@ -1040,7 +1040,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
                                               ),
                                             ),
                                             space10H,
-                                            Divider(),
+                                            const Divider(),
                                             space10H,
                                           ],
                                         ),
@@ -1057,7 +1057,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
                 } else {
                   return Center(
                     child: hasMoreComplete
-                        ? CircularProgressIndicator()
+                        ? const CircularProgressIndicator()
                         : Container(),
                   );
                 }
@@ -1339,7 +1339,7 @@ class _PendingWidgetState extends State<PendingWidget>
                                         ),
                                       ),
                                       space10H,
-                                      Divider(),
+                                      const Divider(),
                                       space10H,
                                       InkWell(
                                         onTap: () async {
@@ -1388,7 +1388,7 @@ class _PendingWidgetState extends State<PendingWidget>
                                         ),
                                       ),
                                       space10H,
-                                      Divider(),
+                                      const Divider(),
                                       space10H,
                                       InkWell(
                                         onTap: () async {
@@ -1426,7 +1426,7 @@ class _PendingWidgetState extends State<PendingWidget>
                                         ),
                                       ),
                                       space10H,
-                                      Divider(),
+                                      const Divider(),
                                       space10H,
                                       InkWell(
                                         onTap: () async {
@@ -1484,7 +1484,7 @@ class _PendingWidgetState extends State<PendingWidget>
                 } else {
                   return Center(
                     child: hasMoreComplete
-                        ? CircularProgressIndicator()
+                        ? const CircularProgressIndicator()
                         : Container(),
                   );
                 }
@@ -1730,7 +1730,7 @@ class _CancleWidgetState extends State<CancleWidget>
                                         ),
                                       ),
                                       space10H,
-                                      Divider(),
+                                      const Divider(),
                                       space10H,
                                     ],
                                   ),
@@ -1748,7 +1748,7 @@ class _CancleWidgetState extends State<CancleWidget>
                 } else {
                   return Center(
                     child: hasMoreCanle
-                        ? CircularProgressIndicator()
+                        ? const CircularProgressIndicator()
                         : Container(),
                   );
                 }
