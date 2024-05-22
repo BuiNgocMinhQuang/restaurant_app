@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/model/bill_infor_model.dart';
 import 'package:bloc/bloc.dart';
@@ -23,7 +24,7 @@ class BillInforBloc extends Bloc<BillInforEvent, BillInforState> {
 
     try {
       var token = event.token;
-      print("TOKEN GET TABLE $token");
+      log("TOKEN GET TABLE $token");
 
       final respons = await http.post(
         Uri.parse('$baseUrl$showBillInfor'),
@@ -42,26 +43,26 @@ class BillInforBloc extends Bloc<BillInforEvent, BillInforState> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print(data);
+      log(data);
       try {
         if (data['status'] == 200) {
           var billTableDataRes = BillInforModel.fromJson(data);
           emit(state.copyWith(billInforModel: billTableDataRes));
           emit(state.copyWith(billStatus: BillInforStateStatus.succes));
         } else {
-          print("ERROR BILL INFOR 1");
+          log("ERROR BILL INFOR 1");
 
           emit(state.copyWith(billStatus: BillInforStateStatus.failed));
           emit(state.copyWith(errorText: someThingWrong));
         }
       } catch (error) {
-        print("ERROR BILL INFOR 2 $error");
+        log("ERROR BILL INFOR 2 $error");
 
         emit(state.copyWith(billStatus: BillInforStateStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      print("ERROR BILL INFOR 3 $error");
+      log("ERROR BILL INFOR 3 $error");
       emit(state.copyWith(billStatus: BillInforStateStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }

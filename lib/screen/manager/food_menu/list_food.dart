@@ -84,9 +84,11 @@ class _ListFoodManagerState extends State<ListFoodManager> {
       final data = jsonDecode(respons.body);
       try {
         if (data['status'] == 200) {
-          setState(() {
-            detailsFoodData = DetailsFoodModel.fromJson(data);
-          });
+          mounted
+              ? setState(() {
+                  detailsFoodData = DetailsFoodModel.fromJson(data);
+                })
+              : null;
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -148,14 +150,16 @@ class _ListFoodManagerState extends State<ListFoodManager> {
             ));
 
     if (picked != null) {
-      setState(() {
-        _dateStartController.text = picked.toString().split(" ")[0];
+      mounted
+          ? setState(() {
+              _dateStartController.text = picked.toString().split(" ")[0];
 
-        refeshListFood(
-            page: 1,
-            dateStart: _dateStartController.text,
-            dateEnd: _dateEndController.text);
-      });
+              refeshListFood(
+                  page: 1,
+                  dateStart: _dateStartController.text,
+                  dateEnd: _dateEndController.text);
+            })
+          : null;
     }
   }
 
@@ -179,13 +183,15 @@ class _ListFoodManagerState extends State<ListFoodManager> {
               child: child ?? Container(),
             ));
     if (picked != null) {
-      setState(() {
-        _dateEndController.text = picked.toString().split(" ")[0];
-        refeshListFood(
-            page: 1,
-            dateStart: _dateStartController.text,
-            dateEnd: _dateEndController.text);
-      });
+      mounted
+          ? setState(() {
+              _dateEndController.text = picked.toString().split(" ")[0];
+              refeshListFood(
+                  page: 1,
+                  dateStart: _dateStartController.text,
+                  dateEnd: _dateEndController.text);
+            })
+          : null;
     }
   }
 
@@ -259,10 +265,6 @@ class _ListFoodManagerState extends State<ListFoodManager> {
     String? dateStart,
     String? dateEnd,
   }) async {
-    // setState(() {
-    //   isLoading = true;
-    //   isError = false;
-    // });
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
 
@@ -290,51 +292,67 @@ class _ListFoodManagerState extends State<ListFoodManager> {
       final data = jsonDecode(respons.body);
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var listMenuPageRes = ManagerListFoodModel.fromJson(data);
-            currentFoodList.addAll(listMenuPageRes.data.data);
-            currentPage++;
-            isRefesh = false;
+          mounted
+              ? setState(() {
+                  var listMenuPageRes = ManagerListFoodModel.fromJson(data);
+                  currentFoodList.addAll(listMenuPageRes.data.data);
+                  currentPage++;
+                  isRefesh = false;
 
-            if (listMenuPageRes.data.data.isEmpty ||
-                listMenuPageRes.data.data.length <= 15) {
-              hasMore = false;
-            }
-          });
+                  if (listMenuPageRes.data.data.isEmpty ||
+                      listMenuPageRes.data.data.length <= 15) {
+                    hasMore = false;
+                  }
+                })
+              : null;
           Future.delayed(const Duration(milliseconds: 1000), () {
-            setState(() {
-              isLoading = false;
-            });
+            mounted
+                ? setState(() {
+                    isLoading = false;
+                  })
+                : null;
           });
         } else {
           Future.delayed(const Duration(milliseconds: 1000), () {
-            setState(() {
-              isLoading = false;
-            });
+            mounted
+                ? setState(() {
+                    isLoading = false;
+                  })
+                : null;
           });
-          setState(() {
-            isError = true;
-          });
+          mounted
+              ? setState(() {
+                  isError = true;
+                })
+              : null;
         }
       } catch (error) {
         Future.delayed(const Duration(milliseconds: 1000), () {
-          setState(() {
-            isLoading = false;
-          });
+          mounted
+              ? setState(() {
+                  isLoading = false;
+                })
+              : null;
         });
-        setState(() {
-          isError = true;
-        });
+        mounted
+            ? setState(() {
+                isError = true;
+              })
+            : null;
       }
     } catch (error) {
       Future.delayed(const Duration(milliseconds: 1000), () {
-        setState(() {
-          isLoading = false;
-        });
+        mounted
+            ? setState(() {
+                isLoading = false;
+              })
+            : null;
       });
-      setState(() {
-        isError = true;
-      });
+      mounted
+          ? setState(() {
+              isError = true;
+            })
+          : null;
     }
   }
 
@@ -375,12 +393,14 @@ class _ListFoodManagerState extends State<ListFoodManager> {
       print("GET DATA LIST FOOD ${data}");
       try {
         if (data['status'] == 200) {
-          setState(() {
-            currentFoodList.clear();
-            var listMenuPageRes = ManagerListFoodModel.fromJson(data);
-            currentFoodList.addAll(listMenuPageRes.data.data);
-            isRefesh = true;
-          });
+          mounted
+              ? setState(() {
+                  currentFoodList.clear();
+                  var listMenuPageRes = ManagerListFoodModel.fromJson(data);
+                  currentFoodList.addAll(listMenuPageRes.data.data);
+                  isRefesh = true;
+                })
+              : null;
         } else {
           print("ERROR LIST FOOOD RECEIPT PAGE 1");
         }
@@ -408,12 +428,12 @@ class _ListFoodManagerState extends State<ListFoodManager> {
 
   @override
   void dispose() {
-    super.dispose();
     scrollListFoodController.dispose();
-    _dateStartController.clear();
-    _dateEndController.clear();
-    searchController.clear();
-    stateFilterTextController.clear();
+    _dateStartController.dispose();
+    _dateEndController.dispose();
+    searchController.dispose();
+    stateFilterTextController.dispose();
+    super.dispose();
   }
 
   @override
@@ -788,10 +808,12 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                                                 child: InkWell(
                                                                                   onTap: () async {
                                                                                     Navigator.pop(context);
-                                                                                    setState(() {
-                                                                                      selectedFlitterFlag = listState[index];
-                                                                                      currentPage = 1;
-                                                                                    });
+                                                                                    mounted
+                                                                                        ? setState(() {
+                                                                                            selectedFlitterFlag = listState[index];
+                                                                                            currentPage = 1;
+                                                                                          })
+                                                                                        : null;
                                                                                     var hehe = index;
                                                                                     // var hehe = listState.indexOf(
                                                                                     //             changeFlag ??

@@ -91,9 +91,9 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
 
   @override
   void dispose() {
+    passwordController.dispose();
+    rePassworldController.dispose();
     super.dispose();
-    passwordController.clear();
-    rePassworldController.clear();
   }
 
   @override

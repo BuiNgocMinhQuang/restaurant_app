@@ -10,20 +10,20 @@ class BillInforModel {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(Data.fromJson(v));
       });
     }
-    order = json['order'] != null ? new Order.fromJson(json['order']) : null;
+    order = json['order'] != null ? Order.fromJson(json['order']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
-    if (this.order != null) {
-      data['order'] = this.order!.toJson();
+    if (order != null) {
+      data['order'] = order!.toJson();
     }
     return data;
   }
@@ -109,31 +109,31 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['order_food_id'] = this.orderFoodId;
-    data['food_id'] = this.foodId;
-    data['order_id'] = this.orderId;
-    data['quantity_food'] = this.quantityFood;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['room_table_id'] = this.roomTableId;
-    data['done_flg'] = this.doneFlg;
-    data['user_id'] = this.userId;
-    data['store_id'] = this.storeId;
-    data['store_room_id'] = this.storeRoomId;
-    data['food_name'] = this.foodName;
-    data['food_description'] = this.foodDescription;
-    data['food_images'] = this.foodImages;
-    data['food_price'] = this.foodPrice;
-    data['food_content'] = this.foodContent;
-    data['food_rate'] = this.foodRate;
-    data['food_kind'] = this.foodKind;
-    data['active_flg'] = this.activeFlg;
-    data['delete_flg'] = this.deleteFlg;
-    data['table_name'] = this.tableName;
-    data['number_of_seats'] = this.numberOfSeats;
-    data['status'] = this.status;
-    data['description'] = this.description;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['order_food_id'] = orderFoodId;
+    data['food_id'] = foodId;
+    data['order_id'] = orderId;
+    data['quantity_food'] = quantityFood;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    data['room_table_id'] = roomTableId;
+    data['done_flg'] = doneFlg;
+    data['user_id'] = userId;
+    data['store_id'] = storeId;
+    data['store_room_id'] = storeRoomId;
+    data['food_name'] = foodName;
+    data['food_description'] = foodDescription;
+    data['food_images'] = foodImages;
+    data['food_price'] = foodPrice;
+    data['food_content'] = foodContent;
+    data['food_rate'] = foodRate;
+    data['food_kind'] = foodKind;
+    data['active_flg'] = activeFlg;
+    data['delete_flg'] = deleteFlg;
+    data['table_name'] = tableName;
+    data['number_of_seats'] = numberOfSeats;
+    data['status'] = status;
+    data['description'] = description;
     return data;
   }
 }
@@ -233,36 +233,36 @@ class Order {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['order_id'] = this.orderId;
-    data['user_id'] = this.userId;
-    data['staff_id'] = this.staffId;
-    data['store_id'] = this.storeId;
-    data['store_room_id'] = this.storeRoomId;
-    data['client_id'] = this.clientId;
-    data['deposit'] = this.deposit;
-    data['amount'] = this.amount;
-    data['payment_amount'] = this.paymentAmount;
-    data['client_name'] = this.clientName;
-    data['client_phone'] = this.clientPhone;
-    data['client_email'] = this.clientEmail;
-    data['start_booked_table_at'] = this.startBookedTableAt;
-    data['end_booked_table_at'] = this.endBookedTableAt;
-    data['note'] = this.note;
-    data['cancellation_reason'] = this.cancellationReason;
-    data['discount'] = this.discount;
-    data['guest_pay'] = this.guestPay;
-    data['pay_kind'] = this.payKind;
-    data['order_kind'] = this.orderKind;
-    data['guest_pay_client'] = this.guestPayClient;
-    data['client_can_pay'] = this.clientCanPay;
-    data['order_total'] = this.orderTotal;
-    data['pay_flg'] = this.payFlg;
-    data['close_order'] = this.closeOrder;
-    data['active_flg'] = this.activeFlg;
-    data['delete_flg'] = this.deleteFlg;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['order_id'] = orderId;
+    data['user_id'] = userId;
+    data['staff_id'] = staffId;
+    data['store_id'] = storeId;
+    data['store_room_id'] = storeRoomId;
+    data['client_id'] = clientId;
+    data['deposit'] = deposit;
+    data['amount'] = amount;
+    data['payment_amount'] = paymentAmount;
+    data['client_name'] = clientName;
+    data['client_phone'] = clientPhone;
+    data['client_email'] = clientEmail;
+    data['start_booked_table_at'] = startBookedTableAt;
+    data['end_booked_table_at'] = endBookedTableAt;
+    data['note'] = note;
+    data['cancellation_reason'] = cancellationReason;
+    data['discount'] = discount;
+    data['guest_pay'] = guestPay;
+    data['pay_kind'] = payKind;
+    data['order_kind'] = orderKind;
+    data['guest_pay_client'] = guestPayClient;
+    data['client_can_pay'] = clientCanPay;
+    data['order_total'] = orderTotal;
+    data['pay_flg'] = payFlg;
+    data['close_order'] = closeOrder;
+    data['active_flg'] = activeFlg;
+    data['delete_flg'] = deleteFlg;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
     return data;
   }
 }

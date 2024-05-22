@@ -53,7 +53,7 @@ class _StaffListBillState extends State<StaffListBill>
 
   @override
   Widget build(BuildContext context) {
-    TabController _tabController = TabController(
+    TabController tabController = TabController(
       length: 4,
       vsync: this,
     );
@@ -70,14 +70,17 @@ class _StaffListBillState extends State<StaffListBill>
                         children: [
                           SizedBox(
                             width: 1.sw,
-                            height: 100,
+                            // height: 100,
                             child: SizedBox(
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Container(
-                                      height: 40.h,
+                                      height: 45.h,
                                       color: Colors.white,
                                       child: TabBar(
+                                          tabAlignment: TabAlignment.start,
+                                          dividerColor: Colors.transparent,
+                                          dividerHeight: 0,
                                           onTap: (index) {
                                             if (index == 0) {
                                               getListBillShop(filtersFlg: {
@@ -95,14 +98,14 @@ class _StaffListBillState extends State<StaffListBill>
                                               });
                                             }
                                           },
-                                          labelPadding: const EdgeInsets.only(
-                                              left: 20, right: 20),
+                                          labelPadding: EdgeInsets.only(
+                                              left: 10.w, right: 10.w),
                                           labelColor: Colors.white,
                                           unselectedLabelColor:
                                               Colors.black.withOpacity(0.5),
                                           labelStyle: const TextStyle(
                                               color: Colors.red),
-                                          controller: _tabController,
+                                          controller: tabController,
                                           isScrollable: true,
                                           indicatorSize:
                                               TabBarIndicatorSize.label,
@@ -131,13 +134,23 @@ class _StaffListBillState extends State<StaffListBill>
                                           ]),
                                     ))),
                           ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          Divider(
+                            height: 1,
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           Expanded(
                               child: Container(
                             width: 1.sw,
                             color: Colors.white,
                             child: TabBarView(
                                 physics: const NeverScrollableScrollPhysics(),
-                                controller: _tabController,
+                                controller: tabController,
                                 children: const [
                                   //Tab All
                                   ListAllBillShop(),
@@ -333,6 +346,7 @@ class _ListAllBillShopState extends State<ListAllBillShop>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return RefreshIndicator(
       color: Colors.blue,
       onRefresh: () async {
@@ -375,7 +389,8 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                       ?.join(',');
 
                   return Padding(
-                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                    padding: EdgeInsets.only(
+                        left: 5.w, right: 5.w, top: index == 0 ? 5.w : 0),
                     child: BillInforContainer(
                         tableName: tableNameBill, //check ghep ban cho nay
                         roomName:
@@ -621,6 +636,7 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return RefreshIndicator(
       color: Colors.blue,
       onRefresh: () async {
@@ -641,7 +657,8 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                       ?.map((table) => table?.roomTable?.tableName)
                       ?.join(',');
                   return Padding(
-                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                    padding: EdgeInsets.only(
+                        left: 5.w, right: 5.w, top: index == 0 ? 5.w : 0),
                     child: BillInforContainer(
                         tableName: tableNameBill, //check ghep ban cho nay
                         roomName:
@@ -890,6 +907,7 @@ class _PendingWidgetState extends State<PendingWidget>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return RefreshIndicator(
       color: Colors.blue,
       onRefresh: () async {
@@ -908,7 +926,8 @@ class _PendingWidgetState extends State<PendingWidget>
                       ?.map((table) => table?.roomTable?.tableName)
                       ?.join(',');
                   return Padding(
-                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                    padding: EdgeInsets.only(
+                        left: 5.w, right: 5.w, top: index == 0 ? 5.w : 0),
                     child: BillInforContainer(
                         tableName: tableNameBill, //check ghep ban cho nay
                         roomName:
@@ -1155,6 +1174,7 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return RefreshIndicator(
       color: Colors.blue,
       onRefresh: () async {
@@ -1173,7 +1193,8 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                       ?.map((table) => table?.roomTable?.tableName)
                       ?.join(',');
                   return Padding(
-                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                    padding: EdgeInsets.only(
+                        left: 5.w, right: 5.w, top: index == 0 ? 5.w : 0),
                     child: BillInforContainer(
                         tableName: tableNameBill, //check ghep ban cho nay
                         roomName:

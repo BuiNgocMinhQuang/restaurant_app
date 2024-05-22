@@ -69,9 +69,9 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
 
   @override
   void dispose() {
-    super.dispose();
     scrollListFoodController.dispose();
-    searchController.clear();
+    searchController.dispose();
+    super.dispose();
   }
 
   void loadMoreMenuFood({

@@ -199,7 +199,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                 )
                               ],
                             ),
-                            space10H,
+                            space10W,
                             Row(
                               children: [
                                 Container(
@@ -523,7 +523,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                                 ),
                                                                                 space10W,
                                                                                 TextApp(
-                                                                                  text: "Ghép bàn",
+                                                                                  text: "Chuyển bàn",
                                                                                   color: Colors.black,
                                                                                   fontsize: 18.sp,
                                                                                 )

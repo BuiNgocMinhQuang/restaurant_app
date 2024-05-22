@@ -123,7 +123,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
             base64Encode(imagebytes); //convert bytes to base64 string
 
         try {
-          print("TRUYEN NNNN ${{
+          log("TRUYEN NNNN ${{
             "staff_avatar": base64string,
           }}");
           var token = StorageUtils.instance.getString(key: 'token_manager');
@@ -139,18 +139,18 @@ class _ManagerInformationState extends State<ManagerInformation> {
             }),
           );
           final data = jsonDecode(respons.body);
-          print("DATA CHANGE AVATAR MANAGER  ${data}}");
+          log("DATA CHANGE AVATAR MANAGER  ${data}}");
 
           try {
             if (data['status'] == 200) {
-              print("CHANGE AVATAR MANAGER  OK");
+              log("CHANGE AVATAR MANAGER  OK");
               showSnackBarTopCustom(
                   title: "Thành công",
                   context: navigatorKey.currentContext,
                   mess: "Cập nhật ảnh đại diện thành công",
                   color: Colors.green);
             } else {
-              print("ERROR CHANGE AVATAR MANAGER  1");
+              log("ERROR CHANGE AVATAR MANAGER  1");
               showSnackBarTopCustom(
                   title: "Thất bại",
                   context: navigatorKey.currentContext,
@@ -158,7 +158,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                   color: Colors.red);
             }
           } catch (error) {
-            print("ERROR CHANGE AVATAR MANAGER  2 ${error}");
+            log("ERROR CHANGE AVATAR MANAGER  2 ${error}");
             showSnackBarTopCustom(
                 title: "Thất bại",
                 context: navigatorKey.currentContext,
@@ -166,7 +166,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                 color: Colors.red);
           }
         } catch (error) {
-          print("ERROR CHANGE AVATAR MANAGER  3 $error");
+          log("ERROR CHANGE AVATAR MANAGER  3 $error");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -174,10 +174,10 @@ class _ManagerInformationState extends State<ManagerInformation> {
               color: Colors.red);
         }
       } else {
-        print("No image is selected.");
+        log("No image is selected.");
       }
     } catch (e) {
-      print("error while picking file.");
+      log("error while picking file.");
     }
   }
 
@@ -199,9 +199,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
     reNewPassworldController.dispose();
     address4Controller.dispose();
     passwordForOpenIDImage.dispose();
-    cityNameTextController.clear();
-    districNameTextController.clear();
-    wardNameTextController.clear();
+    cityNameTextController.dispose();
+    districNameTextController.dispose();
+    wardNameTextController.dispose();
     super.dispose();
   }
 
@@ -247,10 +247,10 @@ class _ManagerInformationState extends State<ManagerInformation> {
               typeDialog: "error");
         }
       } catch (error) {
-        print("LOI GI DO $error");
+        log("LOI GI DO $error");
       }
     } catch (error) {
-      print("LOI GI DO $error");
+      log("LOI GI DO $error");
     }
   }
 
@@ -258,7 +258,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
     required int? city,
     required int? district,
   }) async {
-    print("DATA TRUYEN NN ${{
+    log("DATA TRUYEN NN ${{
       'city': city,
       'district': district,
     }}");
@@ -300,13 +300,13 @@ class _ManagerInformationState extends State<ManagerInformation> {
             // currentWard = myWard;
           });
         } else {
-          print("LOI GI DO dadadadadadadada");
+          log("LOI GI DO dadadadadadadada");
         }
       } catch (error) {
-        print("LOI GI DO $error");
+        log("LOI GI DO $error");
       }
     } catch (error) {
-      print("LOI GI DO $error");
+      log("LOI GI DO $error");
     }
   }
 
@@ -353,13 +353,13 @@ class _ManagerInformationState extends State<ManagerInformation> {
             currentWard = myWard;
           });
         } else {
-          print("LOI GI DO dadadadadadadada");
+          log("LOI GI DO dadadadadadadada");
         }
       } catch (error) {
-        print("LOI GI DO $error");
+        log("LOI GI DO $error");
       }
     } catch (error) {
-      print("LOI GI DO $error");
+      log("LOI GI DO $error");
     }
   }
 
@@ -370,7 +370,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
     });
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
-      print("TOKEN CURRENT $token");
+      log("TOKEN CURRENT $token");
       final response = await http.post(
         Uri.parse('$baseUrl$userInformationApi'),
         headers: {"Authorization": "Bearer $token"},
@@ -445,7 +445,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
               mess: "Xoá ảnh đại diện thành công",
               color: Colors.green);
         } else {
-          print("ERROR DELETED AVATAR MANAGER  1");
+          log("ERROR DELETED AVATAR MANAGER  1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -453,10 +453,10 @@ class _ManagerInformationState extends State<ManagerInformation> {
               color: Colors.red);
         }
       } catch (error) {
-        print("ERROR DELETED AVATAR MANAGER  2 ${error}");
+        log("ERROR DELETED AVATAR MANAGER  2 ${error}");
       }
     } catch (error) {
-      print("ERROR DELETED AVATAR MANAGER  3 $error");
+      log("ERROR DELETED AVATAR MANAGER  3 $error");
     }
   }
 
@@ -466,7 +466,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
     required String? confirmNewPassword,
   }) async {
     try {
-      print("TRUYEN NNNN ${{
+      log("TRUYEN NNNN ${{
         "password": currentPassword,
         "password_new": newPassword,
         "confirm_password_new": confirmNewPassword
@@ -500,7 +500,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
               mess: messText['text'],
               color: Colors.green);
         } else {
-          print("ERROR CHANGE PASS STAFF  1");
+          log("ERROR CHANGE PASS STAFF  1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -508,10 +508,10 @@ class _ManagerInformationState extends State<ManagerInformation> {
               color: Colors.red);
         }
       } catch (error) {
-        print("ERROR CHANGE PASS STAFF  2 ${error}");
+        log("ERROR CHANGE PASS STAFF  2 ${error}");
       }
     } catch (error) {
-      print("ERROR CHANGE PASS STAFF  3 $error");
+      log("ERROR CHANGE PASS STAFF  3 $error");
     }
   }
 
@@ -553,7 +553,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
           final data = jsonDecode(respons.body);
           try {
             if (data['status'] == 200) {
-              print("UPDATE INFOR  OK");
+              log("UPDATE INFOR  OK");
               getInfor();
               showSnackBarTopCustom(
                   title: "Thành công",
@@ -561,7 +561,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                   mess: "Cập nhật hình ảnh thành công",
                   color: Colors.green);
             } else {
-              print("ERROR UPDATE INFOR  1");
+              log("ERROR UPDATE INFOR  1");
               showSnackBarTopCustom(
                   title: "Thất bại",
                   context: navigatorKey.currentContext,
@@ -569,7 +569,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                   color: Colors.red);
             }
           } catch (error) {
-            print("ERROR UPDATE INFOR  2 ${error}");
+            log("ERROR UPDATE INFOR  2 ${error}");
             showSnackBarTopCustom(
                 title: "Thất bại",
                 context: navigatorKey.currentContext,
@@ -577,7 +577,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                 color: Colors.red);
           }
         } catch (error) {
-          print("ERROR UPDATE INFOR  3 $error");
+          log("ERROR UPDATE INFOR  3 $error");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -595,7 +595,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
             typeDialog: "error");
       }
     } catch (error) {
-      print("error while picking file.");
+      log("error while picking file.");
     }
   }
 
@@ -650,10 +650,10 @@ class _ManagerInformationState extends State<ManagerInformation> {
               color: Colors.red);
         }
       } catch (error) {
-        print("ERROR UPDATE INFOR  2 ${error}");
+        log("ERROR UPDATE INFOR  2 ${error}");
       }
     } catch (error) {
-      print("ERROR UPDATE INFOR  3 $error");
+      log("ERROR UPDATE INFOR  3 $error");
     }
   }
 
@@ -1547,7 +1547,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                     .primary,
                                                                 child: TextApp(
                                                                   text:
-                                                                      "Chọn quận/Huyện",
+                                                                      "Chọn quận/huyện",
                                                                   color: Colors
                                                                       .white,
                                                                   fontsize:
@@ -1653,7 +1653,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                       8.r),
                                                         ),
                                                         hintText:
-                                                            'Chọn quận/Huyện',
+                                                            'Chọn quận/huyện',
                                                         suffixIcon:
                                                             Transform.rotate(
                                                           angle: 90 *

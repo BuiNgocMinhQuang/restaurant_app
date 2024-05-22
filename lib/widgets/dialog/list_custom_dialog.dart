@@ -33,6 +33,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
@@ -162,6 +163,16 @@ class _BookingTableDialogState extends State<BookingTableDialog>
   void dispose() {
     scrollListFoodController.dispose();
     _tabController!.dispose();
+    searchController.dispose();
+    _dateStartController.dispose();
+    customerNameController.dispose();
+    noteController.dispose();
+    cancleTableReasonController.dispose();
+    for (TextEditingController controller in _foodQuantityController) {
+      controller.dispose();
+    }
+    // Clear the list to remove references to the disposed controllers
+    _foodQuantityController.clear();
     super.dispose();
   }
 
@@ -472,6 +483,95 @@ class _BookingTableDialogState extends State<BookingTableDialog>
     );
   }
 
+  void saveTableInfor(
+      {required int tableID,
+      required String clientName,
+      required String clientPhone,
+      required String noteText,
+      required String endDate,
+      required List tables,
+      required String tokenReq}) async {
+    try {
+      var token = tokenReq;
+      final respons = await http.post(
+        Uri.parse('$baseUrl$saveInforTable'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({
+          'client': widget.role,
+          'shop_id': widget.shopID,
+          'is_api': true,
+          'room_id': widget.idRoom.toString(),
+          'table_id': tableID,
+          'client_name': clientName,
+          'client_phone': clientPhone,
+          'note': noteText,
+          'end_date': endDate,
+          'tables': tables,
+        }),
+      );
+      final data = jsonDecode(respons.body);
+      try {
+        if (data['status'] == 200) {
+          // showSnackBarTopCustom(
+          //     title: "Thành công",
+          //     context: navigatorKey.currentContext,
+          //     mess: message['title'],
+          //     color: Colors.green);
+          // ignore: use_build_context_synchronously
+          Navigator.of(context).pop();
+          showUpdateDataSuccesDialog();
+          widget.eventSaveButton();
+        } else {
+          log("ERROR Save Infor Table 1");
+          // showSnackBarTopCustom(
+          //     title: "Thất bại",
+          //     context: navigatorKey.currentContext,
+          //     mess: message['text'],
+          //     color: Colors.red);
+          Navigator.of(context).pop();
+
+          showCustomDialogModal(
+              context: navigatorKey.currentContext,
+              textDesc: someThingWrong,
+              title: "Thất bại",
+              colorButton: Colors.red,
+              btnText: "OK",
+              typeDialog: "error");
+        }
+      } catch (error) {
+        log("ERROR Save Infor Table 2 $error");
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pop();
+
+        showCustomDialogModal(
+            context: navigatorKey.currentContext,
+            textDesc: someThingWrong,
+            title: "Thất bại",
+            colorButton: Colors.red,
+            btnText: "OK",
+            typeDialog: "error");
+      }
+    } catch (error) {
+      log("ERROR Save Infor Table 3 $error");
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pop();
+
+      showCustomDialogModal(
+          context: navigatorKey.currentContext,
+          textDesc: someThingWrong,
+          title: "Thất bại",
+          colorButton: Colors.red,
+          btnText: "OK",
+          typeDialog: "error");
+    }
+    refeshHomePage();
+    getDetailFoodTable(tokenReq: widget.token);
+  }
+
   @override
   Widget build(BuildContext buildContext) {
     return BlocBuilder<TableBloc, TableState>(
@@ -507,12 +607,12 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                   table.roomTableId != widget.currentTable?.roomTableId &&
                   table.orderId != null)
               .toList();
+
           var listTableNoBooking = widget.listTableOfRoom
               ?.where(((table) =>
                   table.bookingStatus == true &&
                   table.roomTableId != widget.currentTable?.roomTableId))
               .toList();
-          // var listTableNoBooking = state.tableModel?.tablesNoBooking ?? [];
 
           return AlertDialog(
               contentPadding: const EdgeInsets.all(0),
@@ -797,37 +897,112 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                       SizedBox(
                                         height: 10.h,
                                       ),
-                                      Wrap(
-                                        children: [
-                                          DropdownSearch.multiSelection(
-                                            key: _popupCustomValidationKey,
-                                            itemAsString: (item) =>
-                                                item.tableName,
-                                            items: (listTableNoBooking)
-                                                as List<Tables>,
-                                            selectedItems:
-                                                listTableHaveSameOrderID ?? [],
-                                            onChanged: (listSelectedTable) {
-                                              setState(() {
-                                                listBanDaGhep =
-                                                    listSelectedTable;
-                                              });
+
+                                      // DropdownSearch.multiSelection(
+                                      //   key: _popupCustomValidationKey,
+                                      //   itemAsString: (item) => item.tableName,
+                                      //   items: (listTableNoBooking)
+                                      //       as List<Tables>,
+                                      //   selectedItems:
+                                      //       listTableHaveSameOrderID ?? [],
+                                      //   onChanged: (listSelectedTable) {
+                                      //     setState(() {
+                                      //       listBanDaGhep = listSelectedTable;
+                                      //     });
+                                      //   },
+                                      //   popupProps:
+                                      //       PopupPropsMultiSelection.dialog(
+                                      //     title: Padding(
+                                      //       padding: EdgeInsets.only(
+                                      //           left: 15.w, top: 10.h),
+                                      //       child: TextApp(
+                                      //         text: "Chọn bàn để ghép",
+                                      //         fontsize: 16.sp,
+                                      //         fontWeight: FontWeight.bold,
+                                      //         color: blueText,
+                                      //       ),
+                                      //     ),
+                                      //   ),
+                                      // ),
+
+                                      Theme(
+                                        data: ThemeData(
+                                          primaryColor: Colors.amber,
+                                          // Customize the theme for the AlertDialog
+                                          dialogBackgroundColor: Colors
+                                              .amber, // Set background color to white
+                                        ),
+                                        child: DropdownSearch.multiSelection(
+                                          key: _popupCustomValidationKey,
+                                          itemAsString: (item) =>
+                                              item.tableName,
+                                          items: listTableNoBooking
+                                              as List<Tables>,
+                                          selectedItems:
+                                              listTableHaveSameOrderID ?? [],
+                                          onChanged: (listSelectedTable) {
+                                            setState(() {
+                                              listBanDaGhep = listSelectedTable;
+                                            });
+                                          },
+                                          popupProps:
+                                              PopupPropsMultiSelection.dialog(
+                                            // validationWidgetBuilder:
+                                            //     ((context, item) {
+                                            //   return InkWell(
+                                            //     onTap: () {
+                                            //       item;
+                                            //     },
+                                            //     child: Container(
+                                            //       width: 100.w,
+                                            //       height: 45.h,
+                                            //       color: Colors.green,
+                                            //     ),
+                                            //   );
+                                            // }),
+                                            containerBuilder: (context, child) {
+                                              return Theme(
+                                                  data: ThemeData(
+                                                    // Customize the theme for the AlertDialog
+                                                    dialogBackgroundColor: Colors
+                                                        .white, // Set background color to white
+                                                  ),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.r),
+                                                      color: Colors.white,
+                                                    ),
+                                                    margin: EdgeInsets.all(0.w),
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        SizedBox(
+                                                          height: 10.h,
+                                                        ),
+                                                        TextApp(
+                                                          text:
+                                                              "Chọn bàn để ghép",
+                                                          fontsize: 16.sp,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: blueText,
+                                                        ),
+                                                        SingleChildScrollView(
+                                                          child: SizedBox(
+                                                            width: 1.sw,
+                                                            height: 300.h,
+                                                            child: child,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ));
                                             },
-                                            popupProps:
-                                                PopupPropsMultiSelection.dialog(
-                                              title: Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 15.w, top: 10.h),
-                                                child: TextApp(
-                                                  text: "Chọn bàn để ghép",
-                                                  fontsize: 16.sp,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: blueText,
-                                                ),
-                                              ),
-                                            ),
                                           ),
-                                        ],
+                                        ),
                                       ),
 
                                       SizedBox(
@@ -901,35 +1076,51 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                         ),
                                         ButtonApp(
                                           event: () {
-                                            //Save infor table
-
-                                            BlocProvider.of<TableSaveInforBloc>(
-                                                    context)
-                                                .add(SaveTableInfor(
-                                              token: widget.token,
-                                              client: widget.role,
-                                              shopId: getStaffShopID,
-                                              roomId: widget.idRoom.toString(),
-                                              tableId: widget
-                                                  .currentTable!.roomTableId
-                                                  .toString(),
+                                            saveTableInfor(
+                                              tableID: widget
+                                                  .currentTable!.roomTableId!,
                                               clientName:
                                                   customerNameController.text,
                                               clientPhone:
                                                   customerPhoneController.text,
-                                              note: noteController.text,
+                                              noteText: noteController.text,
                                               endDate:
                                                   _dateStartController.text,
                                               tables: listBanDaGhep
                                                       .map((e) => e.roomTableId)
                                                       .toList() ??
                                                   [],
-                                            ));
+                                              tokenReq: widget.token,
+                                            );
+                                            //Save infor table
 
-                                            ///check dieu kien succes cho nay
-                                            Navigator.of(context).pop();
-                                            showUpdateDataSuccesDialog();
-                                            widget.eventSaveButton();
+                                            // BlocProvider.of<TableSaveInforBloc>(
+                                            //         context)
+                                            //     .add(SaveTableInfor(
+                                            //   token: widget.token,
+                                            //   client: widget.role,
+                                            //   shopId: getStaffShopID,
+                                            //   roomId: widget.idRoom.toString(),
+                                            //   tableId: widget
+                                            //       .currentTable!.roomTableId
+                                            //       .toString(),
+                                            //   clientName:
+                                            //       customerNameController.text,
+                                            //   clientPhone:
+                                            //       customerPhoneController.text,
+                                            //   note: noteController.text,
+                                            //   endDate:
+                                            //       _dateStartController.text,
+                                            //   tables: listBanDaGhep
+                                            //           .map((e) => e.roomTableId)
+                                            //           .toList() ??
+                                            //       [],
+                                            // ));
+
+                                            // ///check dieu kien succes cho nay
+                                            // Navigator.of(context).pop();
+                                            // showUpdateDataSuccesDialog();
+                                            // widget.eventSaveButton();
                                           },
                                           text: save,
                                           colorText: Colors.white,
@@ -2088,7 +2279,7 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
                                                                 element
                                                                     .storeRoomName ==
                                                                 changeRoom)
-                                                            ?.storeRoomId
+                                                            .storeRoomId
                                                             ?.toString() ??
                                                         '',
                                                     tableId: widget.currentTable
@@ -3271,6 +3462,13 @@ class _PayBillDialogState extends State<PayBillDialog> {
   String get _currency =>
       NumberFormat.compactSimpleCurrency(locale: _locale).currencySymbol;
   @override
+  void dispose() {
+    discountController.dispose();
+    clientPayController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<PaymentInforBloc, PaymentInforState>(
       builder: (context, state) {
@@ -3364,7 +3562,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                               ],
                             )),
                       ),
-                      Divider(height: 1, color: Colors.black),
+                      const Divider(height: 1, color: Colors.black),
                       Flexible(
                           fit: FlexFit.tight,
                           child: Container(
@@ -3374,7 +3572,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.all(10.w),
-                                    child: Container(
+                                    child: SizedBox(
                                       width: 1.sw,
                                       // height: 100.h,
                                       // color: Colors.green,
@@ -3438,7 +3636,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                                     mainAxisAlignment:
                                                         MainAxisAlignment.start,
                                                     children: [
-                                                      Container(
+                                                      SizedBox(
                                                           width: 80.w,
                                                           height: 80.w,
                                                           // color: Colors.amber,
@@ -3618,7 +3816,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                       ),
                                     ),
                                   ),
-                                  Divider(
+                                  const Divider(
                                     height: 1,
                                     color: menuGrey,
                                   ),
@@ -3708,7 +3906,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                       ],
                                     ),
                                   ),
-                                  Divider(
+                                  const Divider(
                                     height: 1,
                                     color: menuGrey,
                                   ),
@@ -4020,7 +4218,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
           );
         } else if (state.paymentStatus == PaymentInforStateStatus.loading) {
           return AlertDialog(
-            contentPadding: EdgeInsets.all(0),
+            contentPadding: const EdgeInsets.all(0),
             surfaceTintColor: Colors.white,
             backgroundColor: Colors.white,
             content: Center(
@@ -4033,7 +4231,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
           );
         } else {
           return AlertDialog(
-              contentPadding: EdgeInsets.all(0),
+              contentPadding: const EdgeInsets.all(0),
               surfaceTintColor: Colors.white,
               backgroundColor: Colors.white,
               content: Center(
@@ -4403,7 +4601,12 @@ class _ManageBroughtReceiptDialogState
   @override
   void dispose() {
     scrollListFoodController.dispose();
-
+    searchController.dispose();
+    for (TextEditingController controller in _foodQuantityController) {
+      controller.dispose();
+    }
+    // Clear the list to remove references to the disposed controllers
+    _foodQuantityController.clear();
     super.dispose();
   }
 
@@ -5027,7 +5230,7 @@ class _ManageBroughtReceiptDialogState
                               } else {
                                 return Center(
                                   child: hasMore
-                                      ? CircularProgressIndicator()
+                                      ? const CircularProgressIndicator()
                                       : Container(),
                                 );
                               }
@@ -5038,7 +5241,7 @@ class _ManageBroughtReceiptDialogState
         );
       } else if (state.broughtReceiptStatus == BroughtReceiptStatus.loading) {
         return AlertDialog(
-          contentPadding: EdgeInsets.all(0),
+          contentPadding: const EdgeInsets.all(0),
           surfaceTintColor: Colors.white,
           backgroundColor: Colors.white,
           content: Center(
@@ -5051,7 +5254,7 @@ class _ManageBroughtReceiptDialogState
         );
       } else {
         return AlertDialog(
-          contentPadding: EdgeInsets.all(0),
+          contentPadding: const EdgeInsets.all(0),
           surfaceTintColor: Colors.white,
           backgroundColor: Colors.white,
           content: Center(
@@ -6523,6 +6726,12 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
   }
 
   @override
+  void dispose() {
+    roomFieldController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AlertDialog(
       scrollable: true,
@@ -6609,11 +6818,16 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
                   SizedBox(
                     height: 10.h,
                   ),
-                  TextApp(
-                    text: allowFoodReady,
-                    fontsize: 12.sp,
-                    fontWeight: FontWeight.normal,
-                    color: blueText,
+                  SizedBox(
+                    width: 1.sw,
+                    child: TextApp(
+                      isOverFlow: false,
+                      softWrap: true,
+                      text: allowFoodReady,
+                      fontsize: 12.sp,
+                      fontWeight: FontWeight.normal,
+                      color: blueText,
+                    ),
                   ),
                   SizedBox(
                     height: 10.h,
@@ -6726,7 +6940,6 @@ class _EditRoomDataDialogState extends State<EditRoomDataDialog> {
         }),
       );
       final data = jsonDecode(respons.body);
-      log(data);
 
       try {
         if (data['status'] == 200) {
@@ -6824,6 +7037,12 @@ class _EditRoomDataDialogState extends State<EditRoomDataDialog> {
   }
 
   @override
+  void dispose() {
+    roomFieldController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AlertDialog(
       scrollable: true,
@@ -6910,11 +7129,16 @@ class _EditRoomDataDialogState extends State<EditRoomDataDialog> {
                   SizedBox(
                     height: 10.h,
                   ),
-                  TextApp(
-                    text: allowFoodReady,
-                    fontsize: 12.sp,
-                    fontWeight: FontWeight.normal,
-                    color: blueText,
+                  SizedBox(
+                    width: 1.sw,
+                    child: TextApp(
+                      isOverFlow: false,
+                      softWrap: true,
+                      text: allowFoodReady,
+                      fontsize: 12.sp,
+                      fontWeight: FontWeight.normal,
+                      color: blueText,
+                    ),
                   ),
                   SizedBox(
                     height: 10.h,
@@ -7021,6 +7245,10 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
 
   @override
   void dispose() {
+    idStoreController.dispose();
+    nameStoreController.dispose();
+    addressStoreController.dispose();
+    desController.dispose();
     super.dispose();
     // _controllerQuill;
   }
@@ -7047,11 +7275,9 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
     setState(() {
       var pathImage = File(returndImage.path);
       imageFileList!.add(pathImage);
-      if (pathImage != null) {
-        Uint8List imagebytes = pathImage.readAsBytesSync(); //convert to bytes
-        String base64string = base64Encode(imagebytes);
-        listImageStore.add(base64string);
-      }
+      Uint8List imagebytes = pathImage.readAsBytesSync(); //convert to bytes
+      String base64string = base64Encode(imagebytes);
+      listImageStore.add(base64string);
     });
   } //selecte one picture
 
@@ -7179,7 +7405,10 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      contentPadding: const EdgeInsets.all(0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      contentPadding: EdgeInsets.only(bottom: 10.h),
       surfaceTintColor: Colors.white,
       backgroundColor: Colors.white,
       content: SizedBox(
@@ -7642,7 +7871,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                         text: "Đóng",
                         colorText: Colors.white,
                         backgroundColor: const Color.fromRGBO(131, 146, 171, 1),
-                        outlineColor: Color.fromRGBO(131, 146, 171, 1),
+                        outlineColor: const Color.fromRGBO(131, 146, 171, 1),
                       ),
                       SizedBox(
                         width: 20.w,
@@ -7721,6 +7950,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
   }
 }
 
+// ignore: must_be_immutable
 class EditDetailStoreDialog extends StatefulWidget {
   // final List<XFile>? imageFileList;
   final Function eventSaveButton;
@@ -7775,11 +8005,9 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
     setState(() {
       var pathImage = File(returndImage.path);
       listDynamicImage.add(pathImage);
-      if (pathImage != null) {
-        Uint8List imagebytes = pathImage.readAsBytesSync(); //convert to bytes
-        String base64string = base64Encode(imagebytes);
-        listImageStore.add(base64string);
-      }
+      Uint8List imagebytes = pathImage.readAsBytesSync(); //convert to bytes
+      String base64string = base64Encode(imagebytes);
+      listImageStore.add(base64string);
     });
   } //selecte one picture
 
@@ -7830,11 +8058,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
             widget.editDetailsStoreModel?.data.storeDescription ?? ''
         : null;
     listDataImage.where((element) {
-      if (element.name != null) {
-        listImageStore.add(element.normal);
-      } else {
-        return false;
-      }
+      listImageStore.add(element.normal);
       return true;
     }).toList();
   }
@@ -7877,13 +8101,13 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
         }),
       );
       final data = jsonDecode(respons.body);
-      log("UPDATE DATA STORE ${data}");
+
       try {
         if (data['status'] == 200) {
           Navigator.of(navigatorKey.currentContext!).pop();
           Navigator.pop(navigatorKey.currentContext!);
           getListStore();
-          Future.delayed(Duration(milliseconds: 300), () {
+          Future.delayed(const Duration(milliseconds: 300), () {
             showCustomDialogModal(
               typeDialog: "succes",
               context: navigatorKey.currentContext,
@@ -7933,7 +8157,10 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    idStoreController.dispose();
+    nameStoreController.dispose();
+    addressStoreController.dispose();
+    desStoreController.dispose();
     super.dispose();
   }
 
@@ -8136,11 +8363,16 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                         SizedBox(
                           height: 10.h,
                         ),
-                        TextApp(
-                          text: allowOpenStore,
-                          fontsize: 12.sp,
-                          fontWeight: FontWeight.normal,
-                          color: blueText,
+                        SizedBox(
+                          width: 1.sw,
+                          child: TextApp(
+                            isOverFlow: false,
+                            softWrap: true,
+                            text: allowOpenStore,
+                            fontsize: 12.sp,
+                            fontWeight: FontWeight.normal,
+                            color: blueText,
+                          ),
                         ),
                         SizedBox(
                           height: 10.h,
@@ -8169,11 +8401,16 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                           height: 30.h,
                         ),
                         ////
-                        TextApp(
-                          text: desStore,
-                          fontsize: 12.sp,
-                          fontWeight: FontWeight.bold,
-                          color: blueText,
+                        SizedBox(
+                          width: 1.sw,
+                          child: TextApp(
+                            isOverFlow: false,
+                            softWrap: true,
+                            text: desStore,
+                            fontsize: 12.sp,
+                            fontWeight: FontWeight.normal,
+                            color: blueText,
+                          ),
                         ),
                         SizedBox(
                           height: 10.h,
@@ -8395,7 +8632,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                                 height: 150.h,
                                 margin: EdgeInsets.all(20.h),
                                 child: Padding(
-                                  padding: EdgeInsets.only(top: 0),
+                                  padding: const EdgeInsets.only(top: 0),
                                   child: SizedBox(
                                       width: 100.w,
                                       height: 100.w,
@@ -8453,8 +8690,8 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                         },
                         text: "Đóng",
                         colorText: Colors.white,
-                        backgroundColor: Color.fromRGBO(131, 146, 171, 1),
-                        outlineColor: Color.fromRGBO(131, 146, 171, 1),
+                        backgroundColor: const Color.fromRGBO(131, 146, 171, 1),
+                        outlineColor: const Color.fromRGBO(131, 146, 171, 1),
                       ),
                       SizedBox(
                         width: 20.w,
@@ -8497,8 +8734,8 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                         },
                         text: save,
                         colorText: Colors.white,
-                        backgroundColor: Color.fromRGBO(23, 193, 232, 1),
-                        outlineColor: Color.fromRGBO(23, 193, 232, 1),
+                        backgroundColor: const Color.fromRGBO(23, 193, 232, 1),
+                        outlineColor: const Color.fromRGBO(23, 193, 232, 1),
                       ),
                       SizedBox(
                         width: 20.w,
@@ -8653,6 +8890,9 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
 
   @override
   void dispose() {
+    nameTableController.dispose();
+    chairsOfTableController.dispose();
+    desController.dispose();
     super.dispose();
   }
 
@@ -8673,7 +8913,7 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
+                  SizedBox(
                       width: 1.sw,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -8691,7 +8931,7 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                           ),
                         ],
                       )),
-                  Divider(),
+                  const Divider(),
                   space10H,
                   SingleChildScrollView(
                       child: Form(
@@ -8874,7 +9114,7 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                     ),
                   )),
                   space15H,
-                  Container(
+                  SizedBox(
                     width: 1.sw,
                     height: 80,
                     child: Row(
@@ -8886,8 +9126,9 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                           },
                           text: "Đóng",
                           colorText: Colors.white,
-                          backgroundColor: Color.fromRGBO(131, 146, 171, 1),
-                          outlineColor: Color.fromRGBO(131, 146, 171, 1),
+                          backgroundColor:
+                              const Color.fromRGBO(131, 146, 171, 1),
+                          outlineColor: const Color.fromRGBO(131, 146, 171, 1),
                         ),
                         SizedBox(
                           width: 20.w,
@@ -8909,8 +9150,9 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                           },
                           text: save,
                           colorText: Colors.white,
-                          backgroundColor: Color.fromRGBO(23, 193, 232, 1),
-                          outlineColor: Color.fromRGBO(23, 193, 232, 1),
+                          backgroundColor:
+                              const Color.fromRGBO(23, 193, 232, 1),
+                          outlineColor: const Color.fromRGBO(23, 193, 232, 1),
                         ),
                         SizedBox(
                           width: 20.w,
@@ -8952,7 +9194,9 @@ class _CreateItemDialogState extends State<CreateItemDialog>
   bool isHaveddddd = false;
   @override
   void dispose() {
-    // TODO: implement dispose
+    nameItemController.dispose();
+    initalQuantityController.dispose();
+    minQuantityController.dispose();
     super.dispose();
   }
 
@@ -9013,13 +9257,13 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                     controller: _tabController,
                     isScrollable: true,
                     indicatorSize: TabBarIndicatorSize.label,
-                    tabs: [
+                    tabs: const [
                       Tab(text: "Thông tin chung"),
                       Tab(
                         text: "Quy đổi đơn vị",
                       ),
                     ]),
-                Container(
+                SizedBox(
                   width: 1.sw,
                   height: 400.h,
                   child: TabBarView(

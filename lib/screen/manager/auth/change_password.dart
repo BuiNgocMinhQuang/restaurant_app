@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
@@ -87,18 +88,18 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
             btnText: "OK",
             typeDialog: "error");
 
-        print("FOGOT PASSWORD ERROR 1");
+        log("FOGOT PASSWORD ERROR 1");
       }
     } catch (error) {
-      print("CHECK OTP ERROR ${error}");
+      log("CHECK OTP ERROR ${error}");
     }
   }
 
   @override
   void dispose() {
+    passwordController.dispose();
+    rePassworldController.dispose();
     super.dispose();
-    passwordController.clear();
-    rePassworldController.clear();
   }
 
   @override

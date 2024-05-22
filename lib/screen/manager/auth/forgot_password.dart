@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
@@ -43,7 +44,7 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
       );
       final data = jsonDecode(respons.body);
 
-      print("DADATATA $data");
+      log("DADATATA $data");
       if (data['status'] == 200) {
         final messRes = data['message'];
         final messText = messRes['text'];
@@ -72,17 +73,17 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
         showFailedModal(
             context: navigatorKey.currentContext, desWhyFail: messRes);
 
-        print("FOGOT PASSWORD ERROR 1");
+        log("FOGOT PASSWORD ERROR 1");
       }
     } catch (error) {
-      print("FOGOT PASSWORD ERROR ${error}");
+      log("FOGOT PASSWORD ERROR ${error}");
     }
   }
 
   @override
   void dispose() {
+    emailController.dispose();
     super.dispose();
-    emailController.clear();
   }
 
   @override

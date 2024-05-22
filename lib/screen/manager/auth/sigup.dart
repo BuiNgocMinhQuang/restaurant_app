@@ -45,14 +45,14 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
 
   @override
   void dispose() {
+    surNameController.dispose();
+    nameController.dispose();
+    fullNameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    passworldController.dispose();
+    rePassworldController.dispose();
     super.dispose();
-    surNameController.clear();
-    nameController.clear();
-    fullNameController.clear();
-    emailController.clear();
-    phoneController.clear();
-    passworldController.clear();
-    rePassworldController.clear();
   }
 
   void handleRegister({
@@ -555,12 +555,14 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                               159),
                                                       suffixIcon: IconButton(
                                                           onPressed: () {
-                                                            setState(
-                                                              () {
-                                                                passwordVisible =
-                                                                    !passwordVisible;
-                                                              },
-                                                            );
+                                                            mounted
+                                                                ? setState(
+                                                                    () {
+                                                                      passwordVisible =
+                                                                          !passwordVisible;
+                                                                    },
+                                                                  )
+                                                                : null;
                                                           },
                                                           icon: Icon(passwordVisible
                                                               ? Icons
@@ -634,12 +636,14 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                               159),
                                                       suffixIcon: IconButton(
                                                           onPressed: () {
-                                                            setState(
-                                                              () {
-                                                                rePasswordVisible =
-                                                                    !rePasswordVisible;
-                                                              },
-                                                            );
+                                                            mounted
+                                                                ? setState(
+                                                                    () {
+                                                                      rePasswordVisible =
+                                                                          !rePasswordVisible;
+                                                                    },
+                                                                  )
+                                                                : null;
                                                           },
                                                           icon: Icon(rePasswordVisible
                                                               ? Icons
@@ -695,9 +699,12 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                         value: isChecked,
                                                         onChanged:
                                                             (bool? value) {
-                                                          setState(() {
-                                                            isChecked = value!;
-                                                          });
+                                                          mounted
+                                                              ? setState(() {
+                                                                  isChecked =
+                                                                      value!;
+                                                                })
+                                                              : null;
                                                         }),
                                                     RichText(
                                                       text: TextSpan(

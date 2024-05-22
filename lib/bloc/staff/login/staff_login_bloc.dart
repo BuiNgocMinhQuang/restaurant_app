@@ -45,10 +45,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           navigatorKey.currentContext?.go('/staff_sign_in');
         }
       } catch (error) {
-        print("ERROR LOGOUT 1");
+        log("ERROR LOGOUT 1");
       }
     } catch (error) {
-      print("ERROR LOGOUT 2");
+      log("ERROR LOGOUT 2");
     }
   }
 
@@ -68,7 +68,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         },
       );
       final data = jsonDecode(response.body);
-      print("DATAAAA $data");
+      log("DATAAAA $data");
       try {
         if (data['status'] == 200) {
           var authStaffDataRes = StaffAuthData.fromJson(data);
@@ -86,21 +86,21 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           emit(state.copyWith(loginStatus: LoginStatus.success));
           navigatorKey.currentContext?.go("/staff_home");
           Future.delayed(const Duration(milliseconds: 500), () {
-            print("DANG NHAP THNAH CONG");
+            log("DANG NHAP THNAH CONG");
             showLoginSuccesDialog();
           });
         } else {
-          print("LoginFailure2");
+          log("LoginFailure2");
           emit(state.copyWith(loginStatus: LoginStatus.failed));
           emit(state.copyWith(errorText: data['message']));
         }
       } catch (error) {
-        print("LoginFailure2 $error");
+        log("LoginFailure2 $error");
         emit(state.copyWith(loginStatus: LoginStatus.failed));
         emit(state.copyWith(errorText: data['message']));
       }
     } catch (error) {
-      print("NO CONNECT DATA $error");
+      log("NO CONNECT DATA $error");
       emit(state.copyWith(loginStatus: LoginStatus.failed));
       emit(state.copyWith(errorText: "Không thể kết nối với máy chủ !"));
     }

@@ -94,25 +94,27 @@ class _AddStaffState extends State<AddStaff> {
 
       try {
         if (response.statusCode == 200) {
-          setState(() {
-            cityList.clear();
-            districList.clear();
-            wardList.clear();
-            cityList.addAll(data['cities']);
-            districList.addAll(data['districts']);
-            wardList.addAll(data['wards']);
-            currentCity = null;
-            currentDistric = null;
-            currentWard = null;
-          });
+          mounted
+              ? setState(() {
+                  cityList.clear();
+                  districList.clear();
+                  wardList.clear();
+                  cityList.addAll(data['cities']);
+                  districList.addAll(data['districts']);
+                  wardList.addAll(data['wards']);
+                  currentCity = null;
+                  currentDistric = null;
+                  currentWard = null;
+                })
+              : null;
         } else {
-          print("LOI GI DO dadadadadadadada");
+          log("LOI GI DO dadadadadadadada");
         }
       } catch (error) {
-        print("LOI GI DO $error");
+        log("LOI GI DO $error");
       }
     } catch (error) {
-      print("LOI GI DO $error");
+      log("LOI GI DO $error");
     }
   }
 
@@ -120,7 +122,7 @@ class _AddStaffState extends State<AddStaff> {
     required int? city,
     required int? district,
   }) async {
-    print("DATA TRUYEN NN ${{
+    log("DATA TRUYEN NN ${{
       'city': city,
       'district': district,
     }}");
@@ -139,35 +141,37 @@ class _AddStaffState extends State<AddStaff> {
       final data = jsonDecode(response.body);
       try {
         if (response.statusCode == 200) {
-          setState(() {
-            cityList.clear();
-            districList.clear();
-            wardList.clear();
-            cityList.addAll(data['cities']);
-            districList.addAll(data['districts']);
-            wardList.addAll(data['wards']);
+          mounted
+              ? setState(() {
+                  cityList.clear();
+                  districList.clear();
+                  wardList.clear();
+                  cityList.addAll(data['cities']);
+                  districList.addAll(data['districts']);
+                  wardList.addAll(data['wards']);
 
-            //get current City
-            var cityListMap = cityList.asMap();
-            var myCity = cityListMap[city];
-            currentCity = myCity;
-            //get current District
-            var districtListMap = districList.asMap();
-            var myDistrict = districtListMap[district];
-            currentDistric = myDistrict;
-            //get Current Ward
-            // var wardListMap = wardList.asMap();
-            // var myWard = wardListMap[null];
-            // currentWard = myWard;
-          });
+                  //get current City
+                  var cityListMap = cityList.asMap();
+                  var myCity = cityListMap[city];
+                  currentCity = myCity;
+                  //get current District
+                  var districtListMap = districList.asMap();
+                  var myDistrict = districtListMap[district];
+                  currentDistric = myDistrict;
+                  //get Current Ward
+                  // var wardListMap = wardList.asMap();
+                  // var myWard = wardListMap[null];
+                  // currentWard = myWard;
+                })
+              : null;
         } else {
-          print("LOI GI DO dadadadadadadada");
+          log("LOI GI DO dadadadadadadada");
         }
       } catch (error) {
-        print("LOI GI DO $error");
+        log("LOI GI DO $error");
       }
     } catch (error) {
-      print("LOI GI DO $error");
+      log("LOI GI DO $error");
     }
   }
 
@@ -185,25 +189,27 @@ class _AddStaffState extends State<AddStaff> {
 
     try {
       if (dataListStoreRes['status'] == 200) {
-        setState(() {
-          var listStore = ListStoreModel.fromJson(dataListStoreRes);
+        mounted
+            ? setState(() {
+                var listStore = ListStoreModel.fromJson(dataListStoreRes);
 
-          listStore.data.where((element) {
-            nameListStore.add(element.storeName ?? '');
-            return true;
-          }).toList();
+                listStore.data.where((element) {
+                  nameListStore.add(element.storeName ?? '');
+                  return true;
+                }).toList();
 
-          listStore.data.where((element) {
-            shopIDList.add(element.shopId.toString());
-            return true;
-          }).toList();
-          log(shopIDList.toString());
-        });
+                listStore.data.where((element) {
+                  shopIDList.add(element.shopId.toString());
+                  return true;
+                }).toList();
+                log(shopIDList.toString());
+              })
+            : null;
       } else {
-        print("ERRRO GET LIST STORE 111111");
+        log("ERRRO GET LIST STORE 111111");
       }
     } catch (error) {
-      print("ERRRO GET LIST STORE dadadoaiiw $error");
+      log("ERRRO GET LIST STORE dadadoaiiw $error");
     }
   }
 
@@ -265,32 +271,34 @@ class _AddStaffState extends State<AddStaff> {
           btnText: "OK",
           typeDialog: "succes",
         );
-        setState(() {
-          surNameController.clear();
-          nameController.clear();
-          fullNameController.clear();
-          phoneController.clear();
-          emailController.clear();
-          passworldController.clear();
-          rePassworldController.clear();
-          addressController.clear();
-          twitterController.clear();
-          facebookController.clear();
-          instagramController.clear();
-          currentCity = null;
-          currentDistric = null;
-          currentWard = null;
-          currentIndexCity = null;
-          currentIndexDistric = null;
-          currentIndexWard = null;
-          storeNameTextController.clear();
-          roleNameTextController.clear();
-          cityNameTextController.clear();
-          districNameTextController.clear();
-          wardNameTextController.clear();
-        });
+        mounted
+            ? setState(() {
+                surNameController.clear();
+                nameController.clear();
+                fullNameController.clear();
+                phoneController.clear();
+                emailController.clear();
+                passworldController.clear();
+                rePassworldController.clear();
+                addressController.clear();
+                twitterController.clear();
+                facebookController.clear();
+                instagramController.clear();
+                currentCity = null;
+                currentDistric = null;
+                currentWard = null;
+                currentIndexCity = null;
+                currentIndexDistric = null;
+                currentIndexWard = null;
+                storeNameTextController.clear();
+                roleNameTextController.clear();
+                cityNameTextController.clear();
+                districNameTextController.clear();
+                wardNameTextController.clear();
+              })
+            : null;
       } else {
-        print("ERRRO GET LIST STORE 111111");
+        log("ERRRO GET LIST STORE 111111");
         showCustomDialogModal(
           context: context,
           textDesc: "Thông tin nhân viên đã tồn tại",
@@ -301,7 +309,7 @@ class _AddStaffState extends State<AddStaff> {
         );
       }
     } catch (error) {
-      print("ERRRO GET LIST STORE lllll $error");
+      log("ERRRO GET LIST STORE lllll $error");
     }
   }
 
@@ -314,23 +322,23 @@ class _AddStaffState extends State<AddStaff> {
 
   @override
   void dispose() {
+    surNameController.dispose();
+    nameController.dispose();
+    fullNameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    passworldController.dispose();
+    rePassworldController.dispose();
+    addressController.dispose();
+    twitterController.dispose();
+    facebookController.dispose();
+    instagramController.dispose();
+    storeNameTextController.dispose();
+    roleNameTextController.dispose();
+    cityNameTextController.dispose();
+    districNameTextController.dispose();
+    wardNameTextController.dispose();
     super.dispose();
-    surNameController.clear();
-    nameController.clear();
-    fullNameController.clear();
-    emailController.clear();
-    phoneController.clear();
-    passworldController.clear();
-    rePassworldController.clear();
-    addressController.clear();
-    twitterController.clear();
-    facebookController.clear();
-    instagramController.clear();
-    storeNameTextController.clear();
-    roleNameTextController.clear();
-    cityNameTextController.clear();
-    districNameTextController.clear();
-    wardNameTextController.clear();
   }
 
   sectionController() {
@@ -403,7 +411,7 @@ class _AddStaffState extends State<AddStaff> {
                                 ),
                                 clipBehavior: Clip.antiAliasWithSaveLayer,
                                 context: context,
-                                builder: (context) => Container(
+                                builder: (context) => SizedBox(
                                   height: 1.sh / 2,
                                   child: Column(
                                     children: [
@@ -435,15 +443,18 @@ class _AddStaffState extends State<AddStaff> {
                                                     onTap: () async {
                                                       Navigator.pop(context);
 
-                                                      setState(() {
-                                                        storeNameTextController
-                                                                .text =
-                                                            nameListStore[
-                                                                index];
+                                                      mounted
+                                                          ? setState(() {
+                                                              storeNameTextController
+                                                                      .text =
+                                                                  nameListStore[
+                                                                      index];
 
-                                                        selectedShopId =
-                                                            shopIDList[index];
-                                                      });
+                                                              selectedShopId =
+                                                                  shopIDList[
+                                                                      index];
+                                                            })
+                                                          : null;
                                                     },
                                                     child: Row(
                                                       children: [
@@ -525,7 +536,7 @@ class _AddStaffState extends State<AddStaff> {
                                 ),
                                 clipBehavior: Clip.antiAliasWithSaveLayer,
                                 context: context,
-                                builder: (context) => Container(
+                                builder: (context) => SizedBox(
                                   height: 1.sh / 2,
                                   child: Column(
                                     children: [
@@ -557,15 +568,18 @@ class _AddStaffState extends State<AddStaff> {
                                                     onTap: () async {
                                                       Navigator.pop(context);
 
-                                                      setState(() {
-                                                        roleNameTextController
-                                                                .text =
-                                                            listRole[index];
+                                                      mounted
+                                                          ? setState(() {
+                                                              roleNameTextController
+                                                                      .text =
+                                                                  listRole[
+                                                                      index];
 
-                                                        currentRoleOfStaff =
-                                                            (index + 1)
-                                                                .toString();
-                                                      });
+                                                              currentRoleOfStaff =
+                                                                  (index + 1)
+                                                                      .toString();
+                                                            })
+                                                          : null;
                                                     },
                                                     child: Row(
                                                       children: [
@@ -1037,7 +1051,7 @@ class _AddStaffState extends State<AddStaff> {
                                 ),
                                 clipBehavior: Clip.antiAliasWithSaveLayer,
                                 context: context,
-                                builder: (context) => Container(
+                                builder: (context) => SizedBox(
                                   height: 1.sh / 2,
                                   child: Column(
                                     children: [
@@ -1072,22 +1086,28 @@ class _AddStaffState extends State<AddStaff> {
                                                       getListArea(
                                                           city: index,
                                                           district: null);
-                                                      setState(() {
-                                                        cityNameTextController
-                                                                .text =
-                                                            cityList[index];
-                                                        districNameTextController
-                                                            .clear();
-                                                        wardNameTextController
-                                                            .clear();
-                                                        currentIndexCity =
-                                                            index;
-                                                        currentDistric = null;
-                                                        currentIndexDistric =
-                                                            null;
-                                                        currentWard = null;
-                                                        currentIndexWard = null;
-                                                      });
+                                                      mounted
+                                                          ? setState(() {
+                                                              cityNameTextController
+                                                                      .text =
+                                                                  cityList[
+                                                                      index];
+                                                              districNameTextController
+                                                                  .clear();
+                                                              wardNameTextController
+                                                                  .clear();
+                                                              currentIndexCity =
+                                                                  index;
+                                                              currentDistric =
+                                                                  null;
+                                                              currentIndexDistric =
+                                                                  null;
+                                                              currentWard =
+                                                                  null;
+                                                              currentIndexWard =
+                                                                  null;
+                                                            })
+                                                          : null;
                                                     },
                                                     child: Row(
                                                       children: [
@@ -1175,7 +1195,7 @@ class _AddStaffState extends State<AddStaff> {
                                 ),
                                 clipBehavior: Clip.antiAliasWithSaveLayer,
                                 context: context,
-                                builder: (context) => Container(
+                                builder: (context) => SizedBox(
                                   height: 1.sh / 2,
                                   child: Column(
                                     children: [
@@ -1211,17 +1231,22 @@ class _AddStaffState extends State<AddStaff> {
                                                           city:
                                                               currentIndexCity,
                                                           district: index);
-                                                      setState(() {
-                                                        districNameTextController
-                                                                .text =
-                                                            districList[index];
-                                                        wardNameTextController
-                                                            .clear();
-                                                        currentIndexDistric =
-                                                            index;
-                                                        currentWard = null;
-                                                        currentIndexWard = null;
-                                                      });
+                                                      mounted
+                                                          ? setState(() {
+                                                              districNameTextController
+                                                                      .text =
+                                                                  districList[
+                                                                      index];
+                                                              wardNameTextController
+                                                                  .clear();
+                                                              currentIndexDistric =
+                                                                  index;
+                                                              currentWard =
+                                                                  null;
+                                                              currentIndexWard =
+                                                                  null;
+                                                            })
+                                                          : null;
                                                     },
                                                     child: Row(
                                                       children: [
@@ -1303,7 +1328,7 @@ class _AddStaffState extends State<AddStaff> {
                                 ),
                                 clipBehavior: Clip.antiAliasWithSaveLayer,
                                 context: context,
-                                builder: (context) => Container(
+                                builder: (context) => SizedBox(
                                   height: 1.sh / 2,
                                   child: Column(
                                     children: [
@@ -1340,19 +1365,25 @@ class _AddStaffState extends State<AddStaff> {
                                                               currentIndexCity,
                                                           district:
                                                               currentIndexDistric);
-                                                      setState(() {
-                                                        wardNameTextController
-                                                                .text =
-                                                            wardList[index];
+                                                      mounted
+                                                          ? setState(() {
+                                                              wardNameTextController
+                                                                      .text =
+                                                                  wardList[
+                                                                      index];
 
-                                                        currentIndexWard =
-                                                            index;
-                                                        var wardListMap =
-                                                            wardList.asMap();
-                                                        var myWard =
-                                                            wardListMap[index];
-                                                        currentWard = myWard;
-                                                      });
+                                                              currentIndexWard =
+                                                                  index;
+                                                              var wardListMap =
+                                                                  wardList
+                                                                      .asMap();
+                                                              var myWard =
+                                                                  wardListMap[
+                                                                      index];
+                                                              currentWard =
+                                                                  myWard;
+                                                            })
+                                                          : null;
                                                     },
                                                     child: Row(
                                                       children: [

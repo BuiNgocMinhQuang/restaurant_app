@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+// ignore: must_be_immutable
 class ItemDrawer extends StatelessWidget {
   Color textColor;
   Color backgroundIconColor;
@@ -119,6 +119,7 @@ class ItemDrawer extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class SubItemDrawer extends StatelessWidget {
   void Function() event;
   Color textColor;
@@ -174,6 +175,7 @@ class SubItemDrawer extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class CustomTab extends StatelessWidget {
   final String text;
   IconData icon;

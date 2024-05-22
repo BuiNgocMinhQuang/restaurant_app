@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:app_restaurant/bloc/manager/stores/list_stores_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
@@ -75,7 +76,7 @@ class _ListStoresState extends State<ListStores> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print(" DATA CREATE FOOD ${data}");
+      log(" DATA CREATE FOOD ${data}");
       try {
         if (data['status'] == 200) {
           setState(() {
@@ -89,13 +90,13 @@ class _ListStoresState extends State<ListStores> {
                     )),
           );
         } else {
-          print("ERROR CREATE FOOOD");
+          log("ERROR CREATE FOOOD");
         }
       } catch (error) {
-        print("ERROR CREATE $error");
+        log("ERROR CREATE $error");
       }
     } catch (error) {
-      print("ERROR CREATE $error");
+      log("ERROR CREATE $error");
     }
   }
 
@@ -197,7 +198,7 @@ class _ListStoresState extends State<ListStores> {
                                                                   BorderRadius
                                                                       .circular(
                                                                           10.r),
-                                                              child: Container(
+                                                              child: SizedBox(
                                                                 width: 50.w,
                                                                 height: 50.h,
                                                                 child:
@@ -325,7 +326,7 @@ class _ListStoresState extends State<ListStores> {
                                                                 BorderRadius
                                                                     .circular(
                                                                         15.r),
-                                                            child: Container(
+                                                            child: SizedBox(
                                                               width: 1.sw,
                                                               height: 150.h,
                                                               child: imagePath1 ==
@@ -424,7 +425,7 @@ class _ListStoresState extends State<ListStores> {
                                                                       1),
                                                             ),
                                                             space25W,
-                                                            Container(
+                                                            SizedBox(
                                                                 // width: 120.w,
                                                                 height: 50.h,
                                                                 // color: Colors.amber,
@@ -535,7 +536,7 @@ class _ListStoresState extends State<ListStores> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Container(
+                                  SizedBox(
                                     width: 100,
                                     height: 100,
                                     child: Lottie.asset(

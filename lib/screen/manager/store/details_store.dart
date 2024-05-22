@@ -28,6 +28,7 @@ import 'package:app_restaurant/constant/api/index.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
 
+// ignore: must_be_immutable
 class DetailsStore extends StatefulWidget {
   DetailsStoreModel? detailsStoreModel;
   DetailsStore({Key? key, required this.detailsStoreModel}) : super(key: key);

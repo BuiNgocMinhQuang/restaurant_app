@@ -85,13 +85,16 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                         children: [
                           SizedBox(
                             width: 1.sw,
-                            height: 100,
+                            // height: 100,
                             child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Container(
-                                  height: 40.h,
+                                  height: 45.h,
                                   color: Colors.white,
                                   child: TabBar(
+                                      tabAlignment: TabAlignment.start,
+                                      dividerColor: Colors.transparent,
+                                      dividerHeight: 0,
                                       onTap: (index) {
                                         if (index == 0) {
                                           getListBroughtReceiptData(
@@ -107,8 +110,8 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                                               filtersFlg: {"pay_flg": 2});
                                         }
                                       },
-                                      labelPadding: const EdgeInsets.only(
-                                          left: 20, right: 20),
+                                      labelPadding: EdgeInsets.only(
+                                          left: 10.w, right: 10.w),
                                       labelColor: Colors.white,
                                       unselectedLabelColor:
                                           Colors.black.withOpacity(0.5),
@@ -140,6 +143,16 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                                             icon: Icons.cancel_sharp),
                                       ]),
                                 )),
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          Divider(
+                            height: 1,
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                          SizedBox(
+                            height: 10.h,
                           ),
                           Expanded(
                             child: Container(
@@ -444,7 +457,8 @@ class _AllWidgetState extends State<AllWidget>
                       break;
                   }
                   return Padding(
-                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                    padding: EdgeInsets.only(
+                        left: 5.w, right: 5.w, top: index == 0 ? 5.w : 0),
                     child: BroughtReceiptContainer(
                         dateTime: formatDateTime(
                             newListFood[index].createdAt.toString()),
@@ -927,7 +941,8 @@ class _CompleteWidgetState extends State<CompleteWidget>
               itemBuilder: (BuildContext context, int index) {
                 if (index < listBillComplete.length) {
                   return Padding(
-                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                    padding: EdgeInsets.only(
+                        left: 5.w, right: 5.w, top: index == 0 ? 5.w : 0),
                     child: BroughtReceiptContainer(
                         dateTime: formatDateTime(
                             listBillComplete[index].createdAt.toString()),
@@ -1230,7 +1245,8 @@ class _PendingWidgetState extends State<PendingWidget>
               itemBuilder: (BuildContext context, int index) {
                 if (index < listBillPending.length) {
                   return Padding(
-                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                    padding: EdgeInsets.only(
+                        left: 5.w, right: 5.w, top: index == 0 ? 5.w : 0),
                     child: BroughtReceiptContainer(
                         dateTime: formatDateTime(
                             listBillPending[index].createdAt.toString()),
@@ -1631,7 +1647,8 @@ class _CancleWidgetState extends State<CancleWidget>
               itemBuilder: (BuildContext context, int index) {
                 if (index < listBillCancle.length) {
                   return Padding(
-                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                    padding: EdgeInsets.only(
+                        left: 5.w, right: 5.w, top: index == 0 ? 5.w : 0),
                     child: BroughtReceiptContainer(
                         dateTime: formatDateTime(
                             listBillCancle[index].createdAt.toString()),

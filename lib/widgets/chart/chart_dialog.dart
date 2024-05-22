@@ -53,11 +53,11 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
 
   @override
   void dispose() {
+    _dateStartController.dispose();
+    _dateEndController.dispose();
+    billTypeTextController.dispose();
+    timeTypeTextController.dispose();
     super.dispose();
-    _dateStartController.clear();
-    _dateEndController.clear();
-    billTypeTextController.clear();
-    timeTypeTextController.clear();
   }
 
   void initEndDay() async {

@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/fake_data.dart';
 import 'package:app_restaurant/config/space.dart';
@@ -9,18 +8,6 @@ import 'package:app_restaurant/widgets/box/status_box.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-
-Future<String> get _localPath async {
-  final directory = await getApplicationDocumentsDirectory();
-
-  return directory.path;
-}
-
-Future<File> get _localFile async {
-  final path = await _localPath;
-  return File('$path/filename.xlsx');
-}
 
 class ImportInventory extends StatefulWidget {
   const ImportInventory({super.key});
@@ -37,13 +24,6 @@ class _ImportInventoryState extends State<ImportInventory> {
     ['Lê Văn C', 30, 'Kỹ sư'],
   ];
 
-  // bool _isSelected = false; // Tracks selection state
-  // void _onSelectedRowChanged(int selectedIndex) {
-  //   setState(() {
-  //     _isSelected = selectedIndex != null;
-  //   });
-  // }
-
   final searchController = TextEditingController();
 
   String query = '';
@@ -55,7 +35,7 @@ class _ImportInventoryState extends State<ImportInventory> {
 
   @override
   Widget build(BuildContext context) {
-    final filterItem = myData.where((nameItem) {
+    myData.where((nameItem) {
       final itemTitle = nameItem.name.toLowerCase();
       final input = query.toLowerCase();
 
@@ -70,7 +50,7 @@ class _ImportInventoryState extends State<ImportInventory> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Container(
+              SizedBox(
                   width: 1.sw,
                   // height: 300,
                   child: Column(
@@ -196,36 +176,9 @@ class SelectableDataTable extends StatefulWidget {
 
 class _SelectableDataTableState extends State<SelectableDataTable> {
   // bool _selectAll = false;
-  List<MyData> _selectedData = [];
   BuildContext? _context;
-  // void _handleRowSelected(MyData data, bool selected) {
-  //   setState(() {
-  //     data.isSelected = selected;
-  //     if (selected) {
-  //       _selectedData.add(data);
-  //     } else {
-  //       _selectedData.remove(data);
-  //     }
-  //     _selectAll = _selectedData.length == widget.data.length;
-  //   });
-  //   widget.onSelectedRowsChanged(_selectedData);
-  //   if (widget.onDeleteSelected != null) {
-  //     widget.onDeleteSelected!(_selectedData.toList());
-  //   }
-  // }
 
-  String _searchText = '';
-
-  List<MyData> _filteredData = [];
-
-  void _handleSearch(String text) {
-    setState(() {
-      _searchText = text;
-      _filteredData = widget.data
-          .where((data) => data.name.toLowerCase().contains(text.toLowerCase()))
-          .toList();
-    });
-  }
+  final List<MyData> _filteredData = [];
 
   @override
   Widget build(BuildContext context) {
@@ -234,14 +187,14 @@ class _SelectableDataTableState extends State<SelectableDataTable> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
+        SizedBox(
           height: 50.h,
           width: 300.w,
           child: TextFormField(
             onTapOutside: (event) {
               FocusManager.instance.primaryFocus?.unfocus();
             },
-            onChanged: _handleSearch,
+            onChanged: (cc) {},
             // controller: searchController,
             style: const TextStyle(fontSize: 12, color: Colors.grey),
             cursorColor: Colors.black,

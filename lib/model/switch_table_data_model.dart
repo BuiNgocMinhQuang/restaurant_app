@@ -10,26 +10,25 @@ class SwitchTableDataModel {
     if (json['current_tables'] != null) {
       currentTables = <CurrentTables>[];
       json['current_tables'].forEach((v) {
-        currentTables!.add(new CurrentTables.fromJson(v));
+        currentTables!.add(CurrentTables.fromJson(v));
       });
     }
     if (json['rooms'] != null) {
       rooms = <Rooms>[];
       json['rooms'].forEach((v) {
-        rooms!.add(new Rooms.fromJson(v));
+        rooms!.add(Rooms.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    if (this.currentTables != null) {
-      data['current_tables'] =
-          this.currentTables!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['status'] = status;
+    if (currentTables != null) {
+      data['current_tables'] = currentTables!.map((v) => v.toJson()).toList();
     }
-    if (this.rooms != null) {
-      data['rooms'] = this.rooms!.map((v) => v.toJson()).toList();
+    if (rooms != null) {
+      data['rooms'] = rooms!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -73,17 +72,17 @@ class CurrentTables {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['room_table_id'] = this.roomTableId;
-    data['store_room_id'] = this.storeRoomId;
-    data['table_name'] = this.tableName;
-    data['active_flg'] = this.activeFlg;
-    data['delete_flg'] = this.deleteFlg;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['number_of_seats'] = this.numberOfSeats;
-    data['status'] = this.status;
-    data['description'] = this.description;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['room_table_id'] = roomTableId;
+    data['store_room_id'] = storeRoomId;
+    data['table_name'] = tableName;
+    data['active_flg'] = activeFlg;
+    data['delete_flg'] = deleteFlg;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    data['number_of_seats'] = numberOfSeats;
+    data['status'] = status;
+    data['description'] = description;
     return data;
   }
 }
@@ -101,17 +100,17 @@ class Rooms {
     if (json['tables'] != null) {
       tables = <Tables>[];
       json['tables'].forEach((v) {
-        tables!.add(new Tables.fromJson(v));
+        tables!.add(Tables.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['store_room_id'] = this.storeRoomId;
-    data['store_room_name'] = this.storeRoomName;
-    if (this.tables != null) {
-      data['tables'] = this.tables!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['store_room_id'] = storeRoomId;
+    data['store_room_name'] = storeRoomName;
+    if (tables != null) {
+      data['tables'] = tables!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -155,17 +154,17 @@ class Tables {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['room_table_id'] = this.roomTableId;
-    data['store_room_id'] = this.storeRoomId;
-    data['table_name'] = this.tableName;
-    data['active_flg'] = this.activeFlg;
-    data['delete_flg'] = this.deleteFlg;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['number_of_seats'] = this.numberOfSeats;
-    data['status'] = this.status;
-    data['description'] = this.description;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['room_table_id'] = roomTableId;
+    data['store_room_id'] = storeRoomId;
+    data['table_name'] = tableName;
+    data['active_flg'] = activeFlg;
+    data['delete_flg'] = deleteFlg;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    data['number_of_seats'] = numberOfSeats;
+    data['status'] = status;
+    data['description'] = description;
     return data;
   }
 }

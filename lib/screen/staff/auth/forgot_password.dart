@@ -81,9 +81,9 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
 
   @override
   void dispose() {
+    storeIdController.dispose();
+    emailController.dispose();
     super.dispose();
-    storeIdController.clear();
-    emailController.clear();
   }
 
   @override

@@ -10,25 +10,25 @@ class TableModel {
     status = json['status'];
     foodKinds = json['food_kinds'].cast<String>();
     booking =
-        json['booking'] != null ? new Booking.fromJson(json['booking']) : null;
+        json['booking'] != null ? Booking.fromJson(json['booking']) : null;
     if (json['tables_no_booking'] != null) {
       tablesNoBooking = <TablesNoBooking>[];
       json['tables_no_booking'].forEach((v) {
-        tablesNoBooking!.add(new TablesNoBooking.fromJson(v));
+        tablesNoBooking!.add(TablesNoBooking.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['food_kinds'] = this.foodKinds;
-    if (this.booking != null) {
-      data['booking'] = this.booking!.toJson();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['status'] = status;
+    data['food_kinds'] = foodKinds;
+    if (booking != null) {
+      data['booking'] = booking!.toJson();
     }
-    if (this.tablesNoBooking != null) {
+    if (tablesNoBooking != null) {
       data['tables_no_booking'] =
-          this.tablesNoBooking!.map((v) => v.toJson()).toList();
+          tablesNoBooking!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -59,19 +59,19 @@ class Booking {
     activeFlg = json['active_flg'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
-    order = json['order'] != null ? new Order.fromJson(json['order']) : null;
+    order = json['order'] != null ? Order.fromJson(json['order']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['booked_table_id'] = this.bookedTableId;
-    data['order_id'] = this.orderId;
-    data['room_table_id'] = this.roomTableId;
-    data['active_flg'] = this.activeFlg;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    if (this.order != null) {
-      data['order'] = this.order!.toJson();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['booked_table_id'] = bookedTableId;
+    data['order_id'] = orderId;
+    data['room_table_id'] = roomTableId;
+    data['active_flg'] = activeFlg;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    if (order != null) {
+      data['order'] = order!.toJson();
     }
     return data;
   }
@@ -173,35 +173,35 @@ class Order {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['order_id'] = this.orderId;
-    data['user_id'] = this.userId;
-    data['staff_id'] = this.staffId;
-    data['store_id'] = this.storeId;
-    data['store_room_id'] = this.storeRoomId;
-    data['client_id'] = this.clientId;
-    data['deposit'] = this.deposit;
-    data['amount'] = this.amount;
-    data['payment_amount'] = this.paymentAmount;
-    data['client_name'] = this.clientName;
-    data['client_phone'] = this.clientPhone;
-    data['client_email'] = this.clientEmail;
-    data['start_booked_table_at'] = this.startBookedTableAt;
-    data['end_booked_table_at'] = this.endBookedTableAt;
-    data['note'] = this.note;
-    data['cancellation_reason'] = this.cancellationReason;
-    data['discount'] = this.discount;
-    data['guest_pay'] = this.guestPay;
-    data['pay_kind'] = this.payKind;
-    data['order_kind'] = this.orderKind;
-    data['guest_pay_client'] = this.guestPayClient;
-    data['client_can_pay'] = this.clientCanPay;
-    data['order_total'] = this.orderTotal;
-    data['pay_flg'] = this.payFlg;
-    data['close_order'] = this.closeOrder;
-    data['active_flg'] = this.activeFlg;
-    data['delete_flg'] = this.deleteFlg;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
+    data['order_id'] = orderId;
+    data['user_id'] = userId;
+    data['staff_id'] = staffId;
+    data['store_id'] = storeId;
+    data['store_room_id'] = storeRoomId;
+    data['client_id'] = clientId;
+    data['deposit'] = deposit;
+    data['amount'] = amount;
+    data['payment_amount'] = paymentAmount;
+    data['client_name'] = clientName;
+    data['client_phone'] = clientPhone;
+    data['client_email'] = clientEmail;
+    data['start_booked_table_at'] = startBookedTableAt;
+    data['end_booked_table_at'] = endBookedTableAt;
+    data['note'] = note;
+    data['cancellation_reason'] = cancellationReason;
+    data['discount'] = discount;
+    data['guest_pay'] = guestPay;
+    data['pay_kind'] = payKind;
+    data['order_kind'] = orderKind;
+    data['guest_pay_client'] = guestPayClient;
+    data['client_can_pay'] = clientCanPay;
+    data['order_total'] = orderTotal;
+    data['pay_flg'] = payFlg;
+    data['close_order'] = closeOrder;
+    data['active_flg'] = activeFlg;
+    data['delete_flg'] = deleteFlg;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
     return data;
   }
 }
@@ -244,17 +244,17 @@ class TablesNoBooking {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['room_table_id'] = this.roomTableId;
-    data['store_room_id'] = this.storeRoomId;
-    data['table_name'] = this.tableName;
-    data['active_flg'] = this.activeFlg;
-    data['delete_flg'] = this.deleteFlg;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['number_of_seats'] = this.numberOfSeats;
-    data['status'] = this.status;
-    data['description'] = this.description;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['room_table_id'] = roomTableId;
+    data['store_room_id'] = storeRoomId;
+    data['table_name'] = tableName;
+    data['active_flg'] = activeFlg;
+    data['delete_flg'] = deleteFlg;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    data['number_of_seats'] = numberOfSeats;
+    data['status'] = status;
+    data['description'] = description;
     return data;
   }
 }

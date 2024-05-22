@@ -35,6 +35,7 @@ import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
 
+// ignore: must_be_immutable
 class ManagerFabTab extends StatefulWidget {
   ManagerFabTab({Key? key, required this.selectedIndex}) : super(key: key);
   int selectedIndex = 2;

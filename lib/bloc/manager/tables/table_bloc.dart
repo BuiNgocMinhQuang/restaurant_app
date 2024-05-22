@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/model/food_table_data_model.dart';
 import 'package:app_restaurant/model/switch_table_data_model.dart';
@@ -49,19 +50,19 @@ class TableCancleBloc extends Bloc<TableCancleEvent, TableCancleState> {
         if (data['status'] == 200) {
           emit(state.copyWith(tableCancleStatus: TableCancleStatus.succes));
         } else {
-          print("ERROR Cancle Table 1");
+          log("ERROR Cancle Table 1");
 
           emit(state.copyWith(tableCancleStatus: TableCancleStatus.failed));
           emit(state.copyWith(errorText: message['text']));
         }
       } catch (error) {
-        print("ERROR Cancle Table 2 $error");
+        log("ERROR Cancle Table 2 $error");
 
         emit(state.copyWith(tableCancleStatus: TableCancleStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      print("ERROR Cancle Table 3 $error");
+      log("ERROR Cancle Table 3 $error");
       emit(state.copyWith(tableCancleStatus: TableCancleStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }
@@ -102,31 +103,31 @@ class TableBloc extends Bloc<TableEvent, TableState> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print(event.roomId);
-      print("DATA SWITCH $data");
+      log(event.roomId);
+      log("DATA SWITCH $data");
       var message = data['message'];
       try {
         emit(state.copyWith(currentRoomId: event.roomId));
         if (data['status'] == 200) {
-          print("DATA SWITCH $data");
+          log("DATA SWITCH $data");
 
           var switchTableDataRes = SwitchTableDataModel.fromJson(data);
           emit(state.copyWith(switchTableDataModel: switchTableDataRes));
           emit(state.copyWith(tableStatus: TableStatus.succes));
         } else {
-          print("ERROR SWITCH TABLE  1");
+          log("ERROR SWITCH TABLE  1");
 
           emit(state.copyWith(tableStatus: TableStatus.failed));
           emit(state.copyWith(errorText: message['text']));
         }
       } catch (error) {
-        print("ERROR SWITCH TABLE 2  $error");
+        log("ERROR SWITCH TABLE 2  $error");
 
         emit(state.copyWith(tableStatus: TableStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      print("ERROR SWITCH TABLE 2 $error");
+      log("ERROR SWITCH TABLE 2 $error");
       emit(state.copyWith(tableStatus: TableStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }
@@ -161,11 +162,11 @@ class TableBloc extends Bloc<TableEvent, TableState> {
       );
       final data = jsonDecode(respons.body);
       var message = data['message'];
-      print("DATA Table $data");
+      log("DATA Table $data");
 
       try {
         if (data['status'] == 200) {
-          // print("DATA Table $data");
+          // log("DATA Table $data");
 
           var tableDataRes = TableModel.fromJson(data);
 
@@ -177,19 +178,19 @@ class TableBloc extends Bloc<TableEvent, TableState> {
 
           emit(state.copyWith(tableStatus: TableStatus.succes));
         } else {
-          print("ERROR TABLE INFOR danhjdba");
+          log("ERROR TABLE INFOR danhjdba");
 
           emit(state.copyWith(tableStatus: TableStatus.failed));
           emit(state.copyWith(errorText: message['text']));
         }
       } catch (error) {
-        print("ERROR TABLE INFOR1111 $error");
+        log("ERROR TABLE INFOR1111 $error");
 
         emit(state.copyWith(tableStatus: TableStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      print("ERROR TABLE INFOR222 $error");
+      log("ERROR TABLE INFOR222 $error");
       emit(state.copyWith(tableStatus: TableStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }
@@ -229,17 +230,17 @@ class TableBloc extends Bloc<TableEvent, TableState> {
           emit(state.copyWith(foodTableDataModel: foodTableDataRes));
           emit(state.copyWith(tableStatus: TableStatus.succes));
         } else {
-          print("ERROR DATA FOOD TABLE 1 ${data}");
+          log("ERROR DATA FOOD TABLE 1 ${data}");
 
           emit(state.copyWith(tableStatus: TableStatus.failed));
         }
       } catch (error) {
-        print("ERROR DATA FOOD TABLE 2 ${error}");
+        log("ERROR DATA FOOD TABLE 2 ${error}");
 
         emit(state.copyWith(tableStatus: TableStatus.failed));
       }
     } catch (error) {
-      print("ERROR DATA FOOD TABLE 3 $error");
+      log("ERROR DATA FOOD TABLE 3 $error");
 
       emit(state.copyWith(tableStatus: TableStatus.failed));
     }
@@ -282,31 +283,30 @@ class TableSaveInforBloc
         }),
       );
       final data = jsonDecode(respons.body);
-      var message = data['message'];
+      log("data data");
+
+      log(data);
       try {
         if (data['status'] == 200) {
-          print("REQUESTTTT ${data}");
-
           emit(state.copyWith(
               tableSaveInforStatus: TableSaveInforStatus.succes));
         } else {
-          print("ERROR Save Infor Table 1");
+          log("ERROR Save Infor Table 1");
 
           emit(state.copyWith(
               tableSaveInforStatus: TableSaveInforStatus.failed));
 
-          emit(state.copyWith(errorText: message['text']));
+          emit(state.copyWith(errorText: someThingWrong));
         }
       } catch (error) {
-        print("ERROR Save Infor Table 2 $error");
+        log("ERROR Save Infor Table 2 $error");
 
         emit(state.copyWith(tableSaveInforStatus: TableSaveInforStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      print("ERROR Save Infor Table 3 $error");
+      log("ERROR Save Infor Table 3 $error");
       emit(state.copyWith(tableSaveInforStatus: TableSaveInforStatus.failed));
-
       emit(state.copyWith(errorText: someThingWrong));
     }
   }
@@ -344,25 +344,25 @@ class SwitchTableBloc extends Bloc<SwitchTableEvent, SwitchTableState> {
       );
       final data = jsonDecode(respons.body);
       var message = data['message'];
-      print("DATA HANDLE  SWITCH Table $data");
+      log("DATA HANDLE  SWITCH Table $data");
 
       try {
         if (data['status'] == 200) {
           emit(state.copyWith(switchtableStatus: SwitchTableStatus.succes));
         } else {
-          print("ERROR HANDLE  SWITCH  Table 1");
+          log("ERROR HANDLE  SWITCH  Table 1");
 
           emit(state.copyWith(switchtableStatus: SwitchTableStatus.failed));
           emit(state.copyWith(errorText: message['text']));
         }
       } catch (error) {
-        print("ERROR HANDLE  SWITCH  Table 2 $error");
+        log("ERROR HANDLE  SWITCH  Table 2 $error");
 
         emit(state.copyWith(switchtableStatus: SwitchTableStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      print("ERROR HANDLE  SWITCH  Table 3 $error");
+      log("ERROR HANDLE  SWITCH  Table 3 $error");
       emit(state.copyWith(switchtableStatus: SwitchTableStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }

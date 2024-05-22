@@ -65,11 +65,14 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
   final Set<int> selectedStoreIndices = {};
 
   void updateSelectedStores() {
-    setState(() {
-      final selectedStores =
-          selectedStoreIndices.map((index) => nameStoreList[index]).toList();
-      listStoreTextController.text = selectedStores.join(', ');
-    });
+    mounted
+        ? setState(() {
+            final selectedStores = selectedStoreIndices
+                .map((index) => nameStoreList[index])
+                .toList();
+            listStoreTextController.text = selectedStores.join(', ');
+          })
+        : null;
   }
 
   static const _locale = 'en';
@@ -84,14 +87,14 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
 
   @override
   void dispose() {
-    super.dispose();
-    foodNameController.clear();
-    priceOfFood.clear();
-    noteController.clear();
-    listStoreTextController.clear();
-    listFoodTypeTextController.clear();
+    foodNameController.dispose();
+    priceOfFood.dispose();
+    noteController.dispose();
+    listStoreTextController.dispose();
+    listFoodTypeTextController.dispose();
     listStoreId.clear();
     selectedStoreIndices.clear();
+    super.dispose();
   }
 
   void init() {
@@ -163,17 +166,19 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
             colorButton: Colors.green,
             btnText: "OK",
           );
-          setState(() {
-            foodNameController.clear();
-            priceOfFood.clear();
-            noteController.clear();
-            imageFileList?.clear();
-            listStoreId.clear();
-            listStoreString = null;
-            listStoreTextController.clear();
-            listFoodTypeTextController.clear();
-            light = false;
-          });
+          mounted
+              ? setState(() {
+                  foodNameController.clear();
+                  priceOfFood.clear();
+                  noteController.clear();
+                  imageFileList?.clear();
+                  listStoreId.clear();
+                  listStoreString = null;
+                  listStoreTextController.clear();
+                  listFoodTypeTextController.clear();
+                  light = false;
+                })
+              : null;
         } else {
           log("ERROR CREATE FOOOD");
           showCustomDialogModal(
@@ -736,9 +741,11 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                               activeColor: const Color.fromRGBO(
                                                   58, 65, 111, .95),
                                               onChanged: (bool value) {
-                                                setState(() {
-                                                  light = value;
-                                                });
+                                                mounted
+                                                    ? setState(() {
+                                                        light = value;
+                                                      })
+                                                    : null;
                                               },
                                             ),
                                           ),

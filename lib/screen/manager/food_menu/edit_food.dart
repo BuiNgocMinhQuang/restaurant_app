@@ -68,13 +68,13 @@ class _EditFoodState extends State<EditFood> {
 
   @override
   void dispose() {
-    super.dispose();
     listStoreName.clear();
-    priceOfFood.clear();
-    listFoodTypeTextController.clear();
-    listStoreTextController.clear();
-    foodNameController.clear();
-    desTextController.clear();
+    priceOfFood.dispose();
+    listFoodTypeTextController.dispose();
+    listStoreTextController.dispose();
+    foodNameController.dispose();
+    desTextController.dispose();
+    super.dispose();
   }
 
   void init() async {
@@ -240,9 +240,11 @@ class _EditFoodState extends State<EditFood> {
   @override
   Widget build(BuildContext context) {
     widget.listStores.where((element) {
-      setState(() {
-        listStoreName.add(element.storeName ?? '');
-      });
+      mounted
+          ? setState(() {
+              listStoreName.add(element.storeName ?? '');
+            })
+          : null;
       return true;
     }).toList();
 
@@ -788,9 +790,11 @@ class _EditFoodState extends State<EditFood> {
                                           activeColor: const Color.fromRGBO(
                                               58, 65, 111, .95),
                                           onChanged: (bool value) {
-                                            setState(() {
-                                              light = value;
-                                            });
+                                            mounted
+                                                ? setState(() {
+                                                    light = value;
+                                                  })
+                                                : null;
                                           },
                                         ),
                                       ),

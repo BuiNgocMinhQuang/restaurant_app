@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/model/manager/chart/chart_data_home_model.dart';
@@ -12,6 +13,7 @@ import 'package:app_restaurant/widgets/chart/chart_home_all_store.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart' as http;
@@ -37,6 +39,7 @@ class _ManagerHomeState extends State<ManagerHome> {
   final TextEditingController _dateStartController = TextEditingController();
   final TextEditingController _dateEndController = TextEditingController();
   final TextEditingController dataTypeTextController = TextEditingController();
+
   String currentDataType = "%m-%Y";
   ChartDataHomeModel? chartDataModel;
   bool isLoading = true;
@@ -68,7 +71,7 @@ class _ManagerHomeState extends State<ManagerHome> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print(" DATA HOME ${data}");
+      log(" DATA HOME ${data}");
       try {
         if (data['status'] == 200) {
           mounted
@@ -197,9 +200,6 @@ class _ManagerHomeState extends State<ManagerHome> {
   }
 
   void getDetailsStore({required shopID}) async {
-    print({
-      'shopID': shopID,
-    });
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
 
@@ -216,7 +216,7 @@ class _ManagerHomeState extends State<ManagerHome> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print(" DATA CREATE FOOD ${data}");
+      log(" DATA CREATE FOOD ${data}");
       try {
         if (data['status'] == 200) {
           mounted
@@ -232,13 +232,13 @@ class _ManagerHomeState extends State<ManagerHome> {
                     )),
           );
         } else {
-          print("ERROR CREATE FOOOD");
+          log("ERROR CREATE FOOOD");
         }
       } catch (error) {
-        print("ERROR CREATE $error");
+        log("ERROR CREATE $error");
       }
     } catch (error) {
-      print("ERROR CREATE $error");
+      log("ERROR CREATE $error");
     }
   }
 
@@ -265,7 +265,7 @@ class _ManagerHomeState extends State<ManagerHome> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print(" DATA CHART HOME ${data}");
+      log(" DATA CHART HOME ${data}");
       try {
         if (data['status'] == 200) {
           mounted
@@ -274,13 +274,13 @@ class _ManagerHomeState extends State<ManagerHome> {
                 })
               : null;
         } else {
-          print("ERROR DATA CHART HOME");
+          log("ERROR DATA CHART HOME");
         }
       } catch (error) {
-        print("ERROR DATA CHART HOME $error");
+        log("ERROR DATA CHART HOME $error");
       }
     } catch (error) {
-      print("ERROR DATA CHART HOME $error");
+      log("ERROR DATA CHART HOME $error");
     }
   }
 
@@ -292,10 +292,10 @@ class _ManagerHomeState extends State<ManagerHome> {
 
   @override
   void dispose() {
+    _dateStartController.dispose();
+    _dateEndController.dispose();
+    dataTypeTextController.dispose();
     super.dispose();
-    _dateStartController.clear();
-    _dateEndController.clear();
-    dataTypeTextController.clear();
   }
 
   @override
@@ -309,7 +309,7 @@ class _ManagerHomeState extends State<ManagerHome> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
+                        SizedBox(
                           width: 100,
                           height: 100,
                           child: Lottie.asset('assets/lottie/error.json'),
@@ -321,7 +321,7 @@ class _ManagerHomeState extends State<ManagerHome> {
                           fontWeight: FontWeight.bold,
                         ),
                         space30H,
-                        Container(
+                        SizedBox(
                           width: 200,
                           child: ButtonGradient(
                             color1: color1BlueButton,
@@ -422,7 +422,7 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                 ),
                                                 InkWell(
                                                   onTap: () {},
-                                                  child: Container(
+                                                  child: SizedBox(
                                                     width: 50,
                                                     height: 50,
                                                     // color: Colors.amber,
@@ -486,7 +486,7 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                     )
                                                   ],
                                                 ),
-                                                Container(
+                                                SizedBox(
                                                   width: 50,
                                                   height: 50,
                                                   child: Image.asset(
@@ -549,7 +549,7 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                     )
                                                   ],
                                                 ),
-                                                Container(
+                                                SizedBox(
                                                   width: 50,
                                                   height: 50,
                                                   child: Image.asset(
@@ -612,7 +612,7 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                     )
                                                   ],
                                                 ),
-                                                Container(
+                                                SizedBox(
                                                   width: 50,
                                                   height: 50,
                                                   child: Image.asset(
@@ -965,7 +965,7 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                               .antiAliasWithSaveLayer,
                                                           context: context,
                                                           builder: (context) =>
-                                                              Container(
+                                                              SizedBox(
                                                             height: 1.sh / 2,
                                                             child: Column(
                                                               children: [
@@ -1286,7 +1286,7 @@ class _ManagerHomeState extends State<ManagerHome> {
                                           ),
                                           space20H,
                                           chartDataModel != null
-                                              ? Container(
+                                              ? SizedBox(
                                                   width: 1.sw,
                                                   child: Padding(
                                                     padding: EdgeInsets.only(

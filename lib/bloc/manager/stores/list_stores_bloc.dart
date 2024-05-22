@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
 import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
@@ -33,22 +34,22 @@ class ListStoresBloc extends Bloc<ListStoresEvent, ListStoresState> {
         },
       );
       final dataListStore = jsonDecode(responseListStore.body);
-      print("dataListStore $dataListStore");
+      log("dataListStore $dataListStore");
       try {
         if (dataListStore['status'] == 200) {
           var listStoreManagerDataRes = ListStoreModel.fromJson(dataListStore);
           emit(state.copyWith(listStoreModel: listStoreManagerDataRes));
           emit(state.copyWith(listStoresStatus: ListStoresStatus.succes));
         } else {
-          print("ERRRO GET LIST STORE 111111");
+          log("ERRRO GET LIST STORE 111111");
           emit(state.copyWith(listStoresStatus: ListStoresStatus.failed));
         }
       } catch (error) {
-        print("ERRRO GET LIST STORE $error");
+        log("ERRRO GET LIST STORE $error");
         emit(state.copyWith(listStoresStatus: ListStoresStatus.failed));
       }
     } catch (error) {
-      print("NO DATA ROOM $error");
+      log("NO DATA ROOM $error");
 
       emit(state.copyWith(listStoresStatus: ListStoresStatus.failed));
 

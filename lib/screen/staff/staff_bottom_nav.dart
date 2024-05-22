@@ -22,8 +22,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/constant/api/index.dart';
 
+// ignore: must_be_immutable
 class StaffFabTab extends StatefulWidget {
-  StaffFabTab({required this.selectedIndex});
+  StaffFabTab({super.key, required this.selectedIndex});
   int selectedIndex = 2;
   @override
   State<StaffFabTab> createState() => _StaffFabTabState();

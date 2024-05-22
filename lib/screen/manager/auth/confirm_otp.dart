@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
@@ -82,10 +83,10 @@ class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
             btnText: "OK",
             typeDialog: "error");
 
-        print("FOGOT PASSWORD ERROR 1");
+        log("FOGOT PASSWORD ERROR 1");
       }
     } catch (error) {
-      print("CHECK OTP ERROR ${error}");
+      log("CHECK OTP ERROR ${error}");
     }
   }
 
@@ -313,12 +314,14 @@ class _CountdownTimerState extends State<CountdownTimer> {
   }
 
   void _resetTimer() {
-    setState(() {
-      _remainingTime =
-          widget.duration; // Reset the remaining time to the original duration
-      _timer?.cancel(); // Cancel the existing timer
-      _startTimer(); // Start a new timer from the reset duration
-    });
+    mounted
+        ? setState(() {
+            _remainingTime = widget
+                .duration; // Reset the remaining time to the original duration
+            _timer?.cancel(); // Cancel the existing timer
+            _startTimer(); // Start a new timer from the reset duration
+          })
+        : null;
   }
 
   @override

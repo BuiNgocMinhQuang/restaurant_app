@@ -13,17 +13,16 @@ class ManagerInforModel {
     message = json['message'];
     token = json['token'];
     tokenExpiresAt = json['token_expires_at'];
-    data = json['data'] != null
-        ? new DataManagerInfor.fromJson(json['data'])
-        : null;
+    data =
+        json['data'] != null ? DataManagerInfor.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
-    data['token'] = this.token;
-    data['token_expires_at'] = this.tokenExpiresAt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
+    data['token'] = token;
+    data['token_expires_at'] = tokenExpiresAt;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -105,29 +104,29 @@ class DataManagerInfor {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['user_id'] = this.userId;
-    data['user_no'] = this.userNo;
-    data['user_first_name'] = this.userFirstName;
-    data['user_last_name'] = this.userLastName;
-    data['user_full_name'] = this.userFullName;
-    data['user_avatar'] = this.userAvatar;
-    data['user_email'] = this.userEmail;
-    data['user_phone'] = this.userPhone;
-    data['front_image_cccd'] = this.frontImageCccd;
-    data['back_image_cccd'] = this.backImageCccd;
-    data['hold_image_cccd'] = this.holdImageCccd;
-    data['user_address_1'] = this.userAddress1;
-    data['user_address_2'] = this.userAddress2;
-    data['user_address_3'] = this.userAddress3;
-    data['user_address_4'] = this.userAddress4;
-    data['user_full_address'] = this.userFullAddress;
-    data['user_kind'] = this.userKind;
-    data['manager_flg'] = this.managerFlg;
-    data['active_flg'] = this.activeFlg;
-    data['delete_flg'] = this.deleteFlg;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['user_id'] = userId;
+    data['user_no'] = userNo;
+    data['user_first_name'] = userFirstName;
+    data['user_last_name'] = userLastName;
+    data['user_full_name'] = userFullName;
+    data['user_avatar'] = userAvatar;
+    data['user_email'] = userEmail;
+    data['user_phone'] = userPhone;
+    data['front_image_cccd'] = frontImageCccd;
+    data['back_image_cccd'] = backImageCccd;
+    data['hold_image_cccd'] = holdImageCccd;
+    data['user_address_1'] = userAddress1;
+    data['user_address_2'] = userAddress2;
+    data['user_address_3'] = userAddress3;
+    data['user_address_4'] = userAddress4;
+    data['user_full_address'] = userFullAddress;
+    data['user_kind'] = userKind;
+    data['manager_flg'] = managerFlg;
+    data['active_flg'] = activeFlg;
+    data['delete_flg'] = deleteFlg;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
     return data;
   }
 }

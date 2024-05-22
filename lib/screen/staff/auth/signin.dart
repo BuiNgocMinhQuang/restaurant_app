@@ -50,10 +50,10 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
 
   @override
   void dispose() {
+    storeIdController.dispose();
+    emailController.dispose();
+    passworldController.dispose();
     super.dispose();
-    storeIdController.clear();
-    emailController.clear();
-    passworldController.clear();
   }
 
   @override

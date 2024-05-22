@@ -17,7 +17,6 @@ import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,6 +26,7 @@ import 'package:money_formatter/money_formatter.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
+import 'dart:math' as math;
 
 class StaffBookingTable extends StatefulWidget {
   const StaffBookingTable({
@@ -539,7 +539,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                         ),
                                                                                         space10W,
                                                                                         TextApp(
-                                                                                          text: "Ghép bàn",
+                                                                                          text: "Chuyển bàn",
                                                                                           color: Colors.black,
                                                                                           fontsize: 18.sp,
                                                                                         )
@@ -819,6 +819,8 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
   int currentPage = 1;
   final scrollListOrderController = ScrollController();
   int currentLenghtCheckList = 0;
+  final stateTextController = TextEditingController();
+
   Timer? timer;
   void getListOrderOfChefInIt({
     required int page,
@@ -999,6 +1001,7 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
   @override
   void dispose() {
     timer?.cancel();
+    stateTextController.dispose();
     super.dispose();
   }
 
@@ -1149,34 +1152,109 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                     )),
                     space15W,
                     Expanded(
-                      child: DropdownSearch(
-                        selectedItem: "Chọn trạng thái",
-                        items: updateStatusList,
-                        onChanged: (state) {
-                          // currentListOrderBill.clear();
-                          mounted
-                              ? setState(() {
-                                  if (state == "Chờ xác nhận") {
-                                    currentStatus = 0;
-                                  } else if (state == "Đang chuẩn bị") {
-                                    currentStatus = 1;
-                                  } else if (state == "Đã xong") {
-                                    currentStatus = 2;
-                                  }
-                                })
-                              : null;
-                          if (listIdOrder.isNotEmpty) {
-                            showConfirmDialog(context, () {
-                              hanldeUpdateStatusOrderFood(
-                                  idList: listIdOrder, status: currentStatus);
-                            });
-                          }
+                      child: TextFormField(
+                        readOnly: true,
+                        onTapOutside: (event) {
+                          FocusManager.instance.primaryFocus?.unfocus();
                         },
-                        dropdownDecoratorProps: DropDownDecoratorProps(
-                          dropdownSearchDecoration: InputDecoration(
-                            // isCollapsed: true,
-
-                            hintMaxLines: 1,
+                        onTap: () {
+                          showMaterialModalBottomSheet(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(15.r),
+                                topLeft: Radius.circular(15.r),
+                              ),
+                            ),
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            context: context,
+                            builder: (context) => SizedBox(
+                              height: 1.sh / 2,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    width: 1.sw,
+                                    padding: EdgeInsets.all(20.w),
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    child: TextApp(
+                                      text: "Chọn trạng thái",
+                                      color: Colors.white,
+                                      fontsize: 20.sp,
+                                      fontWeight: FontWeight.bold,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: ListView.builder(
+                                      padding: EdgeInsets.only(top: 10.w),
+                                      itemCount: updateStatusList.length,
+                                      itemBuilder: (context, index) {
+                                        return Column(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  EdgeInsets.only(left: 20.w),
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  Navigator.pop(context);
+                                                  stateTextController.text =
+                                                      updateStatusList[index];
+                                                  mounted
+                                                      ? setState(() {
+                                                          if (updateStatusList[
+                                                                  index] ==
+                                                              "Chờ xác nhận") {
+                                                            currentStatus = 0;
+                                                          } else if (updateStatusList[
+                                                                  index] ==
+                                                              "Đang chuẩn bị") {
+                                                            currentStatus = 1;
+                                                          } else if (updateStatusList[
+                                                                  index] ==
+                                                              "Đã xong") {
+                                                            currentStatus = 2;
+                                                          }
+                                                        })
+                                                      : null;
+                                                  if (listIdOrder.isNotEmpty) {
+                                                    showConfirmDialog(context,
+                                                        () {
+                                                      hanldeUpdateStatusOrderFood(
+                                                          idList: listIdOrder,
+                                                          status:
+                                                              currentStatus);
+                                                    });
+                                                  }
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    TextApp(
+                                                      text: updateStatusList[
+                                                          index],
+                                                      color: Colors.black,
+                                                      fontsize: 20.sp,
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Divider(
+                                              height: 25.h,
+                                            )
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        controller: stateTextController,
+                        style: TextStyle(fontSize: 12.sp, color: grey),
+                        cursorColor: grey,
+                        decoration: InputDecoration(
                             fillColor: const Color.fromARGB(255, 226, 104, 159),
                             focusedBorder: OutlineInputBorder(
                               borderSide: const BorderSide(
@@ -1187,12 +1265,17 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8.r),
                             ),
+                            hintText: 'Chọn trạng thái',
+                            suffixIcon: Transform.rotate(
+                              angle: 90 * math.pi / 180,
+                              child: Icon(
+                                Icons.chevron_right,
+                                size: 28.sp,
+                                color: Colors.black.withOpacity(0.5),
+                              ),
+                            ),
                             isDense: true,
-                            contentPadding: EdgeInsets.all(15.w),
-                            hintStyle: TextStyle(fontSize: 14.sp),
-                            hintText: "Chọn trạng thái",
-                          ),
-                        ),
+                            contentPadding: EdgeInsets.all(15.w)),
                       ),
                     )
                   ],
@@ -1581,6 +1664,7 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                           ],
                         );
                       }
+                      return null;
                     },
                   ),
                 ),

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/fake_data.dart';
 import 'package:app_restaurant/config/space.dart';
@@ -8,18 +7,6 @@ import 'package:app_restaurant/widgets/box/status_box.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-
-Future<String> get _localPath async {
-  final directory = await getApplicationDocumentsDirectory();
-
-  return directory.path;
-}
-
-Future<File> get _localFile async {
-  final path = await _localPath;
-  return File('$path/filename.xlsx');
-}
 
 class ListInventory extends StatefulWidget {
   const ListInventory({super.key});
@@ -220,7 +207,6 @@ class SelectableDataTable extends StatefulWidget {
 }
 
 class _SelectableDataTableState extends State<SelectableDataTable> {
-  bool _selectAll = false;
   final List<MyData> _selectedData = [];
   BuildContext? _context;
   void _handleRowSelected(MyData data, bool selected) {
@@ -231,32 +217,12 @@ class _SelectableDataTableState extends State<SelectableDataTable> {
       } else {
         _selectedData.remove(data);
       }
-      _selectAll = _selectedData.length == widget.data.length;
     });
     widget.onSelectedRowsChanged(_selectedData);
     if (widget.onDeleteSelected != null) {
       widget.onDeleteSelected!(_selectedData.toList());
     }
   }
-
-  // void _handleSelectAllChanged(bool? value) {
-  //   // Accept a nullable boolean
-  //   setState(() {
-  //     if (value != null) {
-  //       // Check for null before using
-  //       _selectAll = value;
-  //       for (var data in widget.data) {
-  //         data.isSelected = value;
-  //         if (value) {
-  //           _selectedData.add(data);
-  //         } else {
-  //           _selectedData.remove(data);
-  //         }
-  //       }
-  //     }
-  //   });
-  //   widget.onSelectedRowsChanged(_selectedData);
-  // }
 
   void _handleDelete(List<MyData> selectedData) {
     // Implement your deletion logic here (e.g., remove from data source, update UI)
@@ -269,13 +235,10 @@ class _SelectableDataTableState extends State<SelectableDataTable> {
     });
   }
 
-  String _searchText = '';
-
   List<MyData> _filteredData = [];
 
   void _handleSearch(String text) {
     setState(() {
-      _searchText = text;
       _filteredData = widget.data
           .where((data) => data.name.toLowerCase().contains(text.toLowerCase()))
           .toList();

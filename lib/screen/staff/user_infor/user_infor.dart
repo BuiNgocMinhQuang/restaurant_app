@@ -15,13 +15,13 @@ import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/constant/api/index.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'dart:math' as math;
 
 class StaffUserInformation extends StatefulWidget {
   const StaffUserInformation({super.key});
@@ -53,6 +53,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
   final address2Controller = TextEditingController();
   final address3Controller = TextEditingController();
   final address4Controller = TextEditingController();
+  final cityNameTextController = TextEditingController();
+  final districNameTextController = TextEditingController();
+  final wardNameTextController = TextEditingController();
   File? selectedImage;
   String currentAvatar = 'assets/user/images/avt/no_image.png';
   List cityList = [];
@@ -511,6 +514,26 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
 
   @override
   void dispose() {
+    shopIDController.dispose();
+    surNameController.dispose();
+    nameController.dispose(); //
+    fullNameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    currentPassworldController.dispose();
+    newPassworldController.dispose();
+    reNewPassworldController.dispose();
+    roleController.dispose();
+    twitterController.dispose();
+    facebookController.dispose();
+    instagramController.dispose();
+    address1Controller.dispose();
+    address2Controller.dispose();
+    address3Controller.dispose();
+    address4Controller.dispose();
+    cityNameTextController.dispose();
+    districNameTextController.dispose();
+    wardNameTextController.dispose();
     super.dispose();
   }
 
@@ -1193,36 +1216,131 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                       SizedBox(
                                         height: 10.h,
                                       ),
-                                      DropdownSearch(
-                                        validator: (value) {
-                                          if (value == "Chọn tỉnh/thành phố") {
-                                            return canNotNull;
-                                          }
-                                          return null;
+                                      TextFormField(
+                                        readOnly: true,
+                                        onTapOutside: (event) {
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
                                         },
-                                        selectedItem: currentCity,
-                                        items: cityList,
-                                        onChanged: (changeCity) {
-                                          getListArea(
-                                              city:
-                                                  cityList.indexOf(changeCity),
-                                              district: null);
-                                          setState(() {
-                                            currentIndexCity =
-                                                cityList.indexOf(changeCity);
-                                            currentDistric = null;
-                                            currentIndexDistric = null;
-                                            currentWard = null;
-                                            currentIndexWard = null;
-                                          });
-                                        },
-                                        dropdownDecoratorProps:
-                                            DropDownDecoratorProps(
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            // isCollapsed: true,
+                                        onTap: () {
+                                          showMaterialModalBottomSheet(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15.r),
+                                                topLeft: Radius.circular(15.r),
+                                              ),
+                                            ),
+                                            clipBehavior:
+                                                Clip.antiAliasWithSaveLayer,
+                                            context: context,
+                                            builder: (context) => Container(
+                                              height: 1.sh / 2,
+                                              child: Column(
+                                                children: [
+                                                  Container(
+                                                    width: 1.sw,
+                                                    padding:
+                                                        EdgeInsets.all(20.w),
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                    child: TextApp(
+                                                      text:
+                                                          "Chọn tỉnh/thành phố",
+                                                      color: Colors.white,
+                                                      fontsize: 20.sp,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: ListView.builder(
+                                                      padding: EdgeInsets.only(
+                                                          top: 10.w),
+                                                      itemCount:
+                                                          cityList.length,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        return Column(
+                                                          children: [
+                                                            Padding(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      left:
+                                                                          20.w),
+                                                              child: InkWell(
+                                                                onTap:
+                                                                    () async {
+                                                                  Navigator.pop(
+                                                                      context);
 
-                                            hintMaxLines: 1,
+                                                                  getListArea(
+                                                                      city:
+                                                                          index,
+                                                                      district:
+                                                                          null);
+                                                                  setState(() {
+                                                                    cityNameTextController
+                                                                            .text =
+                                                                        cityList[
+                                                                            index];
+                                                                    districNameTextController
+                                                                        .clear();
+                                                                    wardNameTextController
+                                                                        .clear();
+                                                                    currentIndexCity =
+                                                                        index;
+                                                                    currentDistric =
+                                                                        null;
+                                                                    currentIndexDistric =
+                                                                        null;
+                                                                    currentWard =
+                                                                        null;
+                                                                    currentIndexWard =
+                                                                        null;
+                                                                  });
+                                                                },
+                                                                child: Row(
+                                                                  children: [
+                                                                    TextApp(
+                                                                      text: cityList[
+                                                                          index],
+                                                                      color: Colors
+                                                                          .black,
+                                                                      fontsize:
+                                                                          20.sp,
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Divider(
+                                                              height: 25.h,
+                                                            )
+                                                          ],
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        controller: cityNameTextController,
+                                        style: TextStyle(
+                                            fontSize: 12.sp, color: grey),
+                                        cursorColor: grey,
+                                        validator: (value) {
+                                          if (value!.isEmpty) {
+                                            return fullnameIsRequied;
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        decoration: InputDecoration(
                                             fillColor: const Color.fromARGB(
                                                 255, 226, 104, 159),
                                             focusedBorder: OutlineInputBorder(
@@ -1237,14 +1355,19 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                               borderRadius:
                                                   BorderRadius.circular(8.r),
                                             ),
+                                            hintText: 'Chọn tỉnh/thành phố',
+                                            suffixIcon: Transform.rotate(
+                                              angle: 90 * math.pi / 180,
+                                              child: Icon(
+                                                Icons.chevron_right,
+                                                size: 28.sp,
+                                                color: Colors.black
+                                                    .withOpacity(0.5),
+                                              ),
+                                            ),
                                             isDense: true,
                                             contentPadding:
-                                                EdgeInsets.all(15.w),
-                                            hintStyle:
-                                                TextStyle(fontSize: 14.sp),
-                                            hintText: "Chọn tỉnh/thành phố",
-                                          ),
-                                        ),
+                                                EdgeInsets.all(15.w)),
                                       ),
                                     ],
                                   ),
@@ -1262,36 +1385,118 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                       SizedBox(
                                         height: 10.h,
                                       ),
-                                      DropdownSearch(
-                                        key: Key(currentDistric.toString()),
-                                        validator: (value) {
-                                          if (value == "Chọn quận/huyện") {
-                                            return canNotNull;
-                                          }
-                                          return null;
+                                      TextFormField(
+                                        readOnly: true,
+                                        onTapOutside: (event) {
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
                                         },
-                                        selectedItem: currentDistric,
+                                        onTap: () {
+                                          showMaterialModalBottomSheet(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15.r),
+                                                topLeft: Radius.circular(15.r),
+                                              ),
+                                            ),
+                                            clipBehavior:
+                                                Clip.antiAliasWithSaveLayer,
+                                            context: context,
+                                            builder: (context) => Container(
+                                              height: 1.sh / 2,
+                                              child: Column(
+                                                children: [
+                                                  Container(
+                                                    width: 1.sw,
+                                                    padding:
+                                                        EdgeInsets.all(20.w),
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                    child: TextApp(
+                                                      text: "Chọn quận/huyện",
+                                                      color: Colors.white,
+                                                      fontsize: 20.sp,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: ListView.builder(
+                                                      padding: EdgeInsets.only(
+                                                          top: 10.w),
+                                                      itemCount:
+                                                          districList.length,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        return Column(
+                                                          children: [
+                                                            Padding(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      left:
+                                                                          20.w),
+                                                              child: InkWell(
+                                                                onTap:
+                                                                    () async {
+                                                                  Navigator.pop(
+                                                                      context);
 
-                                        items: districList,
-                                        onChanged: (changeDistric) {
-                                          getListArea(
-                                              city: currentIndexCity ??
-                                                  staffInforData?.staffAddress1,
-                                              district: districList
-                                                  .indexOf(changeDistric));
-                                          setState(() {
-                                            currentIndexDistric = districList
-                                                .indexOf(changeDistric);
-                                            currentWard = null;
-                                            currentIndexWard = null;
-                                          });
+                                                                  getListArea(
+                                                                      city: currentIndexCity ??
+                                                                          staffInforData
+                                                                              ?.staffAddress1,
+                                                                      district:
+                                                                          index);
+                                                                  setState(() {
+                                                                    districNameTextController
+                                                                            .text =
+                                                                        districList[
+                                                                            index];
+                                                                    wardNameTextController
+                                                                        .clear();
+                                                                    currentIndexDistric =
+                                                                        index;
+                                                                    currentWard =
+                                                                        null;
+                                                                    currentIndexWard =
+                                                                        null;
+                                                                  });
+                                                                },
+                                                                child: Row(
+                                                                  children: [
+                                                                    TextApp(
+                                                                      text: districList[
+                                                                          index],
+                                                                      color: Colors
+                                                                          .black,
+                                                                      fontsize:
+                                                                          20.sp,
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Divider(
+                                                              height: 25.h,
+                                                            )
+                                                          ],
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
                                         },
-
-                                        dropdownDecoratorProps:
-                                            DropDownDecoratorProps(
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            hintMaxLines: 1,
+                                        controller: districNameTextController,
+                                        style: TextStyle(
+                                            fontSize: 12.sp, color: grey),
+                                        cursorColor: grey,
+                                        decoration: InputDecoration(
                                             fillColor: const Color.fromARGB(
                                                 255, 226, 104, 159),
                                             focusedBorder: OutlineInputBorder(
@@ -1306,16 +1511,19 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                               borderRadius:
                                                   BorderRadius.circular(8.r),
                                             ),
+                                            hintText: 'Chọn quận/huyện',
+                                            suffixIcon: Transform.rotate(
+                                              angle: 90 * math.pi / 180,
+                                              child: Icon(
+                                                Icons.chevron_right,
+                                                size: 28.sp,
+                                                color: Colors.black
+                                                    .withOpacity(0.5),
+                                              ),
+                                            ),
                                             isDense: true,
                                             contentPadding:
-                                                EdgeInsets.all(15.w),
-                                            hintStyle:
-                                                TextStyle(fontSize: 14.sp),
-                                            hintText: "Chọn quận/huyện",
-                                          ),
-                                        ),
-                                        // selectedItem:
-                                        //     "Chọn quận/huyện",
+                                                EdgeInsets.all(15.w)),
                                       ),
                                     ],
                                   ),
@@ -1335,35 +1543,120 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                       SizedBox(
                                         height: 10.h,
                                       ),
-                                      DropdownSearch(
-                                        key: Key(currentWard.toString()),
-                                        validator: (value) {
-                                          if (value == "Chọn phường/xã") {
-                                            return canNotNull;
-                                          }
-                                          return null;
+                                      TextFormField(
+                                        readOnly: true,
+                                        onTapOutside: (event) {
+                                          FocusManager.instance.primaryFocus
+                                              ?.unfocus();
                                         },
-                                        selectedItem: currentWard,
+                                        onTap: () {
+                                          showMaterialModalBottomSheet(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15.r),
+                                                topLeft: Radius.circular(15.r),
+                                              ),
+                                            ),
+                                            clipBehavior:
+                                                Clip.antiAliasWithSaveLayer,
+                                            context: context,
+                                            builder: (context) => Container(
+                                              height: 1.sh / 2,
+                                              child: Column(
+                                                children: [
+                                                  Container(
+                                                    width: 1.sw,
+                                                    padding:
+                                                        EdgeInsets.all(20.w),
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                    child: TextApp(
+                                                      text: "Chọn phường/xã",
+                                                      color: Colors.white,
+                                                      fontsize: 20.sp,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: ListView.builder(
+                                                      padding: EdgeInsets.only(
+                                                          top: 10.w),
+                                                      itemCount:
+                                                          wardList.length,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        return Column(
+                                                          children: [
+                                                            Padding(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      left:
+                                                                          20.w),
+                                                              child: InkWell(
+                                                                onTap:
+                                                                    () async {
+                                                                  Navigator.pop(
+                                                                      context);
 
-                                        items: wardList,
-                                        onChanged: (changeWard) {
-                                          getListArea(
-                                              city: currentIndexCity,
-                                              district: currentIndexDistric);
-                                          setState(() {
-                                            currentIndexWard =
-                                                wardList.indexOf(changeWard);
-                                            var wardListMap = wardList.asMap();
-                                            var myWard = wardListMap[
-                                                wardList.indexOf(changeWard)];
-                                            currentWard = myWard;
-                                          });
+                                                                  getListArea(
+                                                                      city:
+                                                                          currentIndexCity,
+                                                                      district:
+                                                                          currentIndexDistric);
+                                                                  setState(() {
+                                                                    wardNameTextController
+                                                                            .text =
+                                                                        wardList[
+                                                                            index];
+
+                                                                    currentIndexWard =
+                                                                        index;
+                                                                    var wardListMap =
+                                                                        wardList
+                                                                            .asMap();
+                                                                    var myWard =
+                                                                        wardListMap[
+                                                                            index];
+                                                                    currentWard =
+                                                                        myWard;
+                                                                  });
+                                                                },
+                                                                child: Row(
+                                                                  children: [
+                                                                    TextApp(
+                                                                      text: wardList[
+                                                                          index],
+                                                                      color: Colors
+                                                                          .black,
+                                                                      fontsize:
+                                                                          20.sp,
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Divider(
+                                                              height: 25.h,
+                                                            )
+                                                          ],
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
                                         },
-                                        dropdownDecoratorProps:
-                                            DropDownDecoratorProps(
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            hintMaxLines: 1,
+                                        controller: wardNameTextController,
+                                        style: TextStyle(
+                                            fontSize: 12.sp, color: grey),
+                                        cursorColor: grey,
+                                        decoration: InputDecoration(
                                             fillColor: const Color.fromARGB(
                                                 255, 226, 104, 159),
                                             focusedBorder: OutlineInputBorder(
@@ -1378,17 +1671,19 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                               borderRadius:
                                                   BorderRadius.circular(8.r),
                                             ),
+                                            hintText: 'Chọn phường/xã',
+                                            suffixIcon: Transform.rotate(
+                                              angle: 90 * math.pi / 180,
+                                              child: Icon(
+                                                Icons.chevron_right,
+                                                size: 28.sp,
+                                                color: Colors.black
+                                                    .withOpacity(0.5),
+                                              ),
+                                            ),
                                             isDense: true,
                                             contentPadding:
-                                                EdgeInsets.all(15.w),
-                                            hintStyle:
-                                                TextStyle(fontSize: 14.sp),
-                                            hintText: "Chọn phường/xã",
-                                          ),
-                                        ),
-
-                                        // selectedItem:
-                                        //     "Chọn phường/xã",
+                                                EdgeInsets.all(15.w)),
                                       ),
                                     ],
                                   ),

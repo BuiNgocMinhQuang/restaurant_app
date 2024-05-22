@@ -505,24 +505,24 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
 
   @override
   void dispose() {
+    surNameController.dispose();
+    nameController.dispose();
+    fullNameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    currentPassworldController.dispose();
+    newPassworldController.dispose();
+    reNewPassworldController.dispose();
+    address4Controller.dispose();
+    twitterTextController.dispose();
+    facebookTextController.dispose();
+    instagramTextController.dispose();
+    storeNameTextController.dispose();
+    roleNameTextController.dispose();
+    cityNameTextController.dispose();
+    districNameTextController.dispose();
+    wardNameTextController.dispose();
     super.dispose();
-    surNameController.clear();
-    nameController.clear();
-    fullNameController.clear();
-    emailController.clear();
-    phoneController.clear();
-    currentPassworldController.clear();
-    newPassworldController.clear();
-    reNewPassworldController.clear();
-    address4Controller.clear();
-    twitterTextController.clear();
-    facebookTextController.clear();
-    instagramTextController.clear();
-    storeNameTextController.clear();
-    roleNameTextController.clear();
-    cityNameTextController.clear();
-    districNameTextController.clear();
-    wardNameTextController.clear();
   }
 
   @override
@@ -1499,7 +1499,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                       fontSize: 12.sp,
                                                       color: grey),
                                                   cursorColor: grey,
-                                                  validator: (value) {},
+                                                  validator: (value) {
+                                                    return null;
+                                                  },
                                                   decoration: InputDecoration(
                                                       fillColor:
                                                           const Color.fromARGB(

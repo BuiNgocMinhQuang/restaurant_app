@@ -249,11 +249,11 @@ class _ListStaffState extends State<ListStaff> {
 
   @override
   void dispose() {
-    super.dispose();
-    _dateStartController.clear();
-    _dateEndController.clear();
+    _dateStartController.dispose();
+    _dateEndController.dispose();
     scrollListStaffController.dispose();
-    stateFilterTextController.clear();
+    stateFilterTextController.dispose();
+    super.dispose();
   }
 
   @override

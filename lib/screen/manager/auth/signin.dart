@@ -27,9 +27,9 @@ class _ManagerSignInState extends State<ManagerSignIn> {
   final passworldController = TextEditingController();
   @override
   void dispose() {
+    emailController.dispose();
+    passworldController.dispose();
     super.dispose();
-    emailController.clear();
-    passworldController.clear();
   }
 
   @override
@@ -278,12 +278,13 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                                   IconButton(
                                                                       onPressed:
                                                                           () {
-                                                                        setState(
-                                                                          () {
-                                                                            passwordVisible =
-                                                                                !passwordVisible;
-                                                                          },
-                                                                        );
+                                                                        mounted
+                                                                            ? setState(
+                                                                                () {
+                                                                                  passwordVisible = !passwordVisible;
+                                                                                },
+                                                                              )
+                                                                            : null;
                                                                       },
                                                                       icon:
                                                                           Icon(
@@ -356,10 +357,13 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                                     .95),
                                                             onChanged:
                                                                 (bool value) {
-                                                              setState(() {
-                                                                isRemember =
-                                                                    value;
-                                                              });
+                                                              mounted
+                                                                  ? setState(
+                                                                      () {
+                                                                      isRemember =
+                                                                          value;
+                                                                    })
+                                                                  : null;
                                                             },
                                                           ),
                                                         ),

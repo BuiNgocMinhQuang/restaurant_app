@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/space.dart';
@@ -8,7 +9,6 @@ import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -57,13 +57,13 @@ class _ManageRoomState extends State<ManageRoom> {
             listTableOfRoomModel = ListTableOfRoomModel.fromJson(data);
           });
         } else {
-          print("ERROR CREATE FOOOD");
+          log("ERROR CREATE FOOOD");
         }
       } catch (error) {
-        print("ERROR CREATE 112212 $error");
+        log("ERROR CREATE 112212 $error");
       }
     } catch (error) {
-      print("ERROR CREATE 44444 $error");
+      log("ERROR CREATE 44444 $error");
     }
   }
 
@@ -88,13 +88,13 @@ class _ManageRoomState extends State<ManageRoom> {
         if (data['status'] == 200) {
           getDataInit();
         } else {
-          print("ERROR CREATE FOOOD");
+          log("ERROR CREATE FOOOD");
         }
       } catch (error) {
-        print("ERROR CREATE 112212 $error");
+        log("ERROR CREATE 112212 $error");
       }
     } catch (error) {
-      print("ERROR CREATE 44444 $error");
+      log("ERROR CREATE 44444 $error");
     }
   }
 
@@ -216,7 +216,7 @@ class _ManageRoomState extends State<ManageRoom> {
                                                             .center,
                                                     children: [
                                                       space20W,
-                                                      Container(
+                                                      SizedBox(
                                                         width: 50.w,
                                                         height: 50.w,
                                                         child: Icon(
@@ -320,7 +320,7 @@ class _ManageRoomState extends State<ManageRoom> {
                                         Positioned(
                                             top: 15.w,
                                             right: 15.w,
-                                            child: Container(
+                                            child: SizedBox(
                                               width: 20.w,
                                               height: 20.w,
                                               child: InkWell(

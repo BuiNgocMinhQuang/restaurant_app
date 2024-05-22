@@ -257,7 +257,7 @@ class CountdownTimer extends StatefulWidget {
   final Function?
       onFinish; // Optional callback function when the timer finishes
 
-  const CountdownTimer({required this.duration, this.onFinish});
+  const CountdownTimer({super.key, required this.duration, this.onFinish});
 
   @override
   _CountdownTimerState createState() => _CountdownTimerState();
