@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:app_restaurant/bloc/staff/login/staff_login_bloc.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/env/index.dart';
@@ -45,7 +46,7 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
 
       var message = data['message'];
 
-      print(" LIST ROOM $data");
+      log(" LIST ROOM $data");
       try {
         if (data['status'] == 200) {
           var roomDataRes = ListRoomModel.fromJson(data);
@@ -65,12 +66,12 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
               });
         }
       } catch (error) {
-        print("ERROR GET LIST ROOM $error");
+        log("ERROR GET LIST ROOM $error");
         emit(state.copyWith(listRoomStatus: ListRoomStatus.failed));
         emit(state.copyWith(errorText: message));
       }
     } catch (error) {
-      print("NO DATA ROOM $error");
+      log("NO DATA ROOM $error");
 
       emit(state.copyWith(listRoomStatus: ListRoomStatus.failed));
       emit(state.copyWith(errorText: "Đã có lỗi xảy ra !"));

@@ -37,12 +37,12 @@ class _ImportInventoryState extends State<ImportInventory> {
     ['Lê Văn C', 30, 'Kỹ sư'],
   ];
 
-  bool _isSelected = false; // Tracks selection state
-  void _onSelectedRowChanged(int selectedIndex) {
-    setState(() {
-      _isSelected = selectedIndex != null;
-    });
-  }
+  // bool _isSelected = false; // Tracks selection state
+  // void _onSelectedRowChanged(int selectedIndex) {
+  //   setState(() {
+  //     _isSelected = selectedIndex != null;
+  //   });
+  // }
 
   final searchController = TextEditingController();
 
@@ -195,24 +195,24 @@ class SelectableDataTable extends StatefulWidget {
 }
 
 class _SelectableDataTableState extends State<SelectableDataTable> {
-  bool _selectAll = false;
+  // bool _selectAll = false;
   List<MyData> _selectedData = [];
   BuildContext? _context;
-  void _handleRowSelected(MyData data, bool selected) {
-    setState(() {
-      data.isSelected = selected;
-      if (selected) {
-        _selectedData.add(data);
-      } else {
-        _selectedData.remove(data);
-      }
-      _selectAll = _selectedData.length == widget.data.length;
-    });
-    widget.onSelectedRowsChanged(_selectedData);
-    if (widget.onDeleteSelected != null) {
-      widget.onDeleteSelected!(_selectedData.toList());
-    }
-  }
+  // void _handleRowSelected(MyData data, bool selected) {
+  //   setState(() {
+  //     data.isSelected = selected;
+  //     if (selected) {
+  //       _selectedData.add(data);
+  //     } else {
+  //       _selectedData.remove(data);
+  //     }
+  //     _selectAll = _selectedData.length == widget.data.length;
+  //   });
+  //   widget.onSelectedRowsChanged(_selectedData);
+  //   if (widget.onDeleteSelected != null) {
+  //     widget.onDeleteSelected!(_selectedData.toList());
+  //   }
+  // }
 
   String _searchText = '';
 
@@ -353,7 +353,7 @@ class _SelectableDataTableState extends State<SelectableDataTable> {
           ),
         )),
       ],
-      onSelectChanged: (selected) => _handleRowSelected(data, selected!),
+      onSelectChanged: (selected) {},
     );
   }
 }

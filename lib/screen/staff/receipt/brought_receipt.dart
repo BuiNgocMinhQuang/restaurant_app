@@ -413,6 +413,7 @@ class _AllWidgetState extends State<AllWidget>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return RefreshIndicator(
       color: Colors.blue,
       onRefresh: () async {
@@ -450,7 +451,7 @@ class _AllWidgetState extends State<AllWidget>
                         price:
                             "${MoneyFormatter(amount: (newListFood[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                         typePopMenu: statusTextBill == "Đang chế biến"
-                            ? Container(
+                            ? SizedBox(
                                 width: 20.w,
                                 height: 20.w,
                                 // color: Colors.amber,
@@ -666,7 +667,7 @@ class _AllWidgetState extends State<AllWidget>
                                   ),
                                 ),
                               )
-                            : Container(
+                            : SizedBox(
                                 width: 20,
                                 height: 20,
                                 // color: Colors.amber,
@@ -911,6 +912,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return RefreshIndicator(
       color: Colors.blue,
       onRefresh: () async {
@@ -931,7 +933,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
                             listBillComplete[index].createdAt.toString()),
                         price:
                             "${MoneyFormatter(amount: (listBillComplete[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: Container(
+                        typePopMenu: SizedBox(
                           width: 20.w,
                           height: 20.w,
                           child: InkWell(
@@ -1157,13 +1159,13 @@ class _PendingWidgetState extends State<PendingWidget>
                 })
               : null;
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR BROUGHT RECEIPT PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
   }
 
@@ -1201,18 +1203,19 @@ class _PendingWidgetState extends State<PendingWidget>
                 })
               : null;
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR BROUGHT RECEIPT PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return RefreshIndicator(
       color: Colors.blue,
       onRefresh: () async {
@@ -1233,7 +1236,7 @@ class _PendingWidgetState extends State<PendingWidget>
                             listBillPending[index].createdAt.toString()),
                         price:
                             "${MoneyFormatter(amount: (listBillPending[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: Container(
+                        typePopMenu: SizedBox(
                           width: 20.w,
                           height: 20.w,
                           // color: Colors.amber,
@@ -1548,15 +1551,15 @@ class _CancleWidgetState extends State<CancleWidget>
                   }
                 })
               : null;
-          print("DATA BACK ${data}");
+          log("DATA BACK $data");
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR BROUGHT RECEIPT PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
   }
 
@@ -1614,6 +1617,7 @@ class _CancleWidgetState extends State<CancleWidget>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return RefreshIndicator(
       color: Colors.blue,
       onRefresh: () async {
@@ -1633,7 +1637,7 @@ class _CancleWidgetState extends State<CancleWidget>
                             listBillCancle[index].createdAt.toString()),
                         price:
                             "${MoneyFormatter(amount: (listBillCancle[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: Container(
+                        typePopMenu: SizedBox(
                           width: 20.w,
                           height: 20.w,
                           child: InkWell(
@@ -1757,7 +1761,7 @@ class _RecipeForChefState extends State<RecipeForChef> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
+            SizedBox(
               width: 300,
               height: 300,
               // color: Colors.amber,

@@ -11,14 +11,16 @@ import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/chart/chart_home_all_store.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
 import 'package:lottie/lottie.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
+import 'dart:math' as math;
 
 class ManagerHome extends StatefulWidget {
   const ManagerHome({super.key});
@@ -32,23 +34,26 @@ class _ManagerHomeState extends State<ManagerHome> {
 
   HomeDataModel? dataHome;
   DetailsStoreModel? dataDetailsStoreModel;
-  final loailistKey = GlobalKey<DropdownSearchState>();
-  TextEditingController _dateStartController = TextEditingController();
-  TextEditingController _dateEndController = TextEditingController();
+  final TextEditingController _dateStartController = TextEditingController();
+  final TextEditingController _dateEndController = TextEditingController();
+  final TextEditingController dataTypeTextController = TextEditingController();
   String currentDataType = "%m-%Y";
   ChartDataHomeModel? chartDataModel;
   bool isLoading = true;
   bool isError = false;
+  bool hasMore = false;
   List<String> loaiList = [
     "Ngày",
     "Tháng",
     "Năm",
   ];
   void handleGetDataHome() async {
-    setState(() {
-      isLoading = true;
-      isError = false;
-    });
+    mounted
+        ? setState(() {
+            isLoading = true;
+            isError = false;
+          })
+        : null;
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
       final respons = await http.post(
@@ -179,13 +184,15 @@ class _ManagerHomeState extends State<ManagerHome> {
               child: child ?? Container(),
             ));
     if (picked != null) {
-      setState(() {
-        _dateEndController.text = picked.toString().split(" ")[0];
-        handleGetChartDataHome(
-            startDate: _dateStartController.text,
-            endDate: _dateEndController.text,
-            dataType: currentDataType);
-      });
+      mounted
+          ? setState(() {
+              _dateEndController.text = picked.toString().split(" ")[0];
+              handleGetChartDataHome(
+                  startDate: _dateStartController.text,
+                  endDate: _dateEndController.text,
+                  dataType: currentDataType);
+            })
+          : null;
     }
   }
 
@@ -212,9 +219,11 @@ class _ManagerHomeState extends State<ManagerHome> {
       print(" DATA CREATE FOOD ${data}");
       try {
         if (data['status'] == 200) {
-          setState(() {
-            dataDetailsStoreModel = DetailsStoreModel.fromJson(data);
-          });
+          mounted
+              ? setState(() {
+                  dataDetailsStoreModel = DetailsStoreModel.fromJson(data);
+                })
+              : null;
           Navigator.push(
             navigatorKey.currentContext!,
             MaterialPageRoute(
@@ -259,9 +268,11 @@ class _ManagerHomeState extends State<ManagerHome> {
       print(" DATA CHART HOME ${data}");
       try {
         if (data['status'] == 200) {
-          setState(() {
-            chartDataModel = ChartDataHomeModel.fromJson(data);
-          });
+          mounted
+              ? setState(() {
+                  chartDataModel = ChartDataHomeModel.fromJson(data);
+                })
+              : null;
         } else {
           print("ERROR DATA CHART HOME");
         }
@@ -284,6 +295,7 @@ class _ManagerHomeState extends State<ManagerHome> {
     super.dispose();
     _dateStartController.clear();
     _dateEndController.clear();
+    dataTypeTextController.clear();
   }
 
   @override
@@ -334,272 +346,288 @@ class _ManagerHomeState extends State<ManagerHome> {
                     child: Container(
                       width: 1.sw,
                       color: Colors.white,
-                      child: SingleChildScrollView(
-                        child: Padding(
-                            padding: EdgeInsets.only(
-                                top: 20.w,
-                                left: 20.w,
-                                right: 20.w,
-                                bottom: 20.w),
-                            child: Column(
-                              children: [
-                                TextApp(
-                                  text: "Thống kê chung",
-                                  fontsize: 22.sp,
-                                  color: menuGrey,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                space35H,
-                                Container(
-                                    width: 1.sw,
-                                    // height: 100.h,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15.r),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.5),
-                                          spreadRadius: 2,
-                                          blurRadius: 4,
-                                          offset: const Offset(0,
-                                              3), // changes position of shadow
-                                        ),
-                                      ],
+                      child: SlidableAutoCloseBehavior(
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () {
+                            // Close any open slidable when tapping outside
+                            Slidable.of(context)?.close();
+                          },
+                          child: SingleChildScrollView(
+                            child: Padding(
+                                padding: EdgeInsets.only(
+                                    top: 20.w,
+                                    left: 20.w,
+                                    right: 20.w,
+                                    bottom: 20.w),
+                                child: Column(
+                                  children: [
+                                    TextApp(
+                                      text: "Thống kê chung",
+                                      fontsize: 22.sp,
+                                      color: menuGrey,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    child: Padding(
-                                        padding: EdgeInsets.all(20.w),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
+                                    space35H,
+                                    Container(
+                                        width: 1.sw,
+                                        // height: 100.h,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15.r),
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.5),
+                                              spreadRadius: 2,
+                                              blurRadius: 4,
+                                              offset: const Offset(0,
+                                                  3), // changes position of shadow
+                                            ),
+                                          ],
+                                        ),
+                                        child: Padding(
+                                            padding: EdgeInsets.all(20.w),
+                                            child: Row(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                TextApp(
-                                                  text: "Tổng tiền thu được",
-                                                  fontsize: 14.sp,
-                                                  color: menuGrey,
-                                                  fontWeight: FontWeight.normal,
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    TextApp(
+                                                      text:
+                                                          "Tổng tiền thu được",
+                                                      fontsize: 14.sp,
+                                                      color: menuGrey,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                    ),
+                                                    TextApp(
+                                                      text:
+                                                          "${MoneyFormatter(amount: (dataHome?.orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                      fontsize: 20.sp,
+                                                      color: blueText2,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    )
+                                                  ],
                                                 ),
-                                                TextApp(
-                                                  text:
-                                                      "${MoneyFormatter(amount: (dataHome?.orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                  fontsize: 20.sp,
-                                                  color: blueText2,
-                                                  fontWeight: FontWeight.bold,
+                                                InkWell(
+                                                  onTap: () {},
+                                                  child: Container(
+                                                    width: 50,
+                                                    height: 50,
+                                                    // color: Colors.amber,
+                                                    child: Image.asset(
+                                                      'assets/images/incomes.png',
+                                                      fit: BoxFit.contain,
+                                                    ),
+                                                  ),
                                                 )
                                               ],
+                                            ))),
+                                    space20H,
+                                    Container(
+                                        width: 1.sw,
+                                        // height: 100.h,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15.r),
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.5),
+                                              spreadRadius: 2,
+                                              blurRadius: 4,
+                                              offset: const Offset(0,
+                                                  3), // changes position of shadow
                                             ),
-                                            InkWell(
-                                              onTap: () {},
-                                              child: Container(
-                                                width: 50,
-                                                height: 50,
-                                                // color: Colors.amber,
-                                                child: Image.asset(
-                                                  'assets/images/incomes.png',
-                                                  fit: BoxFit.contain,
-                                                ),
-                                              ),
-                                            )
                                           ],
-                                        ))),
-                                space20H,
-                                Container(
-                                    width: 1.sw,
-                                    // height: 100.h,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15.r),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.5),
-                                          spreadRadius: 2,
-                                          blurRadius: 4,
-                                          offset: const Offset(0,
-                                              3), // changes position of shadow
                                         ),
-                                      ],
-                                    ),
-                                    child: Padding(
-                                        padding: EdgeInsets.all(20.w),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
+                                        child: Padding(
+                                            padding: EdgeInsets.all(20.w),
+                                            child: Row(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                TextApp(
-                                                  text: "Tổng số nhân viên",
-                                                  fontsize: 14.sp,
-                                                  color: menuGrey,
-                                                  fontWeight: FontWeight.normal,
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    TextApp(
+                                                      text: "Tổng số nhân viên",
+                                                      fontsize: 14.sp,
+                                                      color: menuGrey,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                    ),
+                                                    TextApp(
+                                                      text: dataHome?.staffTotal
+                                                              .toString() ??
+                                                          '0',
+                                                      fontsize: 20.sp,
+                                                      color: blueText2,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    )
+                                                  ],
                                                 ),
-                                                TextApp(
-                                                  text: dataHome?.staffTotal
-                                                          .toString() ??
-                                                      '0',
-                                                  fontsize: 20.sp,
-                                                  color: blueText2,
-                                                  fontWeight: FontWeight.bold,
+                                                Container(
+                                                  width: 50,
+                                                  height: 50,
+                                                  child: Image.asset(
+                                                    'assets/images/staff.png',
+                                                    fit: BoxFit.contain,
+                                                  ),
                                                 )
                                               ],
+                                            ))),
+                                    space20H,
+                                    Container(
+                                        width: 1.sw,
+                                        // height: 100.h,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15.r),
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.5),
+                                              spreadRadius: 2,
+                                              blurRadius: 4,
+                                              offset: const Offset(0,
+                                                  3), // changes position of shadow
                                             ),
-                                            Container(
-                                              width: 50,
-                                              height: 50,
-                                              child: Image.asset(
-                                                'assets/images/staff.png',
-                                                fit: BoxFit.contain,
-                                              ),
-                                            )
                                           ],
-                                        ))),
-                                space20H,
-                                Container(
-                                    width: 1.sw,
-                                    // height: 100.h,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15.r),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.5),
-                                          spreadRadius: 2,
-                                          blurRadius: 4,
-                                          offset: const Offset(0,
-                                              3), // changes position of shadow
                                         ),
-                                      ],
-                                    ),
-                                    child: Padding(
-                                        padding: EdgeInsets.all(20.w),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
+                                        child: Padding(
+                                            padding: EdgeInsets.all(20.w),
+                                            child: Row(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                TextApp(
-                                                  text: "Số đơn thành công",
-                                                  fontsize: 14.sp,
-                                                  color: menuGrey,
-                                                  fontWeight: FontWeight.normal,
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    TextApp(
+                                                      text: "Số đơn thành công",
+                                                      fontsize: 14.sp,
+                                                      color: menuGrey,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                    ),
+                                                    TextApp(
+                                                      text: dataHome
+                                                              ?.orderTotalSuccess
+                                                              .toString() ??
+                                                          '0',
+                                                      fontsize: 20.sp,
+                                                      color: blueText2,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    )
+                                                  ],
                                                 ),
-                                                TextApp(
-                                                  text: dataHome
-                                                          ?.orderTotalSuccess
-                                                          .toString() ??
-                                                      '0',
-                                                  fontsize: 20.sp,
-                                                  color: blueText2,
-                                                  fontWeight: FontWeight.bold,
+                                                Container(
+                                                  width: 50,
+                                                  height: 50,
+                                                  child: Image.asset(
+                                                    'assets/images/comeplete_receipt.png',
+                                                    fit: BoxFit.contain,
+                                                  ),
                                                 )
                                               ],
+                                            ))),
+                                    space20H,
+                                    Container(
+                                        width: 1.sw,
+                                        // height: 100.h,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15.r),
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.5),
+                                              spreadRadius: 2,
+                                              blurRadius: 4,
+                                              offset: const Offset(0,
+                                                  3), // changes position of shadow
                                             ),
-                                            Container(
-                                              width: 50,
-                                              height: 50,
-                                              child: Image.asset(
-                                                'assets/images/comeplete_receipt.png',
-                                                fit: BoxFit.contain,
-                                              ),
-                                            )
                                           ],
-                                        ))),
-                                space20H,
-                                Container(
-                                    width: 1.sw,
-                                    // height: 100.h,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15.r),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.5),
-                                          spreadRadius: 2,
-                                          blurRadius: 4,
-                                          offset: const Offset(0,
-                                              3), // changes position of shadow
                                         ),
-                                      ],
-                                    ),
-                                    child: Padding(
-                                        padding: EdgeInsets.all(20.w),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
+                                        child: Padding(
+                                            padding: EdgeInsets.all(20.w),
+                                            child: Row(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                TextApp(
-                                                  text: "Số đơn bị huỷ",
-                                                  fontsize: 14.sp,
-                                                  color: menuGrey,
-                                                  fontWeight: FontWeight.normal,
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    TextApp(
+                                                      text: "Số đơn bị huỷ",
+                                                      fontsize: 14.sp,
+                                                      color: menuGrey,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                    ),
+                                                    TextApp(
+                                                      text: dataHome
+                                                              ?.orderTotalClose
+                                                              .toString() ??
+                                                          '0',
+                                                      fontsize: 20.sp,
+                                                      color: blueText2,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    )
+                                                  ],
                                                 ),
-                                                TextApp(
-                                                  text: dataHome
-                                                          ?.orderTotalClose
-                                                          .toString() ??
-                                                      '0',
-                                                  fontsize: 20.sp,
-                                                  color: blueText2,
-                                                  fontWeight: FontWeight.bold,
+                                                Container(
+                                                  width: 50,
+                                                  height: 50,
+                                                  child: Image.asset(
+                                                    'assets/images/cancle_receipt.png',
+                                                    fit: BoxFit.contain,
+                                                  ),
                                                 )
                                               ],
-                                            ),
-                                            Container(
-                                              width: 50,
-                                              height: 50,
-                                              child: Image.asset(
-                                                'assets/images/cancle_receipt.png',
-                                                fit: BoxFit.contain,
-                                              ),
-                                            )
-                                          ],
-                                        ))),
-                                space20H,
-                                Container(
-                                    width: 1.sw,
-                                    // height: 100.h,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15.r),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.5),
-                                          spreadRadius: 2,
-                                          blurRadius: 4,
-                                          offset: const Offset(0,
-                                              3), // changes position of shadow
-                                        ),
-                                      ],
-                                    ),
-                                    child: Column(
+                                            ))),
+                                    space20H,
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         space20H,
                                         TextApp(
@@ -608,523 +636,674 @@ class _ManagerHomeState extends State<ManagerHome> {
                                           color: blueText2,
                                           fontWeight: FontWeight.bold,
                                         ),
-                                        SingleChildScrollView(
-                                          scrollDirection: Axis.horizontal,
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Column(
-                                                children: [
-                                                  Container(
-                                                    width: 1.sw * 1.7,
-                                                    // height: 300.h,
-                                                    padding:
-                                                        EdgeInsets.all(20.w),
-                                                    child: ListView.builder(
-                                                        controller:
-                                                            scrollListStrore,
-                                                        physics:
-                                                            const ClampingScrollPhysics(),
-                                                        shrinkWrap: true,
-                                                        itemCount: (dataHome
-                                                                    ?.stores
-                                                                    .length ??
-                                                                0) +
-                                                            1,
-                                                        itemBuilder:
-                                                            (context, index) {
-                                                          var dataLenght =
-                                                              dataHome?.stores
-                                                                      .length ??
-                                                                  0;
-                                                          if (index <
-                                                              dataLenght) {
-                                                            DetailsStoreHome
-                                                                storeData =
-                                                                dataHome!
-                                                                        .stores[
-                                                                    index];
-                                                            // var imagePath1 =
-                                                            //     storeData
-                                                            //         .storeImages;
-                                                            // var listImagePath =
-                                                            //     jsonDecode(imagePath1);
-                                                            var logoImageStore =
-                                                                storeData
-                                                                    .storeLogo;
-                                                            return Theme(
-                                                              data: Theme.of(
-                                                                      context)
-                                                                  .copyWith(
-                                                                      dividerColor:
-                                                                          Colors
-                                                                              .transparent),
-                                                              child: Column(
+                                        space20H,
+                                        SizedBox(
+                                          width: 1.sw,
+                                          child: ListView.builder(
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              shrinkWrap: true,
+                                              itemCount:
+                                                  (dataHome?.stores.length ??
+                                                          0) +
+                                                      1,
+                                              itemBuilder: (context, index) {
+                                                var dataLenght =
+                                                    dataHome?.stores.length ??
+                                                        0;
+                                                if (index < dataLenght) {
+                                                  DetailsStoreHome storeData =
+                                                      dataHome!.stores[index];
+                                                  var logoImageStore =
+                                                      storeData.storeLogo;
+
+                                                  return Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      const Divider(
+                                                        height: 1,
+                                                      ),
+                                                      space5H,
+                                                      Slidable(
+                                                        // Specify a key if the Slidable is dismissible.
+                                                        key: ValueKey(dataHome!
+                                                            .stores[index]),
+
+                                                        // The start action pane is the one at the left or the top side.
+                                                        endActionPane:
+                                                            ActionPane(
+                                                          extentRatio: 0.3,
+                                                          // dismissible: SlidableDismissal.disabled,
+                                                          dragDismissible:
+                                                              false,
+                                                          // A motion is a widget used to control how the pane animates.
+                                                          motion:
+                                                              const ScrollMotion(),
+
+                                                          // A pane can dismiss the Slidable.
+                                                          dismissible:
+                                                              DismissiblePane(
+                                                                  onDismissed:
+                                                                      () {}),
+
+                                                          // All actions are defined in the children parameter.
+                                                          children: [
+                                                            // A SlidableAction can have an icon and/or a label.
+                                                            // SlidableAction(
+                                                            //   onPressed:
+                                                            //       (dd) {},
+                                                            //   backgroundColor: Theme.of(
+                                                            //           context)
+                                                            //       .colorScheme
+                                                            //       .primary,
+                                                            //   foregroundColor:
+                                                            //       Colors
+                                                            //           .white,
+                                                            //   icon: Icons
+                                                            //       .info,
+                                                            //   label:
+                                                            //       'Thêm',
+                                                            // ),
+                                                            SlidableAction(
+                                                              onPressed:
+                                                                  (context) {
+                                                                getDetailsStore(
+                                                                    shopID: storeData
+                                                                        .shopId);
+                                                              },
+                                                              backgroundColor:
+                                                                  Colors.blue,
+                                                              foregroundColor:
+                                                                  Colors.white,
+                                                              icon: Icons.more,
+                                                              label: 'Chi tiết',
+                                                            ),
+                                                          ],
+                                                        ),
+
+                                                        // The end action pane is the one at the right or the bottom side.
+
+                                                        // The child of the Slidable is what the user sees when the
+                                                        // component is not dragged.
+                                                        child: ListTile(
+                                                            contentPadding:
+                                                                EdgeInsets.zero,
+                                                            minVerticalPadding:
+                                                                0,
+                                                            horizontalTitleGap:
+                                                                0,
+                                                            title: Container(
+                                                              width: 1.sw,
+                                                              color:
+                                                                  Colors.white,
+                                                              child: Row(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .start,
                                                                 children: [
-                                                                  Row(
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .center,
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .start,
-                                                                    children: [
-                                                                      Container(
-                                                                        width:
-                                                                            150.w,
-                                                                        height:
-                                                                            100.w,
-                                                                        // color: Colors.amber,
-                                                                        child: logoImageStore ==
-                                                                                null
-                                                                            ? Image.asset(
-                                                                                'assets/images/store.png',
-                                                                                fit: BoxFit.contain,
-                                                                              )
-                                                                            : CachedNetworkImage(
-                                                                                fit: BoxFit.fill,
-                                                                                imageUrl: httpImage + logoImageStore,
-                                                                                placeholder: (context, url) => SizedBox(
-                                                                                  height: 10.w,
-                                                                                  width: 10.w,
-                                                                                  child: const Center(child: CircularProgressIndicator()),
-                                                                                ),
-                                                                                errorWidget: (context, url, error) => const Icon(Icons.error),
+                                                                  SizedBox(
+                                                                    width:
+                                                                        140.w,
+                                                                    height:
+                                                                        100.w,
+                                                                    child: logoImageStore ==
+                                                                            null
+                                                                        ? ClipRRect(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(8.r),
+                                                                            child: Image.asset(
+                                                                              'assets/images/store.png',
+                                                                              fit: BoxFit.contain,
+                                                                            ))
+                                                                        : ClipRRect(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(8.r),
+                                                                            child:
+                                                                                CachedNetworkImage(
+                                                                              fit: BoxFit.fill,
+                                                                              imageUrl: httpImage + logoImageStore,
+                                                                              placeholder: (context, url) => SizedBox(
+                                                                                height: 10.w,
+                                                                                width: 10.w,
+                                                                                child: const Center(child: CircularProgressIndicator()),
                                                                               ),
-                                                                      ),
-                                                                      space15W,
-                                                                      Column(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.start,
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.center,
-                                                                        children: [
-                                                                          TextApp(
-                                                                            isOverFlow:
-                                                                                false,
-                                                                            softWrap:
-                                                                                true,
-                                                                            text:
-                                                                                'Địa chỉ: ',
-                                                                            fontsize:
-                                                                                14.sp,
-                                                                          ),
-                                                                          Container(
-                                                                            width:
-                                                                                150.w,
-                                                                            child:
-                                                                                TextApp(
-                                                                              isOverFlow: false,
-                                                                              softWrap: true,
-                                                                              text: storeData.storeAddress ?? '',
-                                                                              fontsize: 14.sp,
-                                                                              color: blueText,
+                                                                              errorWidget: (context, url, error) => const Icon(Icons.error),
                                                                             ),
                                                                           ),
-                                                                        ],
-                                                                      ),
-                                                                      space15W,
-                                                                      Column(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.start,
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.center,
-                                                                        children: [
-                                                                          Container(
-                                                                            width:
-                                                                                100.w,
-                                                                            child:
-                                                                                TextApp(
-                                                                              isOverFlow: false,
-                                                                              softWrap: true,
-                                                                              text: 'Nhân viên',
-                                                                              fontsize: 14.sp,
-                                                                              textAlign: TextAlign.center,
-                                                                            ),
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                100.w,
-                                                                            child:
-                                                                                TextApp(
-                                                                              isOverFlow: false,
-                                                                              softWrap: true,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              text: storeData.staffsCount.toString(),
-                                                                              fontsize: 14.sp,
-                                                                              color: blueText,
-                                                                              textAlign: TextAlign.center,
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                      space15W,
-                                                                      Column(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.start,
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.center,
-                                                                        children: [
-                                                                          Container(
-                                                                            width:
-                                                                                100.w,
-                                                                            child:
-                                                                                TextApp(
-                                                                              isOverFlow: false,
-                                                                              softWrap: true,
-                                                                              text: 'Tổng tiền',
-                                                                              fontsize: 14.sp,
-                                                                              textAlign: TextAlign.center,
-                                                                            ),
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                100.w,
-                                                                            child:
-                                                                                TextApp(
-                                                                              isOverFlow: false,
-                                                                              softWrap: true,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              text: "${MoneyFormatter(amount: (storeData.ordersSumOrderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                                              fontsize: 14.sp,
-                                                                              color: blueText,
-                                                                              textAlign: TextAlign.center,
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                      space15W,
-                                                                      Container(
-                                                                        width:
-                                                                            100.w,
-                                                                        height:
-                                                                            30.w,
-                                                                        child:
-                                                                            ButtonGradient(
-                                                                          color1:
-                                                                              color1BlueButton,
-                                                                          color2:
-                                                                              color2BlueButton,
-                                                                          event:
-                                                                              () {
-                                                                            getDetailsStore(shopID: storeData.shopId);
-                                                                          },
-                                                                          text:
-                                                                              "Chi tiết",
-                                                                          fontSize:
-                                                                              12.sp,
-                                                                          radius:
-                                                                              8.r,
-                                                                          textColor:
-                                                                              Colors.white,
-                                                                        ),
-                                                                      )
-                                                                    ],
                                                                   ),
-                                                                  space20H
+                                                                  SizedBox(
+                                                                    width: 10.w,
+                                                                  ),
+                                                                  Container(
+                                                                    child:
+                                                                        Column(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        Row(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.center,
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.start,
+                                                                          children: [
+                                                                            TextApp(
+                                                                              isOverFlow: false,
+                                                                              softWrap: true,
+                                                                              text: "Địa chỉ: ",
+                                                                              fontsize: 14.sp,
+                                                                              textAlign: TextAlign.start,
+                                                                              fontWeight: FontWeight.bold,
+                                                                            ),
+                                                                            space5W,
+                                                                            SizedBox(
+                                                                              width: 150.w,
+                                                                              child: TextApp(
+                                                                                isOverFlow: false,
+                                                                                softWrap: true,
+                                                                                text: storeData.storeAddress ?? '',
+                                                                                fontsize: 14.sp,
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                        Row(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.center,
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.start,
+                                                                          children: [
+                                                                            TextApp(
+                                                                              isOverFlow: false,
+                                                                              softWrap: true,
+                                                                              text: "Nhân viên: ",
+                                                                              fontsize: 14.sp,
+                                                                              textAlign: TextAlign.start,
+                                                                              fontWeight: FontWeight.bold,
+                                                                            ),
+                                                                            space5W,
+                                                                            SizedBox(
+                                                                              width: 150.w,
+                                                                              child: TextApp(
+                                                                                isOverFlow: false,
+                                                                                softWrap: true,
+                                                                                text: storeData.staffsCount.toString(),
+                                                                                fontsize: 14.sp,
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                        Row(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.center,
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.start,
+                                                                          children: [
+                                                                            TextApp(
+                                                                              isOverFlow: false,
+                                                                              softWrap: true,
+                                                                              text: "Tổng tiền: ",
+                                                                              fontsize: 14.sp,
+                                                                              textAlign: TextAlign.start,
+                                                                              fontWeight: FontWeight.bold,
+                                                                            ),
+                                                                            space5W,
+                                                                            SizedBox(
+                                                                              width: 150.w,
+                                                                              child: TextApp(
+                                                                                isOverFlow: false,
+                                                                                softWrap: true,
+                                                                                text: "${MoneyFormatter(amount: (storeData.ordersSumOrderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                                                fontsize: 14.sp,
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  )
                                                                 ],
                                                               ),
-                                                            );
-                                                          } else {
-                                                            return Container();
-                                                          }
-                                                        }),
-                                                  )
-                                                ],
-                                              )
-                                            ],
-                                          ),
+                                                            )),
+                                                      ),
+                                                      space5H,
+                                                    ],
+                                                  );
+                                                } else {
+                                                  return Center(
+                                                    child: hasMore
+                                                        ? Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    top: 10.h,
+                                                                    bottom:
+                                                                        10.h),
+                                                            child:
+                                                                const CircularProgressIndicator(),
+                                                          )
+                                                        : Container(),
+                                                  );
+                                                }
+                                              }),
                                         )
                                       ],
-                                    )),
-                                space30H,
-                                Container(
-                                  width: 1.sw,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15.r),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 2,
-                                        blurRadius: 4,
-                                        offset: const Offset(
-                                            0, 3), // changes position of shadow
-                                      ),
-                                    ],
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      space20H,
-                                      TextApp(
-                                        text: "Biểu đồ thu nhập",
-                                        fontsize: 16.sp,
-                                        color: blueText2,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      space20H,
-                                      Row(
-                                        children: [
-                                          space10W,
-                                          Flexible(
-                                            fit: FlexFit.tight,
-                                            child: Column(
-                                              children: [
-                                                TextApp(
-                                                  text: " Loại",
-                                                  fontsize: 12.sp,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: blueText,
-                                                ),
-                                                SizedBox(
-                                                  height: 10.h,
-                                                ),
-                                                DropdownSearch(
-                                                  key: loailistKey,
-                                                  onChanged: (loaiListIndex) {
-                                                    var indexType =
-                                                        loaiList.indexOf(
-                                                            loaiListIndex ??
-                                                                '');
-                                                    if (indexType == 0) {
-                                                      setState(() {
-                                                        currentDataType =
-                                                            "%d-%m-%Y";
-                                                      });
-                                                      handleGetChartDataHome(
-                                                          startDate:
-                                                              _dateStartController
-                                                                  .text,
-                                                          endDate:
-                                                              _dateEndController
-                                                                  .text,
-                                                          dataType:
-                                                              currentDataType);
-                                                    } else if (indexType == 2) {
-                                                      setState(() {
-                                                        currentDataType = "%Y";
-                                                      });
-                                                      handleGetChartDataHome(
-                                                          startDate:
-                                                              _dateStartController
-                                                                  .text,
-                                                          endDate:
-                                                              _dateEndController
-                                                                  .text,
-                                                          dataType:
-                                                              currentDataType);
-                                                    } else {
-                                                      setState(() {
-                                                        currentDataType =
-                                                            "%m-%Y";
-                                                      });
-                                                      handleGetChartDataHome(
-                                                          startDate:
-                                                              _dateStartController
-                                                                  .text,
-                                                          endDate:
-                                                              _dateEndController
-                                                                  .text,
-                                                          dataType:
-                                                              currentDataType);
-                                                    }
-                                                  },
-                                                  items: loaiList,
-                                                  dropdownDecoratorProps:
-                                                      DropDownDecoratorProps(
-                                                    dropdownSearchDecoration:
-                                                        InputDecoration(
-                                                      fillColor:
-                                                          const Color.fromARGB(
-                                                              255,
-                                                              226,
-                                                              104,
-                                                              159),
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide:
-                                                            const BorderSide(
-                                                                color: Color
-                                                                    .fromRGBO(
-                                                                        214,
-                                                                        51,
-                                                                        123,
-                                                                        0.6),
-                                                                width: 2.0),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8.r),
-                                                      ),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8.r),
-                                                      ),
-                                                      isDense: true,
-                                                      contentPadding:
-                                                          EdgeInsets.all(15.w),
-                                                    ),
-                                                  ),
-                                                  // onChanged: print,
-                                                  selectedItem: loaiList[1],
-                                                ),
-                                              ],
-                                            ),
+                                    ),
+                                    space30H,
+                                    Container(
+                                      width: 1.sw,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(15.r),
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            spreadRadius: 2,
+                                            blurRadius: 4,
+                                            offset: const Offset(0,
+                                                3), // changes position of shadow
                                           ),
-                                          space20W,
-                                          Flexible(
-                                            fit: FlexFit.tight,
-                                            child: Column(
-                                              children: [
-                                                TextApp(
-                                                  text: " Từ ngày",
-                                                  fontsize: 12.sp,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: blueText,
-                                                ),
-                                                SizedBox(
-                                                  height: 10.h,
-                                                ),
-                                                TextField(
-                                                  onTapOutside: (event) {
-                                                    FocusManager
-                                                        .instance.primaryFocus
-                                                        ?.unfocus();
-                                                  },
-                                                  readOnly: true,
-                                                  controller:
-                                                      _dateStartController,
-                                                  onTap: selectDayStart,
-                                                  style: TextStyle(
-                                                      fontSize: 14.sp,
-                                                      color: grey),
-                                                  cursorColor: grey,
-                                                  decoration: InputDecoration(
-                                                      suffixIcon: const Icon(
-                                                          Icons.calendar_month),
-                                                      fillColor:
-                                                          const Color.fromARGB(
-                                                              255,
-                                                              226,
-                                                              104,
-                                                              159),
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide:
-                                                            const BorderSide(
-                                                                color: Color
-                                                                    .fromRGBO(
-                                                                        214,
-                                                                        51,
-                                                                        123,
-                                                                        0.6),
-                                                                width: 2.0),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8.r),
-                                                      ),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8.r),
-                                                      ),
-                                                      hintText: 'dd/mm/yy',
-                                                      isDense: true,
-                                                      contentPadding:
-                                                          EdgeInsets.all(15.w)),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          space20W,
-                                          Flexible(
-                                            fit: FlexFit.tight,
-                                            child: Column(
-                                              children: [
-                                                TextApp(
-                                                  text: " Đến ngày",
-                                                  fontsize: 12.sp,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: blueText,
-                                                ),
-                                                SizedBox(
-                                                  height: 10.h,
-                                                ),
-                                                TextField(
-                                                  onTapOutside: (event) {
-                                                    FocusManager
-                                                        .instance.primaryFocus
-                                                        ?.unfocus();
-                                                  },
-                                                  readOnly: true,
-                                                  controller:
-                                                      _dateEndController,
-                                                  onTap: selectDayEnd,
-                                                  style: TextStyle(
-                                                      fontSize: 14.sp,
-                                                      color: grey),
-                                                  cursorColor: grey,
-                                                  decoration: InputDecoration(
-                                                      suffixIcon: const Icon(
-                                                          Icons.calendar_month),
-                                                      fillColor:
-                                                          const Color.fromARGB(
-                                                              255,
-                                                              226,
-                                                              104,
-                                                              159),
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide:
-                                                            const BorderSide(
-                                                                color: Color
-                                                                    .fromRGBO(
-                                                                        214,
-                                                                        51,
-                                                                        123,
-                                                                        0.6),
-                                                                width: 2.0),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8.r),
-                                                      ),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8.r),
-                                                      ),
-                                                      hintText: 'dd/mm/yy',
-                                                      isDense: true,
-                                                      contentPadding:
-                                                          EdgeInsets.all(15.w)),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          space10W,
                                         ],
                                       ),
-                                      space20H,
-                                      chartDataModel != null
-                                          ? Container(
-                                              width: 1.sw,
-                                              child: Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: 0.w, right: 00.w),
-                                                child: ChartHomeAllStore(
-                                                    chartDataModel:
-                                                        chartDataModel!),
+                                      child: Column(
+                                        children: [
+                                          space20H,
+                                          TextApp(
+                                            text: "Biểu đồ thu nhập",
+                                            fontsize: 16.sp,
+                                            color: blueText2,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          space20H,
+                                          Row(
+                                            children: [
+                                              space10W,
+                                              Flexible(
+                                                fit: FlexFit.tight,
+                                                child: Column(
+                                                  children: [
+                                                    TextApp(
+                                                      text: "Loại",
+                                                      fontsize: 12.sp,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: blueText,
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10.h,
+                                                    ),
+                                                    TextFormField(
+                                                      readOnly: true,
+                                                      onTapOutside: (event) {
+                                                        FocusManager.instance
+                                                            .primaryFocus
+                                                            ?.unfocus();
+                                                      },
+                                                      onTap: () {
+                                                        showMaterialModalBottomSheet(
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .only(
+                                                              topRight: Radius
+                                                                  .circular(
+                                                                      15.r),
+                                                              topLeft: Radius
+                                                                  .circular(
+                                                                      15.r),
+                                                            ),
+                                                          ),
+                                                          clipBehavior: Clip
+                                                              .antiAliasWithSaveLayer,
+                                                          context: context,
+                                                          builder: (context) =>
+                                                              Container(
+                                                            height: 1.sh / 2,
+                                                            child: Column(
+                                                              children: [
+                                                                Container(
+                                                                  width: 1.sw,
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(20
+                                                                              .w),
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .primary,
+                                                                  child:
+                                                                      TextApp(
+                                                                    text:
+                                                                        "Chọn loại",
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontsize:
+                                                                        20.sp,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  child: ListView
+                                                                      .builder(
+                                                                    padding: EdgeInsets.only(
+                                                                        top: 10
+                                                                            .w),
+                                                                    itemCount:
+                                                                        loaiList
+                                                                            .length,
+                                                                    itemBuilder:
+                                                                        (context,
+                                                                            index) {
+                                                                      return Column(
+                                                                        children: [
+                                                                          Padding(
+                                                                            padding:
+                                                                                EdgeInsets.only(left: 20.w),
+                                                                            child:
+                                                                                InkWell(
+                                                                              onTap: () async {
+                                                                                Navigator.pop(context);
+
+                                                                                if (index == 0) {
+                                                                                  mounted
+                                                                                      ? setState(() {
+                                                                                          currentDataType = "%d-%m-%Y";
+                                                                                        })
+                                                                                      : null;
+                                                                                  handleGetChartDataHome(startDate: _dateStartController.text, endDate: _dateEndController.text, dataType: currentDataType);
+                                                                                } else if (index == 2) {
+                                                                                  mounted
+                                                                                      ? setState(() {
+                                                                                          currentDataType = "%Y";
+                                                                                        })
+                                                                                      : null;
+                                                                                  handleGetChartDataHome(startDate: _dateStartController.text, endDate: _dateEndController.text, dataType: currentDataType);
+                                                                                } else {
+                                                                                  mounted
+                                                                                      ? setState(() {
+                                                                                          currentDataType = "%m-%Y";
+                                                                                        })
+                                                                                      : null;
+                                                                                  handleGetChartDataHome(startDate: _dateStartController.text, endDate: _dateEndController.text, dataType: currentDataType);
+                                                                                }
+                                                                                mounted
+                                                                                    ? setState(() {
+                                                                                        dataTypeTextController.text = loaiList[index];
+                                                                                      })
+                                                                                    : null;
+                                                                              },
+                                                                              child: Row(
+                                                                                children: [
+                                                                                  TextApp(
+                                                                                    text: loaiList[index],
+                                                                                    color: Colors.black,
+                                                                                    fontsize: 20.sp,
+                                                                                  )
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Divider(
+                                                                            height:
+                                                                                25.h,
+                                                                          )
+                                                                        ],
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                      controller:
+                                                          dataTypeTextController,
+                                                      style: TextStyle(
+                                                          fontSize: 12.sp,
+                                                          color: grey),
+                                                      cursorColor: grey,
+                                                      decoration:
+                                                          InputDecoration(
+                                                              fillColor:
+                                                                  const Color
+                                                                      .fromARGB(
+                                                                      255,
+                                                                      226,
+                                                                      104,
+                                                                      159),
+                                                              focusedBorder:
+                                                                  OutlineInputBorder(
+                                                                borderSide: const BorderSide(
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            214,
+                                                                            51,
+                                                                            123,
+                                                                            0.6),
+                                                                    width: 2.0),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8.r),
+                                                              ),
+                                                              border:
+                                                                  OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8.r),
+                                                              ),
+                                                              hintText: 'Tháng',
+                                                              suffixIcon:
+                                                                  Transform
+                                                                      .rotate(
+                                                                angle: 90 *
+                                                                    math.pi /
+                                                                    180,
+                                                                child: Icon(
+                                                                  Icons
+                                                                      .chevron_right,
+                                                                  size: 28.sp,
+                                                                  color: Colors
+                                                                      .black
+                                                                      .withOpacity(
+                                                                          0.5),
+                                                                ),
+                                                              ),
+                                                              isDense: true,
+                                                              contentPadding:
+                                                                  EdgeInsets
+                                                                      .all(15
+                                                                          .w)),
+                                                    )
+                                                  ],
+                                                ),
                                               ),
-                                            )
-                                          : Container()
-                                    ],
-                                  ),
-                                )
-                              ],
-                            )),
+                                              space20W,
+                                              Flexible(
+                                                fit: FlexFit.tight,
+                                                child: Column(
+                                                  children: [
+                                                    TextApp(
+                                                      text: " Từ ngày",
+                                                      fontsize: 12.sp,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: blueText,
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10.h,
+                                                    ),
+                                                    TextField(
+                                                      onTapOutside: (event) {
+                                                        FocusManager.instance
+                                                            .primaryFocus
+                                                            ?.unfocus();
+                                                      },
+                                                      readOnly: true,
+                                                      controller:
+                                                          _dateStartController,
+                                                      onTap: selectDayStart,
+                                                      style: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
+                                                      cursorColor: grey,
+                                                      decoration:
+                                                          InputDecoration(
+                                                              suffixIcon:
+                                                                  const Icon(Icons
+                                                                      .calendar_month),
+                                                              fillColor:
+                                                                  const Color
+                                                                      .fromARGB(
+                                                                      255,
+                                                                      226,
+                                                                      104,
+                                                                      159),
+                                                              focusedBorder:
+                                                                  OutlineInputBorder(
+                                                                borderSide: const BorderSide(
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            214,
+                                                                            51,
+                                                                            123,
+                                                                            0.6),
+                                                                    width: 2.0),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8.r),
+                                                              ),
+                                                              border:
+                                                                  OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8.r),
+                                                              ),
+                                                              hintText:
+                                                                  'dd/mm/yy',
+                                                              isDense: true,
+                                                              contentPadding:
+                                                                  EdgeInsets
+                                                                      .all(15
+                                                                          .w)),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              space20W,
+                                              Flexible(
+                                                fit: FlexFit.tight,
+                                                child: Column(
+                                                  children: [
+                                                    TextApp(
+                                                      text: " Đến ngày",
+                                                      fontsize: 12.sp,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: blueText,
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10.h,
+                                                    ),
+                                                    TextField(
+                                                      onTapOutside: (event) {
+                                                        FocusManager.instance
+                                                            .primaryFocus
+                                                            ?.unfocus();
+                                                      },
+                                                      readOnly: true,
+                                                      controller:
+                                                          _dateEndController,
+                                                      onTap: selectDayEnd,
+                                                      style: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
+                                                      cursorColor: grey,
+                                                      decoration:
+                                                          InputDecoration(
+                                                              suffixIcon:
+                                                                  const Icon(Icons
+                                                                      .calendar_month),
+                                                              fillColor:
+                                                                  const Color
+                                                                      .fromARGB(
+                                                                      255,
+                                                                      226,
+                                                                      104,
+                                                                      159),
+                                                              focusedBorder:
+                                                                  OutlineInputBorder(
+                                                                borderSide: const BorderSide(
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            214,
+                                                                            51,
+                                                                            123,
+                                                                            0.6),
+                                                                    width: 2.0),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8.r),
+                                                              ),
+                                                              border:
+                                                                  OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8.r),
+                                                              ),
+                                                              hintText:
+                                                                  'dd/mm/yy',
+                                                              isDense: true,
+                                                              contentPadding:
+                                                                  EdgeInsets
+                                                                      .all(15
+                                                                          .w)),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              space10W,
+                                            ],
+                                          ),
+                                          space20H,
+                                          chartDataModel != null
+                                              ? Container(
+                                                  width: 1.sw,
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 0.w, right: 00.w),
+                                                    child: ChartHomeAllStore(
+                                                        chartDataModel:
+                                                            chartDataModel!),
+                                                  ),
+                                                )
+                                              : Container()
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                )),
+                          ),
+                        ),
                       ),
                     ),
                   )

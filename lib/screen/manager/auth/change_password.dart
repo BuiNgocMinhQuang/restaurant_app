@@ -231,12 +231,14 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                               159),
                                                       suffixIcon: IconButton(
                                                           onPressed: () {
-                                                            setState(
-                                                              () {
-                                                                passwordVisible =
-                                                                    !passwordVisible;
-                                                              },
-                                                            );
+                                                            mounted
+                                                                ? setState(
+                                                                    () {
+                                                                      passwordVisible =
+                                                                          !passwordVisible;
+                                                                    },
+                                                                  )
+                                                                : null;
                                                           },
                                                           icon: Icon(passwordVisible
                                                               ? Icons
@@ -310,12 +312,14 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                               159),
                                                       suffixIcon: IconButton(
                                                           onPressed: () {
-                                                            setState(
-                                                              () {
-                                                                rePasswordVisible =
-                                                                    !rePasswordVisible;
-                                                              },
-                                                            );
+                                                            mounted
+                                                                ? setState(
+                                                                    () {
+                                                                      rePasswordVisible =
+                                                                          !rePasswordVisible;
+                                                                    },
+                                                                  )
+                                                                : null;
                                                           },
                                                           icon: Icon(rePasswordVisible
                                                               ? Icons

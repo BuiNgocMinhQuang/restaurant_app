@@ -195,17 +195,21 @@ class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
                                               //runs when a code is typed in
                                               onCodeChanged: (String code) {
                                                 //handle validation or checks here
-                                                setState(() {
-                                                  showButton = false;
-                                                });
+                                                mounted
+                                                    ? setState(() {
+                                                        showButton = false;
+                                                      })
+                                                    : null;
                                               },
                                               //runs when every textfield is filled
                                               onSubmit:
                                                   (String verificationCode) {
-                                                setState(() {
-                                                  showButton = true;
-                                                  otp = verificationCode;
-                                                });
+                                                mounted
+                                                    ? setState(() {
+                                                        showButton = true;
+                                                        otp = verificationCode;
+                                                      })
+                                                    : null;
                                               }, // end onSubmit
                                             ),
                                             space20H,
@@ -295,14 +299,16 @@ class _CountdownTimerState extends State<CountdownTimer> {
 
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        if (_remainingTime > Duration.zero) {
-          _remainingTime -= const Duration(seconds: 1);
-        } else {
-          _timer?.cancel();
-          widget.onFinish?.call(); // Call the optional callback
-        }
-      });
+      mounted
+          ? setState(() {
+              if (_remainingTime > Duration.zero) {
+                _remainingTime -= const Duration(seconds: 1);
+              } else {
+                _timer?.cancel();
+                widget.onFinish?.call(); // Call the optional callback
+              }
+            })
+          : null;
     });
   }
 

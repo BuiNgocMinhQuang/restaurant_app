@@ -170,7 +170,7 @@ class _StaffListBillState extends State<StaffListBill>
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Container(
+                              SizedBox(
                                 width: 100,
                                 height: 100,
                                 child: Lottie.asset('assets/lottie/error.json'),
@@ -182,7 +182,7 @@ class _StaffListBillState extends State<StaffListBill>
                                 fontWeight: FontWeight.bold,
                               ),
                               space30H,
-                              Container(
+                              SizedBox(
                                 width: 200,
                                 child: ButtonGradient(
                                   color1: color1BlueButton,
@@ -242,7 +242,7 @@ class _ListAllBillShopState extends State<ListAllBillShop>
         }),
       );
       final data = jsonDecode(respons.body);
-      // print("DAT BACK LOAD MORE ${data}");
+      // log("DAT BACK LOAD MORE ${data}");
       try {
         if (data['status'] == 200) {
           mounted
@@ -259,13 +259,13 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                 })
               : null;
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR BROUGHT RECEIPT PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
   }
 
@@ -289,7 +289,7 @@ class _ListAllBillShopState extends State<ListAllBillShop>
         }),
       );
       final data = jsonDecode(respons.body);
-      // print("DAT BACK LOAD MORE ${data}");
+      // log("DAT BACK LOAD MORE ${data}");
       try {
         if (data['status'] == 200) {
           mounted
@@ -301,19 +301,18 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                 })
               : null;
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR BROUGHT RECEIPT PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     loadMoreBill(page: 1, filtersFlg: {"pay_flg": null});
 
@@ -366,7 +365,7 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                       break;
                   }
 
-                  print(newListAllBillShop[index]
+                  log(newListAllBillShop[index]
                       ?.bookedTables
                       ?.map((table) => table?.roomTable?.tableName)
                       ?.join(','));
@@ -386,7 +385,7 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                             newListAllBillShop[index].createdAt.toString()),
                         price:
                             "${MoneyFormatter(amount: (newListAllBillShop[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: Container(
+                        typePopMenu: SizedBox(
                           width: 20.w,
                           height: 20.w,
                           child: InkWell(
@@ -550,7 +549,7 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
         }),
       );
       final data = jsonDecode(respons.body);
-      // print("DAT BACK LOAD MORE ${data}");
+      // log("DAT BACK LOAD MORE ${data}");
       try {
         if (data['status'] == 200) {
           mounted
@@ -566,13 +565,13 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                 })
               : null;
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR BROUGHT RECEIPT PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
   }
 
@@ -598,7 +597,7 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
         }),
       );
       final data = jsonDecode(respons.body);
-      // print("DAT BACK LOAD MORE ${data}");
+      // log("DAT BACK LOAD MORE ${data}");
       try {
         if (data['status'] == 200) {
           mounted
@@ -610,13 +609,13 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                 })
               : null;
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR BROUGHT RECEIPT PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
   }
 
@@ -651,7 +650,7 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                             listBillComplete[index].createdAt.toString()),
                         price:
                             "${MoneyFormatter(amount: (listBillComplete[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: Container(
+                        typePopMenu: SizedBox(
                           width: 20.w,
                           height: 20.w,
                           child: InkWell(
@@ -879,13 +878,13 @@ class _PendingWidgetState extends State<PendingWidget>
                 })
               : null;
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR BROUGHT RECEIPT PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
   }
 
@@ -918,7 +917,7 @@ class _PendingWidgetState extends State<PendingWidget>
                             listBillPending[index].createdAt.toString()),
                         price:
                             "${MoneyFormatter(amount: (listBillPending[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: Container(
+                        typePopMenu: SizedBox(
                           width: 20.w,
                           height: 20.w,
                           child: InkWell(
@@ -1101,13 +1100,13 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                 })
               : null;
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR BROUGHT RECEIPT PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
   }
 
@@ -1144,13 +1143,13 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                 })
               : null;
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR BROUGHT RECEIPT PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
   }
 
@@ -1183,7 +1182,7 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                             listBillCancle[index].createdAt.toString()),
                         price:
                             "${MoneyFormatter(amount: (listBillCancle[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: Container(
+                        typePopMenu: SizedBox(
                           width: 20.w,
                           height: 20.w,
                           child: InkWell(

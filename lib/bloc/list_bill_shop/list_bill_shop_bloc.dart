@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/bill/list_bill_model.dart';
@@ -48,7 +49,7 @@ class ListBillShopBloc extends Bloc<ListBillShopEvent, ListBillShopState> {
 
           emit(state.copyWith(listBillShopStatus: ListBillShopStatus.succes));
         } else {
-          print("ERROR LIST BILL 1");
+          log("ERROR LIST BILL 1");
 
           emit(state.copyWith(listBillShopStatus: ListBillShopStatus.failed));
           showSnackBarTopCustom(
@@ -58,13 +59,13 @@ class ListBillShopBloc extends Bloc<ListBillShopEvent, ListBillShopState> {
               color: Colors.red);
         }
       } catch (error) {
-        print("ERROR LIST BILL 2 $error");
+        log("ERROR LIST BILL 2 $error");
 
         emit(state.copyWith(listBillShopStatus: ListBillShopStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      print("ERROR LIST BILL 3 $error");
+      log("ERROR LIST BILL 3 $error");
       emit(state.copyWith(listBillShopStatus: ListBillShopStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }

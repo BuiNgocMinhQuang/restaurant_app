@@ -43,10 +43,10 @@ class ManagerLoginBloc extends Bloc<ManagerLoginEvent, ManagerLoginState> {
           navigatorKey.currentContext?.go('/');
         }
       } catch (error) {
-        print("ERROR LOGOUT 1");
+        log("ERROR LOGOUT 1");
       }
     } catch (error) {
-      print("ERROR LOGOUT 2");
+      log("ERROR LOGOUT 2");
     }
   }
 
@@ -87,7 +87,7 @@ class ManagerLoginBloc extends Bloc<ManagerLoginEvent, ManagerLoginState> {
         log(token.toString());
         navigatorKey.currentContext?.go("/manager_home");
         Future.delayed(const Duration(milliseconds: 300), () {
-          print("DANG NHAP THNAH CONG");
+          log("DANG NHAP THNAH CONG");
           showLoginSuccesDialog();
         });
       } else {

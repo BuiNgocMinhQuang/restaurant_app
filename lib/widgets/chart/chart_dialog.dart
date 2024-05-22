@@ -7,17 +7,19 @@ import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
 import 'package:app_restaurant/widgets/chart/chart_each_store.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
-import 'package:dropdown_search/dropdown_search.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'dart:math' as math;
 
 class OverviewChartDialog extends StatefulWidget {
   final String shopID;
 
-  OverviewChartDialog({
+  const OverviewChartDialog({
     Key? key,
     required this.shopID,
   }) : super(key: key);
@@ -26,10 +28,11 @@ class OverviewChartDialog extends StatefulWidget {
 }
 
 class _OverviewChartDialogState extends State<OverviewChartDialog> {
-  TextEditingController _dateStartController = TextEditingController();
-  TextEditingController _dateEndController = TextEditingController();
-  final bieudotheolistKey = GlobalKey<DropdownSearchState>();
-  final loailistKey = GlobalKey<DropdownSearchState>();
+  final TextEditingController _dateStartController = TextEditingController();
+  final TextEditingController _dateEndController = TextEditingController();
+  final billTypeTextController = TextEditingController();
+  final timeTypeTextController = TextEditingController();
+
   int currentChartWith = 0;
   String currentDataType = "%m-%Y";
   ChartDataModel? chartDataModel;
@@ -46,6 +49,15 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
         startDate: _dateStartController.text,
         endDate: _dateEndController.text,
         dataType: currentDataType);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _dateStartController.clear();
+    _dateEndController.clear();
+    billTypeTextController.clear();
+    timeTypeTextController.clear();
   }
 
   void initEndDay() async {
@@ -98,7 +110,7 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print(" DATA CHART ${data}");
+      log(" DATA CHART $data");
       try {
         if (data['status'] == 200) {
           setState(() {
@@ -106,13 +118,13 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
             isShowChart = true;
           });
         } else {
-          print("ERROR DATA CHART");
+          log("ERROR DATA CHART");
         }
       } catch (error) {
-        print("ERROR DATA CHART $error");
+        log("ERROR DATA CHART $error");
       }
     } catch (error) {
-      print("ERROR DATA CHART $error");
+      log("ERROR DATA CHART $error");
     }
   }
 
@@ -262,32 +274,105 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                           SizedBox(
                             height: 10.h,
                           ),
-                          DropdownSearch(
-                            key: bieudotheolistKey,
-                            // validator: (value) {
-                            //   if (value == chooseStore) {
-                            //     return canNotNull;
-                            //   }
-                            //   return null;
-                            // },
-                            onChanged: (bieudotheoListIndex) {
-                              var hehe = bieudotheoList
-                                  .indexOf(bieudotheoListIndex ?? '');
-                              setState(() {
-                                currentChartWith = hehe;
-                              });
-                              // currentFoodKind =
-                              //     categories.indexOf(foodKindIndex ?? '');
-                              handleGetChartData(
-                                  chartWith: currentChartWith,
-                                  shopID: widget.shopID,
-                                  startDate: _dateStartController.text,
-                                  endDate: _dateEndController.text,
-                                  dataType: currentDataType);
+                          TextFormField(
+                            readOnly: true,
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
                             },
-                            items: bieudotheoList,
-                            dropdownDecoratorProps: DropDownDecoratorProps(
-                              dropdownSearchDecoration: InputDecoration(
+                            onTap: () {
+                              showMaterialModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(15.r),
+                                    topLeft: Radius.circular(15.r),
+                                  ),
+                                ),
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                context: context,
+                                builder: (context) => SizedBox(
+                                  height: 1.sh / 2,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        width: 1.sw,
+                                        padding: EdgeInsets.all(20.w),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        child: TextApp(
+                                          text: "Chọn loại",
+                                          color: Colors.white,
+                                          fontsize: 20.sp,
+                                          fontWeight: FontWeight.bold,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: ListView.builder(
+                                          padding: EdgeInsets.only(top: 10.w),
+                                          itemCount: bieudotheoList.length,
+                                          itemBuilder: (context, index) {
+                                            return Column(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 20.w),
+                                                  child: InkWell(
+                                                    onTap: () async {
+                                                      Navigator.pop(context);
+
+                                                      var hehe = index;
+                                                      setState(() {
+                                                        currentChartWith = hehe;
+                                                        billTypeTextController
+                                                                .text =
+                                                            bieudotheoList[
+                                                                index];
+                                                      });
+                                                      // currentFoodKind =
+                                                      //     categories.indexOf(foodKindIndex ?? '');
+                                                      handleGetChartData(
+                                                          chartWith:
+                                                              currentChartWith,
+                                                          shopID: widget.shopID,
+                                                          startDate:
+                                                              _dateStartController
+                                                                  .text,
+                                                          endDate:
+                                                              _dateEndController
+                                                                  .text,
+                                                          dataType:
+                                                              currentDataType);
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        TextApp(
+                                                          text: bieudotheoList[
+                                                              index],
+                                                          color: Colors.black,
+                                                          fontsize: 20.sp,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Divider(
+                                                  height: 25.h,
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            controller: billTypeTextController,
+                            style: TextStyle(fontSize: 12.sp, color: grey),
+                            cursorColor: grey,
+                            decoration: InputDecoration(
                                 fillColor:
                                     const Color.fromARGB(255, 226, 104, 159),
                                 focusedBorder: OutlineInputBorder(
@@ -299,13 +384,18 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
+                                hintText: bieudotheoList[0],
+                                suffixIcon: Transform.rotate(
+                                  angle: 90 * math.pi / 180,
+                                  child: Icon(
+                                    Icons.chevron_right,
+                                    size: 28.sp,
+                                    color: Colors.black.withOpacity(0.5),
+                                  ),
+                                ),
                                 isDense: true,
-                                contentPadding: EdgeInsets.all(15.w),
-                              ),
-                            ),
-                            // onChanged: print,
-                            selectedItem: bieudotheoList[0],
-                          ),
+                                contentPadding: EdgeInsets.all(15.w)),
+                          )
                         ],
                       ),
                     ),
@@ -325,33 +415,115 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                           SizedBox(
                             height: 10.h,
                           ),
-                          DropdownSearch(
-                            key: loailistKey,
-                            onChanged: (loaiListIndex) {
-                              var haha = loaiList.indexOf(loaiListIndex ?? '');
-                              if (haha == 0) {
-                                setState(() {
-                                  currentDataType = "%d-%m-%Y";
-                                });
-                              } else if (haha == 2) {
-                                setState(() {
-                                  currentDataType = "%Y";
-                                });
-                              } else {
-                                setState(() {
-                                  currentDataType = "%m-%Y";
-                                });
-                              }
-                              handleGetChartData(
-                                  chartWith: currentChartWith,
-                                  shopID: widget.shopID,
-                                  startDate: _dateStartController.text,
-                                  endDate: _dateEndController.text,
-                                  dataType: currentDataType);
+                          TextFormField(
+                            readOnly: true,
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
                             },
-                            items: loaiList,
-                            dropdownDecoratorProps: DropDownDecoratorProps(
-                              dropdownSearchDecoration: InputDecoration(
+                            onTap: () {
+                              showMaterialModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(15.r),
+                                    topLeft: Radius.circular(15.r),
+                                  ),
+                                ),
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                context: context,
+                                builder: (context) => SizedBox(
+                                  height: 1.sh / 2,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        width: 1.sw,
+                                        padding: EdgeInsets.all(20.w),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        child: TextApp(
+                                          text: "Chọn loại",
+                                          color: Colors.white,
+                                          fontsize: 20.sp,
+                                          fontWeight: FontWeight.bold,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: ListView.builder(
+                                          padding: EdgeInsets.only(top: 10.w),
+                                          itemCount: loaiList.length,
+                                          itemBuilder: (context, index) {
+                                            return Column(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 20.w),
+                                                  child: InkWell(
+                                                    onTap: () async {
+                                                      Navigator.pop(context);
+                                                      setState(() {
+                                                        timeTypeTextController
+                                                                .text =
+                                                            loaiList[index];
+                                                      });
+                                                      var haha = index;
+                                                      if (haha == 0) {
+                                                        setState(() {
+                                                          currentDataType =
+                                                              "%d-%m-%Y";
+                                                        });
+                                                      } else if (haha == 2) {
+                                                        setState(() {
+                                                          currentDataType =
+                                                              "%Y";
+                                                        });
+                                                      } else {
+                                                        setState(() {
+                                                          currentDataType =
+                                                              "%m-%Y";
+                                                        });
+                                                      }
+                                                      handleGetChartData(
+                                                          chartWith:
+                                                              currentChartWith,
+                                                          shopID: widget.shopID,
+                                                          startDate:
+                                                              _dateStartController
+                                                                  .text,
+                                                          endDate:
+                                                              _dateEndController
+                                                                  .text,
+                                                          dataType:
+                                                              currentDataType);
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        TextApp(
+                                                          text: loaiList[index],
+                                                          color: Colors.black,
+                                                          fontsize: 20.sp,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Divider(
+                                                  height: 25.h,
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            controller: timeTypeTextController,
+                            style: TextStyle(fontSize: 12.sp, color: grey),
+                            cursorColor: grey,
+                            decoration: InputDecoration(
                                 fillColor:
                                     const Color.fromARGB(255, 226, 104, 159),
                                 focusedBorder: OutlineInputBorder(
@@ -363,13 +535,18 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
+                                hintText: loaiList[1],
+                                suffixIcon: Transform.rotate(
+                                  angle: 90 * math.pi / 180,
+                                  child: Icon(
+                                    Icons.chevron_right,
+                                    size: 28.sp,
+                                    color: Colors.black.withOpacity(0.5),
+                                  ),
+                                ),
                                 isDense: true,
-                                contentPadding: EdgeInsets.all(15.w),
-                              ),
-                            ),
-                            // onChanged: print,
-                            selectedItem: loaiList[1],
-                          ),
+                                contentPadding: EdgeInsets.all(15.w)),
+                          )
                         ],
                       ),
                     )
@@ -471,7 +648,7 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                 ),
                 space30H,
                 isShowChart
-                    ? Container(
+                    ? SizedBox(
                         width: 1.sw,
                         child: Padding(
                           padding: EdgeInsets.only(left: 0.w, right: 00.w),

@@ -140,6 +140,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
       StorageUtils.instance.getString(key: 'token_manager') ?? '';
   void getDataTabIndex({required String roomId, required String shopID}) async {
     await Future.delayed(const Duration(seconds: 0));
+    // ignore: use_build_context_synchronously
     BlocProvider.of<ListRoomBloc>(context).add(
       GetListRoom(
           token: tokenManager,
@@ -270,7 +271,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.white,
         centerTitle: true,
-        title: Container(
+        title: SizedBox(
           // width: 100.w,
           height: 50.w,
           child: Image.asset(
@@ -370,12 +371,14 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                 ),
                 InkWell(
                   onTap: () {
-                    setState(() {
-                      // currentScreen = const ManagerHome();
-                      selectedStoreIndex = null;
-                      currentIndex = 2;
-                      tapDrawerChangeBotNav(2);
-                    });
+                    mounted
+                        ? setState(() {
+                            // currentScreen = const ManagerHome();
+                            selectedStoreIndex = null;
+                            currentIndex = 2;
+                            tapDrawerChangeBotNav(2);
+                          })
+                        : null;
                     Navigator.pop(context);
                     checkTokenExpires();
                   },
@@ -392,19 +395,22 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                     subItem: const [],
                   ),
                 ),
+                SizedBox(
+                  height: 10.h,
+                ),
                 Padding(
                   padding: EdgeInsets.only(left: 15.w),
                   child: TextApp(
                     text: 'Quản lý',
                     color: grey,
-                    fontsize: 20,
+                    fontsize: 18.sp,
                     fontWeight: FontWeight.bold,
                     textAlign: TextAlign.start,
                   ),
                 ),
-                // SizedBox(
-                //   height: 25.h,
-                // ),
+                SizedBox(
+                  height: 10.h,
+                ),
                 InkWell(
                   onTap: () {},
                   child: ItemDrawer(
@@ -430,16 +436,18 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             textColor:
                                 currentIndex == 0 ? Colors.black : menuGrey,
                             event: () {
-                              setState(() {
-                                // currentScreen = const ListStores();
-                                currentIndex = 0;
-                                // getInfor();
-                                selectedStoreIndex = null;
+                              mounted
+                                  ? setState(() {
+                                      // currentScreen = const ListStores();
+                                      currentIndex = 0;
+                                      // getInfor();
+                                      selectedStoreIndex = null;
 
-                                handleGetBannerList();
+                                      handleGetBannerList();
 
-                                tapDrawerChangeBotNav(0);
-                              });
+                                      tapDrawerChangeBotNav(0);
+                                    })
+                                  : null;
                               checkTokenExpires();
 
                               Navigator.pop(context);
@@ -481,13 +489,15 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             iconColor:
                                 currentIndex == 5 ? Colors.black : menuGrey,
                             event: () {
-                              setState(() {
-                                // currentScreen = const ListStaff();
+                              mounted
+                                  ? setState(() {
+                                      // currentScreen = const ListStaff();
 
-                                currentIndex = 1;
-                                tapDrawerChangeBotNav(1);
-                                selectedStoreIndex = null;
-                              });
+                                      currentIndex = 1;
+                                      tapDrawerChangeBotNav(1);
+                                      selectedStoreIndex = null;
+                                    })
+                                  : null;
                               checkTokenExpires();
 
                               Navigator.pop(context);
@@ -503,10 +513,12 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             textColor:
                                 currentIndex == 5 ? Colors.black : menuGrey,
                             event: () {
-                              setState(() {
-                                currentIndex = 5;
-                                selectedStoreIndex = null;
-                              });
+                              mounted
+                                  ? setState(() {
+                                      currentIndex = 5;
+                                      selectedStoreIndex = null;
+                                    })
+                                  : null;
                               checkTokenExpires();
 
                               Navigator.pop(context);
@@ -538,13 +550,15 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             textColor:
                                 currentIndex == 3 ? Colors.black : menuGrey,
                             event: () {
-                              setState(() {
-                                checkTokenExpires();
+                              mounted
+                                  ? setState(() {
+                                      checkTokenExpires();
 
-                                currentIndex = 3;
-                                tapDrawerChangeBotNav(3);
-                                selectedStoreIndex = null;
-                              });
+                                      currentIndex = 3;
+                                      tapDrawerChangeBotNav(3);
+                                      selectedStoreIndex = null;
+                                    })
+                                  : null;
 
                               Navigator.pop(context);
                             }),
@@ -556,10 +570,12 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                             textColor:
                                 currentIndex == 6 ? Colors.black : menuGrey,
                             event: () {
-                              setState(() {
-                                currentIndex = 6;
-                                selectedStoreIndex = null;
-                              });
+                              mounted
+                                  ? setState(() {
+                                      currentIndex = 6;
+                                      selectedStoreIndex = null;
+                                    })
+                                  : null;
                               checkTokenExpires();
 
                               Navigator.pop(context);
@@ -578,18 +594,21 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                 // SizedBox(
                 //   height: 25.h,
                 // ),
+                SizedBox(
+                  height: 10.h,
+                ),
                 Padding(
                   padding: EdgeInsets.only(left: 15.w),
                   child: TextApp(
                     text: 'Tất cả cửa hàng',
                     color: grey,
-                    fontsize: 20,
+                    fontsize: 18.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                // SizedBox(
-                //   height: 25.h,
-                // ),
+                SizedBox(
+                  height: 10.h,
+                ),
                 ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -649,15 +668,18 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                     ? Colors.black
                                     : menuGrey,
                                 event: () {
-                                  setState(() {
-                                    shopIDPar = listStoreManagerData[index]
-                                        .shopId
-                                        .toString();
-                                    getDataTabIndex(
-                                        roomId: "", shopID: shopIDPar);
-                                    selectedStoreIndex = index;
-                                    currentIndex = 7;
-                                  });
+                                  mounted
+                                      ? setState(() {
+                                          shopIDPar =
+                                              listStoreManagerData[index]
+                                                  .shopId
+                                                  .toString();
+                                          getDataTabIndex(
+                                              roomId: "", shopID: shopIDPar);
+                                          selectedStoreIndex = index;
+                                          currentIndex = 7;
+                                        })
+                                      : null;
                                   checkTokenExpires();
                                   Navigator.pop(context);
                                 }),
@@ -673,17 +695,20 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                     ? Colors.black
                                     : menuGrey,
                                 event: () {
-                                  setState(() {
-                                    shopIDPar = listStoreManagerData[index]
-                                        .shopId
-                                        .toString();
-                                    getListBillShop(
-                                        filtersFlg: {"pay_flg": null},
-                                        shopID: shopIDPar);
-                                    selectedStoreIndex = index;
+                                  mounted
+                                      ? setState(() {
+                                          shopIDPar =
+                                              listStoreManagerData[index]
+                                                  .shopId
+                                                  .toString();
+                                          getListBillShop(
+                                              filtersFlg: {"pay_flg": null},
+                                              shopID: shopIDPar);
+                                          selectedStoreIndex = index;
 
-                                    currentIndex = 8;
-                                  });
+                                          currentIndex = 8;
+                                        })
+                                      : null;
                                   Navigator.pop(context);
                                 }),
                             space20H,
@@ -698,17 +723,20 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                     ? Colors.black
                                     : menuGrey,
                                 event: () {
-                                  setState(() {
-                                    shopIDPar = listStoreManagerData[index]
-                                        .shopId
-                                        .toString();
-                                    getListBroughtReceiptData(
-                                        filtersFlg: {"pay_flg": null},
-                                        shopID: shopIDPar);
-                                    selectedStoreIndex = index;
+                                  mounted
+                                      ? setState(() {
+                                          shopIDPar =
+                                              listStoreManagerData[index]
+                                                  .shopId
+                                                  .toString();
+                                          getListBroughtReceiptData(
+                                              filtersFlg: {"pay_flg": null},
+                                              shopID: shopIDPar);
+                                          selectedStoreIndex = index;
 
-                                    currentIndex = 9;
-                                  });
+                                          currentIndex = 9;
+                                        })
+                                      : null;
                                   checkTokenExpires();
 
                                   Navigator.pop(context);
@@ -875,10 +903,12 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
             getInfor();
             handleGetBannerList();
           }
-          setState(() {
-            currentIndex = index;
-            checkTokenExpires();
-          });
+          mounted
+              ? setState(() {
+                  currentIndex = index;
+                  checkTokenExpires();
+                })
+              : null;
         },
         letIndexChange: (index) => true,
       ),

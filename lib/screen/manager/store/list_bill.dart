@@ -63,14 +63,17 @@ class _ManagerListBillState extends State<ManagerListBill>
                       children: [
                         SizedBox(
                           width: 1.sw,
-                          height: 100,
+                          // height: 100,
                           child: SizedBox(
                               child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Container(
-                                    height: 40.h,
+                                    height: 45.h,
                                     color: Colors.white,
                                     child: TabBar(
+                                        tabAlignment: TabAlignment.start,
+                                        dividerColor: Colors.transparent,
+                                        dividerHeight: 0,
                                         onTap: (index) {
                                           if (index == 0) {
                                             getListBillShop(
@@ -86,13 +89,11 @@ class _ManagerListBillState extends State<ManagerListBill>
                                                 filtersFlg: {"close_order": 1});
                                           }
                                         },
-                                        labelPadding: const EdgeInsets.only(
-                                            left: 20, right: 20),
-                                        labelColor: Colors.black,
+                                        labelPadding: EdgeInsets.only(
+                                            left: 10.w, right: 10.w),
+                                        labelColor: Colors.white,
                                         unselectedLabelColor:
                                             Colors.black.withOpacity(0.5),
-                                        labelStyle:
-                                            const TextStyle(color: Colors.red),
                                         controller: _tabController,
                                         isScrollable: true,
                                         indicatorSize:
@@ -310,156 +311,165 @@ class _ListAllBillShopState extends State<ListAllBillShop>
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      color: Colors.blue,
-      onRefresh: () async {
-        // Implement logic to refresh data for Tab 1
-        refeshBill(page: 1, filtersFlg: {"pay_flg": null});
-      },
-      child: newListAllBillShop.isNotEmpty
-          ? ListView.builder(
-              controller: scrollListBillController,
-              shrinkWrap: true,
-              itemCount: newListAllBillShop.length + 1,
-              itemBuilder: (BuildContext context, int index) {
-                var dataLength = newListAllBillShop.length;
-                if (index < dataLength) {
-                  var statusTextBill =
-                      newListAllBillShop[index].payFlg.toString();
-                  var statusCloseBill =
-                      newListAllBillShop[index].closeOrder.toString();
-                  switch (statusTextBill) {
-                    case "0":
-                      statusTextBill = "Chưa thanh toán";
-                      break;
+    super.build(context);
+    return Column(
+      children: [
+        Divider(
+          color: Colors.black.withOpacity(0.5),
+        ),
+        RefreshIndicator(
+          color: Colors.blue,
+          onRefresh: () async {
+            // Implement logic to refresh data for Tab 1
+            refeshBill(page: 1, filtersFlg: {"pay_flg": null});
+          },
+          child: newListAllBillShop.isNotEmpty
+              ? ListView.builder(
+                  controller: scrollListBillController,
+                  shrinkWrap: true,
+                  itemCount: newListAllBillShop.length + 1,
+                  itemBuilder: (BuildContext context, int index) {
+                    var dataLength = newListAllBillShop.length;
+                    if (index < dataLength) {
+                      var statusTextBill =
+                          newListAllBillShop[index].payFlg.toString();
+                      var statusCloseBill =
+                          newListAllBillShop[index].closeOrder.toString();
+                      switch (statusTextBill) {
+                        case "0":
+                          statusTextBill = "Chưa thanh toán";
+                          break;
 
-                    case "1":
-                      statusTextBill = "Đã thanh toán";
-                      break;
-                  }
-                  switch (statusCloseBill) {
-                    case "1":
-                      statusTextBill = "Hoá đơn bị huỷ";
-                      break;
-                  }
-                  var tableNameBill = newListAllBillShop[index]
-                      ?.bookedTables
-                      ?.map((table) => table?.roomTable?.tableName)
-                      ?.join(',');
-                  return Padding(
-                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                    child: BillInforContainer(
-                        tableName: tableNameBill, //check ghep ban cho nay
-                        roomName:
-                            newListAllBillShop[index]?.room?.storeRoomName ??
+                        case "1":
+                          statusTextBill = "Đã thanh toán";
+                          break;
+                      }
+                      switch (statusCloseBill) {
+                        case "1":
+                          statusTextBill = "Hoá đơn bị huỷ";
+                          break;
+                      }
+                      var tableNameBill = newListAllBillShop[index]
+                          ?.bookedTables
+                          ?.map((table) => table?.roomTable?.tableName)
+                          ?.join(',');
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            left: 5.w, right: 5.w, top: index == 0 ? 5.w : 0),
+                        child: BillInforContainer(
+                            tableName: tableNameBill, //check ghep ban cho nay
+                            roomName: newListAllBillShop[index]
+                                    ?.room
+                                    ?.storeRoomName ??
                                 '',
-                        dateTime: formatDateTime(
-                            newListAllBillShop[index].createdAt.toString()),
-                        price:
-                            "${MoneyFormatter(amount: (newListAllBillShop[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: Container(
-                          width: 20.w,
-                          height: 20.w,
-                          child: InkWell(
-                            onTap: () {
-                              showMaterialModalBottomSheet(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(25.r),
-                                      topLeft: Radius.circular(25.r),
-                                    ),
-                                  ),
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  context: context,
-                                  builder: (context) => Container(
-                                        height: 1.sh / 3,
-                                        padding: EdgeInsets.all(20.w),
-                                        child: Column(
-                                          children: [
-                                            InkWell(
-                                              onTap: () async {
-                                                Navigator.pop(context);
-                                                showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return PrintBillDialog(
-                                                        role: 'user',
-                                                        token: tokenManager,
-                                                        orderID:
-                                                            newListAllBillShop[
-                                                                    index]
-                                                                .orderId,
-                                                        roomName:
-                                                            newListAllBillShop[
+                            dateTime: formatDateTime(
+                                newListAllBillShop[index].createdAt.toString()),
+                            price:
+                                "${MoneyFormatter(amount: (newListAllBillShop[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                            typePopMenu: SizedBox(
+                              width: 20.w,
+                              height: 20.w,
+                              child: InkWell(
+                                onTap: () {
+                                  showMaterialModalBottomSheet(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(25.r),
+                                          topLeft: Radius.circular(25.r),
+                                        ),
+                                      ),
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      context: context,
+                                      builder: (context) => Container(
+                                            height: 1.sh / 3,
+                                            padding: EdgeInsets.all(20.w),
+                                            child: Column(
+                                              children: [
+                                                InkWell(
+                                                  onTap: () async {
+                                                    Navigator.pop(context);
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return PrintBillDialog(
+                                                            role: 'user',
+                                                            token: tokenManager,
+                                                            orderID:
+                                                                newListAllBillShop[
+                                                                        index]
+                                                                    .orderId,
+                                                            roomName: newListAllBillShop[
                                                                         index]
                                                                     ?.room
                                                                     ?.storeRoomName ??
                                                                 '',
-                                                        tableName:
-                                                            tableNameBill,
-                                                      );
-                                                    });
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.print,
-                                                    size: 35.sp,
+                                                            tableName:
+                                                                tableNameBill,
+                                                          );
+                                                        });
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.print,
+                                                        size: 35.sp,
+                                                      ),
+                                                      space10W,
+                                                      TextApp(
+                                                        text: "In hoá đơn",
+                                                        color: Colors.black,
+                                                        fontsize: 18.sp,
+                                                      )
+                                                    ],
                                                   ),
-                                                  space10W,
-                                                  TextApp(
-                                                    text: "In hoá đơn",
-                                                    color: Colors.black,
-                                                    fontsize: 18.sp,
-                                                  )
-                                                ],
-                                              ),
+                                                ),
+                                                space10H,
+                                                const Divider(),
+                                                space10H,
+                                              ],
                                             ),
-                                            space10H,
-                                            const Divider(),
-                                            space10H,
-                                          ],
-                                        ),
-                                      ));
-                            },
-                            child: Icon(
-                              Icons.more_horiz_outlined,
-                              size: 25.sp,
+                                          ));
+                                },
+                                child: Icon(
+                                  Icons.more_horiz_outlined,
+                                  size: 25.sp,
+                                ),
+                              ),
                             ),
+                            statusText: statusTextBill),
+                      );
+                    } else {
+                      return Center(
+                        child: hasMore
+                            ? const CircularProgressIndicator()
+                            : Container(),
+                      );
+                    }
+                  })
+              : Center(
+                  child: SizedBox(
+                      width: 1.sw,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.receipt_long_rounded,
+                            size: 50.h,
                           ),
-                        ),
-                        statusText: statusTextBill),
-                  );
-                } else {
-                  return Center(
-                    child: hasMore
-                        ? const CircularProgressIndicator()
-                        : Container(),
-                  );
-                }
-              })
-          : Center(
-              child: SizedBox(
-                  width: 1.sw,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.receipt_long_rounded,
-                        size: 50.h,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      TextApp(
-                          text: "Chưa có hoá đơn :(",
-                          textAlign: TextAlign.center,
-                          fontsize: 16.sp,
-                          color: Colors.black),
-                    ],
-                  )),
-            ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          TextApp(
+                              text: "Chưa có hoá đơn :(",
+                              textAlign: TextAlign.center,
+                              fontsize: 16.sp,
+                              color: Colors.black),
+                        ],
+                      )),
+                ),
+        ),
+      ],
     );
   }
 }
@@ -597,140 +607,150 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      color: Colors.blue,
-      onRefresh: () async {
-        // Implement logic to refresh data for Tab 1
-        refeshCompleteBill(page: 1, filtersFlg: {"pay_flg": 1});
-      },
-      child: listBillComplete.isNotEmpty
-          ? ListView.builder(
-              controller: scrollTabCompleteController,
-              shrinkWrap: true,
-              itemCount: listBillComplete.length + 1,
-              itemBuilder: (BuildContext context, int index) {
-                var dataLength = listBillComplete.length;
-                if (index < dataLength) {
-                  var statusCloseBill =
-                      listBillComplete[index].closeOrder.toString();
-                  var tableNameBill = listBillComplete[index]
-                      ?.bookedTables
-                      ?.map((table) => table?.roomTable?.tableName)
-                      ?.join(',');
-                  return Padding(
-                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                    child: BillInforContainer(
-                        tableName: tableNameBill, //check ghep ban cho nay
-                        roomName:
-                            listBillComplete[index]?.room?.storeRoomName ?? '',
-                        dateTime: formatDateTime(
-                            listBillComplete[index].createdAt.toString()),
-                        price:
-                            "${MoneyFormatter(amount: (listBillComplete[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: Container(
-                          width: 20.w,
-                          height: 20.w,
-                          child: InkWell(
-                            onTap: () {
-                              showMaterialModalBottomSheet(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(25.r),
-                                      topLeft: Radius.circular(25.r),
-                                    ),
-                                  ),
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  context: context,
-                                  builder: (context) => Container(
-                                        height: 1.sh / 3,
-                                        padding: EdgeInsets.all(20.w),
-                                        child: Column(
-                                          children: [
-                                            InkWell(
-                                              onTap: () async {
-                                                Navigator.pop(context);
-                                                showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return PrintBillDialog(
-                                                        role: 'user',
-                                                        token: tokenManager,
-                                                        orderID:
-                                                            listBillComplete[
-                                                                    index]
-                                                                .orderId,
-                                                        roomName: listBillComplete[
-                                                                    index]
-                                                                ?.room
-                                                                ?.storeRoomName ??
-                                                            '',
-                                                        tableName:
-                                                            tableNameBill,
-                                                      );
-                                                    });
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.print,
-                                                    size: 35.sp,
-                                                  ),
-                                                  space10W,
-                                                  TextApp(
-                                                    text: "In hoá đơn",
-                                                    color: Colors.black,
-                                                    fontsize: 18.sp,
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                            space10H,
-                                            const Divider(),
-                                            space10H,
-                                          ],
+    super.build(context);
+    return Column(
+      children: [
+        Divider(
+          color: Colors.black.withOpacity(0.5),
+        ),
+        RefreshIndicator(
+          color: Colors.blue,
+          onRefresh: () async {
+            // Implement logic to refresh data for Tab 1
+            refeshCompleteBill(page: 1, filtersFlg: {"pay_flg": 1});
+          },
+          child: listBillComplete.isNotEmpty
+              ? ListView.builder(
+                  controller: scrollTabCompleteController,
+                  shrinkWrap: true,
+                  itemCount: listBillComplete.length + 1,
+                  itemBuilder: (BuildContext context, int index) {
+                    var dataLength = listBillComplete.length;
+                    if (index < dataLength) {
+                      var statusCloseBill =
+                          listBillComplete[index].closeOrder.toString();
+                      var tableNameBill = listBillComplete[index]
+                          ?.bookedTables
+                          ?.map((table) => table?.roomTable?.tableName)
+                          ?.join(',');
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            left: 5.w, right: 5.w, top: index == 0 ? 5.w : 0),
+                        child: BillInforContainer(
+                            tableName: tableNameBill, //check ghep ban cho nay
+                            roomName:
+                                listBillComplete[index]?.room?.storeRoomName ??
+                                    '',
+                            dateTime: formatDateTime(
+                                listBillComplete[index].createdAt.toString()),
+                            price:
+                                "${MoneyFormatter(amount: (listBillComplete[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                            typePopMenu: SizedBox(
+                              width: 20.w,
+                              height: 20.w,
+                              child: InkWell(
+                                onTap: () {
+                                  showMaterialModalBottomSheet(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(25.r),
+                                          topLeft: Radius.circular(25.r),
                                         ),
-                                      ));
-                            },
-                            child: Icon(
-                              Icons.more_horiz_outlined,
-                              size: 25.sp,
+                                      ),
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      context: context,
+                                      builder: (context) => Container(
+                                            height: 1.sh / 3,
+                                            padding: EdgeInsets.all(20.w),
+                                            child: Column(
+                                              children: [
+                                                InkWell(
+                                                  onTap: () async {
+                                                    Navigator.pop(context);
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return PrintBillDialog(
+                                                            role: 'user',
+                                                            token: tokenManager,
+                                                            orderID:
+                                                                listBillComplete[
+                                                                        index]
+                                                                    .orderId,
+                                                            roomName: listBillComplete[
+                                                                        index]
+                                                                    ?.room
+                                                                    ?.storeRoomName ??
+                                                                '',
+                                                            tableName:
+                                                                tableNameBill,
+                                                          );
+                                                        });
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.print,
+                                                        size: 35.sp,
+                                                      ),
+                                                      space10W,
+                                                      TextApp(
+                                                        text: "In hoá đơn",
+                                                        color: Colors.black,
+                                                        fontsize: 18.sp,
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                                space10H,
+                                                const Divider(),
+                                                space10H,
+                                              ],
+                                            ),
+                                          ));
+                                },
+                                child: Icon(
+                                  Icons.more_horiz_outlined,
+                                  size: 25.sp,
+                                ),
+                              ),
                             ),
+                            statusText: statusCloseBill == "1"
+                                ? "Hoá đơn bị huỷ"
+                                : "Đã thanh toán"),
+                      );
+                    } else {
+                      return Center(
+                        child: hasMoreComplete
+                            ? const CircularProgressIndicator()
+                            : Container(),
+                      );
+                    }
+                  })
+              : Center(
+                  child: SizedBox(
+                      width: 1.sw,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.receipt_long_rounded,
+                            size: 50.h,
                           ),
-                        ),
-                        statusText: statusCloseBill == "1"
-                            ? "Hoá đơn bị huỷ"
-                            : "Đã thanh toán"),
-                  );
-                } else {
-                  return Center(
-                    child: hasMoreComplete
-                        ? const CircularProgressIndicator()
-                        : Container(),
-                  );
-                }
-              })
-          : Center(
-              child: SizedBox(
-                  width: 1.sw,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.receipt_long_rounded,
-                        size: 50.h,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      TextApp(
-                          text: "Chưa có hoá đơn :(",
-                          textAlign: TextAlign.center,
-                          fontsize: 16.sp,
-                          color: Colors.black),
-                    ],
-                  )),
-            ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          TextApp(
+                              text: "Chưa có hoá đơn :(",
+                              textAlign: TextAlign.center,
+                              fontsize: 16.sp,
+                              color: Colors.black),
+                        ],
+                      )),
+                ),
+        ),
+      ],
     );
   }
 
@@ -814,13 +834,13 @@ class _PendingWidgetState extends State<PendingWidget>
                 })
               : null;
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR BROUGHT RECEIPT PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
   }
 
@@ -859,149 +879,159 @@ class _PendingWidgetState extends State<PendingWidget>
                 })
               : null;
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR BROUGHT RECEIPT PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      color: Colors.blue,
-      onRefresh: () async {
-        // Implement logic to refresh data for Tab 1
+    super.build(context);
+    return Column(
+      children: [
+        Divider(
+          color: Colors.black.withOpacity(0.5),
+        ),
+        RefreshIndicator(
+          color: Colors.blue,
+          onRefresh: () async {
+            // Implement logic to refresh data for Tab 1
 
-        refeshPending(page: 1, filtersFlg: {"pay_flg": 0});
-      },
-      child: listBillPending.isNotEmpty
-          ? ListView.builder(
-              controller: scrollTabPendingController,
-              shrinkWrap: true,
-              itemCount: listBillPending.length + 1,
-              itemBuilder: (BuildContext context, int index) {
-                var dataLength = listBillPending.length;
-                if (index < dataLength) {
-                  var tableNameBill = listBillPending[index]
-                      ?.bookedTables
-                      ?.map((table) => table?.roomTable?.tableName)
-                      ?.join(',');
-                  return Padding(
-                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                    child: BillInforContainer(
-                        tableName: tableNameBill, //check ghep ban cho nay
-                        roomName:
-                            listBillPending[index]?.room?.storeRoomName ?? '',
-                        dateTime: formatDateTime(
-                            listBillPending[index].createdAt.toString()),
-                        price:
-                            "${MoneyFormatter(amount: (listBillPending[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: Container(
-                          width: 20.w,
-                          height: 20.w,
-                          child: InkWell(
-                            onTap: () {
-                              showMaterialModalBottomSheet(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(25.r),
-                                      topLeft: Radius.circular(25.r),
-                                    ),
-                                  ),
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  context: context,
-                                  builder: (context) => Container(
-                                        height: 1.sh / 3,
-                                        padding: EdgeInsets.all(20.w),
-                                        child: Column(
-                                          children: [
-                                            InkWell(
-                                              onTap: () async {
-                                                Navigator.pop(context);
-                                                showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return PrintBillDialog(
-                                                        role: 'user',
-                                                        token: tokenManager,
-                                                        orderID:
-                                                            listBillPending[
-                                                                    index]
-                                                                .orderId,
-                                                        roomName: listBillPending[
-                                                                    index]
-                                                                ?.room
-                                                                ?.storeRoomName ??
-                                                            '',
-                                                        tableName:
-                                                            tableNameBill,
-                                                      );
-                                                    });
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.print,
-                                                    size: 35.sp,
-                                                  ),
-                                                  space10W,
-                                                  TextApp(
-                                                    text: "In hoá đơn",
-                                                    color: Colors.black,
-                                                    fontsize: 18.sp,
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                            space10H,
-                                            const Divider(),
-                                            space10H,
-                                          ],
+            refeshPending(page: 1, filtersFlg: {"pay_flg": 0});
+          },
+          child: listBillPending.isNotEmpty
+              ? ListView.builder(
+                  controller: scrollTabPendingController,
+                  shrinkWrap: true,
+                  itemCount: listBillPending.length + 1,
+                  itemBuilder: (BuildContext context, int index) {
+                    var dataLength = listBillPending.length;
+                    if (index < dataLength) {
+                      var tableNameBill = listBillPending[index]
+                          ?.bookedTables
+                          ?.map((table) => table?.roomTable?.tableName)
+                          ?.join(',');
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            left: 5.w, right: 5.w, top: index == 0 ? 5.w : 0),
+                        child: BillInforContainer(
+                            tableName: tableNameBill, //check ghep ban cho nay
+                            roomName:
+                                listBillPending[index]?.room?.storeRoomName ??
+                                    '',
+                            dateTime: formatDateTime(
+                                listBillPending[index].createdAt.toString()),
+                            price:
+                                "${MoneyFormatter(amount: (listBillPending[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                            typePopMenu: SizedBox(
+                              width: 20.w,
+                              height: 20.w,
+                              child: InkWell(
+                                onTap: () {
+                                  showMaterialModalBottomSheet(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(25.r),
+                                          topLeft: Radius.circular(25.r),
                                         ),
-                                      ));
-                            },
-                            child: Icon(
-                              Icons.more_horiz_outlined,
-                              size: 25.sp,
+                                      ),
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      context: context,
+                                      builder: (context) => Container(
+                                            height: 1.sh / 3,
+                                            padding: EdgeInsets.all(20.w),
+                                            child: Column(
+                                              children: [
+                                                InkWell(
+                                                  onTap: () async {
+                                                    Navigator.pop(context);
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return PrintBillDialog(
+                                                            role: 'user',
+                                                            token: tokenManager,
+                                                            orderID:
+                                                                listBillPending[
+                                                                        index]
+                                                                    .orderId,
+                                                            roomName: listBillPending[
+                                                                        index]
+                                                                    ?.room
+                                                                    ?.storeRoomName ??
+                                                                '',
+                                                            tableName:
+                                                                tableNameBill,
+                                                          );
+                                                        });
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.print,
+                                                        size: 35.sp,
+                                                      ),
+                                                      space10W,
+                                                      TextApp(
+                                                        text: "In hoá đơn",
+                                                        color: Colors.black,
+                                                        fontsize: 18.sp,
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                                space10H,
+                                                const Divider(),
+                                                space10H,
+                                              ],
+                                            ),
+                                          ));
+                                },
+                                child: Icon(
+                                  Icons.more_horiz_outlined,
+                                  size: 25.sp,
+                                ),
+                              ),
                             ),
+                            statusText: "Chưa thanh toán"),
+                      );
+                    } else {
+                      return Center(
+                        child: hasMoreComplete
+                            ? const CircularProgressIndicator()
+                            : Container(),
+                      );
+                    }
+                  })
+              : Center(
+                  child: SizedBox(
+                      width: 1.sw,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.receipt_long_rounded,
+                            size: 50.h,
                           ),
-                        ),
-                        statusText: "Chưa thanh toán"),
-                  );
-                } else {
-                  return Center(
-                    child: hasMoreComplete
-                        ? const CircularProgressIndicator()
-                        : Container(),
-                  );
-                }
-              })
-          : Center(
-              child: SizedBox(
-                  width: 1.sw,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.receipt_long_rounded,
-                        size: 50.h,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      TextApp(
-                          text: "Chưa có hoá đơn :(",
-                          textAlign: TextAlign.center,
-                          fontsize: 16.sp,
-                          color: Colors.black),
-                    ],
-                  )),
-            ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          TextApp(
+                              text: "Chưa có hoá đơn :(",
+                              textAlign: TextAlign.center,
+                              fontsize: 16.sp,
+                              color: Colors.black),
+                        ],
+                      )),
+                ),
+        ),
+      ],
     );
   }
 
@@ -1141,134 +1171,145 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      color: Colors.blue,
-      onRefresh: () async {
-        refeshCompleteBill(page: 1, filtersFlg: {"close_order": 1});
-      },
-      child: listBillCancle.isNotEmpty
-          ? ListView.builder(
-              controller: scrollTabCancleController,
-              shrinkWrap: true,
-              itemCount: listBillCancle.length + 1,
-              itemBuilder: (BuildContext context, int index) {
-                var dataLength = listBillCancle.length;
-                if (index < dataLength) {
-                  var tableNameBill = listBillCancle[index]
-                      ?.bookedTables
-                      ?.map((table) => table?.roomTable?.tableName)
-                      ?.join(',');
-                  return Padding(
-                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                    child: BillInforContainer(
-                        tableName: tableNameBill, //check ghep ban cho nay
-                        roomName:
-                            listBillCancle[index]?.room?.storeRoomName ?? '',
-                        dateTime: formatDateTime(
-                            listBillCancle[index].createdAt.toString()),
-                        price:
-                            "${MoneyFormatter(amount: (listBillCancle[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: Container(
-                          width: 20.w,
-                          height: 20.w,
-                          child: InkWell(
-                            onTap: () {
-                              showMaterialModalBottomSheet(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(25.r),
-                                      topLeft: Radius.circular(25.r),
-                                    ),
-                                  ),
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  context: context,
-                                  builder: (context) => Container(
-                                        height: 1.sh / 3,
-                                        padding: EdgeInsets.all(20.w),
-                                        child: Column(
-                                          children: [
-                                            InkWell(
-                                              onTap: () async {
-                                                Navigator.pop(context);
-                                                showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return PrintBillDialog(
-                                                        role: 'user',
-                                                        token: tokenManager,
-                                                        orderID: listBillCancle[
-                                                                index]
-                                                            .orderId,
-                                                        roomName: listBillCancle[
-                                                                    index]
-                                                                ?.room
-                                                                ?.storeRoomName ??
-                                                            '',
-                                                        tableName:
-                                                            tableNameBill,
-                                                      );
-                                                    });
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.print,
-                                                    size: 35.sp,
-                                                  ),
-                                                  space10W,
-                                                  TextApp(
-                                                    text: "In hoá đơn",
-                                                    color: Colors.black,
-                                                    fontsize: 18.sp,
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                            space10H,
-                                            const Divider(),
-                                            space10H,
-                                          ],
+    super.build(context);
+    return Column(
+      children: [
+        Divider(
+          color: Colors.black.withOpacity(0.5),
+        ),
+        RefreshIndicator(
+          color: Colors.blue,
+          onRefresh: () async {
+            refeshCompleteBill(page: 1, filtersFlg: {"close_order": 1});
+          },
+          child: listBillCancle.isNotEmpty
+              ? ListView.builder(
+                  controller: scrollTabCancleController,
+                  shrinkWrap: true,
+                  itemCount: listBillCancle.length + 1,
+                  itemBuilder: (BuildContext context, int index) {
+                    var dataLength = listBillCancle.length;
+                    if (index < dataLength) {
+                      var tableNameBill = listBillCancle[index]
+                          ?.bookedTables
+                          ?.map((table) => table?.roomTable?.tableName)
+                          ?.join(',');
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            left: 5.w, right: 5.w, top: index == 0 ? 5.w : 0),
+                        child: BillInforContainer(
+                            tableName: tableNameBill, //check ghep ban cho nay
+                            roomName:
+                                listBillCancle[index]?.room?.storeRoomName ??
+                                    '',
+                            dateTime: formatDateTime(
+                                listBillCancle[index].createdAt.toString()),
+                            price:
+                                "${MoneyFormatter(amount: (listBillCancle[index].clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                            typePopMenu: SizedBox(
+                              width: 20.w,
+                              height: 20.w,
+                              child: InkWell(
+                                onTap: () {
+                                  showMaterialModalBottomSheet(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(25.r),
+                                          topLeft: Radius.circular(25.r),
                                         ),
-                                      ));
-                            },
-                            child: Icon(
-                              Icons.more_horiz_outlined,
-                              size: 25.sp,
+                                      ),
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      context: context,
+                                      builder: (context) => Container(
+                                            height: 1.sh / 3,
+                                            padding: EdgeInsets.all(20.w),
+                                            child: Column(
+                                              children: [
+                                                InkWell(
+                                                  onTap: () async {
+                                                    Navigator.pop(context);
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return PrintBillDialog(
+                                                            role: 'user',
+                                                            token: tokenManager,
+                                                            orderID:
+                                                                listBillCancle[
+                                                                        index]
+                                                                    .orderId,
+                                                            roomName: listBillCancle[
+                                                                        index]
+                                                                    ?.room
+                                                                    ?.storeRoomName ??
+                                                                '',
+                                                            tableName:
+                                                                tableNameBill,
+                                                          );
+                                                        });
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.print,
+                                                        size: 35.sp,
+                                                      ),
+                                                      space10W,
+                                                      TextApp(
+                                                        text: "In hoá đơn",
+                                                        color: Colors.black,
+                                                        fontsize: 18.sp,
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                                space10H,
+                                                const Divider(),
+                                                space10H,
+                                              ],
+                                            ),
+                                          ));
+                                },
+                                child: Icon(
+                                  Icons.more_horiz_outlined,
+                                  size: 25.sp,
+                                ),
+                              ),
                             ),
+                            statusText: "Hoá đơn bị huỷ"),
+                      );
+                    } else {
+                      return Center(
+                        child: hasMoreCancle
+                            ? const CircularProgressIndicator()
+                            : Container(),
+                      );
+                    }
+                  })
+              : Center(
+                  child: SizedBox(
+                      width: 1.sw,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.receipt_long_rounded,
+                            size: 50.h,
                           ),
-                        ),
-                        statusText: "Hoá đơn bị huỷ"),
-                  );
-                } else {
-                  return Center(
-                    child: hasMoreCancle
-                        ? const CircularProgressIndicator()
-                        : Container(),
-                  );
-                }
-              })
-          : Center(
-              child: SizedBox(
-                  width: 1.sw,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.receipt_long_rounded,
-                        size: 50.h,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      TextApp(
-                          text: "Chưa có hoá đơn :(",
-                          textAlign: TextAlign.center,
-                          fontsize: 16.sp,
-                          color: Colors.black),
-                    ],
-                  )),
-            ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          TextApp(
+                              text: "Chưa có hoá đơn :(",
+                              textAlign: TextAlign.center,
+                              fontsize: 16.sp,
+                              color: Colors.black),
+                        ],
+                      )),
+                ),
+        ),
+      ],
     );
   }
 

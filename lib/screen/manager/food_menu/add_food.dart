@@ -9,7 +9,6 @@ import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,6 +19,9 @@ import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
 import 'package:intl/intl.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
+import 'dart:math' as math;
+
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ManagerAddFood extends StatefulWidget {
   final List<DataListStore> listStores;
@@ -54,11 +56,21 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
   final foodNameController = TextEditingController();
   final priceOfFood = TextEditingController();
   final noteController = TextEditingController();
+  final listStoreTextController = TextEditingController();
+  final listFoodTypeTextController = TextEditingController();
   final ImagePicker imagePicker = ImagePicker();
-  final keyListStore = GlobalKey<DropdownSearchState<String>>();
-  final keyListFoodKind = GlobalKey<DropdownSearchState<String>>();
   final List<String> nameStoreList = [];
   final List<int> listStoreIdInIt = [];
+
+  final Set<int> selectedStoreIndices = {};
+
+  void updateSelectedStores() {
+    setState(() {
+      final selectedStores =
+          selectedStoreIndices.map((index) => nameStoreList[index]).toList();
+      listStoreTextController.text = selectedStores.join(', ');
+    });
+  }
 
   static const _locale = 'en';
   String _formatNumber(String s) =>
@@ -76,6 +88,10 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
     foodNameController.clear();
     priceOfFood.clear();
     noteController.clear();
+    listStoreTextController.clear();
+    listFoodTypeTextController.clear();
+    listStoreId.clear();
+    selectedStoreIndices.clear();
   }
 
   void init() {
@@ -93,11 +109,9 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
     setState(() {
       var pathImage = File(returndImage.path);
       imageFileList!.add(pathImage);
-      if (pathImage != null) {
-        Uint8List imagebytes = pathImage.readAsBytesSync(); //convert to bytes
-        String base64string = base64Encode(imagebytes);
-        listImageFood.add(base64string);
-      }
+      Uint8List imagebytes = pathImage.readAsBytesSync(); //convert to bytes
+      String base64string = base64Encode(imagebytes);
+      listImageFood.add(base64string);
     });
     // openImage();
   }
@@ -156,8 +170,8 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
             imageFileList?.clear();
             listStoreId.clear();
             listStoreString = null;
-            keyListStore.currentState?.clear();
-            keyListFoodKind.currentState?.clear();
+            listStoreTextController.clear();
+            listFoodTypeTextController.clear();
             light = false;
           });
         } else {
@@ -309,25 +323,108 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                         SizedBox(
                                           height: 10.h,
                                         ),
-                                        DropdownSearch<String>(
-                                          key: keyListFoodKind,
-                                          validator: (value) {
-                                            if (value == chooseType ||
-                                                value == null) {
-                                              return canNotNull;
-                                            }
-                                            return null;
+                                        TextFormField(
+                                          readOnly: true,
+                                          onTapOutside: (event) {
+                                            FocusManager.instance.primaryFocus
+                                                ?.unfocus();
                                           },
-                                          onChanged: (foodKindIndex) {
-                                            currentFoodKind =
-                                                categories2.indexOf(
-                                                    foodKindIndex.toString());
+                                          onTap: () {
+                                            showMaterialModalBottomSheet(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topRight:
+                                                      Radius.circular(15.r),
+                                                  topLeft:
+                                                      Radius.circular(15.r),
+                                                ),
+                                              ),
+                                              clipBehavior:
+                                                  Clip.antiAliasWithSaveLayer,
+                                              context: context,
+                                              builder: (context) => SizedBox(
+                                                height: 1.sh / 2,
+                                                child: Column(
+                                                  children: [
+                                                    Container(
+                                                      width: 1.sw,
+                                                      padding:
+                                                          EdgeInsets.all(20.w),
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
+                                                      child: TextApp(
+                                                        text: "Chọn loại",
+                                                        color: Colors.white,
+                                                        fontsize: 20.sp,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      child: ListView.builder(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: 10.w),
+                                                        itemCount:
+                                                            categories2.length,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          return Column(
+                                                            children: [
+                                                              Padding(
+                                                                padding: EdgeInsets
+                                                                    .only(
+                                                                        left: 20
+                                                                            .w),
+                                                                child: InkWell(
+                                                                  onTap:
+                                                                      () async {
+                                                                    Navigator.pop(
+                                                                        context);
+
+                                                                    currentFoodKind =
+                                                                        index;
+                                                                    listFoodTypeTextController
+                                                                            .text =
+                                                                        categories2[
+                                                                            index];
+                                                                  },
+                                                                  child: Row(
+                                                                    children: [
+                                                                      TextApp(
+                                                                        text: categories2[
+                                                                            index],
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontsize:
+                                                                            20.sp,
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Divider(
+                                                                height: 25.h,
+                                                              )
+                                                            ],
+                                                          );
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
                                           },
-                                          items: categories2,
-                                          dropdownDecoratorProps:
-                                              DropDownDecoratorProps(
-                                            dropdownSearchDecoration:
-                                                InputDecoration(
+                                          controller:
+                                              listFoodTypeTextController,
+                                          style: TextStyle(
+                                              fontSize: 12.sp, color: grey),
+                                          cursorColor: grey,
+                                          decoration: InputDecoration(
                                               fillColor: const Color.fromARGB(
                                                   255, 226, 104, 159),
                                               focusedBorder: OutlineInputBorder(
@@ -342,13 +439,20 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                                 borderRadius:
                                                     BorderRadius.circular(8.r),
                                               ),
+                                              hintText: chooseType,
+                                              suffixIcon: Transform.rotate(
+                                                angle: 90 * math.pi / 180,
+                                                child: Icon(
+                                                  Icons.chevron_right,
+                                                  size: 28.sp,
+                                                  color: Colors.black
+                                                      .withOpacity(0.5),
+                                                ),
+                                              ),
                                               isDense: true,
                                               contentPadding:
-                                                  EdgeInsets.all(15.w),
-                                            ),
-                                          ),
-                                          selectedItem: chooseType,
-                                        ),
+                                                  EdgeInsets.all(15.w)),
+                                        )
                                       ],
                                     ),
                                     space20H,
@@ -436,46 +540,167 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                           color: blueText,
                                         ),
                                         space10H,
-                                        Wrap(
-                                          children: [
-                                            DropdownSearch<
-                                                String>.multiSelection(
-                                              validator: (value) {
-                                                if (listStoreId.isEmpty) {
-                                                  return canNotNull;
-                                                }
-                                                return null;
-                                              },
-                                              key: keyListStore,
-                                              items: nameStoreList,
-                                              onChanged: (listSelectedStore) {
-                                                listStoreId.clear();
-
-                                                listSelectedStore.where((e) {
-                                                  listStoreId.add(
-                                                      listStoreIdInIt[
-                                                          nameStoreList
-                                                              .indexOf(e)]);
-
-                                                  return true;
-                                                }).toList();
-                                              },
-                                              popupProps:
-                                                  PopupPropsMultiSelection
-                                                      .bottomSheet(
-                                                title: Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 15.w, top: 10.h),
-                                                  child: TextApp(
-                                                    text: "Chọn cửa hàng",
-                                                    fontsize: 16.sp,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: blueText,
-                                                  ),
+                                        TextFormField(
+                                          readOnly: true,
+                                          onTapOutside: (event) {
+                                            FocusManager.instance.primaryFocus
+                                                ?.unfocus();
+                                          },
+                                          onTap: () {
+                                            showMaterialModalBottomSheet(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topRight:
+                                                      Radius.circular(15.r),
+                                                  topLeft:
+                                                      Radius.circular(15.r),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                              clipBehavior:
+                                                  Clip.antiAliasWithSaveLayer,
+                                              context: context,
+                                              builder: (context) =>
+                                                  StatefulBuilder(builder:
+                                                      (BuildContext context,
+                                                          StateSetter
+                                                              setModalState) {
+                                                return SizedBox(
+                                                  height: 1.sh / 2,
+                                                  child: Column(
+                                                    children: [
+                                                      Container(
+                                                        width: 1.sw,
+                                                        padding: EdgeInsets.all(
+                                                            20.w),
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .primary,
+                                                        child: TextApp(
+                                                          text: "Chọn cửa hàng",
+                                                          color: Colors.white,
+                                                          fontsize: 20.sp,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        child: ListView.builder(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  top: 10.w),
+                                                          itemCount:
+                                                              nameStoreList
+                                                                  .length,
+                                                          itemBuilder:
+                                                              (context, index) {
+                                                            final isSelected =
+                                                                selectedStoreIndices
+                                                                    .contains(
+                                                                        index);
+                                                            return Column(
+                                                              children: [
+                                                                Padding(
+                                                                  padding: EdgeInsets
+                                                                      .only(
+                                                                          left:
+                                                                              20.w),
+                                                                  child:
+                                                                      InkWell(
+                                                                    onTap: () {
+                                                                      setModalState(
+                                                                          () {
+                                                                        if (isSelected) {
+                                                                          selectedStoreIndices
+                                                                              .remove(index);
+                                                                          listStoreId
+                                                                              .remove(index);
+                                                                        } else {
+                                                                          selectedStoreIndices
+                                                                              .add(index);
+                                                                          listStoreId
+                                                                              .add(index);
+                                                                        }
+                                                                      });
+                                                                      updateSelectedStores();
+                                                                    },
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Icon(
+                                                                          isSelected
+                                                                              ? Icons.check_box
+                                                                              : Icons.check_box_outline_blank,
+                                                                          size:
+                                                                              35.sp,
+                                                                        ),
+                                                                        SizedBox(
+                                                                            width:
+                                                                                10.w),
+                                                                        TextApp(
+                                                                          text:
+                                                                              nameStoreList[index],
+                                                                          color:
+                                                                              Colors.black,
+                                                                          fontsize:
+                                                                              20.sp,
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Divider(
+                                                                  height: 25.h,
+                                                                )
+                                                              ],
+                                                            );
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              }),
+                                            );
+                                          },
+                                          validator: (value) {
+                                            if (listStoreId.isEmpty) {
+                                              return canNotNull;
+                                            }
+                                            return null;
+                                          },
+                                          controller: listStoreTextController,
+                                          style: TextStyle(
+                                              fontSize: 12.sp, color: grey),
+                                          cursorColor: grey,
+                                          decoration: InputDecoration(
+                                              fillColor: const Color.fromARGB(
+                                                  255, 226, 104, 159),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color.fromRGBO(
+                                                        214, 51, 123, 0.6),
+                                                    width: 2.0),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              hintText: "Chọn cửa hàng",
+                                              suffixIcon: Transform.rotate(
+                                                angle: 90 * math.pi / 180,
+                                                child: Icon(
+                                                  Icons.chevron_right,
+                                                  size: 28.sp,
+                                                  color: Colors.black
+                                                      .withOpacity(0.5),
+                                                ),
+                                              ),
+                                              isDense: true,
+                                              contentPadding:
+                                                  EdgeInsets.all(15.w)),
                                         ),
                                         space20H,
                                         TextApp(

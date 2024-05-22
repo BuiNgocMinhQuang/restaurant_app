@@ -104,6 +104,7 @@ class _DetailsStoreState extends State<DetailsStore> {
             editDetailsStoreModel = EditDetailsStoreModel.fromJson(data);
           });
           showDialog(
+              // ignore: use_build_context_synchronously
               context: context,
               builder: (BuildContext context) {
                 return EditDetailStoreDialog(
@@ -290,7 +291,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                               child: Row(
                                 children: [
                                   space20W,
-                                  Container(
+                                  SizedBox(
                                     width: 50,
                                     height: 50,
                                     // color: Colors.amber,
@@ -334,7 +335,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                               child: Row(
                                 children: [
                                   space20W,
-                                  Container(
+                                  SizedBox(
                                     width: 50,
                                     height: 50,
                                     child: Image.asset(

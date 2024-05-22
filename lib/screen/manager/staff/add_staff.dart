@@ -9,15 +9,16 @@ import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
-
 import 'package:app_restaurant/widgets/text/text_app.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
+import 'dart:math' as math;
+
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class AddStaff extends StatefulWidget {
   const AddStaff({super.key});
@@ -44,11 +45,12 @@ class _AddStaffState extends State<AddStaff> {
   final twitterController = TextEditingController();
   final facebookController = TextEditingController();
   final instagramController = TextEditingController();
-  final keyListStore = GlobalKey<DropdownSearchState<String>>();
-  final keyListRole = GlobalKey<DropdownSearchState<String>>();
-  final keyListCity = GlobalKey<DropdownSearchState<int>>();
-  final keyListDistric = GlobalKey<DropdownSearchState<int>>();
-  final keyListWard = GlobalKey<DropdownSearchState<int>>();
+  final storeNameTextController = TextEditingController();
+  final roleNameTextController = TextEditingController();
+  final cityNameTextController = TextEditingController();
+  final districNameTextController = TextEditingController();
+  final wardNameTextController = TextEditingController();
+
   String? selectedShopId;
   String? currentRoleOfStaff;
   List cityList = [];
@@ -281,13 +283,11 @@ class _AddStaffState extends State<AddStaff> {
           currentIndexCity = null;
           currentIndexDistric = null;
           currentIndexWard = null;
-          // selectedShopId = '';
-          // currentRoleOfStaff = null;
-          // keyListStore.currentState?.clear();
-          keyListRole.currentState?.clear();
-          keyListCity.currentState?.clear();
-          keyListDistric.currentState?.clear();
-          keyListWard.currentState?.clear();
+          storeNameTextController.clear();
+          roleNameTextController.clear();
+          cityNameTextController.clear();
+          districNameTextController.clear();
+          wardNameTextController.clear();
         });
       } else {
         print("ERRRO GET LIST STORE 111111");
@@ -326,6 +326,11 @@ class _AddStaffState extends State<AddStaff> {
     twitterController.clear();
     facebookController.clear();
     instagramController.clear();
+    storeNameTextController.clear();
+    roleNameTextController.clear();
+    cityNameTextController.clear();
+    districNameTextController.clear();
+    wardNameTextController.clear();
   }
 
   sectionController() {
@@ -383,20 +388,92 @@ class _AddStaffState extends State<AddStaff> {
                             color: blueText,
                           ),
                           space10H,
-                          DropdownSearch<String>(
-                            validator: (value) {
-                              if (value == "Chọn cửa hàng" ||
-                                  selectedShopId == null ||
-                                  selectedShopId == '') {
-                                return canNotNull;
-                              } else {
-                                return null;
-                              }
+                          TextFormField(
+                            readOnly: true,
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
                             },
-                            // key: keyListStore,
-                            items: nameListStore,
-                            dropdownDecoratorProps: DropDownDecoratorProps(
-                              dropdownSearchDecoration: InputDecoration(
+                            onTap: () {
+                              showMaterialModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(15.r),
+                                    topLeft: Radius.circular(15.r),
+                                  ),
+                                ),
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                context: context,
+                                builder: (context) => Container(
+                                  height: 1.sh / 2,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        width: 1.sw,
+                                        padding: EdgeInsets.all(20.w),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        child: TextApp(
+                                          text: "Chọn cửa hàng",
+                                          color: Colors.white,
+                                          fontsize: 20.sp,
+                                          fontWeight: FontWeight.bold,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: ListView.builder(
+                                          padding: EdgeInsets.only(top: 10.w),
+                                          itemCount: nameListStore.length,
+                                          itemBuilder: (context, index) {
+                                            return Column(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 20.w),
+                                                  child: InkWell(
+                                                    onTap: () async {
+                                                      Navigator.pop(context);
+
+                                                      setState(() {
+                                                        storeNameTextController
+                                                                .text =
+                                                            nameListStore[
+                                                                index];
+
+                                                        selectedShopId =
+                                                            shopIDList[index];
+                                                      });
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        TextApp(
+                                                          text: nameListStore[
+                                                              index],
+                                                          color: Colors.black,
+                                                          fontsize: 20.sp,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Divider(
+                                                  height: 25.h,
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            controller: storeNameTextController,
+                            style: TextStyle(fontSize: 12.sp, color: grey),
+                            cursorColor: grey,
+                            decoration: InputDecoration(
                                 fillColor:
                                     const Color.fromARGB(255, 226, 104, 159),
                                 focusedBorder: OutlineInputBorder(
@@ -408,18 +485,17 @@ class _AddStaffState extends State<AddStaff> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
+                                hintText: 'Chọn cửa hàng',
+                                suffixIcon: Transform.rotate(
+                                  angle: 90 * math.pi / 180,
+                                  child: Icon(
+                                    Icons.chevron_right,
+                                    size: 28.sp,
+                                    color: Colors.black.withOpacity(0.5),
+                                  ),
+                                ),
                                 isDense: true,
-                                contentPadding: EdgeInsets.all(15.w),
-                                hintText: "Chọn cửa hàng",
-                              ),
-                            ),
-                            onChanged: (store) {
-                              setState(() {
-                                selectedShopId = shopIDList[
-                                    nameListStore.indexOf(store ?? '')];
-                              });
-                            },
-                            selectedItem: "Chọn cửa hàng",
+                                contentPadding: EdgeInsets.all(15.w)),
                           ),
                         ],
                       ),
@@ -434,26 +510,91 @@ class _AddStaffState extends State<AddStaff> {
                             color: blueText,
                           ),
                           space10H,
-                          DropdownSearch<String>(
-                            validator: (value) {
-                              if (value == "Chọn chức vụ" ||
-                                  currentRoleOfStaff == null) {
-                                return canNotNull;
-                              } else {
-                                return null;
-                              }
+                          TextFormField(
+                            readOnly: true,
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
                             },
-                            key: keyListRole,
-                            items: listRole,
-                            onChanged: (role) {
-                              setState(() {
-                                currentRoleOfStaff =
-                                    (listRole.indexOf(role ?? '') + 1)
-                                        .toString();
-                              });
+                            onTap: () {
+                              showMaterialModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(15.r),
+                                    topLeft: Radius.circular(15.r),
+                                  ),
+                                ),
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                context: context,
+                                builder: (context) => Container(
+                                  height: 1.sh / 2,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        width: 1.sw,
+                                        padding: EdgeInsets.all(20.w),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        child: TextApp(
+                                          text: "Chọn chức vụ",
+                                          color: Colors.white,
+                                          fontsize: 20.sp,
+                                          fontWeight: FontWeight.bold,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: ListView.builder(
+                                          padding: EdgeInsets.only(top: 10.w),
+                                          itemCount: listRole.length,
+                                          itemBuilder: (context, index) {
+                                            return Column(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 20.w),
+                                                  child: InkWell(
+                                                    onTap: () async {
+                                                      Navigator.pop(context);
+
+                                                      setState(() {
+                                                        roleNameTextController
+                                                                .text =
+                                                            listRole[index];
+
+                                                        currentRoleOfStaff =
+                                                            (index + 1)
+                                                                .toString();
+                                                      });
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        TextApp(
+                                                          text: listRole[index],
+                                                          color: Colors.black,
+                                                          fontsize: 20.sp,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Divider(
+                                                  height: 25.h,
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
                             },
-                            dropdownDecoratorProps: DropDownDecoratorProps(
-                              dropdownSearchDecoration: InputDecoration(
+                            controller: roleNameTextController,
+                            style: TextStyle(fontSize: 12.sp, color: grey),
+                            cursorColor: grey,
+                            decoration: InputDecoration(
                                 fillColor:
                                     const Color.fromARGB(255, 226, 104, 159),
                                 focusedBorder: OutlineInputBorder(
@@ -465,12 +606,17 @@ class _AddStaffState extends State<AddStaff> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
+                                hintText: 'Chọn chức vụ',
+                                suffixIcon: Transform.rotate(
+                                  angle: 90 * math.pi / 180,
+                                  child: Icon(
+                                    Icons.chevron_right,
+                                    size: 28.sp,
+                                    color: Colors.black.withOpacity(0.5),
+                                  ),
+                                ),
                                 isDense: true,
-                                contentPadding: EdgeInsets.all(15.w),
-                                hintText: "Chọn chức vụ",
-                              ),
-                            ),
-                            selectedItem: "Chọn chức vụ",
+                                contentPadding: EdgeInsets.all(15.w)),
                           ),
                         ],
                       ),
@@ -876,23 +1022,108 @@ class _AddStaffState extends State<AddStaff> {
                             color: blueText,
                           ),
                           space10H,
-                          DropdownSearch(
-                            onChanged: (changeCity) {
-                              getListArea(
-                                  city: cityList.indexOf(changeCity),
-                                  district: null);
-                              setState(() {
-                                currentIndexCity = cityList.indexOf(changeCity);
-                                currentDistric = null;
-                                currentIndexDistric = null;
-                                currentWard = null;
-                                currentIndexWard = null;
-                              });
+                          TextFormField(
+                            readOnly: true,
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
                             },
-                            key: keyListCity,
-                            items: cityList,
-                            dropdownDecoratorProps: DropDownDecoratorProps(
-                              dropdownSearchDecoration: InputDecoration(
+                            onTap: () {
+                              showMaterialModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(15.r),
+                                    topLeft: Radius.circular(15.r),
+                                  ),
+                                ),
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                context: context,
+                                builder: (context) => Container(
+                                  height: 1.sh / 2,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        width: 1.sw,
+                                        padding: EdgeInsets.all(20.w),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        child: TextApp(
+                                          text: "Chọn tỉnh/thành phố",
+                                          color: Colors.white,
+                                          fontsize: 20.sp,
+                                          fontWeight: FontWeight.bold,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: ListView.builder(
+                                          padding: EdgeInsets.only(top: 10.w),
+                                          itemCount: cityList.length,
+                                          itemBuilder: (context, index) {
+                                            return Column(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 20.w),
+                                                  child: InkWell(
+                                                    onTap: () async {
+                                                      Navigator.pop(context);
+
+                                                      getListArea(
+                                                          city: index,
+                                                          district: null);
+                                                      setState(() {
+                                                        cityNameTextController
+                                                                .text =
+                                                            cityList[index];
+                                                        districNameTextController
+                                                            .clear();
+                                                        wardNameTextController
+                                                            .clear();
+                                                        currentIndexCity =
+                                                            index;
+                                                        currentDistric = null;
+                                                        currentIndexDistric =
+                                                            null;
+                                                        currentWard = null;
+                                                        currentIndexWard = null;
+                                                      });
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        TextApp(
+                                                          text: cityList[index],
+                                                          color: Colors.black,
+                                                          fontsize: 20.sp,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Divider(
+                                                  height: 25.h,
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            controller: cityNameTextController,
+                            style: TextStyle(fontSize: 12.sp, color: grey),
+                            cursorColor: grey,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return fullnameIsRequied;
+                              } else {
+                                return null;
+                              }
+                            },
+                            decoration: InputDecoration(
                                 fillColor:
                                     const Color.fromARGB(255, 226, 104, 159),
                                 focusedBorder: OutlineInputBorder(
@@ -904,12 +1135,17 @@ class _AddStaffState extends State<AddStaff> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
+                                hintText: 'Chọn tỉnh/thành phố',
+                                suffixIcon: Transform.rotate(
+                                  angle: 90 * math.pi / 180,
+                                  child: Icon(
+                                    Icons.chevron_right,
+                                    size: 28.sp,
+                                    color: Colors.black.withOpacity(0.5),
+                                  ),
+                                ),
                                 isDense: true,
-                                contentPadding: EdgeInsets.all(15.w),
-                                hintText: "Chọn tỉnh/thành phố",
-                              ),
-                            ),
-                            selectedItem: currentCity,
+                                contentPadding: EdgeInsets.all(15.w)),
                           ),
                         ],
                       ),
@@ -924,22 +1160,98 @@ class _AddStaffState extends State<AddStaff> {
                             color: blueText,
                           ),
                           space10H,
-                          DropdownSearch(
-                            key: keyListDistric,
-                            items: districList,
-                            onChanged: (changeDistric) {
-                              getListArea(
-                                  city: currentIndexCity,
-                                  district: districList.indexOf(changeDistric));
-                              setState(() {
-                                currentIndexDistric =
-                                    districList.indexOf(changeDistric);
-                                currentWard = null;
-                                currentIndexWard = null;
-                              });
+                          TextFormField(
+                            readOnly: true,
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
                             },
-                            dropdownDecoratorProps: DropDownDecoratorProps(
-                              dropdownSearchDecoration: InputDecoration(
+                            onTap: () {
+                              showMaterialModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(15.r),
+                                    topLeft: Radius.circular(15.r),
+                                  ),
+                                ),
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                context: context,
+                                builder: (context) => Container(
+                                  height: 1.sh / 2,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        width: 1.sw,
+                                        padding: EdgeInsets.all(20.w),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        child: TextApp(
+                                          text: "Chọn quận/Huyện",
+                                          color: Colors.white,
+                                          fontsize: 20.sp,
+                                          fontWeight: FontWeight.bold,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: ListView.builder(
+                                          padding: EdgeInsets.only(top: 10.w),
+                                          itemCount: districList.length,
+                                          itemBuilder: (context, index) {
+                                            return Column(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 20.w),
+                                                  child: InkWell(
+                                                    onTap: () async {
+                                                      Navigator.pop(context);
+
+                                                      getListArea(
+                                                          city:
+                                                              currentIndexCity,
+                                                          district: index);
+                                                      setState(() {
+                                                        districNameTextController
+                                                                .text =
+                                                            districList[index];
+                                                        wardNameTextController
+                                                            .clear();
+                                                        currentIndexDistric =
+                                                            index;
+                                                        currentWard = null;
+                                                        currentIndexWard = null;
+                                                      });
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        TextApp(
+                                                          text: districList[
+                                                              index],
+                                                          color: Colors.black,
+                                                          fontsize: 20.sp,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Divider(
+                                                  height: 25.h,
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            controller: districNameTextController,
+                            style: TextStyle(fontSize: 12.sp, color: grey),
+                            cursorColor: grey,
+                            decoration: InputDecoration(
                                 fillColor:
                                     const Color.fromARGB(255, 226, 104, 159),
                                 focusedBorder: OutlineInputBorder(
@@ -951,12 +1263,17 @@ class _AddStaffState extends State<AddStaff> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
+                                hintText: 'Chọn quận/Huyện',
+                                suffixIcon: Transform.rotate(
+                                  angle: 90 * math.pi / 180,
+                                  child: Icon(
+                                    Icons.chevron_right,
+                                    size: 28.sp,
+                                    color: Colors.black.withOpacity(0.5),
+                                  ),
+                                ),
                                 isDense: true,
-                                contentPadding: EdgeInsets.all(15.w),
-                                hintText: "Chọn quận/huyện",
-                              ),
-                            ),
-                            selectedItem: currentDistric,
+                                contentPadding: EdgeInsets.all(15.w)),
                           ),
                         ],
                       ),
@@ -971,23 +1288,100 @@ class _AddStaffState extends State<AddStaff> {
                             color: blueText,
                           ),
                           space10H,
-                          DropdownSearch(
-                            key: keyListWard,
-                            items: wardList,
-                            onChanged: (changeWard) {
-                              getListArea(
-                                  city: currentIndexCity,
-                                  district: currentIndexDistric);
-                              setState(() {
-                                currentIndexWard = wardList.indexOf(changeWard);
-                                var wardListMap = wardList.asMap();
-                                var myWard =
-                                    wardListMap[wardList.indexOf(changeWard)];
-                                currentWard = myWard;
-                              });
+                          TextFormField(
+                            readOnly: true,
+                            onTapOutside: (event) {
+                              FocusManager.instance.primaryFocus?.unfocus();
                             },
-                            dropdownDecoratorProps: DropDownDecoratorProps(
-                              dropdownSearchDecoration: InputDecoration(
+                            onTap: () {
+                              showMaterialModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(15.r),
+                                    topLeft: Radius.circular(15.r),
+                                  ),
+                                ),
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                context: context,
+                                builder: (context) => Container(
+                                  height: 1.sh / 2,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        width: 1.sw,
+                                        padding: EdgeInsets.all(20.w),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        child: TextApp(
+                                          text: "Chọn phường/xã",
+                                          color: Colors.white,
+                                          fontsize: 20.sp,
+                                          fontWeight: FontWeight.bold,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: ListView.builder(
+                                          padding: EdgeInsets.only(top: 10.w),
+                                          itemCount: wardList.length,
+                                          itemBuilder: (context, index) {
+                                            return Column(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 20.w),
+                                                  child: InkWell(
+                                                    onTap: () async {
+                                                      Navigator.pop(context);
+
+                                                      getListArea(
+                                                          city:
+                                                              currentIndexCity,
+                                                          district:
+                                                              currentIndexDistric);
+                                                      setState(() {
+                                                        wardNameTextController
+                                                                .text =
+                                                            wardList[index];
+
+                                                        currentIndexWard =
+                                                            index;
+                                                        var wardListMap =
+                                                            wardList.asMap();
+                                                        var myWard =
+                                                            wardListMap[index];
+                                                        currentWard = myWard;
+                                                      });
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        TextApp(
+                                                          text: wardList[index],
+                                                          color: Colors.black,
+                                                          fontsize: 20.sp,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Divider(
+                                                  height: 25.h,
+                                                )
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                            controller: wardNameTextController,
+                            style: TextStyle(fontSize: 12.sp, color: grey),
+                            cursorColor: grey,
+                            decoration: InputDecoration(
                                 fillColor:
                                     const Color.fromARGB(255, 226, 104, 159),
                                 focusedBorder: OutlineInputBorder(
@@ -999,12 +1393,17 @@ class _AddStaffState extends State<AddStaff> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
+                                hintText: 'Chọn phường/xã',
+                                suffixIcon: Transform.rotate(
+                                  angle: 90 * math.pi / 180,
+                                  child: Icon(
+                                    Icons.chevron_right,
+                                    size: 28.sp,
+                                    color: Colors.black.withOpacity(0.5),
+                                  ),
+                                ),
                                 isDense: true,
-                                contentPadding: EdgeInsets.all(15.w),
-                                hintText: "Chọn phường/xã",
-                              ),
-                            ),
-                            selectedItem: currentWard,
+                                contentPadding: EdgeInsets.all(15.w)),
                           ),
                         ],
                       ),

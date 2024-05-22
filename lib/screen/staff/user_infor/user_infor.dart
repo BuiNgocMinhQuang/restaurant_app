@@ -98,7 +98,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
               mess: "Xoá ảnh đại diện thành công",
               color: Colors.green);
         } else {
-          print("ERROR DELETED AVATAR STAFF  1");
+          log("ERROR DELETED AVATAR STAFF  1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -106,10 +106,10 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
               color: Colors.red);
         }
       } catch (error) {
-        print("ERROR DELETED AVATAR STAFF  2 ${error}");
+        log("ERROR DELETED AVATAR STAFF  2 $error");
       }
     } catch (error) {
-      print("ERROR DELETED AVATAR STAFF  3 $error");
+      log("ERROR DELETED AVATAR STAFF  3 $error");
     }
   }
 
@@ -123,7 +123,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
         // base64.encode(imagebytes);
 
         try {
-          print("TRUYEN NNNN ${{
+          log("TRUYEN NNNN ${{
             "staff_avatar": base64string,
           }}");
           var token = StorageUtils.instance.getString(key: 'token_staff');
@@ -139,7 +139,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
             }),
           );
           final data = jsonDecode(respons.body);
-          log("DATA CHANGE AVATAR STAFF  ${data}}");
+          log("DATA CHANGE AVATAR STAFF  $data}");
 
           try {
             if (data['status'] == 200) {
@@ -158,7 +158,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                   color: Colors.red);
             }
           } catch (error) {
-            log("ERROR CHANGE AVATAR STAFF  2 ${error}");
+            log("ERROR CHANGE AVATAR STAFF  2 $error");
           }
         } catch (error) {
           log("ERROR CHANGE AVATAR STAFF  3 $error");
@@ -221,7 +221,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
     required int? address3,
     required String? address4,
   }) async {
-    print("CAI DONG TRUYEN LEN ${{
+    log("CAI DONG TRUYEN LEN ${{
       "first_name": firstName,
       "last_name": lastName,
       "full_name": fullName,
@@ -281,7 +281,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
               color: Colors.red);
         }
       } catch (error) {
-        log("ERROR UPDATE INFOR  2 ${error}");
+        log("ERROR UPDATE INFOR  2 $error");
       }
     } catch (error) {
       log("ERROR UPDATE INFOR  3 $error");
@@ -337,7 +337,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
               color: Colors.red);
         }
       } catch (error) {
-        log("ERROR CHANGE PASS STAFF  2 ${error}");
+        log("ERROR CHANGE PASS STAFF  2 $error");
       }
     } catch (error) {
       log("ERROR CHANGE PASS STAFF  3 $error");
@@ -442,13 +442,13 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
             currentDistric = myDistrict;
           });
         } else {
-          print("LOI GI DO dadadadadadadada");
+          log("LOI GI DO dadadadadadadada");
         }
       } catch (error) {
-        print("LOI GI DO $error");
+        log("LOI GI DO $error");
       }
     } catch (error) {
-      print("LOI GI DO $error");
+      log("LOI GI DO $error");
     }
   }
 
@@ -582,7 +582,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                 Positioned(
                                   top: 5.w,
                                   right: 5.w,
-                                  child: Container(
+                                  child: SizedBox(
                                     width: 20.w,
                                     height: 20.w,
                                     child: InkWell(
@@ -1138,6 +1138,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                   if (!phoneValid) {
                                                     return invalidPhone;
                                                   }
+                                                  return null;
                                                 },
                                                 decoration: InputDecoration(
                                                     fillColor:
@@ -1197,6 +1198,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                           if (value == "Chọn tỉnh/thành phố") {
                                             return canNotNull;
                                           }
+                                          return null;
                                         },
                                         selectedItem: currentCity,
                                         items: cityList,
@@ -1266,6 +1268,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                           if (value == "Chọn quận/huyện") {
                                             return canNotNull;
                                           }
+                                          return null;
                                         },
                                         selectedItem: currentDistric,
 
@@ -1338,6 +1341,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                           if (value == "Chọn phường/xã") {
                                             return canNotNull;
                                           }
+                                          return null;
                                         },
                                         selectedItem: currentWard,
 
@@ -1472,6 +1476,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                           if (!emailValid) {
                                             return invalidEmail;
                                           }
+                                          return null;
                                         },
                                         decoration: InputDecoration(
                                             fillColor: const Color.fromARGB(

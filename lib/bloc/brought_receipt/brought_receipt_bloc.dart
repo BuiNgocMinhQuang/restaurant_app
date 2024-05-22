@@ -55,21 +55,21 @@ class BroughtReceiptBloc
           emit(state.copyWith(
               broughtReceiptPageStatus: BroughtReceiptPageStatus.succes));
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR BROUGHT RECEIPT PAGE 1");
 
           emit(state.copyWith(
               broughtReceiptPageStatus: BroughtReceiptPageStatus.failed));
           emit(state.copyWith(errorText: message['text']));
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
 
         emit(state.copyWith(
             broughtReceiptPageStatus: BroughtReceiptPageStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
       emit(state.copyWith(
           broughtReceiptPageStatus: BroughtReceiptPageStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
@@ -117,7 +117,7 @@ class CancleBroughtReceiptBloc
               mess: message['title'],
               color: Colors.green);
         } else {
-          print("ERROR CANCLE BROUGHT RECEIPT 1");
+          log("ERROR CANCLE BROUGHT RECEIPT 1");
 
           emit(state.copyWith(
               cancleBroughtReceiptStatus: CancleBroughtReceiptStatus.failed));
@@ -128,14 +128,14 @@ class CancleBroughtReceiptBloc
               color: Colors.red);
         }
       } catch (error) {
-        print("ERROR CANCLE BROUGHT RECEIPT 2 $error");
+        log("ERROR CANCLE BROUGHT RECEIPT 2 $error");
 
         emit(state.copyWith(
             cancleBroughtReceiptStatus: CancleBroughtReceiptStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      print("ERROR CANCLE BROUGHT RECEIPT 3 $error");
+      log("ERROR CANCLE BROUGHT RECEIPT 3 $error");
 
       emit(state.copyWith(
           cancleBroughtReceiptStatus: CancleBroughtReceiptStatus.failed));
@@ -174,7 +174,7 @@ class PrintBroughtReceiptBloc
         }),
       );
       final data = jsonDecode(respons.body);
-      print("BUG HOA DON MANG VE $data");
+      log("BUG HOA DON MANG VE $data");
       try {
         if (data['status'] == 200) {
           var printBroughtReceiptRes = PrintBroughtReceiptModel.fromJson(data);
@@ -183,20 +183,20 @@ class PrintBroughtReceiptBloc
           emit(state.copyWith(
               printBroughtReceiptStatus: PrintBroughtReceiptStatus.succes));
         } else {
-          print("ERROR CANCLE BROUGHT RECEIPT 1");
+          log("ERROR CANCLE BROUGHT RECEIPT 1");
 
           emit(state.copyWith(
               printBroughtReceiptStatus: PrintBroughtReceiptStatus.failed));
         }
       } catch (error) {
-        print("ERROR CANCLE BROUGHT RECEIPT 2 $error");
+        log("ERROR CANCLE BROUGHT RECEIPT 2 $error");
 
         emit(state.copyWith(
             printBroughtReceiptStatus: PrintBroughtReceiptStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      print("ERROR CANCLE BROUGHT RECEIPT 3 $error");
+      log("ERROR CANCLE BROUGHT RECEIPT 3 $error");
 
       emit(state.copyWith(
           printBroughtReceiptStatus: PrintBroughtReceiptStatus.failed));
@@ -249,20 +249,20 @@ class ManageBroughtReceiptBloc
           emit(state.copyWith(
               broughtReceiptStatus: BroughtReceiptStatus.succes));
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1 HEHHEHEHEH");
+          log("ERROR BROUGHT RECEIPT PAGE 1 HEHHEHEHEH");
 
           emit(state.copyWith(
               broughtReceiptStatus: BroughtReceiptStatus.failed));
           emit(state.copyWith(errorText: message['text']));
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
 
         emit(state.copyWith(broughtReceiptStatus: BroughtReceiptStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
       emit(state.copyWith(broughtReceiptStatus: BroughtReceiptStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }

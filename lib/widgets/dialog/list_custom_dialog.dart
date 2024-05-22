@@ -33,7 +33,6 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
@@ -299,10 +298,10 @@ class _BookingTableDialogState extends State<BookingTableDialog>
             listFoodTableCurrent.addAll(foodTableDataRes.foods.data);
           });
         } else {
-          log("ERROR DATA FOOD TABLE 1 ${data}");
+          log("ERROR DATA FOOD TABLE 1 $data");
         }
       } catch (error) {
-        log("ERROR DATA FOOD TABLE 2 ${error}");
+        log("ERROR DATA FOOD TABLE 2 $error");
       }
     } catch (error) {
       log("ERROR DATA FOOD TABLE 3 $error");
@@ -513,6 +512,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                   table.bookingStatus == true &&
                   table.roomTableId != widget.currentTable?.roomTableId))
               .toList();
+          // var listTableNoBooking = state.tableModel?.tablesNoBooking ?? [];
 
           return AlertDialog(
               contentPadding: const EdgeInsets.all(0),
@@ -1916,6 +1916,7 @@ class MoveTableDialog extends StatefulWidget {
     required this.shopID,
     required this.roomID,
   }) : super(key: key);
+  @override
   State<MoveTableDialog> createState() => _MoveTableDialogState();
 }
 
@@ -2324,7 +2325,7 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: 100,
                   height: 100,
                   child: Lottie.asset('assets/lottie/error.json'),
@@ -2336,7 +2337,7 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
                   fontWeight: FontWeight.bold,
                 ),
                 space30H,
-                Container(
+                SizedBox(
                   width: 200,
                   child: ButtonGradient(
                     color1: color1BlueButton,
@@ -2366,7 +2367,7 @@ class SeeBillDialog extends StatefulWidget {
   final String shopID;
   final int? orderID;
   final String roomID;
-  SeeBillDialog({
+  const SeeBillDialog({
     Key? key,
     required this.currentTable,
     required this.token,
@@ -2414,7 +2415,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
         }),
       );
       final data = jsonDecode(respons.body);
-      // print("BILL INFOR $data");
+      // log("BILL INFOR $data");
       final message = data['message'];
 
       try {
@@ -2424,7 +2425,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
             listFoodBillCurrent = billTableDataRes;
           });
         } else {
-          print("ERROR BILL INFOR 1");
+          log("ERROR BILL INFOR 1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -2432,10 +2433,10 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
               color: Colors.red);
         }
       } catch (error) {
-        print("ERROR BILL INFOR 2 $error");
+        log("ERROR BILL INFOR 2 $error");
       }
     } catch (error) {
-      print("ERROR BILL INFOR 3 $error");
+      log("ERROR BILL INFOR 3 $error");
     }
   }
 
@@ -2461,7 +2462,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print(" DATA ADD FOOD TO TABLE $data");
+      log(" DATA ADD FOOD TO TABLE $data");
       final message = data['message'];
 
       try {
@@ -2472,7 +2473,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
               mess: message['title'],
               color: Colors.green);
         } else {
-          print("ERROR ADD FOOD TO TABLE 1");
+          log("ERROR ADD FOOD TO TABLE 1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -2480,11 +2481,11 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
               color: Colors.red);
         }
       } catch (error) {
-        print('BCBCBCBHCBCBC');
-        print("ERROR ADD FOOD TO TABLE 2 $error");
+        log('BCBCBCBHCBCBC');
+        log("ERROR ADD FOOD TO TABLE 2 $error");
       }
     } catch (error) {
-      print("ERROR ADD FOOD TO TABLE 3 $error");
+      log("ERROR ADD FOOD TO TABLE 3 $error");
     }
     refeshHomePage();
     getBillData();
@@ -2514,7 +2515,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print(" DATA ADD FOOD TO TABLE $data");
+      log(" DATA ADD FOOD TO TABLE $data");
       final message = data['message'];
 
       try {
@@ -2525,7 +2526,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
               mess: message['title'],
               color: Colors.green);
         } else {
-          print("ERROR ADD FOOD TO TABLE 1");
+          log("ERROR ADD FOOD TO TABLE 1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -2533,10 +2534,10 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
               color: Colors.red);
         }
       } catch (error) {
-        print("ERROR ADD FOOD TO TABLE 2 $error");
+        log("ERROR ADD FOOD TO TABLE 2 $error");
       }
     } catch (error) {
-      print("ERROR ADD FOOD TO TABLE 3 $error");
+      log("ERROR ADD FOOD TO TABLE 3 $error");
     }
     refeshHomePage();
     getBillData();
@@ -2564,7 +2565,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print(" DATA ADD FOOD TO TABLE $data");
+      log(" DATA ADD FOOD TO TABLE $data");
       final message = data['message'];
 
       try {
@@ -2575,7 +2576,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
               mess: message['title'],
               color: Colors.green);
         } else {
-          print("ERROR ADD FOOD TO TABLE 1");
+          log("ERROR ADD FOOD TO TABLE 1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -2583,10 +2584,10 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
               color: Colors.red);
         }
       } catch (error) {
-        print("ERROR ADD FOOD TO TABLE 2 $error");
+        log("ERROR ADD FOOD TO TABLE 2 $error");
       }
     } catch (error) {
-      print("ERROR ADD FOOD TO TABLE 3 $error");
+      log("ERROR ADD FOOD TO TABLE 3 $error");
     }
     refeshHomePage();
     getBillData();
@@ -3363,7 +3364,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                               ],
                             )),
                       ),
-                      const Divider(height: 1, color: Colors.black),
+                      Divider(height: 1, color: Colors.black),
                       Flexible(
                           fit: FlexFit.tight,
                           child: Container(
@@ -3373,7 +3374,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.all(10.w),
-                                    child: SizedBox(
+                                    child: Container(
                                       width: 1.sw,
                                       // height: 100.h,
                                       // color: Colors.green,
@@ -3437,7 +3438,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                                     mainAxisAlignment:
                                                         MainAxisAlignment.start,
                                                     children: [
-                                                      SizedBox(
+                                                      Container(
                                                           width: 80.w,
                                                           height: 80.w,
                                                           // color: Colors.amber,
@@ -3617,7 +3618,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                       ),
                                     ),
                                   ),
-                                  const Divider(
+                                  Divider(
                                     height: 1,
                                     color: menuGrey,
                                   ),
@@ -3707,7 +3708,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                       ],
                                     ),
                                   ),
-                                  const Divider(
+                                  Divider(
                                     height: 1,
                                     color: menuGrey,
                                   ),
@@ -4019,7 +4020,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
           );
         } else if (state.paymentStatus == PaymentInforStateStatus.loading) {
           return AlertDialog(
-            contentPadding: const EdgeInsets.all(0),
+            contentPadding: EdgeInsets.all(0),
             surfaceTintColor: Colors.white,
             backgroundColor: Colors.white,
             content: Center(
@@ -4032,7 +4033,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
           );
         } else {
           return AlertDialog(
-              contentPadding: const EdgeInsets.all(0),
+              contentPadding: EdgeInsets.all(0),
               surfaceTintColor: Colors.white,
               backgroundColor: Colors.white,
               content: Center(
@@ -4163,7 +4164,7 @@ class _ManageBroughtReceiptDialogState
       );
 
       final data = jsonDecode(respons.body);
-      print("DATAE !!! $data");
+      log("DATAE !!! $data");
       var detailsBroughtReceiptRes = ManageBroughtReceiptModel.fromJson(data);
       try {
         if (data['status'] == 200) {
@@ -4181,13 +4182,13 @@ class _ManageBroughtReceiptDialogState
             }
           });
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1 CCCC");
+          log("ERROR BROUGHT RECEIPT PAGE 1 CCCC");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
   }
 
@@ -5026,7 +5027,7 @@ class _ManageBroughtReceiptDialogState
                               } else {
                                 return Center(
                                   child: hasMore
-                                      ? const CircularProgressIndicator()
+                                      ? CircularProgressIndicator()
                                       : Container(),
                                 );
                               }
@@ -5037,7 +5038,7 @@ class _ManageBroughtReceiptDialogState
         );
       } else if (state.broughtReceiptStatus == BroughtReceiptStatus.loading) {
         return AlertDialog(
-          contentPadding: const EdgeInsets.all(0),
+          contentPadding: EdgeInsets.all(0),
           surfaceTintColor: Colors.white,
           backgroundColor: Colors.white,
           content: Center(
@@ -5050,7 +5051,7 @@ class _ManageBroughtReceiptDialogState
         );
       } else {
         return AlertDialog(
-          contentPadding: const EdgeInsets.all(0),
+          contentPadding: EdgeInsets.all(0),
           surfaceTintColor: Colors.white,
           backgroundColor: Colors.white,
           content: Center(
@@ -6493,6 +6494,8 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
         }),
       );
       final data = jsonDecode(respons.body);
+      log(data);
+
       try {
         if (data['status'] == 200) {
           roomFieldController.clear();
@@ -6723,6 +6726,7 @@ class _EditRoomDataDialogState extends State<EditRoomDataDialog> {
         }),
       );
       final data = jsonDecode(respons.body);
+      log(data);
 
       try {
         if (data['status'] == 200) {
@@ -6779,6 +6783,7 @@ class _EditRoomDataDialogState extends State<EditRoomDataDialog> {
         }),
       );
       final data = jsonDecode(respons.body);
+      log(data);
 
       try {
         if (data['status'] == 200) {
@@ -6990,7 +6995,7 @@ class CreateStoreDialog extends StatefulWidget {
   // final List<XFile>? imageFileList;
   final Function eventSaveButton;
 
-  CreateStoreDialog({
+  const CreateStoreDialog({
     Key? key,
     // required this.imageFileList,
     required this.eventSaveButton,
@@ -7121,7 +7126,6 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
           // ignore: use_build_context_synchronously
           // Navigator.of(context).pop();
         } else {
-          log("ERROR DATA FOOD TABLE 1 $data");
           var messFailed = data['errors'];
           var messErrorShopId1 = messFailed['shop_id'].toString();
           var messErrorShopId2 = messErrorShopId1.replaceAll("[", "");
@@ -7152,7 +7156,6 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
               typeDialog: "error");
         }
       } catch (error) {
-        log("ERROR DATA FOOD TABLE 2 $error");
         showCustomDialogModal(
             context: navigatorKey.currentContext,
             textDesc: "Có lỗi xảy ra",
@@ -7179,12 +7182,8 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
       contentPadding: const EdgeInsets.all(0),
       surfaceTintColor: Colors.white,
       backgroundColor: Colors.white,
-      content: Container(
+      content: SizedBox(
         width: 1.sw,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15.r),
-          color: Colors.white,
-        ),
         child: ListView(
           shrinkWrap: true,
           children: [
@@ -7194,14 +7193,14 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(top: 15.w, left: 15.w, right: 15.w),
-                  child: Container(
+                  child: SizedBox(
                       width: 1.sw,
                       height: 50,
                       // decoration: BoxDecoration(
                       //   borderRadius: BorderRadius.only(
                       //       topLeft: Radius.circular(15.w),
                       //       topRight: Radius.circular(15.w)),
-                      //   color: Colors.amber,
+                      //   // color: Colors.amber,
                       // ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -7643,7 +7642,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                         text: "Đóng",
                         colorText: Colors.white,
                         backgroundColor: const Color.fromRGBO(131, 146, 171, 1),
-                        outlineColor: const Color.fromRGBO(131, 146, 171, 1),
+                        outlineColor: Color.fromRGBO(131, 146, 171, 1),
                       ),
                       SizedBox(
                         width: 20.w,
@@ -7878,12 +7877,13 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
         }),
       );
       final data = jsonDecode(respons.body);
+      log("UPDATE DATA STORE ${data}");
       try {
         if (data['status'] == 200) {
           Navigator.of(navigatorKey.currentContext!).pop();
           Navigator.pop(navigatorKey.currentContext!);
           getListStore();
-          Future.delayed(const Duration(milliseconds: 300), () {
+          Future.delayed(Duration(milliseconds: 300), () {
             showCustomDialogModal(
               typeDialog: "succes",
               context: navigatorKey.currentContext,
@@ -7943,7 +7943,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
       contentPadding: const EdgeInsets.all(0),
       surfaceTintColor: Colors.white,
       backgroundColor: Colors.white,
-      content: SizedBox(
+      content: Container(
         width: 1.sw,
         child: ListView(
           shrinkWrap: true,
@@ -7954,7 +7954,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(top: 15.w, left: 15.w, right: 15.w),
-                  child: SizedBox(
+                  child: Container(
                       width: 1.sw,
                       height: 50,
                       // decoration: BoxDecoration(
@@ -8395,7 +8395,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                                 height: 150.h,
                                 margin: EdgeInsets.all(20.h),
                                 child: Padding(
-                                  padding: const EdgeInsets.only(top: 0),
+                                  padding: EdgeInsets.only(top: 0),
                                   child: SizedBox(
                                       width: 100.w,
                                       height: 100.w,
@@ -8453,8 +8453,8 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                         },
                         text: "Đóng",
                         colorText: Colors.white,
-                        backgroundColor: const Color.fromRGBO(131, 146, 171, 1),
-                        outlineColor: const Color.fromRGBO(131, 146, 171, 1),
+                        backgroundColor: Color.fromRGBO(131, 146, 171, 1),
+                        outlineColor: Color.fromRGBO(131, 146, 171, 1),
                       ),
                       SizedBox(
                         width: 20.w,
@@ -8497,8 +8497,8 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                         },
                         text: save,
                         colorText: Colors.white,
-                        backgroundColor: const Color.fromRGBO(23, 193, 232, 1),
-                        outlineColor: const Color.fromRGBO(23, 193, 232, 1),
+                        backgroundColor: Color.fromRGBO(23, 193, 232, 1),
+                        outlineColor: Color.fromRGBO(23, 193, 232, 1),
                       ),
                       SizedBox(
                         width: 20.w,
@@ -8673,7 +8673,7 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(
+                  Container(
                       width: 1.sw,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -8691,7 +8691,7 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                           ),
                         ],
                       )),
-                  const Divider(),
+                  Divider(),
                   space10H,
                   SingleChildScrollView(
                       child: Form(
@@ -8874,7 +8874,7 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                     ),
                   )),
                   space15H,
-                  SizedBox(
+                  Container(
                     width: 1.sw,
                     height: 80,
                     child: Row(
@@ -8886,9 +8886,8 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                           },
                           text: "Đóng",
                           colorText: Colors.white,
-                          backgroundColor:
-                              const Color.fromRGBO(131, 146, 171, 1),
-                          outlineColor: const Color.fromRGBO(131, 146, 171, 1),
+                          backgroundColor: Color.fromRGBO(131, 146, 171, 1),
+                          outlineColor: Color.fromRGBO(131, 146, 171, 1),
                         ),
                         SizedBox(
                           width: 20.w,
@@ -8910,9 +8909,8 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                           },
                           text: save,
                           colorText: Colors.white,
-                          backgroundColor:
-                              const Color.fromRGBO(23, 193, 232, 1),
-                          outlineColor: const Color.fromRGBO(23, 193, 232, 1),
+                          backgroundColor: Color.fromRGBO(23, 193, 232, 1),
+                          outlineColor: Color.fromRGBO(23, 193, 232, 1),
                         ),
                         SizedBox(
                           width: 20.w,
@@ -9015,13 +9013,13 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                     controller: _tabController,
                     isScrollable: true,
                     indicatorSize: TabBarIndicatorSize.label,
-                    tabs: const [
+                    tabs: [
                       Tab(text: "Thông tin chung"),
                       Tab(
                         text: "Quy đổi đơn vị",
                       ),
                     ]),
-                SizedBox(
+                Container(
                   width: 1.sw,
                   height: 400.h,
                   child: TabBarView(

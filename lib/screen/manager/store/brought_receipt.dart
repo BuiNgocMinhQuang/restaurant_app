@@ -87,13 +87,15 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                               children: [
                                 SizedBox(
                                     width: 1.sw,
-                                    height: 100,
                                     child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Container(
-                                          height: 40.h,
+                                          height: 45.h,
                                           color: Colors.white,
                                           child: TabBar(
+                                              tabAlignment: TabAlignment.start,
+                                              dividerColor: Colors.transparent,
+                                              dividerHeight: 0,
                                               onTap: (index) {
                                                 if (index == 0) {
                                                   getListBroughtReceiptData(
@@ -117,14 +119,11 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                                                       });
                                                 }
                                               },
-                                              labelPadding:
-                                                  const EdgeInsets.only(
-                                                      left: 20, right: 20),
-                                              labelColor: Colors.black,
+                                              labelPadding: EdgeInsets.only(
+                                                  left: 10.w, right: 10.w),
+                                              labelColor: Colors.white,
                                               unselectedLabelColor:
                                                   Colors.black.withOpacity(0.5),
-                                              labelStyle: const TextStyle(
-                                                  color: Colors.red),
                                               controller: tabController,
                                               isScrollable: true,
                                               indicatorSize:
@@ -382,7 +381,7 @@ class _AllWidgetState extends State<AllWidget>
         }),
       );
       final data = jsonDecode(respons.body);
-      print("DATA $data");
+      log("DATA $data");
       try {
         if (data['status'] == 200) {
           mounted
@@ -431,7 +430,7 @@ class _AllWidgetState extends State<AllWidget>
         }),
       );
       final data = jsonDecode(respons.body);
-      print("DATA $data");
+      log("DATA $data");
       try {
         if (data['status'] == 200) {
           mounted
@@ -456,369 +455,396 @@ class _AllWidgetState extends State<AllWidget>
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      color: Colors.blue,
-      onRefresh: () async {
-        refeshFood(page: 1, filtersFlg: {"pay_flg": null});
-      },
-      child: newListFood.isNotEmpty
-          ? ListView.builder(
-              controller: scrollListFoodController,
-              shrinkWrap: true,
-              itemCount: newListFood.length + 1,
-              itemBuilder: (BuildContext context, int index) {
-                var dataLength = newListFood.length;
+    super.build(context);
+    return Column(
+      children: [
+        Divider(
+          color: Colors.black.withOpacity(0.5),
+        ),
+        RefreshIndicator(
+          color: Colors.blue,
+          onRefresh: () async {
+            refeshFood(page: 1, filtersFlg: {"pay_flg": null});
+          },
+          child: newListFood.isNotEmpty
+              ? ListView.builder(
+                  controller: scrollListFoodController,
+                  shrinkWrap: true,
+                  itemCount: newListFood.length + 1,
+                  itemBuilder: (BuildContext context, int index) {
+                    var dataLength = newListFood.length;
 
-                if (index < dataLength) {
-                  var statusTextBill = newListFood[index].payFlg.toString();
+                    if (index < dataLength) {
+                      var statusTextBill = newListFood[index].payFlg.toString();
 
-                  switch (statusTextBill) {
-                    case "0":
-                      statusTextBill = "Đang chế biến";
-                      break;
+                      switch (statusTextBill) {
+                        case "0":
+                          statusTextBill = "Đang chế biến";
+                          break;
 
-                    case "1":
-                      statusTextBill = "Hoàn thành";
-                      break;
+                        case "1":
+                          statusTextBill = "Hoàn thành";
+                          break;
 
-                    case "2":
-                      statusTextBill = "Đã huỷ";
-                      break;
-                  }
-                  log(newListFood[index].createdAt.toString());
-                  return Padding(
-                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                    child: BroughtReceiptContainer(
-                        dateTime: formatDateTime(
-                            newListFood[index].createdAt.toString()),
-                        price:
-                            "${MoneyFormatter(amount: (newListFood[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: statusTextBill == "Đang chế biến"
-                            ? Container(
-                                width: 20.w,
-                                height: 20.w,
-                                child: InkWell(
-                                  onTap: () {
-                                    showMaterialModalBottomSheet(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(25.r),
-                                            topLeft: Radius.circular(25.r),
-                                          ),
-                                        ),
-                                        clipBehavior:
-                                            Clip.antiAliasWithSaveLayer,
-                                        context: context,
-                                        builder: (context) => Container(
-                                              height: 1.sh / 3,
-                                              padding: EdgeInsets.all(20.w),
-                                              child: Column(
-                                                children: [
-                                                  InkWell(
-                                                    onTap: () async {
-                                                      Navigator.pop(context);
+                        case "2":
+                          statusTextBill = "Đã huỷ";
+                          break;
+                      }
+                      log(newListFood[index].createdAt.toString());
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            left: 5.w, right: 5.w, top: index == 0 ? 5.w : 0),
+                        child: BroughtReceiptContainer(
+                            dateTime: formatDateTime(
+                                newListFood[index].createdAt.toString()),
+                            price:
+                                "${MoneyFormatter(amount: (newListFood[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                            typePopMenu: statusTextBill == "Đang chế biến"
+                                ? SizedBox(
+                                    width: 20.w,
+                                    height: 20.w,
+                                    child: InkWell(
+                                      onTap: () {
+                                        showMaterialModalBottomSheet(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(25.r),
+                                                topLeft: Radius.circular(25.r),
+                                              ),
+                                            ),
+                                            clipBehavior:
+                                                Clip.antiAliasWithSaveLayer,
+                                            context: context,
+                                            builder: (context) => Container(
+                                                  height: 1.sh / 3,
+                                                  padding: EdgeInsets.all(20.w),
+                                                  child: Column(
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          Navigator.pop(
+                                                              context);
 
-                                                      getDetailsBroughtReceiptData(
-                                                          orderID:
-                                                              newListFood[index]
-                                                                  .orderId);
-                                                      await showDialog(
-                                                          context: navigatorKey
-                                                              .currentContext!,
-                                                          builder: (BuildContext
-                                                              context) {
-                                                            return ManageBroughtReceiptDialog(
-                                                              token:
-                                                                  tokenManager,
-                                                              role: 'user',
+                                                          getDetailsBroughtReceiptData(
                                                               orderID:
                                                                   newListFood[
+                                                                          index]
+                                                                      .orderId);
+                                                          await showDialog(
+                                                              context: navigatorKey
+                                                                  .currentContext!,
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                                return ManageBroughtReceiptDialog(
+                                                                  token:
+                                                                      tokenManager,
+                                                                  role: 'user',
+                                                                  orderID: newListFood[
                                                                           index]
                                                                       .orderId,
-                                                              shopID:
-                                                                  widget.shopID,
-                                                            );
-                                                          });
-                                                    },
-                                                    child: Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.receipt,
-                                                          size: 35.sp,
+                                                                  shopID: widget
+                                                                      .shopID,
+                                                                );
+                                                              });
+                                                        },
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(
+                                                              Icons.receipt,
+                                                              size: 35.sp,
+                                                            ),
+                                                            space10W,
+                                                            TextApp(
+                                                              text:
+                                                                  "Quản lý hoá đơn",
+                                                              color:
+                                                                  Colors.black,
+                                                              fontsize: 18.sp,
+                                                            )
+                                                          ],
                                                         ),
-                                                        space10W,
-                                                        TextApp(
-                                                          text:
-                                                              "Quản lý hoá đơn",
-                                                          color: Colors.black,
-                                                          fontsize: 18.sp,
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  space10H,
-                                                  const Divider(),
-                                                  space10H,
-                                                  InkWell(
-                                                    onTap: () async {
-                                                      Navigator.pop(context);
+                                                      ),
+                                                      space10H,
+                                                      const Divider(),
+                                                      space10H,
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          Navigator.pop(
+                                                              context);
 
-                                                      getPaymentData(
-                                                        tableId: '',
-                                                        orderID:
-                                                            newListFood[index]
-                                                                .orderId
-                                                                .toString(),
-                                                      );
-                                                      await showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext
-                                                              context) {
-                                                            return PayBillDialog(
-                                                              token:
-                                                                  tokenManager,
-                                                              role: 'user',
-                                                              shopID:
-                                                                  widget.shopID,
-                                                              orderID:
-                                                                  newListFood[
+                                                          getPaymentData(
+                                                            tableId: '',
+                                                            orderID:
+                                                                newListFood[
+                                                                        index]
+                                                                    .orderId
+                                                                    .toString(),
+                                                          );
+                                                          await showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                                return PayBillDialog(
+                                                                  token:
+                                                                      tokenManager,
+                                                                  role: 'user',
+                                                                  shopID: widget
+                                                                      .shopID,
+                                                                  orderID: newListFood[
                                                                           index]
                                                                       .orderId
                                                                       .toString(),
-                                                              roomID: '',
-                                                              nameRoom: '',
-                                                              eventSaveButton:
-                                                                  () {
-                                                                getListBroughtReceiptData(
-                                                                    filtersFlg: {
-                                                                      "pay_flg":
-                                                                          null
-                                                                    });
-                                                              },
-                                                            );
-                                                          });
-                                                    },
-                                                    child: Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.monetization_on,
-                                                          size: 35.sp,
+                                                                  roomID: '',
+                                                                  nameRoom: '',
+                                                                  eventSaveButton:
+                                                                      () {
+                                                                    getListBroughtReceiptData(
+                                                                        filtersFlg: {
+                                                                          "pay_flg":
+                                                                              null
+                                                                        });
+                                                                  },
+                                                                );
+                                                              });
+                                                        },
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(
+                                                              Icons
+                                                                  .monetization_on,
+                                                              size: 35.sp,
+                                                            ),
+                                                            space10W,
+                                                            TextApp(
+                                                              text:
+                                                                  "Thanh toán hoá đơn",
+                                                              color:
+                                                                  Colors.black,
+                                                              fontsize: 18.sp,
+                                                            )
+                                                          ],
                                                         ),
-                                                        space10W,
-                                                        TextApp(
-                                                          text:
-                                                              "Thanh toán hoá đơn",
-                                                          color: Colors.black,
-                                                          fontsize: 18.sp,
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  space10H,
-                                                  const Divider(),
-                                                  space10H,
-                                                  InkWell(
-                                                    onTap: () async {
-                                                      Navigator.pop(context);
+                                                      ),
+                                                      space10H,
+                                                      const Divider(),
+                                                      space10H,
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          Navigator.pop(
+                                                              context);
 
-                                                      printBroughtReceipt(
-                                                          orderID:
-                                                              newListFood[index]
-                                                                  .orderId);
-                                                      await showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext
-                                                              context) {
-                                                            return PrintBroughtReceiptDialog(
-                                                              role: 'user',
-                                                              shopID:
-                                                                  widget.shopID,
+                                                          printBroughtReceipt(
                                                               orderID:
                                                                   newListFood[
                                                                           index]
+                                                                      .orderId);
+                                                          await showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                                return PrintBroughtReceiptDialog(
+                                                                  role: 'user',
+                                                                  shopID: widget
+                                                                      .shopID,
+                                                                  orderID: newListFood[
+                                                                          index]
                                                                       .orderId
                                                                       .toString(),
-                                                            );
-                                                          });
-                                                    },
-                                                    child: Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.print,
-                                                          size: 35.sp,
+                                                                );
+                                                              });
+                                                        },
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(
+                                                              Icons.print,
+                                                              size: 35.sp,
+                                                            ),
+                                                            space10W,
+                                                            TextApp(
+                                                              text:
+                                                                  "In hoá đơn",
+                                                              color:
+                                                                  Colors.black,
+                                                              fontsize: 18.sp,
+                                                            )
+                                                          ],
                                                         ),
-                                                        space10W,
-                                                        TextApp(
-                                                          text: "In hoá đơn",
-                                                          color: Colors.black,
-                                                          fontsize: 18.sp,
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  space10H,
-                                                  const Divider(),
-                                                  space10H,
-                                                  InkWell(
-                                                    onTap: () async {
-                                                      Navigator.pop(context);
+                                                      ),
+                                                      space10H,
+                                                      const Divider(),
+                                                      space10H,
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          Navigator.pop(
+                                                              context);
 
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext
-                                                              context) {
-                                                            return CancleBillDialog(
-                                                              token:
-                                                                  tokenManager,
-                                                              eventSaveButton:
-                                                                  () {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                                getListBroughtReceiptData(
-                                                                    filtersFlg: {
-                                                                      "pay_flg":
-                                                                          null
-                                                                    });
-                                                              },
-                                                              role: 'user',
-                                                              shopID:
-                                                                  widget.shopID,
-                                                              orderID:
-                                                                  newListFood[
+                                                          showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                                return CancleBillDialog(
+                                                                  token:
+                                                                      tokenManager,
+                                                                  eventSaveButton:
+                                                                      () {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                    getListBroughtReceiptData(
+                                                                        filtersFlg: {
+                                                                          "pay_flg":
+                                                                              null
+                                                                        });
+                                                                  },
+                                                                  role: 'user',
+                                                                  shopID: widget
+                                                                      .shopID,
+                                                                  orderID: newListFood[
                                                                           index]
                                                                       .orderId,
-                                                            );
-                                                          });
-                                                    },
-                                                    child: Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.cancel,
-                                                          size: 35.sp,
+                                                                );
+                                                              });
+                                                        },
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(
+                                                              Icons.cancel,
+                                                              size: 35.sp,
+                                                            ),
+                                                            space10W,
+                                                            TextApp(
+                                                              text:
+                                                                  "Huỷ hoá đơn",
+                                                              color:
+                                                                  Colors.black,
+                                                              fontsize: 18.sp,
+                                                            )
+                                                          ],
                                                         ),
-                                                        space10W,
-                                                        TextApp(
-                                                          text: "Huỷ hoá đơn",
-                                                          color: Colors.black,
-                                                          fontsize: 18.sp,
-                                                        )
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                ));
+                                      },
+                                      child: Icon(
+                                        Icons.more_horiz_outlined,
+                                        size: 25.sp,
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox(
+                                    width: 20.w,
+                                    height: 20.w,
+                                    child: InkWell(
+                                      onTap: () {
+                                        showMaterialModalBottomSheet(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(25.r),
+                                                topLeft: Radius.circular(25.r),
                                               ),
-                                            ));
-                                  },
-                                  child: Icon(
-                                    Icons.more_horiz_outlined,
-                                    size: 25.sp,
-                                  ),
-                                ),
-                              )
-                            : Container(
-                                width: 20.w,
-                                height: 20.w,
-                                child: InkWell(
-                                  onTap: () {
-                                    showMaterialModalBottomSheet(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(25.r),
-                                            topLeft: Radius.circular(25.r),
-                                          ),
-                                        ),
-                                        clipBehavior:
-                                            Clip.antiAliasWithSaveLayer,
-                                        context: context,
-                                        builder: (context) => Container(
-                                              height: 1.sh / 3,
-                                              padding: EdgeInsets.all(20.w),
-                                              child: Column(
-                                                children: [
-                                                  InkWell(
-                                                    onTap: () async {
-                                                      Navigator.pop(context);
+                                            ),
+                                            clipBehavior:
+                                                Clip.antiAliasWithSaveLayer,
+                                            context: context,
+                                            builder: (context) => Container(
+                                                  height: 1.sh / 3,
+                                                  padding: EdgeInsets.all(20.w),
+                                                  child: Column(
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          Navigator.pop(
+                                                              context);
 
-                                                      printBroughtReceipt(
-                                                          orderID:
-                                                              newListFood[index]
-                                                                  .orderId);
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext
-                                                              context) {
-                                                            return PrintBroughtReceiptDialog(
-                                                              role: 'user',
-                                                              shopID:
-                                                                  widget.shopID,
+                                                          printBroughtReceipt(
                                                               orderID:
                                                                   newListFood[
                                                                           index]
+                                                                      .orderId);
+                                                          showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                                return PrintBroughtReceiptDialog(
+                                                                  role: 'user',
+                                                                  shopID: widget
+                                                                      .shopID,
+                                                                  orderID: newListFood[
+                                                                          index]
                                                                       .orderId
                                                                       .toString(),
-                                                            );
-                                                          });
-                                                    },
-                                                    child: Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.print,
-                                                          size: 35.sp,
+                                                                );
+                                                              });
+                                                        },
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(
+                                                              Icons.print,
+                                                              size: 35.sp,
+                                                            ),
+                                                            space10W,
+                                                            TextApp(
+                                                              text:
+                                                                  "In hoá đơn",
+                                                              color:
+                                                                  Colors.black,
+                                                              fontsize: 18.sp,
+                                                            )
+                                                          ],
                                                         ),
-                                                        space10W,
-                                                        TextApp(
-                                                          text: "In hoá đơn",
-                                                          color: Colors.black,
-                                                          fontsize: 18.sp,
-                                                        )
-                                                      ],
-                                                    ),
+                                                      ),
+                                                      space10H,
+                                                      const Divider(),
+                                                      space10H,
+                                                    ],
                                                   ),
-                                                  space10H,
-                                                  const Divider(),
-                                                  space10H,
-                                                ],
-                                              ),
-                                            ));
-                                  },
-                                  child: Icon(
-                                    Icons.more_horiz_outlined,
-                                    size: 25.sp,
+                                                ));
+                                      },
+                                      child: Icon(
+                                        Icons.more_horiz_outlined,
+                                        size: 25.sp,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                        statusText: statusTextBill),
-                  );
-                } else {
-                  return Center(
-                    child: hasMore
-                        ? const CircularProgressIndicator()
-                        : Container(),
-                  );
-                }
-              })
-          : Center(
-              child: SizedBox(
-                  width: 1.sw,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.receipt_long_rounded,
-                        size: 50.h,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      TextApp(
-                          text: "Chưa có hoá đơn :(",
-                          textAlign: TextAlign.center,
-                          fontsize: 16.sp,
-                          color: Colors.black),
-                    ],
-                  )),
-            ),
+                            statusText: statusTextBill),
+                      );
+                    } else {
+                      return Center(
+                        child: hasMore
+                            ? const CircularProgressIndicator()
+                            : Container(),
+                      );
+                    }
+                  })
+              : Center(
+                  child: SizedBox(
+                      width: 1.sw,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.receipt_long_rounded,
+                            size: 50.h,
+                          ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          TextApp(
+                              text: "Chưa có hoá đơn :(",
+                              textAlign: TextAlign.center,
+                              fontsize: 16.sp,
+                              color: Colors.black),
+                        ],
+                      )),
+                ),
+        ),
+      ],
     );
   }
 }
@@ -961,128 +987,138 @@ class _CompleteWidgetState extends State<CompleteWidget>
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      color: Colors.blue,
-      onRefresh: () async {
-        refeshListComplete(page: 1, filtersFlg: {"pay_flg": 1});
-      },
-      child: listBillComplete.isNotEmpty
-          ? ListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              controller: scrollTabCompleteController,
-              shrinkWrap: true,
-              itemCount: listBillComplete.length + 1,
-              itemBuilder: (BuildContext context, int index) {
-                if (index < listBillComplete.length) {
-                  return Padding(
-                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                    child: BroughtReceiptContainer(
-                        dateTime: formatDateTime(
-                            listBillComplete[index].createdAt.toString()),
-                        price:
-                            "${MoneyFormatter(amount: (listBillComplete[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: Container(
-                          width: 20.w,
-                          height: 20.w,
-                          child: InkWell(
-                            onTap: () {
-                              showMaterialModalBottomSheet(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(25.r),
-                                      topLeft: Radius.circular(25.r),
-                                    ),
-                                  ),
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  context: context,
-                                  builder: (context) => Container(
-                                        height: 1.sh / 3,
-                                        padding: EdgeInsets.all(20.w),
-                                        child: Column(
-                                          children: [
-                                            InkWell(
-                                              onTap: () async {
-                                                Navigator.pop(context);
-                                                await showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      printBroughtReceipt(
-                                                          orderID:
-                                                              listBillComplete[
-                                                                      index]
-                                                                  .orderId);
-
-                                                      return PrintBroughtReceiptDialog(
-                                                        role: 'user',
-                                                        shopID: widget.shopID,
-                                                        orderID:
-                                                            listBillComplete[
-                                                                    index]
-                                                                .orderId
-                                                                .toString(),
-                                                      );
-                                                    });
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.print,
-                                                    size: 35.sp,
-                                                  ),
-                                                  space10W,
-                                                  TextApp(
-                                                    text: "In hoá đơn",
-                                                    color: Colors.black,
-                                                    fontsize: 18.sp,
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                            space10H,
-                                            const Divider(),
-                                            space10H,
-                                          ],
+    super.build(context);
+    return Column(
+      children: [
+        Divider(
+          color: Colors.black.withOpacity(0.5),
+        ),
+        RefreshIndicator(
+          color: Colors.blue,
+          onRefresh: () async {
+            refeshListComplete(page: 1, filtersFlg: {"pay_flg": 1});
+          },
+          child: listBillComplete.isNotEmpty
+              ? ListView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  controller: scrollTabCompleteController,
+                  shrinkWrap: true,
+                  itemCount: listBillComplete.length + 1,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index < listBillComplete.length) {
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            left: 5.w, right: 5.w, top: index == 0 ? 5.w : 0),
+                        child: BroughtReceiptContainer(
+                            dateTime: formatDateTime(
+                                listBillComplete[index].createdAt.toString()),
+                            price:
+                                "${MoneyFormatter(amount: (listBillComplete[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                            typePopMenu: SizedBox(
+                              width: 20.w,
+                              height: 20.w,
+                              child: InkWell(
+                                onTap: () {
+                                  showMaterialModalBottomSheet(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(25.r),
+                                          topLeft: Radius.circular(25.r),
                                         ),
-                                      ));
-                            },
-                            child: Icon(
-                              Icons.more_horiz_outlined,
-                              size: 25.sp,
+                                      ),
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      context: context,
+                                      builder: (context) => Container(
+                                            height: 1.sh / 3,
+                                            padding: EdgeInsets.all(20.w),
+                                            child: Column(
+                                              children: [
+                                                InkWell(
+                                                  onTap: () async {
+                                                    Navigator.pop(context);
+                                                    await showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          printBroughtReceipt(
+                                                              orderID:
+                                                                  listBillComplete[
+                                                                          index]
+                                                                      .orderId);
+
+                                                          return PrintBroughtReceiptDialog(
+                                                            role: 'user',
+                                                            shopID:
+                                                                widget.shopID,
+                                                            orderID:
+                                                                listBillComplete[
+                                                                        index]
+                                                                    .orderId
+                                                                    .toString(),
+                                                          );
+                                                        });
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.print,
+                                                        size: 35.sp,
+                                                      ),
+                                                      space10W,
+                                                      TextApp(
+                                                        text: "In hoá đơn",
+                                                        color: Colors.black,
+                                                        fontsize: 18.sp,
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                                space10H,
+                                                const Divider(),
+                                                space10H,
+                                              ],
+                                            ),
+                                          ));
+                                },
+                                child: Icon(
+                                  Icons.more_horiz_outlined,
+                                  size: 25.sp,
+                                ),
+                              ),
                             ),
+                            statusText: "Hoàn thành"),
+                      );
+                    } else {
+                      return Center(
+                        child: hasMoreComplete
+                            ? const CircularProgressIndicator()
+                            : Container(),
+                      );
+                    }
+                  })
+              : Center(
+                  child: SizedBox(
+                      width: 1.sw,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.receipt_long_rounded,
+                            size: 50.h,
                           ),
-                        ),
-                        statusText: "Hoàn thành"),
-                  );
-                } else {
-                  return Center(
-                    child: hasMoreComplete
-                        ? const CircularProgressIndicator()
-                        : Container(),
-                  );
-                }
-              })
-          : Center(
-              child: SizedBox(
-                  width: 1.sw,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.receipt_long_rounded,
-                        size: 50.h,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      TextApp(
-                          text: "Chưa có hoá đơn :(",
-                          textAlign: TextAlign.center,
-                          fontsize: 16.sp,
-                          color: Colors.black),
-                    ],
-                  )),
-            ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          TextApp(
+                              text: "Chưa có hoá đơn :(",
+                              textAlign: TextAlign.center,
+                              fontsize: 16.sp,
+                              color: Colors.black),
+                        ],
+                      )),
+                ),
+        ),
+      ],
     );
   }
 
@@ -1213,13 +1249,13 @@ class _PendingWidgetState extends State<PendingWidget>
             }
           });
         } else {
-          print("ERROR BROUGHT RECEIPT PENDING PAGE 1");
+          log("ERROR BROUGHT RECEIPT PENDING PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PENDING PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PENDING PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT  PENDING PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT  PENDING PAGE 3 $error");
     }
   }
 
@@ -1254,262 +1290,278 @@ class _PendingWidgetState extends State<PendingWidget>
             isRefesh = true;
           });
         } else {
-          print("ERROR BROUGHT RECEIPT PENDING PAGE 1");
+          log("ERROR BROUGHT RECEIPT PENDING PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PENDING PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PENDING PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT  PENDING PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT  PENDING PAGE 3 $error");
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      color: Colors.blue,
-      onRefresh: () async {
-        refeshPending(page: 1, filtersFlg: {"pay_flg": 0});
-      },
-      child: listBillPending.isNotEmpty
-          ? ListView.builder(
-              controller: scrollTabPendingController,
-              shrinkWrap: true,
-              itemCount: listBillPending.length + 1,
-              itemBuilder: (BuildContext context, int index) {
-                if (index < listBillPending.length) {
-                  return Padding(
-                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                    child: BroughtReceiptContainer(
-                        dateTime: formatDateTime(
-                            listBillPending[index].createdAt.toString()),
-                        price:
-                            "${MoneyFormatter(amount: (listBillPending[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: Container(
-                          width: 20.w,
-                          height: 20.w,
-                          child: InkWell(
-                            onTap: () {
-                              showMaterialModalBottomSheet(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(25.r),
-                                    topLeft: Radius.circular(25.r),
-                                  ),
+    super.build(context);
+    return Column(
+      children: [
+        Divider(
+          color: Colors.black.withOpacity(0.5),
+        ),
+        RefreshIndicator(
+          color: Colors.blue,
+          onRefresh: () async {
+            refeshPending(page: 1, filtersFlg: {"pay_flg": 0});
+          },
+          child: listBillPending.isNotEmpty
+              ? ListView.builder(
+                  controller: scrollTabPendingController,
+                  shrinkWrap: true,
+                  itemCount: listBillPending.length + 1,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index < listBillPending.length) {
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            left: 5.w, right: 5.w, top: index == 0 ? 5.w : 0),
+                        child: BroughtReceiptContainer(
+                            dateTime: formatDateTime(
+                                listBillPending[index].createdAt.toString()),
+                            price:
+                                "${MoneyFormatter(amount: (listBillPending[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                            typePopMenu: SizedBox(
+                              width: 20.w,
+                              height: 20.w,
+                              child: InkWell(
+                                onTap: () {
+                                  showMaterialModalBottomSheet(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(25.r),
+                                        topLeft: Radius.circular(25.r),
+                                      ),
+                                    ),
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                    context: context,
+                                    builder: (context) => Container(
+                                      height: 1.sh / 3,
+                                      padding: EdgeInsets.all(20.w),
+                                      child: Column(
+                                        children: [
+                                          InkWell(
+                                            onTap: () async {
+                                              Navigator.pop(context);
+                                              getDetailsBroughtReceiptData(
+                                                  orderID:
+                                                      listBillPending[index]
+                                                          .orderId);
+                                              await showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return ManageBroughtReceiptDialog(
+                                                      token: tokenManager,
+                                                      role: 'user',
+                                                      orderID:
+                                                          listBillPending[index]
+                                                              .orderId,
+                                                      shopID: widget.shopID,
+                                                    );
+                                                  });
+                                            },
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.receipt,
+                                                  size: 35.sp,
+                                                ),
+                                                space10W,
+                                                TextApp(
+                                                  text: "Quản lý hoá đơn",
+                                                  color: Colors.black,
+                                                  fontsize: 18.sp,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          space10H,
+                                          const Divider(),
+                                          space10H,
+                                          InkWell(
+                                            onTap: () async {
+                                              Navigator.pop(context);
+                                              getPaymentData(
+                                                tableId: '',
+                                                orderID: listBillPending[index]
+                                                    .orderId
+                                                    .toString(),
+                                              );
+                                              await showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return PayBillDialog(
+                                                      token: tokenManager,
+                                                      role: 'user',
+                                                      shopID: widget.shopID,
+                                                      orderID:
+                                                          listBillPending[index]
+                                                              .orderId
+                                                              .toString(),
+                                                      roomID: '',
+                                                      nameRoom: '',
+                                                      eventSaveButton: () {
+                                                        getListBroughtReceiptData(
+                                                            filtersFlg: {
+                                                              "pay_flg": null
+                                                            });
+                                                      },
+                                                    );
+                                                  });
+                                            },
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.monetization_on,
+                                                  size: 35.sp,
+                                                ),
+                                                space10W,
+                                                TextApp(
+                                                  text: "Thanh toán hoá đơn",
+                                                  color: Colors.black,
+                                                  fontsize: 18.sp,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          space10H,
+                                          const Divider(),
+                                          space10H,
+                                          InkWell(
+                                            onTap: () async {
+                                              Navigator.pop(context);
+                                              printBroughtReceipt(
+                                                  orderID:
+                                                      listBillPending[index]
+                                                          .orderId);
+
+                                              await showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return PrintBroughtReceiptDialog(
+                                                      role: 'user',
+                                                      shopID: widget.shopID,
+                                                      orderID:
+                                                          listBillPending[index]
+                                                              .orderId
+                                                              .toString(),
+                                                    );
+                                                  });
+                                            },
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.print,
+                                                  size: 35.sp,
+                                                ),
+                                                space10W,
+                                                TextApp(
+                                                  text: "In hoá đơn",
+                                                  color: Colors.black,
+                                                  fontsize: 18.sp,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          space10H,
+                                          const Divider(),
+                                          space10H,
+                                          InkWell(
+                                            onTap: () async {
+                                              Navigator.pop(context);
+
+                                              showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return CancleBillDialog(
+                                                      eventSaveButton: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+
+                                                        getListBroughtReceiptData(
+                                                            filtersFlg: {
+                                                              "pay_flg": 0
+                                                            });
+                                                      },
+                                                      token: tokenManager,
+                                                      role: 'user',
+                                                      shopID: widget.shopID,
+                                                      orderID:
+                                                          listBillPending[index]
+                                                              .orderId,
+                                                    );
+                                                  });
+                                            },
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.cancel,
+                                                  size: 35.sp,
+                                                ),
+                                                space10W,
+                                                TextApp(
+                                                  text: "Huỷ hoá đơn",
+                                                  color: Colors.black,
+                                                  fontsize: 18.sp,
+                                                )
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Icon(
+                                  Icons.more_horiz_outlined,
+                                  size: 25.sp,
                                 ),
-                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                                context: context,
-                                builder: (context) => Container(
-                                  height: 1.sh / 3,
-                                  padding: EdgeInsets.all(20.w),
-                                  child: Column(
-                                    children: [
-                                      InkWell(
-                                        onTap: () async {
-                                          Navigator.pop(context);
-                                          getDetailsBroughtReceiptData(
-                                              orderID: listBillPending[index]
-                                                  .orderId);
-                                          await showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return ManageBroughtReceiptDialog(
-                                                  token: tokenManager,
-                                                  role: 'user',
-                                                  orderID:
-                                                      listBillPending[index]
-                                                          .orderId,
-                                                  shopID: widget.shopID,
-                                                );
-                                              });
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.receipt,
-                                              size: 35.sp,
-                                            ),
-                                            space10W,
-                                            TextApp(
-                                              text: "Quản lý hoá đơn",
-                                              color: Colors.black,
-                                              fontsize: 18.sp,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      space10H,
-                                      const Divider(),
-                                      space10H,
-                                      InkWell(
-                                        onTap: () async {
-                                          Navigator.pop(context);
-                                          getPaymentData(
-                                            tableId: '',
-                                            orderID: listBillPending[index]
-                                                .orderId
-                                                .toString(),
-                                          );
-                                          await showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return PayBillDialog(
-                                                  token: tokenManager,
-                                                  role: 'user',
-                                                  shopID: widget.shopID,
-                                                  orderID:
-                                                      listBillPending[index]
-                                                          .orderId
-                                                          .toString(),
-                                                  roomID: '',
-                                                  nameRoom: '',
-                                                  eventSaveButton: () {
-                                                    getListBroughtReceiptData(
-                                                        filtersFlg: {
-                                                          "pay_flg": null
-                                                        });
-                                                  },
-                                                );
-                                              });
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.monetization_on,
-                                              size: 35.sp,
-                                            ),
-                                            space10W,
-                                            TextApp(
-                                              text: "Thanh toán hoá đơn",
-                                              color: Colors.black,
-                                              fontsize: 18.sp,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      space10H,
-                                      const Divider(),
-                                      space10H,
-                                      InkWell(
-                                        onTap: () async {
-                                          Navigator.pop(context);
-                                          printBroughtReceipt(
-                                              orderID: listBillPending[index]
-                                                  .orderId);
-
-                                          await showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return PrintBroughtReceiptDialog(
-                                                  role: 'user',
-                                                  shopID: widget.shopID,
-                                                  orderID:
-                                                      listBillPending[index]
-                                                          .orderId
-                                                          .toString(),
-                                                );
-                                              });
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.print,
-                                              size: 35.sp,
-                                            ),
-                                            space10W,
-                                            TextApp(
-                                              text: "In hoá đơn",
-                                              color: Colors.black,
-                                              fontsize: 18.sp,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      space10H,
-                                      const Divider(),
-                                      space10H,
-                                      InkWell(
-                                        onTap: () async {
-                                          Navigator.pop(context);
-
-                                          showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return CancleBillDialog(
-                                                  eventSaveButton: () {
-                                                    Navigator.of(context).pop();
-
-                                                    getListBroughtReceiptData(
-                                                        filtersFlg: {
-                                                          "pay_flg": 0
-                                                        });
-                                                  },
-                                                  token: tokenManager,
-                                                  role: 'user',
-                                                  shopID: widget.shopID,
-                                                  orderID:
-                                                      listBillPending[index]
-                                                          .orderId,
-                                                );
-                                              });
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.cancel,
-                                              size: 35.sp,
-                                            ),
-                                            space10W,
-                                            TextApp(
-                                              text: "Huỷ hoá đơn",
-                                              color: Colors.black,
-                                              fontsize: 18.sp,
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Icon(
-                              Icons.more_horiz_outlined,
-                              size: 25.sp,
+                              ),
                             ),
+                            statusText: "Đang chế biến"),
+                      );
+                    } else {
+                      return Center(
+                        child: hasMoreComplete
+                            ? const CircularProgressIndicator()
+                            : Container(),
+                      );
+                    }
+                  })
+              : Center(
+                  child: SizedBox(
+                      width: 1.sw,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.receipt_long_rounded,
+                            size: 50.h,
                           ),
-                        ),
-                        statusText: "Đang chế biến"),
-                  );
-                } else {
-                  return Center(
-                    child: hasMoreComplete
-                        ? const CircularProgressIndicator()
-                        : Container(),
-                  );
-                }
-              })
-          : Center(
-              child: SizedBox(
-                  width: 1.sw,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.receipt_long_rounded,
-                        size: 50.h,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      TextApp(
-                          text: "Chưa có hoá đơn :(",
-                          textAlign: TextAlign.center,
-                          fontsize: 16.sp,
-                          color: Colors.black),
-                    ],
-                  )),
-            ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          TextApp(
+                              text: "Chưa có hoá đơn :(",
+                              textAlign: TextAlign.center,
+                              fontsize: 16.sp,
+                              color: Colors.black),
+                        ],
+                      )),
+                ),
+        ),
+      ],
     );
   }
 
@@ -1593,15 +1645,15 @@ class _CancleWidgetState extends State<CancleWidget>
               hasMoreCanle = false;
             }
           });
-          print("DATA BACK ${data}");
+          log("DATA BACK $data");
         } else {
-          print("ERROR BROUGHT RECEIPT CANCLE PAGE 1");
+          log("ERROR BROUGHT RECEIPT CANCLE PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT CANCLE PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT CANCLE PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT  CANCLE PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT  CANCLE PAGE 3 $error");
     }
   }
 
@@ -1635,15 +1687,15 @@ class _CancleWidgetState extends State<CancleWidget>
             listBillCancle.addAll(broughtReceiptPageRes.data.data);
             isRefesh = true;
           });
-          print("DATA BACK ${data}");
+          log("DATA BACK $data");
         } else {
-          print("ERROR BROUGHT RECEIPT CANCLE PAGE 1");
+          log("ERROR BROUGHT RECEIPT CANCLE PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT CANCLE PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT CANCLE PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT  CANCLE PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT  CANCLE PAGE 3 $error");
     }
   }
 
@@ -1658,122 +1710,133 @@ class _CancleWidgetState extends State<CancleWidget>
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      color: Colors.blue,
-      onRefresh: () async {
-        refeshCancle(page: 1, filtersFlg: {"pay_flg": 2});
-      },
-      child: listBillCancle.isNotEmpty
-          ? ListView.builder(
-              controller: scrollTabCancleController2,
-              shrinkWrap: true,
-              itemCount: listBillCancle.length + 1,
-              itemBuilder: (BuildContext context, int index) {
-                if (index < listBillCancle.length) {
-                  return Padding(
-                    padding: EdgeInsets.only(left: 5.w, right: 5.w),
-                    child: BroughtReceiptContainer(
-                        dateTime: formatDateTime(
-                            listBillCancle[index].createdAt.toString()),
-                        price:
-                            "${MoneyFormatter(amount: (listBillCancle[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                        typePopMenu: Container(
-                          width: 20.w,
-                          height: 20.w,
-                          child: InkWell(
-                            onTap: () {
-                              showMaterialModalBottomSheet(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(25.r),
-                                    topLeft: Radius.circular(25.r),
-                                  ),
-                                ),
-                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                                context: context,
-                                builder: (context) => Container(
-                                  height: 1.sh / 3,
-                                  padding: EdgeInsets.all(20.w),
-                                  child: Column(
-                                    children: [
-                                      InkWell(
-                                        onTap: () async {
-                                          Navigator.pop(context);
-                                          printBroughtReceipt(
-                                              orderID: listBillCancle[index]
-                                                  .orderId);
-                                          await showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return PrintBroughtReceiptDialog(
-                                                  role: 'user',
-                                                  shopID: widget.shopID,
-                                                  orderID: listBillCancle[index]
-                                                      .orderId
-                                                      .toString(),
-                                                );
-                                              });
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.print,
-                                              size: 35.sp,
-                                            ),
-                                            space10W,
-                                            TextApp(
-                                              text: "In hoá đơn",
-                                              color: Colors.black,
-                                              fontsize: 18.sp,
-                                            )
-                                          ],
-                                        ),
+    super.build(context);
+    return Column(
+      children: [
+        Divider(
+          color: Colors.black.withOpacity(0.5),
+        ),
+        RefreshIndicator(
+          color: Colors.blue,
+          onRefresh: () async {
+            refeshCancle(page: 1, filtersFlg: {"pay_flg": 2});
+          },
+          child: listBillCancle.isNotEmpty
+              ? ListView.builder(
+                  controller: scrollTabCancleController2,
+                  shrinkWrap: true,
+                  itemCount: listBillCancle.length + 1,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index < listBillCancle.length) {
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            left: 5.w, right: 5.w, top: index == 0 ? 5.w : 0),
+                        child: BroughtReceiptContainer(
+                            dateTime: formatDateTime(
+                                listBillCancle[index].createdAt.toString()),
+                            price:
+                                "${MoneyFormatter(amount: (listBillCancle[index].orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                            typePopMenu: SizedBox(
+                              width: 20.w,
+                              height: 20.w,
+                              child: InkWell(
+                                onTap: () {
+                                  showMaterialModalBottomSheet(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(25.r),
+                                        topLeft: Radius.circular(25.r),
                                       ),
-                                      space10H,
-                                      const Divider(),
-                                      space10H,
-                                    ],
-                                  ),
+                                    ),
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                    context: context,
+                                    builder: (context) => Container(
+                                      height: 1.sh / 3,
+                                      padding: EdgeInsets.all(20.w),
+                                      child: Column(
+                                        children: [
+                                          InkWell(
+                                            onTap: () async {
+                                              Navigator.pop(context);
+                                              printBroughtReceipt(
+                                                  orderID: listBillCancle[index]
+                                                      .orderId);
+                                              await showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return PrintBroughtReceiptDialog(
+                                                      role: 'user',
+                                                      shopID: widget.shopID,
+                                                      orderID:
+                                                          listBillCancle[index]
+                                                              .orderId
+                                                              .toString(),
+                                                    );
+                                                  });
+                                            },
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.print,
+                                                  size: 35.sp,
+                                                ),
+                                                space10W,
+                                                TextApp(
+                                                  text: "In hoá đơn",
+                                                  color: Colors.black,
+                                                  fontsize: 18.sp,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          space10H,
+                                          const Divider(),
+                                          space10H,
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Icon(
+                                  Icons.more_horiz_outlined,
+                                  size: 25.sp,
                                 ),
-                              );
-                            },
-                            child: Icon(
-                              Icons.more_horiz_outlined,
-                              size: 25.sp,
+                              ),
                             ),
+                            statusText: "Đã huỷ"),
+                      );
+                    } else {
+                      return Center(
+                        child: hasMoreCanle
+                            ? const CircularProgressIndicator()
+                            : Container(),
+                      );
+                    }
+                  })
+              : Center(
+                  child: SizedBox(
+                      width: 1.sw,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.receipt_long_rounded,
+                            size: 50.h,
                           ),
-                        ),
-                        statusText: "Đã huỷ"),
-                  );
-                } else {
-                  return Center(
-                    child: hasMoreCanle
-                        ? const CircularProgressIndicator()
-                        : Container(),
-                  );
-                }
-              })
-          : Center(
-              child: SizedBox(
-                  width: 1.sw,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.receipt_long_rounded,
-                        size: 50.h,
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      TextApp(
-                          text: "Chưa có hoá đơn :(",
-                          textAlign: TextAlign.center,
-                          fontsize: 16.sp,
-                          color: Colors.black),
-                    ],
-                  )),
-            ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          TextApp(
+                              text: "Chưa có hoá đơn :(",
+                              textAlign: TextAlign.center,
+                              fontsize: 16.sp,
+                              color: Colors.black),
+                        ],
+                      )),
+                ),
+        ),
+      ],
     );
   }
 

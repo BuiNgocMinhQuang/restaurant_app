@@ -7,8 +7,6 @@ import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/box/status_box.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -64,7 +62,7 @@ class _ListInventoryState extends State<ListInventory> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Container(
+              SizedBox(
                   width: 1.sw,
                   // height: 300,
                   child: Column(
@@ -188,8 +186,6 @@ class _ListInventoryState extends State<ListInventory> {
                                         data: myData,
                                         onSelectedRowsChanged: (selectedData) {
                                           // Handle the selected data here (e.g., print, update UI)
-                                          print(
-                                              'Selected data: ${selectedData.map((data) => data.name).toList()}');
                                         },
                                       )
                                     ],
@@ -225,7 +221,7 @@ class SelectableDataTable extends StatefulWidget {
 
 class _SelectableDataTableState extends State<SelectableDataTable> {
   bool _selectAll = false;
-  List<MyData> _selectedData = [];
+  final List<MyData> _selectedData = [];
   BuildContext? _context;
   void _handleRowSelected(MyData data, bool selected) {
     setState(() {
@@ -293,7 +289,7 @@ class _SelectableDataTableState extends State<SelectableDataTable> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
+        SizedBox(
           height: 50.h,
           width: 300.w,
           child: TextFormField(

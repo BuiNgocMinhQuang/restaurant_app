@@ -11,7 +11,6 @@ import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,6 +22,9 @@ import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
 import 'package:intl/intl.dart';
 import 'package:app_restaurant/model/manager/food/details_food_model.dart';
+import 'dart:math' as math;
+
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class EditFood extends StatefulWidget {
   final List<DataListStore> listStores;
@@ -44,9 +46,10 @@ class _EditFoodState extends State<EditFood> {
   final priceOfFood = TextEditingController();
   final foodNameController = TextEditingController();
   final desTextController = TextEditingController();
-  final _popupCustomValidationKey1 = GlobalKey<DropdownSearchState<int>>();
-  final _popupCustomValidationKey2 =
-      GlobalKey<DropdownSearchState<List<String>>>();
+
+  final listStoreTextController = TextEditingController();
+  final listFoodTypeTextController = TextEditingController();
+
   final ImagePicker imagePicker = ImagePicker();
   String priceFoodNumber = '0';
   List<String> listImageFood = [];
@@ -68,6 +71,8 @@ class _EditFoodState extends State<EditFood> {
     super.dispose();
     listStoreName.clear();
     priceOfFood.clear();
+    listFoodTypeTextController.clear();
+    listStoreTextController.clear();
     foodNameController.clear();
     desTextController.clear();
   }
@@ -134,11 +139,9 @@ class _EditFoodState extends State<EditFood> {
 
       listDynamicImage.add(pathImage);
 
-      if (pathImage != null) {
-        Uint8List imagebytes = pathImage.readAsBytesSync(); //convert to bytes
-        String base64string = base64Encode(imagebytes);
-        listImageFood.add(base64string);
-      }
+      Uint8List imagebytes = pathImage.readAsBytesSync(); //convert to bytes
+      String base64string = base64Encode(imagebytes);
+      listImageFood.add(base64string);
     });
   }
 
@@ -386,102 +389,278 @@ class _EditFoodState extends State<EditFood> {
                                 ),
                               ),
                               space10H,
-                              TextApp(
-                                text: " Cửa hàng",
-                                fontsize: 12.sp,
-                                fontWeight: FontWeight.bold,
-                                color: blueText,
-                              ),
-                              space10H,
-                              SizedBox(
-                                width: 1.sw,
-                                // height: 100.h,
-                                child: DropdownSearch(
-                                  validator: (value) {
-                                    if (currentStoreText == null) {
-                                      return canNotNull;
-                                    }
-                                    return null;
-                                  },
-                                  selectedItem: currentStoreText,
-                                  key: _popupCustomValidationKey1,
-                                  items: listStoreName,
-                                  onChanged: (listSelectedStore) {
-                                    var getIndexStore = listStoreName
-                                        .indexOf(listSelectedStore.toString());
-
-                                    currentStoreID = widget
-                                        .listStores[getIndexStore].storeId;
-                                  },
-                                  dropdownDecoratorProps:
-                                      DropDownDecoratorProps(
-                                    dropdownSearchDecoration: InputDecoration(
-                                      fillColor: const Color.fromARGB(
-                                          255, 226, 104, 159),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: Color.fromRGBO(
-                                                214, 51, 123, 0.6),
-                                            width: 2.0),
-                                        borderRadius:
-                                            BorderRadius.circular(8.r),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8.r),
-                                      ),
-                                      isDense: true,
-                                      contentPadding: EdgeInsets.all(15.w),
-                                    ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextApp(
+                                    text: " Cửa hàng",
+                                    fontsize: 12.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: blueText,
                                   ),
-                                ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+                                  TextFormField(
+                                    readOnly: true,
+                                    onTapOutside: (event) {
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
+                                    },
+                                    onTap: () {
+                                      showMaterialModalBottomSheet(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(15.r),
+                                            topLeft: Radius.circular(15.r),
+                                          ),
+                                        ),
+                                        clipBehavior:
+                                            Clip.antiAliasWithSaveLayer,
+                                        context: context,
+                                        builder: (context) => SizedBox(
+                                          height: 1.sh / 2,
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                width: 1.sw,
+                                                padding: EdgeInsets.all(20.w),
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                                child: TextApp(
+                                                  text: "Chọn cửa hàng",
+                                                  color: Colors.white,
+                                                  fontsize: 20.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: ListView.builder(
+                                                  padding: EdgeInsets.only(
+                                                      top: 10.w),
+                                                  itemCount:
+                                                      listStoreName.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Column(
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  left: 20.w),
+                                                          child: InkWell(
+                                                            onTap: () async {
+                                                              Navigator.pop(
+                                                                  context);
+
+                                                              currentStoreID =
+                                                                  widget
+                                                                      .listStores[
+                                                                          index]
+                                                                      .storeId;
+                                                              listStoreTextController
+                                                                      .text =
+                                                                  listStoreName[
+                                                                      index];
+                                                            },
+                                                            child: Row(
+                                                              children: [
+                                                                TextApp(
+                                                                  text:
+                                                                      listStoreName[
+                                                                          index],
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontsize:
+                                                                      20.sp,
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Divider(
+                                                          height: 25.h,
+                                                        )
+                                                      ],
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    controller: listStoreTextController,
+                                    style:
+                                        TextStyle(fontSize: 12.sp, color: grey),
+                                    cursorColor: grey,
+                                    decoration: InputDecoration(
+                                        fillColor: const Color.fromARGB(
+                                            255, 226, 104, 159),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color: Color.fromRGBO(
+                                                  214, 51, 123, 0.6),
+                                              width: 2.0),
+                                          borderRadius:
+                                              BorderRadius.circular(8.r),
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.r),
+                                        ),
+                                        hintText: currentStoreText,
+                                        suffixIcon: Transform.rotate(
+                                          angle: 90 * math.pi / 180,
+                                          child: Icon(
+                                            Icons.chevron_right,
+                                            size: 28.sp,
+                                            color:
+                                                Colors.black.withOpacity(0.5),
+                                          ),
+                                        ),
+                                        isDense: true,
+                                        contentPadding: EdgeInsets.all(15.w)),
+                                  )
+                                ],
                               ),
                               space20H,
-                              TextApp(
-                                text: " Loại",
-                                fontsize: 12.sp,
-                                fontWeight: FontWeight.bold,
-                                color: blueText,
-                              ),
-                              space10H,
-                              SizedBox(
-                                width: 1.sw,
-                                child: DropdownSearch<String>(
-                                  validator: (value) {
-                                    if (value == chooseType) {
-                                      return canNotNull;
-                                    }
-                                    return null;
-                                  },
-                                  key: _popupCustomValidationKey2,
-                                  items: categories,
-                                  selectedItem: currentFoodKindText,
-                                  onChanged: (foodKindIndex) {
-                                    currentFoodKind = categories
-                                        .indexOf(foodKindIndex.toString());
-                                  },
-                                  dropdownDecoratorProps:
-                                      DropDownDecoratorProps(
-                                    dropdownSearchDecoration: InputDecoration(
-                                      fillColor: const Color.fromARGB(
-                                          255, 226, 104, 159),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: Color.fromRGBO(
-                                                214, 51, 123, 0.6),
-                                            width: 2.0),
-                                        borderRadius:
-                                            BorderRadius.circular(8.r),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8.r),
-                                      ),
-                                      isDense: true,
-                                      contentPadding: EdgeInsets.all(15.w),
-                                    ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextApp(
+                                    text: " $type",
+                                    fontsize: 12.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: blueText,
                                   ),
-                                ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+                                  TextFormField(
+                                    readOnly: true,
+                                    onTapOutside: (event) {
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
+                                    },
+                                    onTap: () {
+                                      showMaterialModalBottomSheet(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(15.r),
+                                            topLeft: Radius.circular(15.r),
+                                          ),
+                                        ),
+                                        clipBehavior:
+                                            Clip.antiAliasWithSaveLayer,
+                                        context: context,
+                                        builder: (context) => SizedBox(
+                                          height: 1.sh / 2,
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                width: 1.sw,
+                                                padding: EdgeInsets.all(20.w),
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                                child: TextApp(
+                                                  text: "Chọn loại",
+                                                  color: Colors.white,
+                                                  fontsize: 20.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: ListView.builder(
+                                                  padding: EdgeInsets.only(
+                                                      top: 10.w),
+                                                  itemCount: categories.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Column(
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  left: 20.w),
+                                                          child: InkWell(
+                                                            onTap: () async {
+                                                              Navigator.pop(
+                                                                  context);
+
+                                                              currentFoodKind =
+                                                                  index;
+                                                              listFoodTypeTextController
+                                                                      .text =
+                                                                  categories[
+                                                                      index];
+                                                            },
+                                                            child: Row(
+                                                              children: [
+                                                                TextApp(
+                                                                  text:
+                                                                      categories[
+                                                                          index],
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontsize:
+                                                                      20.sp,
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Divider(
+                                                          height: 25.h,
+                                                        )
+                                                      ],
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    controller: listFoodTypeTextController,
+                                    style:
+                                        TextStyle(fontSize: 12.sp, color: grey),
+                                    cursorColor: grey,
+                                    decoration: InputDecoration(
+                                        fillColor: const Color.fromARGB(
+                                            255, 226, 104, 159),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              color: Color.fromRGBO(
+                                                  214, 51, 123, 0.6),
+                                              width: 2.0),
+                                          borderRadius:
+                                              BorderRadius.circular(8.r),
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.r),
+                                        ),
+                                        hintText: currentFoodKindText,
+                                        suffixIcon: Transform.rotate(
+                                          angle: 90 * math.pi / 180,
+                                          child: Icon(
+                                            Icons.chevron_right,
+                                            size: 28.sp,
+                                            color:
+                                                Colors.black.withOpacity(0.5),
+                                          ),
+                                        ),
+                                        isDense: true,
+                                        contentPadding: EdgeInsets.all(15.w)),
+                                  )
+                                ],
                               ),
                             ],
                           ),

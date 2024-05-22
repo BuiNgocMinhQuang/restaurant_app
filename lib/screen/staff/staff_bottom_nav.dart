@@ -89,7 +89,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
   void getInfor() async {
     try {
       var token = StorageUtils.instance.getString(key: 'token_staff');
-      print("TOKEN CURRENT $token");
+      log("TOKEN CURRENT $token");
       final response = await http.post(
         Uri.parse('$baseUrl$userInformationApi'),
         headers: {
@@ -109,15 +109,15 @@ class _StaffFabTabState extends State<StaffFabTab> {
             staffInforData = staffInforDataRes.data;
           });
 
-          print("GET INFOR STAFF OK 1");
+          log("GET INFOR STAFF OK 1");
         } else {
-          print("GET INFOR STAFF ERROR 1");
+          log("GET INFOR STAFF ERROR 1");
         }
       } catch (error) {
-        print("GET INFOR STAFF ERROR 2  $error");
+        log("GET INFOR STAFF ERROR 2  $error");
       }
     } catch (error) {
-      print("GET INFOR STAFF ERROR 3 $error");
+      log("GET INFOR STAFF ERROR 3 $error");
     }
   }
 
@@ -192,7 +192,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                     child: isHaveNoti
                         ? Stack(
                             children: [
-                              Container(
+                              SizedBox(
                                 width: 30.w,
                                 height: 30.w,
                                 child: Image.asset(
@@ -214,7 +214,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                               )
                             ],
                           )
-                        : Container(
+                        : SizedBox(
                             width: 30.w,
                             height: 30.w,
                             child: Image.asset(
@@ -226,7 +226,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
             ],
             bottom: PreferredSize(
                 preferredSize: Size.fromHeight(20.w),
-                child: Container(
+                child: SizedBox(
                   child:
                       Padding(padding: EdgeInsets.only(left: 30, bottom: 10.w)),
                 )),
@@ -268,7 +268,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                             ? Colors.blue
                             : const Color.fromRGBO(233, 236, 239, 1),
                         icon: Icons.home,
-                        subItem: [],
+                        subItem: const [],
                       ),
                     ),
                     SizedBox(
@@ -290,7 +290,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                           backgroundIconColor: currentIndex == 0
                               ? Colors.blue
                               : const Color.fromRGBO(233, 236, 239, 1),
-                          subItem: [],
+                          subItem: const [],
                           icon: Icons.dinner_dining),
                     ),
                     SizedBox(
@@ -312,7 +312,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                           backgroundIconColor: currentIndex == 1
                               ? Colors.blue
                               : const Color.fromRGBO(233, 236, 239, 1),
-                          subItem: [],
+                          subItem: const [],
                           icon: Icons.receipt),
                     ),
                     SizedBox(
@@ -329,7 +329,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                       child: ItemDrawer(
                           isExpand: false,
                           text: 'Danh sách hóa đơn',
-                          subItem: [],
+                          subItem: const [],
                           iconColor:
                               currentIndex == 3 ? Colors.white : Colors.black,
                           backgroundIconColor: currentIndex == 3
@@ -356,7 +356,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                           backgroundIconColor: currentIndex == 4
                               ? Colors.blue
                               : const Color.fromRGBO(233, 236, 239, 1),
-                          subItem: [],
+                          subItem: const [],
                           icon: Icons.person),
                     ),
                   ],

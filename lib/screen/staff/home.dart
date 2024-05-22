@@ -274,7 +274,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                   Padding(
                                     padding: EdgeInsets.only(
                                         left: 30.w, right: 30.w),
-                                    child: Container(
+                                    child: SizedBox(
                                       width: 1.sw,
                                       height: 600.h,
                                       // color: Colors.amber,
@@ -749,7 +749,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Container(
+                            SizedBox(
                               width: 100,
                               height: 100,
                               child: Lottie.asset('assets/lottie/error.json'),
@@ -761,7 +761,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                               fontWeight: FontWeight.bold,
                             ),
                             space30H,
-                            Container(
+                            SizedBox(
                               width: 200,
                               child: ButtonGradient(
                                 color1: color1BlueButton,
@@ -844,7 +844,7 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print(data);
+      log(data);
       // setState(() {
       //             jsonTruocDo = data.toString();
 
@@ -865,13 +865,13 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                 })
               : null;
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR BROUGHT RECEIPT PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
   }
 
@@ -917,13 +917,13 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                 })
               : null;
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR BROUGHT RECEIPT PAGE 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
     }
   }
 
@@ -1018,8 +1018,8 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
               EdgeInsets.only(top: 10.h, left: 25.w, right: 25.w, bottom: 10.h),
           child: Column(
             children: [
-              Container(
-                  height: 50,
+              SizedBox(
+                  height: 50.h,
                   child: Row(
                     children: [
                       Expanded(
@@ -1261,7 +1261,7 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Container(
+                                          SizedBox(
                                             width: 20.w,
                                             height: 20.w,
                                             child: InkWell(
