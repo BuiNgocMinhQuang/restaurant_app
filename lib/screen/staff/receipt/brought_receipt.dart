@@ -124,8 +124,13 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                                         borderRadius: BorderRadius.circular(
                                           8.r,
                                         ),
-                                        color: Colors.blue,
-                                        border: Border.all(color: Colors.blue),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        border: Border.all(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary),
                                       ),
                                       tabs: [
                                         CustomTab(
@@ -201,7 +206,7 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                                 );
                               });
                         },
-                        color: Colors.blue,
+                        color: Theme.of(context).colorScheme.primary,
                         textColor: Colors.white,
                         padding: const EdgeInsets.all(16),
                         shape: const CircleBorder(),
@@ -428,7 +433,7 @@ class _AllWidgetState extends State<AllWidget>
   Widget build(BuildContext context) {
     super.build(context);
     return RefreshIndicator(
-      color: Colors.blue,
+      color: Theme.of(context).colorScheme.primary,
       onRefresh: () async {
         refeshFood(page: 1, filtersFlg: {"pay_flg": null});
       },
@@ -512,9 +517,17 @@ class _AllWidgetState extends State<AllWidget>
                                                     },
                                                     child: Row(
                                                       children: [
-                                                        Icon(
-                                                          Icons.receipt,
-                                                          size: 35.sp,
+                                                        // Icon(
+                                                        //   Icons.receipt,
+                                                        //   size: 35.sp,
+                                                        // ),
+                                                        SizedBox(
+                                                          width: 35.w,
+                                                          height: 35.w,
+                                                          child: Image.asset(
+                                                            "assets/images/receipt.png",
+                                                            fit: BoxFit.contain,
+                                                          ),
                                                         ),
                                                         space10W,
                                                         TextApp(
@@ -568,9 +581,17 @@ class _AllWidgetState extends State<AllWidget>
                                                     },
                                                     child: Row(
                                                       children: [
-                                                        Icon(
-                                                          Icons.monetization_on,
-                                                          size: 35.sp,
+                                                        // Icon(
+                                                        //   Icons.monetization_on,
+                                                        //   size: 35.sp,
+                                                        // ),
+                                                        SizedBox(
+                                                          width: 35.w,
+                                                          height: 35.w,
+                                                          child: Image.asset(
+                                                            "assets/images/incomes.png",
+                                                            fit: BoxFit.contain,
+                                                          ),
                                                         ),
                                                         space10W,
                                                         TextApp(
@@ -610,9 +631,17 @@ class _AllWidgetState extends State<AllWidget>
                                                     },
                                                     child: Row(
                                                       children: [
-                                                        Icon(
-                                                          Icons.print,
-                                                          size: 35.sp,
+                                                        // Icon(
+                                                        //   Icons.print,
+                                                        //   size: 35.sp,
+                                                        // ),
+                                                        SizedBox(
+                                                          width: 35.w,
+                                                          height: 35.w,
+                                                          child: Image.asset(
+                                                            "assets/images/printing_receipt.png",
+                                                            fit: BoxFit.contain,
+                                                          ),
                                                         ),
                                                         space10W,
                                                         TextApp(
@@ -658,9 +687,17 @@ class _AllWidgetState extends State<AllWidget>
                                                     },
                                                     child: Row(
                                                       children: [
-                                                        Icon(
-                                                          Icons.cancel,
-                                                          size: 35.sp,
+                                                        // Icon(
+                                                        //   Icons.cancel,
+                                                        //   size: 35.sp,
+                                                        // ),
+                                                        SizedBox(
+                                                          width: 35.w,
+                                                          height: 35.w,
+                                                          child: Image.asset(
+                                                            "assets/images/cancle_icon.png",
+                                                            fit: BoxFit.contain,
+                                                          ),
                                                         ),
                                                         space10W,
                                                         TextApp(
@@ -727,9 +764,17 @@ class _AllWidgetState extends State<AllWidget>
                                                     },
                                                     child: Row(
                                                       children: [
-                                                        Icon(
-                                                          Icons.print,
-                                                          size: 35.sp,
+                                                        // Icon(
+                                                        //   Icons.print,
+                                                        //   size: 35.sp,
+                                                        // ),
+                                                        SizedBox(
+                                                          width: 35.w,
+                                                          height: 35.w,
+                                                          child: Image.asset(
+                                                            "assets/images/printing_receipt.png",
+                                                            fit: BoxFit.contain,
+                                                          ),
                                                         ),
                                                         space10W,
                                                         TextApp(
@@ -769,9 +814,17 @@ class _AllWidgetState extends State<AllWidget>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.receipt_long_rounded,
-                        size: 50.h,
+                      // Icon(
+                      //   Icons.receipt_long_rounded,
+                      //   size: 50.h,
+                      // ),
+                      SizedBox(
+                        width: 35.w,
+                        height: 35.w,
+                        child: Image.asset(
+                          "assets/images/receipt.png",
+                          fit: BoxFit.contain,
+                        ),
                       ),
                       space10H,
                       TextApp(
@@ -928,7 +981,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
   Widget build(BuildContext context) {
     super.build(context);
     return RefreshIndicator(
-      color: Colors.blue,
+      color: Theme.of(context).colorScheme.primary,
       onRefresh: () async {
         refeshListComplete(page: 1, filtersFlg: {"pay_flg": 1});
       },
@@ -990,9 +1043,17 @@ class _CompleteWidgetState extends State<CompleteWidget>
                                         },
                                         child: Row(
                                           children: [
-                                            Icon(
-                                              Icons.receipt,
-                                              size: 35.sp,
+                                            // Icon(
+                                            //   Icons.receipt,
+                                            //   size: 35.sp,
+                                            // ),
+                                            SizedBox(
+                                              width: 35.w,
+                                              height: 35.w,
+                                              child: Image.asset(
+                                                "assets/images/receipt.png",
+                                                fit: BoxFit.contain,
+                                              ),
                                             ),
                                             space10W,
                                             TextApp(
@@ -1033,9 +1094,17 @@ class _CompleteWidgetState extends State<CompleteWidget>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.receipt_long_rounded,
-                        size: 50.h,
+                      // Icon(
+                      //   Icons.receipt_long_rounded,
+                      //   size: 50.h,
+                      // ),
+                      SizedBox(
+                        width: 35.w,
+                        height: 35.w,
+                        child: Image.asset(
+                          "assets/images/receipt.png",
+                          fit: BoxFit.contain,
+                        ),
                       ),
                       space10H,
                       TextApp(
@@ -1232,7 +1301,7 @@ class _PendingWidgetState extends State<PendingWidget>
   Widget build(BuildContext context) {
     super.build(context);
     return RefreshIndicator(
-      color: Colors.blue,
+      color: Theme.of(context).colorScheme.primary,
       onRefresh: () async {
         // Implement logic to refresh data for Tab 1
         refeshPending(page: 1, filtersFlg: {"pay_flg": 0});
@@ -1296,9 +1365,17 @@ class _PendingWidgetState extends State<PendingWidget>
                                               },
                                               child: Row(
                                                 children: [
-                                                  Icon(
-                                                    Icons.receipt,
-                                                    size: 35.sp,
+                                                  // Icon(
+                                                  //   Icons.receipt,
+                                                  //   size: 35.sp,
+                                                  // ),
+                                                  SizedBox(
+                                                    width: 35.w,
+                                                    height: 35.w,
+                                                    child: Image.asset(
+                                                      "assets/images/receipt.png",
+                                                      fit: BoxFit.contain,
+                                                    ),
                                                   ),
                                                   space10W,
                                                   TextApp(
@@ -1389,9 +1466,17 @@ class _PendingWidgetState extends State<PendingWidget>
                                               },
                                               child: Row(
                                                 children: [
-                                                  Icon(
-                                                    Icons.print,
-                                                    size: 35.sp,
+                                                  // Icon(
+                                                  //   Icons.print,
+                                                  //   size: 35.sp,
+                                                  // ),
+                                                  SizedBox(
+                                                    width: 35.w,
+                                                    height: 35.w,
+                                                    child: Image.asset(
+                                                      "assets/images/printing_receipt.png",
+                                                      fit: BoxFit.contain,
+                                                    ),
                                                   ),
                                                   space10W,
                                                   TextApp(
@@ -1434,9 +1519,17 @@ class _PendingWidgetState extends State<PendingWidget>
                                               },
                                               child: Row(
                                                 children: [
-                                                  Icon(
-                                                    Icons.cancel,
-                                                    size: 35.sp,
+                                                  // Icon(
+                                                  //   Icons.cancel,
+                                                  //   size: 35.sp,
+                                                  // ),
+                                                  SizedBox(
+                                                    width: 35.w,
+                                                    height: 35.w,
+                                                    child: Image.asset(
+                                                      "assets/images/cancle_icon.png",
+                                                      fit: BoxFit.contain,
+                                                    ),
                                                   ),
                                                   space10W,
                                                   TextApp(
@@ -1473,9 +1566,17 @@ class _PendingWidgetState extends State<PendingWidget>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.receipt_long_rounded,
-                        size: 50.h,
+                      // Icon(
+                      //   Icons.receipt_long_rounded,
+                      //   size: 50.h,
+                      // ),
+                      SizedBox(
+                        width: 35.w,
+                        height: 35.w,
+                        child: Image.asset(
+                          "assets/images/receipt.png",
+                          fit: BoxFit.contain,
+                        ),
                       ),
                       space10H,
                       TextApp(
@@ -1635,7 +1736,7 @@ class _CancleWidgetState extends State<CancleWidget>
   Widget build(BuildContext context) {
     super.build(context);
     return RefreshIndicator(
-      color: Colors.blue,
+      color: Theme.of(context).colorScheme.primary,
       onRefresh: () async {
         refeshCancle(page: 1, filtersFlg: {"pay_flg": 2});
       },
@@ -1693,9 +1794,17 @@ class _CancleWidgetState extends State<CancleWidget>
                                         },
                                         child: Row(
                                           children: [
-                                            Icon(
-                                              Icons.receipt,
-                                              size: 35.sp,
+                                            // Icon(
+                                            //   Icons.receipt,
+                                            //   size: 35.sp,
+                                            // ),
+                                            SizedBox(
+                                              width: 35.w,
+                                              height: 35.w,
+                                              child: Image.asset(
+                                                "assets/images/receipt.png",
+                                                fit: BoxFit.contain,
+                                              ),
                                             ),
                                             space10W,
                                             TextApp(
@@ -1736,9 +1845,17 @@ class _CancleWidgetState extends State<CancleWidget>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.receipt_long_rounded,
-                        size: 50.h,
+                      // Icon(
+                      //   Icons.receipt_long_rounded,
+                      //   size: 50.h,
+                      // ),
+                      SizedBox(
+                        width: 35.w,
+                        height: 35.w,
+                        child: Image.asset(
+                          "assets/images/receipt.png",
+                          fit: BoxFit.contain,
+                        ),
                       ),
                       space10H,
                       TextApp(

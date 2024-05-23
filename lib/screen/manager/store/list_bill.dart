@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:app_restaurant/bloc/brought_receipt/brought_receipt_bloc.dart';
 import 'package:app_restaurant/bloc/list_bill_shop/list_bill_shop_bloc.dart';
 import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/config/space.dart';
@@ -102,9 +103,13 @@ class _ManagerListBillState extends State<ManagerListBill>
                                           borderRadius: BorderRadius.circular(
                                             8.r,
                                           ),
-                                          color: Colors.blue,
-                                          border:
-                                              Border.all(color: Colors.blue),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          border: Border.all(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary),
                                         ),
                                         tabs: [
                                           CustomTab(
@@ -302,7 +307,6 @@ class _ListAllBillShopState extends State<ListAllBillShop>
 
   @override
   void initState() {
-    super.initState();
     loadMoreBill(page: 1, filtersFlg: {"pay_flg": null});
     scrollListBillController.addListener(() {
       if (scrollListBillController.position.maxScrollExtent ==
@@ -311,19 +315,29 @@ class _ListAllBillShopState extends State<ListAllBillShop>
         loadMoreBill(page: currentPage, filtersFlg: {"pay_flg": null});
       }
     });
+    super.initState();
   }
 
   @override
   void dispose() {
-    super.dispose();
     scrollListBillController.dispose();
+    super.dispose();
+  }
+
+  void printBroughtReceipt({required int orderID}) async {
+    BlocProvider.of<PrintBroughtReceiptBloc>(context).add(PrintBroughtReceipt(
+      token: tokenManager,
+      client: 'user',
+      shopId: widget.shopID,
+      orderId: orderID,
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return RefreshIndicator(
-      color: Colors.blue,
+      color: Theme.of(context).colorScheme.primary,
       onRefresh: () async {
         // Implement logic to refresh data for Tab 1
         refeshBill(page: 1, filtersFlg: {"pay_flg": null});
@@ -392,11 +406,17 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                                             InkWell(
                                               onTap: () async {
                                                 Navigator.pop(context);
+                                                printBroughtReceipt(
+                                                    orderID: newListAllBillShop[
+                                                            index]
+                                                        .orderId);
                                                 showDialog(
                                                     context: context,
                                                     builder:
                                                         (BuildContext context) {
+                                                      log("widget.token111 $tokenManager");
                                                       return PrintBillDialog(
+                                                        shopID: widget.shopID,
                                                         role: 'user',
                                                         token: tokenManager,
                                                         orderID:
@@ -416,9 +436,13 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                                               },
                                               child: Row(
                                                 children: [
-                                                  Icon(
-                                                    Icons.print,
-                                                    size: 35.sp,
+                                                  SizedBox(
+                                                    width: 35.w,
+                                                    height: 35.w,
+                                                    child: Image.asset(
+                                                      "assets/images/printing_receipt.png",
+                                                      fit: BoxFit.contain,
+                                                    ),
                                                   ),
                                                   space10W,
                                                   TextApp(
@@ -458,9 +482,13 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.receipt_long_rounded,
-                        size: 50.h,
+                      SizedBox(
+                        width: 35.w,
+                        height: 35.w,
+                        child: Image.asset(
+                          "assets/images/receipt.png",
+                          fit: BoxFit.contain,
+                        ),
                       ),
                       SizedBox(
                         height: 10.h,
@@ -608,11 +636,20 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
     }
   }
 
+  void printBroughtReceipt({required int orderID}) async {
+    BlocProvider.of<PrintBroughtReceiptBloc>(context).add(PrintBroughtReceipt(
+      token: tokenManager,
+      client: 'user',
+      shopId: widget.shopID,
+      orderId: orderID,
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return RefreshIndicator(
-      color: Colors.blue,
+      color: Theme.of(context).colorScheme.primary,
       onRefresh: () async {
         // Implement logic to refresh data for Tab 1
         refeshCompleteBill(page: 1, filtersFlg: {"pay_flg": 1});
@@ -666,11 +703,18 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                                                 InkWell(
                                                   onTap: () async {
                                                     Navigator.pop(context);
+                                                    printBroughtReceipt(
+                                                        orderID:
+                                                            listBillComplete[
+                                                                    index]
+                                                                .orderId);
                                                     showDialog(
                                                         context: context,
                                                         builder: (BuildContext
                                                             context) {
                                                           return PrintBillDialog(
+                                                            shopID:
+                                                                widget.shopID,
                                                             role: 'user',
                                                             token: tokenManager,
                                                             orderID:
@@ -689,9 +733,13 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                                                   },
                                                   child: Row(
                                                     children: [
-                                                      Icon(
-                                                        Icons.print,
-                                                        size: 35.sp,
+                                                      SizedBox(
+                                                        width: 35.w,
+                                                        height: 35.w,
+                                                        child: Image.asset(
+                                                          "assets/images/printing_receipt.png",
+                                                          fit: BoxFit.contain,
+                                                        ),
                                                       ),
                                                       space10W,
                                                       TextApp(
@@ -734,9 +782,13 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.receipt_long_rounded,
-                        size: 50.h,
+                      SizedBox(
+                        width: 35.w,
+                        height: 35.w,
+                        child: Image.asset(
+                          "assets/images/receipt.png",
+                          fit: BoxFit.contain,
+                        ),
                       ),
                       SizedBox(
                         height: 10.h,
@@ -887,11 +939,20 @@ class _PendingWidgetState extends State<PendingWidget>
     }
   }
 
+  void printBroughtReceipt({required int orderID}) async {
+    BlocProvider.of<PrintBroughtReceiptBloc>(context).add(PrintBroughtReceipt(
+      token: tokenManager,
+      client: 'user',
+      shopId: widget.shopID,
+      orderId: orderID,
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return RefreshIndicator(
-      color: Colors.blue,
+      color: Theme.of(context).colorScheme.primary,
       onRefresh: () async {
         // Implement logic to refresh data for Tab 1
 
@@ -942,11 +1003,16 @@ class _PendingWidgetState extends State<PendingWidget>
                                             InkWell(
                                               onTap: () async {
                                                 Navigator.pop(context);
+                                                printBroughtReceipt(
+                                                    orderID:
+                                                        listBillPending[index]
+                                                            .orderId);
                                                 showDialog(
                                                     context: context,
                                                     builder:
                                                         (BuildContext context) {
                                                       return PrintBillDialog(
+                                                        shopID: widget.shopID,
                                                         role: 'user',
                                                         token: tokenManager,
                                                         orderID:
@@ -965,9 +1031,13 @@ class _PendingWidgetState extends State<PendingWidget>
                                               },
                                               child: Row(
                                                 children: [
-                                                  Icon(
-                                                    Icons.print,
-                                                    size: 35.sp,
+                                                  SizedBox(
+                                                    width: 35.w,
+                                                    height: 35.w,
+                                                    child: Image.asset(
+                                                      "assets/images/printing_receipt.png",
+                                                      fit: BoxFit.contain,
+                                                    ),
                                                   ),
                                                   space10W,
                                                   TextApp(
@@ -1007,9 +1077,13 @@ class _PendingWidgetState extends State<PendingWidget>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.receipt_long_rounded,
-                        size: 50.h,
+                      SizedBox(
+                        width: 35.w,
+                        height: 35.w,
+                        child: Image.asset(
+                          "assets/images/receipt.png",
+                          fit: BoxFit.contain,
+                        ),
                       ),
                       SizedBox(
                         height: 10.h,
@@ -1159,11 +1233,20 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
     }
   }
 
+  void printBroughtReceipt({required int orderID}) async {
+    BlocProvider.of<PrintBroughtReceiptBloc>(context).add(PrintBroughtReceipt(
+      token: tokenManager,
+      client: 'user',
+      shopId: widget.shopID,
+      orderId: orderID,
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return RefreshIndicator(
-      color: Colors.blue,
+      color: Theme.of(context).colorScheme.primary,
       onRefresh: () async {
         refeshCompleteBill(page: 1, filtersFlg: {"close_order": 1});
       },
@@ -1212,11 +1295,16 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                                             InkWell(
                                               onTap: () async {
                                                 Navigator.pop(context);
+                                                printBroughtReceipt(
+                                                    orderID:
+                                                        listBillCancle[index]
+                                                            .orderId);
                                                 showDialog(
                                                     context: context,
                                                     builder:
                                                         (BuildContext context) {
                                                       return PrintBillDialog(
+                                                        shopID: widget.shopID,
                                                         role: 'user',
                                                         token: tokenManager,
                                                         orderID: listBillCancle[
@@ -1234,9 +1322,13 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                                               },
                                               child: Row(
                                                 children: [
-                                                  Icon(
-                                                    Icons.print,
-                                                    size: 35.sp,
+                                                  SizedBox(
+                                                    width: 35.w,
+                                                    height: 35.w,
+                                                    child: Image.asset(
+                                                      "assets/images/printing_receipt.png",
+                                                      fit: BoxFit.contain,
+                                                    ),
                                                   ),
                                                   space10W,
                                                   TextApp(
@@ -1276,9 +1368,13 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.receipt_long_rounded,
-                        size: 50.h,
+                      SizedBox(
+                        width: 35.w,
+                        height: 35.w,
+                        child: Image.asset(
+                          "assets/images/receipt.png",
+                          fit: BoxFit.contain,
+                        ),
                       ),
                       SizedBox(
                         height: 10.h,

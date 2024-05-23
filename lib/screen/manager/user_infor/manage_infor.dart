@@ -732,7 +732,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                               getInfor();
                             },
                             text: 'Thử lại',
-                            fontSize: 12.sp,
+                            fontSize: 14.sp,
                             radius: 8.r,
                             textColor: Colors.white,
                           ),
@@ -741,7 +741,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                     ),
                   )
                 : RefreshIndicator(
-                    color: Colors.blue,
+                    color: Theme.of(context).colorScheme.primary,
                     onRefresh: () async {
                       getInfor();
                     },
@@ -881,9 +881,17 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                         child:
                                                                             Row(
                                                                           children: [
-                                                                            Icon(
-                                                                              Icons.delete,
-                                                                              size: 35.sp,
+                                                                            // Icon(
+                                                                            //   Icons.delete,
+                                                                            //   size: 35.sp,
+                                                                            // ),
+                                                                            SizedBox(
+                                                                              width: 35.w,
+                                                                              height: 35.w,
+                                                                              child: Image.asset(
+                                                                                "assets/images/delete_icon.png",
+                                                                                fit: BoxFit.contain,
+                                                                              ),
                                                                             ),
                                                                             space10W,
                                                                             TextApp(
@@ -898,10 +906,19 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                   ),
                                                                 ));
                                                   },
-                                                  child: Icon(
-                                                    Icons.edit,
-                                                    size: 25.sp,
-                                                    color: Colors.white,
+                                                  child:
+                                                      // Icon(
+                                                      //   Icons.edit,
+                                                      //   size: 25.sp,
+                                                      //   color: Colors.white,
+                                                      // ),
+                                                      SizedBox(
+                                                    width: 35.w,
+                                                    height: 35.w,
+                                                    child: Image.asset(
+                                                      "assets/images/edit_icon.png",
+                                                      fit: BoxFit.contain,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -983,7 +1000,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                 children: [
                                                   TextApp(
                                                     text: " Họ và tên",
-                                                    fontsize: 10.sp,
+                                                    fontsize: 14.sp,
                                                     fontWeight: FontWeight.bold,
                                                     color: blueText,
                                                   ),
@@ -1001,7 +1018,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                     keyboardType:
                                                         TextInputType.name,
                                                     style: TextStyle(
-                                                        fontSize: 12.sp,
+                                                        fontSize: 14.sp,
                                                         color: grey),
                                                     cursorColor: grey,
                                                     validator: (value) {
@@ -1038,8 +1055,10 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                   .circular(
                                                                       8.r),
                                                         ),
-                                                        // hintText: 'Tên',
                                                         isDense: true,
+                                                        hintText: '',
+                                                        hintStyle: TextStyle(
+                                                            fontSize: 14.sp),
                                                         contentPadding:
                                                             EdgeInsets.all(
                                                                 15.w)),
@@ -1061,7 +1080,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         children: [
                                                           TextApp(
                                                             text: " Họ",
-                                                            fontsize: 10.sp,
+                                                            fontsize: 14.sp,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             color: blueText,
@@ -1083,7 +1102,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                             controller:
                                                                 surNameController,
                                                             style: TextStyle(
-                                                                fontSize: 12.sp,
+                                                                fontSize: 14.sp,
                                                                 color: grey),
                                                             cursorColor: grey,
                                                             validator: (value) {
@@ -1124,6 +1143,11 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                               8.r),
                                                                     ),
                                                                     // hintText: 'Họ',
+                                                                    hintText:
+                                                                        '',
+                                                                    hintStyle: TextStyle(
+                                                                        fontSize: 12
+                                                                            .sp),
                                                                     isDense:
                                                                         true,
                                                                     contentPadding:
@@ -1145,7 +1169,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         children: [
                                                           TextApp(
                                                             text: " Tên",
-                                                            fontsize: 10.sp,
+                                                            fontsize: 14.sp,
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                             color: blueText,
@@ -1167,7 +1191,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                             controller:
                                                                 nameController,
                                                             style: TextStyle(
-                                                                fontSize: 12.sp,
+                                                                fontSize: 14.sp,
                                                                 color: grey),
                                                             cursorColor: grey,
                                                             validator: (value) {
@@ -1229,7 +1253,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                 children: [
                                                   TextApp(
                                                     text: " Số điện thoại",
-                                                    fontsize: 10.sp,
+                                                    fontsize: 14.sp,
                                                     fontWeight: FontWeight.bold,
                                                     color: blueText,
                                                   ),
@@ -1244,9 +1268,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                     },
                                                     controller: phoneController,
                                                     keyboardType:
-                                                        TextInputType.name,
+                                                        TextInputType.phone,
                                                     style: TextStyle(
-                                                        fontSize: 12.sp,
+                                                        fontSize: 14.sp,
                                                         color: grey),
                                                     cursorColor: grey,
                                                     validator: (value) {
@@ -1291,6 +1315,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                       8.r),
                                                         ),
                                                         // hintText: 'Tên',
+                                                        hintText: '',
+                                                        hintStyle: TextStyle(
+                                                            fontSize: 14.sp),
                                                         isDense: true,
                                                         contentPadding:
                                                             EdgeInsets.all(
@@ -1307,7 +1334,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                 children: [
                                                   TextApp(
                                                     text: " Tỉnh/Thành phố",
-                                                    fontsize: 10.sp,
+                                                    fontsize: 14.sp,
                                                     fontWeight: FontWeight.bold,
                                                     color: blueText,
                                                   ),
@@ -1433,7 +1460,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                     controller:
                                                         cityNameTextController,
                                                     style: TextStyle(
-                                                        fontSize: 12.sp,
+                                                        fontSize: 14.sp,
                                                         color: grey),
                                                     cursorColor: grey,
                                                     validator: (value) {
@@ -1472,6 +1499,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         ),
                                                         hintText:
                                                             'Chọn tỉnh/thành phố',
+                                                        hintStyle: TextStyle(
+                                                            fontSize: 14.sp),
                                                         suffixIcon:
                                                             Transform.rotate(
                                                           angle: 90 *
@@ -1499,7 +1528,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                 children: [
                                                   TextApp(
                                                     text: " Quận/Huyện",
-                                                    fontsize: 10.sp,
+                                                    fontsize: 14.sp,
                                                     fontWeight: FontWeight.bold,
                                                     color: blueText,
                                                   ),
@@ -1622,7 +1651,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                     controller:
                                                         districNameTextController,
                                                     style: TextStyle(
-                                                        fontSize: 12.sp,
+                                                        fontSize: 14.sp,
                                                         color: grey),
                                                     cursorColor: grey,
                                                     decoration: InputDecoration(
@@ -1654,6 +1683,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         ),
                                                         hintText:
                                                             'Chọn quận/huyện',
+                                                        hintStyle: TextStyle(
+                                                            fontSize: 14.sp),
                                                         suffixIcon:
                                                             Transform.rotate(
                                                           angle: 90 *
@@ -1683,7 +1714,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                 children: [
                                                   TextApp(
                                                     text: " Phường/Xã",
-                                                    fontsize: 10.sp,
+                                                    fontsize: 14.sp,
                                                     fontWeight: FontWeight.bold,
                                                     color: blueText,
                                                   ),
@@ -1807,7 +1838,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                     controller:
                                                         wardNameTextController,
                                                     style: TextStyle(
-                                                        fontSize: 12.sp,
+                                                        fontSize: 14.sp,
                                                         color: grey),
                                                     cursorColor: grey,
                                                     decoration: InputDecoration(
@@ -1839,6 +1870,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         ),
                                                         hintText:
                                                             'Chọn phường/xã',
+                                                        hintStyle: TextStyle(
+                                                            fontSize: 14.sp),
                                                         suffixIcon:
                                                             Transform.rotate(
                                                           angle: 90 *
@@ -1866,7 +1899,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                 children: [
                                                   TextApp(
                                                     text: " Số nhà, đường",
-                                                    fontsize: 10.sp,
+                                                    fontsize: 14.sp,
                                                     fontWeight: FontWeight.bold,
                                                     color: blueText,
                                                   ),
@@ -1884,7 +1917,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                     keyboardType:
                                                         TextInputType.name,
                                                     style: TextStyle(
-                                                        fontSize: 12.sp,
+                                                        fontSize: 14.sp,
                                                         color: grey),
                                                     cursorColor: grey,
                                                     decoration: InputDecoration(
@@ -1915,6 +1948,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                       8.r),
                                                         ),
                                                         // hintText: 'Tên',
+                                                        hintText: '',
+                                                        hintStyle: TextStyle(
+                                                            fontSize: 14.sp),
                                                         isDense: true,
                                                         contentPadding:
                                                             EdgeInsets.all(
@@ -1929,7 +1965,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                 children: [
                                                   TextApp(
                                                     text: " Email",
-                                                    fontsize: 12.sp,
+                                                    fontsize: 14.sp,
                                                     fontWeight: FontWeight.bold,
                                                     color: blueText,
                                                   ),
@@ -1946,7 +1982,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                     keyboardType: TextInputType
                                                         .emailAddress,
                                                     style: TextStyle(
-                                                        fontSize: 12.sp,
+                                                        fontSize: 14.sp,
                                                         color: grey),
                                                     cursorColor: grey,
                                                     validator: (value) {
@@ -1990,7 +2026,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                   .circular(
                                                                       8.r),
                                                         ),
-                                                        hintText: 'Email',
+                                                        hintText: '',
+                                                        hintStyle: TextStyle(
+                                                            fontSize: 14.sp),
                                                         isDense: true,
                                                         contentPadding:
                                                             EdgeInsets.all(
@@ -2048,7 +2086,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                       },
                                                       text:
                                                           "Cập nhật thông tin",
-                                                      fontSize: 12.sp,
+                                                      fontSize: 14.sp,
                                                       radius: 8.r,
                                                       textColor: Colors.white,
                                                     ),
@@ -2112,7 +2150,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                             children: [
                                               TextApp(
                                                 text: " Mật khẩu hiện tại",
-                                                fontsize: 12.sp,
+                                                fontsize: 14.sp,
                                                 fontWeight: FontWeight.bold,
                                                 color: blueText,
                                               ),
@@ -2130,7 +2168,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                 obscureText:
                                                     currentPasswordVisible,
                                                 style: TextStyle(
-                                                    fontSize: 12.sp,
+                                                    fontSize: 14.sp,
                                                     color: grey),
                                                 cursorColor: grey,
                                                 validator: (value) {
@@ -2202,7 +2240,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                             children: [
                                               TextApp(
                                                 text: " Mật khẩu mới",
-                                                fontsize: 12.sp,
+                                                fontsize: 14.sp,
                                                 fontWeight: FontWeight.bold,
                                                 color: blueText,
                                               ),
@@ -2219,7 +2257,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                     newPassworldController,
                                                 obscureText: newPasswordVisible,
                                                 style: TextStyle(
-                                                    fontSize: 12.sp,
+                                                    fontSize: 14.sp,
                                                     color: grey),
                                                 cursorColor: grey,
                                                 validator: (value) {
@@ -2290,7 +2328,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                             children: [
                                               TextApp(
                                                 text: " Nhập lại mật khẩu mới",
-                                                fontsize: 12.sp,
+                                                fontsize: 14.sp,
                                                 fontWeight: FontWeight.bold,
                                                 color: blueText,
                                               ),
@@ -2308,7 +2346,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                 obscureText:
                                                     reNewPasswordVisible,
                                                 style: TextStyle(
-                                                    fontSize: 12.sp,
+                                                    fontSize: 14.sp,
                                                     color: grey),
                                                 cursorColor: grey,
                                                 validator: (value) {
@@ -2405,7 +2443,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                     }
                                                   },
                                                   text: "Cập nhật mật khẩu",
-                                                  fontSize: 12.sp,
+                                                  fontSize: 14.sp,
                                                   radius: 8.r,
                                                   textColor: Colors.white,
                                                 ),
@@ -2480,7 +2518,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                       children: [
                                                         TextApp(
                                                           text: "Mặt trước",
-                                                          fontsize: 12.sp,
+                                                          fontsize: 14.sp,
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           color: blueText,
@@ -2539,7 +2577,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                       children: [
                                                         TextApp(
                                                           text: "Mặt sau",
-                                                          fontsize: 12.sp,
+                                                          fontsize: 14.sp,
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           color: blueText,
@@ -2598,7 +2636,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                       children: [
                                                         TextApp(
                                                           text: "Khuôn mặt",
-                                                          fontsize: 12.sp,
+                                                          fontsize: 14.sp,
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           color: blueText,
@@ -2665,7 +2703,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                           managerUpdateCitizenID();
                                                         },
                                                         text: "Xác nhận",
-                                                        fontSize: 12.sp,
+                                                        fontSize: 14.sp,
                                                         radius: 8.r,
                                                         textColor: Colors.white,
                                                       ),
@@ -2726,7 +2764,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                   children: [
                                                     TextApp(
                                                       text: " Mật khẩu",
-                                                      fontsize: 12.sp,
+                                                      fontsize: 14.sp,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: blueText,
@@ -2745,7 +2783,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                       obscureText:
                                                           passwordForOpenIDImageVisible,
                                                       style: TextStyle(
-                                                          fontSize: 12.sp,
+                                                          fontSize: 14.sp,
                                                           color: grey),
                                                       cursorColor: grey,
                                                       validator: (value) {
@@ -2845,7 +2883,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                           }
                                                         },
                                                         text: "Xác nhận",
-                                                        fontSize: 12.sp,
+                                                        fontSize: 14.sp,
                                                         radius: 8.r,
                                                         textColor: Colors.white,
                                                       ),

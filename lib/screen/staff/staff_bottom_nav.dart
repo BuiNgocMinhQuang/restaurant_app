@@ -266,7 +266,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                         iconColor:
                             currentIndex == 2 ? Colors.white : Colors.black,
                         backgroundIconColor: currentIndex == 2
-                            ? Colors.blue
+                            ? Theme.of(context).colorScheme.primary
                             : const Color.fromRGBO(233, 236, 239, 1),
                         icon: Icons.home,
                         subItem: const [],
@@ -289,7 +289,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                           iconColor:
                               currentIndex == 0 ? Colors.white : Colors.black,
                           backgroundIconColor: currentIndex == 0
-                              ? Colors.blue
+                              ? Theme.of(context).colorScheme.primary
                               : const Color.fromRGBO(233, 236, 239, 1),
                           subItem: const [],
                           icon: Icons.dinner_dining),
@@ -311,7 +311,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                           iconColor:
                               currentIndex == 1 ? Colors.white : Colors.black,
                           backgroundIconColor: currentIndex == 1
-                              ? Colors.blue
+                              ? Theme.of(context).colorScheme.primary
                               : const Color.fromRGBO(233, 236, 239, 1),
                           subItem: const [],
                           icon: Icons.receipt),
@@ -334,7 +334,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                           iconColor:
                               currentIndex == 3 ? Colors.white : Colors.black,
                           backgroundIconColor: currentIndex == 3
-                              ? Colors.blue
+                              ? Theme.of(context).colorScheme.primary
                               : const Color.fromRGBO(233, 236, 239, 1),
                           icon: Icons.shopping_bag),
                     ),
@@ -355,7 +355,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
                           iconColor:
                               currentIndex == 4 ? Colors.white : Colors.black,
                           backgroundIconColor: currentIndex == 4
-                              ? Colors.blue
+                              ? Theme.of(context).colorScheme.primary
                               : const Color.fromRGBO(233, 236, 239, 1),
                           subItem: const [],
                           icon: Icons.person),
@@ -439,7 +439,7 @@ class _StaffFabTabState extends State<StaffFabTab> {
             index: 2,
             key: bottomNavigationKey,
             // height: 150.h,
-            color: Colors.blue,
+            color: Theme.of(context).colorScheme.primary,
             backgroundColor: Colors.white,
             items: <Widget>[
               Icon(

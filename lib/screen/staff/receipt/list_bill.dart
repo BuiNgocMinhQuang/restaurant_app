@@ -113,9 +113,13 @@ class _StaffListBillState extends State<StaffListBill>
                                             borderRadius: BorderRadius.circular(
                                               8.r,
                                             ),
-                                            color: Colors.blue,
-                                            border:
-                                                Border.all(color: Colors.blue),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            border: Border.all(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary),
                                           ),
                                           tabs: [
                                             CustomTab(
@@ -348,7 +352,7 @@ class _ListAllBillShopState extends State<ListAllBillShop>
   Widget build(BuildContext context) {
     super.build(context);
     return RefreshIndicator(
-      color: Colors.blue,
+      color: Theme.of(context).colorScheme.primary,
       onRefresh: () async {
         refeshBill(page: 1, filtersFlg: {"pay_flg": null});
       },
@@ -426,6 +430,10 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                                               context: context,
                                               builder: (BuildContext context) {
                                                 return PrintBillDialog(
+                                                  shopID:
+                                                      newListAllBillShop[index]
+                                                          .storeId
+                                                          .toString(),
                                                   role: 'staff',
                                                   token: tokenStaff,
                                                   orderID:
@@ -442,9 +450,17 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                                         },
                                         child: Row(
                                           children: [
-                                            Icon(
-                                              Icons.receipt,
-                                              size: 35.sp,
+                                            // Icon(
+                                            //   Icons.receipt,
+                                            //   size: 35.sp,
+                                            // ),
+                                            SizedBox(
+                                              width: 35.w,
+                                              height: 35.w,
+                                              child: Image.asset(
+                                                "assets/images/receipt.png",
+                                                fit: BoxFit.contain,
+                                              ),
                                             ),
                                             space10W,
                                             TextApp(
@@ -485,9 +501,17 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.receipt_long_rounded,
-                        size: 50.h,
+                      // Icon(
+                      //   Icons.receipt_long_rounded,
+                      //   size: 50.h,
+                      // ),
+                      SizedBox(
+                        width: 35.w,
+                        height: 35.w,
+                        child: Image.asset(
+                          "assets/images/receipt.png",
+                          fit: BoxFit.contain,
+                        ),
                       ),
                       SizedBox(
                         height: 10.h,
@@ -638,7 +662,7 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
   Widget build(BuildContext context) {
     super.build(context);
     return RefreshIndicator(
-      color: Colors.blue,
+      color: Theme.of(context).colorScheme.primary,
       onRefresh: () async {
         refeshCompleteBill(page: 1, filtersFlg: {"pay_flg": 1});
       },
@@ -693,6 +717,10 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                                               context: context,
                                               builder: (BuildContext context) {
                                                 return PrintBillDialog(
+                                                  shopID:
+                                                      listBillComplete[index]
+                                                          .storeId
+                                                          .toString(),
                                                   role: 'staff',
                                                   token: tokenStaff,
                                                   orderID:
@@ -709,9 +737,17 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                                         },
                                         child: Row(
                                           children: [
-                                            Icon(
-                                              Icons.receipt,
-                                              size: 35.sp,
+                                            // Icon(
+                                            //   Icons.receipt,
+                                            //   size: 35.sp,
+                                            // ),
+                                            SizedBox(
+                                              width: 35.w,
+                                              height: 35.w,
+                                              child: Image.asset(
+                                                "assets/images/receipt.png",
+                                                fit: BoxFit.contain,
+                                              ),
                                             ),
                                             space10W,
                                             TextApp(
@@ -754,9 +790,17 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.receipt_long_rounded,
-                        size: 50.h,
+                      // Icon(
+                      //   Icons.receipt_long_rounded,
+                      //   size: 50.h,
+                      // ),
+                      SizedBox(
+                        width: 35.w,
+                        height: 35.w,
+                        child: Image.asset(
+                          "assets/images/receipt.png",
+                          fit: BoxFit.contain,
+                        ),
                       ),
                       SizedBox(
                         height: 10.h,
@@ -909,7 +953,7 @@ class _PendingWidgetState extends State<PendingWidget>
   Widget build(BuildContext context) {
     super.build(context);
     return RefreshIndicator(
-      color: Colors.blue,
+      color: Theme.of(context).colorScheme.primary,
       onRefresh: () async {
         refeshPending(page: 1, filtersFlg: {"pay_flg": 0});
       },
@@ -962,6 +1006,9 @@ class _PendingWidgetState extends State<PendingWidget>
                                               context: context,
                                               builder: (BuildContext context) {
                                                 return PrintBillDialog(
+                                                  shopID: listBillPending[index]
+                                                      .storeId
+                                                      .toString(),
                                                   role: 'staff',
                                                   token: tokenStaff,
                                                   orderID:
@@ -978,9 +1025,17 @@ class _PendingWidgetState extends State<PendingWidget>
                                         },
                                         child: Row(
                                           children: [
-                                            Icon(
-                                              Icons.receipt,
-                                              size: 35.sp,
+                                            // Icon(
+                                            //   Icons.receipt,
+                                            //   size: 35.sp,
+                                            // ),
+                                            SizedBox(
+                                              width: 35.w,
+                                              height: 35.w,
+                                              child: Image.asset(
+                                                "assets/images/receipt.png",
+                                                fit: BoxFit.contain,
+                                              ),
                                             ),
                                             space10W,
                                             TextApp(
@@ -1021,9 +1076,17 @@ class _PendingWidgetState extends State<PendingWidget>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.receipt_long_rounded,
-                        size: 50.h,
+                      // Icon(
+                      //   Icons.receipt_long_rounded,
+                      //   size: 50.h,
+                      // ),
+                      SizedBox(
+                        width: 35.w,
+                        height: 35.w,
+                        child: Image.asset(
+                          "assets/images/receipt.png",
+                          fit: BoxFit.contain,
+                        ),
                       ),
                       SizedBox(
                         height: 10.h,
@@ -1176,7 +1239,7 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
   Widget build(BuildContext context) {
     super.build(context);
     return RefreshIndicator(
-      color: Colors.blue,
+      color: Theme.of(context).colorScheme.primary,
       onRefresh: () async {
         refeshCancleBill(page: 1, filtersFlg: {"close_order": 1});
       },
@@ -1229,6 +1292,9 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                                               context: context,
                                               builder: (BuildContext context) {
                                                 return PrintBillDialog(
+                                                  shopID: listBillCancle[index]
+                                                      .storeId
+                                                      .toString(),
                                                   role: 'staff',
                                                   token: tokenStaff,
                                                   orderID: listBillCancle[index]
@@ -1244,9 +1310,17 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                                         },
                                         child: Row(
                                           children: [
-                                            Icon(
-                                              Icons.receipt,
-                                              size: 35.sp,
+                                            // Icon(
+                                            //   Icons.receipt,
+                                            //   size: 35.sp,
+                                            // ),
+                                            SizedBox(
+                                              width: 35.w,
+                                              height: 35.w,
+                                              child: Image.asset(
+                                                "assets/images/receipt.png",
+                                                fit: BoxFit.contain,
+                                              ),
                                             ),
                                             space10W,
                                             TextApp(
@@ -1287,9 +1361,17 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.receipt_long_rounded,
-                        size: 50.h,
+                      // Icon(
+                      //   Icons.receipt_long_rounded,
+                      //   size: 50.h,
+                      // ),
+                      SizedBox(
+                        width: 35.w,
+                        height: 35.w,
+                        child: Image.asset(
+                          "assets/images/receipt.png",
+                          fit: BoxFit.contain,
+                        ),
                       ),
                       SizedBox(
                         height: 10.h,

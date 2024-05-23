@@ -543,7 +543,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
       backgroundColor: Colors.white,
       body: SafeArea(
           child: RefreshIndicator(
-        color: Colors.blue,
+        color: Theme.of(context).colorScheme.primary,
         onRefresh: () async {
           getInfor();
         },
@@ -664,9 +664,19 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                         },
                                                         child: Row(
                                                           children: [
-                                                            Icon(
-                                                              Icons.delete,
-                                                              size: 35.sp,
+                                                            // Icon(
+                                                            //   Icons.delete,
+                                                            //   size: 35.sp,
+                                                            // ),
+                                                            SizedBox(
+                                                              width: 35.w,
+                                                              height: 35.w,
+                                                              child:
+                                                                  Image.asset(
+                                                                "assets/images/delete_icon.png",
+                                                                fit: BoxFit
+                                                                    .contain,
+                                                              ),
                                                             ),
                                                             space10W,
                                                             TextApp(
@@ -683,10 +693,19 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                   ),
                                                 ));
                                       },
-                                      child: Icon(
-                                        Icons.edit,
-                                        size: 25.sp,
-                                        color: Colors.white,
+                                      child:
+                                          // Icon(
+                                          //   Icons.edit,
+                                          //   size: 25.sp,
+                                          //   color: Colors.white,
+                                          // ),
+                                          SizedBox(
+                                        width: 35.w,
+                                        height: 35.w,
+                                        child: Image.asset(
+                                          "assets/images/edit_icon.png",
+                                          fit: BoxFit.contain,
+                                        ),
                                       ),
                                     ),
                                   ),

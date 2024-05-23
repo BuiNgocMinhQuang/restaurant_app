@@ -483,7 +483,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                     ),
                   )
                 : RefreshIndicator(
-                    color: Colors.blue,
+                    color: Theme.of(context).colorScheme.primary,
                     onRefresh: () async {
                       refeshListFood(page: 1, filtersFlg: null);
                     },
@@ -1094,13 +1094,17 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                                               foodID: product.foodId ?? 0);
                                                                         },
                                                                         backgroundColor:
-                                                                            Colors.blue,
+                                                                            Colors.black,
                                                                         foregroundColor:
                                                                             Colors.white,
                                                                         icon: Icons
                                                                             .edit,
                                                                         label:
                                                                             'Sửa',
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width:
+                                                                            2.w,
                                                                       ),
                                                                       SlidableAction(
                                                                         onPressed:
@@ -1112,7 +1116,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                                           });
                                                                         },
                                                                         backgroundColor:
-                                                                            Colors.red,
+                                                                            Colors.black,
                                                                         foregroundColor:
                                                                             Colors.white,
                                                                         icon: Icons
@@ -1212,7 +1216,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                                                         ),
                                                                                       ),
                                                                                       Container(
-                                                                                        // color: Colors.blue,
+                                                                                        // color: Theme.of(context).colorScheme.primary,
                                                                                         width: 120.w,
                                                                                         child: TextApp(
                                                                                           isOverFlow: false,

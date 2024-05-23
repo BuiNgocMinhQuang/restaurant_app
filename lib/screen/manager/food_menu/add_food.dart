@@ -220,7 +220,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
           SafeArea(
             child: SingleChildScrollView(
                 child: Padding(
-              padding: EdgeInsets.all(20.w),
+              padding: EdgeInsets.all(0.w),
               child: Column(
                 children: [
                   Container(
@@ -238,15 +238,15 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15.r),
                                 color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    spreadRadius: 5,
-                                    blurRadius: 7,
-                                    offset: const Offset(
-                                        0, 3), // changes position of shadow
-                                  ),
-                                ],
+                                // boxShadow: [
+                                //   BoxShadow(
+                                //     color: Colors.grey.withOpacity(0.5),
+                                //     spreadRadius: 5,
+                                //     blurRadius: 7,
+                                //     offset: const Offset(
+                                //         0, 3), // changes position of shadow
+                                //   ),
+                                // ],
                               ),
                               child: Padding(
                                 padding: EdgeInsets.all(20.w),
@@ -268,7 +268,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                       children: [
                                         TextApp(
                                           text: foodName,
-                                          fontsize: 12.sp,
+                                          fontsize: 14.sp,
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
@@ -308,20 +308,21 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                                     BorderRadius.circular(8.r),
                                               ),
                                               hintText: foodName,
+                                              hintStyle:
+                                                  TextStyle(fontSize: 14.sp),
                                               isDense: true,
                                               contentPadding:
                                                   EdgeInsets.all(15.w)),
                                         ),
                                       ],
                                     ),
-                                    space20H,
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         TextApp(
                                           text: " $type",
-                                          fontsize: 12.sp,
+                                          fontsize: 14.sp,
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
@@ -427,7 +428,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                           controller:
                                               listFoodTypeTextController,
                                           style: TextStyle(
-                                              fontSize: 12.sp, color: grey),
+                                              fontSize: 14.sp, color: grey),
                                           cursorColor: grey,
                                           decoration: InputDecoration(
                                               fillColor: const Color.fromARGB(
@@ -445,6 +446,8 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                                     BorderRadius.circular(8.r),
                                               ),
                                               hintText: chooseType,
+                                              hintStyle:
+                                                  TextStyle(fontSize: 14.sp),
                                               suffixIcon: Transform.rotate(
                                                 angle: 90 * math.pi / 180,
                                                 child: Icon(
@@ -467,7 +470,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                       children: [
                                         TextApp(
                                           text: " Giá món ăn",
-                                          fontsize: 12.sp,
+                                          fontsize: 14.sp,
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
@@ -527,6 +530,8 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                                     BorderRadius.circular(8.r),
                                               ),
                                               hintText: 'Giá món ăn',
+                                              hintStyle:
+                                                  TextStyle(fontSize: 14.sp),
                                               isDense: true,
                                               contentPadding:
                                                   EdgeInsets.all(15.w)),
@@ -540,7 +545,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                       children: [
                                         TextApp(
                                           text: " Cửa hàng",
-                                          fontsize: 12.sp,
+                                          fontsize: 14.sp,
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
@@ -676,7 +681,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                           },
                                           controller: listStoreTextController,
                                           style: TextStyle(
-                                              fontSize: 12.sp, color: grey),
+                                              fontSize: 14.sp, color: grey),
                                           cursorColor: grey,
                                           decoration: InputDecoration(
                                               fillColor: const Color.fromARGB(
@@ -694,6 +699,8 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                                     BorderRadius.circular(8.r),
                                               ),
                                               hintText: "Chọn cửa hàng",
+                                              hintStyle:
+                                                  TextStyle(fontSize: 14.sp),
                                               suffixIcon: Transform.rotate(
                                                 angle: 90 * math.pi / 180,
                                                 child: Icon(
@@ -710,7 +717,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                         space20H,
                                         TextApp(
                                           text: "Chế độ hiển thị",
-                                          fontsize: 12.sp,
+                                          fontsize: 14.sp,
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
@@ -767,7 +774,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                       children: [
                                         TextApp(
                                           text: " Mô tả",
-                                          fontsize: 12.sp,
+                                          fontsize: 14.sp,
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
@@ -775,6 +782,8 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                           height: 10.h,
                                         ),
                                         TextFormField(
+                                          style: TextStyle(
+                                              fontSize: 14.sp, color: grey),
                                           maxLength: 255,
                                           onTapOutside: (event) {
                                             FocusManager.instance.primaryFocus
@@ -801,6 +810,8 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                                     BorderRadius.circular(8.r),
                                               ),
                                               hintText: '',
+                                              hintStyle:
+                                                  TextStyle(fontSize: 14.sp),
                                               isDense: true,
                                               contentPadding: EdgeInsets.only(
                                                   bottom:
@@ -824,7 +835,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                           color: blueText,
                                           fontFamily: "OpenSans",
                                           fontWeight: FontWeight.bold,
-                                          fontsize: 12.sp,
+                                          fontsize: 14.sp,
                                         ),
                                         space10H,
                                         OutlinedButton(
@@ -958,7 +969,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                               }
                                             },
                                             text: next,
-                                            fontSize: 12.sp,
+                                            fontSize: 14.sp,
                                             radius: 8.r,
                                             textColor: Colors.white,
                                           ),

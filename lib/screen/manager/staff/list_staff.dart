@@ -299,7 +299,7 @@ class _ListStaffState extends State<ListStaff> {
                     ),
                   )
                 : RefreshIndicator(
-                    color: Colors.blue,
+                    color: Theme.of(context).colorScheme.primary,
                     onRefresh: () async {
                       currentStaffList.clear();
                       handleGetListStaff(page: 1);
@@ -909,7 +909,7 @@ class _ListStaffState extends State<ListStaff> {
                                                                       },
                                                                       backgroundColor:
                                                                           Colors
-                                                                              .blue,
+                                                                              .black,
                                                                       foregroundColor:
                                                                           Colors
                                                                               .white,
@@ -917,6 +917,10 @@ class _ListStaffState extends State<ListStaff> {
                                                                           .edit,
                                                                       label:
                                                                           'Sửa',
+                                                                    ),
+                                                                    SizedBox(
+                                                                      width:
+                                                                          2.w,
                                                                     ),
                                                                     SlidableAction(
                                                                       onPressed:
@@ -938,7 +942,7 @@ class _ListStaffState extends State<ListStaff> {
                                                                       },
                                                                       backgroundColor:
                                                                           Colors
-                                                                              .red,
+                                                                              .black,
                                                                       foregroundColor:
                                                                           Colors
                                                                               .white,

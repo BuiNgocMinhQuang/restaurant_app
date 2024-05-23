@@ -12,6 +12,7 @@ import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
@@ -357,12 +358,12 @@ class _AddStaffState extends State<AddStaff> {
                   borderRadius: BorderRadius.circular(15.r),
                   color: Colors.white,
                   boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3), // changes position of shadow
-                    ),
+                    // BoxShadow(
+                    //   color: Colors.grey.withOpacity(0.5),
+                    //   spreadRadius: 5,
+                    //   blurRadius: 7,
+                    //   offset: const Offset(0, 3), // changes position of shadow
+                    // ),
                   ],
                 ),
                 child: Padding(
@@ -391,7 +392,7 @@ class _AddStaffState extends State<AddStaff> {
                         children: [
                           TextApp(
                             text: " Thuộc cửa hàng",
-                            fontsize: 12.sp,
+                            fontsize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
@@ -482,7 +483,7 @@ class _AddStaffState extends State<AddStaff> {
                               );
                             },
                             controller: storeNameTextController,
-                            style: TextStyle(fontSize: 12.sp, color: grey),
+                            style: TextStyle(fontSize: 14.sp, color: grey),
                             cursorColor: grey,
                             decoration: InputDecoration(
                                 fillColor:
@@ -497,6 +498,7 @@ class _AddStaffState extends State<AddStaff> {
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 hintText: 'Chọn cửa hàng',
+                                hintStyle: TextStyle(fontSize: 14.sp),
                                 suffixIcon: Transform.rotate(
                                   angle: 90 * math.pi / 180,
                                   child: Icon(
@@ -516,7 +518,7 @@ class _AddStaffState extends State<AddStaff> {
                         children: [
                           TextApp(
                             text: " Chức vụ",
-                            fontsize: 12.sp,
+                            fontsize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
@@ -606,7 +608,7 @@ class _AddStaffState extends State<AddStaff> {
                               );
                             },
                             controller: roleNameTextController,
-                            style: TextStyle(fontSize: 12.sp, color: grey),
+                            style: TextStyle(fontSize: 14.sp, color: grey),
                             cursorColor: grey,
                             decoration: InputDecoration(
                                 fillColor:
@@ -621,6 +623,7 @@ class _AddStaffState extends State<AddStaff> {
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 hintText: 'Chọn chức vụ',
+                                hintStyle: TextStyle(fontSize: 14.sp),
                                 suffixIcon: Transform.rotate(
                                   angle: 90 * math.pi / 180,
                                   child: Icon(
@@ -640,7 +643,7 @@ class _AddStaffState extends State<AddStaff> {
                         children: [
                           TextApp(
                             text: " Tên đầy đủ",
-                            fontsize: 12.sp,
+                            fontsize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
@@ -672,6 +675,7 @@ class _AddStaffState extends State<AddStaff> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
+                                hintStyle: TextStyle(fontSize: 14.sp),
                                 hintText: 'Tên đầy đủ',
                                 isDense: true,
                                 contentPadding: EdgeInsets.all(15.w)),
@@ -684,7 +688,7 @@ class _AddStaffState extends State<AddStaff> {
                         children: [
                           TextApp(
                             text: " Họ",
-                            fontsize: 12.sp,
+                            fontsize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
@@ -717,6 +721,7 @@ class _AddStaffState extends State<AddStaff> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: 'Họ',
+                              hintStyle: TextStyle(fontSize: 14.sp),
                               isDense: true,
                               contentPadding: EdgeInsets.all(15.w),
                             ),
@@ -729,7 +734,7 @@ class _AddStaffState extends State<AddStaff> {
                         children: [
                           TextApp(
                             text: " Tên",
-                            fontsize: 12.sp,
+                            fontsize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
@@ -762,6 +767,7 @@ class _AddStaffState extends State<AddStaff> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: 'Tên',
+                              hintStyle: TextStyle(fontSize: 14.sp),
                               isDense: true,
                               contentPadding: EdgeInsets.all(15.w),
                             ),
@@ -774,7 +780,7 @@ class _AddStaffState extends State<AddStaff> {
                         children: [
                           TextApp(
                             text: " Số điện thoại",
-                            fontsize: 12.sp,
+                            fontsize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
@@ -817,6 +823,7 @@ class _AddStaffState extends State<AddStaff> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: 'Số điện thoại',
+                              hintStyle: TextStyle(fontSize: 14.sp),
                               isDense: true,
                               contentPadding: EdgeInsets.all(15.w),
                             ),
@@ -829,7 +836,7 @@ class _AddStaffState extends State<AddStaff> {
                         children: [
                           TextApp(
                             text: " Email",
-                            fontsize: 12.sp,
+                            fontsize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
@@ -868,6 +875,7 @@ class _AddStaffState extends State<AddStaff> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: 'Email',
+                              hintStyle: TextStyle(fontSize: 14.sp),
                               isDense: true,
                               contentPadding: EdgeInsets.all(15.w),
                             ),
@@ -880,7 +888,7 @@ class _AddStaffState extends State<AddStaff> {
                         children: [
                           TextApp(
                             text: " Mật khẩu",
-                            fontsize: 12.sp,
+                            fontsize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
@@ -928,6 +936,7 @@ class _AddStaffState extends State<AddStaff> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: 'Mật khẩu',
+                              hintStyle: TextStyle(fontSize: 14.sp),
                               isDense: true,
                               contentPadding: EdgeInsets.all(15.w),
                             ),
@@ -940,7 +949,7 @@ class _AddStaffState extends State<AddStaff> {
                         children: [
                           TextApp(
                             text: " Nhập lại mật khẩu",
-                            fontsize: 12.sp,
+                            fontsize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
@@ -988,6 +997,7 @@ class _AddStaffState extends State<AddStaff> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: 'Nhập lại mật khẩu',
+                              hintStyle: TextStyle(fontSize: 14.sp),
                               isDense: true,
                               contentPadding: EdgeInsets.all(15.w),
                             ),
@@ -998,20 +1008,19 @@ class _AddStaffState extends State<AddStaff> {
                     ],
                   ),
                 )),
-            space35H,
             Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.r),
                   color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //     color: Colors.grey.withOpacity(0.5),
+                  //     spreadRadius: 5,
+                  //     blurRadius: 7,
+                  //     offset: const Offset(0, 3), // changes position of shadow
+                  //   ),
+                  // ],
                 ),
                 child: Padding(
                   padding: EdgeInsets.all(20.w),
@@ -1031,7 +1040,7 @@ class _AddStaffState extends State<AddStaff> {
                         children: [
                           TextApp(
                             text: " Tỉnh/Thành phố",
-                            fontsize: 12.sp,
+                            fontsize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
@@ -1134,7 +1143,7 @@ class _AddStaffState extends State<AddStaff> {
                               );
                             },
                             controller: cityNameTextController,
-                            style: TextStyle(fontSize: 12.sp, color: grey),
+                            style: TextStyle(fontSize: 14.sp, color: grey),
                             cursorColor: grey,
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -1156,6 +1165,7 @@ class _AddStaffState extends State<AddStaff> {
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 hintText: 'Chọn tỉnh/thành phố',
+                                hintStyle: TextStyle(fontSize: 14.sp),
                                 suffixIcon: Transform.rotate(
                                   angle: 90 * math.pi / 180,
                                   child: Icon(
@@ -1175,7 +1185,7 @@ class _AddStaffState extends State<AddStaff> {
                         children: [
                           TextApp(
                             text: " Quận/Huyện",
-                            fontsize: 12.sp,
+                            fontsize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
@@ -1274,7 +1284,7 @@ class _AddStaffState extends State<AddStaff> {
                               );
                             },
                             controller: districNameTextController,
-                            style: TextStyle(fontSize: 12.sp, color: grey),
+                            style: TextStyle(fontSize: 14.sp, color: grey),
                             cursorColor: grey,
                             decoration: InputDecoration(
                                 fillColor:
@@ -1289,6 +1299,7 @@ class _AddStaffState extends State<AddStaff> {
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 hintText: 'Chọn quận/Huyện',
+                                hintStyle: TextStyle(fontSize: 14.sp),
                                 suffixIcon: Transform.rotate(
                                   angle: 90 * math.pi / 180,
                                   child: Icon(
@@ -1308,7 +1319,7 @@ class _AddStaffState extends State<AddStaff> {
                         children: [
                           TextApp(
                             text: " Phường/Xã",
-                            fontsize: 12.sp,
+                            fontsize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
@@ -1410,7 +1421,7 @@ class _AddStaffState extends State<AddStaff> {
                               );
                             },
                             controller: wardNameTextController,
-                            style: TextStyle(fontSize: 12.sp, color: grey),
+                            style: TextStyle(fontSize: 14.sp, color: grey),
                             cursorColor: grey,
                             decoration: InputDecoration(
                                 fillColor:
@@ -1425,6 +1436,7 @@ class _AddStaffState extends State<AddStaff> {
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 hintText: 'Chọn phường/xã',
+                                hintStyle: TextStyle(fontSize: 14.sp),
                                 suffixIcon: Transform.rotate(
                                   angle: 90 * math.pi / 180,
                                   child: Icon(
@@ -1444,7 +1456,7 @@ class _AddStaffState extends State<AddStaff> {
                         children: [
                           TextApp(
                             text: " Số nhà, đường",
-                            fontsize: 12.sp,
+                            fontsize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
@@ -1469,6 +1481,7 @@ class _AddStaffState extends State<AddStaff> {
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 hintText: 'Số nhà, đường',
+                                hintStyle: TextStyle(fontSize: 14.sp),
                                 isDense: true,
                                 contentPadding: EdgeInsets.all(15.w)),
                           ),
@@ -1478,20 +1491,19 @@ class _AddStaffState extends State<AddStaff> {
                     ],
                   ),
                 )),
-            space35H,
             Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.r),
                   color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //     color: Colors.grey.withOpacity(0.5),
+                  //     spreadRadius: 5,
+                  //     blurRadius: 7,
+                  //     offset: const Offset(0, 3), // changes position of shadow
+                  //   ),
+                  // ],
                 ),
                 child: Padding(
                   padding: EdgeInsets.all(20.w),
@@ -1511,7 +1523,7 @@ class _AddStaffState extends State<AddStaff> {
                         children: [
                           TextApp(
                             text: " Twitter",
-                            fontsize: 12.sp,
+                            fontsize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
@@ -1536,6 +1548,7 @@ class _AddStaffState extends State<AddStaff> {
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 hintText: 'Twitter',
+                                hintStyle: TextStyle(fontSize: 14.sp),
                                 isDense: true,
                                 contentPadding: EdgeInsets.all(15.w)),
                           ),
@@ -1547,7 +1560,7 @@ class _AddStaffState extends State<AddStaff> {
                         children: [
                           TextApp(
                             text: " Facebook",
-                            fontsize: 12.sp,
+                            fontsize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
@@ -1572,6 +1585,7 @@ class _AddStaffState extends State<AddStaff> {
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 hintText: 'Facebook',
+                                hintStyle: TextStyle(fontSize: 14.sp),
                                 isDense: true,
                                 contentPadding: EdgeInsets.all(15.w)),
                           ),
@@ -1583,7 +1597,7 @@ class _AddStaffState extends State<AddStaff> {
                         children: [
                           TextApp(
                             text: " Instagram",
-                            fontsize: 12.sp,
+                            fontsize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
@@ -1608,6 +1622,7 @@ class _AddStaffState extends State<AddStaff> {
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 hintText: 'Instagram',
+                                hintStyle: TextStyle(fontSize: 14.sp),
                                 isDense: true,
                                 contentPadding: EdgeInsets.all(15.w)),
                           ),
@@ -1617,13 +1632,13 @@ class _AddStaffState extends State<AddStaff> {
                     ],
                   ),
                 )),
-            space25H,
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
+                Container(
                   width: 100.w,
+                  margin: EdgeInsets.only(right: 20.w),
                   child: ButtonGradient(
                     color1: color1DarkButton,
                     color2: color2DarkButton,
@@ -1650,13 +1665,14 @@ class _AddStaffState extends State<AddStaff> {
                       }
                     },
                     text: save,
-                    fontSize: 12.sp,
+                    fontSize: 14.sp,
                     radius: 8.r,
                     textColor: Colors.white,
                   ),
                 )
               ],
-            )
+            ),
+            space25H,
           ],
         ),
       ),
@@ -1671,12 +1687,10 @@ class _AddStaffState extends State<AddStaff> {
           children: [
             SafeArea(
               child: SingleChildScrollView(
-                  child: Padding(
-                padding: EdgeInsets.all(20.w),
                 child: Column(
                   children: [sectionController()],
                 ),
-              )),
+              ),
             ),
           ],
         ));

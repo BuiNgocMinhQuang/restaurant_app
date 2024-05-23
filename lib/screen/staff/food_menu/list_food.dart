@@ -167,18 +167,23 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                                       right: 15.w,
                                       top: 8.w,
                                       bottom: 8.w),
-                                  disabledColor: Colors.blue,
-                                  selectedColor: Colors.blue,
+                                  disabledColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  selectedColor:
+                                      Theme.of(context).colorScheme.primary,
                                   backgroundColor: Colors.white,
                                   shadowColor: Colors.black,
-                                  selectedShadowColor: Colors.blue,
+                                  selectedShadowColor:
+                                      Theme.of(context).colorScheme.primary,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.w),
                                     side: BorderSide(
                                       color:
                                           selectedCategories.contains(lableFood)
                                               ? Colors.grey.withOpacity(0.5)
-                                              : Colors.blue,
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
                                       width: 1.0,
                                     ),
                                   ),
@@ -186,7 +191,9 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                                       color:
                                           selectedCategories.contains(lableFood)
                                               ? Colors.white
-                                              : Colors.blue),
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .primary),
                                   showCheckmark: false,
                                   label: Text(lableFood.toUpperCase()),
                                   selected:

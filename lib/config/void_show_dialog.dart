@@ -192,7 +192,7 @@ void showChangePasswordSuccessDialog(context) {
           headerAnimationLoop: true,
           title: 'Thành công',
           desc: 'Đổi mật khẩu thành công',
-          btnCancelColor: Colors.blue,
+          btnCancelColor: Theme.of(context).colorScheme.primary,
           btnCancelOnPress: () {},
           btnCancelText: "OK")
       .show();
@@ -205,7 +205,7 @@ void showWrongOtpDialog(context) {
           animType: AnimType.rightSlide,
           headerAnimationLoop: true,
           title: 'Mã OTP không đúng',
-          btnCancelColor: Colors.blue,
+          btnCancelColor: Theme.of(context).colorScheme.primary,
           btnCancelOnPress: () {},
           btnCancelText: "OK")
       .show();
@@ -219,7 +219,7 @@ void showExpiredOtpDialog(context) {
           headerAnimationLoop: true,
           title: 'OTP hết hạn',
           desc: 'Mã OTP của bạn đã hết hạn, vui lòng bấm Gửi lại mã mới!',
-          btnCancelColor: Colors.blue,
+          btnCancelColor: Theme.of(context).colorScheme.primary,
           btnCancelOnPress: () {},
           btnCancelText: "OK")
       .show();
@@ -235,7 +235,7 @@ void showLoginSessionExpiredDialog(
           headerAnimationLoop: true,
           title: 'Hết thời gian đăng nhập',
           desc: 'Phiên đăng nhập của bạn đã hết. Vui lòng đăng nhập lại!',
-          btnCancelColor: Colors.blue,
+          btnCancelColor: Theme.of(context).colorScheme.primary,
           btnCancelOnPress: () {
             okEvent();
           },

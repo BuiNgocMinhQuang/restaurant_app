@@ -197,7 +197,7 @@ class CustomTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
         padding:
-            EdgeInsets.only(left: 10.w, right: 10.w, top: 10.w, bottom: 10.w),
+            EdgeInsets.only(left: 10.w, right: 10.w, top: 5.w, bottom: 5.w),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

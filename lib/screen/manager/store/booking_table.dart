@@ -151,7 +151,9 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                       .storeRoomName ??
                                                   '',
                                               color: currentRoomIndex == index
-                                                  ? Colors.blue
+                                                  ? Theme.of(context)
+                                                      .colorScheme
+                                                      .primary
                                                   : Colors.black,
                                               fontWeight:
                                                   currentRoomIndex == index
@@ -227,7 +229,7 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                           ? Container(
                               width: 1.sw,
                               height: 50,
-                              color: Colors.blue,
+                              color: Theme.of(context).colorScheme.primary,
                               child: Center(
                                 child: TextApp(
                                   text: "Phòng này không có bàn",
@@ -253,7 +255,9 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                 .tables!
                                                 .isNotEmpty
                                             ? RefreshIndicator(
-                                                color: Colors.blue,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
                                                 onRefresh: () async {
                                                   getDataTabIndex(
                                                     roomId: state
@@ -468,9 +472,17 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                             child:
                                                                                 Row(
                                                                               children: [
-                                                                                Icon(
-                                                                                  Icons.receipt,
-                                                                                  size: 35.sp,
+                                                                                // Icon(
+                                                                                //   Icons.receipt,
+                                                                                //   size: 35.sp,
+                                                                                // ),
+                                                                                SizedBox(
+                                                                                  width: 35.w,
+                                                                                  height: 35.w,
+                                                                                  child: Image.asset(
+                                                                                    "assets/images/receipt.png",
+                                                                                    fit: BoxFit.contain,
+                                                                                  ),
                                                                                 ),
                                                                                 space10W,
                                                                                 TextApp(
@@ -517,9 +529,17 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                             child:
                                                                                 Row(
                                                                               children: [
-                                                                                Icon(
-                                                                                  Icons.table_bar,
-                                                                                  size: 35.sp,
+                                                                                // Icon(
+                                                                                //   Icons.table_bar,
+                                                                                //   size: 35.sp,
+                                                                                // ),
+                                                                                SizedBox(
+                                                                                  width: 35.w,
+                                                                                  height: 35.w,
+                                                                                  child: Image.asset(
+                                                                                    "assets/images/table.png",
+                                                                                    fit: BoxFit.contain,
+                                                                                  ),
                                                                                 ),
                                                                                 space10W,
                                                                                 TextApp(
@@ -561,13 +581,21 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                             child:
                                                                                 Row(
                                                                               children: [
-                                                                                Icon(
-                                                                                  Icons.print,
-                                                                                  size: 35.sp,
+                                                                                // Icon(
+                                                                                //   Icons.print,
+                                                                                //   size: 35.sp,
+                                                                                // ),
+                                                                                SizedBox(
+                                                                                  width: 35.w,
+                                                                                  height: 35.w,
+                                                                                  child: Image.asset(
+                                                                                    "assets/images/printing_receipt.png",
+                                                                                    fit: BoxFit.contain,
+                                                                                  ),
                                                                                 ),
                                                                                 space10W,
                                                                                 TextApp(
-                                                                                  text: "In hoá đơn",
+                                                                                  text: "Xem hoá đơn",
                                                                                   color: Colors.black,
                                                                                   fontsize: 18.sp,
                                                                                 )
@@ -608,9 +636,13 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                             child:
                                                                                 Row(
                                                                               children: [
-                                                                                Icon(
-                                                                                  Icons.cancel,
-                                                                                  size: 35.sp,
+                                                                                SizedBox(
+                                                                                  width: 35.w,
+                                                                                  height: 35.w,
+                                                                                  child: Image.asset(
+                                                                                    "assets/images/cancle_icon.png",
+                                                                                    fit: BoxFit.contain,
+                                                                                  ),
                                                                                 ),
                                                                                 space10W,
                                                                                 TextApp(
@@ -675,7 +707,9 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                     }),
                                               )
                                             : RefreshIndicator(
-                                                color: Colors.blue,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
                                                 onRefresh: () async {
                                                   getDataTabIndex(
                                                     roomId: state
@@ -698,7 +732,10 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                         child: Container(
                                                           width: 1.sw,
                                                           height: 50,
-                                                          color: Colors.blue,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .primary,
                                                           child: Center(
                                                             child: TextApp(
                                                               text:

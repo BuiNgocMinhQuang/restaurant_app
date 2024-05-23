@@ -2712,7 +2712,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                     "Sau khi bạn xác nhận sẽ thay đổi trạng thái",
                                                 title:
                                                     "Bạn phải đồng ý để thực hiện tác vụ này",
-                                                colorButton: Colors.blue,
+                                                colorButton: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
                                                 btnText: "OK",
                                                 typeDialog: "info");
                                       },

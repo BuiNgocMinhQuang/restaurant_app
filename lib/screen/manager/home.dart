@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/model/manager/chart/chart_data_home_model.dart';
@@ -14,8 +15,10 @@ import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
@@ -50,6 +53,10 @@ class _ManagerHomeState extends State<ManagerHome> {
     "Tháng",
     "Năm",
   ];
+  void hanldeLogOut() async {
+    BlocProvider.of<ManagerLoginBloc>(context).add(const ManagerLogout());
+  }
+
   void handleGetDataHome() async {
     mounted
         ? setState(() {
@@ -90,6 +97,21 @@ class _ManagerHomeState extends State<ManagerHome> {
                   })
                 : null;
           });
+        } else if (data['status'] == 401) {
+          Future.delayed(const Duration(milliseconds: 1000), () {
+            mounted
+                ? setState(() {
+                    isLoading = false;
+                  })
+                : null;
+          });
+          mounted
+              ? setState(() {
+                  isError = true;
+                })
+              : null;
+          // hanldeLogOut();
+          navigatorKey.currentContext?.go('/');
         } else {
           Future.delayed(const Duration(milliseconds: 1000), () {
             mounted
@@ -286,8 +308,8 @@ class _ManagerHomeState extends State<ManagerHome> {
 
   @override
   void initState() {
-    super.initState();
     handleGetDataHome();
+    super.initState();
   }
 
   @override
@@ -339,7 +361,7 @@ class _ManagerHomeState extends State<ManagerHome> {
                     ),
                   )
                 : RefreshIndicator(
-                    color: Colors.blue,
+                    color: Theme.of(context).colorScheme.primary,
                     onRefresh: () async {
                       handleGetDataHome();
                     },
@@ -490,7 +512,7 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                   width: 50,
                                                   height: 50,
                                                   child: Image.asset(
-                                                    'assets/images/staff.png',
+                                                    'assets/images/staff_gr.png',
                                                     fit: BoxFit.contain,
                                                   ),
                                                 )
@@ -713,10 +735,11 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                                         .shopId);
                                                               },
                                                               backgroundColor:
-                                                                  Colors.blue,
+                                                                  Colors.black,
                                                               foregroundColor:
                                                                   Colors.white,
-                                                              icon: Icons.more,
+                                                              icon: Icons
+                                                                  .more_horiz_outlined,
                                                               label: 'Chi tiết',
                                                             ),
                                                           ],

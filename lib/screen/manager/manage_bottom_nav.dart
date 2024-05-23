@@ -14,13 +14,11 @@ import 'package:app_restaurant/screen/manager/staff/add_staff.dart';
 import 'package:app_restaurant/screen/manager/store/booking_table.dart';
 import 'package:app_restaurant/screen/manager/store/brought_receipt.dart';
 import 'package:app_restaurant/screen/manager/home.dart';
-import 'package:app_restaurant/screen/manager/inventory/import_inventory.dart';
 import 'package:app_restaurant/screen/manager/store/list_bill.dart';
 import 'package:app_restaurant/screen/manager/food_menu/list_food.dart';
 import 'package:app_restaurant/screen/manager/staff/list_staff.dart';
 import 'package:app_restaurant/screen/manager/store/list_stores.dart';
 import 'package:app_restaurant/screen/manager/user_infor/manage_infor.dart';
-import 'package:app_restaurant/screen/manager/inventory/list_inventory.dart';
 import 'package:app_restaurant/screen/manager/user_infor/notifications.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
@@ -257,12 +255,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                       )
                                     : currentIndex == 8
                                         ? ManagerListBill(shopID: shopIDPar)
-                                        : currentIndex == 9
-                                            ? ManagerBroughtReceipt(
-                                                shopID: shopIDPar)
-                                            : currentIndex == 10
-                                                ? const ListInventory()
-                                                : const ImportInventory();
+                                        : ManagerBroughtReceipt(
+                                            shopID: shopIDPar);
 
     return Scaffold(
       onDrawerChanged: (isOpened) {
@@ -390,9 +384,15 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                     text: "Trang chủ",
                     iconColor: currentIndex == 2 ? Colors.white : menuGrey,
                     backgroundIconColor: currentIndex == 2
-                        ? Colors.blue
+                        ? Theme.of(context).colorScheme.primary
                         : const Color.fromRGBO(233, 236, 239, 1),
                     icon: Icons.home,
+                    isShowIcon: false,
+                    image: Container(
+                      padding: EdgeInsets.all(5.w),
+                      child: Image.asset("assets/images/report.png",
+                          fit: BoxFit.cover),
+                    ),
                     subItem: const [],
                   ),
                 ),
@@ -415,47 +415,53 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                 InkWell(
                   onTap: () {},
                   child: ItemDrawer(
-                      isExpand: true,
-                      text: 'Cửa hàng',
-                      fontWeight: currentIndex == 0
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                      iconColor: currentIndex == 0 ? Colors.white : menuGrey,
-                      backgroundIconColor: currentIndex == 0
-                          ? Colors.blue
-                          : const Color.fromRGBO(233, 236, 239, 1),
-                      textColor: currentIndex == 0 ? Colors.black : menuGrey,
-                      subItem: [
-                        space15H,
-                        SubItemDrawer(
-                            fontWeight: currentIndex == 0
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                            iconColor:
-                                currentIndex == 0 ? Colors.black : menuGrey,
-                            text: "Danh sách cửa hàng",
-                            textColor:
-                                currentIndex == 0 ? Colors.black : menuGrey,
-                            event: () {
-                              mounted
-                                  ? setState(() {
-                                      // currentScreen = const ListStores();
-                                      currentIndex = 0;
-                                      // getInfor();
-                                      selectedStoreIndex = null;
+                    isExpand: true,
+                    text: 'Cửa hàng',
+                    fontWeight:
+                        currentIndex == 0 ? FontWeight.bold : FontWeight.normal,
+                    iconColor: currentIndex == 0 ? Colors.white : menuGrey,
+                    backgroundIconColor: currentIndex == 0
+                        ? Theme.of(context).colorScheme.primary
+                        : const Color.fromRGBO(233, 236, 239, 1),
+                    textColor: currentIndex == 0 ? Colors.black : menuGrey,
+                    subItem: [
+                      space15H,
+                      SubItemDrawer(
+                          fontWeight: currentIndex == 0
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                          iconColor:
+                              currentIndex == 0 ? Colors.black : menuGrey,
+                          text: "Danh sách cửa hàng",
+                          textColor:
+                              currentIndex == 0 ? Colors.black : menuGrey,
+                          event: () {
+                            mounted
+                                ? setState(() {
+                                    // currentScreen = const ListStores();
+                                    currentIndex = 0;
+                                    // getInfor();
+                                    selectedStoreIndex = null;
 
-                                      handleGetBannerList();
+                                    handleGetBannerList();
 
-                                      tapDrawerChangeBotNav(0);
-                                    })
-                                  : null;
-                              checkTokenExpires();
+                                    tapDrawerChangeBotNav(0);
+                                  })
+                                : null;
+                            checkTokenExpires();
 
-                              Navigator.pop(context);
-                            }),
-                        space15H,
-                      ],
-                      icon: Icons.store),
+                            Navigator.pop(context);
+                          }),
+                      space15H,
+                    ],
+                    icon: Icons.store,
+                    isShowIcon: false,
+                    image: Container(
+                      padding: EdgeInsets.all(5.w),
+                      child: Image.asset("assets/images/store_icon.png",
+                          fit: BoxFit.cover),
+                    ),
+                  ),
                 ),
                 // SizedBox(
                 //   height: 25.h,
@@ -463,70 +469,76 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                 InkWell(
                   onTap: () {},
                   child: ItemDrawer(
-                      isExpand: true,
-                      fontWeight: currentIndex == 1 || currentIndex == 5
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                      text: 'Nhân viên',
-                      textColor: currentIndex == 1 || currentIndex == 5
-                          ? Colors.black
-                          : menuGrey,
-                      iconColor: currentIndex == 1 || currentIndex == 5
-                          ? Colors.white
-                          : menuGrey,
-                      backgroundIconColor:
-                          currentIndex == 1 || currentIndex == 5
-                              ? Colors.blue
-                              : const Color.fromRGBO(233, 236, 239, 1),
-                      subItem: [
-                        space15H,
-                        SubItemDrawer(
-                            text: "Danh sách nhân viên",
-                            fontWeight: currentIndex == 1
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                            textColor:
-                                currentIndex == 1 ? Colors.black : menuGrey,
-                            iconColor:
-                                currentIndex == 5 ? Colors.black : menuGrey,
-                            event: () {
-                              mounted
-                                  ? setState(() {
-                                      // currentScreen = const ListStaff();
+                    isExpand: true,
+                    fontWeight: currentIndex == 1 || currentIndex == 5
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                    text: 'Nhân viên',
+                    textColor: currentIndex == 1 || currentIndex == 5
+                        ? Colors.black
+                        : menuGrey,
+                    iconColor: currentIndex == 1 || currentIndex == 5
+                        ? Colors.white
+                        : menuGrey,
+                    backgroundIconColor: currentIndex == 1 || currentIndex == 5
+                        ? Theme.of(context).colorScheme.primary
+                        : const Color.fromRGBO(233, 236, 239, 1),
+                    subItem: [
+                      space15H,
+                      SubItemDrawer(
+                          text: "Danh sách nhân viên",
+                          fontWeight: currentIndex == 1
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                          textColor:
+                              currentIndex == 1 ? Colors.black : menuGrey,
+                          iconColor:
+                              currentIndex == 5 ? Colors.black : menuGrey,
+                          event: () {
+                            mounted
+                                ? setState(() {
+                                    // currentScreen = const ListStaff();
 
-                                      currentIndex = 1;
-                                      tapDrawerChangeBotNav(1);
-                                      selectedStoreIndex = null;
-                                    })
-                                  : null;
-                              checkTokenExpires();
+                                    currentIndex = 1;
+                                    tapDrawerChangeBotNav(1);
+                                    selectedStoreIndex = null;
+                                  })
+                                : null;
+                            checkTokenExpires();
 
-                              Navigator.pop(context);
-                            }),
-                        space20H,
-                        SubItemDrawer(
-                            text: "Thêm nhân viên",
-                            fontWeight: currentIndex == 5
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                            iconColor:
-                                currentIndex == 5 ? Colors.black : menuGrey,
-                            textColor:
-                                currentIndex == 5 ? Colors.black : menuGrey,
-                            event: () {
-                              mounted
-                                  ? setState(() {
-                                      currentIndex = 5;
-                                      selectedStoreIndex = null;
-                                    })
-                                  : null;
-                              checkTokenExpires();
+                            Navigator.pop(context);
+                          }),
+                      space20H,
+                      SubItemDrawer(
+                          text: "Thêm nhân viên",
+                          fontWeight: currentIndex == 5
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                          iconColor:
+                              currentIndex == 5 ? Colors.black : menuGrey,
+                          textColor:
+                              currentIndex == 5 ? Colors.black : menuGrey,
+                          event: () {
+                            mounted
+                                ? setState(() {
+                                    currentIndex = 5;
+                                    selectedStoreIndex = null;
+                                  })
+                                : null;
+                            checkTokenExpires();
 
-                              Navigator.pop(context);
-                            }),
-                        space15H,
-                      ],
-                      icon: Icons.group),
+                            Navigator.pop(context);
+                          }),
+                      space15H,
+                    ],
+                    icon: Icons.group,
+                    isShowIcon: false,
+                    image: Container(
+                      padding: EdgeInsets.all(5.w),
+                      child: Image.asset("assets/images/staff_gr.png",
+                          fit: BoxFit.cover),
+                    ),
+                  ),
                 ),
                 // SizedBox(
                 //   height: 25.h,
@@ -534,63 +546,69 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                 InkWell(
                   onTap: () {},
                   child: ItemDrawer(
-                      isExpand: true,
-                      fontWeight: currentIndex == 3 || currentIndex == 6
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                      text: 'Thực đơn',
-                      textColor: currentIndex == 3 || currentIndex == 6
-                          ? Colors.black
-                          : menuGrey,
-                      subItem: [
-                        space15H,
-                        SubItemDrawer(
-                            text: "Danh sách món ăn",
-                            iconColor:
-                                currentIndex == 3 ? Colors.black : menuGrey,
-                            textColor:
-                                currentIndex == 3 ? Colors.black : menuGrey,
-                            event: () {
-                              mounted
-                                  ? setState(() {
-                                      checkTokenExpires();
+                    isExpand: true,
+                    fontWeight: currentIndex == 3 || currentIndex == 6
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                    text: 'Thực đơn',
+                    textColor: currentIndex == 3 || currentIndex == 6
+                        ? Colors.black
+                        : menuGrey,
+                    subItem: [
+                      space15H,
+                      SubItemDrawer(
+                          text: "Danh sách món ăn",
+                          iconColor:
+                              currentIndex == 3 ? Colors.black : menuGrey,
+                          textColor:
+                              currentIndex == 3 ? Colors.black : menuGrey,
+                          event: () {
+                            mounted
+                                ? setState(() {
+                                    checkTokenExpires();
 
-                                      currentIndex = 3;
-                                      tapDrawerChangeBotNav(3);
-                                      selectedStoreIndex = null;
-                                    })
-                                  : null;
+                                    currentIndex = 3;
+                                    tapDrawerChangeBotNav(3);
+                                    selectedStoreIndex = null;
+                                  })
+                                : null;
 
-                              Navigator.pop(context);
-                            }),
-                        space20H,
-                        SubItemDrawer(
-                            text: "Thêm món ăn",
-                            iconColor:
-                                currentIndex == 6 ? Colors.black : menuGrey,
-                            textColor:
-                                currentIndex == 6 ? Colors.black : menuGrey,
-                            event: () {
-                              mounted
-                                  ? setState(() {
-                                      currentIndex = 6;
-                                      selectedStoreIndex = null;
-                                    })
-                                  : null;
-                              checkTokenExpires();
+                            Navigator.pop(context);
+                          }),
+                      space20H,
+                      SubItemDrawer(
+                          text: "Thêm món ăn",
+                          iconColor:
+                              currentIndex == 6 ? Colors.black : menuGrey,
+                          textColor:
+                              currentIndex == 6 ? Colors.black : menuGrey,
+                          event: () {
+                            mounted
+                                ? setState(() {
+                                    currentIndex = 6;
+                                    selectedStoreIndex = null;
+                                  })
+                                : null;
+                            checkTokenExpires();
 
-                              Navigator.pop(context);
-                            }),
-                        space15H,
-                      ],
-                      iconColor: currentIndex == 3 || currentIndex == 6
-                          ? Colors.white
-                          : menuGrey,
-                      backgroundIconColor:
-                          currentIndex == 3 || currentIndex == 6
-                              ? Colors.blue
-                              : const Color.fromRGBO(233, 236, 239, 1),
-                      icon: Icons.restaurant),
+                            Navigator.pop(context);
+                          }),
+                      space15H,
+                    ],
+                    iconColor: currentIndex == 3 || currentIndex == 6
+                        ? Colors.white
+                        : menuGrey,
+                    backgroundIconColor: currentIndex == 3 || currentIndex == 6
+                        ? Theme.of(context).colorScheme.primary
+                        : const Color.fromRGBO(233, 236, 239, 1),
+                    icon: Icons.restaurant,
+                    isShowIcon: false,
+                    image: Container(
+                      padding: EdgeInsets.all(5.w),
+                      child: Image.asset("assets/images/menu_food.png",
+                          fit: BoxFit.cover),
+                    ),
+                  ),
                 ),
                 // SizedBox(
                 //   height: 25.h,
@@ -650,7 +668,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                               ? Colors.white
                               : menuGrey,
                           backgroundIconColor: index == selectedStoreIndex
-                              ? Colors.blue
+                              ? Theme.of(context).colorScheme.primary
                               : const Color.fromRGBO(233, 236, 239, 1),
                           subItem: [
                             space15H,
@@ -750,59 +768,6 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                 SizedBox(
                   height: 15.h,
                 ),
-                //ko xoa
-                // TextApp(
-                //   text: 'Kho hàng',
-                //   color: grey,
-                //   fontsize: 20,
-                //   fontWeight: FontWeight.bold,
-                // ),
-                // SizedBox(
-                //   height: 25.h,
-                // ),
-                // InkWell(
-                //   onTap: () {},
-                //   child: ItemDrawer(
-                //       isExpand: true,
-                //       text: 'Cửa hàng 1',
-                //       iconColor: currentIndex == 10 || currentIndex == 11
-                //           ? Colors.white
-                //           : Colors.black,
-                //       backgroundIconColor:
-                //           currentIndex == 10 || currentIndex == 11
-                //               ? Colors.blue
-                //               : const Color.fromRGBO(233, 236, 239, 1),
-                //       subItem: [
-                //         SubItemDrawer(
-                //             text: "Danh sách tồn kho",
-                //             textColor:
-                //                 currentIndex == 10 ? Colors.blue : Colors.grey,
-                //             event: () {
-                //               setState(() {
-                //                 currentIndex = 10;
-                //               });
-                //               checkTokenExpires();
-
-                //               Navigator.pop(context);
-                //             }),
-                //         SizedBox(
-                //           height: 10.h,
-                //         ),
-                //         SubItemDrawer(
-                //             text: "Nhập kho",
-                //             textColor:
-                //                 currentIndex == 11 ? Colors.blue : Colors.grey,
-                //             event: () {
-                //               setState(() {
-                //                 currentIndex = 11;
-                //               });
-                //               checkTokenExpires();
-
-                //               Navigator.pop(context);
-                //             })
-                //       ],
-                //       icon: Icons.person),
-                // )
               ],
             ),
             Padding(
@@ -878,26 +843,67 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
         index: 2,
         key: bottomNavigationKey,
         // height: 150.h,
-        color: Colors.blue,
+        color: Colors.black.withOpacity(0.8),
         backgroundColor: Colors.transparent,
+        buttonBackgroundColor: Colors.black,
         items: <Widget>[
-          Icon(
-            Icons.store,
-            size: 30.h,
-            color: currentIndex == 0 ? Colors.white : Colors.black,
+          // Icon(
+          //   Icons.store,
+          //   size: 30.h,
+          //   color: currentIndex == 0 ? Colors.white : Colors.black,
+          // ),
+          //  Icon(Icons.group,
+          //     size: 30.h,
+          //     color: currentIndex == 1 ? Colors.white : Colors.black),
+          // Icon(Icons.home,
+          //     size: 30.h,
+          //     color: currentIndex == 2 ? Colors.white : Colors.black),
+          // Icon(Icons.restaurant,
+          //     size: 30.h,
+          //     color: currentIndex == 3 ? Colors.white : Colors.black),
+          // Icon(Icons.person,
+          //     size: 30.h,
+          //     color: currentIndex == 4 ? Colors.white : Colors.black),
+          SizedBox(
+            width: 32.w,
+            height: 32.w,
+            child: Image.asset(
+              "assets/images/store_icon.png",
+              fit: BoxFit.cover,
+            ),
           ),
-          Icon(Icons.group,
-              size: 30.h,
-              color: currentIndex == 1 ? Colors.white : Colors.black),
-          Icon(Icons.home,
-              size: 30.h,
-              color: currentIndex == 2 ? Colors.white : Colors.black),
-          Icon(Icons.restaurant,
-              size: 30.h,
-              color: currentIndex == 3 ? Colors.white : Colors.black),
-          Icon(Icons.person,
-              size: 30.h,
-              color: currentIndex == 4 ? Colors.white : Colors.black),
+          SizedBox(
+            width: 32.w,
+            height: 32.w,
+            child: Image.asset(
+              "assets/images/staff_gr.png",
+              fit: BoxFit.cover,
+            ),
+          ),
+          SizedBox(
+            width: 32.w,
+            height: 32.w,
+            child: Image.asset(
+              "assets/images/report.png",
+              fit: BoxFit.cover,
+            ),
+          ),
+          SizedBox(
+            width: 32.w,
+            height: 32.w,
+            child: Image.asset(
+              "assets/images/menu_food.png",
+              fit: BoxFit.cover,
+            ),
+          ),
+          SizedBox(
+            width: 32.w,
+            height: 32.w,
+            child: Image.asset(
+              "assets/images/infor_user.png",
+              fit: BoxFit.cover,
+            ),
+          ),
         ],
         onTap: (index) {
           if (index == 0) {

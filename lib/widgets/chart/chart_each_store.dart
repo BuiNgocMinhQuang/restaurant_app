@@ -117,7 +117,7 @@ class BarChartSample4State extends State<BarChartSample4> {
                 ? Container(
                     width: 1.sw,
                     height: 50,
-                    color: Colors.blue,
+                    color: Theme.of(context).colorScheme.primary,
                     child: Center(
                       child: TextApp(
                         text: "Chưa có doanh thu, không thể thống kê",
@@ -240,7 +240,9 @@ class BarChartSample4State extends State<BarChartSample4> {
                       .toDouble(),
                   borderRadius: BorderRadius.zero,
                   width: barsWidth,
-                  color: j == 0 ? Colors.blue : Colors.green),
+                  color: j == 0
+                      ? Theme.of(context).colorScheme.primary
+                      : Colors.green),
           ],
         ),
     ];

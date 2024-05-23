@@ -1,18 +1,24 @@
 import 'package:app_restaurant/bloc/bloc_provider.dart';
-import 'package:app_restaurant/bloc/network/network_cubit.dart';
+import 'package:app_restaurant/providers/theme_provider.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await StorageUtils.instance.init();
-  runApp(BlocProvider<InternetCubit>(
-    create: (context) => InternetCubit(),
-    child: const MyApp(),
-  ));
+  // runApp(BlocProvider<InternetCubit>(
+  //   create: (context) => InternetCubit(),
+  //   child: const MyApp(),
+  // ));
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -24,18 +30,18 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final ValueNotifier<ThemeMode> _notifier = ValueNotifier(ThemeMode.light);
-  late InternetCubit internetCubit;
+  // late InternetCubit internetCubit;
   @override
   void initState() {
-    internetCubit = context.read<InternetCubit>();
-    internetCubit.checkConectivity();
-    internetCubit.trackConnectivityChange();
+    // internetCubit = context.read<InternetCubit>();
+    // internetCubit.checkConectivity();
+    // internetCubit.trackConnectivityChange();
     super.initState();
   }
 
   @override
   void dispose() {
-    internetCubit.disposeInternet();
+    // internetCubit.disposeInternet();
     super.dispose();
   }
 
@@ -52,10 +58,7 @@ class _MyAppState extends State<MyApp> {
           valueListenable: _notifier,
           builder: (_, mode, __) {
             return MaterialApp.router(
-                theme: ThemeData.light(),
-                darkTheme: ThemeData.dark(),
-                themeMode: ThemeMode
-                    .light, // Decides which theme to show, light or dark.
+                theme: Provider.of<ThemeProvider>(context).themeDataStyle,
                 debugShowCheckedModeBanner: false,
                 routerConfig: NyAppRouter().router);
           },

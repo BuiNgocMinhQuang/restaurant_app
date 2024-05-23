@@ -120,7 +120,7 @@ class _ListStoresState extends State<ListStores> {
                   padding: EdgeInsets.only(left: 15.w, right: 15.w),
                   child: state.listStoresStatus == ListStoresStatus.succes
                       ? RefreshIndicator(
-                          color: Colors.blue,
+                          color: Theme.of(context).colorScheme.primary,
                           onRefresh: () async {
                             getListStore();
                           },
@@ -261,23 +261,21 @@ class _ListStoresState extends State<ListStores> {
                                   ),
 
                                   //List Stores
-                                  space25H,
+                                  space15H,
                                   Container(
                                       width: 1.sw,
-                                      margin: EdgeInsets.only(
-                                          left: 10.w, right: 10.w),
                                       decoration: BoxDecoration(
                                           color: Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                                  Colors.grey.withOpacity(0.5),
-                                              spreadRadius: 2,
-                                              blurRadius: 4,
-                                              offset: const Offset(0,
-                                                  3), // changes position of shadow
-                                            ),
-                                          ],
+                                          // boxShadow: [
+                                          //   BoxShadow(
+                                          //     color:
+                                          //         Colors.grey.withOpacity(0.5),
+                                          //     spreadRadius: 2,
+                                          //     blurRadius: 4,
+                                          //     offset: const Offset(0,
+                                          //         3), // changes position of shadow
+                                          //   ),
+                                          // ],
                                           borderRadius:
                                               BorderRadius.circular(15.r)),
                                       child: Padding(
@@ -426,42 +424,52 @@ class _ListStoresState extends State<ListStores> {
                                                             ),
                                                             space25W,
                                                             SizedBox(
-                                                                // width: 120.w,
-                                                                height: 50.h,
-                                                                // color: Colors.amber,
-                                                                child: ListView
-                                                                    .builder(
-                                                                        scrollDirection:
-                                                                            Axis
-                                                                                .horizontal,
-                                                                        itemCount: state
-                                                                            .listStoreModel
-                                                                            ?.data[
-                                                                                index]
-                                                                            .staffs
-                                                                            .length,
-                                                                        shrinkWrap:
-                                                                            true,
-                                                                        itemBuilder:
-                                                                            (context,
-                                                                                indexStaff) {
-                                                                          var staffInfor = state
-                                                                              .listStoreModel
-                                                                              ?.data[index]
-                                                                              .staffs;
+                                                              // width: 120.w,
+                                                              height: 50.h,
+                                                              // color: Colors.amber,
+                                                              child: ListView
+                                                                  .builder(
+                                                                scrollDirection:
+                                                                    Axis.horizontal,
+                                                                itemCount: state
+                                                                    .listStoreModel
+                                                                    ?.data[
+                                                                        index]
+                                                                    .staffs
+                                                                    .length,
+                                                                shrinkWrap:
+                                                                    true,
+                                                                itemBuilder:
+                                                                    (context,
+                                                                        indexStaff) {
+                                                                  var staffInfor = state
+                                                                      .listStoreModel
+                                                                      ?.data[
+                                                                          index]
+                                                                      .staffs;
 
-                                                                          return CircleAvatar(
-                                                                            radius:
-                                                                                15.0,
-                                                                            backgroundImage:
-                                                                                NetworkImage("${httpImage + (staffInfor?[indexStaff].staffAvatar ?? '')}"),
-                                                                            backgroundColor:
-                                                                                Colors.red,
-                                                                          );
-                                                                        }))
+                                                                  return CircleAvatar(
+                                                                    radius:
+                                                                        15.0,
+                                                                    backgroundImage:
+                                                                        NetworkImage(
+                                                                            "${httpImage + (staffInfor?[indexStaff].staffAvatar ?? '')}"),
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .red,
+                                                                  );
+                                                                },
+                                                              ),
+                                                            ),
                                                           ],
                                                         ),
-                                                        space30H,
+                                                        space10H,
+                                                        Divider(
+                                                          height: 1,
+                                                          color: Colors.black
+                                                              .withOpacity(0.5),
+                                                        ),
+                                                        space10H,
                                                       ],
                                                     ),
                                                   );

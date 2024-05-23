@@ -70,7 +70,7 @@ class ChartHomeAllStoreState extends State<ChartHomeAllStore> {
                 ? Container(
                     width: 1.sw,
                     height: 50,
-                    color: Colors.blue,
+                    color: Theme.of(context).colorScheme.primary,
                     child: Center(
                       child: TextApp(
                         text: "Chưa có doanh thu, không thể thống kê",
@@ -183,7 +183,9 @@ class ChartHomeAllStoreState extends State<ChartHomeAllStore> {
                       .toDouble(),
                   borderRadius: BorderRadius.zero,
                   width: barsWidth,
-                  color: j == 0 ? Colors.blue : Colors.green),
+                  color: j == 0
+                      ? Theme.of(context).colorScheme.primary
+                      : Colors.green),
           ],
         ),
     ];

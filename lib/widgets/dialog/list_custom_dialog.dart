@@ -686,8 +686,10 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                 borderRadius: BorderRadius.circular(
                                   8.r,
                                 ),
-                                color: Colors.blue,
-                                border: Border.all(color: Colors.blue),
+                                color: Theme.of(context).colorScheme.primary,
+                                border: Border.all(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                               ),
                               tabs: [
                                 CustomTab(
@@ -1167,14 +1169,20 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                               top: 8.w,
                                                               bottom: 8.w),
                                                       disabledColor:
-                                                          Colors.blue,
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .primary,
                                                       selectedColor:
-                                                          Colors.blue,
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .primary,
                                                       backgroundColor:
                                                           Colors.white,
                                                       shadowColor: Colors.black,
                                                       selectedShadowColor:
-                                                          Colors.blue,
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .primary,
                                                       shape:
                                                           RoundedRectangleBorder(
                                                         borderRadius:
@@ -1187,7 +1195,10 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                               ? Colors.grey
                                                                   .withOpacity(
                                                                       0.5)
-                                                              : Colors.blue,
+                                                              : Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .primary,
                                                           width: 1.0,
                                                         ),
                                                       ),
@@ -1196,7 +1207,10 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                   .contains(
                                                                       lableFood)
                                                               ? Colors.white
-                                                              : Colors.blue),
+                                                              : Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .primary),
                                                       showCheckmark: false,
                                                       label: Text(lableFood
                                                           .toUpperCase()),
@@ -1336,15 +1350,19 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                   TextApp(
                                                     text:
                                                         currentCart.toString(),
-                                                    color: Colors.blue,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
                                                     fontsize: 14.sp,
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                   space5W,
-                                                  const Icon(
+                                                  Icon(
                                                     Icons
                                                         .shopping_basket_rounded,
-                                                    color: Colors.blue,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
                                                   )
                                                 ],
                                               ))
@@ -2236,9 +2254,13 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
                                                     ?.currentTables?[index]
                                                     .tableName ??
                                                 '',
-                                            colorText: Colors.blue,
+                                            colorText: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                             backgroundColor: Colors.white,
-                                            outlineColor: Colors.blue,
+                                            outlineColor: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                             radius: 8.r,
                                           ),
                                         );
@@ -2354,7 +2376,9 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
                                           Container(
                                             width: 20,
                                             height: 20,
-                                            color: Colors.blue,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                           ),
                                           SizedBox(
                                             width: 5.w,
@@ -2407,11 +2431,17 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
                                                 '',
                                             colorText: isSelected
                                                 ? Colors.white
-                                                : Colors.blue,
+                                                : Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
                                             backgroundColor: isSelected
-                                                ? Colors.blue
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .primary
                                                 : Colors.white,
-                                            outlineColor: Colors.blue,
+                                            outlineColor: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
                                             radius: 8.r,
                                           ),
                                         );
@@ -2575,18 +2605,26 @@ class SeeBillDialog extends StatefulWidget {
 class _SeeBillDialogState extends State<SeeBillDialog> {
   final List<TextEditingController> _foodQuantityController = [];
   BillInforModel? listFoodBillCurrent;
-  void refeshHomePage() async {
-    BlocProvider.of<ListRoomBloc>(context).add(
-      GetListRoom(
-          token: widget.token,
-          client: widget.role,
-          shopId: widget.shopID,
-          isApi: true,
-          roomId: widget.roomID.toString()),
-    );
-  }
+  bool isLoading = true;
+  bool isError = false;
+  // void refeshHomePage() async {
+  //   BlocProvider.of<ListRoomBloc>(context).add(
+  //     GetListRoom(
+  //         token: widget.token,
+  //         client: widget.role,
+  //         shopId: widget.shopID,
+  //         isApi: true,
+  //         roomId: widget.roomID.toString()),
+  //   );
+  // }
 
   void getBillData() async {
+    mounted
+        ? setState(() {
+            isLoading = true;
+            isError = false;
+          })
+        : null;
     try {
       var token = widget.token;
       final respons = await http.post(
@@ -2606,28 +2644,64 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
         }),
       );
       final data = jsonDecode(respons.body);
-      // log("BILL INFOR $data");
-      final message = data['message'];
 
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var billTableDataRes = BillInforModel.fromJson(data);
-            listFoodBillCurrent = billTableDataRes;
+          mounted
+              ? setState(() {
+                  var billTableDataRes = BillInforModel.fromJson(data);
+                  listFoodBillCurrent = billTableDataRes;
+                })
+              : null;
+          Future.delayed(const Duration(milliseconds: 1000), () {
+            mounted
+                ? setState(() {
+                    isLoading = false;
+                  })
+                : null;
           });
         } else {
           log("ERROR BILL INFOR 1");
-          showSnackBarTopCustom(
-              title: "Thất bại",
-              context: navigatorKey.currentContext,
-              mess: message['text'],
-              color: Colors.red);
+          Future.delayed(const Duration(milliseconds: 1000), () {
+            mounted
+                ? setState(() {
+                    isLoading = false;
+                  })
+                : null;
+          });
+          mounted
+              ? setState(() {
+                  isError = true;
+                })
+              : null;
         }
       } catch (error) {
-        log("ERROR BILL INFOR 2 $error");
+        Future.delayed(const Duration(milliseconds: 1000), () {
+          mounted
+              ? setState(() {
+                  isLoading = false;
+                })
+              : null;
+        });
+        mounted
+            ? setState(() {
+                isError = true;
+              })
+            : null;
       }
     } catch (error) {
-      log("ERROR BILL INFOR 3 $error");
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        mounted
+            ? setState(() {
+                isLoading = false;
+              })
+            : null;
+      });
+      mounted
+          ? setState(() {
+              isError = true;
+            })
+          : null;
     }
   }
 
@@ -2678,7 +2752,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
     } catch (error) {
       log("ERROR ADD FOOD TO TABLE 3 $error");
     }
-    refeshHomePage();
+    // refeshHomePage();
     getBillData();
   }
 
@@ -2730,7 +2804,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
     } catch (error) {
       log("ERROR ADD FOOD TO TABLE 3 $error");
     }
-    refeshHomePage();
+    // refeshHomePage();
     getBillData();
   }
 
@@ -2780,589 +2854,652 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
     } catch (error) {
       log("ERROR ADD FOOD TO TABLE 3 $error");
     }
-    refeshHomePage();
+    // refeshHomePage();
     getBillData();
   }
 
   @override
   void initState() {
-    super.initState();
     getBillData();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BillInforBloc, BillInforState>(
-      builder: (context, state) {
-        if (state.billStatus == BillInforStateStatus.succes) {
-          return AlertDialog(
-            contentPadding: const EdgeInsets.all(0),
-            surfaceTintColor: Colors.white,
-            backgroundColor: Colors.white,
-            content: Container(
-                width: 1.sw,
-                // height: 1.sh,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.r),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(8.w),
-                      child: Container(
-                          width: 1.sw,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(15.w),
-                                topRight: Radius.circular(15.w)),
-                            // color: Colors.amber,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 20.w),
-                                    child: TextApp(
-                                      text:
-                                          widget.currentTable?.tableName ?? '',
-                                      fontsize: 18.sp,
-                                      color: blueText,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                ],
+    return !isLoading
+        ? isError
+            ? AlertDialog(
+                contentPadding: const EdgeInsets.all(0),
+                surfaceTintColor: Colors.white,
+                backgroundColor: Colors.white,
+                content: Center(
+                    child: SizedBox(
+                  width: 1.sw,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: Lottie.asset('assets/lottie/error.json'),
+                      ),
+                      space30H,
+                      TextApp(
+                        text: "Có lỗi xảy ra, vui lòng thử lại sau",
+                        textAlign: TextAlign.center,
+                        fontsize: 20.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      space30H,
+                      SizedBox(
+                        width: 200,
+                        child: ButtonGradient(
+                          color1: color1BlueButton,
+                          color2: color2BlueButton,
+                          event: () {
+                            getBillData();
+                          },
+                          text: 'Thử lại',
+                          fontSize: 12.sp,
+                          radius: 8.r,
+                          textColor: Colors.white,
+                        ),
+                      )
+                    ],
+                  ),
+                )))
+            : AlertDialog(
+                contentPadding: const EdgeInsets.all(0),
+                surfaceTintColor: Colors.white,
+                backgroundColor: Colors.white,
+                content: Container(
+                    width: 1.sw,
+                    // height: 1.sh,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.r),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(8.w),
+                          child: Container(
+                              width: 1.sw,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(15.w),
+                                    topRight: Radius.circular(15.w)),
+                                // color: Colors.amber,
                               ),
-                              Row(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 20.w),
-                                    child: TextApp(
-                                      text: widget.nameRoom,
-                                      fontsize: 14.sp,
-                                      color: blueText,
-                                      fontWeight: FontWeight.normal,
-                                    ),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 20.w),
+                                        child: TextApp(
+                                          text:
+                                              widget.currentTable?.tableName ??
+                                                  '',
+                                          fontsize: 18.sp,
+                                          color: blueText,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 20.w),
+                                        child: TextApp(
+                                          text: widget.nameRoom,
+                                          fontsize: 14.sp,
+                                          color: blueText,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      )
+                                    ],
                                   )
                                 ],
-                              )
-                            ],
-                          )),
-                    ),
-                    const Divider(
-                      height: 1,
-                      color: Colors.black,
-                    ),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(20.w),
-                              child: Column(
-                                children: [
-                                  Container(
-                                      width: 1.sw,
-                                      // height: 100.h,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(10.r),
-                                        color: Colors.white,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey.withOpacity(0.5),
-                                            spreadRadius: 2,
-                                            blurRadius: 4,
-                                            offset: const Offset(0,
-                                                3), // changes position of shadow
-                                          ),
-                                        ],
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            width: 1.sw,
-                                            // height: 30.h,
-                                            decoration: BoxDecoration(
-                                              gradient: const LinearGradient(
-                                                begin: Alignment.topRight,
-                                                end: Alignment.bottomLeft,
-                                                colors: [
-                                                  Color.fromRGBO(
-                                                      33, 82, 255, 1),
-                                                  Color.fromRGBO(
-                                                      33, 212, 253, 1),
-                                                ],
+                              )),
+                        ),
+                        const Divider(
+                          height: 1,
+                          color: Colors.black,
+                        ),
+                        Flexible(
+                          fit: FlexFit.tight,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(20.w),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                          width: 1.sw,
+                                          // height: 100.h,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10.r),
+                                            color: Colors.white,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.5),
+                                                spreadRadius: 2,
+                                                blurRadius: 4,
+                                                offset: const Offset(0,
+                                                    3), // changes position of shadow
                                               ),
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft:
-                                                      Radius.circular(10.r),
-                                                  topRight:
-                                                      Radius.circular(10.r)),
-                                              color: Colors.blue,
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsets.only(
-                                                  top: 10.h,
-                                                  left: 10.w,
-                                                  bottom: 10.h),
-                                              child: TextApp(
-                                                text: "Tổng quan",
-                                                fontsize: 18.sp,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
+                                            ],
                                           ),
-                                          Container(
-                                            width: 1.sw,
-                                            // height: 30.h,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(15.r),
-                                              color: Colors.white,
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsets.all(20.w),
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                width: 1.sw,
+                                                // height: 30.h,
+                                                decoration: BoxDecoration(
+                                                  gradient:
+                                                      const LinearGradient(
+                                                    begin: Alignment.topRight,
+                                                    end: Alignment.bottomLeft,
+                                                    colors: [
+                                                      Color.fromRGBO(
+                                                          33, 82, 255, 1),
+                                                      Color.fromRGBO(
+                                                          33, 212, 253, 1),
+                                                    ],
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  10.r),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  10.r)),
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                ),
+                                                child: Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: 10.h,
+                                                      left: 10.w,
+                                                      bottom: 10.h),
+                                                  child: TextApp(
+                                                    text: "Tổng quan",
+                                                    fontsize: 18.sp,
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                width: 1.sw,
+                                                // height: 30.h,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15.r),
+                                                  color: Colors.white,
+                                                ),
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(20.w),
+                                                  child: Column(
                                                     children: [
-                                                      TextApp(
-                                                          text: formatDateTime(
-                                                              listFoodBillCurrent
-                                                                      ?.order
-                                                                      ?.createdAt
-                                                                      .toString() ??
-                                                                  ''),
-                                                          fontsize: 14.sp),
-                                                      SizedBox(
-                                                        width: 5.w,
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          TextApp(
+                                                              text: formatDateTime(
+                                                                  listFoodBillCurrent
+                                                                          ?.order
+                                                                          ?.createdAt
+                                                                          .toString() ??
+                                                                      ''),
+                                                              fontsize: 14.sp),
+                                                          SizedBox(
+                                                            width: 5.w,
+                                                          ),
+                                                          Icon(
+                                                            Icons
+                                                                .access_time_filled,
+                                                            size: 14.sp,
+                                                            color: Colors.grey,
+                                                          )
+                                                        ],
                                                       ),
-                                                      Icon(
-                                                        Icons
-                                                            .access_time_filled,
-                                                        size: 14.sp,
-                                                        color: Colors.grey,
+                                                      SizedBox(
+                                                        height: 15.h,
+                                                      ),
+                                                      Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          TextApp(
+                                                            text: "Tổng tiền",
+                                                            fontsize: 14.sp,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                          TextApp(
+                                                              text:
+                                                                  "${MoneyFormatter(amount: (listFoodBillCurrent?.order?.orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                              fontsize: 14.sp),
+                                                        ],
                                                       )
                                                     ],
                                                   ),
-                                                  SizedBox(
-                                                    height: 15.h,
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      TextApp(
-                                                        text: "Tổng tiền",
-                                                        fontsize: 14.sp,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                      TextApp(
-                                                          text:
-                                                              "${MoneyFormatter(amount: (listFoodBillCurrent?.order?.orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                          fontsize: 14.sp),
-                                                    ],
-                                                  )
-                                                ],
+                                                ),
+                                              )
+                                            ],
+                                          )),
+                                      SizedBox(
+                                        height: 20.h,
+                                      ),
+                                      Container(
+                                        width: 1.sw,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10.r),
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.5),
+                                              spreadRadius: 2,
+                                              blurRadius: 4,
+                                              offset: const Offset(0,
+                                                  3), // changes position of shadow
+                                            ),
+                                          ],
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              width: 1.sw,
+                                              // height: 30.h,
+                                              decoration: BoxDecoration(
+                                                gradient: const LinearGradient(
+                                                  begin: Alignment.topRight,
+                                                  end: Alignment.bottomLeft,
+                                                  colors: [
+                                                    Color.fromRGBO(
+                                                        33, 82, 255, 1),
+                                                    Color.fromRGBO(
+                                                        33, 212, 253, 1),
+                                                  ],
+                                                ),
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(10.r),
+                                                    topRight:
+                                                        Radius.circular(10.r)),
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.only(
+                                                    top: 10.h,
+                                                    left: 10.w,
+                                                    right: 10.w,
+                                                    bottom: 10.h),
+                                                child: TextApp(
+                                                  text: "Danh sách món ăn",
+                                                  fontsize: 18.sp,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ),
-                                          )
-                                        ],
-                                      )),
-                                  SizedBox(
-                                    height: 20.h,
-                                  ),
-                                  Container(
-                                    width: 1.sw,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.r),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.5),
-                                          spreadRadius: 2,
-                                          blurRadius: 4,
-                                          offset: const Offset(0,
-                                              3), // changes position of shadow
-                                        ),
-                                      ],
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          width: 1.sw,
-                                          // height: 30.h,
-                                          decoration: BoxDecoration(
-                                            gradient: const LinearGradient(
-                                              begin: Alignment.topRight,
-                                              end: Alignment.bottomLeft,
-                                              colors: [
-                                                Color.fromRGBO(33, 82, 255, 1),
-                                                Color.fromRGBO(33, 212, 253, 1),
-                                              ],
-                                            ),
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(10.r),
-                                                topRight:
-                                                    Radius.circular(10.r)),
-                                            color: Colors.blue,
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsets.only(
-                                                top: 10.h,
-                                                left: 10.w,
-                                                right: 10.w,
-                                                bottom: 10.h),
-                                            child: TextApp(
-                                              text: "Danh sách món ăn",
-                                              fontsize: 18.sp,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                        //Fix cho nay, height layout
+                                            //Fix cho nay, height layout
 
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 20.w, right: 20.w),
-                                          child: (listFoodBillCurrent?.data ==
-                                                      null ||
-                                                  listFoodBillCurrent!
-                                                      .data!.isEmpty)
-                                              ? ListView.builder(
-                                                  shrinkWrap: true,
-                                                  itemCount: 1,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 30.h,
-                                                          left: 20.w,
-                                                          right: 20.w),
-                                                      child: Container(
-                                                        width: 1.sw,
-                                                        height: 50,
-                                                        color: Colors.blue,
-                                                        child: Center(
-                                                          child: TextApp(
-                                                            text:
-                                                                "Chưa có món được chọn",
-                                                            color: Colors.white,
-                                                            fontsize: 14.sp,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  })
-                                              : ListView.builder(
-                                                  physics:
-                                                      const NeverScrollableScrollPhysics(),
-                                                  shrinkWrap: true,
-                                                  itemCount: listFoodBillCurrent
-                                                          ?.data?.length ??
-                                                      0,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    _foodQuantityController.add(
-                                                        TextEditingController());
-                                                    _foodQuantityController[
-                                                                index]
-                                                            .text =
-                                                        listFoodBillCurrent
-                                                                ?.data?[index]
-                                                                .quantityFood
-                                                                .toString() ??
-                                                            '0';
-
-                                                    var imagePath =
-                                                        listFoodBillCurrent
-                                                                ?.data?[index]
-                                                                .foodImages ??
-                                                            '';
-                                                    log(imagePath);
-                                                    var listImagePath =
-                                                        jsonDecode(imagePath);
-                                                    // var imagePath1 = imagePath
-                                                    //     .replaceAll('["', '');
-                                                    // var imagePath2 = imagePath1
-                                                    //     .replaceAll('"]', '');
-
-                                                    return Column(
-                                                      children: [
-                                                        Padding(
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 20.w, right: 20.w),
+                                              child: (listFoodBillCurrent?.data ==
+                                                          null ||
+                                                      listFoodBillCurrent!
+                                                          .data!.isEmpty)
+                                                  ? ListView.builder(
+                                                      shrinkWrap: true,
+                                                      itemCount: 1,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        return Padding(
                                                           padding:
                                                               EdgeInsets.only(
-                                                                  bottom: 10.h),
-                                                          child: SizedBox(
-                                                              width: 1.sw,
-                                                              child: Padding(
-                                                                padding:
-                                                                    EdgeInsets
+                                                                  top: 20.h,
+                                                                  left: 20.w,
+                                                                  right: 20.w,
+                                                                  bottom: 20.h),
+                                                          child: Container(
+                                                            width: 1.sw,
+                                                            height: 50,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .primary,
+                                                            child: Center(
+                                                              child: TextApp(
+                                                                text:
+                                                                    "Chưa có món được chọn",
+                                                                color: Colors
+                                                                    .white,
+                                                                fontsize: 14.sp,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      })
+                                                  : ListView.builder(
+                                                      physics:
+                                                          const NeverScrollableScrollPhysics(),
+                                                      shrinkWrap: true,
+                                                      itemCount:
+                                                          listFoodBillCurrent
+                                                                  ?.data
+                                                                  ?.length ??
+                                                              0,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        _foodQuantityController.add(
+                                                            TextEditingController());
+                                                        _foodQuantityController[
+                                                                    index]
+                                                                .text =
+                                                            listFoodBillCurrent
+                                                                    ?.data?[
+                                                                        index]
+                                                                    .quantityFood
+                                                                    .toString() ??
+                                                                '0';
+
+                                                        var imagePath =
+                                                            listFoodBillCurrent
+                                                                    ?.data?[
+                                                                        index]
+                                                                    .foodImages ??
+                                                                '';
+                                                        log(imagePath);
+                                                        var listImagePath =
+                                                            jsonDecode(
+                                                                imagePath);
+                                                        // var imagePath1 = imagePath
+                                                        //     .replaceAll('["', '');
+                                                        // var imagePath2 = imagePath1
+                                                        //     .replaceAll('"]', '');
+
+                                                        return Column(
+                                                          children: [
+                                                            Padding(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      bottom:
+                                                                          10.h),
+                                                              child: SizedBox(
+                                                                  width: 1.sw,
+                                                                  child:
+                                                                      Padding(
+                                                                    padding: EdgeInsets
                                                                         .all(10
                                                                             .w),
-                                                                child: Column(
-                                                                  children: [
-                                                                    Row(
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .center,
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .start,
-                                                                      children: [
-                                                                        SizedBox(
-                                                                            width:
-                                                                                80.w,
-                                                                            height: 80.w,
-                                                                            child: ClipRRect(
-                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(15.r), topRight: Radius.circular(15.r)),
-                                                                              child: CachedNetworkImage(
-                                                                                fit: BoxFit.cover,
-                                                                                imageUrl: httpImage + listImagePath[0],
-                                                                                placeholder: (context, url) => SizedBox(
-                                                                                  height: 10.w,
-                                                                                  width: 10.w,
-                                                                                  child: const Center(child: CircularProgressIndicator()),
-                                                                                ),
-                                                                                errorWidget: (context, url, error) => const Icon(Icons.error),
-                                                                              ),
-                                                                              //  Image.network(
-                                                                              //   httpImage + imagePath2,
-                                                                              //   fit: BoxFit.cover,
-                                                                              // ),
-                                                                            )),
-                                                                        space50W,
+                                                                    child:
                                                                         Column(
+                                                                      children: [
+                                                                        Row(
                                                                           crossAxisAlignment:
                                                                               CrossAxisAlignment.center,
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.start,
                                                                           children: [
                                                                             SizedBox(
-                                                                                width: 100.w,
-                                                                                child: Center(
-                                                                                  child: TextApp(
-                                                                                    isOverFlow: false,
-                                                                                    softWrap: true,
-                                                                                    textAlign: TextAlign.center,
-                                                                                    text: listFoodBillCurrent?.data?[index].foodName ?? '',
-                                                                                    fontsize: 14.sp,
-                                                                                  ),
-                                                                                )),
-                                                                            TextApp(
-                                                                                text: "${MoneyFormatter(amount: (listFoodBillCurrent?.data?[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                                                fontsize: 14.sp)
-                                                                          ],
-                                                                        )
-                                                                      ],
-                                                                    ),
-                                                                    SizedBox(
-                                                                      height:
-                                                                          15.h,
-                                                                    ),
-                                                                    Container(
-                                                                      width:
-                                                                          1.sw,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius.all(Radius.circular(8.r)),
-
-                                                                        // color:
-                                                                        //     Colors.pink,
-                                                                      ),
-                                                                      child:
-                                                                          SizedBox(
-                                                                        width:
-                                                                            250.w,
-                                                                        height:
-                                                                            30.h,
-                                                                        child:
-                                                                            Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.center,
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.stretch,
-                                                                          children: [
-                                                                            InkWell(
-                                                                              onTap: () {
-                                                                                minusQuantytiFoodToSeeBillTable(foodID: listFoodBillCurrent?.data?[index].foodId ?? 0);
-                                                                              },
-                                                                              onDoubleTap: () {
-                                                                                showCustomDialogModal(
-                                                                                  typeDialog: "error",
-                                                                                  context: navigatorKey.currentContext,
-                                                                                  textDesc: "Bạn thao tác quá nhanh",
-                                                                                  title: "Thành công",
-                                                                                  colorButton: Colors.red,
-                                                                                  btnText: "OK",
-                                                                                );
-                                                                              },
-                                                                              child: Container(
-                                                                                width: 50.w,
-                                                                                height: 25.w,
-                                                                                decoration: BoxDecoration(
-                                                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(8.r), bottomLeft: Radius.circular(8.r)),
-                                                                                    gradient: const LinearGradient(
-                                                                                      begin: Alignment.topRight,
-                                                                                      end: Alignment.bottomLeft,
-                                                                                      colors: [
-                                                                                        Color.fromRGBO(33, 82, 255, 1),
-                                                                                        Color.fromRGBO(33, 212, 253, 1)
-                                                                                      ],
-                                                                                    )),
-                                                                                child: Center(
-                                                                                  child: TextApp(text: "-", textAlign: TextAlign.center, color: Colors.white, fontsize: 14.sp),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            Flexible(
-                                                                                fit: FlexFit.tight,
-                                                                                //check thang nay co the co loi layout
-                                                                                child: Container(
-                                                                                  decoration: BoxDecoration(
-                                                                                    border: Border.all(width: 0.4, color: Colors.grey),
-                                                                                  ),
-                                                                                  child: Center(
-                                                                                    child: TextField(
-                                                                                      textAlign: TextAlign.center,
-                                                                                      keyboardType: TextInputType.number,
-                                                                                      inputFormatters: <TextInputFormatter>[
-                                                                                        FilteringTextInputFormatter.allow(RegExp("[0-9]")),
-                                                                                      ], // Only numbers can be entered,
-                                                                                      style: TextStyle(fontSize: 12.sp, color: grey),
-                                                                                      controller: _foodQuantityController[index],
-
-                                                                                      onTapOutside: (event) {
-                                                                                        log('onTapOutside');
-                                                                                        FocusManager.instance.primaryFocus?.unfocus();
-                                                                                        // updateQuantytiFood();
-                                                                                        updateQuantytiFoodToSeeBillTable(
-                                                                                          foodID: listFoodBillCurrent?.data?[index].foodId ?? 0,
-                                                                                          quantityFood: _foodQuantityController[index].text,
-                                                                                        );
-                                                                                      },
-                                                                                      cursorColor: grey,
-                                                                                      decoration: const InputDecoration(
-                                                                                        fillColor: Color.fromARGB(255, 226, 104, 159),
-                                                                                        focusedBorder: OutlineInputBorder(
-                                                                                          borderSide: BorderSide(color: Color.fromRGBO(214, 51, 123, 0.6), width: 2.0),
-                                                                                        ),
-
-                                                                                        hintText: '',
-                                                                                        isDense: true, // Added this
-                                                                                        contentPadding: EdgeInsets.all(8), // Added this
-                                                                                      ),
+                                                                                width: 80.w,
+                                                                                height: 80.w,
+                                                                                child: ClipRRect(
+                                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(15.r), topRight: Radius.circular(15.r)),
+                                                                                  child: CachedNetworkImage(
+                                                                                    fit: BoxFit.cover,
+                                                                                    imageUrl: httpImage + listImagePath[0],
+                                                                                    placeholder: (context, url) => SizedBox(
+                                                                                      height: 10.w,
+                                                                                      width: 10.w,
+                                                                                      child: const Center(child: CircularProgressIndicator()),
                                                                                     ),
+                                                                                    errorWidget: (context, url, error) => const Icon(Icons.error),
                                                                                   ),
+                                                                                  //  Image.network(
+                                                                                  //   httpImage + imagePath2,
+                                                                                  //   fit: BoxFit.cover,
+                                                                                  // ),
                                                                                 )),
-                                                                            InkWell(
-                                                                              onTap: () {
-                                                                                plusQuantytiFoodToSeeBillTable(foodID: listFoodBillCurrent?.data?[index].foodId ?? 0);
-                                                                              },
-                                                                              onDoubleTap: () {
-                                                                                showCustomDialogModal(
-                                                                                  typeDialog: "error",
-                                                                                  context: navigatorKey.currentContext,
-                                                                                  textDesc: "Bạn thao tác quá nhanh",
-                                                                                  title: "Thành công",
-                                                                                  colorButton: Colors.red,
-                                                                                  btnText: "OK",
-                                                                                );
-                                                                              },
-                                                                              child: Container(
-                                                                                width: 50.w,
-                                                                                height: 25.w,
-                                                                                decoration: BoxDecoration(
-                                                                                    borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), bottomRight: Radius.circular(8.r)),
-                                                                                    gradient: const LinearGradient(
-                                                                                      begin: Alignment.topRight,
-                                                                                      end: Alignment.bottomLeft,
-                                                                                      colors: [
-                                                                                        Color.fromRGBO(33, 82, 255, 1),
-                                                                                        Color.fromRGBO(33, 212, 253, 1)
-                                                                                      ],
+                                                                            space50W,
+                                                                            Column(
+                                                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                                                              children: [
+                                                                                SizedBox(
+                                                                                    width: 100.w,
+                                                                                    child: Center(
+                                                                                      child: TextApp(
+                                                                                        isOverFlow: false,
+                                                                                        softWrap: true,
+                                                                                        textAlign: TextAlign.center,
+                                                                                        text: listFoodBillCurrent?.data?[index].foodName ?? '',
+                                                                                        fontsize: 14.sp,
+                                                                                      ),
                                                                                     )),
-                                                                                child: Center(
-                                                                                  child: TextApp(
-                                                                                    text: "+",
-                                                                                    textAlign: TextAlign.center,
-                                                                                    color: Colors.white,
-                                                                                    fontsize: 14.sp,
-                                                                                  ),
-                                                                                ),
-                                                                              ),
+                                                                                TextApp(text: "${MoneyFormatter(amount: (listFoodBillCurrent?.data?[index].foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ", fontsize: 14.sp)
+                                                                              ],
                                                                             )
                                                                           ],
                                                                         ),
-                                                                      ),
+                                                                        SizedBox(
+                                                                          height:
+                                                                              15.h,
+                                                                        ),
+                                                                        Container(
+                                                                          width:
+                                                                              1.sw,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.all(Radius.circular(8.r)),
+
+                                                                            // color:
+                                                                            //     Colors.pink,
+                                                                          ),
+                                                                          child:
+                                                                              SizedBox(
+                                                                            width:
+                                                                                250.w,
+                                                                            height:
+                                                                                30.h,
+                                                                            child:
+                                                                                Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                                              children: [
+                                                                                InkWell(
+                                                                                  onTap: () {
+                                                                                    minusQuantytiFoodToSeeBillTable(foodID: listFoodBillCurrent?.data?[index].foodId ?? 0);
+                                                                                  },
+                                                                                  onDoubleTap: () {
+                                                                                    showCustomDialogModal(
+                                                                                      typeDialog: "error",
+                                                                                      context: navigatorKey.currentContext,
+                                                                                      textDesc: "Bạn thao tác quá nhanh",
+                                                                                      title: "Thành công",
+                                                                                      colorButton: Colors.red,
+                                                                                      btnText: "OK",
+                                                                                    );
+                                                                                  },
+                                                                                  child: Container(
+                                                                                    width: 50.w,
+                                                                                    height: 25.w,
+                                                                                    decoration: BoxDecoration(
+                                                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(8.r), bottomLeft: Radius.circular(8.r)),
+                                                                                        gradient: const LinearGradient(
+                                                                                          begin: Alignment.topRight,
+                                                                                          end: Alignment.bottomLeft,
+                                                                                          colors: [
+                                                                                            Color.fromRGBO(33, 82, 255, 1),
+                                                                                            Color.fromRGBO(33, 212, 253, 1)
+                                                                                          ],
+                                                                                        )),
+                                                                                    child: Center(
+                                                                                      child: TextApp(text: "-", textAlign: TextAlign.center, color: Colors.white, fontsize: 14.sp),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                Flexible(
+                                                                                    fit: FlexFit.tight,
+                                                                                    //check thang nay co the co loi layout
+                                                                                    child: Container(
+                                                                                      decoration: BoxDecoration(
+                                                                                        border: Border.all(width: 0.4, color: Colors.grey),
+                                                                                      ),
+                                                                                      child: Center(
+                                                                                        child: TextField(
+                                                                                          textAlign: TextAlign.center,
+                                                                                          keyboardType: TextInputType.number,
+                                                                                          inputFormatters: <TextInputFormatter>[
+                                                                                            FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                                                                                          ], // Only numbers can be entered,
+                                                                                          style: TextStyle(fontSize: 12.sp, color: grey),
+                                                                                          controller: _foodQuantityController[index],
+
+                                                                                          onTapOutside: (event) {
+                                                                                            log('onTapOutside');
+                                                                                            FocusManager.instance.primaryFocus?.unfocus();
+                                                                                            // updateQuantytiFood();
+                                                                                            updateQuantytiFoodToSeeBillTable(
+                                                                                              foodID: listFoodBillCurrent?.data?[index].foodId ?? 0,
+                                                                                              quantityFood: _foodQuantityController[index].text,
+                                                                                            );
+                                                                                          },
+                                                                                          cursorColor: grey,
+                                                                                          decoration: const InputDecoration(
+                                                                                            fillColor: Color.fromARGB(255, 226, 104, 159),
+                                                                                            focusedBorder: OutlineInputBorder(
+                                                                                              borderSide: BorderSide(color: Color.fromRGBO(214, 51, 123, 0.6), width: 2.0),
+                                                                                            ),
+
+                                                                                            hintText: '',
+                                                                                            isDense: true, // Added this
+                                                                                            contentPadding: EdgeInsets.all(8), // Added this
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    )),
+                                                                                InkWell(
+                                                                                  onTap: () {
+                                                                                    plusQuantytiFoodToSeeBillTable(foodID: listFoodBillCurrent?.data?[index].foodId ?? 0);
+                                                                                  },
+                                                                                  onDoubleTap: () {
+                                                                                    showCustomDialogModal(
+                                                                                      typeDialog: "error",
+                                                                                      context: navigatorKey.currentContext,
+                                                                                      textDesc: "Bạn thao tác quá nhanh",
+                                                                                      title: "Thành công",
+                                                                                      colorButton: Colors.red,
+                                                                                      btnText: "OK",
+                                                                                    );
+                                                                                  },
+                                                                                  child: Container(
+                                                                                    width: 50.w,
+                                                                                    height: 25.w,
+                                                                                    decoration: BoxDecoration(
+                                                                                        borderRadius: BorderRadius.only(topRight: Radius.circular(8.r), bottomRight: Radius.circular(8.r)),
+                                                                                        gradient: const LinearGradient(
+                                                                                          begin: Alignment.topRight,
+                                                                                          end: Alignment.bottomLeft,
+                                                                                          colors: [
+                                                                                            Color.fromRGBO(33, 82, 255, 1),
+                                                                                            Color.fromRGBO(33, 212, 253, 1)
+                                                                                          ],
+                                                                                        )),
+                                                                                    child: Center(
+                                                                                      child: TextApp(
+                                                                                        text: "+",
+                                                                                        textAlign: TextAlign.center,
+                                                                                        color: Colors.white,
+                                                                                        fontsize: 14.sp,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                )
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
                                                                     ),
-                                                                  ],
-                                                                ),
-                                                              )),
-                                                        ),
-                                                        const Divider(
-                                                          height: 1,
-                                                          color: Colors.grey,
-                                                        )
-                                                      ],
-                                                    );
-                                                  }),
+                                                                  )),
+                                                            ),
+                                                            const Divider(
+                                                              height: 1,
+                                                              color:
+                                                                  Colors.grey,
+                                                            )
+                                                          ],
+                                                        );
+                                                      }),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: 1.sw,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(15.w),
-                            bottomRight: Radius.circular(15.w)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ButtonApp(
-                            event: () {
-                              Navigator.of(context).pop();
-                            },
-                            text: "Đóng",
-                            colorText: Colors.white,
-                            backgroundColor:
-                                const Color.fromRGBO(131, 146, 171, 1),
-                            outlineColor:
-                                const Color.fromRGBO(131, 146, 171, 1),
                           ),
-                        ],
-                      ),
-                    ),
-                  ],
-                )),
-          );
-        } else if (state.billStatus == BillInforStateStatus.loading) {
-          return AlertDialog(
+                        ),
+                        Container(
+                          width: 1.sw,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(15.w),
+                                bottomRight: Radius.circular(15.w)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ButtonApp(
+                                event: () {
+                                  Navigator.of(context).pop();
+                                },
+                                text: "Đóng",
+                                colorText: Colors.white,
+                                backgroundColor:
+                                    const Color.fromRGBO(131, 146, 171, 1),
+                                outlineColor:
+                                    const Color.fromRGBO(131, 146, 171, 1),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )),
+              )
+        : AlertDialog(
             contentPadding: const EdgeInsets.all(0),
             surfaceTintColor: Colors.white,
             backgroundColor: Colors.white,
@@ -3374,52 +3511,64 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
               ),
             ),
           );
-        } else {
-          return AlertDialog(
-              contentPadding: const EdgeInsets.all(0),
-              surfaceTintColor: Colors.white,
-              backgroundColor: Colors.white,
-              content: Center(
-                  child: SizedBox(
-                width: 1.sw,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 100,
-                      height: 100,
-                      child: Lottie.asset('assets/lottie/error.json'),
-                    ),
-                    space30H,
-                    TextApp(
-                      text: state.errorText.toString(),
-                      textAlign: TextAlign.center,
-                      fontsize: 20.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    space30H,
-                    SizedBox(
-                      width: 200,
-                      child: ButtonGradient(
-                        color1: color1BlueButton,
-                        color2: color2BlueButton,
-                        event: () {
-                          // getDataTabIndex("");
-                          Navigator.pop(context);
-                        },
-                        text: 'Thử lại',
-                        fontSize: 12.sp,
-                        radius: 8.r,
-                        textColor: Colors.white,
-                      ),
-                    )
-                  ],
-                ),
-              )));
-        }
-      },
-    );
+
+    // return AlertDialog(
+    //   contentPadding: const EdgeInsets.all(0),
+    //   surfaceTintColor: Colors.white,
+    //   backgroundColor: Colors.white,
+    //   content: Center(
+    //     child: SizedBox(
+    //       width: 1.sw,
+    //       height: 200.w,
+    //       child: Lottie.asset('assets/lottie/loading_7_color.json'),
+    //     ),
+    //   ),
+    // );
+    //   } else {
+    //     return AlertDialog(
+    //         contentPadding: const EdgeInsets.all(0),
+    //         surfaceTintColor: Colors.white,
+    //         backgroundColor: Colors.white,
+    //         content: Center(
+    //             child: SizedBox(
+    //           width: 1.sw,
+    //           child: Column(
+    //             mainAxisAlignment: MainAxisAlignment.center,
+    //             crossAxisAlignment: CrossAxisAlignment.center,
+    //             children: [
+    //               SizedBox(
+    //                 width: 100,
+    //                 height: 100,
+    //                 child: Lottie.asset('assets/lottie/error.json'),
+    //               ),
+    //               space30H,
+    //               TextApp(
+    //                 text: state.errorText.toString(),
+    //                 textAlign: TextAlign.center,
+    //                 fontsize: 20.sp,
+    //                 fontWeight: FontWeight.bold,
+    //               ),
+    //               space30H,
+    //               SizedBox(
+    //                 width: 200,
+    //                 child: ButtonGradient(
+    //                   color1: color1BlueButton,
+    //                   color2: color2BlueButton,
+    //                   event: () {
+    //                     // getDataTabIndex("");
+    //                     Navigator.pop(context);
+    //                   },
+    //                   text: 'Thử lại',
+    //                   fontSize: 12.sp,
+    //                   radius: 8.r,
+    //                   textColor: Colors.white,
+    //                 ),
+    //               )
+    //             ],
+    //           ),
+    //         )));
+    //   }
+    // },
   }
 }
 
@@ -4181,9 +4330,10 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                 Navigator.of(context).pop();
                               },
                               text: "Đóng",
-                              colorText: Colors.blue,
+                              colorText: Theme.of(context).colorScheme.primary,
                               backgroundColor: Colors.transparent,
-                              outlineColor: Colors.blue,
+                              outlineColor:
+                                  Theme.of(context).colorScheme.primary,
                             ),
                             space15W,
                             ButtonApp(
@@ -4206,8 +4356,10 @@ class _PayBillDialogState extends State<PayBillDialog> {
                               },
                               text: "Thanh toán",
                               colorText: Colors.white,
-                              backgroundColor: Colors.blue,
-                              outlineColor: Colors.blue,
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
+                              outlineColor:
+                                  Theme.of(context).colorScheme.primary,
                             ),
                           ],
                         ),
@@ -4717,18 +4869,23 @@ class _ManageBroughtReceiptDialogState
                                       right: 15.w,
                                       top: 8.w,
                                       bottom: 8.w),
-                                  disabledColor: Colors.blue,
-                                  selectedColor: Colors.blue,
+                                  disabledColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  selectedColor:
+                                      Theme.of(context).colorScheme.primary,
                                   backgroundColor: Colors.white,
                                   shadowColor: Colors.black,
-                                  selectedShadowColor: Colors.blue,
+                                  selectedShadowColor:
+                                      Theme.of(context).colorScheme.primary,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.w),
                                     side: BorderSide(
                                       color:
                                           selectedCategories.contains(lableFood)
                                               ? Colors.grey.withOpacity(0.5)
-                                              : Colors.blue,
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
                                       width: 1.0,
                                     ),
                                   ),
@@ -4736,7 +4893,9 @@ class _ManageBroughtReceiptDialogState
                                       color:
                                           selectedCategories.contains(lableFood)
                                               ? Colors.white
-                                              : Colors.blue),
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .primary),
                                   showCheckmark: false,
                                   label: Text(lableFood.toUpperCase()),
                                   // TextApp(
@@ -4865,14 +5024,14 @@ class _ManageBroughtReceiptDialogState
                             children: [
                               TextApp(
                                 text: currentCartBroughtReceipt.toString(),
-                                color: Colors.blue,
+                                color: Theme.of(context).colorScheme.primary,
                                 fontsize: 14.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                               space5W,
-                              const Icon(
+                              Icon(
                                 Icons.shopping_basket_rounded,
-                                color: Colors.blue,
+                                color: Theme.of(context).colorScheme.primary,
                               )
                             ],
                           ))
@@ -5303,32 +5462,38 @@ class PrintBillDialog extends StatefulWidget {
   final String tableName;
   final int orderID;
   final String role;
-  const PrintBillDialog(
-      {Key? key,
-      required this.roomName,
-      required this.tableName,
-      required this.orderID,
-      required this.role,
-      required this.token})
-      : super(key: key);
+  final String shopID;
+  const PrintBillDialog({
+    Key? key,
+    required this.roomName,
+    required this.tableName,
+    required this.orderID,
+    required this.role,
+    required this.token,
+    required this.shopID,
+  }) : super(key: key);
   @override
   State<PrintBillDialog> createState() => _PrintBillDialogState();
 }
 
 class _PrintBillDialogState extends State<PrintBillDialog> {
-  void printBroughtReceipt({required int orderID}) async {
-    BlocProvider.of<PrintBroughtReceiptBloc>(context).add(PrintBroughtReceipt(
-        token: widget.token,
-        client: widget.role,
-        shopId: getStaffShopID,
-        orderId: orderID));
-  }
+  // void printBroughtReceipt({required int orderID}) async {
+  //   log("widget.token 22 ${widget.token}");
+  //   log("widget.role 22 ${widget.role}");
+  //   log("shopId 22 ${widget.shopID}");
+  //   log("orderID ${orderID}");
+  //   BlocProvider.of<PrintBroughtReceiptBloc>(context).add(PrintBroughtReceipt(
+  //       token: widget.token,
+  //       client: widget.role,
+  //       shopId: widget.shopID,
+  //       orderId: orderID));
+  // }
 
-  @override
-  void initState() {
-    super.initState();
-    printBroughtReceipt(orderID: widget.orderID);
-  }
+  // @override
+  // void initState() {
+  //   // printBroughtReceipt(orderID: widget.orderID);
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -6772,7 +6937,7 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
                 children: [
                   TextApp(
                     text: "Tên phòng",
-                    fontsize: 12.sp,
+                    fontsize: 14.sp,
                     fontWeight: FontWeight.bold,
                     color: blueText,
                   ),
@@ -6791,6 +6956,7 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
                         return null;
                       }
                     },
+                    style: TextStyle(fontSize: 14.sp, color: grey),
                     cursorColor: const Color.fromRGBO(73, 80, 87, 1),
                     decoration: InputDecoration(
                         fillColor: const Color.fromARGB(255, 226, 104, 159),
@@ -6804,6 +6970,7 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
                           borderRadius: BorderRadius.circular(8.r),
                         ),
                         hintText: "Tên phòng",
+                        hintStyle: TextStyle(fontSize: 14.sp),
                         isDense: true,
                         contentPadding:
                             EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
@@ -6811,7 +6978,7 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
                   space20H,
                   TextApp(
                     text: "Chế độ hiển thị",
-                    fontsize: 12.sp,
+                    fontsize: 14.sp,
                     fontWeight: FontWeight.bold,
                     color: blueText,
                   ),
@@ -7083,7 +7250,7 @@ class _EditRoomDataDialogState extends State<EditRoomDataDialog> {
                 children: [
                   TextApp(
                     text: "Tên phòng",
-                    fontsize: 12.sp,
+                    fontsize: 14.sp,
                     fontWeight: FontWeight.bold,
                     color: blueText,
                   ),
@@ -7102,6 +7269,7 @@ class _EditRoomDataDialogState extends State<EditRoomDataDialog> {
                         return null;
                       }
                     },
+                    style: TextStyle(fontSize: 14.sp, color: grey),
                     cursorColor: const Color.fromRGBO(73, 80, 87, 1),
                     decoration: InputDecoration(
                         fillColor: const Color.fromARGB(255, 226, 104, 159),
@@ -7115,6 +7283,7 @@ class _EditRoomDataDialogState extends State<EditRoomDataDialog> {
                           borderRadius: BorderRadius.circular(8.r),
                         ),
                         hintText: "Tên phòng",
+                        hintStyle: TextStyle(fontSize: 14.sp),
                         isDense: true,
                         contentPadding:
                             EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
@@ -7122,7 +7291,7 @@ class _EditRoomDataDialogState extends State<EditRoomDataDialog> {
                   space20H,
                   TextApp(
                     text: "Chế độ hiển thị",
-                    fontsize: 12.sp,
+                    fontsize: 14.sp,
                     fontWeight: FontWeight.bold,
                     color: blueText,
                   ),
@@ -7238,7 +7407,6 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
   final addressStoreController = TextEditingController();
   final desController = TextEditingController();
   final ImagePicker imagePicker = ImagePicker();
-  // QuillController _controllerQuill = QuillController.basic();
   String currentStoreLogo = 'assets/img/no-image.png';
   List<File>? imageFileList = [];
   List<String> listImageStore = [];
@@ -7457,7 +7625,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                       children: [
                         TextApp(
                           text: storeId,
-                          fontsize: 12.sp,
+                          fontsize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: blueText,
                         ),
@@ -7493,18 +7661,19 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: storeId,
+                              hintStyle: TextStyle(fontSize: 12.sp),
                               isDense: true,
                               contentPadding:
                                   EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
                         ),
                         ////////
-                        SizedBox(
-                          height: 30.h,
-                        ),
+                        // SizedBox(
+                        //   height: 30.h,
+                        // ),
                         //////
                         TextApp(
                           text: storeName,
-                          fontsize: 12.sp,
+                          fontsize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: blueText,
                         ),
@@ -7538,18 +7707,19 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: storeName,
+                              hintStyle: TextStyle(fontSize: 12.sp),
                               isDense: true,
                               contentPadding:
                                   EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
                         ),
                         /////
-                        SizedBox(
-                          height: 30.h,
-                        ),
+                        // SizedBox(
+                        //   height: 30.h,
+                        // ),
                         ////
                         TextApp(
                           text: storeAddress,
-                          fontsize: 12.sp,
+                          fontsize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: blueText,
                         ),
@@ -7582,18 +7752,19 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: storeAddress,
+                              hintStyle: TextStyle(fontSize: 12.sp),
                               isDense: true,
                               contentPadding:
                                   EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
                         ),
                         /////
                         SizedBox(
-                          height: 30.h,
+                          height: 20.h,
                         ),
                         ////
                         TextApp(
                           text: displayMode,
-                          fontsize: 12.sp,
+                          fontsize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: blueText,
                         ),
@@ -7635,12 +7806,12 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                         ),
 
                         SizedBox(
-                          height: 30.h,
+                          height: 20.h,
                         ),
-                        ////
+                        //
                         TextApp(
                           text: desStore,
-                          fontsize: 12.sp,
+                          fontsize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: blueText,
                         ),
@@ -7666,7 +7837,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                           children: [
                             TextApp(
                               text: " Mô tả",
-                              fontsize: 12.sp,
+                              fontsize: 14.sp,
                               fontWeight: FontWeight.bold,
                               color: blueText,
                             ),
@@ -7696,6 +7867,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                                     borderRadius: BorderRadius.circular(8.r),
                                   ),
                                   hintText: '',
+                                  hintStyle: TextStyle(fontSize: 12.sp),
                                   isDense: true,
                                   contentPadding: EdgeInsets.only(
                                       bottom: 1.sw > 600 ? 50.w : 40.w,
@@ -7705,12 +7877,12 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: 30.h,
-                        ),
+                        // SizedBox(
+                        //   height: 30.h,
+                        // ),
                         TextApp(
                           text: storeImage,
-                          fontsize: 12.sp,
+                          fontsize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: blueText,
                         ),
@@ -7788,7 +7960,9 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                                                     },
                                                     child: TextApp(
                                                       text: deleteImage,
-                                                      color: Colors.blue,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
                                                     ),
                                                   )
                                                 ],
@@ -7799,11 +7973,11 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                             )),
 
                         SizedBox(
-                          height: 30.h,
+                          height: 20.h,
                         ),
                         TextApp(
                           text: "Logo của của hàng",
-                          fontsize: 12.sp,
+                          fontsize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: blueText,
                         ),
@@ -8167,7 +8341,10 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      contentPadding: const EdgeInsets.all(0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      contentPadding: EdgeInsets.only(bottom: 10.h),
       surfaceTintColor: Colors.white,
       backgroundColor: Colors.white,
       content: Container(
@@ -8196,7 +8373,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                           Row(
                             children: [
                               TextApp(
-                                text: "Cửa hàng ",
+                                text: "Cửa hàng: ",
                                 fontsize: 18.sp,
                                 color: blueText,
                                 fontWeight: FontWeight.bold,
@@ -8224,7 +8401,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                       children: [
                         TextApp(
                           text: storeId,
-                          fontsize: 12.sp,
+                          fontsize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: blueText,
                         ),
@@ -8244,6 +8421,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                               return null;
                             }
                           },
+                          style: TextStyle(fontSize: 14.sp),
                           decoration: InputDecoration(
                               fillColor:
                                   const Color.fromARGB(255, 226, 104, 159),
@@ -8257,6 +8435,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: storeId,
+                              hintStyle: TextStyle(fontSize: 14.sp),
                               isDense: true,
                               contentPadding:
                                   EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
@@ -8268,7 +8447,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                         //////
                         TextApp(
                           text: storeName,
-                          fontsize: 12.sp,
+                          fontsize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: blueText,
                         ),
@@ -8287,6 +8466,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                           onTapOutside: (event) {
                             FocusManager.instance.primaryFocus?.unfocus();
                           },
+                          style: TextStyle(fontSize: 14.sp),
                           cursorColor: const Color.fromRGBO(73, 80, 87, 1),
                           decoration: InputDecoration(
                               fillColor:
@@ -8301,6 +8481,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: storeName,
+                              hintStyle: TextStyle(fontSize: 14.sp),
                               isDense: true,
                               contentPadding:
                                   EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
@@ -8312,7 +8493,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                         ////
                         TextApp(
                           text: storeAddress,
-                          fontsize: 12.sp,
+                          fontsize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: blueText,
                         ),
@@ -8332,6 +8513,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                           onTapOutside: (event) {
                             FocusManager.instance.primaryFocus?.unfocus();
                           },
+                          style: TextStyle(fontSize: 14.sp),
                           decoration: InputDecoration(
                               fillColor:
                                   const Color.fromARGB(255, 226, 104, 159),
@@ -8346,6 +8528,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                               ),
                               hintText: storeAddress,
                               isDense: true,
+                              hintStyle: TextStyle(fontSize: 14.sp),
                               contentPadding:
                                   EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
                         ),
@@ -8356,7 +8539,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                         ////
                         TextApp(
                           text: displayMode,
-                          fontsize: 12.sp,
+                          fontsize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: blueText,
                         ),
@@ -8407,19 +8590,24 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                             isOverFlow: false,
                             softWrap: true,
                             text: desStore,
-                            fontsize: 12.sp,
-                            fontWeight: FontWeight.normal,
+                            fontsize: 14.sp,
+                            fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
                         ),
                         SizedBox(
                           height: 10.h,
                         ),
-                        TextApp(
-                          text: describeDetailSotre,
-                          fontsize: 12.sp,
-                          fontWeight: FontWeight.normal,
-                          color: blueText,
+                        SizedBox(
+                          width: 1.sw,
+                          child: TextApp(
+                            isOverFlow: false,
+                            softWrap: true,
+                            text: describeDetailSotre,
+                            fontsize: 12.sp,
+                            fontWeight: FontWeight.normal,
+                            color: blueText,
+                          ),
                         ),
                         SizedBox(
                           height: 20.h,
@@ -8433,6 +8621,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                           keyboardType: TextInputType.multiline,
                           minLines: 1,
                           maxLines: 3,
+                          style: TextStyle(fontSize: 14.sp),
                           cursorColor: const Color.fromRGBO(73, 80, 87, 1),
                           decoration: InputDecoration(
                               fillColor:
@@ -8447,6 +8636,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                               ),
                               hintText: '',
                               isDense: true,
+                              hintStyle: TextStyle(fontSize: 14.sp),
                               contentPadding: EdgeInsets.only(
                                   bottom: 1.sw > 600 ? 50.w : 40.w,
                                   top: 0,
@@ -8459,7 +8649,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                         ),
                         TextApp(
                           text: storeImage,
-                          fontsize: 12.sp,
+                          fontsize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: blueText,
                         ),
@@ -8533,7 +8723,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                                                       fit: BoxFit.cover,
                                                     )),
                                               ),
-                                              space10H,
+                                              // space10H,
                                               InkWell(
                                                 onTap: () {
                                                   deleteImages(
@@ -8543,7 +8733,9 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                                                 },
                                                 child: TextApp(
                                                   text: deleteImage,
-                                                  color: Colors.blue,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
                                                 ),
                                               )
                                             ],
@@ -8582,7 +8774,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                                                   ),
                                                 ),
                                               ),
-                                              space10H,
+                                              // space10H,
                                               InkWell(
                                                 onTap: () {
                                                   deleteImages(
@@ -8592,7 +8784,9 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                                                 },
                                                 child: TextApp(
                                                   text: deleteImage,
-                                                  color: Colors.blue,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
                                                 ),
                                               )
                                             ],
@@ -8607,7 +8801,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                         ),
                         TextApp(
                           text: "Logo của của hàng",
-                          fontsize: 12.sp,
+                          fontsize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: blueText,
                         ),
@@ -8884,15 +9078,12 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
     handleGetDataTable();
+    super.initState();
   }
 
   @override
   void dispose() {
-    nameTableController.dispose();
-    chairsOfTableController.dispose();
-    desController.dispose();
     super.dispose();
   }
 
@@ -8941,7 +9132,7 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                       children: [
                         TextApp(
                           text: "Tên bàn",
-                          fontsize: 12.sp,
+                          fontsize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: blueText,
                         ),
@@ -8961,6 +9152,7 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                               return null;
                             }
                           },
+                          style: TextStyle(fontSize: 14.sp),
                           cursorColor: const Color.fromRGBO(73, 80, 87, 1),
                           decoration: InputDecoration(
                               fillColor:
@@ -8975,18 +9167,15 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               // hintText: storeName,
+
                               isDense: true,
                               contentPadding:
                                   EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
                         ),
-                        /////
-                        SizedBox(
-                          height: 30.h,
-                        ),
-                        ////
+
                         TextApp(
                           text: "Số ghế trong bàn",
-                          fontsize: 12.sp,
+                          fontsize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: blueText,
                         ),
@@ -8994,6 +9183,7 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                           height: 10.h,
                         ),
                         TextFormField(
+                          keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.allow(RegExp("[0-9]")),
                           ],
@@ -9009,6 +9199,7 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                               return null;
                             }
                           },
+                          style: TextStyle(fontSize: 14.sp),
                           decoration: InputDecoration(
                               fillColor:
                                   const Color.fromARGB(255, 226, 104, 159),
@@ -9032,7 +9223,7 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                         ),
                         TextApp(
                           text: "Mô tả",
-                          fontsize: 12.sp,
+                          fontsize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: blueText,
                         ),
@@ -9046,6 +9237,7 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                           keyboardType: TextInputType.multiline,
                           minLines: 1,
                           maxLines: 3,
+                          style: TextStyle(fontSize: 14.sp),
                           cursorColor: const Color.fromRGBO(73, 80, 87, 1),
                           decoration: InputDecoration(
                               fillColor:
@@ -9059,6 +9251,7 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: '',
+                              hintStyle: TextStyle(fontSize: 14.sp),
                               isDense: true,
                               contentPadding: EdgeInsets.only(
                                   bottom: 1.sw > 600 ? 50.w : 40.w,
@@ -9072,7 +9265,7 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                           isOverFlow: false,
                           softWrap: true,
                           text: displayMode,
-                          fontsize: 12.sp,
+                          fontsize: 14.sp,
                           fontWeight: FontWeight.bold,
                           color: blueText,
                         ),
@@ -9194,9 +9387,6 @@ class _CreateItemDialogState extends State<CreateItemDialog>
   bool isHaveddddd = false;
   @override
   void dispose() {
-    nameItemController.dispose();
-    initalQuantityController.dispose();
-    minQuantityController.dispose();
     super.dispose();
   }
 
@@ -9251,7 +9441,7 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                 space15H,
                 TabBar(
                     labelPadding: const EdgeInsets.only(left: 20, right: 20),
-                    labelColor: Colors.blue,
+                    labelColor: Theme.of(context).colorScheme.primary,
                     unselectedLabelColor: Colors.black.withOpacity(0.5),
                     labelStyle: const TextStyle(color: Colors.red),
                     controller: _tabController,

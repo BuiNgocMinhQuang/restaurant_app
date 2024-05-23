@@ -175,7 +175,9 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                         .storeRoomName ??
                                                     '',
                                                 color: currentRoomIndex == index
-                                                    ? Colors.blue
+                                                    ? Theme.of(context)
+                                                        .colorScheme
+                                                        .primary
                                                     : Colors.black,
                                                 fontWeight:
                                                     currentRoomIndex == index
@@ -258,7 +260,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                             ? Container(
                                 width: 1.sw,
                                 height: 50,
-                                color: Colors.blue,
+                                color: Theme.of(context).colorScheme.primary,
                                 child: Center(
                                   child: TextApp(
                                     text: "Shop này không có Phòng",
@@ -278,182 +280,192 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                       width: 1.sw,
                                       height: 600.h,
                                       // color: Colors.amber,
-                                      child:
-                                          state
-                                                  .listRoomModel!
-                                                  .rooms![currentRoomIndex]
-                                                  .tables!
-                                                  .isNotEmpty
-                                              ? RefreshIndicator(
-                                                  color: Colors.blue,
-                                                  onRefresh: () async {
-                                                    log(currentRoomIndex
-                                                        .toString());
-                                                    getDataTabIndex(
-                                                      roomId: state
+                                      child: state
+                                              .listRoomModel!
+                                              .rooms![currentRoomIndex]
+                                              .tables!
+                                              .isNotEmpty
+                                          ? RefreshIndicator(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              onRefresh: () async {
+                                                log(currentRoomIndex
+                                                    .toString());
+                                                getDataTabIndex(
+                                                  roomId: state
+                                                      .listRoomModel!
+                                                      .rooms![currentRoomIndex]
+                                                      .storeRoomId
+                                                      .toString(),
+                                                ); //get data table of firts room
+                                              },
+                                              child: GridView.builder(
+                                                  gridDelegate:
+                                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                                          crossAxisCount: 3),
+                                                  itemCount: state
                                                           .listRoomModel!
                                                           .rooms![
                                                               currentRoomIndex]
-                                                          .storeRoomId
-                                                          .toString(),
-                                                    ); //get data table of firts room
-                                                  },
-                                                  child: GridView.builder(
-                                                      gridDelegate:
-                                                          const SliverGridDelegateWithFixedCrossAxisCount(
-                                                              crossAxisCount:
-                                                                  3),
-                                                      itemCount: state
-                                                              .listRoomModel!
-                                                              .rooms![
-                                                                  currentRoomIndex]
-                                                              .tables
-                                                              ?.length ??
-                                                          1,
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        var roomName = state
-                                                                .listRoomModel!
-                                                                .rooms![
-                                                                    currentRoomIndex]
-                                                                .storeRoomName ??
-                                                            '';
-
-                                                        var listRoomID = state
+                                                          .tables
+                                                          ?.length ??
+                                                      1,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    var roomName = state
                                                             .listRoomModel!
-                                                            .rooms!
-                                                            .map((data) => data
-                                                                .storeRoomId)
-                                                            .toList();
+                                                            .rooms![
+                                                                currentRoomIndex]
+                                                            .storeRoomName ??
+                                                        '';
 
-                                                        return Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  10.w),
-                                                          child: state
-                                                                      .listRoomModel!
-                                                                      .rooms![
-                                                                          currentRoomIndex]
-                                                                      .tables?[
-                                                                          index]
-                                                                      .bookingStatus ==
-                                                                  true
-                                                              ? InkWell(
-                                                                  onTap: () {
-                                                                    getTableInfor(
-                                                                        roomId: state
-                                                                            .listRoomModel!
-                                                                            .rooms![
-                                                                                currentRoomIndex]
-                                                                            .storeRoomId
-                                                                            .toString(),
-                                                                        tableId: state
-                                                                            .listRoomModel!
-                                                                            .rooms![
-                                                                                currentRoomIndex]
-                                                                            .tables![
-                                                                                index]
-                                                                            .roomTableId
-                                                                            .toString(),
-                                                                        orderID: state
+                                                    var listRoomID = state
+                                                        .listRoomModel!.rooms!
+                                                        .map((data) =>
+                                                            data.storeRoomId)
+                                                        .toList();
+
+                                                    return Padding(
+                                                      padding:
+                                                          EdgeInsets.all(10.w),
+                                                      child: state
+                                                                  .listRoomModel!
+                                                                  .rooms![
+                                                                      currentRoomIndex]
+                                                                  .tables?[
+                                                                      index]
+                                                                  .bookingStatus ==
+                                                              true
+                                                          ? InkWell(
+                                                              onTap: () {
+                                                                getTableInfor(
+                                                                    roomId: state
+                                                                        .listRoomModel!
+                                                                        .rooms![
+                                                                            currentRoomIndex]
+                                                                        .storeRoomId
+                                                                        .toString(),
+                                                                    tableId: state
+                                                                        .listRoomModel!
+                                                                        .rooms![
+                                                                            currentRoomIndex]
+                                                                        .tables![
+                                                                            index]
+                                                                        .roomTableId
+                                                                        .toString(),
+                                                                    orderID: state
+                                                                        .listRoomModel!
+                                                                        .rooms![
+                                                                            currentRoomIndex]
+                                                                        .tables![
+                                                                            index]
+                                                                        .orderId
+                                                                        .toString());
+
+                                                                showDialog(
+                                                                    context:
+                                                                        context,
+                                                                    builder:
+                                                                        (BuildContext
+                                                                            context) {
+                                                                      return BookingTableDialog(
+                                                                        token:
+                                                                            tokenStaff,
+                                                                        role:
+                                                                            currentRole,
+                                                                        shopID:
+                                                                            currentShopId,
+                                                                        idRoom: state
                                                                             .listRoomModel!
                                                                             .rooms![currentRoomIndex]
-                                                                            .tables![index]
-                                                                            .orderId
-                                                                            .toString());
-
-                                                                    showDialog(
-                                                                        context:
-                                                                            context,
-                                                                        builder:
-                                                                            (BuildContext
-                                                                                context) {
-                                                                          return BookingTableDialog(
-                                                                            token:
-                                                                                tokenStaff,
-                                                                            role:
-                                                                                currentRole,
-                                                                            shopID:
-                                                                                currentShopId,
-                                                                            idRoom:
-                                                                                state.listRoomModel!.rooms![currentRoomIndex].storeRoomId,
-                                                                            orderID:
-                                                                                null,
-                                                                            eventSaveButton:
-                                                                                () {
-                                                                              getDataTabIndex(
-                                                                                roomId: state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
-                                                                              );
-                                                                            },
-                                                                            listTableOfRoom:
-                                                                                state.listRoomModel!.rooms![currentRoomIndex].tables,
-                                                                            currentTable:
-                                                                                state.listRoomModel!.rooms![currentRoomIndex].tables![index],
+                                                                            .storeRoomId,
+                                                                        orderID:
+                                                                            null,
+                                                                        eventSaveButton:
+                                                                            () {
+                                                                          getDataTabIndex(
+                                                                            roomId:
+                                                                                state.listRoomModel!.rooms![currentRoomIndex].storeRoomId.toString(),
                                                                           );
-                                                                        });
-                                                                  },
-                                                                  child: Stack(
-                                                                    alignment:
-                                                                        Alignment
+                                                                        },
+                                                                        listTableOfRoom: state
+                                                                            .listRoomModel!
+                                                                            .rooms![currentRoomIndex]
+                                                                            .tables,
+                                                                        currentTable: state
+                                                                            .listRoomModel!
+                                                                            .rooms![currentRoomIndex]
+                                                                            .tables![index],
+                                                                      );
+                                                                    });
+                                                              },
+                                                              child: Stack(
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                children: [
+                                                                  Image.asset(
+                                                                    "assets/images/table_image_emty.png",
+                                                                    fit: BoxFit
+                                                                        .contain,
+                                                                  ),
+                                                                  Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
                                                                             .center,
                                                                     children: [
-                                                                      Image
-                                                                          .asset(
-                                                                        "assets/images/table_image_emty.png",
-                                                                        fit: BoxFit
-                                                                            .contain,
+                                                                      TextApp(
+                                                                        isOverFlow:
+                                                                            false,
+                                                                        softWrap:
+                                                                            true,
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        text: state.listRoomModel!.rooms![currentRoomIndex].tables?[index].tableName ??
+                                                                            '',
+                                                                        color:
+                                                                            newBlueText,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
                                                                       ),
-                                                                      Column(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.center,
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.center,
-                                                                        children: [
-                                                                          TextApp(
-                                                                            isOverFlow:
-                                                                                false,
-                                                                            softWrap:
-                                                                                true,
-                                                                            textAlign:
-                                                                                TextAlign.center,
-                                                                            text:
-                                                                                state.listRoomModel!.rooms![currentRoomIndex].tables?[index].tableName ?? '',
-                                                                            color:
-                                                                                newBlueText,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
-                                                                          Icon(
-                                                                            Icons.add,
-                                                                            color:
-                                                                                newBlueText,
-                                                                            size:
-                                                                                15.sp,
-                                                                          )
-                                                                        ],
+                                                                      Icon(
+                                                                        Icons
+                                                                            .add,
+                                                                        color:
+                                                                            newBlueText,
+                                                                        size: 15
+                                                                            .sp,
                                                                       )
                                                                     ],
-                                                                  ),
-                                                                )
-                                                              : InkWell(
-                                                                  onTap: () {
-                                                                    showMaterialModalBottomSheet(
-                                                                        shape:
-                                                                            RoundedRectangleBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(25.r),
-                                                                            topLeft:
-                                                                                Radius.circular(25.r),
-                                                                          ),
-                                                                        ),
-                                                                        clipBehavior:
-                                                                            Clip
-                                                                                .antiAliasWithSaveLayer,
-                                                                        context:
-                                                                            context,
-                                                                        builder: (context) =>
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            )
+                                                          : InkWell(
+                                                              onTap: () {
+                                                                showMaterialModalBottomSheet(
+                                                                    shape:
+                                                                        RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topRight:
+                                                                            Radius.circular(25.r),
+                                                                        topLeft:
+                                                                            Radius.circular(25.r),
+                                                                      ),
+                                                                    ),
+                                                                    clipBehavior:
+                                                                        Clip
+                                                                            .antiAliasWithSaveLayer,
+                                                                    context:
+                                                                        context,
+                                                                    builder:
+                                                                        (context) =>
                                                                             Container(
                                                                               height: 1.sh / 3,
                                                                               padding: EdgeInsets.all(20.w),
@@ -486,9 +498,17 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                     },
                                                                                     child: Row(
                                                                                       children: [
-                                                                                        Icon(
-                                                                                          Icons.receipt,
-                                                                                          size: 35.sp,
+                                                                                        // Icon(
+                                                                                        //   Icons.receipt,
+                                                                                        //   size: 35.sp,
+                                                                                        // ),
+                                                                                        SizedBox(
+                                                                                          width: 35.w,
+                                                                                          height: 35.w,
+                                                                                          child: Image.asset(
+                                                                                            "assets/images/receipt.png",
+                                                                                            fit: BoxFit.contain,
+                                                                                          ),
                                                                                         ),
                                                                                         space10W,
                                                                                         TextApp(
@@ -575,13 +595,21 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                     },
                                                                                     child: Row(
                                                                                       children: [
-                                                                                        Icon(
-                                                                                          Icons.print,
-                                                                                          size: 35.sp,
+                                                                                        // Icon(
+                                                                                        //   Icons.print,
+                                                                                        //   size: 35.sp,
+                                                                                        // ),
+                                                                                        SizedBox(
+                                                                                          width: 35.w,
+                                                                                          height: 35.w,
+                                                                                          child: Image.asset(
+                                                                                            "assets/images/printing_receipt.png",
+                                                                                            fit: BoxFit.contain,
+                                                                                          ),
                                                                                         ),
                                                                                         space10W,
                                                                                         TextApp(
-                                                                                          text: "In hoá đơn",
+                                                                                          text: "Xem hoá đơn",
                                                                                           color: Colors.black,
                                                                                           fontsize: 18.sp,
                                                                                         )
@@ -620,9 +648,17 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                     },
                                                                                     child: Row(
                                                                                       children: [
-                                                                                        Icon(
-                                                                                          Icons.cancel,
-                                                                                          size: 35.sp,
+                                                                                        // Icon(
+                                                                                        //   Icons.cancel,
+                                                                                        //   size: 35.sp,
+                                                                                        // ),
+                                                                                        SizedBox(
+                                                                                          width: 35.w,
+                                                                                          height: 35.w,
+                                                                                          child: Image.asset(
+                                                                                            "assets/images/cancle_icon.png",
+                                                                                            fit: BoxFit.contain,
+                                                                                          ),
                                                                                         ),
                                                                                         space10W,
                                                                                         TextApp(
@@ -636,95 +672,96 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                 ],
                                                                               ),
                                                                             ));
-                                                                  },
-                                                                  child: Stack(
-                                                                    alignment:
-                                                                        Alignment
+                                                              },
+                                                              child: Stack(
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                children: [
+                                                                  Image.asset(
+                                                                    "assets/images/table_image.png",
+                                                                    fit: BoxFit
+                                                                        .contain,
+                                                                  ),
+                                                                  Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
                                                                             .center,
                                                                     children: [
-                                                                      Image
-                                                                          .asset(
-                                                                        "assets/images/table_image.png",
-                                                                        fit: BoxFit
-                                                                            .contain,
+                                                                      TextApp(
+                                                                        isOverFlow:
+                                                                            false,
+                                                                        softWrap:
+                                                                            true,
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        text: state.listRoomModel!.rooms![currentRoomIndex].tables?[index].tableName ??
+                                                                            '',
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
                                                                       ),
-                                                                      Column(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.center,
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.center,
-                                                                        children: [
-                                                                          TextApp(
-                                                                            isOverFlow:
-                                                                                false,
-                                                                            softWrap:
-                                                                                true,
-                                                                            textAlign:
-                                                                                TextAlign.center,
-                                                                            text:
-                                                                                state.listRoomModel!.rooms![currentRoomIndex].tables?[index].tableName ?? '',
-                                                                            color:
-                                                                                Colors.black,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
-                                                                          TextApp(
-                                                                            text:
-                                                                                state.listRoomModel!.rooms![currentRoomIndex].tables?[index].orderCreatedAt.toString() ?? '',
-                                                                            color:
-                                                                                orangeColorApp,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          )
-                                                                        ],
-                                                                      ),
+                                                                      TextApp(
+                                                                        text: state.listRoomModel!.rooms![currentRoomIndex].tables?[index].orderCreatedAt.toString() ??
+                                                                            '',
+                                                                        color:
+                                                                            orangeColorApp,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                      )
                                                                     ],
                                                                   ),
-                                                                ),
-                                                        );
-                                                      }),
-                                                )
-                                              : RefreshIndicator(
-                                                  color: Colors.blue,
-                                                  onRefresh: () async {
-                                                    getDataTabIndex(
-                                                      roomId: state
-                                                          .listRoomModel!
-                                                          .rooms![
-                                                              currentRoomIndex]
-                                                          .storeRoomId
-                                                          .toString(),
-                                                    );
-                                                  },
-                                                  child: ListView.builder(
-                                                      itemCount: 1,
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        return Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  left: 30.w,
-                                                                  right: 30.w),
-                                                          child: Container(
-                                                            width: 1.sw,
-                                                            height: 50,
-                                                            color: Colors.blue,
-                                                            child: Center(
-                                                              child: TextApp(
-                                                                text:
-                                                                    "Phòng này không có bàn",
-                                                                color: Colors
-                                                                    .white,
-                                                                fontsize: 14.sp,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
+                                                                ],
                                                               ),
                                                             ),
+                                                    );
+                                                  }),
+                                            )
+                                          : RefreshIndicator(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              onRefresh: () async {
+                                                getDataTabIndex(
+                                                  roomId: state
+                                                      .listRoomModel!
+                                                      .rooms![currentRoomIndex]
+                                                      .storeRoomId
+                                                      .toString(),
+                                                );
+                                              },
+                                              child: ListView.builder(
+                                                  itemCount: 1,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: 30.w,
+                                                          right: 30.w),
+                                                      child: Container(
+                                                        width: 1.sw,
+                                                        height: 50,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .primary,
+                                                        child: Center(
+                                                          child: TextApp(
+                                                            text:
+                                                                "Phòng này không có bàn",
+                                                            color: Colors.white,
+                                                            fontsize: 14.sp,
+                                                            textAlign: TextAlign
+                                                                .center,
                                                           ),
-                                                        );
-                                                      }),
-                                                ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }),
+                                            ),
                                     ),
                                   )
                                 ],
@@ -1038,18 +1075,21 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                                     right: 15.w,
                                     top: 8.w,
                                     bottom: 8.w),
-                                disabledColor: Colors.blue,
-                                selectedColor: Colors.blue,
+                                disabledColor:
+                                    Theme.of(context).colorScheme.primary,
+                                selectedColor:
+                                    Theme.of(context).colorScheme.primary,
                                 backgroundColor: Colors.white,
                                 shadowColor: Colors.black,
-                                selectedShadowColor: Colors.blue,
+                                selectedShadowColor:
+                                    Theme.of(context).colorScheme.primary,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10.w),
                                   side: BorderSide(
-                                    color:
-                                        selectedCategories.contains(lableFood)
-                                            ? Colors.grey.withOpacity(0.5)
-                                            : Colors.blue,
+                                    color: selectedCategories
+                                            .contains(lableFood)
+                                        ? Colors.grey.withOpacity(0.5)
+                                        : Theme.of(context).colorScheme.primary,
                                     width: 1.0,
                                   ),
                                 ),
@@ -1057,7 +1097,9 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                                     color:
                                         selectedCategories.contains(lableFood)
                                             ? Colors.white
-                                            : Colors.blue),
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .primary),
                                 showCheckmark: false,
                                 label: Text(lableFood.toUpperCase()),
                                 selected:

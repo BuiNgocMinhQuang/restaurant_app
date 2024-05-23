@@ -17,6 +17,7 @@ import 'package:app_restaurant/widgets/chart/chart_dialog.dart';
 import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -212,7 +213,7 @@ class _DetailsStoreState extends State<DetailsStore> {
           children: [
             SafeArea(
               child: RefreshIndicator(
-                color: Colors.blue,
+                color: Theme.of(context).colorScheme.primary,
                 onRefresh: () async {
                   handleGetListRoom(
                       shopID: widget.detailsStoreModel?.shopId ?? '');
@@ -340,7 +341,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                                     width: 50,
                                     height: 50,
                                     child: Image.asset(
-                                      'assets/images/staff.png',
+                                      'assets/images/staff_gr.png',
                                       fit: BoxFit.contain,
                                     ),
                                   ),
@@ -451,23 +452,39 @@ class _DetailsStoreState extends State<DetailsStore> {
                                             )
                                           ],
                                         ),
-                                        SizedBox(
-                                          width: 30,
-                                          height: 30,
-                                          child: ButtonIcon(
-                                              isIconCircle: false,
-                                              color1: const Color.fromRGBO(
-                                                  20, 23, 39, 1),
-                                              color2: const Color.fromRGBO(
-                                                  58, 65, 111, 1),
-                                              event: () {
-                                                hanldeGetEditDetailsStore(
-                                                    shopID: widget
-                                                            .detailsStoreModel
-                                                            ?.shopId ??
-                                                        1);
-                                              },
-                                              icon: Icons.edit),
+                                        InkWell(
+                                          onTap: () {
+                                            hanldeGetEditDetailsStore(
+                                                shopID: widget.detailsStoreModel
+                                                        ?.shopId ??
+                                                    1);
+                                          },
+                                          child: Container(
+                                            width: 35.w,
+                                            height: 35.w,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5.r),
+                                                gradient: const LinearGradient(
+                                                  begin: Alignment.topRight,
+                                                  end: Alignment.bottomLeft,
+                                                  colors: [
+                                                    Color.fromRGBO(
+                                                        20, 23, 39, 1),
+                                                    Color.fromRGBO(
+                                                        58, 65, 111, 1),
+                                                  ],
+                                                )),
+                                            child: Container(
+                                              width: 30.w,
+                                              height: 30.w,
+                                              padding: EdgeInsets.all(5.w),
+                                              child: Image.asset(
+                                                "assets/images/edit_icon.png",
+                                                fit: BoxFit.contain,
+                                              ),
+                                            ),
+                                          ),
                                         )
                                       ],
                                     ),
@@ -598,7 +615,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                                             Container(
                                               width: 1.sw,
                                               padding: EdgeInsets.all(10.w),
-                                              decoration: const BoxDecoration(
+                                              decoration: BoxDecoration(
                                                 border: Border(
                                                     top: BorderSide(
                                                         width: 0,
@@ -608,7 +625,9 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                         color: Colors.white),
                                                     left: BorderSide(
                                                         width: 3,
-                                                        color: Colors.blue),
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .primary),
                                                     right: BorderSide(
                                                         width: 0,
                                                         color: Colors.white)),
@@ -676,9 +695,17 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                                                 },
                                                                                 child: Row(
                                                                                   children: [
-                                                                                    Icon(
-                                                                                      Icons.edit,
-                                                                                      size: 35.sp,
+                                                                                    // Icon(
+                                                                                    //   Icons.edit,
+                                                                                    //   size: 35.sp,
+                                                                                    // ),
+                                                                                    SizedBox(
+                                                                                      width: 35.w,
+                                                                                      height: 35.w,
+                                                                                      child: Image.asset(
+                                                                                        "assets/images/edit_icon.png",
+                                                                                        fit: BoxFit.contain,
+                                                                                      ),
                                                                                     ),
                                                                                     space10W,
                                                                                     TextApp(
@@ -708,9 +735,17 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                                                 },
                                                                                 child: Row(
                                                                                   children: [
-                                                                                    Icon(
-                                                                                      Icons.settings,
-                                                                                      size: 35.sp,
+                                                                                    // Icon(
+                                                                                    //   Icons.settings,
+                                                                                    //   size: 35.sp,
+                                                                                    // ),
+                                                                                    SizedBox(
+                                                                                      width: 35.w,
+                                                                                      height: 35.w,
+                                                                                      child: Image.asset(
+                                                                                        "assets/images/setting_icon.png",
+                                                                                        fit: BoxFit.contain,
+                                                                                      ),
                                                                                     ),
                                                                                     space10W,
                                                                                     TextApp(
@@ -734,9 +769,17 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                                                 },
                                                                                 child: Row(
                                                                                   children: [
-                                                                                    Icon(
-                                                                                      Icons.delete,
-                                                                                      size: 35.sp,
+                                                                                    // Icon(
+                                                                                    //   Icons.delete,
+                                                                                    //   size: 35.sp,
+                                                                                    // ),
+                                                                                    SizedBox(
+                                                                                      width: 35.w,
+                                                                                      height: 35.w,
+                                                                                      child: Image.asset(
+                                                                                        "assets/images/delete_icon.png",
+                                                                                        fit: BoxFit.contain,
+                                                                                      ),
                                                                                     ),
                                                                                     space10W,
                                                                                     TextApp(

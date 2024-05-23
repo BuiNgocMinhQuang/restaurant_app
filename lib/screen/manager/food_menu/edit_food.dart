@@ -991,7 +991,9 @@ class _EditFoodState extends State<EditFood> {
                                                     },
                                                     child: TextApp(
                                                       text: deleteImage,
-                                                      color: Colors.blue,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
                                                     ),
                                                   )
                                                 ],
@@ -1043,7 +1045,9 @@ class _EditFoodState extends State<EditFood> {
                                                     },
                                                     child: TextApp(
                                                       text: deleteImage,
-                                                      color: Colors.blue,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
                                                     ),
                                                   )
                                                 ],

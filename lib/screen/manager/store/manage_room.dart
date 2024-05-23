@@ -375,10 +375,21 @@ class _ManageRoomState extends State<ManageRoom> {
                                                                       child:
                                                                           Row(
                                                                         children: [
-                                                                          Icon(
-                                                                            Icons.edit,
-                                                                            size:
-                                                                                35.sp,
+                                                                          // Icon(
+                                                                          //   Icons.edit,
+                                                                          //   size:
+                                                                          //       35.sp,
+                                                                          // ),
+                                                                          SizedBox(
+                                                                            width:
+                                                                                35.w,
+                                                                            height:
+                                                                                35.w,
+                                                                            child:
+                                                                                Image.asset(
+                                                                              "assets/images/edit_icon.png",
+                                                                              fit: BoxFit.contain,
+                                                                            ),
                                                                           ),
                                                                           space10W,
                                                                           TextApp(
@@ -411,10 +422,21 @@ class _ManageRoomState extends State<ManageRoom> {
                                                                       child:
                                                                           Row(
                                                                         children: [
-                                                                          Icon(
-                                                                            Icons.delete,
-                                                                            size:
-                                                                                35.sp,
+                                                                          // Icon(
+                                                                          //   Icons.delete,
+                                                                          //   size:
+                                                                          //       35.sp,
+                                                                          // ),
+                                                                          SizedBox(
+                                                                            width:
+                                                                                35.w,
+                                                                            height:
+                                                                                35.w,
+                                                                            child:
+                                                                                Image.asset(
+                                                                              "assets/images/delete_icon.png",
+                                                                              fit: BoxFit.contain,
+                                                                            ),
                                                                           ),
                                                                           space10W,
                                                                           TextApp(
