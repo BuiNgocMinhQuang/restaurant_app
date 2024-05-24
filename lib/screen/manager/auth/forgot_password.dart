@@ -44,7 +44,6 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
       );
       final data = jsonDecode(respons.body);
 
-      log("DADATATA $data");
       if (data['status'] == 200) {
         final messRes = data['message'];
         final messText = messRes['text'];
@@ -73,10 +72,10 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
         showFailedModal(
             context: navigatorKey.currentContext, desWhyFail: messRes);
 
-        log("FOGOT PASSWORD ERROR 1");
+        log("ERROR handleForgotPassword 1");
       }
     } catch (error) {
-      log("FOGOT PASSWORD ERROR ${error}");
+      log("ERROR handleForgotPassword 2 $error");
     }
   }
 

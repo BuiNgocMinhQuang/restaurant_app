@@ -4,6 +4,7 @@ import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
 import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
 import 'package:app_restaurant/utils/storage.dart';
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,22 +35,21 @@ class ListStoresBloc extends Bloc<ListStoresEvent, ListStoresState> {
         },
       );
       final dataListStore = jsonDecode(responseListStore.body);
-      log("dataListStore $dataListStore");
       try {
         if (dataListStore['status'] == 200) {
           var listStoreManagerDataRes = ListStoreModel.fromJson(dataListStore);
           emit(state.copyWith(listStoreModel: listStoreManagerDataRes));
           emit(state.copyWith(listStoresStatus: ListStoresStatus.succes));
         } else {
-          log("ERRRO GET LIST STORE 111111");
+          log("ERRRO _onGetListStores 1");
           emit(state.copyWith(listStoresStatus: ListStoresStatus.failed));
         }
       } catch (error) {
-        log("ERRRO GET LIST STORE $error");
+        log("ERRRO _onGetListStores 2 $error");
         emit(state.copyWith(listStoresStatus: ListStoresStatus.failed));
       }
     } catch (error) {
-      log("NO DATA ROOM $error");
+      log("ERRRO _onGetListStores 3 $error");
 
       emit(state.copyWith(listStoresStatus: ListStoresStatus.failed));
 

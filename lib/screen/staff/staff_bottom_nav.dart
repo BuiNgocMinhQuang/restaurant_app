@@ -109,8 +109,6 @@ class _StaffFabTabState extends State<StaffFabTab> {
           setState(() {
             staffInforData = staffInforDataRes.data;
           });
-
-          log("GET INFOR STAFF OK 1");
         } else {
           log("GET INFOR STAFF ERROR 1");
         }

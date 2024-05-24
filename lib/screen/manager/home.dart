@@ -14,7 +14,6 @@ import 'package:app_restaurant/widgets/chart/chart_home_all_store.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -78,7 +77,6 @@ class _ManagerHomeState extends State<ManagerHome> {
         }),
       );
       final data = jsonDecode(respons.body);
-      log(" DATA HOME ${data}");
       try {
         if (data['status'] == 200) {
           mounted
@@ -238,7 +236,6 @@ class _ManagerHomeState extends State<ManagerHome> {
         }),
       );
       final data = jsonDecode(respons.body);
-      log(" DATA CREATE FOOD ${data}");
       try {
         if (data['status'] == 200) {
           mounted
@@ -254,13 +251,13 @@ class _ManagerHomeState extends State<ManagerHome> {
                     )),
           );
         } else {
-          log("ERROR CREATE FOOOD");
+          log("ERROR getDetailsStore 1");
         }
       } catch (error) {
-        log("ERROR CREATE $error");
+        log("ERROR getDetailsStore 2 $error");
       }
     } catch (error) {
-      log("ERROR CREATE $error");
+      log("ERROR getDetailsStore 3 $error");
     }
   }
 
@@ -287,7 +284,6 @@ class _ManagerHomeState extends State<ManagerHome> {
         }),
       );
       final data = jsonDecode(respons.body);
-      log(" DATA CHART HOME ${data}");
       try {
         if (data['status'] == 200) {
           mounted
@@ -296,13 +292,13 @@ class _ManagerHomeState extends State<ManagerHome> {
                 })
               : null;
         } else {
-          log("ERROR DATA CHART HOME");
+          log("ERROR handleGetChartDataHome 1");
         }
       } catch (error) {
-        log("ERROR DATA CHART HOME $error");
+        log("ERROR handleGetChartDataHome 2 $error");
       }
     } catch (error) {
-      log("ERROR DATA CHART HOME $error");
+      log("ERROR handleGetChartDataHome 3 $error");
     }
   }
 
@@ -801,96 +797,117 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                                   SizedBox(
                                                                     width: 10.w,
                                                                   ),
-                                                                  Container(
-                                                                    child:
-                                                                        Column(
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .start,
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .start,
-                                                                      children: [
-                                                                        Row(
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.center,
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          children: [
-                                                                            TextApp(
+                                                                  Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Row(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.start,
+                                                                        children: [
+                                                                          TextApp(
+                                                                            isOverFlow:
+                                                                                false,
+                                                                            softWrap:
+                                                                                true,
+                                                                            text:
+                                                                                "Địa chỉ: ",
+                                                                            fontsize:
+                                                                                14.sp,
+                                                                            textAlign:
+                                                                                TextAlign.start,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
+                                                                          space5W,
+                                                                          SizedBox(
+                                                                            width:
+                                                                                150.w,
+                                                                            child:
+                                                                                TextApp(
                                                                               isOverFlow: false,
                                                                               softWrap: true,
-                                                                              text: "Địa chỉ: ",
+                                                                              text: storeData.storeAddress ?? '',
                                                                               fontsize: 14.sp,
-                                                                              textAlign: TextAlign.start,
-                                                                              fontWeight: FontWeight.bold,
                                                                             ),
-                                                                            space5W,
-                                                                            SizedBox(
-                                                                              width: 150.w,
-                                                                              child: TextApp(
-                                                                                isOverFlow: false,
-                                                                                softWrap: true,
-                                                                                text: storeData.storeAddress ?? '',
-                                                                                fontsize: 14.sp,
-                                                                              ),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                        Row(
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.center,
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          children: [
-                                                                            TextApp(
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      Row(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.start,
+                                                                        children: [
+                                                                          TextApp(
+                                                                            isOverFlow:
+                                                                                false,
+                                                                            softWrap:
+                                                                                true,
+                                                                            text:
+                                                                                "Nhân viên: ",
+                                                                            fontsize:
+                                                                                14.sp,
+                                                                            textAlign:
+                                                                                TextAlign.start,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
+                                                                          space5W,
+                                                                          SizedBox(
+                                                                            width:
+                                                                                150.w,
+                                                                            child:
+                                                                                TextApp(
                                                                               isOverFlow: false,
                                                                               softWrap: true,
-                                                                              text: "Nhân viên: ",
+                                                                              text: storeData.staffsCount.toString(),
                                                                               fontsize: 14.sp,
-                                                                              textAlign: TextAlign.start,
-                                                                              fontWeight: FontWeight.bold,
                                                                             ),
-                                                                            space5W,
-                                                                            SizedBox(
-                                                                              width: 150.w,
-                                                                              child: TextApp(
-                                                                                isOverFlow: false,
-                                                                                softWrap: true,
-                                                                                text: storeData.staffsCount.toString(),
-                                                                                fontsize: 14.sp,
-                                                                              ),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                        Row(
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.center,
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          children: [
-                                                                            TextApp(
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      Row(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.start,
+                                                                        children: [
+                                                                          TextApp(
+                                                                            isOverFlow:
+                                                                                false,
+                                                                            softWrap:
+                                                                                true,
+                                                                            text:
+                                                                                "Tổng tiền: ",
+                                                                            fontsize:
+                                                                                14.sp,
+                                                                            textAlign:
+                                                                                TextAlign.start,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
+                                                                          space5W,
+                                                                          SizedBox(
+                                                                            width:
+                                                                                150.w,
+                                                                            child:
+                                                                                TextApp(
                                                                               isOverFlow: false,
                                                                               softWrap: true,
-                                                                              text: "Tổng tiền: ",
+                                                                              text: "${MoneyFormatter(amount: (storeData.ordersSumOrderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                                                                               fontsize: 14.sp,
-                                                                              textAlign: TextAlign.start,
-                                                                              fontWeight: FontWeight.bold,
                                                                             ),
-                                                                            space5W,
-                                                                            SizedBox(
-                                                                              width: 150.w,
-                                                                              child: TextApp(
-                                                                                isOverFlow: false,
-                                                                                softWrap: true,
-                                                                                text: "${MoneyFormatter(amount: (storeData.ordersSumOrderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                                                fontsize: 14.sp,
-                                                                              ),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      ],
-                                                                    ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ],
                                                                   )
                                                                 ],
                                                               ),

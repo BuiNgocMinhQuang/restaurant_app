@@ -12,12 +12,10 @@ import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/screen/manager/store/manage_room.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
-import 'package:app_restaurant/widgets/button/button_icon.dart';
 import 'package:app_restaurant/widgets/chart/chart_dialog.dart';
 import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -66,20 +64,19 @@ class _DetailsStoreState extends State<DetailsStore> {
         }),
       );
       final data = jsonDecode(respons.body);
-      log(" DATA CREATE FOOD $data");
       try {
         if (data['status'] == 200) {
           setState(() {
             widget.detailsStoreModel = DetailsStoreModel.fromJson(data);
           });
         } else {
-          log("ERROR CREATE FOOOD");
+          log("ERROR getDetailsStore 1");
         }
       } catch (error) {
-        log("ERROR CREATE $error");
+        log("ERROR getDetailsStore 2 $error");
       }
     } catch (error) {
-      log("ERROR CREATE $error");
+      log("ERROR getDetailsStore 3 $error");
     }
   }
 
@@ -115,13 +112,13 @@ class _DetailsStoreState extends State<DetailsStore> {
                 );
               });
         } else {
-          log("ERROR CREATE FOOOD");
+          log("ERROR hanldeGetEditDetailsStore 1");
         }
       } catch (error) {
-        log("ERROR CREATE 112212 $error");
+        log("ERROR hanldeGetEditDetailsStore 2 $error");
       }
     } catch (error) {
-      log("ERROR CREATE 44444 $error");
+      log("ERROR hanldeGetEditDetailsStore 3 $error");
     }
   }
 
@@ -150,13 +147,13 @@ class _DetailsStoreState extends State<DetailsStore> {
             listRoomOfStoreModel = ListRoomOfStoreModel.fromJson(data);
           });
         } else {
-          log("ERROR CREATE FOOOD");
+          log("ERROR handleGetListRoom 1");
         }
       } catch (error) {
-        log("ERROR CREATE 112212 $error");
+        log("ERROR handleGetListRoom 2 $error");
       }
     } catch (error) {
-      log("ERROR CREATE 44444 $error");
+      log("ERROR handleGetListRoom 3 $error");
     }
   }
 
@@ -185,20 +182,20 @@ class _DetailsStoreState extends State<DetailsStore> {
             handleGetListRoom(shopID: widget.detailsStoreModel?.shopId ?? '');
           });
         } else {
-          log("ERROR CREATE FOOOD");
+          log("ERROR handleDeleteRoom 1");
         }
       } catch (error) {
-        log("ERROR CREATE 112212 $error");
+        log("ERROR handleDeleteRoom 2 $error");
       }
     } catch (error) {
-      log("ERROR CREATE 44444 $error");
+      log("ERROR handleDeleteRoom 3 $error");
     }
   }
 
   @override
   void initState() {
-    super.initState();
     handleGetListRoom(shopID: widget.detailsStoreModel?.shopId ?? '');
+    super.initState();
   }
 
   @override
@@ -617,10 +614,10 @@ class _DetailsStoreState extends State<DetailsStore> {
                                               padding: EdgeInsets.all(10.w),
                                               decoration: BoxDecoration(
                                                 border: Border(
-                                                    top: BorderSide(
+                                                    top: const BorderSide(
                                                         width: 0,
                                                         color: Colors.white),
-                                                    bottom: BorderSide(
+                                                    bottom: const BorderSide(
                                                         width: 0,
                                                         color: Colors.white),
                                                     left: BorderSide(
@@ -628,7 +625,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                         color: Theme.of(context)
                                                             .colorScheme
                                                             .primary),
-                                                    right: BorderSide(
+                                                    right: const BorderSide(
                                                         width: 0,
                                                         color: Colors.white)),
                                               ),
@@ -644,10 +641,9 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                                   ?.rooms[index]
                                                                   .storeRoomName ??
                                                               ''),
-                                                      // Icon(Icons.more),
                                                       SizedBox(
-                                                        width: 20.w,
-                                                        height: 20.w,
+                                                        width: 50.w,
+                                                        height: 30.w,
                                                         child: InkWell(
                                                           onTap: () {
                                                             showMaterialModalBottomSheet(
@@ -695,10 +691,6 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                                                 },
                                                                                 child: Row(
                                                                                   children: [
-                                                                                    // Icon(
-                                                                                    //   Icons.edit,
-                                                                                    //   size: 35.sp,
-                                                                                    // ),
                                                                                     SizedBox(
                                                                                       width: 35.w,
                                                                                       height: 35.w,
@@ -735,10 +727,6 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                                                 },
                                                                                 child: Row(
                                                                                   children: [
-                                                                                    // Icon(
-                                                                                    //   Icons.settings,
-                                                                                    //   size: 35.sp,
-                                                                                    // ),
                                                                                     SizedBox(
                                                                                       width: 35.w,
                                                                                       height: 35.w,
@@ -769,10 +757,6 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                                                 },
                                                                                 child: Row(
                                                                                   children: [
-                                                                                    // Icon(
-                                                                                    //   Icons.delete,
-                                                                                    //   size: 35.sp,
-                                                                                    // ),
                                                                                     SizedBox(
                                                                                       width: 35.w,
                                                                                       height: 35.w,

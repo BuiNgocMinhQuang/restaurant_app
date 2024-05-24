@@ -10,6 +10,7 @@ import 'package:app_restaurant/model/manager_infor_model.dart';
 import 'package:app_restaurant/screen/manager/store/details_store.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
+import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
@@ -49,8 +50,8 @@ class _ListStoresState extends State<ListStores> {
   final ImagePicker imagePicker = ImagePicker();
   @override
   void initState() {
-    super.initState();
     getListStore();
+    super.initState();
   }
 
   void getListStore() async {
@@ -76,7 +77,6 @@ class _ListStoresState extends State<ListStores> {
         }),
       );
       final data = jsonDecode(respons.body);
-      log(" DATA CREATE FOOD ${data}");
       try {
         if (data['status'] == 200) {
           setState(() {
@@ -90,13 +90,13 @@ class _ListStoresState extends State<ListStores> {
                     )),
           );
         } else {
-          log("ERROR CREATE FOOOD");
+          log("ERROR getDetailsStore 1");
         }
       } catch (error) {
-        log("ERROR CREATE $error");
+        log("ERROR getDetailsStore 2 $error");
       }
     } catch (error) {
-      log("ERROR CREATE $error");
+      log("ERROR getDetailsStore 3 $error");
     }
   }
 
@@ -556,6 +556,21 @@ class _ListStoresState extends State<ListStores> {
                                     fontsize: 20.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
+                                  space30H,
+                                  SizedBox(
+                                    width: 200,
+                                    child: ButtonGradient(
+                                      color1: color1BlueButton,
+                                      color2: color2BlueButton,
+                                      event: () {
+                                        getListStore();
+                                      },
+                                      text: 'Thử lại',
+                                      fontSize: 12.sp,
+                                      radius: 8.r,
+                                      textColor: Colors.white,
+                                    ),
+                                  )
                                 ],
                               ),
                             ),

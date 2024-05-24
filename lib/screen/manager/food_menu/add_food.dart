@@ -81,8 +81,8 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
 
   @override
   void initState() {
-    super.initState();
     init();
+    super.initState();
   }
 
   @override
@@ -98,7 +98,6 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
   }
 
   void init() {
-    log(widget.listStores.length.toString());
     for (var i = 0; i < widget.listStores.length; i++) {
       nameStoreList.add(widget.listStores[i].storeName ?? '');
       listStoreIdInIt.add(widget.listStores[i].storeId ?? 0);
@@ -155,7 +154,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
         }),
       );
       final data = jsonDecode(respons.body);
-      log(" DATA CREATE FOOD $data");
+
       try {
         if (data['status'] == 200) {
           showCustomDialogModal(
@@ -180,7 +179,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                 })
               : null;
         } else {
-          log("ERROR CREATE FOOOD");
+          log("ERROR handleCreateFood 1");
           showCustomDialogModal(
               context: navigatorKey.currentContext,
               textDesc: "Có lỗi xảy ra",
@@ -190,7 +189,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
               typeDialog: "error");
         }
       } catch (error) {
-        log("ERROR CREATE111 $error");
+        log("ERROR handleCreateFood 2 $error");
         showCustomDialogModal(
             context: navigatorKey.currentContext,
             textDesc: "Có lỗi xảy ra",
@@ -200,7 +199,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
             typeDialog: "error");
       }
     } catch (error) {
-      log("ERROR CREATE2222 $error");
+      log("ERROR handleCreateFood 3 $error");
       showCustomDialogModal(
           context: navigatorKey.currentContext,
           textDesc: "Có lỗi xảy ra",

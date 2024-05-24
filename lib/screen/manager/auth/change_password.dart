@@ -77,6 +77,8 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
           );
         });
       } else {
+        log("ERROR handleChangePassword 1");
+
         final messRes = data['message'];
         final messFailed = messRes['text'];
 
@@ -87,11 +89,9 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
             colorButton: Colors.red,
             btnText: "OK",
             typeDialog: "error");
-
-        log("FOGOT PASSWORD ERROR 1");
       }
     } catch (error) {
-      log("CHECK OTP ERROR ${error}");
+      log("ERROR handleChangePassword 2 $error");
     }
   }
 

@@ -113,13 +113,13 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
             init();
           });
         } else {
-          log("ERROR CREATE FOOOD");
+          log("ERROR getDataStaff 1");
         }
       } catch (error) {
-        log("ERROR CREATE $error");
+        log("ERROR getDataStaff 2 $error");
       }
     } catch (error) {
-      log("ERROR CREATE $error");
+      log("ERROR getDataStaff 3 $error");
     }
   }
 
@@ -159,20 +159,6 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
         ? instagramTextController.text =
             staffDataModel?.staff.staffInstagram ?? ''
         : null;
-    // log(staffDataModel?.stores[0].shopId.toString() ?? 'ddd');
-    var hehe = staffDataModel?.stores.where((element) {
-      log(element.shopId.toString());
-      if (element.shopId == staffDataModel?.staff.shopId) {
-        log("OKOK");
-        setState(() {
-          selectedShopIdInit = element.storeName ?? '';
-        });
-      } else {
-        log("COOK");
-      }
-      return true;
-    });
-    log(hehe.toString());
 
     mounted
         ? roleStaffString = staffDataModel?.staff.staffPosition == 1
@@ -234,18 +220,15 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
             var wardListMap = wardList.asMap();
             var myWard = wardListMap[staffDataModel?.staff.staffAddress3];
             currentWard = myWard;
-            log("currentWard.toString()");
-
-            log(currentWard.toString());
           });
         } else {
-          log("LOI GI DO dadadadadadadada");
+          log("ERROR getListAreaInit 1");
         }
       } catch (error) {
-        log("LOI GI DO $error");
+        log("ERROR getListAreaInit 2 $error");
       }
     } catch (error) {
-      log("LOI GI DO $error");
+      log("ERROR getListAreaInit 3 $error");
     }
   }
 
@@ -253,10 +236,6 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
     required int? city,
     required int? district,
   }) async {
-    log("DATA TRUYEN NN ${{
-      'city': city,
-      'district': district,
-    }}");
     try {
       final response = await http.post(
         Uri.parse('$baseUrl$areas'),
@@ -295,13 +274,13 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
             // currentWard = myWard;
           });
         } else {
-          log("LOI GI DO dadadadadadadada");
+          log("ERROR getListArea 1 ");
         }
       } catch (error) {
-        log("LOI GI DO $error");
+        log("ERROR getListArea 2 $error ");
       }
     } catch (error) {
-      log("LOI GI DO $error");
+      log("ERROR getListArea 3 $error ");
     }
   }
 
@@ -333,10 +312,10 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
           }).toList();
         });
       } else {
-        log("ERRRO GET LIST STORE 111111");
+        log("ERRRO getListStore 1");
       }
     } catch (error) {
-      log("ERRRO GET LIST STORE $error");
+      log("ERRRO getListStore 2 $error");
     }
   }
 
@@ -390,7 +369,6 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
         }),
       );
       final data = jsonDecode(respons.body);
-      log(" DATA CREATE FOOD $data");
       try {
         if (data['status'] == 200) {
           // var hahah = DetailsStoreModel.fromJson(data);
@@ -398,13 +376,13 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
           getDataStaff(staffNo: widget.staffNo);
           showUpdateDataSuccesDialog();
         } else {
-          log("ERROR CREATE FOOOD");
+          log("ERROR handleUpdateInforStaff 1");
         }
       } catch (error) {
-        log("ERROR CREATE $error");
+        log("ERROR handleUpdateInforStaff 2 $error");
       }
     } catch (error) {
-      log("ERROR CREATE $error");
+      log("ERROR handleUpdateInforStaff 3 $error");
     }
   }
 
@@ -445,6 +423,8 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
           newPassworldController.clear();
           reNewPassworldController.clear();
         } else {
+          log("ERROR handleChangePassStaff 1 ");
+
           final messRes = data['message'];
           final messFailed = messRes['text'];
 
@@ -457,10 +437,10 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
               typeDialog: "error");
         }
       } catch (error) {
-        log("ERROR CREATE $error");
+        log("ERROR handleChangePassStaff 2 $error");
       }
     } catch (error) {
-      log("ERROR CREATE $error");
+      log("ERROR handleChangePassStaff 3 $error");
     }
   }
 
@@ -486,21 +466,21 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
           light = false;
           getDataStaff(staffNo: widget.staffNo);
         } else {
-          log("ERROR CREATE FOOOD");
+          log("ERROR handleChangeStatusStaff 1");
         }
       } catch (error) {
-        log("ERROR CREATE $error");
+        log("ERROR handleChangeStatusStaff 2 $error");
       }
     } catch (error) {
-      log("ERROR CREATE $error");
+      log("ERROR handleChangeStatusStaff 3 $error");
     }
   }
 
   @override
   void initState() {
-    super.initState();
     getListStore();
     getDataStaff(staffNo: widget.staffNo);
+    super.initState();
   }
 
   @override
@@ -757,7 +737,6 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
 
                                                                               selectedShopId = shopIDList[index];
                                                                             });
-                                                                            log(selectedShopId.toString());
                                                                           },
                                                                           child:
                                                                               Row(
@@ -941,7 +920,6 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
 
                                                                               currentRoleOfStaff = index + 1;
                                                                             });
-                                                                            log(currentRoleOfStaff.toString());
                                                                             //3 quan li
                                                                             //1 nv
                                                                             //2 truong nhom

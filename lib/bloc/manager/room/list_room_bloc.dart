@@ -42,13 +42,14 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
 
       var message = data['message'];
 
-      log(" LIST ROOM $data");
       try {
         if (data['status'] == 200) {
           var roomDataRes = ListRoomModel.fromJson(data);
           emit(state.copyWith(listRoomModel: roomDataRes));
           emit(state.copyWith(listRoomStatus: ListRoomStatus.succes));
         } else {
+          log("ERROR _onGetListRoom 1");
+
           emit(state.copyWith(listRoomStatus: ListRoomStatus.failed));
           emit(state.copyWith(errorText: message));
           // showLoginSessionExpiredDialog(
@@ -62,12 +63,12 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
           //     });
         }
       } catch (error) {
-        log("ERROR GET LIST ROOM $error");
+        log("ERROR _onGetListRoom 2 $error");
         emit(state.copyWith(listRoomStatus: ListRoomStatus.failed));
         emit(state.copyWith(errorText: message));
       }
     } catch (error) {
-      log("NO DATA ROOM $error");
+      log("ERROR _onGetListRoom 3 $error");
 
       emit(state.copyWith(listRoomStatus: ListRoomStatus.failed));
       emit(state.copyWith(errorText: "Đã có lỗi xảy ra !"));

@@ -25,14 +25,14 @@ class NoInternetScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
           space30H,
-          Container(
-            width: 300,
-            height: 300,
+          SizedBox(
+            width: 300.w,
+            height: 300.w,
             child: Lottie.asset('assets/lottie/no_internet.json'),
           ),
           space50H,
-          Container(
-            width: 300,
+          SizedBox(
+            width: 300.w,
             child: ButtonGradient(
               color1: color1BlueButton,
               color2: color2BlueButton,

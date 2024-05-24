@@ -6,7 +6,7 @@ import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/model/bill/list_bill_model.dart';
-import 'package:app_restaurant/utils/share_getString.dart';
+import 'package:app_restaurant/utils/share_getstring.dart';
 import 'package:app_restaurant/utils/storage.dart';
 
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
@@ -47,8 +47,8 @@ class _StaffListBillState extends State<StaffListBill>
 
   @override
   void initState() {
-    super.initState();
     getListBillShop(filtersFlg: {"pay_flg": null});
+    super.initState();
   }
 
   @override
@@ -204,7 +204,10 @@ class _StaffListBillState extends State<StaffListBill>
                                 child: ButtonGradient(
                                   color1: color1BlueButton,
                                   color2: color2BlueButton,
-                                  event: () {},
+                                  event: () {
+                                    getListBillShop(
+                                        filtersFlg: {"pay_flg": null});
+                                  },
                                   text: 'Thử lại',
                                   fontSize: 12.sp,
                                   radius: 8.r,
@@ -276,13 +279,13 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                 })
               : null;
         } else {
-          log("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR loadMoreBill 1");
         }
       } catch (error) {
-        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR loadMoreBill 2 $error");
       }
     } catch (error) {
-      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR loadMoreBill 3 $error");
     }
   }
 
@@ -318,19 +321,18 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                 })
               : null;
         } else {
-          log("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR refeshBill 1");
         }
       } catch (error) {
-        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR refeshBill 2 $error");
       }
     } catch (error) {
-      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR refeshBill 3 $error");
     }
   }
 
   @override
   void initState() {
-    super.initState();
     loadMoreBill(page: 1, filtersFlg: {"pay_flg": null});
 
     scrollListBillController.addListener(() {
@@ -340,12 +342,13 @@ class _ListAllBillShopState extends State<ListAllBillShop>
         loadMoreBill(page: currentPage, filtersFlg: {"pay_flg": null});
       }
     });
+    super.initState();
   }
 
   @override
   void dispose() {
-    super.dispose();
     scrollListBillController.dispose();
+    super.dispose();
   }
 
   @override
@@ -450,10 +453,6 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                                         },
                                         child: Row(
                                           children: [
-                                            // Icon(
-                                            //   Icons.receipt,
-                                            //   size: 35.sp,
-                                            // ),
                                             SizedBox(
                                               width: 35.w,
                                               height: 35.w,
@@ -501,10 +500,6 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Icon(
-                      //   Icons.receipt_long_rounded,
-                      //   size: 50.h,
-                      // ),
                       SizedBox(
                         width: 35.w,
                         height: 35.w,
@@ -604,13 +599,13 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                 })
               : null;
         } else {
-          log("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR loadMoreCompleteBill 1");
         }
       } catch (error) {
-        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR loadMoreCompleteBill 2 $error");
       }
     } catch (error) {
-      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR loadMoreCompleteBill 3 $error");
     }
   }
 
@@ -648,13 +643,13 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                 })
               : null;
         } else {
-          log("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR refeshCompleteBill 1");
         }
       } catch (error) {
-        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR refeshCompleteBill 2 $error");
       }
     } catch (error) {
-      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR refeshCompleteBill 3 $error");
     }
   }
 
@@ -737,10 +732,6 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                                         },
                                         child: Row(
                                           children: [
-                                            // Icon(
-                                            //   Icons.receipt,
-                                            //   size: 35.sp,
-                                            // ),
                                             SizedBox(
                                               width: 35.w,
                                               height: 35.w,
@@ -790,10 +781,6 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Icon(
-                      //   Icons.receipt_long_rounded,
-                      //   size: 50.h,
-                      // ),
                       SizedBox(
                         width: 35.w,
                         height: 35.w,
@@ -1025,10 +1012,6 @@ class _PendingWidgetState extends State<PendingWidget>
                                         },
                                         child: Row(
                                           children: [
-                                            // Icon(
-                                            //   Icons.receipt,
-                                            //   size: 35.sp,
-                                            // ),
                                             SizedBox(
                                               width: 35.w,
                                               height: 35.w,
@@ -1076,10 +1059,6 @@ class _PendingWidgetState extends State<PendingWidget>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Icon(
-                      //   Icons.receipt_long_rounded,
-                      //   size: 50.h,
-                      // ),
                       SizedBox(
                         width: 35.w,
                         height: 35.w,
@@ -1182,13 +1161,13 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                 })
               : null;
         } else {
-          log("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR loadMoreCancleBill 1");
         }
       } catch (error) {
-        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR loadMoreCancleBill 2 $error");
       }
     } catch (error) {
-      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR loadMoreCancleBill 3 $error");
     }
   }
 
@@ -1225,13 +1204,13 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                 })
               : null;
         } else {
-          log("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR refeshCancleBill 1");
         }
       } catch (error) {
-        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR refeshCancleBill 2 $error");
       }
     } catch (error) {
-      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR refeshCancleBill 3 $error");
     }
   }
 
@@ -1310,10 +1289,6 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                                         },
                                         child: Row(
                                           children: [
-                                            // Icon(
-                                            //   Icons.receipt,
-                                            //   size: 35.sp,
-                                            // ),
                                             SizedBox(
                                               width: 35.w,
                                               height: 35.w,
@@ -1361,10 +1336,6 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Icon(
-                      //   Icons.receipt_long_rounded,
-                      //   size: 50.h,
-                      // ),
                       SizedBox(
                         width: 35.w,
                         height: 35.w,

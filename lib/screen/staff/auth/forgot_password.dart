@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
@@ -72,10 +73,10 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
 
         showFailedModal(
             context: navigatorKey.currentContext, desWhyFail: messRes);
-        print("FOGOT PASSWORD ERROR 1");
+        log("ERROR handleForgotPassword 1");
       }
     } catch (error) {
-      print("FOGOT PASSWORD ERROR ${error}");
+      log("ERROR handleForgotPassword 2 $error");
     }
   }
 

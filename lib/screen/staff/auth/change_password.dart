@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
@@ -82,10 +83,10 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
             btnText: "OK",
             typeDialog: "error");
 
-        print("FOGOT PASSWORD ERROR 1");
+        log("ERROR handleChangePassword 1");
       }
     } catch (error) {
-      print("CHECK OTP ERROR ${error}");
+      log("ERROR handleChangePassword 2 $error");
     }
   }
 

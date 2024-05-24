@@ -12,7 +12,6 @@ import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
@@ -109,13 +108,13 @@ class _AddStaffState extends State<AddStaff> {
                 })
               : null;
         } else {
-          log("LOI GI DO dadadadadadadada");
+          log("ERROR getListAreaInit 1");
         }
       } catch (error) {
-        log("LOI GI DO $error");
+        log("ERROR getListAreaInit 2 $error");
       }
     } catch (error) {
-      log("LOI GI DO $error");
+      log("ERROR getListAreaInit 3 $error");
     }
   }
 
@@ -123,10 +122,6 @@ class _AddStaffState extends State<AddStaff> {
     required int? city,
     required int? district,
   }) async {
-    log("DATA TRUYEN NN ${{
-      'city': city,
-      'district': district,
-    }}");
     try {
       final response = await http.post(
         Uri.parse('$baseUrl$areas'),
@@ -166,13 +161,13 @@ class _AddStaffState extends State<AddStaff> {
                 })
               : null;
         } else {
-          log("LOI GI DO dadadadadadadada");
+          log("ERROR getListArea 1");
         }
       } catch (error) {
-        log("LOI GI DO $error");
+        log("ERROR getListArea 2 $error");
       }
     } catch (error) {
-      log("LOI GI DO $error");
+      log("ERROR getListArea 3 $error");
     }
   }
 
@@ -207,10 +202,10 @@ class _AddStaffState extends State<AddStaff> {
               })
             : null;
       } else {
-        log("ERRRO GET LIST STORE 111111");
+        log("ERRRO getListStore 1");
       }
     } catch (error) {
-      log("ERRRO GET LIST STORE dadadoaiiw $error");
+      log("ERRRO getListStore 2 $error");
     }
   }
 
@@ -260,8 +255,6 @@ class _AddStaffState extends State<AddStaff> {
           'instagram': staffInstagram,
         }));
     final data = jsonDecode(response.body);
-    log(data.toString());
-
     try {
       if (data['status'] == 200) {
         showCustomDialogModal(
@@ -299,7 +292,7 @@ class _AddStaffState extends State<AddStaff> {
               })
             : null;
       } else {
-        log("ERRRO GET LIST STORE 111111");
+        log("ERRRO handleCreateNewStaff 1");
         showCustomDialogModal(
           context: context,
           textDesc: "Thông tin nhân viên đã tồn tại",
@@ -310,15 +303,15 @@ class _AddStaffState extends State<AddStaff> {
         );
       }
     } catch (error) {
-      log("ERRRO GET LIST STORE lllll $error");
+      log("ERRRO handleCreateNewStaff 2 $error");
     }
   }
 
   @override
   void initState() {
-    super.initState();
     getListStore();
     getListAreaInit(city: null, district: null);
+    super.initState();
   }
 
   @override
@@ -357,14 +350,14 @@ class _AddStaffState extends State<AddStaff> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.r),
                   color: Colors.white,
-                  boxShadow: [
-                    // BoxShadow(
-                    //   color: Colors.grey.withOpacity(0.5),
-                    //   spreadRadius: 5,
-                    //   blurRadius: 7,
-                    //   offset: const Offset(0, 3), // changes position of shadow
-                    // ),
-                  ],
+                  // boxShadow: [
+                  //   // BoxShadow(
+                  //   //   color: Colors.grey.withOpacity(0.5),
+                  //   //   spreadRadius: 5,
+                  //   //   blurRadius: 7,
+                  //   //   offset: const Offset(0, 3), // changes position of shadow
+                  //   // ),
+                  // ],
                 ),
                 child: Padding(
                   padding: EdgeInsets.all(20.w),

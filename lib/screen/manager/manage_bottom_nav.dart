@@ -123,7 +123,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
               })
             : null;
       } else {
-        log("ERRRO GET LIST STORE 111111");
+        log("ERRRO getListStore 1");
         // showLoginSessionExpiredDialog(
         //     context: context,
         //     okEvent: () {
@@ -131,7 +131,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
         //     });
       }
     } catch (error) {
-      log("ERRRO GET LIST STORE $error");
+      log("ERRRO getListStore 2 $error");
     }
   }
 
@@ -189,27 +189,25 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                   managerInforData = managerInforDataRes.data;
                 })
               : null;
-
-          log("GET INFOR MANGAER OK 1");
         } else {
-          log("GET INFOR MANGAER ERROR 1");
+          log("ERROR getInfor 1");
         }
       } catch (error) {
-        log("GET INFOR MANGAER ERROR 2  $error");
+        log("ERROR getInfor 2  $error");
       }
     } catch (error) {
-      log("GET INFOR MANGAER ERROR 3 $error");
+      log("ERROR getInfor 3 $error");
     }
   }
 
   @override
   void initState() {
-    super.initState();
     Future.delayed(Duration.zero, () {
       checkTokenExpires();
       getInfor();
       getListStore();
     });
+    super.initState();
   }
 
   // final List<Widget> pages = const [
@@ -387,6 +385,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                         ? Theme.of(context).colorScheme.primary
                         : const Color.fromRGBO(233, 236, 239, 1),
                     icon: Icons.home,
+                    textColor: currentIndex == 0 ? Colors.black : menuGrey,
                     isShowIcon: false,
                     image: Container(
                       padding: EdgeInsets.all(5.w),
@@ -906,6 +905,14 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
           ),
         ],
         onTap: (index) {
+          log("index.toString()");
+          setState(() {
+            // index == 0 ?
+            selectedStoreIndex = null;
+
+            currentIndex = index;
+          });
+          log(index.toString());
           if (index == 0) {
             getInfor();
             handleGetBannerList();

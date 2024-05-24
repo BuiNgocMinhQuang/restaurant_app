@@ -25,9 +25,9 @@ class _ManagerNotificationsState extends State<ManagerNotifications> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              width: 300,
-              height: 300,
+            SizedBox(
+              width: 300.w,
+              height: 300.w,
               // color: Colors.amber,
               child: Lottie.asset('assets/lottie/no_mess.json'),
             ),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
@@ -121,6 +122,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
       }
     } catch (error) {
       // print("ZO ELSE $error");
+      log("ERROR handleRegister $error");
     }
   }
 

@@ -153,8 +153,8 @@ class _EditFoodState extends State<EditFood> {
 
   @override
   void initState() {
-    super.initState();
     init();
+    super.initState();
   }
 
   void handleEditFood({
@@ -190,7 +190,6 @@ class _EditFoodState extends State<EditFood> {
         }),
       );
       final data = jsonDecode(respons.body);
-      log("GET DATA LIST FOOD $data");
       try {
         if (data['status'] == 200) {
           // Navigator.of(navigatorKey.currentContext!).pop();
@@ -206,7 +205,7 @@ class _EditFoodState extends State<EditFood> {
             );
           });
         } else {
-          log("ERROR LIST FOOOD RECEIPT PAGE 1");
+          log("ERROR handleEditFood 1");
           showCustomDialogModal(
               context: navigatorKey.currentContext,
               textDesc: "Có lỗi xảy ra",
@@ -216,7 +215,7 @@ class _EditFoodState extends State<EditFood> {
               typeDialog: "error");
         }
       } catch (error) {
-        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR handleEditFood 2 $error");
         showCustomDialogModal(
             context: navigatorKey.currentContext,
             textDesc: "Có lỗi xảy ra",
@@ -226,7 +225,7 @@ class _EditFoodState extends State<EditFood> {
             typeDialog: "error");
       }
     } catch (error) {
-      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR handleEditFood 3 $error");
       showCustomDialogModal(
           context: navigatorKey.currentContext,
           textDesc: "Có lỗi xảy ra",

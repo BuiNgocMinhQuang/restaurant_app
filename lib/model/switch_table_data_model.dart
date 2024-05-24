@@ -22,7 +22,7 @@ class SwitchTableDataModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
     if (currentTables != null) {
       data['current_tables'] = currentTables!.map((v) => v.toJson()).toList();
@@ -154,7 +154,7 @@ class Tables {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['room_table_id'] = roomTableId;
     data['store_room_id'] = storeRoomId;
     data['table_name'] = tableName;

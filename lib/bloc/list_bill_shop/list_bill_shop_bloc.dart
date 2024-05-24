@@ -4,6 +4,7 @@ import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/bill/list_bill_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,7 @@ class ListBillShopBloc extends Bloc<ListBillShopEvent, ListBillShopState> {
 
           emit(state.copyWith(listBillShopStatus: ListBillShopStatus.succes));
         } else {
-          log("ERROR LIST BILL 1");
+          log("ERROR _onGetListBillShop 1");
 
           emit(state.copyWith(listBillShopStatus: ListBillShopStatus.failed));
           showSnackBarTopCustom(
@@ -59,13 +60,13 @@ class ListBillShopBloc extends Bloc<ListBillShopEvent, ListBillShopState> {
               color: Colors.red);
         }
       } catch (error) {
-        log("ERROR LIST BILL 2 $error");
+        log("ERROR _onGetListBillShop 2 $error");
 
         emit(state.copyWith(listBillShopStatus: ListBillShopStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      log("ERROR LIST BILL 3 $error");
+      log("ERROR _onGetListBillShop 3 $error");
       emit(state.copyWith(listBillShopStatus: ListBillShopStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }

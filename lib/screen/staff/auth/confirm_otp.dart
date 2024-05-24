@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
@@ -79,10 +80,10 @@ class _StaffConfirmOTPState extends State<StaffConfirmOTP> {
             btnText: "OK",
             typeDialog: "error");
 
-        print("FOGOT PASSWORD ERROR 1");
+        log("ERROR handleCheckOtp 1");
       }
     } catch (error) {
-      print("CHECK OTP ERROR ${error}");
+      log("ERROR handleCheckOtp 2 $error");
     }
   }
 
@@ -202,7 +203,6 @@ class _StaffConfirmOTPState extends State<StaffConfirmOTP> {
                                                 setState(() {
                                                   showButton = true;
                                                   otp = verificationCode;
-                                                  print("OTP $otp");
                                                 });
                                               }, // end onSubmit
                                             ),

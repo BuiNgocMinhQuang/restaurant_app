@@ -123,9 +123,6 @@ class _ManagerInformationState extends State<ManagerInformation> {
             base64Encode(imagebytes); //convert bytes to base64 string
 
         try {
-          log("TRUYEN NNNN ${{
-            "staff_avatar": base64string,
-          }}");
           var token = StorageUtils.instance.getString(key: 'token_manager');
           final respons = await http.post(
             Uri.parse('$baseUrl$managerUpdateAvatar'),
@@ -139,11 +136,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
             }),
           );
           final data = jsonDecode(respons.body);
-          log("DATA CHANGE AVATAR MANAGER  ${data}}");
 
           try {
             if (data['status'] == 200) {
-              log("CHANGE AVATAR MANAGER  OK");
               showSnackBarTopCustom(
                   title: "Thành công",
                   context: navigatorKey.currentContext,
@@ -158,7 +153,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                   color: Colors.red);
             }
           } catch (error) {
-            log("ERROR CHANGE AVATAR MANAGER  2 ${error}");
+            log("ERROR CHANGE AVATAR MANAGER  2 $error");
             showSnackBarTopCustom(
                 title: "Thất bại",
                 context: navigatorKey.currentContext,
@@ -183,8 +178,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
 
   @override
   void initState() {
-    super.initState();
     getInfor();
+    super.initState();
   }
 
   @override
@@ -238,6 +233,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                 typeDialog: "succes");
           });
         } else {
+          log("ERROR checkPasswordToUpdateIdImage 1");
           showCustomDialogModal(
               context: navigatorKey.currentContext,
               textDesc: messText,
@@ -247,10 +243,10 @@ class _ManagerInformationState extends State<ManagerInformation> {
               typeDialog: "error");
         }
       } catch (error) {
-        log("LOI GI DO $error");
+        log("ERROR checkPasswordToUpdateIdImage 2 $error");
       }
     } catch (error) {
-      log("LOI GI DO $error");
+      log("ERROR checkPasswordToUpdateIdImage 3 $error");
     }
   }
 
@@ -258,10 +254,6 @@ class _ManagerInformationState extends State<ManagerInformation> {
     required int? city,
     required int? district,
   }) async {
-    log("DATA TRUYEN NN ${{
-      'city': city,
-      'district': district,
-    }}");
     try {
       final response = await http.post(
         Uri.parse('$baseUrl$areas'),
@@ -300,13 +292,13 @@ class _ManagerInformationState extends State<ManagerInformation> {
             // currentWard = myWard;
           });
         } else {
-          log("LOI GI DO dadadadadadadada");
+          log("ERROR getListArea 1");
         }
       } catch (error) {
-        log("LOI GI DO $error");
+        log("ERROR getListArea 2 $error");
       }
     } catch (error) {
-      log("LOI GI DO $error");
+      log("ERROR getListArea 3 $error");
     }
   }
 
@@ -353,13 +345,13 @@ class _ManagerInformationState extends State<ManagerInformation> {
             currentWard = myWard;
           });
         } else {
-          log("LOI GI DO dadadadadadadada");
+          log("ERROR getListAreaInit 1");
         }
       } catch (error) {
-        log("LOI GI DO $error");
+        log("ERROR getListAreaInit 2 $error");
       }
     } catch (error) {
-      log("LOI GI DO $error");
+      log("ERROR getListAreaInit 3 $error");
     }
   }
 
@@ -390,6 +382,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
             });
           });
         } else {
+          log("ERROR getInfor 1");
+
           Future.delayed(const Duration(milliseconds: 1000), () {
             setState(() {
               isLoading = false;
@@ -400,6 +394,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
           });
         }
       } catch (error) {
+        log("ERROR getInfor 2 $error");
+
         Future.delayed(const Duration(milliseconds: 1000), () {
           setState(() {
             isLoading = false;
@@ -411,6 +407,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
         });
       }
     } catch (error) {
+      log("ERROR getInfor 3 $error");
+
       Future.delayed(const Duration(milliseconds: 1000), () {
         setState(() {
           isLoading = false;
@@ -445,7 +443,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
               mess: "Xoá ảnh đại diện thành công",
               color: Colors.green);
         } else {
-          log("ERROR DELETED AVATAR MANAGER  1");
+          log("ERROR deletedAvatarManager  1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -453,10 +451,10 @@ class _ManagerInformationState extends State<ManagerInformation> {
               color: Colors.red);
         }
       } catch (error) {
-        log("ERROR DELETED AVATAR MANAGER  2 ${error}");
+        log("ERROR deletedAvatarManager  2 $error");
       }
     } catch (error) {
-      log("ERROR DELETED AVATAR MANAGER  3 $error");
+      log("ERROR deletedAvatarManager  3 $error");
     }
   }
 
@@ -466,11 +464,6 @@ class _ManagerInformationState extends State<ManagerInformation> {
     required String? confirmNewPassword,
   }) async {
     try {
-      log("TRUYEN NNNN ${{
-        "password": currentPassword,
-        "password_new": newPassword,
-        "confirm_password_new": confirmNewPassword
-      }}");
       var token = StorageUtils.instance.getString(key: 'token_manager');
       log(token.toString());
       final respons = await http.post(
@@ -500,7 +493,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
               mess: messText['text'],
               color: Colors.green);
         } else {
-          log("ERROR CHANGE PASS STAFF  1");
+          log("ERROR changePasswordManager 1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -508,10 +501,10 @@ class _ManagerInformationState extends State<ManagerInformation> {
               color: Colors.red);
         }
       } catch (error) {
-        log("ERROR CHANGE PASS STAFF  2 ${error}");
+        log("ERROR changePasswordManager  2 $error");
       }
     } catch (error) {
-      log("ERROR CHANGE PASS STAFF  3 $error");
+      log("ERROR changePasswordManager  3 $error");
     }
   }
 
@@ -553,7 +546,6 @@ class _ManagerInformationState extends State<ManagerInformation> {
           final data = jsonDecode(respons.body);
           try {
             if (data['status'] == 200) {
-              log("UPDATE INFOR  OK");
               getInfor();
               showSnackBarTopCustom(
                   title: "Thành công",
@@ -561,7 +553,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                   mess: "Cập nhật hình ảnh thành công",
                   color: Colors.green);
             } else {
-              log("ERROR UPDATE INFOR  1");
+              log("ERROR managerUpdateCitizenID 1");
               showSnackBarTopCustom(
                   title: "Thất bại",
                   context: navigatorKey.currentContext,
@@ -569,7 +561,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                   color: Colors.red);
             }
           } catch (error) {
-            log("ERROR UPDATE INFOR  2 ${error}");
+            log("ERROR managerUpdateCitizenID  2 $error");
             showSnackBarTopCustom(
                 title: "Thất bại",
                 context: navigatorKey.currentContext,
@@ -577,7 +569,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                 color: Colors.red);
           }
         } catch (error) {
-          log("ERROR UPDATE INFOR  3 $error");
+          log("ERROR managerUpdateCitizenID 3 $error");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -643,6 +635,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
               mess: messText['text'],
               color: Colors.green);
         } else {
+          log("ERROR updateInforManager 1");
+
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -650,10 +644,10 @@ class _ManagerInformationState extends State<ManagerInformation> {
               color: Colors.red);
         }
       } catch (error) {
-        log("ERROR UPDATE INFOR  2 ${error}");
+        log("ERROR updateInforManager  2 $error");
       }
     } catch (error) {
-      log("ERROR UPDATE INFOR  3 $error");
+      log("ERROR updateInforManager  3 $error");
     }
   }
 
@@ -851,9 +845,13 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                         child:
                                                                             Row(
                                                                           children: [
-                                                                            Icon(
-                                                                              Icons.image,
-                                                                              size: 35.sp,
+                                                                            SizedBox(
+                                                                              width: 35.w,
+                                                                              height: 35.w,
+                                                                              child: Image.asset(
+                                                                                "assets/images/picture.png",
+                                                                                fit: BoxFit.cover,
+                                                                              ),
                                                                             ),
                                                                             space10W,
                                                                             TextApp(
@@ -881,10 +879,6 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                         child:
                                                                             Row(
                                                                           children: [
-                                                                            // Icon(
-                                                                            //   Icons.delete,
-                                                                            //   size: 35.sp,
-                                                                            // ),
                                                                             SizedBox(
                                                                               width: 35.w,
                                                                               height: 35.w,
@@ -906,13 +900,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                   ),
                                                                 ));
                                                   },
-                                                  child:
-                                                      // Icon(
-                                                      //   Icons.edit,
-                                                      //   size: 25.sp,
-                                                      //   color: Colors.white,
-                                                      // ),
-                                                      SizedBox(
+                                                  child: SizedBox(
                                                     width: 35.w,
                                                     height: 35.w,
                                                     child: Image.asset(

@@ -24,7 +24,6 @@ class TableCancleBloc extends Bloc<TableCancleEvent, TableCancleState> {
     emit(state.copyWith(tableCancleStatus: TableCancleStatus.loading));
 
     try {
-      // var token = StorageUtils.instance.getString(key: 'token_staff');
       var token = event.token;
       final respons = await http.post(
         Uri.parse('$baseUrl$cancleTable'),
@@ -50,19 +49,19 @@ class TableCancleBloc extends Bloc<TableCancleEvent, TableCancleState> {
         if (data['status'] == 200) {
           emit(state.copyWith(tableCancleStatus: TableCancleStatus.succes));
         } else {
-          log("ERROR Cancle Table 1");
+          log("ERROR _onCancleTable 1");
 
           emit(state.copyWith(tableCancleStatus: TableCancleStatus.failed));
           emit(state.copyWith(errorText: message['text']));
         }
       } catch (error) {
-        log("ERROR Cancle Table 2 $error");
+        log("ERROR _onCancleTable 2 $error");
 
         emit(state.copyWith(tableCancleStatus: TableCancleStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      log("ERROR Cancle Table 3 $error");
+      log("ERROR _onCancleTable 3 $error");
       emit(state.copyWith(tableCancleStatus: TableCancleStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }
@@ -84,7 +83,6 @@ class TableBloc extends Bloc<TableEvent, TableState> {
     await Future.delayed(const Duration(seconds: 1));
 
     try {
-      // var token = StorageUtils.instance.getString(key: 'token_staff');
       var token = event.token;
       final respons = await http.post(
         Uri.parse('$baseUrl$getSwitchTable'),
@@ -103,31 +101,27 @@ class TableBloc extends Bloc<TableEvent, TableState> {
         }),
       );
       final data = jsonDecode(respons.body);
-      log(event.roomId);
-      log("DATA SWITCH $data");
       var message = data['message'];
       try {
         emit(state.copyWith(currentRoomId: event.roomId));
         if (data['status'] == 200) {
-          log("DATA SWITCH $data");
-
           var switchTableDataRes = SwitchTableDataModel.fromJson(data);
           emit(state.copyWith(switchTableDataModel: switchTableDataRes));
           emit(state.copyWith(tableStatus: TableStatus.succes));
         } else {
-          log("ERROR SWITCH TABLE  1");
+          log("ERROR _onGetSwitchTableInfor 1");
 
           emit(state.copyWith(tableStatus: TableStatus.failed));
           emit(state.copyWith(errorText: message['text']));
         }
       } catch (error) {
-        log("ERROR SWITCH TABLE 2  $error");
+        log("ERROR _onGetSwitchTableInfor 2 $error");
 
         emit(state.copyWith(tableStatus: TableStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      log("ERROR SWITCH TABLE 2 $error");
+      log("ERROR _onGetSwitchTableInfor 3 $error");
       emit(state.copyWith(tableStatus: TableStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }
@@ -162,12 +156,9 @@ class TableBloc extends Bloc<TableEvent, TableState> {
       );
       final data = jsonDecode(respons.body);
       var message = data['message'];
-      log("DATA Table $data");
 
       try {
         if (data['status'] == 200) {
-          // log("DATA Table $data");
-
           var tableDataRes = TableModel.fromJson(data);
 
           emit(state.copyWith(tableModel: tableDataRes));
@@ -178,19 +169,19 @@ class TableBloc extends Bloc<TableEvent, TableState> {
 
           emit(state.copyWith(tableStatus: TableStatus.succes));
         } else {
-          log("ERROR TABLE INFOR danhjdba");
+          log("ERROR _onGetTableInfor 1");
 
           emit(state.copyWith(tableStatus: TableStatus.failed));
           emit(state.copyWith(errorText: message['text']));
         }
       } catch (error) {
-        log("ERROR TABLE INFOR1111 $error");
+        log("ERROR _onGetTableInfor 2 $error");
 
         emit(state.copyWith(tableStatus: TableStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      log("ERROR TABLE INFOR222 $error");
+      log("ERROR _onGetTableInfor 3 $error");
       emit(state.copyWith(tableStatus: TableStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }
@@ -203,7 +194,6 @@ class TableBloc extends Bloc<TableEvent, TableState> {
     emit(state.copyWith(tableStatus: TableStatus.loading));
     await Future.delayed(const Duration(seconds: 1));
     try {
-      // var token = StorageUtils.instance.getString(key: 'token_staff');
       var token = event.token;
       final respons = await http.post(
         Uri.parse('$baseUrl$foodsTableApi'),
@@ -230,17 +220,17 @@ class TableBloc extends Bloc<TableEvent, TableState> {
           emit(state.copyWith(foodTableDataModel: foodTableDataRes));
           emit(state.copyWith(tableStatus: TableStatus.succes));
         } else {
-          log("ERROR DATA FOOD TABLE 1 ${data}");
+          log("ERROR _onGetTableFoods 1");
 
           emit(state.copyWith(tableStatus: TableStatus.failed));
         }
       } catch (error) {
-        log("ERROR DATA FOOD TABLE 2 ${error}");
+        log("ERROR _onGetTableFoods 2 $error");
 
         emit(state.copyWith(tableStatus: TableStatus.failed));
       }
     } catch (error) {
-      log("ERROR DATA FOOD TABLE 3 $error");
+      log("ERROR _onGetTableFoods 3 $error");
 
       emit(state.copyWith(tableStatus: TableStatus.failed));
     }
@@ -283,9 +273,6 @@ class TableSaveInforBloc
         }),
       );
       final data = jsonDecode(respons.body);
-      log("data data");
-
-      log(data);
       try {
         if (data['status'] == 200) {
           emit(state.copyWith(
@@ -344,8 +331,6 @@ class SwitchTableBloc extends Bloc<SwitchTableEvent, SwitchTableState> {
       );
       final data = jsonDecode(respons.body);
       var message = data['message'];
-      log("DATA HANDLE  SWITCH Table $data");
-
       try {
         if (data['status'] == 200) {
           emit(state.copyWith(switchtableStatus: SwitchTableStatus.succes));

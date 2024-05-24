@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'package:app_restaurant/bloc/bill_table/bill_table_bloc.dart';
 import 'package:app_restaurant/bloc/brought_receipt/brought_receipt_bloc.dart';
 import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/bloc/manager/stores/list_stores_bloc.dart';
@@ -22,7 +21,7 @@ import 'package:app_restaurant/model/manager/store/edit_details_store_model.dart
 import 'package:app_restaurant/model/manager/store/rooms/data_room_details_model.dart';
 import 'package:app_restaurant/model/manager/store/rooms/table/table_data_details_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
-import 'package:app_restaurant/utils/share_getString.dart';
+import 'package:app_restaurant/utils/share_getstring.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
@@ -33,7 +32,6 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
@@ -178,16 +176,12 @@ class _BookingTableDialogState extends State<BookingTableDialog>
 
   @override
   void initState() {
-    super.initState();
-
     _tabController = TabController(length: 3, vsync: this);
     _tabController!.addListener(_handleTabSelection);
     //
     getListFoodTable(page: 1, tokenReq: widget.token);
 
     scrollListFoodController.addListener(() {
-      log("ENDDDDDD");
-
       if (scrollListFoodController.position.maxScrollExtent ==
           scrollListFoodController.offset) {
         currentPage = 2; ////check this
@@ -209,6 +203,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
               .toList() ??
           [];
     });
+    super.initState();
   }
 
   _handleTabSelection() {
@@ -532,6 +527,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
           //     context: navigatorKey.currentContext,
           //     mess: message['text'],
           //     color: Colors.red);
+          // ignore: use_build_context_synchronously
           Navigator.of(context).pop();
 
           showCustomDialogModal(
@@ -639,78 +635,100 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                         ),
                         space15H,
                         SizedBox(
-                          height: 50,
-                          child: TabBar(
-                              onTap: (index) {
-                                if (index == 0) {
-                                  BlocProvider.of<TableBloc>(context).add(
-                                      GetTableInfor(
-                                          token: widget.token,
-                                          client: widget.role,
-                                          shopId: widget.shopID,
-                                          roomId: widget.idRoom.toString(),
-                                          tableId: widget
-                                                  .currentTable?.roomTableId
-                                                  .toString() ??
-                                              '',
-                                          orderID: widget.currentTable?.orderId
-                                              .toString()));
-                                } else if (index == 1) {
-                                  getDetailFoodTable(tokenReq: widget.token);
-                                }
-                                // else if (index == 2) {
-                                //   // getListFoodTable(page: 1);
-                                //   BlocProvider.of<TableBloc>(context).add(
-                                //       GetTableFoods(
-                                //           client: widget.role,
-                                //           shopId: widget.shopID,
-                                //           roomId: widget.idRoom,
-                                //           tableId:
-                                //               widget.currentTable?.roomTableId,
-                                //           limit: 15,
-                                //           page: 1));
-                                //   getDetailFoodTable();
-                                // }
-                              },
-                              tabAlignment: TabAlignment.center,
-                              labelPadding:
-                                  EdgeInsets.only(left: 20.w, right: 20.w),
-                              labelColor: Colors.black,
-                              unselectedLabelColor:
-                                  Colors.black.withOpacity(0.5),
-                              labelStyle: const TextStyle(color: Colors.red),
-                              controller: _tabController,
-                              isScrollable: true,
-                              indicatorSize: TabBarIndicatorSize.label,
-                              indicator: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                  8.r,
-                                ),
-                                color: Theme.of(context).colorScheme.primary,
-                                border: Border.all(
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
+                          width: 1.sw,
+                          child: SizedBox(
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                height: 45.h,
+                                color: Colors.white,
+                                child: TabBar(
+                                    onTap: (index) {
+                                      if (index == 0) {
+                                        BlocProvider.of<TableBloc>(context).add(
+                                            GetTableInfor(
+                                                token: widget.token,
+                                                client: widget.role,
+                                                shopId: widget.shopID,
+                                                roomId:
+                                                    widget.idRoom.toString(),
+                                                tableId: widget.currentTable
+                                                        ?.roomTableId
+                                                        .toString() ??
+                                                    '',
+                                                orderID: widget
+                                                    .currentTable?.orderId
+                                                    .toString()));
+                                      } else if (index == 1) {
+                                        getDetailFoodTable(
+                                            tokenReq: widget.token);
+                                      }
+                                      // else if (index == 2) {
+                                      //   // getListFoodTable(page: 1);
+                                      //   BlocProvider.of<TableBloc>(context).add(
+                                      //       GetTableFoods(
+                                      //           client: widget.role,
+                                      //           shopId: widget.shopID,
+                                      //           roomId: widget.idRoom,
+                                      //           tableId:
+                                      //               widget.currentTable?.roomTableId,
+                                      //           limit: 15,
+                                      //           page: 1));
+                                      //   getDetailFoodTable();
+                                      // }
+                                    },
+                                    tabAlignment: TabAlignment.center,
+                                    labelPadding: EdgeInsets.only(
+                                        left: 20.w, right: 20.w),
+                                    labelColor: Colors.white,
+                                    unselectedLabelColor:
+                                        Colors.black.withOpacity(0.5),
+                                    controller: _tabController,
+                                    isScrollable: true,
+                                    indicatorSize: TabBarIndicatorSize.label,
+                                    indicator: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                        8.r,
+                                      ),
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      border: Border.all(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
+                                    ),
+                                    tabs: [
+                                      CustomTab(
+                                          text: "Đặt bàn",
+                                          icon: Icons.group_add_outlined),
+                                      Visibility(
+                                        visible:
+                                            state.tableModel?.booking != null,
+                                        child: CustomTab(
+                                            text: "Đặt món",
+                                            icon: Icons.dinner_dining_outlined),
+                                      ),
+                                      Visibility(
+                                        visible:
+                                            state.tableModel?.booking != null,
+                                        child: CustomTab(
+                                            text: "Huỷ bàn",
+                                            icon: Icons.group_add_outlined),
+                                      )
+                                    ]),
                               ),
-                              tabs: [
-                                CustomTab(
-                                    text: "Đặt bàn",
-                                    icon: Icons.group_add_outlined),
-                                Visibility(
-                                  visible: state.tableModel?.booking != null,
-                                  child: CustomTab(
-                                      text: "Đặt món",
-                                      icon: Icons.dinner_dining_outlined),
-                                ),
-                                Visibility(
-                                  visible: state.tableModel?.booking != null,
-                                  child: CustomTab(
-                                      text: "Huỷ bàn",
-                                      icon: Icons.group_add_outlined),
-                                )
-                              ]),
+                            ),
+                          ),
                         ),
                         SizedBox(
-                          height: 20.h,
+                          height: 10.h,
+                        ),
+                        Divider(
+                          height: 1,
+                          color: Colors.black.withOpacity(0.5),
+                        ),
+                        SizedBox(
+                          height: 10.h,
                         ),
                         SizedBox(
                           width: 1.sw,
@@ -2082,6 +2100,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                         color2: color2BlueButton,
                         event: () {
                           // getDataTabIndex("");
+                          getListFoodTable(page: 1, tokenReq: widget.token);
                           Navigator.pop(context);
                         },
                         text: 'Thử lại',
@@ -2746,7 +2765,6 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
               color: Colors.red);
         }
       } catch (error) {
-        log('BCBCBCBHCBCBC');
         log("ERROR ADD FOOD TO TABLE 2 $error");
       }
     } catch (error) {
@@ -3608,8 +3626,8 @@ class _PayBillDialogState extends State<PayBillDialog> {
   static const _locale = 'en';
   String _formatNumber(String s) =>
       NumberFormat.decimalPattern(_locale).format(int.parse(s));
-  String get _currency =>
-      NumberFormat.compactSimpleCurrency(locale: _locale).currencySymbol;
+  // String get _currency =>
+  //     NumberFormat.compactSimpleCurrency(locale: _locale).currencySymbol;
   @override
   void dispose() {
     discountController.dispose();
@@ -3714,603 +3732,582 @@ class _PayBillDialogState extends State<PayBillDialog> {
                       const Divider(height: 1, color: Colors.black),
                       Flexible(
                           fit: FlexFit.tight,
-                          child: Container(
-                            // color: Colors.green,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.all(10.w),
-                                    child: SizedBox(
-                                      width: 1.sw,
-                                      // height: 100.h,
-                                      // color: Colors.green,
-                                      child: Column(
-                                        children: [
-                                          space15H,
-                                          ListView.builder(
-                                              shrinkWrap: true,
-                                              itemCount: state.paymentInforModel
-                                                      ?.data?.length ??
-                                                  0,
-                                              itemBuilder: (context, index) {
-                                                var priceOfFood = state
-                                                        .paymentInforModel
-                                                        ?.data?[index]
-                                                        .foodPrice ??
-                                                    0;
-                                                var totalMoneyFood = (state
-                                                            .paymentInforModel
-                                                            ?.data?[index]
-                                                            .foodPrice ??
-                                                        1) *
-                                                    (state
-                                                            .paymentInforModel
-                                                            ?.data?[index]
-                                                            .quantityFood ??
-                                                        1);
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(10.w),
+                                  child: SizedBox(
+                                    width: 1.sw,
+                                    // height: 100.h,
+                                    // color: Colors.green,
+                                    child: Column(
+                                      children: [
+                                        space15H,
+                                        ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: state.paymentInforModel
+                                                    ?.data?.length ??
+                                                0,
+                                            itemBuilder: (context, index) {
+                                              var priceOfFood = state
+                                                      .paymentInforModel
+                                                      ?.data?[index]
+                                                      .foodPrice ??
+                                                  0;
+                                              var totalMoneyFood = (state
+                                                          .paymentInforModel
+                                                          ?.data?[index]
+                                                          .foodPrice ??
+                                                      1) *
+                                                  (state
+                                                          .paymentInforModel
+                                                          ?.data?[index]
+                                                          .quantityFood ??
+                                                      1);
 
-                                                var imagePath1 = state
-                                                    .paymentInforModel
-                                                    ?.data?[index]
-                                                    .foodImages;
-                                                var listImagePath = jsonDecode(
-                                                    imagePath1 ?? '[]');
+                                              var imagePath1 = state
+                                                  .paymentInforModel
+                                                  ?.data?[index]
+                                                  .foodImages;
+                                              var listImagePath = jsonDecode(
+                                                  imagePath1 ?? '[]');
 
-                                                return Container(
-                                                  width: 1.sw,
-                                                  padding: EdgeInsets.all(10.w),
-                                                  margin: EdgeInsets.only(
-                                                      bottom: 20.h),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.r),
-                                                    color: Colors.white,
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors.grey
-                                                            .withOpacity(0.5),
-                                                        spreadRadius: 2,
-                                                        blurRadius: 4,
-                                                        offset: const Offset(0,
-                                                            3), // changes position of shadow
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      SizedBox(
-                                                          width: 80.w,
-                                                          height: 80.w,
-                                                          // color: Colors.amber,
-                                                          child: ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        40.w),
-                                                            child: imagePath1 ==
-                                                                    null
-                                                                ? Image.asset(
-                                                                    'assets/images/dish.png',
-                                                                    fit: BoxFit
-                                                                        .contain,
-                                                                  )
-                                                                : CachedNetworkImage(
-                                                                    fit: BoxFit
-                                                                        .fill,
-                                                                    imageUrl: httpImage +
-                                                                        listImagePath[
-                                                                            0],
-                                                                    placeholder:
-                                                                        (context,
-                                                                                url) =>
-                                                                            SizedBox(
-                                                                      height:
-                                                                          10.w,
-                                                                      width:
-                                                                          10.w,
-                                                                      child: const Center(
-                                                                          child:
-                                                                              CircularProgressIndicator()),
-                                                                    ),
-                                                                    errorWidget: (context,
-                                                                            url,
-                                                                            error) =>
-                                                                        const Icon(
-                                                                            Icons.error),
+                                              return Container(
+                                                width: 1.sw,
+                                                padding: EdgeInsets.all(10.w),
+                                                margin: EdgeInsets.only(
+                                                    bottom: 20.h),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.r),
+                                                  color: Colors.white,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey
+                                                          .withOpacity(0.5),
+                                                      spreadRadius: 2,
+                                                      blurRadius: 4,
+                                                      offset: const Offset(0,
+                                                          3), // changes position of shadow
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(
+                                                        width: 80.w,
+                                                        height: 80.w,
+                                                        // color: Colors.amber,
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      40.w),
+                                                          child: imagePath1 ==
+                                                                  null
+                                                              ? Image.asset(
+                                                                  'assets/images/dish.png',
+                                                                  fit: BoxFit
+                                                                      .contain,
+                                                                )
+                                                              : CachedNetworkImage(
+                                                                  fit: BoxFit
+                                                                      .fill,
+                                                                  imageUrl:
+                                                                      httpImage +
+                                                                          listImagePath[
+                                                                              0],
+                                                                  placeholder:
+                                                                      (context,
+                                                                              url) =>
+                                                                          SizedBox(
+                                                                    height:
+                                                                        10.w,
+                                                                    width: 10.w,
+                                                                    child: const Center(
+                                                                        child:
+                                                                            CircularProgressIndicator()),
                                                                   ),
-                                                          )),
-                                                      space15W,
-                                                      Expanded(
-                                                          child: Row(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .end,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              SizedBox(
-                                                                width: 100.w,
-                                                                child: TextApp(
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  softWrap:
-                                                                      true,
-                                                                  isOverFlow:
-                                                                      false,
-                                                                  text: state
-                                                                          .paymentInforModel
-                                                                          ?.data?[
-                                                                              index]
-                                                                          .foodName ??
-                                                                      '',
-                                                                  color:
-                                                                      blueText,
-                                                                  fontsize:
-                                                                      16.sp,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
+                                                                  errorWidget: (context,
+                                                                          url,
+                                                                          error) =>
+                                                                      const Icon(
+                                                                          Icons
+                                                                              .error),
                                                                 ),
+                                                        )),
+                                                    space15W,
+                                                    Expanded(
+                                                        child: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            SizedBox(
+                                                              width: 100.w,
+                                                              child: TextApp(
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                softWrap: true,
+                                                                isOverFlow:
+                                                                    false,
+                                                                text: state
+                                                                        .paymentInforModel
+                                                                        ?.data?[
+                                                                            index]
+                                                                        .foodName ??
+                                                                    '',
+                                                                color: blueText,
+                                                                fontsize: 16.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
                                                               ),
-                                                              space10H,
-                                                              SizedBox(
-                                                                width: 100.w,
-                                                                child: TextApp(
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  softWrap:
-                                                                      true,
-                                                                  isOverFlow:
-                                                                      false,
-                                                                  text:
-                                                                      "${MoneyFormatter(amount: priceOfFood.toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                            ),
+                                                            space10H,
+                                                            SizedBox(
+                                                              width: 100.w,
+                                                              child: TextApp(
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                softWrap: true,
+                                                                isOverFlow:
+                                                                    false,
+                                                                text:
+                                                                    "${MoneyFormatter(amount: priceOfFood.toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                                color: greyText,
+                                                                fontsize: 14.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                            space10H,
+                                                            Container(
+                                                                width: 35.w,
+                                                                height: 30.w,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10),
                                                                   color:
-                                                                      greyText,
-                                                                  fontsize:
-                                                                      14.sp,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
+                                                                      greyLight,
                                                                 ),
-                                                              ),
-                                                              space10H,
-                                                              Container(
-                                                                  width: 35.w,
-                                                                  height: 30.w,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            10),
+                                                                child: Center(
+                                                                  child:
+                                                                      TextApp(
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    text:
+                                                                        "x ${state.paymentInforModel?.data?[index].quantityFood.toString() ?? ''}",
                                                                     color:
-                                                                        greyLight,
+                                                                        blueText,
+                                                                    fontsize:
+                                                                        14.sp,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
                                                                   ),
-                                                                  child: Center(
-                                                                    child:
-                                                                        TextApp(
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      text:
-                                                                          "x ${state.paymentInforModel?.data?[index].quantityFood.toString() ?? ''}",
-                                                                      color:
-                                                                          blueText,
-                                                                      fontsize:
-                                                                          14.sp,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                                  )),
-                                                            ],
-                                                          ),
-                                                          Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .end,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .end,
-                                                            children: [
-                                                              // MoneyFormatter(amount:
+                                                                )),
+                                                          ],
+                                                        ),
+                                                        Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            // MoneyFormatter(amount:
 
-                                                              SizedBox(
-                                                                // width: 80.w,
-                                                                child: TextApp(
-                                                                  softWrap:
-                                                                      true,
-                                                                  isOverFlow:
-                                                                      false,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  text:
-                                                                      "${MoneyFormatter(amount: totalMoneyFood.toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                                  color:
-                                                                      blueText2,
-                                                                  fontsize:
-                                                                      16.sp,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                ),
-                                                              )
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      ))
-                                                    ],
-                                                  ),
-                                                );
-                                              })
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  const Divider(
-                                    height: 1,
-                                    color: menuGrey,
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.all(10.w),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Icon(
-                                              Icons.post_add_rounded,
-                                              size: 20.sp,
-                                              color: Colors.grey,
-                                            ),
-                                            space5W,
-                                            TextApp(
-                                              text: "Giảm giá",
-                                              color: Colors.black,
-                                              fontsize: 14.sp,
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          width: 120.w,
-                                          child: TextField(
-                                            onTapOutside: (event) {
-                                              FocusManager.instance.primaryFocus
-                                                  ?.unfocus();
-                                            },
-                                            keyboardType: TextInputType.number,
-                                            inputFormatters: <TextInputFormatter>[
-                                              FilteringTextInputFormatter.allow(
-                                                  RegExp("[0-9]")),
-                                            ], // Only numbers can be entered,
-                                            style: TextStyle(
-                                                fontSize: 12.sp, color: grey),
-                                            controller: discountController,
-                                            onChanged: (string) {
-                                              discountMoney = string;
-                                              if (string.isNotEmpty) {
-                                                string =
-                                                    '${_formatNumber(string.replaceAll(',', ''))}';
-                                                discountController.value =
-                                                    TextEditingValue(
-                                                  text: string,
-                                                  selection:
-                                                      TextSelection.collapsed(
-                                                          offset:
-                                                              string.length),
-                                                );
-                                              }
-                                            },
-                                            onEditingComplete: () {},
-                                            cursorColor: grey,
-                                            decoration: InputDecoration(
-                                                fillColor: const Color.fromARGB(
-                                                    255, 226, 104, 159),
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Color.fromRGBO(
-                                                          214, 51, 123, 0.6),
-                                                      width: 2.0),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.r),
+                                                            SizedBox(
+                                                              // width: 80.w,
+                                                              child: TextApp(
+                                                                softWrap: true,
+                                                                isOverFlow:
+                                                                    false,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                text:
+                                                                    "${MoneyFormatter(amount: totalMoneyFood.toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                                color:
+                                                                    blueText2,
+                                                                fontsize: 16.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ))
+                                                  ],
                                                 ),
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.r),
-                                                ),
-                                                hintText: '',
-                                                isDense: true,
-                                                contentPadding:
-                                                    EdgeInsets.all(15.w)),
-                                          ),
-                                        )
+                                              );
+                                            })
                                       ],
                                     ),
                                   ),
-                                  const Divider(
-                                    height: 1,
-                                    color: menuGrey,
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.all(10.w),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons
-                                                  .account_balance_wallet_outlined,
-                                              size: 20.sp,
-                                              color: Colors.grey,
-                                            ),
-                                            space5W,
-                                            TextApp(
-                                              text: "Khách thanh toán",
-                                              color: Colors.black,
-                                              fontsize: 14.sp,
-                                            ),
-                                          ],
-                                        ),
-                                        // space15W,
-                                        SizedBox(
-                                          width: 120.w,
-                                          child: TextField(
-                                            onTapOutside: (event) {
-                                              FocusManager.instance.primaryFocus
-                                                  ?.unfocus();
-                                            },
-                                            keyboardType: TextInputType.number,
-                                            inputFormatters: <TextInputFormatter>[
-                                              FilteringTextInputFormatter.allow(
-                                                  RegExp("[0-9]")),
-                                            ], // Only numbers can be entered,
-                                            controller: clientPayController,
-                                            onChanged: (string) {
-                                              if (string.isNotEmpty) {
-                                                payMoney = string;
-
-                                                string =
-                                                    '${_formatNumber(string.replaceAll(',', ''))}';
-                                                clientPayController.value =
-                                                    TextEditingValue(
-                                                  text: string,
-                                                  selection:
-                                                      TextSelection.collapsed(
-                                                          offset:
-                                                              string.length),
-                                                );
-                                              }
-                                            },
-                                            style: TextStyle(
-                                                fontSize: 12.sp, color: grey),
-                                            cursorColor: grey,
-                                            decoration: InputDecoration(
-                                                fillColor: const Color.fromARGB(
-                                                    255, 226, 104, 159),
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Color.fromRGBO(
-                                                          214, 51, 123, 0.6),
-                                                      width: 2.0),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.r),
-                                                ),
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.r),
-                                                ),
-                                                hintText: '',
-                                                isDense: true,
-                                                contentPadding:
-                                                    EdgeInsets.all(15.w)),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  space20H,
-                                  Wrap(
+                                ),
+                                const Divider(
+                                  height: 1,
+                                  color: menuGrey,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(10.w),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
-                                          Radio(
-                                            activeColor: Colors.black,
-                                            value: optionsPayment[0],
-                                            groupValue: currentOptions,
-                                            onChanged: (value) {
-                                              setState(() {
-                                                currentOptions =
-                                                    value.toString();
-                                                paymentMethod = 0;
-                                              });
-                                            },
+                                          Icon(
+                                            Icons.post_add_rounded,
+                                            size: 20.sp,
+                                            color: Colors.grey,
                                           ),
+                                          space5W,
                                           TextApp(
-                                            text: optionsPayment[0],
+                                            text: "Giảm giá",
                                             color: Colors.black,
                                             fontsize: 14.sp,
-                                          )
+                                          ),
                                         ],
                                       ),
-                                      Row(
-                                        children: [
-                                          Radio(
-                                            activeColor: Colors.black,
-                                            value: optionsPayment[1],
-                                            groupValue: currentOptions,
-                                            onChanged: (value) {
-                                              setState(() {
-                                                currentOptions =
-                                                    value.toString();
-                                                paymentMethod = 1;
-                                              });
-                                            },
-                                          ),
-                                          TextApp(
-                                            text: optionsPayment[1],
-                                            color: Colors.black,
-                                            fontsize: 14.sp,
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Radio(
-                                            activeColor: Colors.black,
-                                            value: optionsPayment[2],
-                                            groupValue: currentOptions,
-                                            onChanged: (value) {
-                                              setState(() {
-                                                currentOptions =
-                                                    value.toString();
-                                                paymentMethod = 2;
-                                              });
-                                            },
-                                          ),
-                                          TextApp(
-                                            text: optionsPayment[2],
-                                            color: Colors.black,
-                                            fontsize: 14.sp,
-                                          )
-                                        ],
+                                      SizedBox(
+                                        width: 120.w,
+                                        child: TextField(
+                                          onTapOutside: (event) {
+                                            FocusManager.instance.primaryFocus
+                                                ?.unfocus();
+                                          },
+                                          keyboardType: TextInputType.number,
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp("[0-9]")),
+                                          ], // Only numbers can be entered,
+                                          style: TextStyle(
+                                              fontSize: 12.sp, color: grey),
+                                          controller: discountController,
+                                          onChanged: (string) {
+                                            discountMoney = string;
+                                            if (string.isNotEmpty) {
+                                              string = _formatNumber(
+                                                  string.replaceAll(',', ''));
+                                              discountController.value =
+                                                  TextEditingValue(
+                                                text: string,
+                                                selection:
+                                                    TextSelection.collapsed(
+                                                        offset: string.length),
+                                              );
+                                            }
+                                          },
+                                          onEditingComplete: () {},
+                                          cursorColor: grey,
+                                          decoration: InputDecoration(
+                                              fillColor: const Color.fromARGB(
+                                                  255, 226, 104, 159),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color.fromRGBO(
+                                                        214, 51, 123, 0.6),
+                                                    width: 2.0),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              hintText: '',
+                                              isDense: true,
+                                              contentPadding:
+                                                  EdgeInsets.all(15.w)),
+                                        ),
                                       )
                                     ],
                                   ),
-                                  const Divider(
-                                    height: 1,
-                                    color: menuGrey,
+                                ),
+                                const Divider(
+                                  height: 1,
+                                  color: menuGrey,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(10.w),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons
+                                                .account_balance_wallet_outlined,
+                                            size: 20.sp,
+                                            color: Colors.grey,
+                                          ),
+                                          space5W,
+                                          TextApp(
+                                            text: "Khách thanh toán",
+                                            color: Colors.black,
+                                            fontsize: 14.sp,
+                                          ),
+                                        ],
+                                      ),
+                                      // space15W,
+                                      SizedBox(
+                                        width: 120.w,
+                                        child: TextField(
+                                          onTapOutside: (event) {
+                                            FocusManager.instance.primaryFocus
+                                                ?.unfocus();
+                                          },
+                                          keyboardType: TextInputType.number,
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp("[0-9]")),
+                                          ], // Only numbers can be entered,
+                                          controller: clientPayController,
+                                          onChanged: (string) {
+                                            if (string.isNotEmpty) {
+                                              payMoney = string;
+
+                                              string = _formatNumber(
+                                                  string.replaceAll(',', ''));
+                                              clientPayController.value =
+                                                  TextEditingValue(
+                                                text: string,
+                                                selection:
+                                                    TextSelection.collapsed(
+                                                        offset: string.length),
+                                              );
+                                            }
+                                          },
+                                          style: TextStyle(
+                                              fontSize: 12.sp, color: grey),
+                                          cursorColor: grey,
+                                          decoration: InputDecoration(
+                                              fillColor: const Color.fromARGB(
+                                                  255, 226, 104, 159),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                    color: Color.fromRGBO(
+                                                        214, 51, 123, 0.6),
+                                                    width: 2.0),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
+                                              ),
+                                              hintText: '',
+                                              isDense: true,
+                                              contentPadding:
+                                                  EdgeInsets.all(15.w)),
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.all(10.w),
-                                    child: Column(
+                                ),
+                                space20H,
+                                Wrap(
+                                  children: [
+                                    Row(
                                       children: [
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            TextApp(
-                                              text: "Tạm tính",
-                                              color: greyText,
-                                              fontsize: 14.sp,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            TextApp(
-                                              text:
-                                                  "${MoneyFormatter(amount: (state.paymentInforModel?.order?.orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                              color: Colors.black,
-                                              fontsize: 14.sp,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ],
+                                        Radio(
+                                          activeColor: Colors.black,
+                                          value: optionsPayment[0],
+                                          groupValue: currentOptions,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              currentOptions = value.toString();
+                                              paymentMethod = 0;
+                                            });
+                                          },
                                         ),
-                                        space20H,
-
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            TextApp(
-                                              text: "Tiền thừa trả khách",
-                                              color: greyText,
-                                              fontsize: 14.sp,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            TextApp(
-                                              text:
-                                                  "${MoneyFormatter(amount: (state.paymentInforModel?.order?.guestPayClient ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                              color: Colors.black,
-                                              fontsize: 14.sp,
-                                            ),
-                                          ],
-                                        ),
-
-                                        // Row(
-                                        //   mainAxisAlignment:
-                                        //       MainAxisAlignment.end,
-                                        //   children: [
-                                        //     TextApp(
-                                        //         text: formatDateTime(state
-                                        //                 .paymentInforModel
-                                        //                 ?.order
-                                        //                 ?.createdAt
-                                        //                 .toString() ??
-                                        //             ''),
-                                        //         fontsize: 14.sp),
-                                        //     space5W,
-                                        //     Icon(
-                                        //       Icons.access_time_filled,
-                                        //       size: 14.sp,
-                                        //       color: Colors.grey,
-                                        //     )
-                                        //   ],
-                                        // ),
-                                        space20H,
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            TextApp(
-                                              text: "Tổng cộng",
-                                              color: blueText2,
-                                              fontsize: 16.sp,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            TextApp(
-                                              text:
-                                                  "${MoneyFormatter(amount: (state.paymentInforModel?.order?.clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                              color: blueText2,
-                                              fontsize: 16.sp,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ],
-                                        ),
-                                        space20H,
+                                        TextApp(
+                                          text: optionsPayment[0],
+                                          color: Colors.black,
+                                          fontsize: 14.sp,
+                                        )
                                       ],
                                     ),
-                                  )
-                                ],
-                              ),
+                                    Row(
+                                      children: [
+                                        Radio(
+                                          activeColor: Colors.black,
+                                          value: optionsPayment[1],
+                                          groupValue: currentOptions,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              currentOptions = value.toString();
+                                              paymentMethod = 1;
+                                            });
+                                          },
+                                        ),
+                                        TextApp(
+                                          text: optionsPayment[1],
+                                          color: Colors.black,
+                                          fontsize: 14.sp,
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Radio(
+                                          activeColor: Colors.black,
+                                          value: optionsPayment[2],
+                                          groupValue: currentOptions,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              currentOptions = value.toString();
+                                              paymentMethod = 2;
+                                            });
+                                          },
+                                        ),
+                                        TextApp(
+                                          text: optionsPayment[2],
+                                          color: Colors.black,
+                                          fontsize: 14.sp,
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                const Divider(
+                                  height: 1,
+                                  color: menuGrey,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(10.w),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          TextApp(
+                                            text: "Tạm tính",
+                                            color: greyText,
+                                            fontsize: 14.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          TextApp(
+                                            text:
+                                                "${MoneyFormatter(amount: (state.paymentInforModel?.order?.orderTotal ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                            color: Colors.black,
+                                            fontsize: 14.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ],
+                                      ),
+                                      space20H,
+
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          TextApp(
+                                            text: "Tiền thừa trả khách",
+                                            color: greyText,
+                                            fontsize: 14.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          TextApp(
+                                            text:
+                                                "${MoneyFormatter(amount: (state.paymentInforModel?.order?.guestPayClient ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                            color: Colors.black,
+                                            fontsize: 14.sp,
+                                          ),
+                                        ],
+                                      ),
+
+                                      // Row(
+                                      //   mainAxisAlignment:
+                                      //       MainAxisAlignment.end,
+                                      //   children: [
+                                      //     TextApp(
+                                      //         text: formatDateTime(state
+                                      //                 .paymentInforModel
+                                      //                 ?.order
+                                      //                 ?.createdAt
+                                      //                 .toString() ??
+                                      //             ''),
+                                      //         fontsize: 14.sp),
+                                      //     space5W,
+                                      //     Icon(
+                                      //       Icons.access_time_filled,
+                                      //       size: 14.sp,
+                                      //       color: Colors.grey,
+                                      //     )
+                                      //   ],
+                                      // ),
+                                      space20H,
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          TextApp(
+                                            text: "Tổng cộng",
+                                            color: blueText2,
+                                            fontsize: 16.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          TextApp(
+                                            text:
+                                                "${MoneyFormatter(amount: (state.paymentInforModel?.order?.clientCanPay ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                            color: blueText2,
+                                            fontsize: 16.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ],
+                                      ),
+                                      space20H,
+                                    ],
+                                  ),
+                                )
+                              ],
                             ),
                           )),
                       Container(
@@ -4514,7 +4511,6 @@ class _ManageBroughtReceiptDialogState
       );
 
       final data = jsonDecode(respons.body);
-      log("DATAE !!! $data");
       var detailsBroughtReceiptRes = ManageBroughtReceiptModel.fromJson(data);
       try {
         if (data['status'] == 200) {
@@ -5477,24 +5473,6 @@ class PrintBillDialog extends StatefulWidget {
 }
 
 class _PrintBillDialogState extends State<PrintBillDialog> {
-  // void printBroughtReceipt({required int orderID}) async {
-  //   log("widget.token 22 ${widget.token}");
-  //   log("widget.role 22 ${widget.role}");
-  //   log("shopId 22 ${widget.shopID}");
-  //   log("orderID ${orderID}");
-  //   BlocProvider.of<PrintBroughtReceiptBloc>(context).add(PrintBroughtReceipt(
-  //       token: widget.token,
-  //       client: widget.role,
-  //       shopId: widget.shopID,
-  //       orderId: orderID));
-  // }
-
-  // @override
-  // void initState() {
-  //   // printBroughtReceipt(orderID: widget.orderID);
-  //   super.initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PrintBroughtReceiptBloc, PrintBroughtReceiptState>(
@@ -8347,7 +8325,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
       contentPadding: EdgeInsets.only(bottom: 10.h),
       surfaceTintColor: Colors.white,
       backgroundColor: Colors.white,
-      content: Container(
+      content: SizedBox(
         width: 1.sw,
         child: ListView(
           shrinkWrap: true,
@@ -8358,7 +8336,7 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(top: 15.w, left: 15.w, right: 15.w),
-                  child: Container(
+                  child: SizedBox(
                       width: 1.sw,
                       height: 50,
                       // decoration: BoxDecoration(
@@ -9077,6 +9055,7 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
 
   @override
   void initState() {
+    // ignore: todo
     // TODO: implement initState
     handleGetDataTable();
     super.initState();
@@ -9385,14 +9364,10 @@ class _CreateItemDialogState extends State<CreateItemDialog>
   final ImagePicker imagePicker = ImagePicker();
 
   bool isHaveddddd = false;
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
-    TabController _tabController = TabController(
+    TabController tabController = TabController(
       length: 2,
       vsync: this,
     );
@@ -9444,7 +9419,7 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                     labelColor: Theme.of(context).colorScheme.primary,
                     unselectedLabelColor: Colors.black.withOpacity(0.5),
                     labelStyle: const TextStyle(color: Colors.red),
-                    controller: _tabController,
+                    controller: tabController,
                     isScrollable: true,
                     indicatorSize: TabBarIndicatorSize.label,
                     tabs: const [
@@ -9458,7 +9433,7 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                   height: 400.h,
                   child: TabBarView(
                       physics: const NeverScrollableScrollPhysics(),
-                      controller: _tabController,
+                      controller: tabController,
                       children: [
                         ListView(
                           shrinkWrap: true,

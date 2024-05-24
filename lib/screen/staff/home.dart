@@ -11,7 +11,7 @@ import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/staff/list_food_order_model.dart';
 import 'package:app_restaurant/model/staff/staff_infor_model.dart';
-import 'package:app_restaurant/utils/share_getString.dart';
+import 'package:app_restaurant/utils/share_getstring.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
@@ -111,8 +111,8 @@ class _StaffBookingTableState extends State<StaffBookingTable>
 
   @override
   void initState() {
-    super.initState();
     getDataTabIndex(roomId: '');
+    super.initState();
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   WidgetsBinding.instance.addPostFrameCallback((_) => getInfor());
     // });
@@ -498,10 +498,6 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                     },
                                                                                     child: Row(
                                                                                       children: [
-                                                                                        // Icon(
-                                                                                        //   Icons.receipt,
-                                                                                        //   size: 35.sp,
-                                                                                        // ),
                                                                                         SizedBox(
                                                                                           width: 35.w,
                                                                                           height: 35.w,
@@ -595,10 +591,6 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                     },
                                                                                     child: Row(
                                                                                       children: [
-                                                                                        // Icon(
-                                                                                        //   Icons.print,
-                                                                                        //   size: 35.sp,
-                                                                                        // ),
                                                                                         SizedBox(
                                                                                           width: 35.w,
                                                                                           height: 35.w,
@@ -648,10 +640,6 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                     },
                                                                                     child: Row(
                                                                                       children: [
-                                                                                        // Icon(
-                                                                                        //   Icons.cancel,
-                                                                                        //   size: 35.sp,
-                                                                                        // ),
                                                                                         SizedBox(
                                                                                           width: 35.w,
                                                                                           height: 35.w,
@@ -883,11 +871,7 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
         }),
       );
       final data = jsonDecode(respons.body);
-      log(data);
-      // setState(() {
-      //             jsonTruocDo = data.toString();
 
-      // });
       try {
         if (data['status'] == 200) {
           mounted
@@ -904,13 +888,13 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                 })
               : null;
         } else {
-          log("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR getListOrderOfChefInIt 1");
         }
       } catch (error) {
-        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR getListOrderOfChefInIt 2 $error");
       }
     } catch (error) {
-      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR getListOrderOfChefInIt 3 $error");
     }
   }
 
@@ -956,13 +940,13 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                 })
               : null;
         } else {
-          log("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR getListOrderOfChef 1");
         }
       } catch (error) {
-        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR getListOrderOfChef 2 $error");
       }
     } catch (error) {
-      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR getListOrderOfChef 3 $error");
     }
   }
 
@@ -1003,20 +987,18 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                 })
               : null;
         } else {
-          log("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR hanldeUpdateStatusOrderFood 1");
         }
       } catch (error) {
-        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR hanldeUpdateStatusOrderFood 2 $error");
       }
     } catch (error) {
-      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR hanldeUpdateStatusOrderFood 3 $error");
     }
   }
 
   @override
   void initState() {
-    super.initState();
-
     getListOrderOfChefInIt(foodInOrderStatus: null, page: 1);
 
     timer = Timer.periodic(const Duration(seconds: 2), (Timer t) {
@@ -1033,6 +1015,7 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                           : null,
           page: 1);
     });
+    super.initState();
   }
 
   @override

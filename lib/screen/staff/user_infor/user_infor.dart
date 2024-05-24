@@ -101,7 +101,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
               mess: "Xoá ảnh đại diện thành công",
               color: Colors.green);
         } else {
-          log("ERROR DELETED AVATAR STAFF  1");
+          log("ERROR deletedAvatarStaff  1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -109,10 +109,10 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
               color: Colors.red);
         }
       } catch (error) {
-        log("ERROR DELETED AVATAR STAFF  2 $error");
+        log("ERROR deletedAvatarStaff 2 $error");
       }
     } catch (error) {
-      log("ERROR DELETED AVATAR STAFF  3 $error");
+      log("ERROR deletedAvatarStaff 3 $error");
     }
   }
 
@@ -126,9 +126,6 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
         // base64.encode(imagebytes);
 
         try {
-          log("TRUYEN NNNN ${{
-            "staff_avatar": base64string,
-          }}");
           var token = StorageUtils.instance.getString(key: 'token_staff');
           final respons = await http.post(
             Uri.parse('$baseUrl$updateAvatarStaffApi'),
@@ -197,16 +194,14 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
             staffInforData = staffInforDataRes.data;
           });
           init();
-
-          log("GET INFOR STAFF OK 1");
         } else {
-          log("GET INFOR STAFF ERROR 1");
+          log(" ERROR getInfor 1");
         }
       } catch (error) {
-        log("GET INFOR STAFF ERROR 2  $error");
+        log("ERROR getInfor 2  $error");
       }
     } catch (error) {
-      log("GET INFOR STAFF ERROR 3 $error");
+      log("ERROR getInfor 3 $error");
     }
   }
 
@@ -224,20 +219,6 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
     required int? address3,
     required String? address4,
   }) async {
-    log("CAI DONG TRUYEN LEN ${{
-      "first_name": firstName,
-      "last_name": lastName,
-      "full_name": fullName,
-      "email": email,
-      "phone": phone,
-      "address_1": address1,
-      "address_2": address2,
-      "address_3": address3,
-      "address_4": address4,
-      "twitter": twitter,
-      "facebook": facebook,
-      "instagram": instagram
-    }}");
     try {
       var token = StorageUtils.instance.getString(key: 'token_staff');
       final respons = await http.post(
@@ -263,12 +244,10 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
         }),
       );
       final data = jsonDecode(respons.body);
-      log("DATA UPDATE INFOR  $data}");
       final messText = data['message'];
 
       try {
         if (data['status'] == 200) {
-          log("UPDATE INFOR  OK");
           getInfor();
           showSnackBarTopCustom(
               title: "Thành công",
@@ -276,7 +255,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
               mess: messText['text'],
               color: Colors.green);
         } else {
-          log("ERROR UPDATE INFOR  1");
+          log("ERROR updateInforStaff  1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -284,10 +263,10 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
               color: Colors.red);
         }
       } catch (error) {
-        log("ERROR UPDATE INFOR  2 $error");
+        log("ERROR updateInforStaff 2 $error");
       }
     } catch (error) {
-      log("ERROR UPDATE INFOR  3 $error");
+      log("ERROR updateInforStaff 3 $error");
     }
   }
 
@@ -297,11 +276,6 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
     required String? confirmNewPassword,
   }) async {
     try {
-      log("TRUYEN NNNN ${{
-        "password": currentPassword,
-        "password_new": newPassword,
-        "confirm_password_new": confirmNewPassword
-      }}");
       var token = StorageUtils.instance.getString(key: 'token_staff');
       final respons = await http.post(
         Uri.parse('$baseUrl$changePasswordStaffApi'),
@@ -317,11 +291,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
         }),
       );
       final data = jsonDecode(respons.body);
-      log("DATA CHANGE PASS STAFF  $data}");
       final messText = data['message'];
       try {
         if (data['status'] == 200) {
-          log("CHANGE PASS STAFF  OK");
           currentPassworldController.clear();
           newPassworldController.clear();
           reNewPassworldController.clear();
@@ -332,7 +304,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
               mess: messText['text'],
               color: Colors.green);
         } else {
-          log("ERROR CHANGE PASS STAFF  1");
+          log("ERROR changePasswordStaff  1");
           showSnackBarTopCustom(
               title: "Thất bại",
               context: navigatorKey.currentContext,
@@ -340,10 +312,10 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
               color: Colors.red);
         }
       } catch (error) {
-        log("ERROR CHANGE PASS STAFF  2 $error");
+        log("ERROR changePasswordStaff 2 $error");
       }
     } catch (error) {
-      log("ERROR CHANGE PASS STAFF  3 $error");
+      log("ERROR changePasswordStaff 3 $error");
     }
   }
 
@@ -393,13 +365,13 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
             currentWard = myWard;
           });
         } else {
-          log("LOI GI DO dadadadadadadada");
+          log("ERROR getListAreaInit 1");
         }
       } catch (error) {
-        log("LOI GI DO $error");
+        log("ERROR getListAreaInit 2 $error");
       }
     } catch (error) {
-      log("LOI GI DO $error");
+      log("ERROR getListAreaInit 3 $error");
     }
   }
 
@@ -445,13 +417,13 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
             currentDistric = myDistrict;
           });
         } else {
-          log("LOI GI DO dadadadadadadada");
+          log("ERROR getListArea 1 ");
         }
       } catch (error) {
-        log("LOI GI DO $error");
+        log("ERROR getListArea 2 $error");
       }
     } catch (error) {
-      log("LOI GI DO $error");
+      log("ERROR getListArea 3 $error");
     }
   }
 
@@ -506,10 +478,10 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
 
   @override
   void initState() {
-    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       WidgetsBinding.instance.addPostFrameCallback((_) => getInfor());
     });
+    super.initState();
   }
 
   @override
@@ -633,9 +605,15 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                         },
                                                         child: Row(
                                                           children: [
-                                                            Icon(
-                                                              Icons.image,
-                                                              size: 35.sp,
+                                                            SizedBox(
+                                                              width: 35.w,
+                                                              height: 35.w,
+                                                              child:
+                                                                  Image.asset(
+                                                                "assets/images/picture.png",
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
                                                             ),
                                                             space10W,
                                                             TextApp(
@@ -664,10 +642,6 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                         },
                                                         child: Row(
                                                           children: [
-                                                            // Icon(
-                                                            //   Icons.delete,
-                                                            //   size: 35.sp,
-                                                            // ),
                                                             SizedBox(
                                                               width: 35.w,
                                                               height: 35.w,
@@ -693,13 +667,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                   ),
                                                 ));
                                       },
-                                      child:
-                                          // Icon(
-                                          //   Icons.edit,
-                                          //   size: 25.sp,
-                                          //   color: Colors.white,
-                                          // ),
-                                          SizedBox(
+                                      child: SizedBox(
                                         width: 35.w,
                                         height: 35.w,
                                         child: Image.asset(
@@ -1421,7 +1389,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                             clipBehavior:
                                                 Clip.antiAliasWithSaveLayer,
                                             context: context,
-                                            builder: (context) => Container(
+                                            builder: (context) => SizedBox(
                                               height: 1.sh / 2,
                                               child: Column(
                                                 children: [
@@ -1579,7 +1547,7 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                             clipBehavior:
                                                 Clip.antiAliasWithSaveLayer,
                                             context: context,
-                                            builder: (context) => Container(
+                                            builder: (context) => SizedBox(
                                               height: 1.sh / 2,
                                               child: Column(
                                                 children: [

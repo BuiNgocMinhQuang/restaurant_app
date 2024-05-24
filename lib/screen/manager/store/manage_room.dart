@@ -57,13 +57,13 @@ class _ManageRoomState extends State<ManageRoom> {
             listTableOfRoomModel = ListTableOfRoomModel.fromJson(data);
           });
         } else {
-          log("ERROR CREATE FOOOD");
+          log("ERROR getDataInit 1");
         }
       } catch (error) {
-        log("ERROR CREATE 112212 $error");
+        log("ERROR getDataInit 2 $error");
       }
     } catch (error) {
-      log("ERROR CREATE 44444 $error");
+      log("ERROR getDataInit 3 $error");
     }
   }
 
@@ -88,20 +88,20 @@ class _ManageRoomState extends State<ManageRoom> {
         if (data['status'] == 200) {
           getDataInit();
         } else {
-          log("ERROR CREATE FOOOD");
+          log("ERROR handleDeleteTable 1");
         }
       } catch (error) {
-        log("ERROR CREATE 112212 $error");
+        log("ERROR handleDeleteTable 2 $error");
       }
     } catch (error) {
-      log("ERROR CREATE 44444 $error");
+      log("ERROR handleDeleteTable 3 $error");
     }
   }
 
   @override
   void initState() {
-    super.initState();
     getDataInit();
+    super.initState();
   }
 
   @override
@@ -375,11 +375,6 @@ class _ManageRoomState extends State<ManageRoom> {
                                                                       child:
                                                                           Row(
                                                                         children: [
-                                                                          // Icon(
-                                                                          //   Icons.edit,
-                                                                          //   size:
-                                                                          //       35.sp,
-                                                                          // ),
                                                                           SizedBox(
                                                                             width:
                                                                                 35.w,
@@ -422,11 +417,6 @@ class _ManageRoomState extends State<ManageRoom> {
                                                                       child:
                                                                           Row(
                                                                         children: [
-                                                                          // Icon(
-                                                                          //   Icons.delete,
-                                                                          //   size:
-                                                                          //       35.sp,
-                                                                          // ),
                                                                           SizedBox(
                                                                             width:
                                                                                 35.w,

@@ -7,6 +7,7 @@ import 'package:app_restaurant/constant/api/index.dart';
 import 'package:app_restaurant/model/manager_infor_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart' as http;
@@ -41,12 +42,14 @@ class ManagerLoginBloc extends Bloc<ManagerLoginEvent, ManagerLoginState> {
         if (data['status'] == 200) {
           StorageUtils.instance.removeKey(key: 'token_manager');
           navigatorKey.currentContext?.go('/');
+        } else {
+          log("ERROR _onManagerLogout 1");
         }
       } catch (error) {
-        log("ERROR LOGOUT 1");
+        log("ERROR _onManagerLogout 2");
       }
     } catch (error) {
-      log("ERROR LOGOUT 2");
+      log("ERROR _onManagerLogout 3");
     }
   }
 
@@ -87,16 +90,17 @@ class ManagerLoginBloc extends Bloc<ManagerLoginEvent, ManagerLoginState> {
         log(token.toString());
         navigatorKey.currentContext?.go("/manager_home");
         Future.delayed(const Duration(milliseconds: 300), () {
-          log("DANG NHAP THNAH CONG");
           showLoginSuccesDialog();
         });
       } else {
+        log("ERROR _onManagerLoginButtonPressed 1");
         emit(state.copyWith(loginStatus: ManagerLoginStatus.failed));
         emit(state.copyWith(errorText: message['text']));
       }
     } catch (error) {
+      log("ERROR _onManagerLoginButtonPressed 2");
       emit(state.copyWith(loginStatus: ManagerLoginStatus.failed));
-      emit(state.copyWith(errorText: message['text']));
+      emit(state.copyWith(errorText: "Không thể kết nối với máy chủ !"));
     }
 
     if (state.loginStatus == ManagerLoginStatus.failed) {

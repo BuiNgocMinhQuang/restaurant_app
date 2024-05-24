@@ -7,6 +7,7 @@ import 'package:app_restaurant/model/brought_receipt/list_brought_receipt_model.
 import 'package:app_restaurant/model/brought_receipt/manage_brought_receipt_model.dart';
 import 'package:app_restaurant/model/brought_receipt/print_brought_receipt_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -55,21 +56,21 @@ class BroughtReceiptBloc
           emit(state.copyWith(
               broughtReceiptPageStatus: BroughtReceiptPageStatus.succes));
         } else {
-          log("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR _onGetListBroughtReceipt 1");
 
           emit(state.copyWith(
               broughtReceiptPageStatus: BroughtReceiptPageStatus.failed));
           emit(state.copyWith(errorText: message['text']));
         }
       } catch (error) {
-        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR _onGetListBroughtReceipt 2 $error");
 
         emit(state.copyWith(
             broughtReceiptPageStatus: BroughtReceiptPageStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR _onGetListBroughtReceipt 3 $error");
       emit(state.copyWith(
           broughtReceiptPageStatus: BroughtReceiptPageStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
@@ -117,7 +118,7 @@ class CancleBroughtReceiptBloc
               mess: message['title'],
               color: Colors.green);
         } else {
-          log("ERROR CANCLE BROUGHT RECEIPT 1");
+          log("ERROR _onCancleBroughtReceipt 1");
 
           emit(state.copyWith(
               cancleBroughtReceiptStatus: CancleBroughtReceiptStatus.failed));
@@ -128,14 +129,14 @@ class CancleBroughtReceiptBloc
               color: Colors.red);
         }
       } catch (error) {
-        log("ERROR CANCLE BROUGHT RECEIPT 2 $error");
+        log("ERROR _onCancleBroughtReceipt 2 $error");
 
         emit(state.copyWith(
             cancleBroughtReceiptStatus: CancleBroughtReceiptStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      log("ERROR CANCLE BROUGHT RECEIPT 3 $error");
+      log("ERROR _onCancleBroughtReceipt 3 $error");
 
       emit(state.copyWith(
           cancleBroughtReceiptStatus: CancleBroughtReceiptStatus.failed));
@@ -174,7 +175,6 @@ class PrintBroughtReceiptBloc
         }),
       );
       final data = jsonDecode(respons.body);
-      log("BUG HOA DON MANG VE $data");
       try {
         if (data['status'] == 200) {
           var printBroughtReceiptRes = PrintBroughtReceiptModel.fromJson(data);

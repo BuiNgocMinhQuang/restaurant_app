@@ -90,6 +90,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                 })
               : null;
           Navigator.push(
+            // ignore: use_build_context_synchronously
             context,
             MaterialPageRoute(
                 builder: (context) => EditFood(
@@ -98,7 +99,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                     )),
           );
         } else {
-          print("ERROR DETAILS  FOOD 1");
+          log("ERROR handleGetDetailsFood 1");
           showCustomDialogModal(
               context: navigatorKey.currentContext,
               textDesc: "Có lỗi xảy ra",
@@ -108,7 +109,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
               typeDialog: "error");
         }
       } catch (error) {
-        print("ERROR DETAILS  FOOD 2 $error");
+        log("ERROR handleGetDetailsFood 2 $error");
         showCustomDialogModal(
             context: navigatorKey.currentContext,
             textDesc: "Có lỗi xảy ra",
@@ -118,7 +119,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
             typeDialog: "error");
       }
     } catch (error) {
-      print("ERROR DETAILS  FOOD 3 $error");
+      log("ERROR handleGetDetailsFood 3 $error");
       showCustomDialogModal(
           context: navigatorKey.currentContext,
           textDesc: "Có lỗi xảy ra",
@@ -209,7 +210,6 @@ class _ListFoodManagerState extends State<ListFoodManager> {
         body: jsonEncode({'is_api': true, 'key': foodID}),
       );
       final data = jsonDecode(respons.body);
-      print("GET DATA LIST FOOD ${data}");
       try {
         if (data['status'] == 200) {
           showCustomDialogModal(
@@ -225,7 +225,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
           loadMoreMenuFood(
               page: currentPage, keywords: query, filtersFlg: selectedFlag);
         } else {
-          print("ERROR LIST FOOOD RECEIPT PAGE 1");
+          log("ERROR handleGetDetailsFood 1");
           showCustomDialogModal(
               context: navigatorKey.currentContext,
               textDesc: "Có lỗi xảy ra",
@@ -235,7 +235,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
               typeDialog: "error");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR handleGetDetailsFood 2 $error");
         showCustomDialogModal(
             context: navigatorKey.currentContext,
             textDesc: "Có lỗi xảy ra",
@@ -245,7 +245,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
             typeDialog: "error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR handleGetDetailsFood 3 $error");
       showCustomDialogModal(
           context: navigatorKey.currentContext,
           textDesc: "Có lỗi xảy ra",
@@ -390,7 +390,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
         }),
       );
       final data = jsonDecode(respons.body);
-      print("GET DATA LIST FOOD ${data}");
+
       try {
         if (data['status'] == 200) {
           mounted
@@ -402,19 +402,18 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                 })
               : null;
         } else {
-          print("ERROR LIST FOOOD RECEIPT PAGE 1");
+          log("ERROR handleGetDetailsFood 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR handleGetDetailsFood 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR handleGetDetailsFood 3 $error");
     }
   }
 
   @override
   void initState() {
-    super.initState();
     loadMoreMenuFood(page: 1, filtersFlg: null);
     scrollListFoodController.addListener(() {
       if (scrollListFoodController.position.maxScrollExtent ==
@@ -424,6 +423,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
             page: currentPage, keywords: query, filtersFlg: selectedFlag);
       }
     });
+    super.initState();
   }
 
   @override
@@ -453,7 +453,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
+                        SizedBox(
                           width: 100,
                           height: 100,
                           child: Lottie.asset('assets/lottie/error.json'),
@@ -465,12 +465,13 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                           fontWeight: FontWeight.bold,
                         ),
                         space30H,
-                        Container(
-                          width: 200,
+                        SizedBox(
+                          width: 200.w,
                           child: ButtonGradient(
                             color1: color1BlueButton,
                             color2: color2BlueButton,
                             event: () {
+                              currentFoodList.clear();
                               loadMoreMenuFood(page: 1, filtersFlg: null);
                             },
                             text: 'Thử lại',
@@ -492,7 +493,6 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                         behavior: HitTestBehavior.opaque,
                         onTap: () {
                           // Close any open slidable when tapping outside
-                          log("TAP CLOSE");
                           Slidable.of(context)?.close();
                         },
                         child: Container(
@@ -762,7 +762,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                               context: context,
                                                               builder:
                                                                   (context) =>
-                                                                      Container(
+                                                                      SizedBox(
                                                                 height:
                                                                     1.sh / 2,
                                                                 child: Column(
@@ -1174,90 +1174,88 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                                             SizedBox(
                                                                               width: 10.w,
                                                                             ),
-                                                                            Container(
-                                                                              child: Column(
-                                                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                                children: [
-                                                                                  Row(
-                                                                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                    children: [
-                                                                                      Container(
-                                                                                        // color: Colors.white,
-                                                                                        width: 180.w,
-                                                                                        child: TextApp(
-                                                                                          isOverFlow: false,
-                                                                                          softWrap: true,
-                                                                                          text: product.foodName ?? '',
-                                                                                          fontsize: 14.sp,
-                                                                                          color: blueText,
-                                                                                          fontWeight: FontWeight.bold,
-                                                                                        ),
-                                                                                      ),
-                                                                                      product.activeFlg == 1 ? const StatusBoxIsSelling() : const StatusBoxNoMoreSelling()
-                                                                                    ],
-                                                                                  ),
-                                                                                  SizedBox(
-                                                                                    height: 10.h,
-                                                                                  ),
-                                                                                  Row(
-                                                                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                    children: [
-                                                                                      Container(
-                                                                                        // color: Colors.green,
-                                                                                        width: 120.w,
-                                                                                        child: TextApp(
-                                                                                          isOverFlow: false,
-                                                                                          softWrap: true,
-                                                                                          text: product.storeName ?? '',
-                                                                                          fontsize: 14.sp,
-                                                                                        ),
-                                                                                      ),
-                                                                                      Container(
-                                                                                        // color: Theme.of(context).colorScheme.primary,
-                                                                                        width: 120.w,
-                                                                                        child: TextApp(
-                                                                                          isOverFlow: false,
-                                                                                          softWrap: true,
-                                                                                          text: "${MoneyFormatter(amount: (product.foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
-                                                                                          fontsize: 14.sp,
-                                                                                          textAlign: TextAlign.end,
-                                                                                          fontWeight: FontWeight.bold,
-                                                                                        ),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                  SizedBox(
-                                                                                    height: 10.h,
-                                                                                  ),
-                                                                                  Row(
-                                                                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                    children: [
-                                                                                      TextApp(
+                                                                            Column(
+                                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                                              children: [
+                                                                                Row(
+                                                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                  children: [
+                                                                                    SizedBox(
+                                                                                      // color: Colors.white,
+                                                                                      width: 180.w,
+                                                                                      child: TextApp(
                                                                                         isOverFlow: false,
                                                                                         softWrap: true,
-                                                                                        text: "Ngày tạo: ",
+                                                                                        text: product.foodName ?? '',
                                                                                         fontsize: 14.sp,
-                                                                                        textAlign: TextAlign.start,
+                                                                                        color: blueText,
                                                                                         fontWeight: FontWeight.bold,
                                                                                       ),
-                                                                                      space5W,
-                                                                                      SizedBox(
-                                                                                        width: 150.w,
-                                                                                        child: TextApp(
-                                                                                          isOverFlow: false,
-                                                                                          softWrap: true,
-                                                                                          text: formatDateTime(product.createdAt ?? ''),
-                                                                                          fontsize: 14.sp,
-                                                                                        ),
+                                                                                    ),
+                                                                                    product.activeFlg == 1 ? const StatusBoxIsSelling() : const StatusBoxNoMoreSelling()
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(
+                                                                                  height: 10.h,
+                                                                                ),
+                                                                                Row(
+                                                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                  children: [
+                                                                                    SizedBox(
+                                                                                      // color: Colors.green,
+                                                                                      width: 120.w,
+                                                                                      child: TextApp(
+                                                                                        isOverFlow: false,
+                                                                                        softWrap: true,
+                                                                                        text: product.storeName ?? '',
+                                                                                        fontsize: 14.sp,
                                                                                       ),
-                                                                                    ],
-                                                                                  ),
-                                                                                ],
-                                                                              ),
+                                                                                    ),
+                                                                                    SizedBox(
+                                                                                      // color: Theme.of(context).colorScheme.primary,
+                                                                                      width: 120.w,
+                                                                                      child: TextApp(
+                                                                                        isOverFlow: false,
+                                                                                        softWrap: true,
+                                                                                        text: "${MoneyFormatter(amount: (product.foodPrice ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
+                                                                                        fontsize: 14.sp,
+                                                                                        textAlign: TextAlign.end,
+                                                                                        fontWeight: FontWeight.bold,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(
+                                                                                  height: 10.h,
+                                                                                ),
+                                                                                Row(
+                                                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                  children: [
+                                                                                    TextApp(
+                                                                                      isOverFlow: false,
+                                                                                      softWrap: true,
+                                                                                      text: "Ngày tạo: ",
+                                                                                      fontsize: 14.sp,
+                                                                                      textAlign: TextAlign.start,
+                                                                                      fontWeight: FontWeight.bold,
+                                                                                    ),
+                                                                                    space5W,
+                                                                                    SizedBox(
+                                                                                      width: 150.w,
+                                                                                      child: TextApp(
+                                                                                        isOverFlow: false,
+                                                                                        softWrap: true,
+                                                                                        text: formatDateTime(product.createdAt ?? ''),
+                                                                                        fontsize: 14.sp,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ],
                                                                             )
                                                                           ],
                                                                         ),

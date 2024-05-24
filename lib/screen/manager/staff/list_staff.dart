@@ -148,7 +148,6 @@ class _ListStaffState extends State<ListStaff> {
             listStaffDataModel = ListStaffDataModel.fromJson(data);
             currentStaffList.addAll(listStaffDataModel!.staffs.data);
             currentPage++;
-            log(currentStaffList.toString());
             if (listStaffDataModel!.staffs.data.isEmpty ||
                 listStaffDataModel!.staffs.data.length <= 15) {
               hasMore = false;
@@ -160,6 +159,7 @@ class _ListStaffState extends State<ListStaff> {
             });
           });
         } else {
+          log("ERROR handleGetListStaff 1");
           Future.delayed(const Duration(milliseconds: 1000), () {
             setState(() {
               isLoading = false;
@@ -170,6 +170,8 @@ class _ListStaffState extends State<ListStaff> {
           });
         }
       } catch (error) {
+        log("ERROR handleGetListStaff 2 $error");
+
         Future.delayed(const Duration(milliseconds: 1000), () {
           setState(() {
             isLoading = false;
@@ -180,6 +182,8 @@ class _ListStaffState extends State<ListStaff> {
         });
       }
     } catch (error) {
+      log("ERROR handleGetListStaff 3 $error");
+
       Future.delayed(const Duration(milliseconds: 1000), () {
         setState(() {
           isLoading = false;
@@ -218,19 +222,18 @@ class _ListStaffState extends State<ListStaff> {
             dateEnd: _dateEndController.text,
           );
         } else {
-          log("ERROR CREATE FOOOD");
+          log("ERROR handleChangeStatusStaff 1");
         }
       } catch (error) {
-        log("ERROR CREATE $error");
+        log("ERROR handleChangeStatusStaff 2 $error");
       }
     } catch (error) {
-      log("ERROR CREATE $error");
+      log("ERROR handleChangeStatusStaff 3 $error");
     }
   }
 
   @override
   void initState() {
-    super.initState();
     handleGetListStaff(page: 1);
     scrollListStaffController.addListener(() {
       if (scrollListStaffController.position.maxScrollExtent ==
@@ -245,6 +248,7 @@ class _ListStaffState extends State<ListStaff> {
         );
       }
     });
+    super.initState();
   }
 
   @override

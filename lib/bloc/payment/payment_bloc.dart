@@ -49,26 +49,24 @@ class PaymentInforBloc extends Bloc<PaymentInforEvent, PaymentInforState> {
       );
       final data = jsonDecode(respons.body);
       var message = data['message'];
-      log("UPDATE PAYMENT $data");
 
       try {
         if (data['status'] == 200) {
-          // print("UPDATE PAYMENT ${data}");
           emit(state.copyWith(paymentStatus: PaymentInforStateStatus.succes));
         } else {
-          log("ERROR UPDATE PAYMENT INFOR 1");
+          log("ERROR _onUpdatePaymentInfor 1");
 
           emit(state.copyWith(paymentStatus: PaymentInforStateStatus.failed));
           emit(state.copyWith(errorText: message['text']));
         }
       } catch (error) {
-        log("ERROR UPDATE PAYMENT INFOR 2 $error");
+        log("ERROR _onUpdatePaymentInfor 2 $error");
 
         emit(state.copyWith(paymentStatus: PaymentInforStateStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      log("ERROR UPDATE PAYMENT INFOR 3 $error");
+      log("ERROR _onUpdatePaymentInfor 3 $error");
       emit(state.copyWith(paymentStatus: PaymentInforStateStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }
@@ -99,34 +97,24 @@ class PaymentInforBloc extends Bloc<PaymentInforEvent, PaymentInforState> {
         }),
       );
       final data = jsonDecode(respons.body);
-      log("CONFIRM PAYMENT $data");
-      // final message = data['message'];
       try {
         if (data['status'] == 200) {
-          // print("UPDATE PAYMENT ${data}");
           emit(state.copyWith(paymentStatus: PaymentInforStateStatus.succes));
-          // showSnackBarTopCustom(
-          //     context: navigatorKey.currentContext,
-          //     mess: message['title'],
-          //     color: Colors.green);
         } else {
-          log("ERROR CONFIRM PAYMENT  1");
+          log("ERROR _onConfirmPayment  1");
 
           emit(state.copyWith(paymentStatus: PaymentInforStateStatus.failed));
           emit(state.copyWith(errorText: someThingWrong));
           // showSnackBarTopCustom(
-          //     context: navigatorKey.currentContext,
-          //     mess: message['text'],
-          //     color: Colors.red);
         }
       } catch (error) {
-        log("ERROR CONFIRM PAYMENT  2 $error");
+        log("ERROR _onConfirmPayment 2 $error");
 
         emit(state.copyWith(paymentStatus: PaymentInforStateStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      log("ERROR CONFIRM PAYMENT  3 $error");
+      log("ERROR _onConfirmPayment 3 $error");
       emit(state.copyWith(paymentStatus: PaymentInforStateStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }
@@ -158,29 +146,26 @@ class PaymentInforBloc extends Bloc<PaymentInforEvent, PaymentInforState> {
         }),
       );
       final data = jsonDecode(respons.body);
-      // print("BILL INFOR $data");
       var message = data['message'];
       try {
         if (data['status'] == 200) {
-          log("DATA PAYMENT ${data['order']}");
-
           var paymentInforDataRes = PaymentInforModel.fromJson(data);
           emit(state.copyWith(paymentInforModel: paymentInforDataRes));
           emit(state.copyWith(paymentStatus: PaymentInforStateStatus.succes));
         } else {
-          log("ERROR PAYMENT INFOR 1");
+          log("ERROR _onGetPaymentInfor 1");
 
           emit(state.copyWith(paymentStatus: PaymentInforStateStatus.failed));
           emit(state.copyWith(errorText: message['text']));
         }
       } catch (error) {
-        log("ERROR PAYMENT INFOR 2 $error");
+        log("ERROR _onGetPaymentInfor 2 $error");
 
         emit(state.copyWith(paymentStatus: PaymentInforStateStatus.failed));
         emit(state.copyWith(errorText: someThingWrong));
       }
     } catch (error) {
-      log("ERROR PAYMENT INFOR 3 $error");
+      log("ERROR _onGetPaymentInfor 3 $error");
       emit(state.copyWith(paymentStatus: PaymentInforStateStatus.failed));
       emit(state.copyWith(errorText: someThingWrong));
     }

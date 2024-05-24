@@ -1,8 +1,9 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/model/list_food_menu_model.dart';
-import 'package:app_restaurant/utils/share_getString.dart';
+import 'package:app_restaurant/utils/share_getstring.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -116,17 +117,16 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                       listMenuPageRes.data.data.length <= 15) {
                     hasMore = false;
                   }
-                  print('LENGHT ${listMenuPageRes.data.data.length}');
                 })
               : null;
         } else {
-          print("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR loadMoreMenuFood 1");
         }
       } catch (error) {
-        print("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR loadMoreMenuFood 2 $error");
       }
     } catch (error) {
-      print("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR loadMoreMenuFood 3 $error");
     }
   }
 
@@ -150,7 +150,7 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
             padding: EdgeInsets.all(20.w),
             child: Column(
               children: [
-                Container(
+                SizedBox(
                     height: 50,
                     child: Row(
                       children: [
@@ -271,7 +271,7 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                 ),
                 space15H,
                 Expanded(
-                    child: Container(
+                    child: SizedBox(
                   width: 1.sw,
                   child: ListView.builder(
                       controller: scrollListFoodController,

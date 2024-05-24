@@ -20,7 +20,7 @@ class TableModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
     data['food_kinds'] = foodKinds;
     if (booking != null) {
@@ -63,7 +63,7 @@ class Booking {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['booked_table_id'] = bookedTableId;
     data['order_id'] = orderId;
     data['room_table_id'] = roomTableId;
@@ -172,7 +172,7 @@ class Order {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['order_id'] = orderId;
     data['user_id'] = userId;
     data['staff_id'] = staffId;
@@ -244,7 +244,7 @@ class TablesNoBooking {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['room_table_id'] = roomTableId;
     data['store_room_id'] = storeRoomId;
     data['table_name'] = tableName;

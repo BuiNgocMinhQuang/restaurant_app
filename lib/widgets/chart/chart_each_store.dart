@@ -8,7 +8,8 @@ import 'package:money_formatter/money_formatter.dart';
 
 class BarChartSample4 extends StatefulWidget {
   final ChartDataModel chartDataModel;
-  BarChartSample4({Key? key, required this.chartDataModel}) : super(key: key);
+  const BarChartSample4({Key? key, required this.chartDataModel})
+      : super(key: key);
 
   final Color dark = Colors.black12;
   final Color normal = Colors.green;
@@ -212,11 +213,11 @@ class BarChartSample4State extends State<BarChartSample4> {
   //   }
 
   List<BarChartGroupData> getData(double barsWidth, double barsSpace) {
-    final _categories = widget.chartDataModel.categories;
-    final _series = widget.chartDataModel.series;
+    final categories = widget.chartDataModel.categories;
+    final series = widget.chartDataModel.series;
 
     return [
-      for (var i = 0; i < _categories.length; i++)
+      for (var i = 0; i < categories.length; i++)
         BarChartGroupData(
           // showingTooltipIndicators: touchedGroupIndex ==
           //         getMonthFromDateString(
@@ -231,10 +232,10 @@ class BarChartSample4State extends State<BarChartSample4> {
           barsSpace: barsSpace,
           barRods: [
             for (var j = 0;
-                j < _series.map((serie) => serie.data[i]).toList().length;
+                j < series.map((serie) => serie.data[i]).toList().length;
                 j++)
               BarChartRodData(
-                  toY: _series
+                  toY: series
                       .map((serie) => serie.data[i])
                       .toList()[j]
                       .toDouble(),

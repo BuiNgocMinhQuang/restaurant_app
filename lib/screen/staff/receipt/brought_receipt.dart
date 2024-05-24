@@ -7,8 +7,9 @@ import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/model/brought_receipt/list_brought_receipt_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
-import 'package:app_restaurant/utils/share_getString.dart';
+import 'package:app_restaurant/utils/share_getstring.dart';
 import 'package:app_restaurant/utils/storage.dart';
+import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/card/card_receipt_container.dart';
 import 'package:app_restaurant/widgets/tabs&drawer/item_drawer_and_tab.dart';
 import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
@@ -61,8 +62,8 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
 
   @override
   void initState() {
-    super.initState();
     getListBroughtReceiptData(filtersFlg: {"pay_flg": null});
+    super.initState();
   }
 
   @override
@@ -244,6 +245,22 @@ class _StaffBroughtReceiptState extends State<StaffBroughtReceipt>
                             fontsize: 20.sp,
                             fontWeight: FontWeight.bold,
                           ),
+                          space30H,
+                          SizedBox(
+                            width: 200,
+                            child: ButtonGradient(
+                              color1: color1BlueButton,
+                              color2: color2BlueButton,
+                              event: () {
+                                getListBroughtReceiptData(
+                                    filtersFlg: {"pay_flg": null});
+                              },
+                              text: 'Thử lại',
+                              fontSize: 12.sp,
+                              radius: 8.r,
+                              textColor: Colors.white,
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -375,13 +392,13 @@ class _AllWidgetState extends State<AllWidget>
                 })
               : null;
         } else {
-          log("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR loadMoreFood 1");
         }
       } catch (error) {
-        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR loadMoreFood 2 $error");
       }
     } catch (error) {
-      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR loadMoreFood 3 $error");
     }
   }
 
@@ -419,13 +436,13 @@ class _AllWidgetState extends State<AllWidget>
                 })
               : null;
         } else {
-          log("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR refeshFood 1");
         }
       } catch (error) {
-        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR refeshFood 2 $error");
       }
     } catch (error) {
-      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR refeshFood 3 $error");
     }
   }
 
@@ -517,10 +534,6 @@ class _AllWidgetState extends State<AllWidget>
                                                     },
                                                     child: Row(
                                                       children: [
-                                                        // Icon(
-                                                        //   Icons.receipt,
-                                                        //   size: 35.sp,
-                                                        // ),
                                                         SizedBox(
                                                           width: 35.w,
                                                           height: 35.w,
@@ -581,10 +594,6 @@ class _AllWidgetState extends State<AllWidget>
                                                     },
                                                     child: Row(
                                                       children: [
-                                                        // Icon(
-                                                        //   Icons.monetization_on,
-                                                        //   size: 35.sp,
-                                                        // ),
                                                         SizedBox(
                                                           width: 35.w,
                                                           height: 35.w,
@@ -631,10 +640,6 @@ class _AllWidgetState extends State<AllWidget>
                                                     },
                                                     child: Row(
                                                       children: [
-                                                        // Icon(
-                                                        //   Icons.print,
-                                                        //   size: 35.sp,
-                                                        // ),
                                                         SizedBox(
                                                           width: 35.w,
                                                           height: 35.w,
@@ -687,10 +692,6 @@ class _AllWidgetState extends State<AllWidget>
                                                     },
                                                     child: Row(
                                                       children: [
-                                                        // Icon(
-                                                        //   Icons.cancel,
-                                                        //   size: 35.sp,
-                                                        // ),
                                                         SizedBox(
                                                           width: 35.w,
                                                           height: 35.w,
@@ -764,10 +765,6 @@ class _AllWidgetState extends State<AllWidget>
                                                     },
                                                     child: Row(
                                                       children: [
-                                                        // Icon(
-                                                        //   Icons.print,
-                                                        //   size: 35.sp,
-                                                        // ),
                                                         SizedBox(
                                                           width: 35.w,
                                                           height: 35.w,
@@ -814,10 +811,6 @@ class _AllWidgetState extends State<AllWidget>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Icon(
-                      //   Icons.receipt_long_rounded,
-                      //   size: 50.h,
-                      // ),
                       SizedBox(
                         width: 35.w,
                         height: 35.w,
@@ -857,7 +850,6 @@ class _CompleteWidgetState extends State<CompleteWidget>
   final scrollTabCompleteController = ScrollController();
   @override
   void initState() {
-    super.initState();
     loadMoreComplete(page: 1, filtersFlg: {"pay_flg": 1});
 
     scrollTabCompleteController.addListener(() {
@@ -867,6 +859,7 @@ class _CompleteWidgetState extends State<CompleteWidget>
         loadMoreComplete(page: currentPageComplete, filtersFlg: {"pay_flg": 1});
       }
     });
+    super.initState();
   }
 
   @override
@@ -915,13 +908,13 @@ class _CompleteWidgetState extends State<CompleteWidget>
                 })
               : null;
         } else {
-          log("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR loadMoreComplete 1");
         }
       } catch (error) {
-        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR loadMoreComplete 2 $error");
       }
     } catch (error) {
-      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR loadMoreComplete 3 $error");
     }
   }
 
@@ -958,13 +951,13 @@ class _CompleteWidgetState extends State<CompleteWidget>
                 })
               : null;
         } else {
-          log("ERROR BROUGHT RECEIPT PAGE 1");
+          log("ERROR refeshListComplete 1");
         }
       } catch (error) {
-        log("ERROR BROUGHT RECEIPT PAGE 2 $error");
+        log("ERROR refeshListComplete 2 $error");
       }
     } catch (error) {
-      log("ERROR BROUGHT RECEIPT PAGE 3 $error");
+      log("ERROR refeshListComplete 3 $error");
     }
   }
 
@@ -1043,10 +1036,6 @@ class _CompleteWidgetState extends State<CompleteWidget>
                                         },
                                         child: Row(
                                           children: [
-                                            // Icon(
-                                            //   Icons.receipt,
-                                            //   size: 35.sp,
-                                            // ),
                                             SizedBox(
                                               width: 35.w,
                                               height: 35.w,
@@ -1094,10 +1083,6 @@ class _CompleteWidgetState extends State<CompleteWidget>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Icon(
-                      //   Icons.receipt_long_rounded,
-                      //   size: 50.h,
-                      // ),
                       SizedBox(
                         width: 35.w,
                         height: 35.w,
@@ -1365,10 +1350,6 @@ class _PendingWidgetState extends State<PendingWidget>
                                               },
                                               child: Row(
                                                 children: [
-                                                  // Icon(
-                                                  //   Icons.receipt,
-                                                  //   size: 35.sp,
-                                                  // ),
                                                   SizedBox(
                                                     width: 35.w,
                                                     height: 35.w,
@@ -1466,10 +1447,6 @@ class _PendingWidgetState extends State<PendingWidget>
                                               },
                                               child: Row(
                                                 children: [
-                                                  // Icon(
-                                                  //   Icons.print,
-                                                  //   size: 35.sp,
-                                                  // ),
                                                   SizedBox(
                                                     width: 35.w,
                                                     height: 35.w,
@@ -1519,10 +1496,6 @@ class _PendingWidgetState extends State<PendingWidget>
                                               },
                                               child: Row(
                                                 children: [
-                                                  // Icon(
-                                                  //   Icons.cancel,
-                                                  //   size: 35.sp,
-                                                  // ),
                                                   SizedBox(
                                                     width: 35.w,
                                                     height: 35.w,
@@ -1566,10 +1539,6 @@ class _PendingWidgetState extends State<PendingWidget>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Icon(
-                      //   Icons.receipt_long_rounded,
-                      //   size: 50.h,
-                      // ),
                       SizedBox(
                         width: 35.w,
                         height: 35.w,
@@ -1794,10 +1763,6 @@ class _CancleWidgetState extends State<CancleWidget>
                                         },
                                         child: Row(
                                           children: [
-                                            // Icon(
-                                            //   Icons.receipt,
-                                            //   size: 35.sp,
-                                            // ),
                                             SizedBox(
                                               width: 35.w,
                                               height: 35.w,
@@ -1845,10 +1810,6 @@ class _CancleWidgetState extends State<CancleWidget>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Icon(
-                      //   Icons.receipt_long_rounded,
-                      //   size: 50.h,
-                      // ),
                       SizedBox(
                         width: 35.w,
                         height: 35.w,

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:app_restaurant/bloc/bill_table/bill_table_bloc.dart';
 import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
@@ -6,6 +5,7 @@ import 'package:app_restaurant/bloc/payment/payment_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/utils/storage.dart';
+import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/material.dart';
@@ -281,7 +281,6 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                         0,
                                                     itemBuilder:
                                                         (context, index) {
-                                                      log(index.toString());
                                                       var roomName = state
                                                               .listRoomModel
                                                               ?.rooms?[
@@ -472,10 +471,6 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                             child:
                                                                                 Row(
                                                                               children: [
-                                                                                // Icon(
-                                                                                //   Icons.receipt,
-                                                                                //   size: 35.sp,
-                                                                                // ),
                                                                                 SizedBox(
                                                                                   width: 35.w,
                                                                                   height: 35.w,
@@ -529,10 +524,6 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                             child:
                                                                                 Row(
                                                                               children: [
-                                                                                // Icon(
-                                                                                //   Icons.table_bar,
-                                                                                //   size: 35.sp,
-                                                                                // ),
                                                                                 SizedBox(
                                                                                   width: 35.w,
                                                                                   height: 35.w,
@@ -581,10 +572,6 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                             child:
                                                                                 Row(
                                                                               children: [
-                                                                                // Icon(
-                                                                                //   Icons.print,
-                                                                                //   size: 35.sp,
-                                                                                // ),
                                                                                 SizedBox(
                                                                                   width: 35.w,
                                                                                   height: 35.w,
@@ -788,18 +775,24 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                             fontWeight: FontWeight.bold,
                           ),
                           space30H,
-                          // SizedBox(
-                          //   width: 200.w,
-                          //   child: ButtonGradient(
-                          //     color1: color1BlueButton,
-                          //     color2: color2BlueButton,
-                          //     event: () {},
-                          //     text: 'Thử lại',
-                          //     fontSize: 12.sp,
-                          //     radius: 8.r,
-                          //     textColor: Colors.white,
-                          //   ),
-                          // )
+                          SizedBox(
+                            width: 200.w,
+                            child: ButtonGradient(
+                              color1: color1BlueButton,
+                              color2: color2BlueButton,
+                              event: () {
+                                getDataTabIndex(
+                                  roomId: state.listRoomModel!
+                                      .rooms![currentRoomIndex].storeRoomId
+                                      .toString(),
+                                );
+                              },
+                              text: 'Thử lại',
+                              fontSize: 12.sp,
+                              radius: 8.r,
+                              textColor: Colors.white,
+                            ),
+                          )
                         ],
                       ),
                     ),

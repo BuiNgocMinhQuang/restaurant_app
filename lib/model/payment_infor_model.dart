@@ -109,7 +109,7 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['order_food_id'] = orderFoodId;
     data['food_id'] = foodId;
     data['order_id'] = orderId;
@@ -233,7 +233,7 @@ class Order {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['order_id'] = orderId;
     data['user_id'] = userId;
     data['staff_id'] = staffId;

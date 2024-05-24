@@ -386,36 +386,36 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                     color1: color1BlueButton,
                                                     color2: color2BlueButton,
                                                     event: () {
-                                                      // if (_formField
-                                                      //     .currentState!
-                                                      //     .validate()) {
-                                                      //   BlocProvider.of<
-                                                      //               ManagerLoginBloc>(
-                                                      //           context)
-                                                      //       .add(
-                                                      //     ManagerLoginButtonPressed(
-                                                      //         email:
-                                                      //             emailController
-                                                      //                 .text,
-                                                      //         password:
-                                                      //             passworldController
-                                                      //                 .text,
-                                                      //         remember:
-                                                      //             isRemember),
-                                                      //   );
-                                                      // }
+                                                      if (_formField
+                                                          .currentState!
+                                                          .validate()) {
+                                                        BlocProvider.of<
+                                                                    ManagerLoginBloc>(
+                                                                context)
+                                                            .add(
+                                                          ManagerLoginButtonPressed(
+                                                              email:
+                                                                  emailController
+                                                                      .text,
+                                                              password:
+                                                                  passworldController
+                                                                      .text,
+                                                              remember:
+                                                                  isRemember),
+                                                        );
+                                                      }
 
-                                                      BlocProvider.of<
-                                                                  ManagerLoginBloc>(
-                                                              context)
-                                                          .add(
-                                                        const ManagerLoginButtonPressed(
-                                                            email:
-                                                                "contact@thuonghieuvietsol.com",
-                                                            password:
-                                                                "thvTHV123!@#",
-                                                            remember: true),
-                                                      );
+                                                      // BlocProvider.of<
+                                                      //             ManagerLoginBloc>(
+                                                      //         context)
+                                                      //     .add(
+                                                      //   const ManagerLoginButtonPressed(
+                                                      //       email:
+                                                      //           "contact@thuonghieuvietsol.com",
+                                                      //       password:
+                                                      //           "thvTHV123!@#",
+                                                      //       remember: true),
+                                                      // );
                                                     },
                                                     text: login,
                                                     fontSize: 12.sp,

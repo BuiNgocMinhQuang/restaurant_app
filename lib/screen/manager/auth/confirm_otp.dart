@@ -10,7 +10,6 @@ import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -83,10 +82,10 @@ class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
             btnText: "OK",
             typeDialog: "error");
 
-        log("FOGOT PASSWORD ERROR 1");
+        log("ERROR handleCheckOtp 1");
       }
     } catch (error) {
-      log("CHECK OTP ERROR ${error}");
+      log("ERROR handleCheckOtp 2 $error");
     }
   }
 
@@ -231,12 +230,6 @@ class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
                                                 color2: color2BlueButton,
                                                 event: () {
                                                   handleCheckOtp(otp: otp);
-                                                  // if (otp == "1234") {
-                                                  //   showWrongOtpDialog(context);
-                                                  // } else {
-                                                  //   context.go(
-                                                  //       "/manager_change_password");
-                                                  // }
                                                 },
                                                 text: confirm,
                                                 fontSize: 12.sp,
