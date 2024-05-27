@@ -50,10 +50,12 @@ class _ListStaffState extends State<ListStaff> {
 
   final scrollListStaffController = ScrollController();
   void searchStaff(String query) {
-    setState(() {
-      this.query = query;
-      currentPage = 1;
-    });
+    mounted
+        ? setState(() {
+            this.query = query;
+            currentPage = 1;
+          })
+        : null;
     currentStaffList.clear();
     handleGetListStaff(
       page: currentPage,
@@ -75,19 +77,21 @@ class _ListStaffState extends State<ListStaff> {
         lastDate: DateTime(2025));
 
     if (picked != null) {
-      setState(() {
-        _dateStartController.text = picked.toString().split(" ")[0];
-        currentPage = 1;
-        currentStaffList.clear();
+      mounted
+          ? setState(() {
+              _dateStartController.text = picked.toString().split(" ")[0];
+              currentPage = 1;
+              currentStaffList.clear();
 
-        handleGetListStaff(
-          page: currentPage,
-          keywords: query,
-          activeFlg: currentActiveFlag,
-          dateStart: _dateStartController.text,
-          dateEnd: _dateEndController.text,
-        );
-      });
+              handleGetListStaff(
+                page: currentPage,
+                keywords: query,
+                activeFlg: currentActiveFlag,
+                dateStart: _dateStartController.text,
+                dateEnd: _dateEndController.text,
+              );
+            })
+          : null;
     }
   }
 
@@ -98,18 +102,20 @@ class _ListStaffState extends State<ListStaff> {
         firstDate: DateTime(2020),
         lastDate: DateTime(2025));
     if (picked != null) {
-      setState(() {
-        _dateEndController.text = picked.toString().split(" ")[0];
-        currentPage = 1;
-        currentStaffList.clear();
-        handleGetListStaff(
-          page: currentPage,
-          keywords: query,
-          activeFlg: currentActiveFlag,
-          dateStart: _dateStartController.text,
-          dateEnd: _dateEndController.text,
-        );
-      });
+      mounted
+          ? setState(() {
+              _dateEndController.text = picked.toString().split(" ")[0];
+              currentPage = 1;
+              currentStaffList.clear();
+              handleGetListStaff(
+                page: currentPage,
+                keywords: query,
+                activeFlg: currentActiveFlag,
+                dateStart: _dateStartController.text,
+                dateEnd: _dateEndController.text,
+              );
+            })
+          : null;
     }
   }
 
@@ -144,54 +150,70 @@ class _ListStaffState extends State<ListStaff> {
       final data = jsonDecode(respons.body);
       try {
         if (data['status'] == 200) {
-          setState(() {
-            listStaffDataModel = ListStaffDataModel.fromJson(data);
-            currentStaffList.addAll(listStaffDataModel!.staffs.data);
-            currentPage++;
-            if (listStaffDataModel!.staffs.data.isEmpty ||
-                listStaffDataModel!.staffs.data.length <= 15) {
-              hasMore = false;
-            }
-          });
+          mounted
+              ? setState(() {
+                  listStaffDataModel = ListStaffDataModel.fromJson(data);
+                  currentStaffList.addAll(listStaffDataModel!.staffs.data);
+                  currentPage++;
+                  if (listStaffDataModel!.staffs.data.isEmpty ||
+                      listStaffDataModel!.staffs.data.length <= 15) {
+                    hasMore = false;
+                  }
+                })
+              : null;
           Future.delayed(const Duration(milliseconds: 1000), () {
-            setState(() {
-              isLoading = false;
-            });
+            mounted
+                ? setState(() {
+                    isLoading = false;
+                  })
+                : null;
           });
         } else {
           log("ERROR handleGetListStaff 1");
           Future.delayed(const Duration(milliseconds: 1000), () {
-            setState(() {
-              isLoading = false;
-            });
+            mounted
+                ? setState(() {
+                    isLoading = false;
+                  })
+                : null;
           });
-          setState(() {
-            isError = true;
-          });
+          mounted
+              ? setState(() {
+                  isError = true;
+                })
+              : null;
         }
       } catch (error) {
         log("ERROR handleGetListStaff 2 $error");
 
         Future.delayed(const Duration(milliseconds: 1000), () {
-          setState(() {
-            isLoading = false;
-          });
+          mounted
+              ? setState(() {
+                  isLoading = false;
+                })
+              : null;
         });
-        setState(() {
-          isError = true;
-        });
+        mounted
+            ? setState(() {
+                isError = true;
+              })
+            : null;
       }
     } catch (error) {
       log("ERROR handleGetListStaff 3 $error");
 
       Future.delayed(const Duration(milliseconds: 1000), () {
-        setState(() {
-          isLoading = false;
-        });
+        mounted
+            ? setState(() {
+                isLoading = false;
+              })
+            : null;
       });
-      setState(() {
-        isError = true;
-      });
+      mounted
+          ? setState(() {
+              isError = true;
+            })
+          : null;
     }
   }
 
@@ -522,7 +544,7 @@ class _ListStaffState extends State<ListStaff> {
                                                     children: [
                                                       TextApp(
                                                         text: " Trạng thái",
-                                                        fontsize: 12.sp,
+                                                        fontsize: 14.sp,
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         color: blueText,
@@ -610,26 +632,32 @@ class _ListStaffState extends State<ListStaff> {
                                                                                       : null;
                                                                                   var kkk = index;
                                                                                   if (kkk == 0) {
-                                                                                    setState(() {
-                                                                                      currentStaffList.clear();
+                                                                                    mounted
+                                                                                        ? setState(() {
+                                                                                            currentStaffList.clear();
 
-                                                                                      currentPage = 1;
-                                                                                      currentActiveFlag = null;
-                                                                                    });
+                                                                                            currentPage = 1;
+                                                                                            currentActiveFlag = null;
+                                                                                          })
+                                                                                        : null;
                                                                                   } else if (kkk == 1) {
-                                                                                    setState(() {
-                                                                                      currentStaffList.clear();
+                                                                                    mounted
+                                                                                        ? setState(() {
+                                                                                            currentStaffList.clear();
 
-                                                                                      currentPage = 1;
-                                                                                      currentActiveFlag = 1;
-                                                                                    });
+                                                                                            currentPage = 1;
+                                                                                            currentActiveFlag = 1;
+                                                                                          })
+                                                                                        : null;
                                                                                   } else {
-                                                                                    setState(() {
-                                                                                      currentStaffList.clear();
+                                                                                    mounted
+                                                                                        ? setState(() {
+                                                                                            currentStaffList.clear();
 
-                                                                                      currentPage = 1;
-                                                                                      currentActiveFlag = 0;
-                                                                                    });
+                                                                                            currentPage = 1;
+                                                                                            currentActiveFlag = 0;
+                                                                                          })
+                                                                                        : null;
                                                                                   }
                                                                                   handleGetListStaff(
                                                                                     page: currentPage,
@@ -666,8 +694,9 @@ class _ListStaffState extends State<ListStaff> {
                                                         controller:
                                                             stateFilterTextController,
                                                         style: TextStyle(
-                                                            fontSize: 12.sp,
-                                                            color: grey),
+                                                            fontSize: 14.sp,
+                                                            color:
+                                                                Colors.black),
                                                         cursorColor: grey,
                                                         validator: (value) {
                                                           return null;
@@ -721,6 +750,11 @@ class _ListStaffState extends State<ListStaff> {
                                                                   ),
                                                                 ),
                                                                 isDense: true,
+                                                                hintStyle: TextStyle(
+                                                                    fontSize:
+                                                                        14.sp,
+                                                                    color:
+                                                                        grey),
                                                                 contentPadding:
                                                                     EdgeInsets
                                                                         .all(15
@@ -740,7 +774,7 @@ class _ListStaffState extends State<ListStaff> {
                                                     children: [
                                                       TextApp(
                                                         text: " Tìm kiếm",
-                                                        fontsize: 12.sp,
+                                                        fontsize: 14.sp,
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         color: blueText,
@@ -791,7 +825,7 @@ class _ListStaffState extends State<ListStaff> {
                                                                 isDense: true,
                                                                 contentPadding:
                                                                     EdgeInsets
-                                                                        .all(15
+                                                                        .all(18
                                                                             .w)),
                                                       ),
                                                     ],

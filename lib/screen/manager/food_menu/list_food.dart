@@ -727,7 +727,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                       children: [
                                                         TextApp(
                                                           text: " Trạng thái",
-                                                          fontsize: 12.sp,
+                                                          fontsize: 14.sp,
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           color: blueText,
@@ -862,8 +862,9 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                           controller:
                                                               stateFilterTextController,
                                                           style: TextStyle(
-                                                              fontSize: 12.sp,
-                                                              color: grey),
+                                                              fontSize: 14.sp,
+                                                              color:
+                                                                  Colors.black),
                                                           cursorColor: grey,
                                                           validator: (value) {
                                                             if (value!
@@ -922,6 +923,11 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                                     ),
                                                                   ),
                                                                   isDense: true,
+                                                                  hintStyle: TextStyle(
+                                                                      fontSize:
+                                                                          14.sp,
+                                                                      color:
+                                                                          grey),
                                                                   contentPadding:
                                                                       EdgeInsets
                                                                           .all(15
@@ -941,7 +947,7 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                       children: [
                                                         TextApp(
                                                           text: " Tìm kiếm",
-                                                          fontsize: 12.sp,
+                                                          fontsize: 14.sp,
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           color: blueText,
@@ -961,7 +967,8 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                               searchController,
                                                           style: TextStyle(
                                                               fontSize: 14.sp,
-                                                              color: grey),
+                                                              color:
+                                                                  Colors.black),
                                                           cursorColor: grey,
                                                           decoration:
                                                               InputDecoration(
@@ -993,9 +1000,14 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                                             8.r),
                                                                   ),
                                                                   isDense: true,
+                                                                  hintStyle: TextStyle(
+                                                                      fontSize:
+                                                                          14.sp,
+                                                                      color:
+                                                                          grey),
                                                                   contentPadding:
                                                                       EdgeInsets
-                                                                          .all(15
+                                                                          .all(18
                                                                               .w)),
                                                         ),
                                                       ],

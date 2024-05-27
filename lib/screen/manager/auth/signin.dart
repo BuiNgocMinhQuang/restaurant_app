@@ -86,7 +86,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                               event: () {
                                                 context.go("/staff_sign_in");
                                               },
-                                              fontSize: 12.sp,
+                                              fontSize: 14.sp,
                                               text: signInAsStaff,
                                               textColor: Colors.white,
                                             ),
@@ -168,169 +168,162 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                               "OpenSans",
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          fontsize: 12.sp),
+                                                          fontsize: 14.sp),
                                                     ),
                                                   ),
                                                   space30H,
-                                                  SizedBox(
-                                                    height: 65.h,
-                                                    child: TextFormField(
-                                                      onTapOutside: (event) {
-                                                        FocusManager.instance
-                                                            .primaryFocus
-                                                            ?.unfocus();
-                                                      },
-                                                      controller:
-                                                          emailController,
-                                                      keyboardType:
-                                                          TextInputType
-                                                              .emailAddress,
-                                                      style: TextStyle(
-                                                          fontSize: 14.sp,
-                                                          color: grey),
-                                                      cursorColor: grey,
-                                                      validator: (value) {
-                                                        if (value!.isEmpty) {
-                                                          return emailIsRequied;
-                                                        }
-                                                        bool emailValid = RegExp(
-                                                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                                            .hasMatch(value);
+                                                  TextFormField(
+                                                    onTapOutside: (event) {
+                                                      FocusManager
+                                                          .instance.primaryFocus
+                                                          ?.unfocus();
+                                                    },
+                                                    controller: emailController,
+                                                    keyboardType: TextInputType
+                                                        .emailAddress,
+                                                    style: TextStyle(
+                                                        fontSize: 14.sp,
+                                                        color: Colors.black),
+                                                    cursorColor: grey,
+                                                    validator: (value) {
+                                                      if (value!.isEmpty) {
+                                                        return emailIsRequied;
+                                                      }
+                                                      bool emailValid = RegExp(
+                                                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                                          .hasMatch(value);
 
-                                                        if (!emailValid) {
-                                                          return invalidEmail;
-                                                        } else {
-                                                          return null;
-                                                        }
-                                                      },
-                                                      decoration:
-                                                          InputDecoration(
-                                                              fillColor:
-                                                                  const Color
-                                                                      .fromARGB(
-                                                                      255,
-                                                                      226,
-                                                                      104,
-                                                                      159),
-                                                              focusedBorder:
-                                                                  OutlineInputBorder(
-                                                                borderSide: const BorderSide(
-                                                                    color: Color
-                                                                        .fromRGBO(
-                                                                            214,
-                                                                            51,
-                                                                            123,
-                                                                            0.6),
-                                                                    width: 2.0),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.r),
-                                                              ),
-                                                              border:
-                                                                  OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.r),
-                                                              ),
-                                                              hintText: 'Email',
-                                                              isDense: true,
-                                                              contentPadding:
-                                                                  EdgeInsets
-                                                                      .all(20
-                                                                          .w)),
-                                                    ),
+                                                      if (!emailValid) {
+                                                        return invalidEmail;
+                                                      } else {
+                                                        return null;
+                                                      }
+                                                    },
+                                                    decoration: InputDecoration(
+                                                        labelText: "Email",
+                                                        labelStyle: TextStyle(
+                                                            fontSize: 14.sp,
+                                                            color: grey),
+                                                        fillColor: const Color
+                                                            .fromARGB(
+                                                            255, 226, 104, 159),
+                                                        focusedBorder:
+                                                            OutlineInputBorder(
+                                                          borderSide:
+                                                              const BorderSide(
+                                                                  color: Color
+                                                                      .fromRGBO(
+                                                                          214,
+                                                                          51,
+                                                                          123,
+                                                                          0.6),
+                                                                  width: 2.0),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      8.r),
+                                                        ),
+                                                        border:
+                                                            OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      8.r),
+                                                        ),
+                                                        // hintText: 'Email',
+                                                        hintStyle: TextStyle(
+                                                            fontSize: 14.sp,
+                                                            color: grey),
+                                                        isDense: true,
+                                                        contentPadding:
+                                                            EdgeInsets.all(
+                                                                20.w)),
                                                   ),
                                                   space20H,
-                                                  SizedBox(
-                                                    height: 65.h,
-                                                    child: TextFormField(
-                                                      onTapOutside: (event) {
-                                                        FocusManager.instance
-                                                            .primaryFocus
-                                                            ?.unfocus();
-                                                      },
-                                                      controller:
-                                                          passworldController,
-                                                      obscureText:
-                                                          passwordVisible,
-                                                      style: TextStyle(
-                                                          fontSize: 14.sp,
-                                                          color: grey),
-                                                      cursorColor: grey,
-                                                      validator: (value) {
-                                                        if (value!.isEmpty) {
-                                                          return passwordIsRequied;
-                                                        } else {
-                                                          return null;
-                                                        }
-                                                      },
-                                                      decoration:
-                                                          InputDecoration(
-                                                              suffixIconColor:
-                                                                  const Color.fromARGB(
-                                                                      255,
-                                                                      226,
-                                                                      104,
-                                                                      159),
-                                                              suffixIcon:
-                                                                  IconButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        mounted
-                                                                            ? setState(
-                                                                                () {
-                                                                                  passwordVisible = !passwordVisible;
-                                                                                },
-                                                                              )
-                                                                            : null;
+                                                  TextFormField(
+                                                    onTapOutside: (event) {
+                                                      FocusManager
+                                                          .instance.primaryFocus
+                                                          ?.unfocus();
+                                                    },
+                                                    controller:
+                                                        passworldController,
+                                                    obscureText:
+                                                        passwordVisible,
+                                                    style: TextStyle(
+                                                        fontSize: 14.sp,
+                                                        color: Colors.black),
+                                                    cursorColor: grey,
+                                                    validator: (value) {
+                                                      if (value!.isEmpty) {
+                                                        return passwordIsRequied;
+                                                      } else {
+                                                        return null;
+                                                      }
+                                                    },
+                                                    decoration: InputDecoration(
+                                                        labelText: password,
+                                                        labelStyle:
+                                                            TextStyle(
+                                                                fontSize: 14.sp,
+                                                                color: grey),
+                                                        suffixIconColor:
+                                                            const Color
+                                                                .fromARGB(255,
+                                                                226, 104, 159),
+                                                        suffixIcon: IconButton(
+                                                            onPressed: () {
+                                                              mounted
+                                                                  ? setState(
+                                                                      () {
+                                                                        passwordVisible =
+                                                                            !passwordVisible;
                                                                       },
-                                                                      icon:
-                                                                          Icon(
-                                                                        passwordVisible
-                                                                            ? Icons.visibility_off
-                                                                            : Icons.visibility,
-                                                                        size: 24
-                                                                            .sp,
-                                                                      )),
-                                                              fillColor:
-                                                                  const Color
-                                                                      .fromARGB(
-                                                                      255,
-                                                                      226,
-                                                                      104,
-                                                                      159),
-                                                              focusedBorder:
-                                                                  OutlineInputBorder(
-                                                                borderSide: const BorderSide(
-                                                                    color: Color
-                                                                        .fromRGBO(
-                                                                            214,
-                                                                            51,
-                                                                            123,
-                                                                            0.6),
-                                                                    width: 2.0),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.r),
-                                                              ),
-                                                              border:
-                                                                  OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.r),
-                                                              ),
-                                                              hintText:
-                                                                  password,
-                                                              isDense: true,
-                                                              contentPadding:
-                                                                  EdgeInsets
-                                                                      .all(20
-                                                                          .w)),
-                                                    ),
+                                                                    )
+                                                                  : null;
+                                                            },
+                                                            icon: Icon(
+                                                              passwordVisible
+                                                                  ? Icons
+                                                                      .visibility_off
+                                                                  : Icons
+                                                                      .visibility,
+                                                              size: 24.sp,
+                                                            )),
+                                                        fillColor: const Color
+                                                            .fromARGB(
+                                                            255, 226, 104, 159),
+                                                        focusedBorder:
+                                                            OutlineInputBorder(
+                                                          borderSide:
+                                                              const BorderSide(
+                                                                  color: Color
+                                                                      .fromRGBO(
+                                                                          214,
+                                                                          51,
+                                                                          123,
+                                                                          0.6),
+                                                                  width: 2.0),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      8.r),
+                                                        ),
+                                                        border:
+                                                            OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      8.r),
+                                                        ),
+                                                        // hintText: password,
+                                                        hintStyle: TextStyle(
+                                                            fontSize: 14.sp,
+                                                            color: grey),
+                                                        isDense: true,
+                                                        contentPadding:
+                                                            EdgeInsets.all(
+                                                                20.w)),
                                                   ),
                                                   space10H,
                                                   Row(
@@ -378,7 +371,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                               "OpenSans",
                                                           fontWeight:
                                                               FontWeight.normal,
-                                                          fontsize: 12.sp),
+                                                          fontsize: 14.sp),
                                                     ],
                                                   ),
                                                   space30H,
@@ -386,39 +379,39 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                     color1: color1BlueButton,
                                                     color2: color2BlueButton,
                                                     event: () {
-                                                      if (_formField
-                                                          .currentState!
-                                                          .validate()) {
-                                                        BlocProvider.of<
-                                                                    ManagerLoginBloc>(
-                                                                context)
-                                                            .add(
-                                                          ManagerLoginButtonPressed(
-                                                              email:
-                                                                  emailController
-                                                                      .text,
-                                                              password:
-                                                                  passworldController
-                                                                      .text,
-                                                              remember:
-                                                                  isRemember),
-                                                        );
-                                                      }
+                                                      // if (_formField
+                                                      //     .currentState!
+                                                      //     .validate()) {
+                                                      //   BlocProvider.of<
+                                                      //               ManagerLoginBloc>(
+                                                      //           context)
+                                                      //       .add(
+                                                      //     ManagerLoginButtonPressed(
+                                                      //         email:
+                                                      //             emailController
+                                                      //                 .text,
+                                                      //         password:
+                                                      //             passworldController
+                                                      //                 .text,
+                                                      //         remember:
+                                                      //             isRemember),
+                                                      //   );
+                                                      // }
 
-                                                      // BlocProvider.of<
-                                                      //             ManagerLoginBloc>(
-                                                      //         context)
-                                                      //     .add(
-                                                      //   const ManagerLoginButtonPressed(
-                                                      //       email:
-                                                      //           "contact@thuonghieuvietsol.com",
-                                                      //       password:
-                                                      //           "thvTHV123!@#",
-                                                      //       remember: true),
-                                                      // );
+                                                      BlocProvider.of<
+                                                                  ManagerLoginBloc>(
+                                                              context)
+                                                          .add(
+                                                        const ManagerLoginButtonPressed(
+                                                            email:
+                                                                "contact@thuonghieuvietsol.com",
+                                                            password:
+                                                                "thvTHV123!@#",
+                                                            remember: true),
+                                                      );
                                                     },
                                                     text: login,
-                                                    fontSize: 12.sp,
+                                                    fontSize: 14.sp,
                                                     radius: 8.r,
                                                     textColor: Colors.white,
                                                   ),
@@ -446,7 +439,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                       Text(
                                                         "hoặc",
                                                         style: TextStyle(
-                                                          fontSize: 12.sp,
+                                                          fontSize: 14.sp,
                                                           color: const Color
                                                               .fromRGBO(
                                                               103, 116, 142, 1),
@@ -471,7 +464,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                           "/manager_sign_up");
                                                     },
                                                     text: signIn,
-                                                    fontSize: 12.sp,
+                                                    fontSize: 14.sp,
                                                     radius: 8.r,
                                                     textColor: Colors.white,
                                                   ),
@@ -489,6 +482,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontFamily: "OpenSans",
+                                                      fontsize: 14.sp,
                                                     ),
                                                   )
                                                 ],

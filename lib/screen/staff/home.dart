@@ -157,9 +157,11 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                   .rooms![index].storeRoomId
                                                   .toString(),
                                             );
-                                            setState(() {
-                                              currentRoomIndex = index;
-                                            });
+                                            mounted
+                                                ? setState(() {
+                                                    currentRoomIndex = index;
+                                                  })
+                                                : null;
                                           },
                                           child: Column(
                                             mainAxisAlignment:
@@ -644,13 +646,13 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                           width: 35.w,
                                                                                           height: 35.w,
                                                                                           child: Image.asset(
-                                                                                            "assets/images/cancle_icon.png",
+                                                                                            "assets/images/coin.png",
                                                                                             fit: BoxFit.contain,
                                                                                           ),
                                                                                         ),
                                                                                         space10W,
                                                                                         TextApp(
-                                                                                          text: "Huỷ hoá đơn",
+                                                                                          text: "Thanh toán hoá đơn",
                                                                                           color: Colors.black,
                                                                                           fontsize: 18.sp,
                                                                                         )
@@ -1277,7 +1279,7 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                           );
                         },
                         controller: stateTextController,
-                        style: TextStyle(fontSize: 12.sp, color: grey),
+                        style: TextStyle(fontSize: 14.sp, color: Colors.black),
                         cursorColor: grey,
                         decoration: InputDecoration(
                             fillColor: const Color.fromARGB(255, 226, 104, 159),
@@ -1291,6 +1293,7 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                               borderRadius: BorderRadius.circular(8.r),
                             ),
                             hintText: 'Chọn trạng thái',
+                            hintStyle: TextStyle(fontSize: 14.sp, color: grey),
                             suffixIcon: Transform.rotate(
                               angle: 90 * math.pi / 180,
                               child: Icon(
@@ -1300,7 +1303,7 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                               ),
                             ),
                             isDense: true,
-                            contentPadding: EdgeInsets.all(15.w)),
+                            contentPadding: EdgeInsets.all(20.w)),
                       ),
                     )
                   ],

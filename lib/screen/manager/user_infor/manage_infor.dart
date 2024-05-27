@@ -222,16 +222,18 @@ class _ManagerInformationState extends State<ManagerInformation> {
       final messText = messRes['text'];
       try {
         if (data['status'] == 200) {
-          setState(() {
-            isChangeUI = true;
-            showCustomDialogModal(
-                context: navigatorKey.currentContext,
-                textDesc: messText,
-                title: "Thành công",
-                colorButton: Colors.green,
-                btnText: "OK",
-                typeDialog: "succes");
-          });
+          mounted
+              ? setState(() {
+                  isChangeUI = true;
+                  showCustomDialogModal(
+                      context: navigatorKey.currentContext,
+                      textDesc: messText,
+                      title: "Thành công",
+                      colorButton: Colors.green,
+                      btnText: "OK",
+                      typeDialog: "succes");
+                })
+              : null;
         } else {
           log("ERROR checkPasswordToUpdateIdImage 1");
           showCustomDialogModal(
@@ -270,27 +272,29 @@ class _ManagerInformationState extends State<ManagerInformation> {
 
       try {
         if (response.statusCode == 200) {
-          setState(() {
-            cityList.clear();
-            districList.clear();
-            wardList.clear();
-            cityList.addAll(data['cities']);
-            districList.addAll(data['districts']);
-            wardList.addAll(data['wards']);
+          mounted
+              ? setState(() {
+                  cityList.clear();
+                  districList.clear();
+                  wardList.clear();
+                  cityList.addAll(data['cities']);
+                  districList.addAll(data['districts']);
+                  wardList.addAll(data['wards']);
 
-            //get current City
-            var cityListMap = cityList.asMap();
-            var myCity = cityListMap[city];
-            currentCity = myCity;
-            //get current District
-            var districtListMap = districList.asMap();
-            var myDistrict = districtListMap[district];
-            currentDistric = myDistrict;
-            //get Current Ward
-            // var wardListMap = wardList.asMap();
-            // var myWard = wardListMap[null];
-            // currentWard = myWard;
-          });
+                  //get current City
+                  var cityListMap = cityList.asMap();
+                  var myCity = cityListMap[city];
+                  currentCity = myCity;
+                  //get current District
+                  var districtListMap = districList.asMap();
+                  var myDistrict = districtListMap[district];
+                  currentDistric = myDistrict;
+                  //get Current Ward
+                  // var wardListMap = wardList.asMap();
+                  // var myWard = wardListMap[null];
+                  // currentWard = myWard;
+                })
+              : null;
         } else {
           log("ERROR getListArea 1");
         }
@@ -322,28 +326,31 @@ class _ManagerInformationState extends State<ManagerInformation> {
 
       try {
         if (response.statusCode == 200) {
-          setState(() {
-            cityList.clear();
-            districList.clear();
-            wardList.clear();
-            cityList.addAll(data['cities']);
-            districList.addAll(data['districts']);
-            wardList.addAll(data['wards']);
+          mounted
+              ? setState(() {
+                  cityList.clear();
+                  districList.clear();
+                  wardList.clear();
+                  cityList.addAll(data['cities']);
+                  districList.addAll(data['districts']);
+                  wardList.addAll(data['wards']);
 
-            //get current City
-            var cityListMap = cityList.asMap();
-            var myCity = cityListMap[managerInforData?.userAddress1];
-            currentCity = myCity;
-            //get current District
-            var districtListMap = districList.asMap();
-            var myDistrict = districtListMap[managerInforData?.userAddress2];
-            currentDistric = myDistrict;
+                  //get current City
+                  var cityListMap = cityList.asMap();
+                  var myCity = cityListMap[managerInforData?.userAddress1];
+                  currentCity = myCity;
+                  //get current District
+                  var districtListMap = districList.asMap();
+                  var myDistrict =
+                      districtListMap[managerInforData?.userAddress2];
+                  currentDistric = myDistrict;
 
-            //get Current Ward
-            var wardListMap = wardList.asMap();
-            var myWard = wardListMap[managerInforData?.userAddress3];
-            currentWard = myWard;
-          });
+                  //get Current Ward
+                  var wardListMap = wardList.asMap();
+                  var myWard = wardListMap[managerInforData?.userAddress3];
+                  currentWard = myWard;
+                })
+              : null;
         } else {
           log("ERROR getListAreaInit 1");
         }
@@ -356,10 +363,12 @@ class _ManagerInformationState extends State<ManagerInformation> {
   }
 
   void getInfor() async {
-    setState(() {
-      isLoading = true;
-      isError = false;
-    });
+    mounted
+        ? setState(() {
+            isLoading = true;
+            isError = false;
+          })
+        : null;
     try {
       var token = StorageUtils.instance.getString(key: 'token_manager');
       log("TOKEN CURRENT $token");
@@ -372,51 +381,67 @@ class _ManagerInformationState extends State<ManagerInformation> {
       try {
         if (data['status'] == 200) {
           var managerInforDataRes = ManagerInforModel.fromJson(data);
-          setState(() {
-            managerInforData = managerInforDataRes.data;
-            init();
-          });
+          mounted
+              ? setState(() {
+                  managerInforData = managerInforDataRes.data;
+                  init();
+                })
+              : null;
           Future.delayed(const Duration(milliseconds: 1000), () {
-            setState(() {
-              isLoading = false;
-            });
+            mounted
+                ? setState(() {
+                    isLoading = false;
+                  })
+                : null;
           });
         } else {
           log("ERROR getInfor 1");
 
           Future.delayed(const Duration(milliseconds: 1000), () {
-            setState(() {
-              isLoading = false;
-            });
+            mounted
+                ? setState(() {
+                    isLoading = false;
+                  })
+                : null;
           });
-          setState(() {
-            isError = true;
-          });
+          mounted
+              ? setState(() {
+                  isError = true;
+                })
+              : null;
         }
       } catch (error) {
         log("ERROR getInfor 2 $error");
 
         Future.delayed(const Duration(milliseconds: 1000), () {
-          setState(() {
-            isLoading = false;
-          });
+          mounted
+              ? setState(() {
+                  isLoading = false;
+                })
+              : null;
         });
 
-        setState(() {
-          isError = true;
-        });
+        mounted
+            ? setState(() {
+                isError = true;
+              })
+            : null;
       }
     } catch (error) {
       log("ERROR getInfor 3 $error");
 
       Future.delayed(const Duration(milliseconds: 1000), () {
-        setState(() {
-          isLoading = false;
-        });
+        mounted
+            ? setState(() {
+                isLoading = false;
+              })
+            : null;
       });
-      setState(() {
-        isError = true;
-      });
+      mounted
+          ? setState(() {
+              isError = true;
+            })
+          : null;
     }
   }
 
@@ -1007,7 +1032,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         TextInputType.name,
                                                     style: TextStyle(
                                                         fontSize: 14.sp,
-                                                        color: grey),
+                                                        color: Colors.black),
                                                     cursorColor: grey,
                                                     validator: (value) {
                                                       if (value!.isEmpty) {
@@ -1046,10 +1071,11 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         isDense: true,
                                                         hintText: '',
                                                         hintStyle: TextStyle(
-                                                            fontSize: 14.sp),
+                                                            fontSize: 14.sp,
+                                                            color: grey),
                                                         contentPadding:
                                                             EdgeInsets.all(
-                                                                15.w)),
+                                                                20.w)),
                                                   ),
                                                 ],
                                               ),
@@ -1091,7 +1117,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                 surNameController,
                                                             style: TextStyle(
                                                                 fontSize: 14.sp,
-                                                                color: grey),
+                                                                color: Colors
+                                                                    .black),
                                                             cursorColor: grey,
                                                             validator: (value) {
                                                               if (value!
@@ -1134,13 +1161,15 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                     hintText:
                                                                         '',
                                                                     hintStyle: TextStyle(
-                                                                        fontSize: 12
-                                                                            .sp),
+                                                                        fontSize: 14
+                                                                            .sp,
+                                                                        color:
+                                                                            grey),
                                                                     isDense:
                                                                         true,
                                                                     contentPadding:
                                                                         EdgeInsets.all(
-                                                                            15.w)),
+                                                                            20.w)),
                                                           ),
                                                         ],
                                                       ),
@@ -1180,7 +1209,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                 nameController,
                                                             style: TextStyle(
                                                                 fontSize: 14.sp,
-                                                                color: grey),
+                                                                color: Colors
+                                                                    .black),
                                                             cursorColor: grey,
                                                             validator: (value) {
                                                               if (value!
@@ -1222,9 +1252,14 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                     // hintText: 'Tên',
                                                                     isDense:
                                                                         true,
+                                                                    hintStyle: TextStyle(
+                                                                        fontSize: 14
+                                                                            .sp,
+                                                                        color:
+                                                                            grey),
                                                                     contentPadding:
                                                                         EdgeInsets.all(
-                                                                            15.w)),
+                                                                            20.w)),
                                                           ),
                                                         ],
                                                       ),
@@ -1259,7 +1294,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         TextInputType.phone,
                                                     style: TextStyle(
                                                         fontSize: 14.sp,
-                                                        color: grey),
+                                                        color: Colors.black),
                                                     cursorColor: grey,
                                                     validator: (value) {
                                                       if (value!.isEmpty) {
@@ -1305,11 +1340,12 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         // hintText: 'Tên',
                                                         hintText: '',
                                                         hintStyle: TextStyle(
-                                                            fontSize: 14.sp),
+                                                            fontSize: 14.sp,
+                                                            color: grey),
                                                         isDense: true,
                                                         contentPadding:
                                                             EdgeInsets.all(
-                                                                15.w)),
+                                                                20.w)),
                                                   ),
                                                 ],
                                               ),
@@ -1408,16 +1444,18 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                               Navigator.pop(context);
 
                                                                               getListArea(city: index, district: null);
-                                                                              setState(() {
-                                                                                cityNameTextController.text = cityList[index];
-                                                                                districNameTextController.clear();
-                                                                                wardNameTextController.clear();
-                                                                                currentIndexCity = index;
-                                                                                currentDistric = null;
-                                                                                currentIndexDistric = null;
-                                                                                currentWard = null;
-                                                                                currentIndexWard = null;
-                                                                              });
+                                                                              mounted
+                                                                                  ? setState(() {
+                                                                                      cityNameTextController.text = cityList[index];
+                                                                                      districNameTextController.clear();
+                                                                                      wardNameTextController.clear();
+                                                                                      currentIndexCity = index;
+                                                                                      currentDistric = null;
+                                                                                      currentIndexDistric = null;
+                                                                                      currentWard = null;
+                                                                                      currentIndexWard = null;
+                                                                                    })
+                                                                                  : null;
                                                                             },
                                                                             child:
                                                                                 Row(
@@ -1449,7 +1487,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         cityNameTextController,
                                                     style: TextStyle(
                                                         fontSize: 14.sp,
-                                                        color: grey),
+                                                        color: Colors.black),
                                                     cursorColor: grey,
                                                     validator: (value) {
                                                       if (value!.isEmpty) {
@@ -1488,7 +1526,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         hintText:
                                                             'Chọn tỉnh/thành phố',
                                                         hintStyle: TextStyle(
-                                                            fontSize: 14.sp),
+                                                            fontSize: 14.sp,
+                                                            color: grey),
                                                         suffixIcon:
                                                             Transform.rotate(
                                                           angle: 90 *
@@ -1505,7 +1544,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         isDense: true,
                                                         contentPadding:
                                                             EdgeInsets.all(
-                                                                15.w)),
+                                                                20.w)),
                                                   ),
                                                 ],
                                               ),
@@ -1602,13 +1641,15 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                               Navigator.pop(context);
 
                                                                               getListArea(city: currentIndexCity ?? managerInforData?.userAddress1, district: index);
-                                                                              setState(() {
-                                                                                districNameTextController.text = districList[index];
-                                                                                wardNameTextController.clear();
-                                                                                currentIndexDistric = index;
-                                                                                currentWard = null;
-                                                                                currentIndexWard = null;
-                                                                              });
+                                                                              mounted
+                                                                                  ? setState(() {
+                                                                                      districNameTextController.text = districList[index];
+                                                                                      wardNameTextController.clear();
+                                                                                      currentIndexDistric = index;
+                                                                                      currentWard = null;
+                                                                                      currentIndexWard = null;
+                                                                                    })
+                                                                                  : null;
                                                                             },
                                                                             child:
                                                                                 Row(
@@ -1640,7 +1681,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         districNameTextController,
                                                     style: TextStyle(
                                                         fontSize: 14.sp,
-                                                        color: grey),
+                                                        color: Colors.black),
                                                     cursorColor: grey,
                                                     decoration: InputDecoration(
                                                         fillColor: const Color
@@ -1672,7 +1713,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         hintText:
                                                             'Chọn quận/huyện',
                                                         hintStyle: TextStyle(
-                                                            fontSize: 14.sp),
+                                                            fontSize: 14.sp,
+                                                            color: grey),
                                                         suffixIcon:
                                                             Transform.rotate(
                                                           angle: 90 *
@@ -1689,7 +1731,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         isDense: true,
                                                         contentPadding:
                                                             EdgeInsets.all(
-                                                                15.w)),
+                                                                20.w)),
                                                   ),
                                                 ],
                                               ),
@@ -1788,14 +1830,16 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                               Navigator.pop(context);
 
                                                                               getListArea(city: currentIndexCity, district: currentIndexDistric);
-                                                                              setState(() {
-                                                                                wardNameTextController.text = wardList[index];
+                                                                              mounted
+                                                                                  ? setState(() {
+                                                                                      wardNameTextController.text = wardList[index];
 
-                                                                                currentIndexWard = index;
-                                                                                var wardListMap = wardList.asMap();
-                                                                                var myWard = wardListMap[index];
-                                                                                currentWard = myWard;
-                                                                              });
+                                                                                      currentIndexWard = index;
+                                                                                      var wardListMap = wardList.asMap();
+                                                                                      var myWard = wardListMap[index];
+                                                                                      currentWard = myWard;
+                                                                                    })
+                                                                                  : null;
                                                                             },
                                                                             child:
                                                                                 Row(
@@ -1827,7 +1871,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         wardNameTextController,
                                                     style: TextStyle(
                                                         fontSize: 14.sp,
-                                                        color: grey),
+                                                        color: Colors.black),
                                                     cursorColor: grey,
                                                     decoration: InputDecoration(
                                                         fillColor: const Color
@@ -1859,7 +1903,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         hintText:
                                                             'Chọn phường/xã',
                                                         hintStyle: TextStyle(
-                                                            fontSize: 14.sp),
+                                                            fontSize: 14.sp,
+                                                            color: grey),
                                                         suffixIcon:
                                                             Transform.rotate(
                                                           angle: 90 *
@@ -1876,7 +1921,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         isDense: true,
                                                         contentPadding:
                                                             EdgeInsets.all(
-                                                                15.w)),
+                                                                20.w)),
                                                   ),
                                                 ],
                                               ),
@@ -1906,7 +1951,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         TextInputType.name,
                                                     style: TextStyle(
                                                         fontSize: 14.sp,
-                                                        color: grey),
+                                                        color: Colors.black),
                                                     cursorColor: grey,
                                                     decoration: InputDecoration(
                                                         fillColor: const Color
@@ -1938,11 +1983,12 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         // hintText: 'Tên',
                                                         hintText: '',
                                                         hintStyle: TextStyle(
-                                                            fontSize: 14.sp),
+                                                            fontSize: 14.sp,
+                                                            color: grey),
                                                         isDense: true,
                                                         contentPadding:
                                                             EdgeInsets.all(
-                                                                15.w)),
+                                                                20.w)),
                                                   ),
                                                 ],
                                               ),
@@ -1971,7 +2017,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         .emailAddress,
                                                     style: TextStyle(
                                                         fontSize: 14.sp,
-                                                        color: grey),
+                                                        color: Colors.black),
                                                     cursorColor: grey,
                                                     validator: (value) {
                                                       if (value!.isEmpty) {
@@ -2016,11 +2062,12 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         ),
                                                         hintText: '',
                                                         hintStyle: TextStyle(
-                                                            fontSize: 14.sp),
+                                                            fontSize: 14.sp,
+                                                            color: grey),
                                                         isDense: true,
                                                         contentPadding:
                                                             EdgeInsets.all(
-                                                                15.w)),
+                                                                20.w)),
                                                   ),
                                                 ],
                                               ),
@@ -2174,12 +2221,14 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                             255, 226, 104, 159),
                                                     suffixIcon: IconButton(
                                                         onPressed: () {
-                                                          setState(
-                                                            () {
-                                                              currentPasswordVisible =
-                                                                  !currentPasswordVisible;
-                                                            },
-                                                          );
+                                                          mounted
+                                                              ? setState(
+                                                                  () {
+                                                                    currentPasswordVisible =
+                                                                        !currentPasswordVisible;
+                                                                  },
+                                                                )
+                                                              : null;
                                                         },
                                                         icon: Icon(
                                                             currentPasswordVisible
@@ -2215,9 +2264,12 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                     ),
                                                     hintText:
                                                         'Mật khẩu hiện tại',
+                                                    hintStyle: TextStyle(
+                                                        fontSize: 14.sp,
+                                                        color: grey),
                                                     isDense: true,
                                                     contentPadding:
-                                                        EdgeInsets.all(15.w)),
+                                                        EdgeInsets.all(20.w)),
                                               ),
                                             ],
                                           ),
@@ -2246,7 +2298,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                 obscureText: newPasswordVisible,
                                                 style: TextStyle(
                                                     fontSize: 14.sp,
-                                                    color: grey),
+                                                    color: Colors.black),
                                                 cursorColor: grey,
                                                 validator: (value) {
                                                   if (value!.isEmpty) {
@@ -2267,12 +2319,14 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                             255, 226, 104, 159),
                                                     suffixIcon: IconButton(
                                                         onPressed: () {
-                                                          setState(
-                                                            () {
-                                                              newPasswordVisible =
-                                                                  !newPasswordVisible;
-                                                            },
-                                                          );
+                                                          mounted
+                                                              ? setState(
+                                                                  () {
+                                                                    newPasswordVisible =
+                                                                        !newPasswordVisible;
+                                                                  },
+                                                                )
+                                                              : null;
                                                         },
                                                         icon: Icon(newPasswordVisible
                                                             ? Icons
@@ -2303,9 +2357,12 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                               8.r),
                                                     ),
                                                     hintText: 'Mật khẩu mới',
+                                                    hintStyle: TextStyle(
+                                                        fontSize: 14.sp,
+                                                        color: grey),
                                                     isDense: true,
                                                     contentPadding:
-                                                        EdgeInsets.all(15.w)),
+                                                        EdgeInsets.all(20.w)),
                                               ),
                                             ],
                                           ),
@@ -2335,7 +2392,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                     reNewPasswordVisible,
                                                 style: TextStyle(
                                                     fontSize: 14.sp,
-                                                    color: grey),
+                                                    color: Colors.black),
                                                 cursorColor: grey,
                                                 validator: (value) {
                                                   if (value!.isEmpty) {
@@ -2356,12 +2413,14 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                         255, 226, 104, 159),
                                                     suffixIcon: IconButton(
                                                         onPressed: () {
-                                                          setState(
-                                                            () {
-                                                              reNewPasswordVisible =
-                                                                  !reNewPasswordVisible;
-                                                            },
-                                                          );
+                                                          mounted
+                                                              ? setState(
+                                                                  () {
+                                                                    reNewPasswordVisible =
+                                                                        !reNewPasswordVisible;
+                                                                  },
+                                                                )
+                                                              : null;
                                                         },
                                                         icon: Icon(
                                                             reNewPasswordVisible
@@ -2394,9 +2453,12 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                     ),
                                                     hintText:
                                                         'Nhập lại mật khẩu mới',
+                                                    hintStyle: TextStyle(
+                                                        fontSize: 14.sp,
+                                                        color: grey),
                                                     isDense: true,
                                                     contentPadding:
-                                                        EdgeInsets.all(15.w)),
+                                                        EdgeInsets.all(20.w)),
                                               ),
                                             ],
                                           ),
@@ -2772,7 +2834,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                           passwordForOpenIDImageVisible,
                                                       style: TextStyle(
                                                           fontSize: 14.sp,
-                                                          color: grey),
+                                                          color: Colors.black),
                                                       cursorColor: grey,
                                                       validator: (value) {
                                                         if (value!.isEmpty) {
@@ -2797,12 +2859,13 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                   IconButton(
                                                                       onPressed:
                                                                           () {
-                                                                        setState(
-                                                                          () {
-                                                                            passwordForOpenIDImageVisible =
-                                                                                !passwordForOpenIDImageVisible;
-                                                                          },
-                                                                        );
+                                                                        mounted
+                                                                            ? setState(
+                                                                                () {
+                                                                                  passwordForOpenIDImageVisible = !passwordForOpenIDImageVisible;
+                                                                                },
+                                                                              )
+                                                                            : null;
                                                                       },
                                                                       icon: Icon(passwordForOpenIDImageVisible
                                                                           ? Icons
@@ -2841,10 +2904,15 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                               hintText:
                                                                   'Xác nhận mật khẩu để cập nhật thẻ CCCD',
                                                               isDense: true,
+                                                              hintStyle:
+                                                                  TextStyle(
+                                                                      fontSize:
+                                                                          14.sp,
+                                                                      color:
+                                                                          grey),
                                                               contentPadding:
-                                                                  EdgeInsets
-                                                                      .all(15
-                                                                          .w)),
+                                                                  EdgeInsets.all(
+                                                                      20.w)),
                                                     ),
                                                   ],
                                                 ),

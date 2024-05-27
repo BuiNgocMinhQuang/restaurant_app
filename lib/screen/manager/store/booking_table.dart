@@ -133,9 +133,11 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                 .rooms![index].storeRoomId
                                                 .toString(),
                                           );
-                                          setState(() {
-                                            currentRoomIndex = index;
-                                          });
+                                          mounted
+                                              ? setState(() {
+                                                  currentRoomIndex = index;
+                                                })
+                                              : null;
                                         },
                                         child: Column(
                                           mainAxisAlignment:
@@ -627,13 +629,13 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                                   width: 35.w,
                                                                                   height: 35.w,
                                                                                   child: Image.asset(
-                                                                                    "assets/images/cancle_icon.png",
+                                                                                    "assets/images/coin.png",
                                                                                     fit: BoxFit.contain,
                                                                                   ),
                                                                                 ),
                                                                                 space10W,
                                                                                 TextApp(
-                                                                                  text: "Huỷ hoá đơn",
+                                                                                  text: "Thanh toán hoá đơn",
                                                                                   color: Colors.black,
                                                                                   fontsize: 18.sp,
                                                                                 )

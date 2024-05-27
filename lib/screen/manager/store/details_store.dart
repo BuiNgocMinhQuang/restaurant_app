@@ -66,9 +66,11 @@ class _DetailsStoreState extends State<DetailsStore> {
       final data = jsonDecode(respons.body);
       try {
         if (data['status'] == 200) {
-          setState(() {
-            widget.detailsStoreModel = DetailsStoreModel.fromJson(data);
-          });
+          mounted
+              ? setState(() {
+                  widget.detailsStoreModel = DetailsStoreModel.fromJson(data);
+                })
+              : null;
         } else {
           log("ERROR getDetailsStore 1");
         }
@@ -99,9 +101,11 @@ class _DetailsStoreState extends State<DetailsStore> {
       final data = jsonDecode(respons.body);
       try {
         if (data['status'] == 200) {
-          setState(() {
-            editDetailsStoreModel = EditDetailsStoreModel.fromJson(data);
-          });
+          mounted
+              ? setState(() {
+                  editDetailsStoreModel = EditDetailsStoreModel.fromJson(data);
+                })
+              : null;
           showDialog(
               // ignore: use_build_context_synchronously
               context: context,
@@ -143,9 +147,11 @@ class _DetailsStoreState extends State<DetailsStore> {
       final data = jsonDecode(respons.body);
       try {
         if (data['status'] == 200) {
-          setState(() {
-            listRoomOfStoreModel = ListRoomOfStoreModel.fromJson(data);
-          });
+          mounted
+              ? setState(() {
+                  listRoomOfStoreModel = ListRoomOfStoreModel.fromJson(data);
+                })
+              : null;
         } else {
           log("ERROR handleGetListRoom 1");
         }
@@ -178,9 +184,12 @@ class _DetailsStoreState extends State<DetailsStore> {
       final data = jsonDecode(respons.body);
       try {
         if (data['status'] == 200) {
-          setState(() {
-            handleGetListRoom(shopID: widget.detailsStoreModel?.shopId ?? '');
-          });
+          mounted
+              ? setState(() {
+                  handleGetListRoom(
+                      shopID: widget.detailsStoreModel?.shopId ?? '');
+                })
+              : null;
         } else {
           log("ERROR handleDeleteRoom 1");
         }

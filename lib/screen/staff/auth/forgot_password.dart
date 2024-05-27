@@ -211,7 +211,7 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                   children: [
                                                     TextApp(
                                                       text: " Mã cửa hàng",
-                                                      fontsize: 10.sp,
+                                                      fontsize: 14.sp,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: blueText,
@@ -220,6 +220,9 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                       height: 10.h,
                                                     ),
                                                     TextFormField(
+                                                      style: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: Colors.black),
                                                       onTapOutside: (event) {
                                                         FocusManager.instance
                                                             .primaryFocus
@@ -239,86 +242,14 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                       },
                                                       decoration:
                                                           InputDecoration(
-                                                              fillColor: const Color
-                                                                  .fromARGB(255,
-                                                                  226, 104, 159),
-                                                              focusedBorder:
-                                                                  OutlineInputBorder(
-                                                                borderSide: const BorderSide(
-                                                                    color: Color
-                                                                        .fromRGBO(
-                                                                            214,
-                                                                            51,
-                                                                            123,
-                                                                            0.6),
-                                                                    width: 2.0),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.r),
-                                                              ),
-                                                              border:
-                                                                  OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.r),
-                                                              ),
-                                                              hintText:
-                                                                  'Mã cửa hàng',
-                                                              isDense: true,
-                                                              contentPadding:
-                                                                  EdgeInsets.all(
-                                                                      1.sw > 600
-                                                                          ? 20.w
-                                                                          : 15.w)),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 20.h,
-                                                ),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    TextApp(
-                                                      text: " Email",
-                                                      fontsize: 10.sp,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: blueText,
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10.h,
-                                                    ),
-                                                    TextFormField(
-                                                      onTapOutside: (event) {
-                                                        FocusManager.instance
-                                                            .primaryFocus
-                                                            ?.unfocus();
-                                                      },
-                                                      controller:
-                                                          emailController,
-                                                      cursorColor:
-                                                          const Color.fromRGBO(
-                                                              73, 80, 87, 1),
-                                                      validator: (value) {
-                                                        if (value!.isEmpty) {
-                                                          return emailIsRequied;
-                                                        }
-                                                        bool emailValid = RegExp(
-                                                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                                            .hasMatch(value);
-
-                                                        if (!emailValid) {
-                                                          return invalidEmail;
-                                                        } else {
-                                                          return null;
-                                                        }
-                                                      },
-                                                      decoration:
-                                                          InputDecoration(
+                                                              labelText:
+                                                                  "Mã cửa hàng",
+                                                              labelStyle:
+                                                                  TextStyle(
+                                                                      fontSize: 14
+                                                                          .sp,
+                                                                      color:
+                                                                          grey),
                                                               fillColor:
                                                                   const Color
                                                                       .fromARGB(
@@ -348,13 +279,118 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                                         .circular(
                                                                             8.r),
                                                               ),
-                                                              hintText: 'Email',
+                                                              // hintText:
+                                                              //     'Mã cửa hàng',
+                                                              isDense: true,
+                                                              hintStyle:
+                                                                  TextStyle(
+                                                                      fontSize:
+                                                                          14.sp,
+                                                                      color:
+                                                                          grey),
+                                                              contentPadding:
+                                                                  EdgeInsets
+                                                                      .all(20
+                                                                          .w)),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  height: 20.h,
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    TextApp(
+                                                      text: " Email",
+                                                      fontsize: 14.sp,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: blueText,
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10.h,
+                                                    ),
+                                                    TextFormField(
+                                                      onTapOutside: (event) {
+                                                        FocusManager.instance
+                                                            .primaryFocus
+                                                            ?.unfocus();
+                                                      },
+                                                      style: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: Colors.black),
+                                                      controller:
+                                                          emailController,
+                                                      cursorColor:
+                                                          const Color.fromRGBO(
+                                                              73, 80, 87, 1),
+                                                      validator: (value) {
+                                                        if (value!.isEmpty) {
+                                                          return emailIsRequied;
+                                                        }
+                                                        bool emailValid = RegExp(
+                                                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                                            .hasMatch(value);
+
+                                                        if (!emailValid) {
+                                                          return invalidEmail;
+                                                        } else {
+                                                          return null;
+                                                        }
+                                                      },
+                                                      decoration:
+                                                          InputDecoration(
+                                                              labelText:
+                                                                  "Email",
+                                                              labelStyle:
+                                                                  TextStyle(
+                                                                      fontSize: 14
+                                                                          .sp,
+                                                                      color:
+                                                                          grey),
+                                                              fillColor:
+                                                                  const Color
+                                                                      .fromARGB(
+                                                                      255,
+                                                                      226,
+                                                                      104,
+                                                                      159),
+                                                              focusedBorder:
+                                                                  OutlineInputBorder(
+                                                                borderSide: const BorderSide(
+                                                                    color: Color
+                                                                        .fromRGBO(
+                                                                            214,
+                                                                            51,
+                                                                            123,
+                                                                            0.6),
+                                                                    width: 2.0),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8.r),
+                                                              ),
+                                                              border:
+                                                                  OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8.r),
+                                                              ),
+                                                              // hintText: 'Email',
+                                                              hintStyle:
+                                                                  TextStyle(
+                                                                      fontSize:
+                                                                          14.sp,
+                                                                      color:
+                                                                          grey),
                                                               isDense: true,
                                                               contentPadding:
-                                                                  EdgeInsets.all(
-                                                                      1.sw > 600
-                                                                          ? 20.w
-                                                                          : 15.w)),
+                                                                  EdgeInsets
+                                                                      .all(20
+                                                                          .w)),
                                                     ),
                                                   ],
                                                 ),

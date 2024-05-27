@@ -205,8 +205,8 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
                                                       passwordController,
                                                   obscureText: passwordVisible,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black),
                                                   cursorColor: grey,
                                                   validator: (value) {
                                                     if (value!.isEmpty) {
@@ -219,6 +219,10 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
                                                     }
                                                   },
                                                   decoration: InputDecoration(
+                                                      labelText: "Mật khẩu",
+                                                      labelStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       suffixIconColor:
                                                           const Color.fromARGB(
                                                               255,
@@ -227,12 +231,14 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
                                                               159),
                                                       suffixIcon: IconButton(
                                                           onPressed: () {
-                                                            setState(
-                                                              () {
-                                                                passwordVisible =
-                                                                    !passwordVisible;
-                                                              },
-                                                            );
+                                                            mounted
+                                                                ? setState(
+                                                                    () {
+                                                                      passwordVisible =
+                                                                          !passwordVisible;
+                                                                    },
+                                                                  )
+                                                                : null;
                                                           },
                                                           icon: Icon(passwordVisible
                                                               ? Icons
@@ -266,10 +272,13 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
-                                                      hintText: 'Mật khẩu',
+                                                      // hintText: 'Mật khẩu',
                                                       isDense: true,
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
                                                 space20H,
                                                 TextFormField(
@@ -283,8 +292,8 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
                                                   obscureText:
                                                       rePasswordVisible,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black),
                                                   cursorColor: grey,
                                                   validator: (value) {
                                                     if (value!.isEmpty) {
@@ -298,6 +307,11 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
                                                     }
                                                   },
                                                   decoration: InputDecoration(
+                                                      labelText:
+                                                          "Nhập lại mật khẩu",
+                                                      labelStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       suffixIconColor:
                                                           const Color.fromARGB(
                                                               255,
@@ -306,12 +320,14 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
                                                               159),
                                                       suffixIcon: IconButton(
                                                           onPressed: () {
-                                                            setState(
-                                                              () {
-                                                                rePasswordVisible =
-                                                                    !rePasswordVisible;
-                                                              },
-                                                            );
+                                                            mounted
+                                                                ? setState(
+                                                                    () {
+                                                                      rePasswordVisible =
+                                                                          !rePasswordVisible;
+                                                                    },
+                                                                  )
+                                                                : null;
                                                           },
                                                           icon: Icon(rePasswordVisible
                                                               ? Icons
@@ -345,11 +361,14 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
-                                                      hintText:
-                                                          'Nhập lại mật khẩu',
+                                                      // hintText:
+                                                      //     'Nhập lại mật khẩu',
                                                       isDense: true,
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
                                                 space40H,
                                                 ButtonGradient(

@@ -314,7 +314,7 @@ class _EditFoodState extends State<EditFood> {
                                 children: [
                                   TextApp(
                                     text: " Giá món ăn",
-                                    fontsize: 12.sp,
+                                    fontsize: 14.sp,
                                     fontWeight: FontWeight.bold,
                                     color: blueText,
                                   ),
@@ -346,8 +346,8 @@ class _EditFoodState extends State<EditFood> {
                                           RegExp("[0-9]")),
                                     ], // Only numbers can be entered,
 
-                                    style:
-                                        TextStyle(fontSize: 14.sp, color: grey),
+                                    style: TextStyle(
+                                        fontSize: 14.sp, color: Colors.black),
                                     cursorColor: grey,
                                     validator: (value) {
                                       if (value!.isEmpty) {
@@ -372,8 +372,10 @@ class _EditFoodState extends State<EditFood> {
                                               BorderRadius.circular(8.r),
                                         ),
                                         hintText: 'Giá món ăn',
+                                        hintStyle: TextStyle(
+                                            fontSize: 14.sp, color: grey),
                                         isDense: true,
-                                        contentPadding: EdgeInsets.all(15.w)),
+                                        contentPadding: EdgeInsets.all(20.w)),
                                   ),
                                 ],
                               ),
@@ -395,7 +397,7 @@ class _EditFoodState extends State<EditFood> {
                                 children: [
                                   TextApp(
                                     text: " Cửa hàng",
-                                    fontsize: 12.sp,
+                                    fontsize: 14.sp,
                                     fontWeight: FontWeight.bold,
                                     color: blueText,
                                   ),
@@ -495,8 +497,8 @@ class _EditFoodState extends State<EditFood> {
                                       );
                                     },
                                     controller: listStoreTextController,
-                                    style:
-                                        TextStyle(fontSize: 12.sp, color: grey),
+                                    style: TextStyle(
+                                        fontSize: 14.sp, color: Colors.black),
                                     cursorColor: grey,
                                     decoration: InputDecoration(
                                         fillColor: const Color.fromARGB(
@@ -524,7 +526,9 @@ class _EditFoodState extends State<EditFood> {
                                           ),
                                         ),
                                         isDense: true,
-                                        contentPadding: EdgeInsets.all(15.w)),
+                                        hintStyle: TextStyle(
+                                            fontSize: 14.sp, color: grey),
+                                        contentPadding: EdgeInsets.all(20.w)),
                                   )
                                 ],
                               ),
@@ -534,7 +538,7 @@ class _EditFoodState extends State<EditFood> {
                                 children: [
                                   TextApp(
                                     text: " $type",
-                                    fontsize: 12.sp,
+                                    fontsize: 14.sp,
                                     fontWeight: FontWeight.bold,
                                     color: blueText,
                                   ),
@@ -630,8 +634,8 @@ class _EditFoodState extends State<EditFood> {
                                       );
                                     },
                                     controller: listFoodTypeTextController,
-                                    style:
-                                        TextStyle(fontSize: 12.sp, color: grey),
+                                    style: TextStyle(
+                                        fontSize: 14.sp, color: Colors.black),
                                     cursorColor: grey,
                                     decoration: InputDecoration(
                                         fillColor: const Color.fromARGB(
@@ -659,7 +663,9 @@ class _EditFoodState extends State<EditFood> {
                                           ),
                                         ),
                                         isDense: true,
-                                        contentPadding: EdgeInsets.all(15.w)),
+                                        hintStyle: TextStyle(
+                                            fontSize: 14.sp, color: grey),
+                                        contentPadding: EdgeInsets.all(20.w)),
                                   )
                                 ],
                               ),
@@ -710,7 +716,7 @@ class _EditFoodState extends State<EditFood> {
                                       children: [
                                         TextApp(
                                           text: foodName,
-                                          fontsize: 12.sp,
+                                          fontsize: 14.sp,
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
@@ -724,7 +730,8 @@ class _EditFoodState extends State<EditFood> {
                                                 ?.unfocus();
                                           },
                                           style: TextStyle(
-                                              fontSize: 14.sp, color: grey),
+                                              fontSize: 14.sp,
+                                              color: Colors.black),
                                           cursorColor: grey,
                                           validator: (value) {
                                             if (value!.isEmpty) {
@@ -750,8 +757,10 @@ class _EditFoodState extends State<EditFood> {
                                               ),
                                               hintText: foodName,
                                               isDense: true,
+                                              hintStyle: TextStyle(
+                                                  fontSize: 14.sp, color: grey),
                                               contentPadding:
-                                                  EdgeInsets.all(15.w)),
+                                                  EdgeInsets.all(20.w)),
                                         ),
                                       ],
                                     ),
@@ -805,7 +814,7 @@ class _EditFoodState extends State<EditFood> {
                                       children: [
                                         TextApp(
                                           text: " Mô tả",
-                                          fontsize: 12.sp,
+                                          fontsize: 14.sp,
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
@@ -813,11 +822,20 @@ class _EditFoodState extends State<EditFood> {
                                           height: 10.h,
                                         ),
                                         TextFormField(
-                                          maxLength: 255,
                                           onTapOutside: (event) {
                                             FocusManager.instance.primaryFocus
                                                 ?.unfocus();
                                           },
+                                          validator: (value) {
+                                            if (value!.length > 255) {
+                                              return "Độ dài tối đa 255 kí tự";
+                                            } else {
+                                              return null;
+                                            }
+                                          },
+                                          style: TextStyle(
+                                              fontSize: 14.sp,
+                                              color: Colors.black),
                                           controller: desTextController,
                                           keyboardType: TextInputType.multiline,
                                           minLines: 1,
@@ -839,16 +857,11 @@ class _EditFoodState extends State<EditFood> {
                                                     BorderRadius.circular(8.r),
                                               ),
                                               hintText: '',
+                                              hintStyle: TextStyle(
+                                                  fontSize: 14.sp, color: grey),
                                               isDense: true,
-                                              contentPadding: EdgeInsets.only(
-                                                  bottom:
-                                                      1.sw > 600 ? 50.w : 40.w,
-                                                  top: 0,
-                                                  left:
-                                                      1.sw > 600 ? 20.w : 15.w,
-                                                  right: 1.sw > 600
-                                                      ? 20.w
-                                                      : 15.w)),
+                                              contentPadding:
+                                                  EdgeInsets.all(20.w)),
                                         ),
                                       ],
                                     ),

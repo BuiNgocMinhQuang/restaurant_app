@@ -36,10 +36,12 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
   bool hasMore = true;
 
   void searchProduct(String query) {
-    setState(() {
-      this.query = query;
-      currentPage = 1;
-    });
+    mounted
+        ? setState(() {
+            this.query = query;
+            currentPage = 1;
+          })
+        : null;
     currentFoodList.clear();
     loadMoreMenuFood(
       page: currentPage,
@@ -199,43 +201,45 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                                   selected:
                                       selectedCategories.contains(lableFood),
                                   onSelected: (bool selected) {
-                                    setState(() {
-                                      if (selected) {
-                                        selectedCategories.add(
-                                            lableFood); //thêm tên category vào mảng
-                                        int index = listAllCategoriesFood
-                                            .indexOf(lableFood);
-                                        selectedCategoriesIndex.add(
-                                            index); //thêm index category vào mảng
-                                        currentPage = 1;
-                                        currentFoodList.clear();
-                                        loadMoreMenuFood(
-                                            page: currentPage,
-                                            keywords: query,
-                                            foodKinds:
-                                                selectedCategoriesIndex.isEmpty
-                                                    ? null
-                                                    : selectedCategoriesIndex,
-                                            filtersFlg: null);
-                                      } else {
-                                        selectedCategories.remove(
-                                            lableFood); //xoá tên category vào mảng
-                                        int index = listAllCategoriesFood
-                                            .indexOf(lableFood);
-                                        selectedCategoriesIndex.remove(
-                                            index); //xoá index category vào mảng
-                                        currentPage = 1;
-                                        currentFoodList.clear();
-                                        loadMoreMenuFood(
-                                            page: currentPage,
-                                            keywords: query,
-                                            foodKinds:
-                                                selectedCategoriesIndex.isEmpty
-                                                    ? null
-                                                    : selectedCategoriesIndex,
-                                            filtersFlg: null);
-                                      }
-                                    });
+                                    mounted
+                                        ? setState(() {
+                                            if (selected) {
+                                              selectedCategories.add(
+                                                  lableFood); //thêm tên category vào mảng
+                                              int index = listAllCategoriesFood
+                                                  .indexOf(lableFood);
+                                              selectedCategoriesIndex.add(
+                                                  index); //thêm index category vào mảng
+                                              currentPage = 1;
+                                              currentFoodList.clear();
+                                              loadMoreMenuFood(
+                                                  page: currentPage,
+                                                  keywords: query,
+                                                  foodKinds: selectedCategoriesIndex
+                                                          .isEmpty
+                                                      ? null
+                                                      : selectedCategoriesIndex,
+                                                  filtersFlg: null);
+                                            } else {
+                                              selectedCategories.remove(
+                                                  lableFood); //xoá tên category vào mảng
+                                              int index = listAllCategoriesFood
+                                                  .indexOf(lableFood);
+                                              selectedCategoriesIndex.remove(
+                                                  index); //xoá index category vào mảng
+                                              currentPage = 1;
+                                              currentFoodList.clear();
+                                              loadMoreMenuFood(
+                                                  page: currentPage,
+                                                  keywords: query,
+                                                  foodKinds: selectedCategoriesIndex
+                                                          .isEmpty
+                                                      ? null
+                                                      : selectedCategoriesIndex,
+                                                  filtersFlg: null);
+                                            }
+                                          })
+                                        : null;
                                   },
                                 ),
                               );
@@ -251,7 +255,7 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                   },
                   onChanged: searchProduct,
                   controller: searchController,
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  style: const TextStyle(fontSize: 14, color: Colors.black),
                   cursorColor: Colors.black,
                   decoration: InputDecoration(
                       filled: true,
@@ -266,8 +270,9 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       isDense: true,
+                      hintStyle: TextStyle(fontSize: 14.sp, color: grey),
                       hintText: "Nhập nội dung bạn muốn tìm kiếm",
-                      contentPadding: const EdgeInsets.all(15)),
+                      contentPadding: EdgeInsets.all(20.w)),
                 ),
                 space15H,
                 Expanded(

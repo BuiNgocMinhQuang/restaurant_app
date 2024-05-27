@@ -971,7 +971,7 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                   children: [
                                                     TextApp(
                                                       text: "Loại",
-                                                      fontsize: 12.sp,
+                                                      fontsize: 14.sp,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: blueText,
@@ -1113,8 +1113,8 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                       controller:
                                                           dataTypeTextController,
                                                       style: TextStyle(
-                                                          fontSize: 12.sp,
-                                                          color: grey),
+                                                          fontSize: 14.sp,
+                                                          color: Colors.black),
                                                       cursorColor: grey,
                                                       decoration:
                                                           InputDecoration(
@@ -1165,22 +1165,28 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                                 ),
                                                               ),
                                                               isDense: true,
+                                                              hintStyle:
+                                                                  TextStyle(
+                                                                      fontSize:
+                                                                          14.sp,
+                                                                      color:
+                                                                          grey),
                                                               contentPadding:
                                                                   EdgeInsets
-                                                                      .all(15
+                                                                      .all(10
                                                                           .w)),
                                                     )
                                                   ],
                                                 ),
                                               ),
-                                              space20W,
+                                              space10W,
                                               Flexible(
                                                 fit: FlexFit.tight,
                                                 child: Column(
                                                   children: [
                                                     TextApp(
                                                       text: " Từ ngày",
-                                                      fontsize: 12.sp,
+                                                      fontsize: 14.sp,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: blueText,
@@ -1204,9 +1210,9 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                       cursorColor: grey,
                                                       decoration:
                                                           InputDecoration(
-                                                              suffixIcon:
-                                                                  const Icon(Icons
-                                                                      .calendar_month),
+                                                              // suffixIcon:
+                                                              //     const Icon(Icons
+                                                              //         .calendar_month),
                                                               fillColor:
                                                                   const Color
                                                                       .fromARGB(
@@ -1236,18 +1242,18 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                                         .circular(
                                                                             8.r),
                                                               ),
-                                                              hintText:
-                                                                  'dd/mm/yy',
+                                                              // hintText:
+                                                              //     'dd/mm/yy',
                                                               isDense: true,
                                                               contentPadding:
                                                                   EdgeInsets
-                                                                      .all(15
+                                                                      .all(18
                                                                           .w)),
                                                     ),
                                                   ],
                                                 ),
                                               ),
-                                              space20W,
+                                              space10W,
                                               Flexible(
                                                 fit: FlexFit.tight,
                                                 child: Column(
@@ -1278,9 +1284,9 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                       cursorColor: grey,
                                                       decoration:
                                                           InputDecoration(
-                                                              suffixIcon:
-                                                                  const Icon(Icons
-                                                                      .calendar_month),
+                                                              // suffixIcon:
+                                                              //     const Icon(Icons
+                                                              //         .calendar_month),
                                                               fillColor:
                                                                   const Color
                                                                       .fromARGB(
@@ -1310,12 +1316,12 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                                         .circular(
                                                                             8.r),
                                                               ),
-                                                              hintText:
-                                                                  'dd/mm/yy',
+                                                              // hintText:
+                                                              //     'dd/mm/yy',
                                                               isDense: true,
                                                               contentPadding:
                                                                   EdgeInsets
-                                                                      .all(15
+                                                                      .all(18
                                                                           .w)),
                                                     ),
                                                   ],

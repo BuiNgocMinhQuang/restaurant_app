@@ -621,7 +621,7 @@ class _AllWidgetState extends State<AllWidget>
                                                           width: 35.w,
                                                           height: 35.w,
                                                           child: Image.asset(
-                                                            "assets/images/incomes.png",
+                                                            "assets/images/coin.png",
                                                             fit: BoxFit.contain,
                                                           ),
                                                         ),
@@ -925,16 +925,19 @@ class _CompleteWidgetState extends State<CompleteWidget>
 
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
-            listBillComplete.addAll(broughtReceiptPageRes.data.data);
-            currentPageComplete++;
-            isRefesh = false;
-            if (broughtReceiptPageRes.data.data.isEmpty ||
-                broughtReceiptPageRes.data.data.length <= 15) {
-              hasMoreComplete = false;
-            }
-          });
+          mounted
+              ? setState(() {
+                  var broughtReceiptPageRes =
+                      ListBroughtReceiptModel.fromJson(data);
+                  listBillComplete.addAll(broughtReceiptPageRes.data.data);
+                  currentPageComplete++;
+                  isRefesh = false;
+                  if (broughtReceiptPageRes.data.data.isEmpty ||
+                      broughtReceiptPageRes.data.data.length <= 15) {
+                    hasMoreComplete = false;
+                  }
+                })
+              : null;
         } else {
           log("ERROR loadMoreComplete 1");
         }
@@ -970,12 +973,15 @@ class _CompleteWidgetState extends State<CompleteWidget>
 
       try {
         if (data['status'] == 200) {
-          setState(() {
-            listBillComplete.clear();
-            var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
-            listBillComplete.addAll(broughtReceiptPageRes.data.data);
-            isRefesh = true;
-          });
+          mounted
+              ? setState(() {
+                  listBillComplete.clear();
+                  var broughtReceiptPageRes =
+                      ListBroughtReceiptModel.fromJson(data);
+                  listBillComplete.addAll(broughtReceiptPageRes.data.data);
+                  isRefesh = true;
+                })
+              : null;
         } else {
           log("ERROR refeshListComplete 1");
         }
@@ -1248,17 +1254,20 @@ class _PendingWidgetState extends State<PendingWidget>
 
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
-            listBillPending.addAll(broughtReceiptPageRes.data.data);
-            currentPagePending++;
-            isRefesh = false;
+          mounted
+              ? setState(() {
+                  var broughtReceiptPageRes =
+                      ListBroughtReceiptModel.fromJson(data);
+                  listBillPending.addAll(broughtReceiptPageRes.data.data);
+                  currentPagePending++;
+                  isRefesh = false;
 
-            if (broughtReceiptPageRes.data.data.isEmpty ||
-                broughtReceiptPageRes.data.data.length <= 15) {
-              hasMoreComplete = false;
-            }
-          });
+                  if (broughtReceiptPageRes.data.data.isEmpty ||
+                      broughtReceiptPageRes.data.data.length <= 15) {
+                    hasMoreComplete = false;
+                  }
+                })
+              : null;
         } else {
           log("ERROR loadMorePending 1");
         }
@@ -1294,12 +1303,15 @@ class _PendingWidgetState extends State<PendingWidget>
 
       try {
         if (data['status'] == 200) {
-          setState(() {
-            listBillPending.clear();
-            var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
-            listBillPending.addAll(broughtReceiptPageRes.data.data);
-            isRefesh = true;
-          });
+          mounted
+              ? setState(() {
+                  listBillPending.clear();
+                  var broughtReceiptPageRes =
+                      ListBroughtReceiptModel.fromJson(data);
+                  listBillPending.addAll(broughtReceiptPageRes.data.data);
+                  isRefesh = true;
+                })
+              : null;
         } else {
           log("ERROR refeshPending 1");
         }
@@ -1647,17 +1659,20 @@ class _CancleWidgetState extends State<CancleWidget>
 
       try {
         if (data['status'] == 200) {
-          setState(() {
-            var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
-            listBillCancle.addAll(broughtReceiptPageRes.data.data);
-            currentPageCancle++;
-            isRefesh = false;
+          mounted
+              ? setState(() {
+                  var broughtReceiptPageRes =
+                      ListBroughtReceiptModel.fromJson(data);
+                  listBillCancle.addAll(broughtReceiptPageRes.data.data);
+                  currentPageCancle++;
+                  isRefesh = false;
 
-            if (broughtReceiptPageRes.data.data.isEmpty ||
-                broughtReceiptPageRes.data.data.length <= 15) {
-              hasMoreCanle = false;
-            }
-          });
+                  if (broughtReceiptPageRes.data.data.isEmpty ||
+                      broughtReceiptPageRes.data.data.length <= 15) {
+                    hasMoreCanle = false;
+                  }
+                })
+              : null;
         } else {
           log("ERROR loadMoreCancle 1");
         }
@@ -1693,12 +1708,15 @@ class _CancleWidgetState extends State<CancleWidget>
 
       try {
         if (data['status'] == 200) {
-          setState(() {
-            listBillCancle.clear();
-            var broughtReceiptPageRes = ListBroughtReceiptModel.fromJson(data);
-            listBillCancle.addAll(broughtReceiptPageRes.data.data);
-            isRefesh = true;
-          });
+          mounted
+              ? setState(() {
+                  listBillCancle.clear();
+                  var broughtReceiptPageRes =
+                      ListBroughtReceiptModel.fromJson(data);
+                  listBillCancle.addAll(broughtReceiptPageRes.data.data);
+                  isRefesh = true;
+                })
+              : null;
         } else {
           log("ERROR refeshCancle 1");
         }

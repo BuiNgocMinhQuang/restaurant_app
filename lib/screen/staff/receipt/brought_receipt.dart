@@ -598,7 +598,7 @@ class _AllWidgetState extends State<AllWidget>
                                                           width: 35.w,
                                                           height: 35.w,
                                                           child: Image.asset(
-                                                            "assets/images/incomes.png",
+                                                            "assets/images/coin.png",
                                                             fit: BoxFit.contain,
                                                           ),
                                                         ),

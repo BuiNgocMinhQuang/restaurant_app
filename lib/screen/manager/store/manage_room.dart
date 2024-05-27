@@ -53,9 +53,11 @@ class _ManageRoomState extends State<ManageRoom> {
       final data = jsonDecode(respons.body);
       try {
         if (data['status'] == 200) {
-          setState(() {
-            listTableOfRoomModel = ListTableOfRoomModel.fromJson(data);
-          });
+          mounted
+              ? setState(() {
+                  listTableOfRoomModel = ListTableOfRoomModel.fromJson(data);
+                })
+              : null;
         } else {
           log("ERROR getDataInit 1");
         }

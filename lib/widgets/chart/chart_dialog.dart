@@ -113,10 +113,12 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
       log(" DATA CHART $data");
       try {
         if (data['status'] == 200) {
-          setState(() {
-            chartDataModel = ChartDataModel.fromJson(data);
-            isShowChart = true;
-          });
+          mounted
+              ? setState(() {
+                  chartDataModel = ChartDataModel.fromJson(data);
+                  isShowChart = true;
+                })
+              : null;
         } else {
           log("ERROR DATA CHART");
         }
@@ -161,9 +163,11 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
             ));
 
     if (picked != null) {
-      setState(() {
-        _dateStartController.text = picked.toString().split(" ")[0];
-      });
+      mounted
+          ? setState(() {
+              _dateStartController.text = picked.toString().split(" ")[0];
+            })
+          : null;
       handleGetChartData(
           chartWith: currentChartWith,
           shopID: widget.shopID,
@@ -193,9 +197,11 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
               child: child ?? Container(),
             ));
     if (picked != null) {
-      setState(() {
-        _dateEndController.text = picked.toString().split(" ")[0];
-      });
+      mounted
+          ? setState(() {
+              _dateEndController.text = picked.toString().split(" ")[0];
+            })
+          : null;
       handleGetChartData(
           chartWith: currentChartWith,
           shopID: widget.shopID,
@@ -267,7 +273,7 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                         children: [
                           TextApp(
                             text: " Biểu đồ theo",
-                            fontsize: 12.sp,
+                            fontsize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
@@ -322,13 +328,16 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                                                       Navigator.pop(context);
 
                                                       var hehe = index;
-                                                      setState(() {
-                                                        currentChartWith = hehe;
-                                                        billTypeTextController
-                                                                .text =
-                                                            bieudotheoList[
-                                                                index];
-                                                      });
+                                                      mounted
+                                                          ? setState(() {
+                                                              currentChartWith =
+                                                                  hehe;
+                                                              billTypeTextController
+                                                                      .text =
+                                                                  bieudotheoList[
+                                                                      index];
+                                                            })
+                                                          : null;
                                                       // currentFoodKind =
                                                       //     categories.indexOf(foodKindIndex ?? '');
                                                       handleGetChartData(
@@ -370,7 +379,8 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                               );
                             },
                             controller: billTypeTextController,
-                            style: TextStyle(fontSize: 12.sp, color: grey),
+                            style:
+                                TextStyle(fontSize: 14.sp, color: Colors.black),
                             cursorColor: grey,
                             decoration: InputDecoration(
                                 fillColor:
@@ -393,8 +403,10 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                                     color: Colors.black.withOpacity(0.5),
                                   ),
                                 ),
+                                hintStyle:
+                                    TextStyle(fontSize: 14.sp, color: grey),
                                 isDense: true,
-                                contentPadding: EdgeInsets.all(15.w)),
+                                contentPadding: EdgeInsets.all(20.w)),
                           )
                         ],
                       ),
@@ -408,7 +420,7 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                         children: [
                           TextApp(
                             text: " Loại",
-                            fontsize: 12.sp,
+                            fontsize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
@@ -461,27 +473,36 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                                                   child: InkWell(
                                                     onTap: () async {
                                                       Navigator.pop(context);
-                                                      setState(() {
-                                                        timeTypeTextController
-                                                                .text =
-                                                            loaiList[index];
-                                                      });
+                                                      mounted
+                                                          ? setState(() {
+                                                              timeTypeTextController
+                                                                      .text =
+                                                                  loaiList[
+                                                                      index];
+                                                            })
+                                                          : null;
                                                       var haha = index;
                                                       if (haha == 0) {
-                                                        setState(() {
-                                                          currentDataType =
-                                                              "%d-%m-%Y";
-                                                        });
+                                                        mounted
+                                                            ? setState(() {
+                                                                currentDataType =
+                                                                    "%d-%m-%Y";
+                                                              })
+                                                            : null;
                                                       } else if (haha == 2) {
-                                                        setState(() {
-                                                          currentDataType =
-                                                              "%Y";
-                                                        });
+                                                        mounted
+                                                            ? setState(() {
+                                                                currentDataType =
+                                                                    "%Y";
+                                                              })
+                                                            : null;
                                                       } else {
-                                                        setState(() {
-                                                          currentDataType =
-                                                              "%m-%Y";
-                                                        });
+                                                        mounted
+                                                            ? setState(() {
+                                                                currentDataType =
+                                                                    "%m-%Y";
+                                                              })
+                                                            : null;
                                                       }
                                                       handleGetChartData(
                                                           chartWith:
@@ -521,7 +542,8 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                               );
                             },
                             controller: timeTypeTextController,
-                            style: TextStyle(fontSize: 12.sp, color: grey),
+                            style:
+                                TextStyle(fontSize: 14.sp, color: Colors.black),
                             cursorColor: grey,
                             decoration: InputDecoration(
                                 fillColor:
@@ -545,7 +567,9 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                                   ),
                                 ),
                                 isDense: true,
-                                contentPadding: EdgeInsets.all(15.w)),
+                                hintStyle:
+                                    TextStyle(fontSize: 14.sp, color: grey),
+                                contentPadding: EdgeInsets.all(20.w)),
                           )
                         ],
                       ),

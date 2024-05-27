@@ -202,16 +202,16 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    TextApp(
-                                                      text: " Email",
-                                                      fontsize: 12.sp,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: blueText,
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10.h,
-                                                    ),
+                                                    // TextApp(
+                                                    //   text: " Email",
+                                                    //   fontsize: 14.sp,
+                                                    //   fontWeight:
+                                                    //       FontWeight.bold,
+                                                    //   color: blueText,
+                                                    // ),
+                                                    // SizedBox(
+                                                    //   height: 10.h,
+                                                    // ),
                                                     TextFormField(
                                                       onTapOutside: (event) {
                                                         FocusManager.instance
@@ -222,7 +222,7 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                                           emailController,
                                                       style: TextStyle(
                                                           fontSize: 14.sp,
-                                                          color: grey),
+                                                          color: Colors.black),
                                                       cursorColor: grey,
                                                       validator: (value) {
                                                         if (value!.isEmpty) {
@@ -240,6 +240,14 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                                       },
                                                       decoration:
                                                           InputDecoration(
+                                                              labelText:
+                                                                  "Email",
+                                                              labelStyle:
+                                                                  TextStyle(
+                                                                      fontSize: 14
+                                                                          .sp,
+                                                                      color:
+                                                                          grey),
                                                               fillColor:
                                                                   const Color
                                                                       .fromARGB(
@@ -269,11 +277,17 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                                                         .circular(
                                                                             8.r),
                                                               ),
-                                                              hintText: 'Email',
+                                                              // hintText: 'Email',
+                                                              hintStyle:
+                                                                  TextStyle(
+                                                                      fontSize:
+                                                                          14.sp,
+                                                                      color:
+                                                                          grey),
                                                               isDense: true,
                                                               contentPadding:
                                                                   EdgeInsets
-                                                                      .all(15
+                                                                      .all(20
                                                                           .w)),
                                                     ),
                                                   ],

@@ -79,9 +79,11 @@ class _ListStoresState extends State<ListStores> {
       final data = jsonDecode(respons.body);
       try {
         if (data['status'] == 200) {
-          setState(() {
-            detailsStoreModel = DetailsStoreModel.fromJson(data);
-          });
+          mounted
+              ? setState(() {
+                  detailsStoreModel = DetailsStoreModel.fromJson(data);
+                })
+              : null;
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -152,9 +154,11 @@ class _ListStoresState extends State<ListStores> {
                                                           seconds: 4),
                                                   onPageChanged:
                                                       (index, reason) {
-                                                    setState(() {
-                                                      activeIndex = index;
-                                                    });
+                                                    mounted
+                                                        ? setState(() {
+                                                            activeIndex = index;
+                                                          })
+                                                        : null;
                                                   },
                                                   viewportFraction: 1))
                                           : Container(),

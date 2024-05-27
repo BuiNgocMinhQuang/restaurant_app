@@ -229,27 +229,31 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                 ),
                                                 space30H,
                                                 TextFormField(
-                                                  maxLength: 8,
                                                   onTapOutside: (event) {
                                                     FocusManager
                                                         .instance.primaryFocus
                                                         ?.unfocus();
                                                   },
-                                                  keyboardType:
-                                                      TextInputType.name,
                                                   controller: surNameController,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black),
                                                   cursorColor: grey,
                                                   validator: (value) {
                                                     if (value!.isEmpty) {
                                                       return surNameIsRequied;
+                                                    } else if (value.length >
+                                                        8) {
+                                                      return "Độ dài tối đa 8 kí tự";
                                                     } else {
                                                       return null;
                                                     }
                                                   },
                                                   decoration: InputDecoration(
+                                                      labelText: "Họ",
+                                                      labelStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       fillColor:
                                                           const Color.fromARGB(
                                                               255,
@@ -277,14 +281,16 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
-                                                      hintText: 'Họ',
+                                                      // hintText: 'Họ',
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
-                                                space5H,
+                                                space20H,
                                                 TextFormField(
-                                                  maxLength: 24,
                                                   onTapOutside: (event) {
                                                     FocusManager
                                                         .instance.primaryFocus
@@ -294,17 +300,24 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                   keyboardType:
                                                       TextInputType.name,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black),
                                                   cursorColor: grey,
                                                   validator: (value) {
                                                     if (value!.isEmpty) {
                                                       return nameIsRequied;
+                                                    } else if (value.length >
+                                                        24) {
+                                                      return "Độ dài tối đa 24 kí tự";
                                                     } else {
                                                       return null;
                                                     }
                                                   },
                                                   decoration: InputDecoration(
+                                                      labelText: "Tên",
+                                                      labelStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       fillColor:
                                                           const Color.fromARGB(
                                                               255,
@@ -332,14 +345,16 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
-                                                      hintText: 'Tên',
+                                                      // hintText: 'Tên',
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
-                                                space5H,
+                                                space20H,
                                                 TextFormField(
-                                                  maxLength: 32,
                                                   onTapOutside: (event) {
                                                     FocusManager
                                                         .instance.primaryFocus
@@ -350,17 +365,24 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                   keyboardType:
                                                       TextInputType.name,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black),
                                                   cursorColor: grey,
                                                   validator: (value) {
                                                     if (value!.isEmpty) {
                                                       return fullnameIsRequied;
+                                                    } else if (value.length >
+                                                        32) {
+                                                      return "Độ dài tối đa 32 kí tự";
                                                     } else {
                                                       return null;
                                                     }
                                                   },
                                                   decoration: InputDecoration(
+                                                      labelText: "Họ và tên",
+                                                      labelStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       fillColor:
                                                           const Color.fromARGB(
                                                               255,
@@ -388,12 +410,15 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
-                                                      hintText: 'Họ và tên',
+                                                      // hintText: 'Họ và tên',
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
-                                                space5H,
+                                                space20H,
                                                 TextFormField(
                                                   onTapOutside: (event) {
                                                     FocusManager
@@ -404,8 +429,8 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                   keyboardType: TextInputType
                                                       .emailAddress,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black),
                                                   cursorColor: grey,
                                                   validator: (value) {
                                                     if (value!.isEmpty) {
@@ -422,6 +447,10 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                     }
                                                   },
                                                   decoration: InputDecoration(
+                                                      labelText: "Email",
+                                                      labelStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       fillColor:
                                                           const Color.fromARGB(
                                                               255,
@@ -449,10 +478,13 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
-                                                      hintText: 'Email',
+                                                      // hintText: 'Email',
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
                                                 space20H,
                                                 TextFormField(
@@ -469,8 +501,8 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                   keyboardType:
                                                       TextInputType.phone,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black),
                                                   cursorColor: grey,
                                                   validator: (value) {
                                                     if (value!.isEmpty) {
@@ -492,6 +524,10 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                     }
                                                   },
                                                   decoration: InputDecoration(
+                                                      labelText: phoneNumber,
+                                                      labelStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       fillColor:
                                                           const Color.fromARGB(
                                                               255,
@@ -519,10 +555,13 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
-                                                      hintText: phoneNumber,
+                                                      // hintText: phoneNumber,
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
                                                 space20H,
                                                 TextFormField(
@@ -535,8 +574,8 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                       passworldController,
                                                   obscureText: passwordVisible,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black),
                                                   cursorColor: grey,
                                                   validator: (value) {
                                                     if (value!.isEmpty) {
@@ -549,6 +588,10 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                     }
                                                   },
                                                   decoration: InputDecoration(
+                                                      labelText: password,
+                                                      labelStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       suffixIconColor:
                                                           const Color.fromARGB(
                                                               255,
@@ -598,10 +641,13 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
-                                                      hintText: password,
+                                                      // hintText: password,
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
                                                 space20H,
                                                 TextFormField(
@@ -615,8 +661,8 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                   obscureText:
                                                       rePasswordVisible,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black),
                                                   cursorColor: grey,
                                                   validator: (value) {
                                                     if (value!.isEmpty) {
@@ -630,6 +676,10 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                     }
                                                   },
                                                   decoration: InputDecoration(
+                                                      labelText: reTypePassword,
+                                                      labelStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       suffixIconColor:
                                                           const Color.fromARGB(
                                                               255,
@@ -679,10 +729,13 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
-                                                      hintText: reTypePassword,
+                                                      // hintText: reTypePassword,
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
                                                 space20H,
                                                 Row(

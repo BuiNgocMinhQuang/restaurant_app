@@ -106,9 +106,11 @@ class _StaffFabTabState extends State<StaffFabTab> {
       try {
         if (data['status'] == 200) {
           var staffInforDataRes = StaffInfor.fromJson(data);
-          setState(() {
-            staffInforData = staffInforDataRes.data;
-          });
+          mounted
+              ? setState(() {
+                  staffInforData = staffInforDataRes.data;
+                })
+              : null;
         } else {
           log("GET INFOR STAFF ERROR 1");
         }
@@ -252,10 +254,12 @@ class _StaffFabTabState extends State<StaffFabTab> {
                     ),
                     InkWell(
                       onTap: () {
-                        setState(() {
-                          currentIndex = 2;
-                          tapDrawerChangeBotNav(2);
-                        });
+                        mounted
+                            ? setState(() {
+                                currentIndex = 2;
+                                tapDrawerChangeBotNav(2);
+                              })
+                            : null;
                         Navigator.pop(context);
                       },
                       child: ItemDrawer(
@@ -275,10 +279,12 @@ class _StaffFabTabState extends State<StaffFabTab> {
                     ),
                     InkWell(
                       onTap: () {
-                        setState(() {
-                          currentIndex = 0;
-                          tapDrawerChangeBotNav(0);
-                        });
+                        mounted
+                            ? setState(() {
+                                currentIndex = 0;
+                                tapDrawerChangeBotNav(0);
+                              })
+                            : null;
                         Navigator.pop(context);
                       },
                       child: ItemDrawer(
@@ -297,10 +303,12 @@ class _StaffFabTabState extends State<StaffFabTab> {
                     ),
                     InkWell(
                       onTap: () {
-                        setState(() {
-                          currentIndex = 1;
-                          tapDrawerChangeBotNav(1);
-                        });
+                        mounted
+                            ? setState(() {
+                                currentIndex = 1;
+                                tapDrawerChangeBotNav(1);
+                              })
+                            : null;
                         Navigator.pop(context);
                       },
                       child: ItemDrawer(
@@ -319,10 +327,12 @@ class _StaffFabTabState extends State<StaffFabTab> {
                     ),
                     InkWell(
                       onTap: () {
-                        setState(() {
-                          currentIndex = 3;
-                          tapDrawerChangeBotNav(3);
-                        });
+                        mounted
+                            ? setState(() {
+                                currentIndex = 3;
+                                tapDrawerChangeBotNav(3);
+                              })
+                            : null;
                         Navigator.pop(context);
                       },
                       child: ItemDrawer(
@@ -341,10 +351,12 @@ class _StaffFabTabState extends State<StaffFabTab> {
                     ),
                     InkWell(
                       onTap: () {
-                        setState(() {
-                          currentIndex = 4;
-                          tapDrawerChangeBotNav(4);
-                        });
+                        mounted
+                            ? setState(() {
+                                currentIndex = 4;
+                                tapDrawerChangeBotNav(4);
+                              })
+                            : null;
                         Navigator.pop(context);
                       },
                       child: ItemDrawer(
@@ -462,10 +474,12 @@ class _StaffFabTabState extends State<StaffFabTab> {
                   color: currentIndex == 4 ? Colors.white : Colors.black),
             ],
             onTap: (index) {
-              setState(() {
-                currentIndex = index;
-                checkTokenExpires();
-              });
+              mounted
+                  ? setState(() {
+                      currentIndex = index;
+                      checkTokenExpires();
+                    })
+                  : null;
             },
             letIndexChange: (index) => true,
           ),

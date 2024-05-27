@@ -152,7 +152,7 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                             event: () {
                                               context.go('/');
                                             },
-                                            fontSize: 12.sp,
+                                            fontSize: 14.sp,
                                             text: signInAsManager,
                                             textColor: Colors.white,
                                           ),
@@ -210,8 +210,8 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                       passwordController,
                                                   obscureText: passwordVisible,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black),
                                                   cursorColor: grey,
                                                   validator: (value) {
                                                     if (value!.isEmpty) {
@@ -224,6 +224,10 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                     }
                                                   },
                                                   decoration: InputDecoration(
+                                                      labelText: password,
+                                                      labelStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       suffixIconColor:
                                                           const Color.fromARGB(
                                                               255,
@@ -273,10 +277,13 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
-                                                      hintText: password,
+                                                      // hintText: password,
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
                                                 space20H,
                                                 TextFormField(
@@ -290,8 +297,8 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                   obscureText:
                                                       rePasswordVisible,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black),
                                                   cursorColor: grey,
                                                   validator: (value) {
                                                     if (value!.isEmpty) {
@@ -305,6 +312,10 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                     }
                                                   },
                                                   decoration: InputDecoration(
+                                                      labelText: reTypePassword,
+                                                      labelStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       suffixIconColor:
                                                           const Color.fromARGB(
                                                               255,
@@ -354,10 +365,13 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
-                                                      hintText: reTypePassword,
+                                                      // hintText: reTypePassword,
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
                                                 space40H,
                                                 ButtonGradient(
@@ -376,7 +390,7 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                     }
                                                   },
                                                   text: confirm,
-                                                  fontSize: 12.sp,
+                                                  fontSize: 14.sp,
                                                   radius: 8.r,
                                                   textColor: Colors.white,
                                                 ),

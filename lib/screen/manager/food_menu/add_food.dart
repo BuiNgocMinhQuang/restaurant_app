@@ -275,18 +275,20 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                           height: 10.h,
                                         ),
                                         TextFormField(
-                                          maxLength: 32,
                                           onTapOutside: (event) {
                                             FocusManager.instance.primaryFocus
                                                 ?.unfocus();
                                           },
                                           controller: foodNameController,
                                           style: TextStyle(
-                                              fontSize: 14.sp, color: grey),
+                                              fontSize: 14.sp,
+                                              color: Colors.black),
                                           cursorColor: grey,
                                           validator: (value) {
                                             if (value!.isEmpty) {
                                               return canNotNull;
+                                            } else if (value.length > 32) {
+                                              return "Độ dài tối đa 32 kí tự";
                                             } else {
                                               return null;
                                             }
@@ -307,14 +309,15 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                                     BorderRadius.circular(8.r),
                                               ),
                                               hintText: foodName,
-                                              hintStyle:
-                                                  TextStyle(fontSize: 14.sp),
+                                              hintStyle: TextStyle(
+                                                  fontSize: 14.sp, color: grey),
                                               isDense: true,
                                               contentPadding:
-                                                  EdgeInsets.all(15.w)),
+                                                  EdgeInsets.all(20.w)),
                                         ),
                                       ],
                                     ),
+                                    space20H,
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -427,7 +430,8 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                           controller:
                                               listFoodTypeTextController,
                                           style: TextStyle(
-                                              fontSize: 14.sp, color: grey),
+                                              fontSize: 14.sp,
+                                              color: Colors.black),
                                           cursorColor: grey,
                                           decoration: InputDecoration(
                                               fillColor: const Color.fromARGB(
@@ -445,8 +449,8 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                                     BorderRadius.circular(8.r),
                                               ),
                                               hintText: chooseType,
-                                              hintStyle:
-                                                  TextStyle(fontSize: 14.sp),
+                                              hintStyle: TextStyle(
+                                                  fontSize: 14.sp, color: grey),
                                               suffixIcon: Transform.rotate(
                                                 angle: 90 * math.pi / 180,
                                                 child: Icon(
@@ -458,7 +462,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                               ),
                                               isDense: true,
                                               contentPadding:
-                                                  EdgeInsets.all(15.w)),
+                                                  EdgeInsets.all(20.w)),
                                         )
                                       ],
                                     ),
@@ -504,7 +508,8 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                             }
                                           },
                                           style: TextStyle(
-                                              fontSize: 14.sp, color: grey),
+                                              fontSize: 14.sp,
+                                              color: Colors.black),
                                           cursorColor: grey,
                                           validator: (value) {
                                             if (value!.isEmpty) {
@@ -529,11 +534,11 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                                     BorderRadius.circular(8.r),
                                               ),
                                               hintText: 'Giá món ăn',
-                                              hintStyle:
-                                                  TextStyle(fontSize: 14.sp),
+                                              hintStyle: TextStyle(
+                                                  fontSize: 14.sp, color: grey),
                                               isDense: true,
                                               contentPadding:
-                                                  EdgeInsets.all(15.w)),
+                                                  EdgeInsets.all(20.w)),
                                         ),
                                       ],
                                     ),
@@ -680,7 +685,8 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                           },
                                           controller: listStoreTextController,
                                           style: TextStyle(
-                                              fontSize: 14.sp, color: grey),
+                                              fontSize: 14.sp,
+                                              color: Colors.black),
                                           cursorColor: grey,
                                           decoration: InputDecoration(
                                               fillColor: const Color.fromARGB(
@@ -698,8 +704,8 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                                     BorderRadius.circular(8.r),
                                               ),
                                               hintText: "Chọn cửa hàng",
-                                              hintStyle:
-                                                  TextStyle(fontSize: 14.sp),
+                                              hintStyle: TextStyle(
+                                                  fontSize: 14.sp, color: grey),
                                               suffixIcon: Transform.rotate(
                                                 angle: 90 * math.pi / 180,
                                                 child: Icon(
@@ -711,7 +717,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                               ),
                                               isDense: true,
                                               contentPadding:
-                                                  EdgeInsets.all(15.w)),
+                                                  EdgeInsets.all(20.w)),
                                         ),
                                         space20H,
                                         TextApp(
@@ -729,7 +735,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                             isOverFlow: false,
                                             softWrap: true,
                                             text: allowFoodReady,
-                                            fontsize: 12.sp,
+                                            fontsize: 14.sp,
                                             fontWeight: FontWeight.normal,
                                             color: blueText,
                                           ),
@@ -756,10 +762,10 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                             ),
                                           ),
                                         ),
-                                        space30H,
+                                        space20H,
                                         TextApp(
                                           text: createFoodInEachYourStore,
-                                          fontsize: 12.sp,
+                                          fontsize: 14.sp,
                                           fontWeight: FontWeight.normal,
                                           color: blueText,
                                         ),
@@ -782,11 +788,18 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                         ),
                                         TextFormField(
                                           style: TextStyle(
-                                              fontSize: 14.sp, color: grey),
-                                          maxLength: 255,
+                                              fontSize: 14.sp,
+                                              color: Colors.black),
                                           onTapOutside: (event) {
                                             FocusManager.instance.primaryFocus
                                                 ?.unfocus();
+                                          },
+                                          validator: (value) {
+                                            if (value!.length < 255) {
+                                              return "Độ dài tối đa 255 kí tự";
+                                            } else {
+                                              return null;
+                                            }
                                           },
                                           controller: noteController,
                                           keyboardType: TextInputType.multiline,
@@ -809,18 +822,11 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                                     BorderRadius.circular(8.r),
                                               ),
                                               hintText: '',
-                                              hintStyle:
-                                                  TextStyle(fontSize: 14.sp),
+                                              hintStyle: TextStyle(
+                                                  fontSize: 14.sp, color: grey),
                                               isDense: true,
-                                              contentPadding: EdgeInsets.only(
-                                                  bottom:
-                                                      1.sw > 600 ? 50.w : 40.w,
-                                                  top: 0,
-                                                  left:
-                                                      1.sw > 600 ? 20.w : 15.w,
-                                                  right: 1.sw > 600
-                                                      ? 20.w
-                                                      : 15.w)),
+                                              contentPadding:
+                                                  EdgeInsets.all(20.w)),
                                         ),
                                       ],
                                     ),
@@ -859,6 +865,7 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                                     child: Center(
                                                       child: TextApp(
                                                         text: addPictureHere,
+                                                        fontsize: 14.sp,
                                                         textAlign:
                                                             TextAlign.center,
                                                       ),

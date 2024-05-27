@@ -476,7 +476,8 @@ class _AddStaffState extends State<AddStaff> {
                               );
                             },
                             controller: storeNameTextController,
-                            style: TextStyle(fontSize: 14.sp, color: grey),
+                            style:
+                                TextStyle(fontSize: 14.sp, color: Colors.black),
                             cursorColor: grey,
                             decoration: InputDecoration(
                                 fillColor:
@@ -491,7 +492,8 @@ class _AddStaffState extends State<AddStaff> {
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 hintText: 'Chọn cửa hàng',
-                                hintStyle: TextStyle(fontSize: 14.sp),
+                                hintStyle:
+                                    TextStyle(fontSize: 14.sp, color: grey),
                                 suffixIcon: Transform.rotate(
                                   angle: 90 * math.pi / 180,
                                   child: Icon(
@@ -501,7 +503,7 @@ class _AddStaffState extends State<AddStaff> {
                                   ),
                                 ),
                                 isDense: true,
-                                contentPadding: EdgeInsets.all(15.w)),
+                                contentPadding: EdgeInsets.all(20.w)),
                           ),
                         ],
                       ),
@@ -601,7 +603,8 @@ class _AddStaffState extends State<AddStaff> {
                               );
                             },
                             controller: roleNameTextController,
-                            style: TextStyle(fontSize: 14.sp, color: grey),
+                            style:
+                                TextStyle(fontSize: 14.sp, color: Colors.black),
                             cursorColor: grey,
                             decoration: InputDecoration(
                                 fillColor:
@@ -616,7 +619,8 @@ class _AddStaffState extends State<AddStaff> {
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 hintText: 'Chọn chức vụ',
-                                hintStyle: TextStyle(fontSize: 14.sp),
+                                hintStyle:
+                                    TextStyle(fontSize: 14.sp, color: grey),
                                 suffixIcon: Transform.rotate(
                                   angle: 90 * math.pi / 180,
                                   child: Icon(
@@ -626,7 +630,7 @@ class _AddStaffState extends State<AddStaff> {
                                   ),
                                 ),
                                 isDense: true,
-                                contentPadding: EdgeInsets.all(15.w)),
+                                contentPadding: EdgeInsets.all(20.w)),
                           ),
                         ],
                       ),
@@ -642,16 +646,18 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                           space10H,
                           TextFormField(
-                            maxLength: 32,
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
                             },
                             controller: fullNameController,
-                            style: TextStyle(fontSize: 14.sp, color: grey),
+                            style:
+                                TextStyle(fontSize: 14.sp, color: Colors.black),
                             cursorColor: grey,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return fullnameIsRequied;
+                              } else if (value.length > 32) {
+                                return "Độ dài tối đa 32 kí tự";
                               } else {
                                 return null;
                               }
@@ -668,14 +674,15 @@ class _AddStaffState extends State<AddStaff> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
-                                hintStyle: TextStyle(fontSize: 14.sp),
+                                hintStyle:
+                                    TextStyle(fontSize: 14.sp, color: grey),
                                 hintText: 'Tên đầy đủ',
                                 isDense: true,
-                                contentPadding: EdgeInsets.all(15.w)),
+                                contentPadding: EdgeInsets.all(20.w)),
                           ),
                         ],
                       ),
-                      // space20H,
+                      space20H,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -687,16 +694,18 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                           space10H,
                           TextFormField(
-                            maxLength: 24,
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
                             },
                             controller: surNameController,
-                            style: TextStyle(fontSize: 14.sp, color: grey),
+                            style:
+                                TextStyle(fontSize: 14.sp, color: Colors.black),
                             cursorColor: grey,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return surNameIsRequied;
+                              } else if (value.length > 24) {
+                                return "Độ dài tối đa 24 kí tự";
                               } else {
                                 return null;
                               }
@@ -714,14 +723,15 @@ class _AddStaffState extends State<AddStaff> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: 'Họ',
-                              hintStyle: TextStyle(fontSize: 14.sp),
+                              hintStyle:
+                                  TextStyle(fontSize: 14.sp, color: grey),
                               isDense: true,
-                              contentPadding: EdgeInsets.all(15.w),
+                              contentPadding: EdgeInsets.all(20.w),
                             ),
                           ),
                         ],
                       ),
-                      // space20H,
+                      space20H,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -733,16 +743,18 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                           space10H,
                           TextFormField(
-                            maxLength: 8,
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
                             },
                             controller: nameController,
-                            style: TextStyle(fontSize: 14.sp, color: grey),
+                            style:
+                                TextStyle(fontSize: 14.sp, color: Colors.black),
                             cursorColor: grey,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return nameIsRequied;
+                              } else if (value.length > 8) {
+                                return "Độ dài tối đa 8 kí tự";
                               } else {
                                 return null;
                               }
@@ -760,14 +772,15 @@ class _AddStaffState extends State<AddStaff> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: 'Tên',
-                              hintStyle: TextStyle(fontSize: 14.sp),
+                              hintStyle:
+                                  TextStyle(fontSize: 14.sp, color: grey),
                               isDense: true,
-                              contentPadding: EdgeInsets.all(15.w),
+                              contentPadding: EdgeInsets.all(20.w),
                             ),
                           ),
                         ],
                       ),
-                      // space20H,
+                      space20H,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -779,7 +792,6 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                           space10H,
                           TextFormField(
-                            maxLength: 15,
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
                             },
@@ -788,12 +800,16 @@ class _AddStaffState extends State<AddStaff> {
                                   RegExp("[0-9]")),
                             ],
                             controller: phoneController,
-                            style: TextStyle(fontSize: 14.sp, color: grey),
+                            style:
+                                TextStyle(fontSize: 14.sp, color: Colors.black),
                             cursorColor: grey,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return phoneIsRequied;
+                              } else if (value.length > 15) {
+                                return "Độ dài tối đa 15 kí tự";
                               }
+
                               bool phoneValid = RegExp(r'^(?:[+0]9)?[0-9]{10}$')
                                   .hasMatch(value);
 
@@ -816,14 +832,15 @@ class _AddStaffState extends State<AddStaff> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: 'Số điện thoại',
-                              hintStyle: TextStyle(fontSize: 14.sp),
+                              hintStyle:
+                                  TextStyle(fontSize: 14.sp, color: grey),
                               isDense: true,
-                              contentPadding: EdgeInsets.all(15.w),
+                              contentPadding: EdgeInsets.all(20.w),
                             ),
                           ),
                         ],
                       ),
-                      // space20H,
+                      space20H,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -839,7 +856,8 @@ class _AddStaffState extends State<AddStaff> {
                               FocusManager.instance.primaryFocus?.unfocus();
                             },
                             controller: emailController,
-                            style: TextStyle(fontSize: 14.sp, color: grey),
+                            style:
+                                TextStyle(fontSize: 14.sp, color: Colors.black),
                             cursorColor: grey,
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -868,9 +886,10 @@ class _AddStaffState extends State<AddStaff> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: 'Email',
-                              hintStyle: TextStyle(fontSize: 14.sp),
+                              hintStyle:
+                                  TextStyle(fontSize: 14.sp, color: grey),
                               isDense: true,
-                              contentPadding: EdgeInsets.all(15.w),
+                              contentPadding: EdgeInsets.all(20.w),
                             ),
                           ),
                         ],
@@ -892,7 +911,8 @@ class _AddStaffState extends State<AddStaff> {
                             },
                             controller: passworldController,
                             obscureText: passwordVisible,
-                            style: TextStyle(fontSize: 14.sp, color: grey),
+                            style:
+                                TextStyle(fontSize: 14.sp, color: Colors.black),
                             cursorColor: grey,
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -908,11 +928,14 @@ class _AddStaffState extends State<AddStaff> {
                                   const Color.fromARGB(255, 226, 104, 159),
                               suffixIcon: IconButton(
                                   onPressed: () {
-                                    setState(
-                                      () {
-                                        passwordVisible = !passwordVisible;
-                                      },
-                                    );
+                                    mounted
+                                        ? setState(
+                                            () {
+                                              passwordVisible =
+                                                  !passwordVisible;
+                                            },
+                                          )
+                                        : null;
                                   },
                                   icon: Icon(passwordVisible
                                       ? Icons.visibility_off
@@ -929,9 +952,10 @@ class _AddStaffState extends State<AddStaff> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: 'Mật khẩu',
-                              hintStyle: TextStyle(fontSize: 14.sp),
+                              hintStyle:
+                                  TextStyle(fontSize: 14.sp, color: grey),
                               isDense: true,
-                              contentPadding: EdgeInsets.all(15.w),
+                              contentPadding: EdgeInsets.all(20.w),
                             ),
                           ),
                         ],
@@ -953,7 +977,8 @@ class _AddStaffState extends State<AddStaff> {
                             },
                             controller: rePassworldController,
                             obscureText: rePasswordVisible,
-                            style: TextStyle(fontSize: 14.sp, color: grey),
+                            style:
+                                TextStyle(fontSize: 14.sp, color: Colors.black),
                             cursorColor: grey,
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -969,11 +994,14 @@ class _AddStaffState extends State<AddStaff> {
                                   const Color.fromARGB(255, 226, 104, 159),
                               suffixIcon: IconButton(
                                   onPressed: () {
-                                    setState(
-                                      () {
-                                        rePasswordVisible = !rePasswordVisible;
-                                      },
-                                    );
+                                    mounted
+                                        ? setState(
+                                            () {
+                                              rePasswordVisible =
+                                                  !rePasswordVisible;
+                                            },
+                                          )
+                                        : null;
                                   },
                                   icon: Icon(rePasswordVisible
                                       ? Icons.visibility_off
@@ -990,9 +1018,10 @@ class _AddStaffState extends State<AddStaff> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: 'Nhập lại mật khẩu',
-                              hintStyle: TextStyle(fontSize: 14.sp),
+                              hintStyle:
+                                  TextStyle(fontSize: 14.sp, color: grey),
                               isDense: true,
-                              contentPadding: EdgeInsets.all(15.w),
+                              contentPadding: EdgeInsets.all(20.w),
                             ),
                           ),
                         ],
@@ -1136,7 +1165,8 @@ class _AddStaffState extends State<AddStaff> {
                               );
                             },
                             controller: cityNameTextController,
-                            style: TextStyle(fontSize: 14.sp, color: grey),
+                            style:
+                                TextStyle(fontSize: 14.sp, color: Colors.black),
                             cursorColor: grey,
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -1158,7 +1188,8 @@ class _AddStaffState extends State<AddStaff> {
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 hintText: 'Chọn tỉnh/thành phố',
-                                hintStyle: TextStyle(fontSize: 14.sp),
+                                hintStyle:
+                                    TextStyle(fontSize: 14.sp, color: grey),
                                 suffixIcon: Transform.rotate(
                                   angle: 90 * math.pi / 180,
                                   child: Icon(
@@ -1168,7 +1199,7 @@ class _AddStaffState extends State<AddStaff> {
                                   ),
                                 ),
                                 isDense: true,
-                                contentPadding: EdgeInsets.all(15.w)),
+                                contentPadding: EdgeInsets.all(20.w)),
                           ),
                         ],
                       ),
@@ -1277,7 +1308,8 @@ class _AddStaffState extends State<AddStaff> {
                               );
                             },
                             controller: districNameTextController,
-                            style: TextStyle(fontSize: 14.sp, color: grey),
+                            style:
+                                TextStyle(fontSize: 14.sp, color: Colors.black),
                             cursorColor: grey,
                             decoration: InputDecoration(
                                 fillColor:
@@ -1292,7 +1324,8 @@ class _AddStaffState extends State<AddStaff> {
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 hintText: 'Chọn quận/Huyện',
-                                hintStyle: TextStyle(fontSize: 14.sp),
+                                hintStyle:
+                                    TextStyle(fontSize: 14.sp, color: grey),
                                 suffixIcon: Transform.rotate(
                                   angle: 90 * math.pi / 180,
                                   child: Icon(
@@ -1302,7 +1335,7 @@ class _AddStaffState extends State<AddStaff> {
                                   ),
                                 ),
                                 isDense: true,
-                                contentPadding: EdgeInsets.all(15.w)),
+                                contentPadding: EdgeInsets.all(20.w)),
                           ),
                         ],
                       ),
@@ -1414,7 +1447,8 @@ class _AddStaffState extends State<AddStaff> {
                               );
                             },
                             controller: wardNameTextController,
-                            style: TextStyle(fontSize: 14.sp, color: grey),
+                            style:
+                                TextStyle(fontSize: 14.sp, color: Colors.black),
                             cursorColor: grey,
                             decoration: InputDecoration(
                                 fillColor:
@@ -1429,7 +1463,8 @@ class _AddStaffState extends State<AddStaff> {
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 hintText: 'Chọn phường/xã',
-                                hintStyle: TextStyle(fontSize: 14.sp),
+                                hintStyle:
+                                    TextStyle(fontSize: 14.sp, color: grey),
                                 suffixIcon: Transform.rotate(
                                   angle: 90 * math.pi / 180,
                                   child: Icon(
@@ -1439,7 +1474,7 @@ class _AddStaffState extends State<AddStaff> {
                                   ),
                                 ),
                                 isDense: true,
-                                contentPadding: EdgeInsets.all(15.w)),
+                                contentPadding: EdgeInsets.all(20.w)),
                           ),
                         ],
                       ),
@@ -1459,7 +1494,8 @@ class _AddStaffState extends State<AddStaff> {
                               FocusManager.instance.primaryFocus?.unfocus();
                             },
                             controller: addressController,
-                            style: TextStyle(fontSize: 14.sp, color: grey),
+                            style:
+                                TextStyle(fontSize: 14.sp, color: Colors.black),
                             cursorColor: grey,
                             decoration: InputDecoration(
                                 fillColor:
@@ -1474,9 +1510,10 @@ class _AddStaffState extends State<AddStaff> {
                                   borderRadius: BorderRadius.circular(8.r),
                                 ),
                                 hintText: 'Số nhà, đường',
-                                hintStyle: TextStyle(fontSize: 14.sp),
+                                hintStyle:
+                                    TextStyle(fontSize: 14.sp, color: grey),
                                 isDense: true,
-                                contentPadding: EdgeInsets.all(15.w)),
+                                contentPadding: EdgeInsets.all(20.w)),
                           ),
                         ],
                       ),
@@ -1543,7 +1580,7 @@ class _AddStaffState extends State<AddStaff> {
                                 hintText: 'Twitter',
                                 hintStyle: TextStyle(fontSize: 14.sp),
                                 isDense: true,
-                                contentPadding: EdgeInsets.all(15.w)),
+                                contentPadding: EdgeInsets.all(20.w)),
                           ),
                         ],
                       ),
@@ -1580,7 +1617,7 @@ class _AddStaffState extends State<AddStaff> {
                                 hintText: 'Facebook',
                                 hintStyle: TextStyle(fontSize: 14.sp),
                                 isDense: true,
-                                contentPadding: EdgeInsets.all(15.w)),
+                                contentPadding: EdgeInsets.all(20.w)),
                           ),
                         ],
                       ),
@@ -1617,7 +1654,7 @@ class _AddStaffState extends State<AddStaff> {
                                 hintText: 'Instagram',
                                 hintStyle: TextStyle(fontSize: 14.sp),
                                 isDense: true,
-                                contentPadding: EdgeInsets.all(15.w)),
+                                contentPadding: EdgeInsets.all(20.w)),
                           ),
                         ],
                       ),

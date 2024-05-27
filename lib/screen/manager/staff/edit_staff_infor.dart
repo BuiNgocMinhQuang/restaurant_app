@@ -108,10 +108,12 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
       final data = jsonDecode(respons.body);
       try {
         if (data['status'] == 200) {
-          setState(() {
-            staffDataModel = ListStaffDataModel.fromJson(data);
-            init();
-          });
+          mounted
+              ? setState(() {
+                  staffDataModel = ListStaffDataModel.fromJson(data);
+                  init();
+                })
+              : null;
         } else {
           log("ERROR getDataStaff 1");
         }
@@ -197,30 +199,32 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
 
       try {
         if (response.statusCode == 200) {
-          setState(() {
-            cityList.clear();
-            districList.clear();
-            wardList.clear();
-            cityList.addAll(data['cities']);
-            districList.addAll(data['districts']);
-            wardList.addAll(data['wards']);
+          mounted
+              ? setState(() {
+                  cityList.clear();
+                  districList.clear();
+                  wardList.clear();
+                  cityList.addAll(data['cities']);
+                  districList.addAll(data['districts']);
+                  wardList.addAll(data['wards']);
 
-            //get current City
-            var cityListMap = cityList.asMap();
-            var myCity = cityListMap[staffDataModel?.staff.staffAddress1];
-            currentCity = myCity;
+                  //get current City
+                  var cityListMap = cityList.asMap();
+                  var myCity = cityListMap[staffDataModel?.staff.staffAddress1];
+                  currentCity = myCity;
 
-            //get current District
-            var districtListMap = districList.asMap();
-            var myDistrict =
-                districtListMap[staffDataModel?.staff.staffAddress2];
-            currentDistric = myDistrict;
+                  //get current District
+                  var districtListMap = districList.asMap();
+                  var myDistrict =
+                      districtListMap[staffDataModel?.staff.staffAddress2];
+                  currentDistric = myDistrict;
 
-            //get Current Ward
-            var wardListMap = wardList.asMap();
-            var myWard = wardListMap[staffDataModel?.staff.staffAddress3];
-            currentWard = myWard;
-          });
+                  //get Current Ward
+                  var wardListMap = wardList.asMap();
+                  var myWard = wardListMap[staffDataModel?.staff.staffAddress3];
+                  currentWard = myWard;
+                })
+              : null;
         } else {
           log("ERROR getListAreaInit 1");
         }
@@ -252,27 +256,29 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
 
       try {
         if (response.statusCode == 200) {
-          setState(() {
-            cityList.clear();
-            districList.clear();
-            wardList.clear();
-            cityList.addAll(data['cities']);
-            districList.addAll(data['districts']);
-            wardList.addAll(data['wards']);
+          mounted
+              ? setState(() {
+                  cityList.clear();
+                  districList.clear();
+                  wardList.clear();
+                  cityList.addAll(data['cities']);
+                  districList.addAll(data['districts']);
+                  wardList.addAll(data['wards']);
 
-            //get current City
-            var cityListMap = cityList.asMap();
-            var myCity = cityListMap[city];
-            currentCity = myCity;
-            //get current District
-            var districtListMap = districList.asMap();
-            var myDistrict = districtListMap[district];
-            currentDistric = myDistrict;
-            //get Current Ward
-            // var wardListMap = wardList.asMap();
-            // var myWard = wardListMap[null];
-            // currentWard = myWard;
-          });
+                  //get current City
+                  var cityListMap = cityList.asMap();
+                  var myCity = cityListMap[city];
+                  currentCity = myCity;
+                  //get current District
+                  var districtListMap = districList.asMap();
+                  var myDistrict = districtListMap[district];
+                  currentDistric = myDistrict;
+                  //get Current Ward
+                  // var wardListMap = wardList.asMap();
+                  // var myWard = wardListMap[null];
+                  // currentWard = myWard;
+                })
+              : null;
         } else {
           log("ERROR getListArea 1 ");
         }
@@ -298,19 +304,21 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
 
     try {
       if (dataListStoreRes['status'] == 200) {
-        setState(() {
-          var listStore = ListStoreModel.fromJson(dataListStoreRes);
+        mounted
+            ? setState(() {
+                var listStore = ListStoreModel.fromJson(dataListStoreRes);
 
-          listStore.data.where((element) {
-            nameListStore.add(element.storeName ?? '');
-            return true;
-          }).toList();
+                listStore.data.where((element) {
+                  nameListStore.add(element.storeName ?? '');
+                  return true;
+                }).toList();
 
-          listStore.data.where((element) {
-            shopIDList.add(element.shopId.toString());
-            return true;
-          }).toList();
-        });
+                listStore.data.where((element) {
+                  shopIDList.add(element.shopId.toString());
+                  return true;
+                }).toList();
+              })
+            : null;
       } else {
         log("ERRRO getListStore 1");
       }
@@ -650,7 +658,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                 TextApp(
                                                   text:
                                                       " Thuộc cửa hàng cửa hàng",
-                                                  fontsize: 12.sp,
+                                                  fontsize: 14.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
@@ -732,11 +740,13 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                                               () async {
                                                                             Navigator.pop(context);
 
-                                                                            setState(() {
-                                                                              storeNameTextController.text = nameListStore[index];
+                                                                            mounted
+                                                                                ? setState(() {
+                                                                                    storeNameTextController.text = nameListStore[index];
 
-                                                                              selectedShopId = shopIDList[index];
-                                                                            });
+                                                                                    selectedShopId = shopIDList[index];
+                                                                                  })
+                                                                                : null;
                                                                           },
                                                                           child:
                                                                               Row(
@@ -767,8 +777,8 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   controller:
                                                       storeNameTextController,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black),
                                                   cursorColor: grey,
                                                   decoration: InputDecoration(
                                                       fillColor:
@@ -800,6 +810,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                       ),
                                                       hintText:
                                                           selectedShopIdInit,
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       suffixIcon:
                                                           Transform.rotate(
                                                         angle:
@@ -813,7 +826,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                       ),
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
                                               ],
                                             ),
@@ -833,7 +846,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                               children: [
                                                 TextApp(
                                                   text: " Chức vụ",
-                                                  fontsize: 12.sp,
+                                                  fontsize: 14.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
@@ -915,11 +928,13 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                                               () async {
                                                                             Navigator.pop(context);
 
-                                                                            setState(() {
-                                                                              roleNameTextController.text = listRole[index];
+                                                                            mounted
+                                                                                ? setState(() {
+                                                                                    roleNameTextController.text = listRole[index];
 
-                                                                              currentRoleOfStaff = index + 1;
-                                                                            });
+                                                                                    currentRoleOfStaff = index + 1;
+                                                                                  })
+                                                                                : null;
                                                                             //3 quan li
                                                                             //1 nv
                                                                             //2 truong nhom
@@ -955,8 +970,8 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   controller:
                                                       roleNameTextController,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black),
                                                   cursorColor: grey,
                                                   decoration: InputDecoration(
                                                       fillColor:
@@ -998,9 +1013,12 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                               .withOpacity(0.5),
                                                         ),
                                                       ),
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
                                               ],
                                             ),
@@ -1024,13 +1042,12 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                               children: [
                                                 TextApp(
                                                   text: " Họ và tên",
-                                                  fontsize: 12.sp,
+                                                  fontsize: 14.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
                                                 space10H,
                                                 TextFormField(
-                                                  maxLength: 255,
                                                   onTapOutside: (event) {
                                                     FocusManager
                                                         .instance.primaryFocus
@@ -1041,12 +1058,15 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   keyboardType:
                                                       TextInputType.name,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black),
                                                   cursorColor: grey,
                                                   validator: (value) {
                                                     if (value!.isEmpty) {
                                                       return fullnameIsRequied;
+                                                    } else if (value.length >
+                                                        32) {
+                                                      return "Độ dài tối đa 32 kí tự";
                                                     } else {
                                                       return null;
                                                     }
@@ -1081,10 +1101,11 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                       ),
                                                       // hintText: 'Tên',
                                                       hintStyle: TextStyle(
-                                                          fontSize: 14.sp),
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
                                               ],
                                             ),
@@ -1092,7 +1113,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    // space20H,
+                                    space20H,
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -1104,13 +1125,12 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                               children: [
                                                 TextApp(
                                                   text: " Họ",
-                                                  fontsize: 12.sp,
+                                                  fontsize: 14.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
                                                 space10H,
                                                 TextFormField(
-                                                  maxLength: 255,
                                                   onTapOutside: (event) {
                                                     FocusManager
                                                         .instance.primaryFocus
@@ -1120,12 +1140,15 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                       TextInputType.name,
                                                   controller: surNameController,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black),
                                                   cursorColor: grey,
                                                   validator: (value) {
                                                     if (value!.isEmpty) {
                                                       return surNameIsRequied;
+                                                    } else if (value.length >
+                                                        8) {
+                                                      return "Độ dài tối đa 8 kí tự";
                                                     } else {
                                                       return null;
                                                     }
@@ -1160,10 +1183,11 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                       ),
                                                       // hintText: 'Họ',
                                                       hintStyle: TextStyle(
-                                                          fontSize: 14.sp),
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
                                               ],
                                             ),
@@ -1171,7 +1195,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-
+                                    space20H,
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -1183,13 +1207,12 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                               children: [
                                                 TextApp(
                                                   text: " Tên",
-                                                  fontsize: 12.sp,
+                                                  fontsize: 14.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
                                                 space10H,
                                                 TextFormField(
-                                                  maxLength: 255,
                                                   onTapOutside: (event) {
                                                     FocusManager
                                                         .instance.primaryFocus
@@ -1199,12 +1222,15 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                       TextInputType.name,
                                                   controller: nameController,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black),
                                                   cursorColor: grey,
                                                   validator: (value) {
                                                     if (value!.isEmpty) {
                                                       return nameIsRequied;
+                                                    } else if (value.length >
+                                                        24) {
+                                                      return "Độ dài tối đa 24 kí tự";
                                                     } else {
                                                       return null;
                                                     }
@@ -1239,10 +1265,11 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                       ),
                                                       // hintText: 'Tên',
                                                       hintStyle: TextStyle(
-                                                          fontSize: 14.sp),
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
                                               ],
                                             ),
@@ -1250,7 +1277,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-
+                                    space20H,
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -1262,13 +1289,12 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                               children: [
                                                 TextApp(
                                                   text: " Số điện thoại",
-                                                  fontsize: 12.sp,
+                                                  fontsize: 14.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
                                                 space10H,
                                                 TextFormField(
-                                                  maxLength: 15,
                                                   onTapOutside: (event) {
                                                     FocusManager
                                                         .instance.primaryFocus
@@ -1278,12 +1304,15 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   keyboardType:
                                                       TextInputType.name,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
+                                                      fontSize: 14.sp,
                                                       color: grey),
                                                   cursorColor: grey,
                                                   validator: (value) {
                                                     if (value!.isEmpty) {
                                                       return phoneIsRequied;
+                                                    } else if (value.length >
+                                                        15) {
+                                                      return "Độ dài tối đa 15 kí tự";
                                                     }
 
                                                     bool phoneValid = RegExp(
@@ -1329,7 +1358,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                           fontSize: 14.sp),
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
                                               ],
                                             ),
@@ -1337,7 +1366,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-
+                                    space20H,
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -1349,7 +1378,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                               children: [
                                                 TextApp(
                                                   text: " Tỉnh/Thành phố",
-                                                  fontsize: 12.sp,
+                                                  fontsize: 14.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
@@ -1434,16 +1463,18 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                                             getListArea(
                                                                                 city: index,
                                                                                 district: null);
-                                                                            setState(() {
-                                                                              cityNameTextController.text = cityList[index];
-                                                                              districNameTextController.clear();
-                                                                              wardNameTextController.clear();
-                                                                              currentIndexCity = index;
-                                                                              currentDistric = null;
-                                                                              currentIndexDistric = null;
-                                                                              currentWard = null;
-                                                                              currentIndexWard = null;
-                                                                            });
+                                                                            mounted
+                                                                                ? setState(() {
+                                                                                    cityNameTextController.text = cityList[index];
+                                                                                    districNameTextController.clear();
+                                                                                    wardNameTextController.clear();
+                                                                                    currentIndexCity = index;
+                                                                                    currentDistric = null;
+                                                                                    currentIndexDistric = null;
+                                                                                    currentWard = null;
+                                                                                    currentIndexWard = null;
+                                                                                  })
+                                                                                : null;
                                                                           },
                                                                           child:
                                                                               Row(
@@ -1474,8 +1505,8 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   controller:
                                                       cityNameTextController,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black),
                                                   cursorColor: grey,
                                                   validator: (value) {
                                                     return null;
@@ -1525,9 +1556,12 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                               .withOpacity(0.5),
                                                         ),
                                                       ),
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       isDense: true,
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
                                               ],
                                             ),
@@ -1535,7 +1569,6 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-
                                     space20H,
                                     IntrinsicHeight(
                                       child: Row(
@@ -1548,7 +1581,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                               children: [
                                                 TextApp(
                                                   text: " Quận/Huyện",
-                                                  fontsize: 12.sp,
+                                                  fontsize: 14.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
@@ -1633,13 +1666,15 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                                             getListArea(
                                                                                 city: currentIndexCity,
                                                                                 district: index);
-                                                                            setState(() {
-                                                                              districNameTextController.text = districList[index];
-                                                                              wardNameTextController.clear();
-                                                                              currentIndexDistric = index;
-                                                                              currentWard = null;
-                                                                              currentIndexWard = null;
-                                                                            });
+                                                                            mounted
+                                                                                ? setState(() {
+                                                                                    districNameTextController.text = districList[index];
+                                                                                    wardNameTextController.clear();
+                                                                                    currentIndexDistric = index;
+                                                                                    currentWard = null;
+                                                                                    currentIndexWard = null;
+                                                                                  })
+                                                                                : null;
                                                                           },
                                                                           child:
                                                                               Row(
@@ -1670,8 +1705,8 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   controller:
                                                       districNameTextController,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black),
                                                   cursorColor: grey,
                                                   decoration: InputDecoration(
                                                       fillColor:
@@ -1719,8 +1754,11 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                         ),
                                                       ),
                                                       isDense: true,
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
                                               ],
                                             ),
@@ -1740,7 +1778,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                               children: [
                                                 TextApp(
                                                   text: " Phường/Xã",
-                                                  fontsize: 12.sp,
+                                                  fontsize: 14.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
@@ -1825,14 +1863,16 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                                             getListArea(
                                                                                 city: currentIndexCity,
                                                                                 district: currentIndexDistric);
-                                                                            setState(() {
-                                                                              wardNameTextController.text = wardList[index];
+                                                                            mounted
+                                                                                ? setState(() {
+                                                                                    wardNameTextController.text = wardList[index];
 
-                                                                              currentIndexWard = index;
-                                                                              var wardListMap = wardList.asMap();
-                                                                              var myWard = wardListMap[index];
-                                                                              currentWard = myWard;
-                                                                            });
+                                                                                    currentIndexWard = index;
+                                                                                    var wardListMap = wardList.asMap();
+                                                                                    var myWard = wardListMap[index];
+                                                                                    currentWard = myWard;
+                                                                                  })
+                                                                                : null;
                                                                           },
                                                                           child:
                                                                               Row(
@@ -1863,8 +1903,8 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   controller:
                                                       wardNameTextController,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black),
                                                   cursorColor: grey,
                                                   decoration: InputDecoration(
                                                       fillColor:
@@ -1912,8 +1952,11 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                         ),
                                                       ),
                                                       isDense: true,
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
                                               ],
                                             ),
@@ -1933,25 +1976,31 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                               children: [
                                                 TextApp(
                                                   text: " Số nhà, đường",
-                                                  fontsize: 12.sp,
+                                                  fontsize: 14.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
                                                 space10H,
                                                 TextFormField(
-                                                  maxLength: 255,
                                                   onTapOutside: (event) {
                                                     FocusManager
                                                         .instance.primaryFocus
                                                         ?.unfocus();
+                                                  },
+                                                  validator: (value) {
+                                                    if (value!.length > 255) {
+                                                      return "Độ dài tối đa 255 kí tự";
+                                                    } else {
+                                                      return null;
+                                                    }
                                                   },
                                                   controller:
                                                       address4Controller,
                                                   keyboardType:
                                                       TextInputType.name,
                                                   style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: grey),
+                                                      fontSize: 14.sp,
+                                                      color: Colors.black),
                                                   cursorColor: grey,
                                                   decoration: InputDecoration(
                                                       fillColor:
@@ -1981,10 +2030,12 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                             BorderRadius
                                                                 .circular(8.r),
                                                       ),
-                                                      // hintText: 'Tên',
                                                       isDense: true,
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          color: grey),
                                                       contentPadding:
-                                                          EdgeInsets.all(15.w)),
+                                                          EdgeInsets.all(20.w)),
                                                 ),
                                               ],
                                             ),
@@ -1992,14 +2043,14 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-
+                                    space20H,
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         TextApp(
                                           text: " Email",
-                                          fontsize: 12.sp,
+                                          fontsize: 14.sp,
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
@@ -2013,7 +2064,8 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                           keyboardType:
                                               TextInputType.emailAddress,
                                           style: TextStyle(
-                                              fontSize: 12.sp, color: grey),
+                                              fontSize: 14.sp,
+                                              color: Colors.black),
                                           cursorColor: grey,
                                           validator: (value) {
                                             if (value!.isEmpty) {
@@ -2044,12 +2096,12 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                 borderRadius:
                                                     BorderRadius.circular(8.r),
                                               ),
-                                              hintStyle:
-                                                  TextStyle(fontSize: 14.sp),
+                                              hintStyle: TextStyle(
+                                                  fontSize: 14.sp, color: grey),
                                               hintText: 'Email',
                                               isDense: true,
                                               contentPadding:
-                                                  EdgeInsets.all(15.w)),
+                                                  EdgeInsets.all(20.w)),
                                         ),
                                       ],
                                     ),
@@ -2060,7 +2112,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                       children: [
                                         TextApp(
                                           text: " Twitter",
-                                          fontsize: 12.sp,
+                                          fontsize: 14.sp,
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
@@ -2094,7 +2146,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                               hintText: 'Twitter',
                                               isDense: true,
                                               contentPadding:
-                                                  EdgeInsets.all(15.w)),
+                                                  EdgeInsets.all(20.w)),
                                         ),
                                       ],
                                     ),
@@ -2105,7 +2157,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                       children: [
                                         TextApp(
                                           text: " Facebook",
-                                          fontsize: 12.sp,
+                                          fontsize: 14.sp,
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
@@ -2139,7 +2191,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                               hintText: 'Facebook',
                                               isDense: true,
                                               contentPadding:
-                                                  EdgeInsets.all(15.w)),
+                                                  EdgeInsets.all(20.w)),
                                         ),
                                       ],
                                     ),
@@ -2150,7 +2202,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                       children: [
                                         TextApp(
                                           text: " Instagram",
-                                          fontsize: 12.sp,
+                                          fontsize: 14.sp,
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
@@ -2184,7 +2236,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                               hintText: 'Instagram',
                                               isDense: true,
                                               contentPadding:
-                                                  EdgeInsets.all(15.w)),
+                                                  EdgeInsets.all(20.w)),
                                         ),
                                       ],
                                     ),
@@ -2327,7 +2379,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                   children: [
                                     TextApp(
                                       text: " Mật khẩu hiện tại",
-                                      fontsize: 12.sp,
+                                      fontsize: 14.sp,
                                       fontWeight: FontWeight.bold,
                                       color: blueText,
                                     ),
@@ -2340,7 +2392,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                       controller: currentPassworldController,
                                       obscureText: currentPasswordVisible,
                                       style: TextStyle(
-                                          fontSize: 12.sp, color: grey),
+                                          fontSize: 14.sp, color: Colors.black),
                                       cursorColor: grey,
                                       validator: (value) {
                                         if (value!.isEmpty) {
@@ -2356,12 +2408,14 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                               255, 226, 104, 159),
                                           suffixIcon: IconButton(
                                               onPressed: () {
-                                                setState(
-                                                  () {
-                                                    currentPasswordVisible =
-                                                        !currentPasswordVisible;
-                                                  },
-                                                );
+                                                mounted
+                                                    ? setState(
+                                                        () {
+                                                          currentPasswordVisible =
+                                                              !currentPasswordVisible;
+                                                        },
+                                                      )
+                                                    : null;
                                               },
                                               icon: Icon(currentPasswordVisible
                                                   ? Icons.visibility_off
@@ -2380,10 +2434,11 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                             borderRadius:
                                                 BorderRadius.circular(8.r),
                                           ),
-                                          hintStyle: TextStyle(fontSize: 14.sp),
+                                          hintStyle: TextStyle(
+                                              fontSize: 14.sp, color: grey),
                                           hintText: 'Mật khẩu hiện tại',
                                           isDense: true,
-                                          contentPadding: EdgeInsets.all(15.w)),
+                                          contentPadding: EdgeInsets.all(20.w)),
                                     ),
                                   ],
                                 ),
@@ -2393,7 +2448,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                   children: [
                                     TextApp(
                                       text: " Mật khẩu mới",
-                                      fontsize: 12.sp,
+                                      fontsize: 14.sp,
                                       fontWeight: FontWeight.bold,
                                       color: blueText,
                                     ),
@@ -2406,7 +2461,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                       controller: newPassworldController,
                                       obscureText: newPasswordVisible,
                                       style: TextStyle(
-                                          fontSize: 12.sp, color: grey),
+                                          fontSize: 14.sp, color: Colors.black),
                                       cursorColor: grey,
                                       validator: (value) {
                                         if (value!.isEmpty) {
@@ -2425,12 +2480,14 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                               255, 226, 104, 159),
                                           suffixIcon: IconButton(
                                               onPressed: () {
-                                                setState(
-                                                  () {
-                                                    newPasswordVisible =
-                                                        !newPasswordVisible;
-                                                  },
-                                                );
+                                                mounted
+                                                    ? setState(
+                                                        () {
+                                                          newPasswordVisible =
+                                                              !newPasswordVisible;
+                                                        },
+                                                      )
+                                                    : null;
                                               },
                                               icon: Icon(newPasswordVisible
                                                   ? Icons.visibility_off
@@ -2449,10 +2506,11 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                             borderRadius:
                                                 BorderRadius.circular(8.r),
                                           ),
-                                          hintStyle: TextStyle(fontSize: 14.sp),
+                                          hintStyle: TextStyle(
+                                              fontSize: 14.sp, color: grey),
                                           hintText: 'Mật khẩu mới',
                                           isDense: true,
-                                          contentPadding: EdgeInsets.all(15.w)),
+                                          contentPadding: EdgeInsets.all(20.w)),
                                     ),
                                   ],
                                 ),
@@ -2462,7 +2520,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                   children: [
                                     TextApp(
                                       text: " Nhập lại mật khẩu mới",
-                                      fontsize: 12.sp,
+                                      fontsize: 14.sp,
                                       fontWeight: FontWeight.bold,
                                       color: blueText,
                                     ),
@@ -2475,7 +2533,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                       controller: reNewPassworldController,
                                       obscureText: reNewPasswordVisible,
                                       style: TextStyle(
-                                          fontSize: 12.sp, color: grey),
+                                          fontSize: 14.sp, color: Colors.black),
                                       cursorColor: grey,
                                       validator: (value) {
                                         if (value!.isEmpty) {
@@ -2494,12 +2552,14 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                               255, 226, 104, 159),
                                           suffixIcon: IconButton(
                                               onPressed: () {
-                                                setState(
-                                                  () {
-                                                    reNewPasswordVisible =
-                                                        !reNewPasswordVisible;
-                                                  },
-                                                );
+                                                mounted
+                                                    ? setState(
+                                                        () {
+                                                          reNewPasswordVisible =
+                                                              !reNewPasswordVisible;
+                                                        },
+                                                      )
+                                                    : null;
                                               },
                                               icon: Icon(reNewPasswordVisible
                                                   ? Icons.visibility_off
@@ -2518,10 +2578,11 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                             borderRadius:
                                                 BorderRadius.circular(8.r),
                                           ),
-                                          hintStyle: TextStyle(fontSize: 14.sp),
+                                          hintStyle: TextStyle(
+                                              fontSize: 14.sp, color: grey),
                                           hintText: 'Nhập lại mật khẩu mới',
                                           isDense: true,
-                                          contentPadding: EdgeInsets.all(15.w)),
+                                          contentPadding: EdgeInsets.all(20.w)),
                                     ),
                                   ],
                                 ),
@@ -2611,7 +2672,7 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                 child: TextApp(
                                   text: lockAccountDes,
                                   color: blueText,
-                                  fontsize: 12.sp,
+                                  fontsize: 14.sp,
                                   isOverFlow: false,
                                   softWrap: true,
                                 ),
@@ -2633,9 +2694,11 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                             activeColor: const Color.fromRGBO(
                                                 58, 65, 111, .95),
                                             onChanged: (bool value) {
-                                              setState(() {
-                                                light = value;
-                                              });
+                                              mounted
+                                                  ? setState(() {
+                                                      light = value;
+                                                    })
+                                                  : null;
                                             },
                                           ),
                                         ),
@@ -2647,12 +2710,12 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         children: [
                                           TextApp(
                                               text: "Xác nhận",
-                                              fontsize: 12.sp,
+                                              fontsize: 14.sp,
                                               fontWeight: FontWeight.bold,
                                               color: blueText),
                                           TextApp(
                                             text: youWantToFixAccountStatus,
-                                            fontsize: 12.sp,
+                                            fontsize: 14.sp,
                                           ),
                                         ],
                                       )

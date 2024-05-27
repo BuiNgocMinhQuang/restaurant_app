@@ -12,9 +12,11 @@ class CopyRightText extends StatelessWidget {
       children: [
         Center(
           child: TextApp(
+            isOverFlow: false,
+            softWrap: true,
             text: "© 2024, một trong số các dự án được thực hiện của công ty",
             textAlign: TextAlign.center,
-            fontsize: 12.sp,
+            fontsize: 14.sp,
             color: Colors.grey,
           ),
         ),
@@ -23,7 +25,7 @@ class CopyRightText extends StatelessWidget {
           child: TextApp(
             text: "Thương Hiệu Việt",
             fontWeight: FontWeight.bold,
-            fontsize: 12.sp,
+            fontsize: 14.sp,
             color: Colors.black,
           ),
         )

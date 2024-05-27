@@ -113,10 +113,12 @@ class _BookingTableDialogState extends State<BookingTableDialog>
 
     final newDateTime =
         DateTime(date.year, date.month, date.day, time.hour, time.minute);
-    setState(() {
-      dateTime = newDateTime;
-      _dateStartController.text = formatDateTime(newDateTime.toString());
-    });
+    mounted
+        ? setState(() {
+            dateTime = newDateTime;
+            _dateStartController.text = formatDateTime(newDateTime.toString());
+          })
+        : null;
   }
 
   final searchController = TextEditingController();
@@ -133,10 +135,12 @@ class _BookingTableDialogState extends State<BookingTableDialog>
   List listFoodTableCurrent = [];
   String query = '';
   void searchProduct(String query) {
-    setState(() {
-      this.query = query;
-      currentPage = 1;
-    });
+    mounted
+        ? setState(() {
+            this.query = query;
+            currentPage = 1;
+          })
+        : null;
     listFoodTableCurrent.clear();
     getListFoodTable(
       tokenReq: widget.token,
@@ -194,15 +198,17 @@ class _BookingTableDialogState extends State<BookingTableDialog>
         );
       }
     });
-    setState(() {
-      listBanDaGhep = widget.listTableOfRoom
-              ?.where((table) =>
-                  table.orderId == widget.currentTable?.orderId &&
-                  table.roomTableId != widget.currentTable?.roomTableId &&
-                  table.orderId != null)
-              .toList() ??
-          [];
-    });
+    mounted
+        ? setState(() {
+            listBanDaGhep = widget.listTableOfRoom
+                    ?.where((table) =>
+                        table.orderId == widget.currentTable?.orderId &&
+                        table.roomTableId != widget.currentTable?.roomTableId &&
+                        table.orderId != null)
+                    .toList() ??
+                [];
+          })
+        : null;
     super.initState();
   }
 
@@ -248,15 +254,17 @@ class _BookingTableDialogState extends State<BookingTableDialog>
       try {
         if (data['status'] == 200) {
           if (mounted) {
-            setState(() {
-              var foodTableDataRes = FoodTableDataModel.fromJson(data);
-              listFoodTableCurrent.addAll(foodTableDataRes.foods.data);
-              currentPage++;
-              if (foodTableDataRes.foods.data.isEmpty ||
-                  foodTableDataRes.foods.data.length <= 15) {
-                hasMore = false;
-              }
-            });
+            mounted
+                ? setState(() {
+                    var foodTableDataRes = FoodTableDataModel.fromJson(data);
+                    listFoodTableCurrent.addAll(foodTableDataRes.foods.data);
+                    currentPage++;
+                    if (foodTableDataRes.foods.data.isEmpty ||
+                        foodTableDataRes.foods.data.length <= 15) {
+                      hasMore = false;
+                    }
+                  })
+                : null;
           }
         } else {
           log("ERROR DATA FOOD TABLE 1 $data");
@@ -297,12 +305,14 @@ class _BookingTableDialogState extends State<BookingTableDialog>
           var foodTableDataRes = FoodTableDataModel.fromJson(data);
           log(foodTableDataRes.countOrderFoods.toString());
 
-          setState(() {
-            listFoodTableCurrent.clear();
-            currentCart = foodTableDataRes.countOrderFoods;
+          mounted
+              ? setState(() {
+                  listFoodTableCurrent.clear();
+                  currentCart = foodTableDataRes.countOrderFoods;
 
-            listFoodTableCurrent.addAll(foodTableDataRes.foods.data);
-          });
+                  listFoodTableCurrent.addAll(foodTableDataRes.foods.data);
+                })
+              : null;
         } else {
           log("ERROR DATA FOOD TABLE 1 $data");
         }
@@ -772,7 +782,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
 
                                       TextApp(
                                         text: " Thời gian kết thúc",
-                                        fontsize: 12.sp,
+                                        fontsize: 14.sp,
                                         fontWeight: FontWeight.bold,
                                         color: blueText,
                                       ),
@@ -801,9 +811,11 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                               borderRadius:
                                                   BorderRadius.circular(8.r),
                                             ),
+                                            hintStyle: TextStyle(
+                                                fontSize: 14.sp, color: grey),
                                             isDense: true,
-                                            contentPadding: EdgeInsets.all(
-                                                1.sw > 600 ? 20.w : 15.w)),
+                                            contentPadding:
+                                                EdgeInsets.all(20.w)),
                                       ),
                                       ////////
                                       SizedBox(
@@ -812,7 +824,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                       //////
                                       TextApp(
                                         text: 'Tên khách hàng',
-                                        fontsize: 12.sp,
+                                        fontsize: 14.sp,
                                         fontWeight: FontWeight.bold,
                                         color: blueText,
                                       ),
@@ -843,9 +855,11 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                   BorderRadius.circular(8.r),
                                             ),
                                             hintText: 'Tên khách hàng',
+                                            hintStyle: TextStyle(
+                                                fontSize: 14.sp, color: grey),
                                             isDense: true,
-                                            contentPadding: EdgeInsets.all(
-                                                1.sw > 600 ? 20.w : 15.w)),
+                                            contentPadding:
+                                                EdgeInsets.all(20.w)),
                                       ),
                                       /////
                                       SizedBox(
@@ -854,7 +868,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                       ////
                                       TextApp(
                                         text: " Số điện thoại",
-                                        fontsize: 12.sp,
+                                        fontsize: 14.sp,
                                         fontWeight: FontWeight.bold,
                                         color: blueText,
                                       ),
@@ -889,9 +903,11 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                   BorderRadius.circular(8.r),
                                             ),
                                             hintText: 'Số điện thoại',
+                                            hintStyle: TextStyle(
+                                                fontSize: 14.sp, color: grey),
                                             isDense: true,
-                                            contentPadding: EdgeInsets.all(
-                                                1.sw > 600 ? 20.w : 15.w)),
+                                            contentPadding:
+                                                EdgeInsets.all(20.w)),
                                       ),
                                       /////
                                       SizedBox(
@@ -902,7 +918,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                       TextApp(
                                         text:
                                             "Các bàn đang còn trống của phòng",
-                                        fontsize: 12.sp,
+                                        fontsize: 14.sp,
                                         fontWeight: FontWeight.normal,
                                         color: blueText,
                                       ),
@@ -910,7 +926,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                       ////
                                       TextApp(
                                         text: "Ghép bàn",
-                                        fontsize: 12.sp,
+                                        fontsize: 14.sp,
                                         fontWeight: FontWeight.bold,
                                         color: blueText,
                                       ),
@@ -961,9 +977,12 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                           selectedItems:
                                               listTableHaveSameOrderID ?? [],
                                           onChanged: (listSelectedTable) {
-                                            setState(() {
-                                              listBanDaGhep = listSelectedTable;
-                                            });
+                                            mounted
+                                                ? setState(() {
+                                                    listBanDaGhep =
+                                                        listSelectedTable;
+                                                  })
+                                                : null;
                                           },
                                           popupProps:
                                               PopupPropsMultiSelection.dialog(
@@ -1030,7 +1049,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                       ),
                                       TextApp(
                                         text: "Ghi chú",
-                                        fontsize: 12.sp,
+                                        fontsize: 14.sp,
                                         fontWeight: FontWeight.bold,
                                         color: blueText,
                                       ),
@@ -1063,14 +1082,11 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                   BorderRadius.circular(8.r),
                                             ),
                                             hintText: '',
+                                            hintStyle: TextStyle(
+                                                fontSize: 14.sp, color: grey),
                                             isDense: true,
-                                            contentPadding: EdgeInsets.only(
-                                                bottom:
-                                                    1.sw > 600 ? 50.w : 40.w,
-                                                top: 0,
-                                                left: 1.sw > 600 ? 20.w : 15.w,
-                                                right:
-                                                    1.sw > 600 ? 20.w : 15.w)),
+                                            contentPadding:
+                                                EdgeInsets.all(20.w)),
                                       ),
                                     ],
                                   )),
@@ -1238,59 +1254,69 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                   lableFood),
                                                       onSelected:
                                                           (bool selected) {
-                                                        setState(() {
-                                                          if (selected) {
-                                                            selectedCategories.add(
-                                                                lableFood); //thêm tên category vào mảng
-                                                            int index =
-                                                                listAllCategoriesFood
-                                                                    .indexOf(
-                                                                        lableFood);
-                                                            selectedCategoriesIndex
-                                                                .add(index);
-                                                            //thêm index category vào mảng
-                                                            listFoodTableCurrent
-                                                                .clear();
-                                                            currentPage = 1;
-                                                            getListFoodTable(
-                                                              tokenReq:
-                                                                  widget.token,
-                                                              page: currentPage,
-                                                              keywords: query,
-                                                              foodKinds:
+                                                        mounted
+                                                            ? setState(() {
+                                                                if (selected) {
+                                                                  selectedCategories
+                                                                      .add(
+                                                                          lableFood); //thêm tên category vào mảng
+                                                                  int index =
+                                                                      listAllCategoriesFood
+                                                                          .indexOf(
+                                                                              lableFood);
                                                                   selectedCategoriesIndex
-                                                                          .isEmpty
-                                                                      ? null
-                                                                      : selectedCategoriesIndex,
-                                                            );
-                                                          } else {
-                                                            selectedCategories
-                                                                .remove(
-                                                                    lableFood); //xoá tên category vào mảng
-                                                            int index =
-                                                                listAllCategoriesFood
-                                                                    .indexOf(
-                                                                        lableFood);
-                                                            selectedCategoriesIndex
-                                                                .remove(
-                                                                    index); //xoá index category vào mảng
-                                                            listFoodTableCurrent
-                                                                .clear();
-                                                            currentPage = 1;
+                                                                      .add(
+                                                                          index);
+                                                                  //thêm index category vào mảng
+                                                                  listFoodTableCurrent
+                                                                      .clear();
+                                                                  currentPage =
+                                                                      1;
+                                                                  getListFoodTable(
+                                                                    tokenReq:
+                                                                        widget
+                                                                            .token,
+                                                                    page:
+                                                                        currentPage,
+                                                                    keywords:
+                                                                        query,
+                                                                    foodKinds: selectedCategoriesIndex
+                                                                            .isEmpty
+                                                                        ? null
+                                                                        : selectedCategoriesIndex,
+                                                                  );
+                                                                } else {
+                                                                  selectedCategories
+                                                                      .remove(
+                                                                          lableFood); //xoá tên category vào mảng
+                                                                  int index =
+                                                                      listAllCategoriesFood
+                                                                          .indexOf(
+                                                                              lableFood);
+                                                                  selectedCategoriesIndex
+                                                                      .remove(
+                                                                          index); //xoá index category vào mảng
+                                                                  listFoodTableCurrent
+                                                                      .clear();
+                                                                  currentPage =
+                                                                      1;
 
-                                                            getListFoodTable(
-                                                              tokenReq:
-                                                                  widget.token,
-                                                              page: currentPage,
-                                                              keywords: query,
-                                                              foodKinds:
-                                                                  selectedCategoriesIndex
-                                                                          .isEmpty
-                                                                      ? null
-                                                                      : selectedCategoriesIndex,
-                                                            );
-                                                          }
-                                                        });
+                                                                  getListFoodTable(
+                                                                    tokenReq:
+                                                                        widget
+                                                                            .token,
+                                                                    page:
+                                                                        currentPage,
+                                                                    keywords:
+                                                                        query,
+                                                                    foodKinds: selectedCategoriesIndex
+                                                                            .isEmpty
+                                                                        ? null
+                                                                        : selectedCategoriesIndex,
+                                                                  );
+                                                                }
+                                                              })
+                                                            : null;
                                                       },
                                                     ),
                                                   );
@@ -1313,8 +1339,8 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                               onChanged: searchProduct,
                                               controller: searchController,
                                               style: const TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.grey),
+                                                  fontSize: 14,
+                                                  color: Colors.black),
                                               cursorColor: Colors.black,
                                               decoration: InputDecoration(
                                                   filled: true,
@@ -1340,10 +1366,13 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                             8),
                                                   ),
                                                   isDense: true,
+                                                  hintStyle: TextStyle(
+                                                      fontSize: 14.sp,
+                                                      color: grey),
                                                   hintText:
                                                       "Nhập nội dung bạn muốn tìm kiếm",
                                                   contentPadding:
-                                                      const EdgeInsets.all(15)),
+                                                      EdgeInsets.all(20.w)),
                                             ),
                                           ),
                                           space20W,
@@ -1644,7 +1673,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                               FilteringTextInputFormatter.allow(RegExp("[0-9]")),
                                                                             ], // Only numbers can be entered,
                                                                             style:
-                                                                                TextStyle(fontSize: 12.sp, color: grey),
+                                                                                TextStyle(fontSize: 14.sp, color: Colors.black),
                                                                             controller:
                                                                                 _foodQuantityController[index],
 
@@ -1657,15 +1686,20 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                             cursorColor:
                                                                                 grey,
                                                                             decoration:
-                                                                                const InputDecoration(
-                                                                              fillColor: Color.fromARGB(255, 226, 104, 159),
-                                                                              focusedBorder: OutlineInputBorder(
+                                                                                InputDecoration(
+                                                                              enabledBorder: OutlineInputBorder(
+                                                                                borderRadius: BorderRadius.circular(0),
+                                                                                borderSide: const BorderSide(color: Colors.grey, width: 1),
+                                                                              ),
+                                                                              fillColor: const Color.fromARGB(255, 226, 104, 159),
+                                                                              focusedBorder: const OutlineInputBorder(
                                                                                 borderSide: BorderSide(color: Color.fromRGBO(214, 51, 123, 0.6), width: 2.0),
                                                                               ),
 
                                                                               hintText: '',
+                                                                              hintStyle: TextStyle(fontSize: 14.sp, color: grey),
                                                                               isDense: true, // Added this
-                                                                              contentPadding: EdgeInsets.all(3), // Added this
+                                                                              contentPadding: EdgeInsets.all(1.5.w), // Added this
                                                                             ),
                                                                           ),
                                                                         ),
@@ -1903,7 +1937,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                         children: [
                                           TextApp(
                                             text: "Lý do hủy bàn",
-                                            fontsize: 12.sp,
+                                            fontsize: 14.sp,
                                             fontWeight: FontWeight.bold,
                                             color: blueText,
                                           ),
@@ -1925,6 +1959,9 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                   return null;
                                                 }
                                               },
+                                              style: TextStyle(
+                                                  fontSize: 14.sp,
+                                                  color: Colors.black),
                                               controller:
                                                   cancleTableReasonController,
                                               keyboardType:
@@ -1934,9 +1971,9 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                               cursorColor: const Color.fromRGBO(
                                                   73, 80, 87, 1),
                                               decoration: InputDecoration(
-                                                  fillColor: const Color
-                                                      .fromARGB(
-                                                      255, 226, 104, 159),
+                                                  fillColor:
+                                                      const Color.fromARGB(
+                                                          255, 226, 104, 159),
                                                   focusedBorder:
                                                       const OutlineInputBorder(
                                                     borderSide: BorderSide(
@@ -1950,20 +1987,12 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                             8.r),
                                                   ),
                                                   hintText: '',
+                                                  hintStyle: TextStyle(
+                                                      fontSize: 14.sp,
+                                                      color: grey),
                                                   isDense: true,
-                                                  contentPadding: EdgeInsets
-                                                      .only(
-                                                          bottom: 1.sw > 600
-                                                              ? 50.w
-                                                              : 40.w,
-                                                          top: 0,
-                                                          left: 1.sw >
-                                                                  600
-                                                              ? 20.w
-                                                              : 15.w,
-                                                          right: 1.sw > 600
-                                                              ? 20.w
-                                                              : 15.w)),
+                                                  contentPadding:
+                                                      EdgeInsets.all(20.w)),
                                             ),
                                           ),
                                         ],
@@ -2425,25 +2454,31 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
                                           padding: EdgeInsets.all(10.w),
                                           child: ButtonApp(
                                             event: () {
-                                              setState(() {
-                                                if (isSelected) {
-                                                  selectedTable.remove(index);
-                                                  selectedTableId.remove(
-                                                    // listTableFreeOfCurrentRoom
-                                                    //     ?.first?[index]
-                                                    //     .roomTableId,
-                                                    currentRoom?.tables?[index]
-                                                        .roomTableId,
-                                                  );
-                                                } else {
-                                                  selectedTable.add(index);
-                                                  selectedTableId.add(
-                                                      currentRoom
+                                              mounted
+                                                  ? setState(() {
+                                                      if (isSelected) {
+                                                        selectedTable
+                                                            .remove(index);
+                                                        selectedTableId.remove(
+                                                          // listTableFreeOfCurrentRoom
+                                                          //     ?.first?[index]
+                                                          //     .roomTableId,
+                                                          currentRoom
                                                               ?.tables?[index]
-                                                              .roomTableId ??
-                                                          0);
-                                                }
-                                              });
+                                                              .roomTableId,
+                                                        );
+                                                      } else {
+                                                        selectedTable
+                                                            .add(index);
+                                                        selectedTableId.add(
+                                                            currentRoom
+                                                                    ?.tables?[
+                                                                        index]
+                                                                    .roomTableId ??
+                                                                0);
+                                                      }
+                                                    })
+                                                  : null;
                                             },
                                             text: currentRoom?.tables?[index]
                                                     .tableName ??
@@ -3387,11 +3422,10 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                                                                                 ),
                                                                                 Flexible(
                                                                                     fit: FlexFit.tight,
-                                                                                    //check thang nay co the co loi layout
                                                                                     child: Container(
-                                                                                      decoration: BoxDecoration(
-                                                                                        border: Border.all(width: 0.4, color: Colors.grey),
-                                                                                      ),
+                                                                                      // decoration: BoxDecoration(
+                                                                                      //   border: Border.all(width: 0.4, color: Colors.grey),
+                                                                                      // ),
                                                                                       child: Center(
                                                                                         child: TextField(
                                                                                           textAlign: TextAlign.center,
@@ -3399,28 +3433,31 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                                                                                           inputFormatters: <TextInputFormatter>[
                                                                                             FilteringTextInputFormatter.allow(RegExp("[0-9]")),
                                                                                           ], // Only numbers can be entered,
-                                                                                          style: TextStyle(fontSize: 12.sp, color: grey),
+                                                                                          style: TextStyle(fontSize: 14.sp, color: Colors.black),
                                                                                           controller: _foodQuantityController[index],
 
                                                                                           onTapOutside: (event) {
-                                                                                            log('onTapOutside');
                                                                                             FocusManager.instance.primaryFocus?.unfocus();
-                                                                                            // updateQuantytiFood();
                                                                                             updateQuantytiFoodToSeeBillTable(
                                                                                               foodID: listFoodBillCurrent?.data?[index].foodId ?? 0,
                                                                                               quantityFood: _foodQuantityController[index].text,
                                                                                             );
                                                                                           },
                                                                                           cursorColor: grey,
-                                                                                          decoration: const InputDecoration(
+                                                                                          decoration: InputDecoration(
+                                                                                            enabledBorder: OutlineInputBorder(
+                                                                                              borderRadius: BorderRadius.circular(0),
+                                                                                              borderSide: const BorderSide(color: Colors.grey, width: 1),
+                                                                                            ),
                                                                                             fillColor: Color.fromARGB(255, 226, 104, 159),
                                                                                             focusedBorder: OutlineInputBorder(
                                                                                               borderSide: BorderSide(color: Color.fromRGBO(214, 51, 123, 0.6), width: 2.0),
                                                                                             ),
 
                                                                                             hintText: '',
+                                                                                            hintStyle: TextStyle(fontSize: 14.sp, color: grey),
                                                                                             isDense: true, // Added this
-                                                                                            contentPadding: EdgeInsets.all(8), // Added this
+                                                                                            contentPadding: EdgeInsets.all(3.w), // Added this
                                                                                           ),
                                                                                         ),
                                                                                       ),
@@ -3470,11 +3507,16 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                                                                     ),
                                                                   )),
                                                             ),
-                                                            const Divider(
-                                                              height: 1,
-                                                              color:
-                                                                  Colors.grey,
-                                                            )
+                                                            listFoodBillCurrent!
+                                                                        .data!
+                                                                        .length >
+                                                                    1
+                                                                ? const Divider(
+                                                                    height: 1,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  )
+                                                                : Container()
                                                           ],
                                                         );
                                                       }),
@@ -4018,7 +4060,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                                 RegExp("[0-9]")),
                                           ], // Only numbers can be entered,
                                           style: TextStyle(
-                                              fontSize: 12.sp, color: grey),
+                                              fontSize: 14.sp, color: grey),
                                           controller: discountController,
                                           onChanged: (string) {
                                             discountMoney = string;
@@ -4052,6 +4094,8 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                                     BorderRadius.circular(8.r),
                                               ),
                                               hintText: '',
+                                              hintStyle: TextStyle(
+                                                  fontSize: 14.sp, color: grey),
                                               isDense: true,
                                               contentPadding:
                                                   EdgeInsets.all(15.w)),
@@ -4118,7 +4162,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                             }
                                           },
                                           style: TextStyle(
-                                              fontSize: 12.sp, color: grey),
+                                              fontSize: 14.sp, color: grey),
                                           cursorColor: grey,
                                           decoration: InputDecoration(
                                               fillColor: const Color.fromARGB(
@@ -4136,6 +4180,8 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                                     BorderRadius.circular(8.r),
                                               ),
                                               hintText: '',
+                                              hintStyle: TextStyle(
+                                                  fontSize: 14.sp, color: grey),
                                               isDense: true,
                                               contentPadding:
                                                   EdgeInsets.all(15.w)),
@@ -4154,10 +4200,13 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                           value: optionsPayment[0],
                                           groupValue: currentOptions,
                                           onChanged: (value) {
-                                            setState(() {
-                                              currentOptions = value.toString();
-                                              paymentMethod = 0;
-                                            });
+                                            mounted
+                                                ? setState(() {
+                                                    currentOptions =
+                                                        value.toString();
+                                                    paymentMethod = 0;
+                                                  })
+                                                : null;
                                           },
                                         ),
                                         TextApp(
@@ -4174,10 +4223,13 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                           value: optionsPayment[1],
                                           groupValue: currentOptions,
                                           onChanged: (value) {
-                                            setState(() {
-                                              currentOptions = value.toString();
-                                              paymentMethod = 1;
-                                            });
+                                            mounted
+                                                ? setState(() {
+                                                    currentOptions =
+                                                        value.toString();
+                                                    paymentMethod = 1;
+                                                  })
+                                                : null;
                                           },
                                         ),
                                         TextApp(
@@ -4194,10 +4246,13 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                           value: optionsPayment[2],
                                           groupValue: currentOptions,
                                           onChanged: (value) {
-                                            setState(() {
-                                              currentOptions = value.toString();
-                                              paymentMethod = 2;
-                                            });
+                                            mounted
+                                                ? setState(() {
+                                                    currentOptions =
+                                                        value.toString();
+                                                    paymentMethod = 2;
+                                                  })
+                                                : null;
                                           },
                                         ),
                                         TextApp(
@@ -4466,10 +4521,12 @@ class _ManageBroughtReceiptDialogState
 
   String query = '';
   void searchProduct(String query) {
-    setState(() {
-      this.query = query;
-      currentPage = 1;
-    });
+    mounted
+        ? setState(() {
+            this.query = query;
+            currentPage = 1;
+          })
+        : null;
     listFoodCurrent.clear();
 
     getDetailsBroughtReceiptData(
@@ -4514,19 +4571,21 @@ class _ManageBroughtReceiptDialogState
       var detailsBroughtReceiptRes = ManageBroughtReceiptModel.fromJson(data);
       try {
         if (data['status'] == 200) {
-          setState(() {
-            // listFoodCurrent.clear();
-            currentOrderTotalBroughtReceipt =
-                detailsBroughtReceiptRes.orderTotal;
-            currentCartBroughtReceipt =
-                detailsBroughtReceiptRes.countOrderFoods;
-            listFoodCurrent.addAll(detailsBroughtReceiptRes.data.data);
-            currentPage++;
-            if (detailsBroughtReceiptRes.data.data.isEmpty ||
-                detailsBroughtReceiptRes.data.data.length <= 15) {
-              hasMore = false;
-            }
-          });
+          mounted
+              ? setState(() {
+                  // listFoodCurrent.clear();
+                  currentOrderTotalBroughtReceipt =
+                      detailsBroughtReceiptRes.orderTotal;
+                  currentCartBroughtReceipt =
+                      detailsBroughtReceiptRes.countOrderFoods;
+                  listFoodCurrent.addAll(detailsBroughtReceiptRes.data.data);
+                  currentPage++;
+                  if (detailsBroughtReceiptRes.data.data.isEmpty ||
+                      detailsBroughtReceiptRes.data.data.length <= 15) {
+                    hasMore = false;
+                  }
+                })
+              : null;
         } else {
           log("ERROR BROUGHT RECEIPT PAGE 1 CCCC");
         }
@@ -4573,16 +4632,18 @@ class _ManageBroughtReceiptDialogState
       try {
         if (data['status'] == 200) {
           var newOrderId = data['order_id'];
-          setState(() {
-            currentPage = 1;
-            listFoodCurrent.clear();
-            orderNewIDBroughtReceipt = newOrderId;
-            getListBroughtReceiptData(filtersFlg: {"pay_flg": null});
-            getDetailsBroughtReceiptData(
-                page: currentPage,
-                tokenReq: tokenReq,
-                orderID: orderNewIDBroughtReceipt ?? widget.orderID);
-          });
+          mounted
+              ? setState(() {
+                  currentPage = 1;
+                  listFoodCurrent.clear();
+                  orderNewIDBroughtReceipt = newOrderId;
+                  getListBroughtReceiptData(filtersFlg: {"pay_flg": null});
+                  getDetailsBroughtReceiptData(
+                      page: currentPage,
+                      tokenReq: tokenReq,
+                      orderID: orderNewIDBroughtReceipt ?? widget.orderID);
+                })
+              : null;
           showSnackBarTopCustom(
               title: "Thành công",
               context: navigatorKey.currentContext,
@@ -4629,16 +4690,18 @@ class _ManageBroughtReceiptDialogState
       try {
         if (data['status'] == 200) {
           var newOrderId = data['order_id'];
-          setState(() {
-            currentPage = 1;
-            listFoodCurrent.clear();
-            orderNewIDBroughtReceipt = newOrderId;
-            getListBroughtReceiptData(filtersFlg: {"pay_flg": null});
-            getDetailsBroughtReceiptData(
-                page: currentPage,
-                tokenReq: tokenReq,
-                orderID: orderNewIDBroughtReceipt ?? widget.orderID);
-          });
+          mounted
+              ? setState(() {
+                  currentPage = 1;
+                  listFoodCurrent.clear();
+                  orderNewIDBroughtReceipt = newOrderId;
+                  getListBroughtReceiptData(filtersFlg: {"pay_flg": null});
+                  getDetailsBroughtReceiptData(
+                      page: currentPage,
+                      tokenReq: tokenReq,
+                      orderID: orderNewIDBroughtReceipt ?? widget.orderID);
+                })
+              : null;
           showSnackBarTopCustom(
               title: "Thành công",
               context: navigatorKey.currentContext,
@@ -4905,63 +4968,67 @@ class _ManageBroughtReceiptDialogState
                                       selectedCategories.contains(lableFood),
                                   onSelected: (bool selected) {
                                     if (mounted) {
-                                      setState(() {
-                                        if (selected) {
-                                          selectedCategories.add(
-                                              lableFood); //thêm tên category vào mảng
-                                          int index = listAllCategoriesFood
-                                              .indexOf(lableFood);
-                                          selectedCategoriesIndex.add(
-                                              index); //thêm index category vào mảng
-                                          listFoodCurrent.clear();
-                                          currentPage = 1;
-                                          getDetailsBroughtReceiptData(
-                                            page: currentPage,
-                                            orderID: widget.orderID,
-                                            tokenReq: widget.token,
-                                            keywords: query,
-                                            foodKinds:
-                                                selectedCategoriesIndex.isEmpty
-                                                    ? null
-                                                    : selectedCategoriesIndex,
-                                          );
-                                          // getListFood(
-                                          //     tokenReq: widget.token,
-                                          //     page: currentPage,
-                                          //     keywords: query,
-                                          //     foodKinds: selectedCategoriesIndex
-                                          //             .isEmpty
-                                          //         ? null
-                                          //         : selectedCategoriesIndex);
-                                        } else {
-                                          selectedCategories.remove(
-                                              lableFood); //xoá tên category vào mảng
-                                          int index = listAllCategoriesFood
-                                              .indexOf(lableFood);
-                                          selectedCategoriesIndex.remove(
-                                              index); //xoá index category vào mảng
-                                          listFoodCurrent.clear();
-                                          currentPage = 1;
-                                          getDetailsBroughtReceiptData(
-                                            page: currentPage,
-                                            orderID: widget.orderID,
-                                            tokenReq: widget.token,
-                                            keywords: query,
-                                            foodKinds:
-                                                selectedCategoriesIndex.isEmpty
-                                                    ? null
-                                                    : selectedCategoriesIndex,
-                                          );
-                                          // getListFood(
-                                          //     tokenReq: widget.token,
-                                          //     page: currentPage,
-                                          //     keywords: query,
-                                          //     foodKinds: selectedCategoriesIndex
-                                          //             .isEmpty
-                                          //         ? null
-                                          //         : selectedCategoriesIndex);
-                                        }
-                                      });
+                                      mounted
+                                          ? setState(() {
+                                              if (selected) {
+                                                selectedCategories.add(
+                                                    lableFood); //thêm tên category vào mảng
+                                                int index =
+                                                    listAllCategoriesFood
+                                                        .indexOf(lableFood);
+                                                selectedCategoriesIndex.add(
+                                                    index); //thêm index category vào mảng
+                                                listFoodCurrent.clear();
+                                                currentPage = 1;
+                                                getDetailsBroughtReceiptData(
+                                                  page: currentPage,
+                                                  orderID: widget.orderID,
+                                                  tokenReq: widget.token,
+                                                  keywords: query,
+                                                  foodKinds: selectedCategoriesIndex
+                                                          .isEmpty
+                                                      ? null
+                                                      : selectedCategoriesIndex,
+                                                );
+                                                // getListFood(
+                                                //     tokenReq: widget.token,
+                                                //     page: currentPage,
+                                                //     keywords: query,
+                                                //     foodKinds: selectedCategoriesIndex
+                                                //             .isEmpty
+                                                //         ? null
+                                                //         : selectedCategoriesIndex);
+                                              } else {
+                                                selectedCategories.remove(
+                                                    lableFood); //xoá tên category vào mảng
+                                                int index =
+                                                    listAllCategoriesFood
+                                                        .indexOf(lableFood);
+                                                selectedCategoriesIndex.remove(
+                                                    index); //xoá index category vào mảng
+                                                listFoodCurrent.clear();
+                                                currentPage = 1;
+                                                getDetailsBroughtReceiptData(
+                                                  page: currentPage,
+                                                  orderID: widget.orderID,
+                                                  tokenReq: widget.token,
+                                                  keywords: query,
+                                                  foodKinds: selectedCategoriesIndex
+                                                          .isEmpty
+                                                      ? null
+                                                      : selectedCategoriesIndex,
+                                                );
+                                                // getListFood(
+                                                //     tokenReq: widget.token,
+                                                //     page: currentPage,
+                                                //     keywords: query,
+                                                //     foodKinds: selectedCategoriesIndex
+                                                //             .isEmpty
+                                                //         ? null
+                                                //         : selectedCategoriesIndex);
+                                              }
+                                            })
+                                          : null;
                                     }
                                   },
                                 ),
@@ -4982,8 +5049,8 @@ class _ManageBroughtReceiptDialogState
                           },
                           onChanged: searchProduct,
                           controller: searchController,
-                          style:
-                              const TextStyle(fontSize: 12, color: Colors.grey),
+                          style: const TextStyle(
+                              fontSize: 14, color: Colors.black),
                           cursorColor: Colors.black,
                           decoration: InputDecoration(
                               filled: true,
@@ -4999,7 +5066,9 @@ class _ManageBroughtReceiptDialogState
                               ),
                               isDense: true,
                               hintText: "Nhập nội dung bạn muốn tìm kiếm",
-                              contentPadding: const EdgeInsets.all(15)),
+                              hintStyle:
+                                  TextStyle(fontSize: 14.sp, color: grey),
+                              contentPadding: EdgeInsets.all(20.w)),
                         ),
                       ),
                       space20W,
@@ -5103,12 +5172,12 @@ class _ManageBroughtReceiptDialogState
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       SizedBox(
-                                          width: 80.w,
-                                          height: 80.w,
+                                          width: 70.w,
+                                          height: 70.w,
                                           // color: Colors.amber,
                                           child: ClipRRect(
                                             borderRadius:
-                                                BorderRadius.circular(40.w),
+                                                BorderRadius.circular(35.w),
                                             child: imagePath1 == null
                                                 ? Image.asset(
                                                     'assets/images/dish.png',
@@ -5270,14 +5339,13 @@ class _ManageBroughtReceiptDialogState
                                                                 "[0-9]")),
                                                       ], // Only numbers can be entered,
                                                       style: TextStyle(
-                                                          fontSize: 12.sp,
+                                                          fontSize: 14.sp,
                                                           color: grey),
                                                       controller:
                                                           _foodQuantityController[
                                                               index],
 
                                                       onTapOutside: (event) {
-                                                        log('onTapOutside');
                                                         FocusManager.instance
                                                             .primaryFocus
                                                             ?.unfocus();
@@ -5296,7 +5364,18 @@ class _ManageBroughtReceiptDialogState
                                                       },
                                                       cursorColor: grey,
                                                       decoration:
-                                                          const InputDecoration(
+                                                          InputDecoration(
+                                                        enabledBorder:
+                                                            OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(0),
+                                                          borderSide:
+                                                              const BorderSide(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  width: 1),
+                                                        ),
                                                         fillColor:
                                                             Color.fromARGB(255,
                                                                 226, 104, 159),
@@ -5314,11 +5393,14 @@ class _ManageBroughtReceiptDialogState
                                                         ),
 
                                                         hintText: '',
+                                                        hintStyle: TextStyle(
+                                                            fontSize: 14.sp,
+                                                            color: grey),
                                                         isDense:
                                                             true, // Added this
                                                         contentPadding:
-                                                            EdgeInsets.all(
-                                                                3), // Added this
+                                                            EdgeInsets.all(1.5
+                                                                .w), // Added this
                                                       ),
                                                     ),
                                                   ),
@@ -6934,7 +7016,7 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
                         return null;
                       }
                     },
-                    style: TextStyle(fontSize: 14.sp, color: grey),
+                    style: TextStyle(fontSize: 14.sp, color: Colors.black),
                     cursorColor: const Color.fromRGBO(73, 80, 87, 1),
                     decoration: InputDecoration(
                         fillColor: const Color.fromARGB(255, 226, 104, 159),
@@ -6948,10 +7030,9 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
                           borderRadius: BorderRadius.circular(8.r),
                         ),
                         hintText: "Tên phòng",
-                        hintStyle: TextStyle(fontSize: 14.sp),
+                        hintStyle: TextStyle(fontSize: 14.sp, color: grey),
                         isDense: true,
-                        contentPadding:
-                            EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
+                        contentPadding: EdgeInsets.all(20.w)),
                   ),
                   space20H,
                   TextApp(
@@ -7247,7 +7328,7 @@ class _EditRoomDataDialogState extends State<EditRoomDataDialog> {
                         return null;
                       }
                     },
-                    style: TextStyle(fontSize: 14.sp, color: grey),
+                    style: TextStyle(fontSize: 14.sp, color: Colors.black),
                     cursorColor: const Color.fromRGBO(73, 80, 87, 1),
                     decoration: InputDecoration(
                         fillColor: const Color.fromARGB(255, 226, 104, 159),
@@ -7261,10 +7342,9 @@ class _EditRoomDataDialogState extends State<EditRoomDataDialog> {
                           borderRadius: BorderRadius.circular(8.r),
                         ),
                         hintText: "Tên phòng",
-                        hintStyle: TextStyle(fontSize: 14.sp),
+                        hintStyle: TextStyle(fontSize: 14.sp, color: grey),
                         isDense: true,
-                        contentPadding:
-                            EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
+                        contentPadding: EdgeInsets.all(20.w)),
                   ),
                   space20H,
                   TextApp(
@@ -7611,17 +7691,18 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                           height: 10.h,
                         ),
                         TextFormField(
-                          maxLength: 12,
                           onTapOutside: (event) {
                             FocusManager.instance.primaryFocus?.unfocus();
                           },
+                          style:
+                              TextStyle(fontSize: 14.sp, color: Colors.black),
                           controller: idStoreController,
                           cursorColor: const Color.fromRGBO(73, 80, 87, 1),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return canNotNull;
-                            } else if (value.length < 6) {
-                              return "Độ dài ít nhất 6 kí tự";
+                            } else if (value.length > 12) {
+                              return "Độ dài ít nhất 12 kí tự";
                             } else {
                               return null;
                             }
@@ -7639,16 +7720,17 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: storeId,
-                              hintStyle: TextStyle(fontSize: 12.sp),
+                              hintStyle:
+                                  TextStyle(fontSize: 14.sp, color: grey),
                               isDense: true,
-                              contentPadding:
-                                  EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
+                              contentPadding: EdgeInsets.all(20.w)),
                         ),
                         ////////
                         // SizedBox(
                         //   height: 30.h,
                         // ),
                         //////
+                        space20H,
                         TextApp(
                           text: storeName,
                           fontsize: 14.sp,
@@ -7659,14 +7741,17 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                           height: 10.h,
                         ),
                         TextFormField(
-                          maxLength: 32,
                           onTapOutside: (event) {
                             FocusManager.instance.primaryFocus?.unfocus();
                           },
+                          style:
+                              TextStyle(fontSize: 14.sp, color: Colors.black),
                           controller: nameStoreController,
                           validator: (value) {
                             if (value!.isEmpty) {
                               return canNotNull;
+                            } else if (value.length > 32) {
+                              return "Độ dài tối đa 32 kí tự";
                             } else {
                               return null;
                             }
@@ -7685,16 +7770,18 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: storeName,
-                              hintStyle: TextStyle(fontSize: 12.sp),
+                              hintStyle:
+                                  TextStyle(fontSize: 14.sp, color: grey),
                               isDense: true,
-                              contentPadding:
-                                  EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
+                              contentPadding: EdgeInsets.all(20.w)),
                         ),
                         /////
                         // SizedBox(
                         //   height: 30.h,
                         // ),
                         ////
+                        space20H,
+
                         TextApp(
                           text: storeAddress,
                           fontsize: 14.sp,
@@ -7705,6 +7792,8 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                           height: 10.h,
                         ),
                         TextFormField(
+                          style:
+                              TextStyle(fontSize: 14.sp, color: Colors.black),
                           onTapOutside: (event) {
                             FocusManager.instance.primaryFocus?.unfocus();
                           },
@@ -7730,15 +7819,14 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: storeAddress,
-                              hintStyle: TextStyle(fontSize: 12.sp),
+                              hintStyle:
+                                  TextStyle(fontSize: 14.sp, color: grey),
                               isDense: true,
-                              contentPadding:
-                                  EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
+                              contentPadding: EdgeInsets.all(20.w)),
                         ),
                         /////
-                        SizedBox(
-                          height: 20.h,
-                        ),
+                        space20H,
+
                         ////
                         TextApp(
                           text: displayMode,
@@ -7802,7 +7890,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                             isOverFlow: false,
                             softWrap: true,
                             text: describeDetailSotre,
-                            fontsize: 12.sp,
+                            fontsize: 14.sp,
                             fontWeight: FontWeight.normal,
                             color: blueText,
                           ),
@@ -7813,20 +7901,19 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextApp(
-                              text: " Mô tả",
-                              fontsize: 14.sp,
-                              fontWeight: FontWeight.bold,
-                              color: blueText,
-                            ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
                             TextFormField(
-                              maxLength: 255,
                               onTapOutside: (event) {
                                 FocusManager.instance.primaryFocus?.unfocus();
                               },
+                              validator: (value) {
+                                if (value!.length > 255) {
+                                  return "Độ dài tối đa 255 kí tự";
+                                } else {
+                                  return null;
+                                }
+                              },
+                              style: TextStyle(
+                                  fontSize: 14.sp, color: Colors.black),
                               controller: desController,
                               keyboardType: TextInputType.multiline,
                               minLines: 1,
@@ -7845,19 +7932,18 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                                     borderRadius: BorderRadius.circular(8.r),
                                   ),
                                   hintText: '',
-                                  hintStyle: TextStyle(fontSize: 12.sp),
+                                  hintStyle:
+                                      TextStyle(fontSize: 14.sp, color: grey),
                                   isDense: true,
-                                  contentPadding: EdgeInsets.only(
-                                      bottom: 1.sw > 600 ? 50.w : 40.w,
-                                      top: 0,
-                                      left: 1.sw > 600 ? 20.w : 15.w,
-                                      right: 1.sw > 600 ? 20.w : 15.w)),
+                                  contentPadding: EdgeInsets.all(20.w)),
                             ),
                           ],
                         ),
                         // SizedBox(
                         //   height: 30.h,
                         // ),
+                        space20H,
+
                         TextApp(
                           text: storeImage,
                           fontsize: 14.sp,
@@ -8399,7 +8485,8 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                               return null;
                             }
                           },
-                          style: TextStyle(fontSize: 14.sp),
+                          style:
+                              TextStyle(fontSize: 14.sp, color: Colors.black),
                           decoration: InputDecoration(
                               fillColor:
                                   const Color.fromARGB(255, 226, 104, 159),
@@ -8413,10 +8500,10 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: storeId,
-                              hintStyle: TextStyle(fontSize: 14.sp),
+                              hintStyle:
+                                  TextStyle(fontSize: 14.sp, color: grey),
                               isDense: true,
-                              contentPadding:
-                                  EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
+                              contentPadding: EdgeInsets.all(20.w)),
                         ),
                         ////////
                         SizedBox(
@@ -8444,7 +8531,8 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                           onTapOutside: (event) {
                             FocusManager.instance.primaryFocus?.unfocus();
                           },
-                          style: TextStyle(fontSize: 14.sp),
+                          style:
+                              TextStyle(fontSize: 14.sp, color: Colors.black),
                           cursorColor: const Color.fromRGBO(73, 80, 87, 1),
                           decoration: InputDecoration(
                               fillColor:
@@ -8459,10 +8547,10 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: storeName,
-                              hintStyle: TextStyle(fontSize: 14.sp),
+                              hintStyle:
+                                  TextStyle(fontSize: 14.sp, color: grey),
                               isDense: true,
-                              contentPadding:
-                                  EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
+                              contentPadding: EdgeInsets.all(20.w)),
                         ),
                         /////
                         SizedBox(
@@ -8491,7 +8579,8 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                           onTapOutside: (event) {
                             FocusManager.instance.primaryFocus?.unfocus();
                           },
-                          style: TextStyle(fontSize: 14.sp),
+                          style:
+                              TextStyle(fontSize: 14.sp, color: Colors.black),
                           decoration: InputDecoration(
                               fillColor:
                                   const Color.fromARGB(255, 226, 104, 159),
@@ -8506,9 +8595,9 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                               ),
                               hintText: storeAddress,
                               isDense: true,
-                              hintStyle: TextStyle(fontSize: 14.sp),
-                              contentPadding:
-                                  EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
+                              hintStyle:
+                                  TextStyle(fontSize: 14.sp, color: grey),
+                              contentPadding: EdgeInsets.all(20.w)),
                         ),
                         /////
                         SizedBox(
@@ -8591,7 +8680,13 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                           height: 20.h,
                         ),
                         TextFormField(
-                          maxLength: 255,
+                          validator: (value) {
+                            if (value!.length > 255) {
+                              return "Độ dài tối đa 255 kí tự";
+                            } else {
+                              return null;
+                            }
+                          },
                           onTapOutside: (event) {
                             FocusManager.instance.primaryFocus?.unfocus();
                           },
@@ -8599,7 +8694,8 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                           keyboardType: TextInputType.multiline,
                           minLines: 1,
                           maxLines: 3,
-                          style: TextStyle(fontSize: 14.sp),
+                          style:
+                              TextStyle(fontSize: 14.sp, color: Colors.black),
                           cursorColor: const Color.fromRGBO(73, 80, 87, 1),
                           decoration: InputDecoration(
                               fillColor:
@@ -8614,12 +8710,9 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                               ),
                               hintText: '',
                               isDense: true,
-                              hintStyle: TextStyle(fontSize: 14.sp),
-                              contentPadding: EdgeInsets.only(
-                                  bottom: 1.sw > 600 ? 50.w : 40.w,
-                                  top: 0,
-                                  left: 1.sw > 600 ? 20.w : 15.w,
-                                  right: 1.sw > 600 ? 20.w : 15.w)),
+                              hintStyle:
+                                  TextStyle(fontSize: 14.sp, color: grey),
+                              contentPadding: EdgeInsets.all(20.w)),
                         ),
 
                         SizedBox(
@@ -8967,9 +9060,11 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
 
       try {
         if (data['status'] == 200) {
-          setState(() {
-            tableDataDetailsModel = TableDataDetailsModel.fromJson(data);
-          });
+          mounted
+              ? setState(() {
+                  tableDataDetailsModel = TableDataDetailsModel.fromJson(data);
+                })
+              : null;
           intitData();
         } else {
           log("ERROR CREATE FOOOD");
@@ -9119,7 +9214,6 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                           height: 10.h,
                         ),
                         TextFormField(
-                          maxLength: 12,
                           onTapOutside: (event) {
                             FocusManager.instance.primaryFocus?.unfocus();
                           },
@@ -9127,11 +9221,14 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                           validator: (value) {
                             if (value!.isEmpty) {
                               return canNotNull;
+                            } else if (value.length > 12) {
+                              return "Độ dài tối đa 12 kí tự";
                             } else {
                               return null;
                             }
                           },
-                          style: TextStyle(fontSize: 14.sp),
+                          style:
+                              TextStyle(fontSize: 14.sp, color: Colors.black),
                           cursorColor: const Color.fromRGBO(73, 80, 87, 1),
                           decoration: InputDecoration(
                               fillColor:
@@ -9146,12 +9243,14 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               // hintText: storeName,
-
+                              hintStyle:
+                                  TextStyle(fontSize: 14.sp, color: grey),
                               isDense: true,
-                              contentPadding:
-                                  EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
+                              contentPadding: EdgeInsets.all(20.w)),
                         ),
-
+                        SizedBox(
+                          height: 20.h,
+                        ),
                         TextApp(
                           text: "Số ghế trong bàn",
                           fontsize: 14.sp,
@@ -9178,7 +9277,8 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                               return null;
                             }
                           },
-                          style: TextStyle(fontSize: 14.sp),
+                          style:
+                              TextStyle(fontSize: 14.sp, color: Colors.black),
                           decoration: InputDecoration(
                               fillColor:
                                   const Color.fromARGB(255, 226, 104, 159),
@@ -9191,10 +9291,10 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
-                              // hintText: storeAddress,
+                              hintStyle:
+                                  TextStyle(fontSize: 14.sp, color: grey),
                               isDense: true,
-                              contentPadding:
-                                  EdgeInsets.all(1.sw > 600 ? 20.w : 15.w)),
+                              contentPadding: EdgeInsets.all(20.w)),
                         ),
 
                         SizedBox(
@@ -9208,15 +9308,22 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                         ),
                         space10H,
                         TextFormField(
-                          maxLength: 255,
                           onTapOutside: (event) {
                             FocusManager.instance.primaryFocus?.unfocus();
+                          },
+                          validator: (value) {
+                            if (value!.length > 255) {
+                              return "Độ dài tối đa 255 kí tự";
+                            } else {
+                              return null;
+                            }
                           },
                           controller: desController,
                           keyboardType: TextInputType.multiline,
                           minLines: 1,
                           maxLines: 3,
-                          style: TextStyle(fontSize: 14.sp),
+                          style:
+                              TextStyle(fontSize: 14.sp, color: Colors.black),
                           cursorColor: const Color.fromRGBO(73, 80, 87, 1),
                           decoration: InputDecoration(
                               fillColor:
@@ -9230,15 +9337,14 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               hintText: '',
-                              hintStyle: TextStyle(fontSize: 14.sp),
+                              hintStyle:
+                                  TextStyle(fontSize: 14.sp, color: grey),
                               isDense: true,
-                              contentPadding: EdgeInsets.only(
-                                  bottom: 1.sw > 600 ? 50.w : 40.w,
-                                  top: 0,
-                                  left: 1.sw > 600 ? 20.w : 15.w,
-                                  right: 1.sw > 600 ? 20.w : 15.w)),
+                              contentPadding: EdgeInsets.all(20.w)),
                         ),
-
+                        SizedBox(
+                          height: 20.h,
+                        ),
                         ////
                         TextApp(
                           isOverFlow: false,
@@ -9275,9 +9381,11 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                               activeColor:
                                   const Color.fromRGBO(58, 65, 111, .95),
                               onChanged: (bool value) {
-                                setState(() {
-                                  light = value;
-                                });
+                                mounted
+                                    ? setState(() {
+                                        light = value;
+                                      })
+                                    : null;
                               },
                             ),
                           ),
@@ -9450,7 +9558,7 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                                   //////
                                   TextApp(
                                     text: "Tên mặt hàng",
-                                    fontsize: 12.sp,
+                                    fontsize: 14.sp,
                                     fontWeight: FontWeight.bold,
                                     color: blueText,
                                   ),
@@ -9471,6 +9579,8 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                                         return null;
                                       }
                                     },
+                                    style: TextStyle(
+                                        fontSize: 14.sp, color: Colors.black),
                                     cursorColor:
                                         const Color.fromRGBO(73, 80, 87, 1),
                                     decoration: InputDecoration(
@@ -9488,10 +9598,10 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                                           borderRadius:
                                               BorderRadius.circular(8.r),
                                         ),
-                                        // hintText: storeName,
+                                        hintStyle: TextStyle(
+                                            fontSize: 14.sp, color: grey),
                                         isDense: true,
-                                        contentPadding: EdgeInsets.all(
-                                            1.sw > 600 ? 20.w : 15.w)),
+                                        contentPadding: EdgeInsets.all(20.w)),
                                   ),
                                   /////
                                   SizedBox(
@@ -9549,7 +9659,7 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                                   ////
                                   TextApp(
                                     text: "Số lượng ban đầu",
-                                    fontsize: 12.sp,
+                                    fontsize: 14.sp,
                                     fontWeight: FontWeight.bold,
                                     color: blueText,
                                   ),
@@ -9561,6 +9671,8 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                                       FocusManager.instance.primaryFocus
                                           ?.unfocus();
                                     },
+                                    style: TextStyle(
+                                        fontSize: 14.sp, color: Colors.black),
                                     controller: initalQuantityController,
                                     cursorColor:
                                         const Color.fromRGBO(73, 80, 87, 1),
@@ -9586,10 +9698,10 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                                           borderRadius:
                                               BorderRadius.circular(8.r),
                                         ),
-                                        // hintText: storeAddress,
+                                        hintStyle: TextStyle(
+                                            fontSize: 14.sp, color: grey),
                                         isDense: true,
-                                        contentPadding: EdgeInsets.all(
-                                            1.sw > 600 ? 20.w : 15.w)),
+                                        contentPadding: EdgeInsets.all(20.w)),
                                   ),
 
                                   SizedBox(
@@ -9598,7 +9710,7 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                                   ////
                                   TextApp(
                                     text: "Số lượng tối thiểu",
-                                    fontsize: 12.sp,
+                                    fontsize: 14.sp,
                                     fontWeight: FontWeight.bold,
                                     color: blueText,
                                   ),
@@ -9610,6 +9722,8 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                                       FocusManager.instance.primaryFocus
                                           ?.unfocus();
                                     },
+                                    style: TextStyle(
+                                        fontSize: 14.sp, color: Colors.black),
                                     controller: minQuantityController,
                                     cursorColor:
                                         const Color.fromRGBO(73, 80, 87, 1),
@@ -9636,8 +9750,9 @@ class _CreateItemDialogState extends State<CreateItemDialog>
                                               BorderRadius.circular(8.r),
                                         ),
                                         isDense: true,
-                                        contentPadding: EdgeInsets.all(
-                                            1.sw > 600 ? 20.w : 15.w)),
+                                        hintStyle: TextStyle(
+                                            fontSize: 14.sp, color: grey),
+                                        contentPadding: EdgeInsets.all(20.w)),
                                   ),
                                   SizedBox(
                                     height: 10.h,
