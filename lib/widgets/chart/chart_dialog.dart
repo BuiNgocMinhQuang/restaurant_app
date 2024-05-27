@@ -214,11 +214,13 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      contentPadding: const EdgeInsets.all(0),
+      contentPadding: EdgeInsets.zero,
       surfaceTintColor: Colors.white,
       backgroundColor: Colors.white,
+      insetPadding:
+          EdgeInsets.only(left: 20.w, right: 20.w, top: 30.w, bottom: 10.w),
       content: Padding(
-        padding: EdgeInsets.only(left: 10.w, right: 10.w),
+        padding: EdgeInsets.all(10.w),
         child: Container(
             width: 1.sw,
             // height: 1.sh,
@@ -681,7 +683,6 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                         ),
                       )
                     : Container(),
-                space20H,
                 Container(
                   width: 1.sw,
                   height: 80,

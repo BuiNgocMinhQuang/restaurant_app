@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:app_restaurant/config/colors.dart';
+import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
@@ -102,6 +103,7 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                         padding: EdgeInsets.only(left: 20.w, right: 20.w),
                         child: Column(
                           children: [
+                            space15H,
                             Stack(
                               children: [
                                 Stack(
@@ -196,6 +198,7 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                 ),
                                                 Center(
                                                   child: TextApp(
+                                                    fontsize: 14.sp,
                                                     softWrap: true,
                                                     isOverFlow: false,
                                                     text: sendCodeIn60Sec,
@@ -209,16 +212,6 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    TextApp(
-                                                      text: " Mã cửa hàng",
-                                                      fontsize: 14.sp,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: blueText,
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10.h,
-                                                    ),
                                                     TextFormField(
                                                       style: TextStyle(
                                                           fontSize: 14.sp,
@@ -302,16 +295,6 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    TextApp(
-                                                      text: " Email",
-                                                      fontsize: 14.sp,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: blueText,
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10.h,
-                                                    ),
                                                     TextFormField(
                                                       onTapOutside: (event) {
                                                         FocusManager.instance
@@ -395,9 +378,10 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                                   ],
                                                 ),
                                                 SizedBox(
-                                                  height: 40.h,
+                                                  height: 20.h,
                                                 ),
                                                 ButtonGradient(
+                                                  height: 60.h,
                                                   color1: color1BlueButton,
                                                   color2: color2BlueButton,
                                                   event: () {
@@ -429,7 +413,7 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                                       height: 30.h,
                                     ),
                                     SizedBox(
-                                      width: 1.sw / 2,
+                                      width: 1.sw,
                                       // height: 80,
                                       child: const CopyRightText(),
                                     ),

@@ -168,7 +168,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                               "OpenSans",
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          fontsize: 14.sp),
+                                                          fontsize: 12.sp),
                                                     ),
                                                   ),
                                                   space30H,
@@ -376,39 +376,40 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                   ),
                                                   space30H,
                                                   ButtonGradient(
+                                                    height: 60.h,
                                                     color1: color1BlueButton,
                                                     color2: color2BlueButton,
                                                     event: () {
-                                                      // if (_formField
-                                                      //     .currentState!
-                                                      //     .validate()) {
-                                                      //   BlocProvider.of<
-                                                      //               ManagerLoginBloc>(
-                                                      //           context)
-                                                      //       .add(
-                                                      //     ManagerLoginButtonPressed(
-                                                      //         email:
-                                                      //             emailController
-                                                      //                 .text,
-                                                      //         password:
-                                                      //             passworldController
-                                                      //                 .text,
-                                                      //         remember:
-                                                      //             isRemember),
-                                                      //   );
-                                                      // }
+                                                      if (_formField
+                                                          .currentState!
+                                                          .validate()) {
+                                                        BlocProvider.of<
+                                                                    ManagerLoginBloc>(
+                                                                context)
+                                                            .add(
+                                                          ManagerLoginButtonPressed(
+                                                              email:
+                                                                  emailController
+                                                                      .text,
+                                                              password:
+                                                                  passworldController
+                                                                      .text,
+                                                              remember:
+                                                                  isRemember),
+                                                        );
+                                                      }
 
-                                                      BlocProvider.of<
-                                                                  ManagerLoginBloc>(
-                                                              context)
-                                                          .add(
-                                                        const ManagerLoginButtonPressed(
-                                                            email:
-                                                                "contact@thuonghieuvietsol.com",
-                                                            password:
-                                                                "thvTHV123!@#",
-                                                            remember: true),
-                                                      );
+                                                      // BlocProvider.of<
+                                                      //             ManagerLoginBloc>(
+                                                      //         context)
+                                                      //     .add(
+                                                      //   const ManagerLoginButtonPressed(
+                                                      //       email:
+                                                      //           "contact@thuonghieuvietsol.com",
+                                                      //       password:
+                                                      //           "thvTHV123!@#",
+                                                      //       remember: true),
+                                                      // );
                                                     },
                                                     text: login,
                                                     fontSize: 14.sp,
@@ -457,6 +458,7 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                   ),
                                                   space20H,
                                                   ButtonGradient(
+                                                    height: 60.h,
                                                     color1: color1DarkButton,
                                                     color2: color2DarkButton,
                                                     event: () {

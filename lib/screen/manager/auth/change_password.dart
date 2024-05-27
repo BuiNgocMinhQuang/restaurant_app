@@ -118,6 +118,7 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                         padding: EdgeInsets.only(left: 20.w, right: 20.w),
                         child: Column(
                           children: [
+                            space15H,
                             Stack(
                               children: [
                                 Stack(
@@ -189,17 +190,6 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                             padding: EdgeInsets.all(20.w),
                                             child: Column(
                                               children: [
-                                                Text(
-                                                  updatePassword,
-                                                  style: TextStyle(
-                                                    color: const Color.fromRGBO(
-                                                        52, 71, 103, 1),
-                                                    fontFamily: "Icomoon",
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 24.sp,
-                                                  ),
-                                                ),
-                                                space20W,
                                                 TextFormField(
                                                   onTapOutside: (event) {
                                                     FocusManager
@@ -224,7 +214,7 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                     }
                                                   },
                                                   decoration: InputDecoration(
-                                                      labelText: password,
+                                                      labelText: updatePassword,
                                                       labelStyle: TextStyle(
                                                           fontSize: 14.sp,
                                                           color: grey),
@@ -375,6 +365,7 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                 ),
                                                 space40H,
                                                 ButtonGradient(
+                                                  height: 60.h,
                                                   color1: color1BlueButton,
                                                   color2: color2BlueButton,
                                                   event: () {

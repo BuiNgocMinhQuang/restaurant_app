@@ -101,7 +101,7 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                       event: () {
                                         context.go("/");
                                       },
-                                      fontSize: 12.sp,
+                                      fontSize: 14.sp,
                                       text: signInAsManager,
                                       textColor: Colors.white,
                                     ),
@@ -304,6 +304,10 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                               }
                                             },
                                             decoration: InputDecoration(
+                                                labelText: password,
+                                                labelStyle: TextStyle(
+                                                    fontSize: 14.sp,
+                                                    color: grey),
                                                 suffixIconColor:
                                                     const Color.fromARGB(
                                                         255, 226, 104, 159),
@@ -338,7 +342,7 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                                       BorderRadius.circular(
                                                           8.r),
                                                 ),
-                                                hintText: 'Mật khẩu',
+                                                // hintText: 'Mật khẩu',
                                                 isDense: true,
                                                 hintStyle: TextStyle(
                                                     fontSize: 14.sp,
@@ -385,7 +389,7 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                                   color: grey,
                                                   fontFamily: "OpenSans",
                                                   fontWeight: FontWeight.normal,
-                                                  fontsize: 12.sp),
+                                                  fontsize: 14.sp),
                                             ],
                                           ),
                                           SizedBox(
@@ -394,6 +398,7 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                           !(state.loginStatus ==
                                                   LoginStatus.loading)
                                               ? ButtonGradient(
+                                                  height: 60.h,
                                                   color1: color1BlueButton,
                                                   color2: color2BlueButton,
                                                   event: () async {
@@ -428,14 +433,14 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                                     //   StaffLoginButtonPressed(
                                                     //       shopId: "123456",
                                                     //       email:
-                                                    //           "nhanavien@gmail.com",
+                                                    //           "daubep1@gmail.com",
                                                     //       password: "123456789",
                                                     //       remember: true),
                                                     // );
                                                     //khong xoa
                                                   },
                                                   text: "Đăng nhập",
-                                                  fontSize: 12.sp,
+                                                  fontSize: 14.sp,
                                                   radius: 8.r,
                                                   textColor: Colors.white,
                                                 )
@@ -451,6 +456,7 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                                                   .go("/staff_forgot_password");
                                             },
                                             child: TextApp(
+                                              fontsize: 14.sp,
                                               text: "Quên mật khẩu?",
                                               color: const Color.fromRGBO(
                                                   52, 71, 103, 1),

@@ -551,9 +551,13 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                     },
                                                                                     child: Row(
                                                                                       children: [
-                                                                                        Icon(
-                                                                                          Icons.table_bar,
-                                                                                          size: 35.sp,
+                                                                                        SizedBox(
+                                                                                          width: 35.w,
+                                                                                          height: 35.w,
+                                                                                          child: Image.asset(
+                                                                                            "assets/images/table.png",
+                                                                                            fit: BoxFit.contain,
+                                                                                          ),
                                                                                         ),
                                                                                         space10W,
                                                                                         TextApp(
@@ -1058,8 +1062,8 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                                 labelPadding: EdgeInsets.only(
                                     left: 15.w,
                                     right: 15.w,
-                                    top: 8.w,
-                                    bottom: 8.w),
+                                    top: 0.w,
+                                    bottom: 0.w),
                                 disabledColor:
                                     Theme.of(context).colorScheme.primary,
                                 selectedColor:
@@ -1148,9 +1152,8 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                        child: SizedBox(
-                      // height: 35.h,
                       child: ButtonGradient(
+                        height: 50.h,
                         radius: 5.r,
                         color1: color1BlueButton,
                         color2: color2BlueButton,
@@ -1176,134 +1179,141 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                         text: "CHỌN TẤT CẢ",
                         textColor: Colors.white,
                       ),
-                    )),
+                    ),
                     space15W,
                     Expanded(
-                      child: TextFormField(
-                        readOnly: true,
-                        onTapOutside: (event) {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                        },
-                        onTap: () {
-                          showMaterialModalBottomSheet(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15.r),
-                                topLeft: Radius.circular(15.r),
+                      child: SizedBox(
+                        height: 50.h,
+                        child: TextFormField(
+                          readOnly: true,
+                          onTapOutside: (event) {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          },
+                          onTap: () {
+                            showMaterialModalBottomSheet(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(15.r),
+                                  topLeft: Radius.circular(15.r),
+                                ),
                               ),
-                            ),
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                            context: context,
-                            builder: (context) => SizedBox(
-                              height: 1.sh / 2,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width: 1.sw,
-                                    padding: EdgeInsets.all(20.w),
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    child: TextApp(
-                                      text: "Chọn trạng thái",
-                                      color: Colors.white,
-                                      fontsize: 20.sp,
-                                      fontWeight: FontWeight.bold,
-                                      textAlign: TextAlign.center,
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              context: context,
+                              builder: (context) => SizedBox(
+                                height: 1.sh / 2,
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      width: 1.sw,
+                                      padding: EdgeInsets.all(20.w),
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      child: TextApp(
+                                        text: "Chọn trạng thái",
+                                        color: Colors.white,
+                                        fontsize: 20.sp,
+                                        fontWeight: FontWeight.bold,
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: ListView.builder(
-                                      padding: EdgeInsets.only(top: 10.w),
-                                      itemCount: updateStatusList.length,
-                                      itemBuilder: (context, index) {
-                                        return Column(
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 20.w),
-                                              child: InkWell(
-                                                onTap: () async {
-                                                  Navigator.pop(context);
-                                                  stateTextController.text =
-                                                      updateStatusList[index];
-                                                  mounted
-                                                      ? setState(() {
-                                                          if (updateStatusList[
-                                                                  index] ==
-                                                              "Chờ xác nhận") {
-                                                            currentStatus = 0;
-                                                          } else if (updateStatusList[
-                                                                  index] ==
-                                                              "Đang chuẩn bị") {
-                                                            currentStatus = 1;
-                                                          } else if (updateStatusList[
-                                                                  index] ==
-                                                              "Đã xong") {
-                                                            currentStatus = 2;
-                                                          }
-                                                        })
-                                                      : null;
-                                                  if (listIdOrder.isNotEmpty) {
-                                                    showConfirmDialog(context,
-                                                        () {
-                                                      hanldeUpdateStatusOrderFood(
-                                                          idList: listIdOrder,
-                                                          status:
-                                                              currentStatus);
-                                                    });
-                                                  }
-                                                },
-                                                child: Row(
-                                                  children: [
-                                                    TextApp(
-                                                      text: updateStatusList[
-                                                          index],
-                                                      color: Colors.black,
-                                                      fontsize: 20.sp,
-                                                    )
-                                                  ],
+                                    Expanded(
+                                      child: ListView.builder(
+                                        padding: EdgeInsets.only(top: 10.w),
+                                        itemCount: updateStatusList.length,
+                                        itemBuilder: (context, index) {
+                                          return Column(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 20.w),
+                                                child: InkWell(
+                                                  onTap: () async {
+                                                    Navigator.pop(context);
+                                                    stateTextController.text =
+                                                        updateStatusList[index];
+                                                    mounted
+                                                        ? setState(() {
+                                                            if (updateStatusList[
+                                                                    index] ==
+                                                                "Chờ xác nhận") {
+                                                              currentStatus = 0;
+                                                            } else if (updateStatusList[
+                                                                    index] ==
+                                                                "Đang chuẩn bị") {
+                                                              currentStatus = 1;
+                                                            } else if (updateStatusList[
+                                                                    index] ==
+                                                                "Đã xong") {
+                                                              currentStatus = 2;
+                                                            }
+                                                          })
+                                                        : null;
+                                                    if (listIdOrder
+                                                        .isNotEmpty) {
+                                                      showConfirmDialog(context,
+                                                          () {
+                                                        hanldeUpdateStatusOrderFood(
+                                                            idList: listIdOrder,
+                                                            status:
+                                                                currentStatus);
+                                                      });
+                                                    }
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      TextApp(
+                                                        text: updateStatusList[
+                                                            index],
+                                                        color: Colors.black,
+                                                        fontsize: 20.sp,
+                                                      )
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Divider(
-                                              height: 25.h,
-                                            )
-                                          ],
-                                        );
-                                      },
+                                              Divider(
+                                                height: 25.h,
+                                              )
+                                            ],
+                                          );
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                        controller: stateTextController,
-                        style: TextStyle(fontSize: 14.sp, color: Colors.black),
-                        cursorColor: grey,
-                        decoration: InputDecoration(
-                            fillColor: const Color.fromARGB(255, 226, 104, 159),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Color.fromRGBO(214, 51, 123, 0.6),
-                                  width: 2.0),
-                              borderRadius: BorderRadius.circular(8.r),
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.r),
-                            ),
-                            hintText: 'Chọn trạng thái',
-                            hintStyle: TextStyle(fontSize: 14.sp, color: grey),
-                            suffixIcon: Transform.rotate(
-                              angle: 90 * math.pi / 180,
-                              child: Icon(
-                                Icons.chevron_right,
-                                size: 28.sp,
-                                color: Colors.black.withOpacity(0.5),
+                            );
+                          },
+                          controller: stateTextController,
+                          style:
+                              TextStyle(fontSize: 14.sp, color: Colors.black),
+                          cursorColor: grey,
+                          decoration: InputDecoration(
+                              fillColor:
+                                  const Color.fromARGB(255, 226, 104, 159),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color.fromRGBO(214, 51, 123, 0.6),
+                                    width: 2.0),
+                                borderRadius: BorderRadius.circular(8.r),
                               ),
-                            ),
-                            isDense: true,
-                            contentPadding: EdgeInsets.all(20.w)),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              hintText: 'Chọn trạng thái',
+                              hintStyle:
+                                  TextStyle(fontSize: 14.sp, color: grey),
+                              suffixIcon: Transform.rotate(
+                                angle: 90 * math.pi / 180,
+                                child: Icon(
+                                  Icons.chevron_right,
+                                  size: 28.sp,
+                                  color: Colors.black.withOpacity(0.5),
+                                ),
+                              ),
+                              isDense: true,
+                              contentPadding: EdgeInsets.all(15.w)),
+                        ),
                       ),
                     )
                   ],

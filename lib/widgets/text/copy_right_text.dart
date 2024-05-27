@@ -14,7 +14,7 @@ class CopyRightText extends StatelessWidget {
           child: TextApp(
             isOverFlow: false,
             softWrap: true,
-            text: "© 2024, một trong số các dự án được thực hiện của công ty",
+            text: "© 2024, một trong số các dự án được thực hiện của cty",
             textAlign: TextAlign.center,
             fontsize: 14.sp,
             color: Colors.grey,

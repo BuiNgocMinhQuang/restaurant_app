@@ -7890,7 +7890,7 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                             isOverFlow: false,
                             softWrap: true,
                             text: describeDetailSotre,
-                            fontsize: 14.sp,
+                            fontsize: 12.sp,
                             fontWeight: FontWeight.normal,
                             color: blueText,
                           ),

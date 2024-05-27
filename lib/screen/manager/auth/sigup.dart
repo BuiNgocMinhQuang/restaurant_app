@@ -738,79 +738,68 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                           EdgeInsets.all(20.w)),
                                                 ),
                                                 space20H,
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Checkbox(
-                                                        checkColor:
-                                                            Colors.white,
-                                                        fillColor:
-                                                            MaterialStateProperty
-                                                                .resolveWith(
-                                                                    getColor),
-                                                        value: isChecked,
-                                                        onChanged:
-                                                            (bool? value) {
-                                                          mounted
-                                                              ? setState(() {
-                                                                  isChecked =
-                                                                      value!;
-                                                                })
-                                                              : null;
-                                                        }),
-                                                    RichText(
-                                                      text: TextSpan(
-                                                        children: [
-                                                          TextSpan(
-                                                              text: iAgreeWith,
-                                                              style: TextStyle(
-                                                                fontSize: 12.sp,
-                                                                color: const Color
-                                                                    .fromRGBO(
-                                                                    52,
-                                                                    71,
-                                                                    103,
-                                                                    1),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                fontFamily:
-                                                                    "OpenSans",
-                                                              )),
-                                                          TextSpan(
-                                                              text:
-                                                                  termsAndCondition,
-                                                              recognizer:
-                                                                  TapGestureRecognizer()
-                                                                    ..onTap =
-                                                                        () {
-                                                                      launchURL();
-                                                                      // Single tapped.
-                                                                    },
-                                                              style: TextStyle(
-                                                                fontSize: 12.sp,
-                                                                color: const Color
-                                                                    .fromRGBO(
-                                                                    52,
-                                                                    71,
-                                                                    103,
-                                                                    1),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontFamily:
-                                                                    "OpenSans",
-                                                              )),
-                                                        ],
-                                                      ),
+                                                CheckboxListTile(
+                                                  checkColor: Colors.white,
+                                                  fillColor:
+                                                      MaterialStateProperty
+                                                          .resolveWith(
+                                                              getColor),
+                                                  value: isChecked,
+                                                  onChanged: (value) {
+                                                    if (value == null) return;
+                                                    setState(() {
+                                                      isChecked = value;
+                                                    });
+                                                  },
+                                                  title: RichText(
+                                                    text: TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                            text: iAgreeWith,
+                                                            style: TextStyle(
+                                                              fontSize: 14.sp,
+                                                              color: const Color
+                                                                  .fromRGBO(52,
+                                                                  71, 103, 1),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal,
+                                                              fontFamily:
+                                                                  "OpenSans",
+                                                            )),
+                                                        TextSpan(
+                                                            text:
+                                                                termsAndCondition,
+                                                            recognizer:
+                                                                TapGestureRecognizer()
+                                                                  ..onTap = () {
+                                                                    launchURL();
+                                                                    // Single tapped.
+                                                                  },
+                                                            style: TextStyle(
+                                                              fontSize: 14.sp,
+                                                              color: const Color
+                                                                  .fromRGBO(52,
+                                                                  71, 103, 1),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  "OpenSans",
+                                                            )),
+                                                      ],
                                                     ),
-                                                  ],
+                                                  ),
+                                                  controlAffinity:
+                                                      ListTileControlAffinity
+                                                          .leading,
+                                                  dense: true,
+                                                  contentPadding:
+                                                      const EdgeInsets.all(0),
                                                 ),
                                                 space20H,
                                                 ButtonGradient(
+                                                  height: 60.h,
                                                   color1: color1DarkButton,
                                                   color2: color2DarkButton,
                                                   event: () {
@@ -842,7 +831,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                     }
                                                   },
                                                   text: "Đăng ký",
-                                                  fontSize: 12.sp,
+                                                  fontSize: 14.sp,
                                                   radius: 8.r,
                                                   textColor: Colors.white,
                                                 ),
@@ -854,7 +843,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                           text:
                                                               alreadyHaveAccount,
                                                           style: TextStyle(
-                                                            fontSize: 12.sp,
+                                                            fontSize: 14.sp,
                                                             color: const Color
                                                                 .fromRGBO(
                                                                 52, 71, 103, 1),
@@ -874,7 +863,7 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                                   // Single tapped.
                                                                 },
                                                           style: TextStyle(
-                                                            fontSize: 12.sp,
+                                                            fontSize: 14.sp,
                                                             color: const Color
                                                                 .fromRGBO(
                                                                 52, 71, 103, 1),

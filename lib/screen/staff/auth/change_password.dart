@@ -113,6 +113,7 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
                         padding: EdgeInsets.only(left: 20.w, right: 20.w),
                         child: Column(
                           children: [
+                            space15H,
                             Stack(
                               children: [
                                 Stack(
@@ -184,17 +185,6 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
                                             padding: EdgeInsets.all(20.w),
                                             child: Column(
                                               children: [
-                                                Text(
-                                                  "Cập nhật mật khẩu",
-                                                  style: TextStyle(
-                                                    color: const Color.fromRGBO(
-                                                        52, 71, 103, 1),
-                                                    fontFamily: "Icomoon",
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 24.sp,
-                                                  ),
-                                                ),
-                                                space20W,
                                                 TextFormField(
                                                   onTapOutside: (event) {
                                                     FocusManager
@@ -219,7 +209,8 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
                                                     }
                                                   },
                                                   decoration: InputDecoration(
-                                                      labelText: "Mật khẩu",
+                                                      labelText:
+                                                          "Cập nhật mật khẩu",
                                                       labelStyle: TextStyle(
                                                           fontSize: 14.sp,
                                                           color: grey),
@@ -372,6 +363,7 @@ class _StaffChangePasswordState extends State<StaffChangePassword> {
                                                 ),
                                                 space40H,
                                                 ButtonGradient(
+                                                  height: 60.h,
                                                   color1: color1BlueButton,
                                                   color2: color2BlueButton,
                                                   event: () {

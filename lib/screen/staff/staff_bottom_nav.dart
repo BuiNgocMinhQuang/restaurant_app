@@ -271,6 +271,12 @@ class _StaffFabTabState extends State<StaffFabTab> {
                             ? Theme.of(context).colorScheme.primary
                             : const Color.fromRGBO(233, 236, 239, 1),
                         icon: Icons.home,
+                        isShowIcon: false,
+                        image: Container(
+                          padding: EdgeInsets.all(5.w),
+                          child: Image.asset("assets/images/store_icon.png",
+                              fit: BoxFit.cover),
+                        ),
                         subItem: const [],
                       ),
                     ),
@@ -288,15 +294,22 @@ class _StaffFabTabState extends State<StaffFabTab> {
                         Navigator.pop(context);
                       },
                       child: ItemDrawer(
-                          isExpand: false,
-                          text: 'Danh sách món ăn',
-                          iconColor:
-                              currentIndex == 0 ? Colors.white : Colors.black,
-                          backgroundIconColor: currentIndex == 0
-                              ? Theme.of(context).colorScheme.primary
-                              : const Color.fromRGBO(233, 236, 239, 1),
-                          subItem: const [],
-                          icon: Icons.dinner_dining),
+                        isExpand: false,
+                        text: 'Danh sách món ăn',
+                        iconColor:
+                            currentIndex == 0 ? Colors.white : Colors.black,
+                        backgroundIconColor: currentIndex == 0
+                            ? Theme.of(context).colorScheme.primary
+                            : const Color.fromRGBO(233, 236, 239, 1),
+                        subItem: const [],
+                        icon: Icons.dinner_dining,
+                        isShowIcon: false,
+                        image: Container(
+                          padding: EdgeInsets.all(5.w),
+                          child: Image.asset("assets/images/menu_food.png",
+                              fit: BoxFit.cover),
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: 25.h,
@@ -312,15 +325,32 @@ class _StaffFabTabState extends State<StaffFabTab> {
                         Navigator.pop(context);
                       },
                       child: ItemDrawer(
-                          isExpand: false,
-                          text: 'Hóa đơn mang về',
-                          iconColor:
-                              currentIndex == 1 ? Colors.white : Colors.black,
-                          backgroundIconColor: currentIndex == 1
-                              ? Theme.of(context).colorScheme.primary
-                              : const Color.fromRGBO(233, 236, 239, 1),
-                          subItem: const [],
-                          icon: Icons.receipt),
+                        isExpand: false,
+                        text: staffInforData?.staffPosition.toString() == '5'
+                            ? 'Công thức nấu ăn'
+                            : 'Hóa đơn mang về',
+                        iconColor:
+                            currentIndex == 1 ? Colors.white : Colors.black,
+                        backgroundIconColor: currentIndex == 1
+                            ? Theme.of(context).colorScheme.primary
+                            : const Color.fromRGBO(233, 236, 239, 1),
+                        subItem: const [],
+                        icon: Icons.receipt,
+                        isShowIcon: false,
+                        image: staffInforData?.staffPosition.toString() == '5'
+                            ? Container(
+                                padding: EdgeInsets.all(5.w),
+                                child: Image.asset(
+                                    "assets/images/recipe_book.png",
+                                    fit: BoxFit.cover),
+                              )
+                            : Container(
+                                padding: EdgeInsets.all(5.w),
+                                child: Image.asset(
+                                    "assets/images/food_delivery_bike.png",
+                                    fit: BoxFit.cover),
+                              ),
+                      ),
                     ),
                     SizedBox(
                       height: 25.h,
@@ -336,15 +366,22 @@ class _StaffFabTabState extends State<StaffFabTab> {
                         Navigator.pop(context);
                       },
                       child: ItemDrawer(
-                          isExpand: false,
-                          text: 'Danh sách hóa đơn',
-                          subItem: const [],
-                          iconColor:
-                              currentIndex == 3 ? Colors.white : Colors.black,
-                          backgroundIconColor: currentIndex == 3
-                              ? Theme.of(context).colorScheme.primary
-                              : const Color.fromRGBO(233, 236, 239, 1),
-                          icon: Icons.shopping_bag),
+                        isExpand: false,
+                        text: 'Danh sách hóa đơn',
+                        subItem: const [],
+                        iconColor:
+                            currentIndex == 3 ? Colors.white : Colors.black,
+                        backgroundIconColor: currentIndex == 3
+                            ? Theme.of(context).colorScheme.primary
+                            : const Color.fromRGBO(233, 236, 239, 1),
+                        icon: Icons.shopping_bag,
+                        isShowIcon: false,
+                        image: Container(
+                          padding: EdgeInsets.all(5.w),
+                          child: Image.asset("assets/images/receipt.png",
+                              fit: BoxFit.cover),
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: 25.h,
@@ -360,15 +397,22 @@ class _StaffFabTabState extends State<StaffFabTab> {
                         Navigator.pop(context);
                       },
                       child: ItemDrawer(
-                          isExpand: false,
-                          text: 'Thông tin cá nhân',
-                          iconColor:
-                              currentIndex == 4 ? Colors.white : Colors.black,
-                          backgroundIconColor: currentIndex == 4
-                              ? Theme.of(context).colorScheme.primary
-                              : const Color.fromRGBO(233, 236, 239, 1),
-                          subItem: const [],
-                          icon: Icons.person),
+                        isExpand: false,
+                        text: 'Thông tin cá nhân',
+                        iconColor:
+                            currentIndex == 4 ? Colors.white : Colors.black,
+                        backgroundIconColor: currentIndex == 4
+                            ? Theme.of(context).colorScheme.primary
+                            : const Color.fromRGBO(233, 236, 239, 1),
+                        subItem: const [],
+                        icon: Icons.person,
+                        isShowIcon: false,
+                        image: Container(
+                          padding: EdgeInsets.all(5.w),
+                          child: Image.asset("assets/images/infor_user.png",
+                              fit: BoxFit.cover),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -396,8 +440,8 @@ class _StaffFabTabState extends State<StaffFabTab> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                width: 50,
-                                height: 50,
+                                width: 50.w,
+                                height: 50.w,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     color: Colors.white),
@@ -409,14 +453,14 @@ class _StaffFabTabState extends State<StaffFabTab> {
                               ),
                               Center(
                                 child: TextApp(
-                                  text: "Ten nhan vien",
+                                  text: staffInforData?.staffFullName ?? '',
                                   textAlign: TextAlign.center,
                                   color: Colors.white,
                                 ),
                               ),
                               Center(
                                 child: TextApp(
-                                    text: "nhanvien@gmail.com",
+                                    text: staffInforData?.staffEmail ?? '',
                                     textAlign: TextAlign.center,
                                     color: Colors.white),
                               ),
@@ -432,7 +476,10 @@ class _StaffFabTabState extends State<StaffFabTab> {
                                 text: "Đăng xuất",
                                 textColor: Colors.black,
                                 radius: 8.w,
-                              )
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
                             ],
                           ),
                         )
@@ -449,29 +496,80 @@ class _StaffFabTabState extends State<StaffFabTab> {
             index: 2,
             key: bottomNavigationKey,
             // height: 150.h,
-            color: Theme.of(context).colorScheme.primary,
-            backgroundColor: Colors.white,
+            color: Colors.black.withOpacity(0.8),
+            backgroundColor: Colors.transparent,
+            buttonBackgroundColor: Colors.black,
+
             items: <Widget>[
-              Icon(
-                Icons.restaurant,
-                size: 30.h,
-                color: currentIndex == 0 ? Colors.white : Colors.black,
+              // Icon(
+              //   Icons.restaurant,
+              //   size: 30.h,
+              //   color: currentIndex == 0 ? Colors.white : Colors.black,
+              // ),
+              SizedBox(
+                width: 32.w,
+                height: 32.w,
+                child: Image.asset(
+                  "assets/images/menu_food.png",
+                  fit: BoxFit.cover,
+                ),
               ),
-              Icon(
-                  staffInforData?.staffPosition.toString() == '5'
-                      ? Icons.book
-                      : Icons.delivery_dining,
-                  size: 30.h,
-                  color: currentIndex == 1 ? Colors.white : Colors.black),
-              Icon(Icons.home,
-                  size: 30.h,
-                  color: currentIndex == 2 ? Colors.white : Colors.black),
-              Icon(Icons.receipt,
-                  size: 30.h,
-                  color: currentIndex == 3 ? Colors.white : Colors.black),
-              Icon(Icons.person,
-                  size: 30.h,
-                  color: currentIndex == 4 ? Colors.white : Colors.black),
+              staffInforData?.staffPosition.toString() == '5'
+                  ? SizedBox(
+                      width: 32.w,
+                      height: 32.w,
+                      child: Image.asset(
+                        "assets/images/recipe_book.png",
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : SizedBox(
+                      width: 32.w,
+                      height: 32.w,
+                      child: Image.asset(
+                        "assets/images/food_delivery_bike.png",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+              // Icon(
+              //     staffInforData?.staffPosition.toString() == '5'
+              //         ? Icons.book
+              //         : Icons.delivery_dining,
+              //     size: 30.h,
+              //     color: currentIndex == 1 ? Colors.white : Colors.black),
+              // Icon(Icons.home,
+              //     size: 30.h,
+              //     color: currentIndex == 2 ? Colors.white : Colors.black),
+              // Icon(Icons.receipt,
+              //     size: 30.h,
+              //     color: currentIndex == 3 ? Colors.white : Colors.black),
+              // Icon(Icons.person,
+              //     size: 30.h,
+              //     color: currentIndex == 4 ? Colors.white : Colors.black),
+              SizedBox(
+                width: 32.w,
+                height: 32.w,
+                child: Image.asset(
+                  "assets/images/store_icon.png",
+                  fit: BoxFit.cover,
+                ),
+              ),
+              SizedBox(
+                width: 32.w,
+                height: 32.w,
+                child: Image.asset(
+                  "assets/images/receipt.png",
+                  fit: BoxFit.cover,
+                ),
+              ),
+              SizedBox(
+                width: 32.w,
+                height: 32.w,
+                child: Image.asset(
+                  "assets/images/infor_user.png",
+                  fit: BoxFit.cover,
+                ),
+              ),
             ],
             onTap: (index) {
               mounted

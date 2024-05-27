@@ -103,6 +103,7 @@ class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
                     padding: EdgeInsets.only(left: 20.w, right: 20.w),
                     child: Column(
                       children: [
+                        space15H,
                         Stack(
                           children: [
                             Stack(
@@ -226,6 +227,7 @@ class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
                                             Visibility(
                                               visible: showButton,
                                               child: ButtonGradient(
+                                                height: 60.h,
                                                 color1: color1BlueButton,
                                                 color2: color2BlueButton,
                                                 event: () {

@@ -790,8 +790,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            width: 50,
-                            height: 50,
+                            width: 50.w,
+                            height: 50.w,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.white),

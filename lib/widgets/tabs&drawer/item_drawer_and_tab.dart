@@ -155,7 +155,7 @@ class SubItemDrawer extends StatelessWidget {
           ),
           Icon(
             Icons.circle,
-            size: iconSize == 0 ? 10.w : iconSize,
+            size: iconSize == 0 ? 12.w : iconSize,
             color: iconColor,
           ),
           SizedBox(
@@ -164,7 +164,7 @@ class SubItemDrawer extends StatelessWidget {
           Text(
             text,
             style: TextStyle(
-              fontSize: fontSize == 0 ? 14.w : fontSize,
+              fontSize: fontSize == 0 ? 16.w : fontSize,
               color: textColor,
               fontWeight: fontWeight,
             ),
