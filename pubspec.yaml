@@ -39,6 +39,7 @@ dependencies:
   fl_chart: ^0.67.0
   modal_bottom_sheet: ^3.0.0
   flutter_slidable: ^3.1.0
+  flutter_native_splash: ^2.4.0
 
 dev_dependencies:
   flutter_test:

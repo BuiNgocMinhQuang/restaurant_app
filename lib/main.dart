@@ -28,7 +28,7 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final ValueNotifier<ThemeMode> _notifier = ValueNotifier(ThemeMode.light);
   // late InternetCubit internetCubit;
   @override
@@ -37,12 +37,6 @@ class _MyAppState extends State<MyApp> {
     // internetCubit.checkConectivity();
     // internetCubit.trackConnectivityChange();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    // internetCubit.disposeInternet();
-    super.dispose();
   }
 
   @override
