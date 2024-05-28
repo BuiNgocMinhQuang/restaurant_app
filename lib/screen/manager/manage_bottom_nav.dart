@@ -29,6 +29,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
@@ -297,40 +298,45 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
               );
             },
             child: Padding(
-                padding: EdgeInsets.all(8.w),
-                child: isHaveNoti
-                    ? Stack(
-                        children: [
-                          SizedBox(
-                            width: 30.w,
-                            height: 30.w,
-                            child: Image.asset(
-                              'assets/images/bell.png',
-                              fit: BoxFit.contain,
-                            ),
+              padding: EdgeInsets.all(8.w),
+              child: isHaveNoti
+                  ? Stack(
+                      children: [
+                        SizedBox(
+                          width: 30.w,
+                          height: 30.w,
+                          child: SvgPicture.asset(
+                            'assets/svg/bell.svg',
+                            fit: BoxFit.contain,
                           ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.red,
-                              ),
-                              width: 15.w,
-                              height: 15.w,
-                            ),
-                          )
-                        ],
-                      )
-                    : SizedBox(
-                        width: 30.w,
-                        height: 30.w,
-                        child: Image.asset(
-                          'assets/images/bell.png',
-                          fit: BoxFit.contain,
                         ),
-                      )),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.red,
+                            ),
+                            width: 15.w,
+                            height: 15.w,
+                          ),
+                        )
+                      ],
+                    )
+                  : SizedBox(
+                      width: 30.w,
+                      height: 30.w,
+                      child: SvgPicture.asset(
+                        'assets/svg/bell.svg',
+                        fit: BoxFit.contain,
+                      )
+                      // Image.asset(
+                      //   'assets/images/bell.png',
+                      //   fit: BoxFit.contain,
+                      // ),
+                      ),
+            ),
           )
         ],
         bottom: PreferredSize(
@@ -389,8 +395,10 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                     isShowIcon: false,
                     image: Container(
                       padding: EdgeInsets.all(5.w),
-                      child: Image.asset("assets/images/report.png",
-                          fit: BoxFit.cover),
+                      child: SvgPicture.asset(
+                        'assets/svg/report.svg',
+                        fit: BoxFit.contain,
+                      ),
                     ),
                     subItem: const [],
                   ),
@@ -457,8 +465,10 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                     isShowIcon: false,
                     image: Container(
                       padding: EdgeInsets.all(5.w),
-                      child: Image.asset("assets/images/store_icon.png",
-                          fit: BoxFit.cover),
+                      child: SvgPicture.asset(
+                        'assets/svg/store_icon.svg',
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
                 ),
@@ -534,8 +544,10 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                     isShowIcon: false,
                     image: Container(
                       padding: EdgeInsets.all(5.w),
-                      child: Image.asset("assets/images/staff_gr.png",
-                          fit: BoxFit.cover),
+                      child: SvgPicture.asset(
+                        'assets/svg/staff_gr.svg',
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
                 ),
@@ -604,8 +616,10 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                     isShowIcon: false,
                     image: Container(
                       padding: EdgeInsets.all(5.w),
-                      child: Image.asset("assets/images/menu_food.png",
-                          fit: BoxFit.cover),
+                      child: SvgPicture.asset(
+                        'assets/svg/menu_food.svg',
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
                 ),
@@ -643,8 +657,8 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                               ? FontWeight.bold
                               : FontWeight.normal,
                           image: logoStore == null
-                              ? Image.asset(
-                                  'assets/images/store.png',
+                              ? SvgPicture.asset(
+                                  'assets/svg/store_icon.svg',
                                   fit: BoxFit.contain,
                                 )
                               : CachedNetworkImage(
@@ -864,43 +878,42 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
           //     size: 30.h,
           //     color: currentIndex == 4 ? Colors.white : Colors.black),
           SizedBox(
+              width: 32.w,
+              height: 32.w,
+              child: SvgPicture.asset(
+                'assets/svg/store_icon.svg',
+                fit: BoxFit.contain,
+              )),
+          SizedBox(
             width: 32.w,
             height: 32.w,
-            child: Image.asset(
-              "assets/images/store_icon.png",
-              fit: BoxFit.cover,
+            child: SvgPicture.asset(
+              'assets/svg/staff_gr.svg',
+              fit: BoxFit.contain,
             ),
           ),
           SizedBox(
             width: 32.w,
             height: 32.w,
-            child: Image.asset(
-              "assets/images/staff_gr.png",
-              fit: BoxFit.cover,
+            child: SvgPicture.asset(
+              'assets/svg/report.svg',
+              fit: BoxFit.contain,
             ),
           ),
           SizedBox(
             width: 32.w,
             height: 32.w,
-            child: Image.asset(
-              "assets/images/report.png",
-              fit: BoxFit.cover,
+            child: SvgPicture.asset(
+              'assets/svg/menu_food.svg',
+              fit: BoxFit.contain,
             ),
           ),
           SizedBox(
             width: 32.w,
             height: 32.w,
-            child: Image.asset(
-              "assets/images/menu_food.png",
-              fit: BoxFit.cover,
-            ),
-          ),
-          SizedBox(
-            width: 32.w,
-            height: 32.w,
-            child: Image.asset(
-              "assets/images/infor_user.png",
-              fit: BoxFit.cover,
+            child: SvgPicture.asset(
+              'assets/svg/infor_user.svg',
+              fit: BoxFit.contain,
             ),
           ),
         ],

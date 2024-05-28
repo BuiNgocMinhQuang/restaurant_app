@@ -15,6 +15,7 @@ import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
@@ -456,8 +457,8 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                                                   SizedBox(
                                                     width: 35.w,
                                                     height: 35.w,
-                                                    child: Image.asset(
-                                                      "assets/images/printing_receipt.png",
+                                                    child: SvgPicture.asset(
+                                                      'assets/svg/printing_receipt.svg',
                                                       fit: BoxFit.contain,
                                                     ),
                                                   ),
@@ -500,13 +501,12 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: 35.w,
-                        height: 35.w,
-                        child: Image.asset(
-                          "assets/images/receipt.png",
-                          fit: BoxFit.contain,
-                        ),
-                      ),
+                          width: 35.w,
+                          height: 35.w,
+                          child: SvgPicture.asset(
+                            'assets/svg/receipt.svg',
+                            fit: BoxFit.contain,
+                          )),
                       SizedBox(
                         height: 10.h,
                       ),
@@ -753,8 +753,8 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                                                       SizedBox(
                                                         width: 35.w,
                                                         height: 35.w,
-                                                        child: Image.asset(
-                                                          "assets/images/printing_receipt.png",
+                                                        child: SvgPicture.asset(
+                                                          'assets/svg/printing_receipt.svg',
                                                           fit: BoxFit.contain,
                                                         ),
                                                       ),
@@ -800,13 +800,12 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: 35.w,
-                        height: 35.w,
-                        child: Image.asset(
-                          "assets/images/receipt.png",
-                          fit: BoxFit.contain,
-                        ),
-                      ),
+                          width: 35.w,
+                          height: 35.w,
+                          child: SvgPicture.asset(
+                            'assets/svg/receipt.svg',
+                            fit: BoxFit.contain,
+                          )),
                       SizedBox(
                         height: 10.h,
                       ),
@@ -1051,8 +1050,8 @@ class _PendingWidgetState extends State<PendingWidget>
                                                   SizedBox(
                                                     width: 35.w,
                                                     height: 35.w,
-                                                    child: Image.asset(
-                                                      "assets/images/printing_receipt.png",
+                                                    child: SvgPicture.asset(
+                                                      'assets/svg/printing_receipt.svg',
                                                       fit: BoxFit.contain,
                                                     ),
                                                   ),
@@ -1095,13 +1094,12 @@ class _PendingWidgetState extends State<PendingWidget>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: 35.w,
-                        height: 35.w,
-                        child: Image.asset(
-                          "assets/images/receipt.png",
-                          fit: BoxFit.contain,
-                        ),
-                      ),
+                          width: 35.w,
+                          height: 35.w,
+                          child: SvgPicture.asset(
+                            'assets/svg/receipt.svg',
+                            fit: BoxFit.contain,
+                          )),
                       SizedBox(
                         height: 10.h,
                       ),
@@ -1342,8 +1340,8 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                                                   SizedBox(
                                                     width: 35.w,
                                                     height: 35.w,
-                                                    child: Image.asset(
-                                                      "assets/images/printing_receipt.png",
+                                                    child: SvgPicture.asset(
+                                                      'assets/svg/printing_receipt.svg',
                                                       fit: BoxFit.contain,
                                                     ),
                                                   ),
@@ -1386,13 +1384,12 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: 35.w,
-                        height: 35.w,
-                        child: Image.asset(
-                          "assets/images/receipt.png",
-                          fit: BoxFit.contain,
-                        ),
-                      ),
+                          width: 35.w,
+                          height: 35.w,
+                          child: SvgPicture.asset(
+                            'assets/svg/receipt.svg',
+                            fit: BoxFit.contain,
+                          )),
                       SizedBox(
                         height: 10.h,
                       ),

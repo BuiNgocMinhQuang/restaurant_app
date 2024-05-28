@@ -16,6 +16,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/constant/api/index.dart';
@@ -1165,8 +1166,8 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                                               child: listImagePath == null
                                                                                   ? ClipRRect(
                                                                                       borderRadius: BorderRadius.circular(8.r),
-                                                                                      child: Image.asset(
-                                                                                        'assets/images/dish.png',
+                                                                                      child: SvgPicture.asset(
+                                                                                        'assets/svg/menu_food.svg',
                                                                                         fit: BoxFit.contain,
                                                                                       ))
                                                                                   : ClipRRect(

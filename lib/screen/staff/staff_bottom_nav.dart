@@ -19,6 +19,7 @@ import 'package:app_restaurant/env/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/constant/api/index.dart';
 
@@ -194,13 +195,17 @@ class _StaffFabTabState extends State<StaffFabTab> {
                         ? Stack(
                             children: [
                               SizedBox(
-                                width: 30.w,
-                                height: 30.w,
-                                child: Image.asset(
-                                  'assets/images/bell.png',
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
+                                  width: 30.w,
+                                  height: 30.w,
+                                  child: SvgPicture.asset(
+                                    'assets/svg/bell.svg',
+                                    fit: BoxFit.contain,
+                                  )
+                                  //  Image.asset(
+                                  //   'assets/images/bell.png',
+                                  //   fit: BoxFit.contain,
+                                  // ),
+                                  ),
                               Positioned(
                                 top: 0,
                                 right: 0,
@@ -218,11 +223,15 @@ class _StaffFabTabState extends State<StaffFabTab> {
                         : SizedBox(
                             width: 30.w,
                             height: 30.w,
-                            child: Image.asset(
-                              'assets/images/bell.png',
+                            child: SvgPicture.asset(
+                              'assets/svg/bell.svg',
                               fit: BoxFit.contain,
-                            ),
-                          )),
+                            )
+                            // Image.asset(
+                            //   'assets/images/bell.png',
+                            //   fit: BoxFit.contain,
+                            // ),
+                            )),
               )
             ],
             bottom: PreferredSize(
@@ -274,8 +283,10 @@ class _StaffFabTabState extends State<StaffFabTab> {
                         isShowIcon: false,
                         image: Container(
                           padding: EdgeInsets.all(5.w),
-                          child: Image.asset("assets/images/store_icon.png",
-                              fit: BoxFit.cover),
+                          child: SvgPicture.asset(
+                            'assets/svg/store_icon.svg',
+                            fit: BoxFit.contain,
+                          ),
                         ),
                         subItem: const [],
                       ),
@@ -306,8 +317,10 @@ class _StaffFabTabState extends State<StaffFabTab> {
                         isShowIcon: false,
                         image: Container(
                           padding: EdgeInsets.all(5.w),
-                          child: Image.asset("assets/images/menu_food.png",
-                              fit: BoxFit.cover),
+                          child: SvgPicture.asset(
+                            'assets/svg/menu_food.svg',
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
                     ),
@@ -340,15 +353,17 @@ class _StaffFabTabState extends State<StaffFabTab> {
                         image: staffInforData?.staffPosition.toString() == '5'
                             ? Container(
                                 padding: EdgeInsets.all(5.w),
-                                child: Image.asset(
-                                    "assets/images/recipe_book.png",
-                                    fit: BoxFit.cover),
+                                child: SvgPicture.asset(
+                                  'assets/svg/recipe_book.svg',
+                                  fit: BoxFit.contain,
+                                ),
                               )
                             : Container(
                                 padding: EdgeInsets.all(5.w),
-                                child: Image.asset(
-                                    "assets/images/food_delivery_bike.png",
-                                    fit: BoxFit.cover),
+                                child: SvgPicture.asset(
+                                  'assets/svg/food_delivery_bike.svg',
+                                  fit: BoxFit.contain,
+                                ),
                               ),
                       ),
                     ),
@@ -378,8 +393,10 @@ class _StaffFabTabState extends State<StaffFabTab> {
                         isShowIcon: false,
                         image: Container(
                           padding: EdgeInsets.all(5.w),
-                          child: Image.asset("assets/images/receipt.png",
-                              fit: BoxFit.cover),
+                          child: SvgPicture.asset(
+                            'assets/svg/receipt.svg',
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
                     ),
@@ -409,8 +426,10 @@ class _StaffFabTabState extends State<StaffFabTab> {
                         isShowIcon: false,
                         image: Container(
                           padding: EdgeInsets.all(5.w),
-                          child: Image.asset("assets/images/infor_user.png",
-                              fit: BoxFit.cover),
+                          child: SvgPicture.asset(
+                            'assets/svg/infor_user.svg',
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
                     ),
@@ -509,28 +528,27 @@ class _StaffFabTabState extends State<StaffFabTab> {
               SizedBox(
                 width: 32.w,
                 height: 32.w,
-                child: Image.asset(
-                  "assets/images/menu_food.png",
-                  fit: BoxFit.cover,
+                child: SvgPicture.asset(
+                  'assets/svg/menu_food.svg',
+                  fit: BoxFit.contain,
                 ),
               ),
               staffInforData?.staffPosition.toString() == '5'
                   ? SizedBox(
                       width: 32.w,
                       height: 32.w,
-                      child: Image.asset(
-                        "assets/images/recipe_book.png",
-                        fit: BoxFit.cover,
+                      child: SvgPicture.asset(
+                        'assets/svg/recipe_book.svg',
+                        fit: BoxFit.contain,
                       ),
                     )
                   : SizedBox(
                       width: 32.w,
                       height: 32.w,
-                      child: Image.asset(
-                        "assets/images/food_delivery_bike.png",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                      child: SvgPicture.asset(
+                        'assets/svg/food_delivery_bike.svg',
+                        fit: BoxFit.contain,
+                      )),
               // Icon(
               //     staffInforData?.staffPosition.toString() == '5'
               //         ? Icons.book
@@ -549,25 +567,24 @@ class _StaffFabTabState extends State<StaffFabTab> {
               SizedBox(
                 width: 32.w,
                 height: 32.w,
-                child: Image.asset(
-                  "assets/images/store_icon.png",
-                  fit: BoxFit.cover,
+                child: SvgPicture.asset(
+                  'assets/svg/store_icon.svg',
+                  fit: BoxFit.contain,
                 ),
               ),
               SizedBox(
-                width: 32.w,
-                height: 32.w,
-                child: Image.asset(
-                  "assets/images/receipt.png",
-                  fit: BoxFit.cover,
-                ),
-              ),
+                  width: 32.w,
+                  height: 32.w,
+                  child: SvgPicture.asset(
+                    'assets/svg/receipt.svg',
+                    fit: BoxFit.contain,
+                  )),
               SizedBox(
                 width: 32.w,
                 height: 32.w,
-                child: Image.asset(
-                  "assets/images/infor_user.png",
-                  fit: BoxFit.cover,
+                child: SvgPicture.asset(
+                  'assets/svg/infor_user.svg',
+                  fit: BoxFit.contain,
                 ),
               ),
             ],

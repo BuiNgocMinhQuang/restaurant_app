@@ -21,6 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app_restaurant/model/manager/store/details_stores_model.dart';
 import 'package:app_restaurant/model/manager/store/rooms/list_room_of_store_model.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/constant/api/index.dart';
@@ -300,14 +301,13 @@ class _DetailsStoreState extends State<DetailsStore> {
                                 children: [
                                   space20W,
                                   SizedBox(
-                                    width: 50,
-                                    height: 50,
-                                    // color: Colors.amber,
-                                    child: Image.asset(
-                                      'assets/images/incomes.png',
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
+                                      width: 50,
+                                      height: 50,
+                                      // color: Colors.amber,
+                                      child: SvgPicture.asset(
+                                        'assets/svg/incomes.svg',
+                                        fit: BoxFit.contain,
+                                      )),
                                   space20W,
                                   Column(
                                     crossAxisAlignment:
@@ -346,8 +346,8 @@ class _DetailsStoreState extends State<DetailsStore> {
                                   SizedBox(
                                     width: 50,
                                     height: 50,
-                                    child: Image.asset(
-                                      'assets/images/staff_gr.png',
+                                    child: SvgPicture.asset(
+                                      'assets/svg/staff_gr.svg',
                                       fit: BoxFit.contain,
                                     ),
                                   ),
@@ -408,8 +408,8 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                       BorderRadius.circular(
                                                           8.0),
                                                   child: imageStorePath == null
-                                                      ? Image.asset(
-                                                          'assets/images/store.png',
+                                                      ? SvgPicture.asset(
+                                                          'assets/svg/store_icon.svg',
                                                           fit: BoxFit.contain,
                                                         )
                                                       : CachedNetworkImage(
@@ -485,8 +485,8 @@ class _DetailsStoreState extends State<DetailsStore> {
                                               width: 30.w,
                                               height: 30.w,
                                               padding: EdgeInsets.all(5.w),
-                                              child: Image.asset(
-                                                "assets/images/edit_icon.png",
+                                              child: SvgPicture.asset(
+                                                'assets/svg/edit_icon.svg',
                                                 fit: BoxFit.contain,
                                               ),
                                             ),
@@ -703,8 +703,8 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                                                     SizedBox(
                                                                                       width: 35.w,
                                                                                       height: 35.w,
-                                                                                      child: Image.asset(
-                                                                                        "assets/images/edit_icon.png",
+                                                                                      child: SvgPicture.asset(
+                                                                                        'assets/svg/edit_icon.svg',
                                                                                         fit: BoxFit.contain,
                                                                                       ),
                                                                                     ),
@@ -739,8 +739,8 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                                                     SizedBox(
                                                                                       width: 35.w,
                                                                                       height: 35.w,
-                                                                                      child: Image.asset(
-                                                                                        "assets/images/setting_icon.png",
+                                                                                      child: SvgPicture.asset(
+                                                                                        'assets/svg/setting_icon.svg',
                                                                                         fit: BoxFit.contain,
                                                                                       ),
                                                                                     ),
@@ -769,8 +769,8 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                                                     SizedBox(
                                                                                       width: 35.w,
                                                                                       height: 35.w,
-                                                                                      child: Image.asset(
-                                                                                        "assets/images/delete_icon.png",
+                                                                                      child: SvgPicture.asset(
+                                                                                        'assets/svg/delete_icon.svg',
                                                                                         fit: BoxFit.contain,
                                                                                       ),
                                                                                     ),

@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/env/index.dart';
@@ -441,14 +442,13 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                 InkWell(
                                                   onTap: () {},
                                                   child: SizedBox(
-                                                    width: 50,
-                                                    height: 50,
-                                                    // color: Colors.amber,
-                                                    child: Image.asset(
-                                                      'assets/images/incomes.png',
-                                                      fit: BoxFit.contain,
-                                                    ),
-                                                  ),
+                                                      width: 50,
+                                                      height: 50,
+                                                      // color: Colors.amber,
+                                                      child: SvgPicture.asset(
+                                                        'assets/svg/incomes.svg',
+                                                        fit: BoxFit.contain,
+                                                      )),
                                                 )
                                               ],
                                             ))),
@@ -505,13 +505,12 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                   ],
                                                 ),
                                                 SizedBox(
-                                                  width: 50,
-                                                  height: 50,
-                                                  child: Image.asset(
-                                                    'assets/images/staff_gr.png',
-                                                    fit: BoxFit.contain,
-                                                  ),
-                                                )
+                                                    width: 50,
+                                                    height: 50,
+                                                    child: SvgPicture.asset(
+                                                      'assets/svg/staff_gr.svg',
+                                                      fit: BoxFit.contain,
+                                                    ))
                                               ],
                                             ))),
                                     space20H,
@@ -570,8 +569,8 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                 SizedBox(
                                                   width: 50,
                                                   height: 50,
-                                                  child: Image.asset(
-                                                    'assets/images/comeplete_receipt.png',
+                                                  child: SvgPicture.asset(
+                                                    'assets/svg/comeplete_receipt.svg',
                                                     fit: BoxFit.contain,
                                                   ),
                                                 )
@@ -631,13 +630,12 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                   ],
                                                 ),
                                                 SizedBox(
-                                                  width: 50,
-                                                  height: 50,
-                                                  child: Image.asset(
-                                                    'assets/images/cancle_receipt.png',
-                                                    fit: BoxFit.contain,
-                                                  ),
-                                                )
+                                                    width: 50,
+                                                    height: 50,
+                                                    child: SvgPicture.asset(
+                                                      'assets/svg/cancle_receipt.svg',
+                                                      fit: BoxFit.contain,
+                                                    ))
                                               ],
                                             ))),
                                     space20H,
@@ -774,8 +772,8 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                                         ? ClipRRect(
                                                                             borderRadius:
                                                                                 BorderRadius.circular(8.r),
-                                                                            child: Image.asset(
-                                                                              'assets/images/store.png',
+                                                                            child: SvgPicture.asset(
+                                                                              'assets/svg/store_icon.svg',
                                                                               fit: BoxFit.contain,
                                                                             ))
                                                                         : ClipRRect(

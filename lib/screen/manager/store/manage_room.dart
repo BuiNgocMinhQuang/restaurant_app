@@ -11,6 +11,7 @@ import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/constant/api/index.dart';
@@ -383,8 +384,8 @@ class _ManageRoomState extends State<ManageRoom> {
                                                                             height:
                                                                                 35.w,
                                                                             child:
-                                                                                Image.asset(
-                                                                              "assets/images/edit_icon.png",
+                                                                                SvgPicture.asset(
+                                                                              'assets/svg/edit_icon.svg',
                                                                               fit: BoxFit.contain,
                                                                             ),
                                                                           ),
@@ -425,8 +426,8 @@ class _ManageRoomState extends State<ManageRoom> {
                                                                             height:
                                                                                 35.w,
                                                                             child:
-                                                                                Image.asset(
-                                                                              "assets/images/delete_icon.png",
+                                                                                SvgPicture.asset(
+                                                                              'assets/svg/delete_icon.svg',
                                                                               fit: BoxFit.contain,
                                                                             ),
                                                                           ),

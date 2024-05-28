@@ -15,6 +15,7 @@ import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_restaurant/constant/api/index.dart';
@@ -873,9 +874,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                             SizedBox(
                                                                               width: 35.w,
                                                                               height: 35.w,
-                                                                              child: Image.asset(
-                                                                                "assets/images/picture.png",
-                                                                                fit: BoxFit.cover,
+                                                                              child: SvgPicture.asset(
+                                                                                'assets/svg/picture.svg',
+                                                                                fit: BoxFit.contain,
                                                                               ),
                                                                             ),
                                                                             space10W,
@@ -907,8 +908,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                             SizedBox(
                                                                               width: 35.w,
                                                                               height: 35.w,
-                                                                              child: Image.asset(
-                                                                                "assets/images/delete_icon.png",
+                                                                              child: SvgPicture.asset(
+                                                                                'assets/svg/delete_icon.svg',
                                                                                 fit: BoxFit.contain,
                                                                               ),
                                                                             ),
@@ -928,8 +929,8 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                   child: SizedBox(
                                                     width: 35.w,
                                                     height: 35.w,
-                                                    child: Image.asset(
-                                                      "assets/images/edit_icon.png",
+                                                    child: SvgPicture.asset(
+                                                      'assets/svg/edit_icon.svg',
                                                       fit: BoxFit.contain,
                                                     ),
                                                   ),

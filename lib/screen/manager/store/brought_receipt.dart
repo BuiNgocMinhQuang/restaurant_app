@@ -16,6 +16,7 @@ import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:money_formatter/money_formatter.dart';
@@ -556,13 +557,14 @@ class _AllWidgetState extends State<AllWidget>
                                                     child: Row(
                                                       children: [
                                                         SizedBox(
-                                                          width: 35.w,
-                                                          height: 35.w,
-                                                          child: Image.asset(
-                                                            "assets/images/receipt.png",
-                                                            fit: BoxFit.contain,
-                                                          ),
-                                                        ),
+                                                            width: 35.w,
+                                                            height: 35.w,
+                                                            child: SvgPicture
+                                                                .asset(
+                                                              'assets/svg/receipt.svg',
+                                                              fit: BoxFit
+                                                                  .contain,
+                                                            )),
                                                         space10W,
                                                         TextApp(
                                                           text:
@@ -618,13 +620,14 @@ class _AllWidgetState extends State<AllWidget>
                                                     child: Row(
                                                       children: [
                                                         SizedBox(
-                                                          width: 35.w,
-                                                          height: 35.w,
-                                                          child: Image.asset(
-                                                            "assets/images/coin.png",
-                                                            fit: BoxFit.contain,
-                                                          ),
-                                                        ),
+                                                            width: 35.w,
+                                                            height: 35.w,
+                                                            child: SvgPicture
+                                                                .asset(
+                                                              'assets/svg/coin.svg',
+                                                              fit: BoxFit
+                                                                  .contain,
+                                                            )),
                                                         space10W,
                                                         TextApp(
                                                           text:
@@ -667,8 +670,9 @@ class _AllWidgetState extends State<AllWidget>
                                                         SizedBox(
                                                           width: 35.w,
                                                           height: 35.w,
-                                                          child: Image.asset(
-                                                            "assets/images/printing_receipt.png",
+                                                          child:
+                                                              SvgPicture.asset(
+                                                            'assets/svg/printing_receipt.svg',
                                                             fit: BoxFit.contain,
                                                           ),
                                                         ),
@@ -719,13 +723,14 @@ class _AllWidgetState extends State<AllWidget>
                                                     child: Row(
                                                       children: [
                                                         SizedBox(
-                                                          width: 35.w,
-                                                          height: 35.w,
-                                                          child: Image.asset(
-                                                            "assets/images/cancle_icon.png",
-                                                            fit: BoxFit.contain,
-                                                          ),
-                                                        ),
+                                                            width: 35.w,
+                                                            height: 35.w,
+                                                            child: SvgPicture
+                                                                .asset(
+                                                              'assets/svg/cancle_icon.svg',
+                                                              fit: BoxFit
+                                                                  .contain,
+                                                            )),
                                                         space10W,
                                                         TextApp(
                                                           text: "Huỷ hoá đơn",
@@ -794,8 +799,9 @@ class _AllWidgetState extends State<AllWidget>
                                                         SizedBox(
                                                           width: 35.w,
                                                           height: 35.w,
-                                                          child: Image.asset(
-                                                            "assets/images/printing_receipt.png",
+                                                          child:
+                                                              SvgPicture.asset(
+                                                            'assets/svg/printing_receipt.svg',
                                                             fit: BoxFit.contain,
                                                           ),
                                                         ),
@@ -838,13 +844,12 @@ class _AllWidgetState extends State<AllWidget>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: 35.w,
-                        height: 35.w,
-                        child: Image.asset(
-                          "assets/images/receipt.png",
-                          fit: BoxFit.contain,
-                        ),
-                      ),
+                          width: 35.w,
+                          height: 35.w,
+                          child: SvgPicture.asset(
+                            'assets/svg/receipt.svg',
+                            fit: BoxFit.contain,
+                          )),
                       SizedBox(
                         height: 10.h,
                       ),
@@ -1074,8 +1079,8 @@ class _CompleteWidgetState extends State<CompleteWidget>
                                                   SizedBox(
                                                     width: 35.w,
                                                     height: 35.w,
-                                                    child: Image.asset(
-                                                      "assets/images/printing_receipt.png",
+                                                    child: SvgPicture.asset(
+                                                      'assets/svg/printing_receipt.svg',
                                                       fit: BoxFit.contain,
                                                     ),
                                                   ),
@@ -1118,13 +1123,12 @@ class _CompleteWidgetState extends State<CompleteWidget>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: 35.w,
-                        height: 35.w,
-                        child: Image.asset(
-                          "assets/images/receipt.png",
-                          fit: BoxFit.contain,
-                        ),
-                      ),
+                          width: 35.w,
+                          height: 35.w,
+                          child: SvgPicture.asset(
+                            'assets/svg/receipt.svg',
+                            fit: BoxFit.contain,
+                          )),
                       SizedBox(
                         height: 10.h,
                       ),
@@ -1387,13 +1391,12 @@ class _PendingWidgetState extends State<PendingWidget>
                                         child: Row(
                                           children: [
                                             SizedBox(
-                                              width: 35.w,
-                                              height: 35.w,
-                                              child: Image.asset(
-                                                "assets/images/receipt.png",
-                                                fit: BoxFit.contain,
-                                              ),
-                                            ),
+                                                width: 35.w,
+                                                height: 35.w,
+                                                child: SvgPicture.asset(
+                                                  'assets/svg/receipt.svg',
+                                                  fit: BoxFit.contain,
+                                                )),
                                             space10W,
                                             TextApp(
                                               text: "Quản lý hoá đơn",
@@ -1480,8 +1483,8 @@ class _PendingWidgetState extends State<PendingWidget>
                                             SizedBox(
                                               width: 35.w,
                                               height: 35.w,
-                                              child: Image.asset(
-                                                "assets/images/printing_receipt.png",
+                                              child: SvgPicture.asset(
+                                                'assets/svg/printing_receipt.svg',
                                                 fit: BoxFit.contain,
                                               ),
                                             ),
@@ -1525,13 +1528,12 @@ class _PendingWidgetState extends State<PendingWidget>
                                         child: Row(
                                           children: [
                                             SizedBox(
-                                              width: 35.w,
-                                              height: 35.w,
-                                              child: Image.asset(
-                                                "assets/images/cancle_icon.png",
-                                                fit: BoxFit.contain,
-                                              ),
-                                            ),
+                                                width: 35.w,
+                                                height: 35.w,
+                                                child: SvgPicture.asset(
+                                                  'assets/svg/cancle_icon.svg',
+                                                  fit: BoxFit.contain,
+                                                )),
                                             space10W,
                                             TextApp(
                                               text: "Huỷ hoá đơn",
@@ -1569,13 +1571,12 @@ class _PendingWidgetState extends State<PendingWidget>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: 35.w,
-                        height: 35.w,
-                        child: Image.asset(
-                          "assets/images/receipt.png",
-                          fit: BoxFit.contain,
-                        ),
-                      ),
+                          width: 35.w,
+                          height: 35.w,
+                          child: SvgPicture.asset(
+                            'assets/svg/receipt.svg',
+                            fit: BoxFit.contain,
+                          )),
                       SizedBox(
                         height: 10.h,
                       ),
@@ -1802,8 +1803,8 @@ class _CancleWidgetState extends State<CancleWidget>
                                             SizedBox(
                                               width: 35.w,
                                               height: 35.w,
-                                              child: Image.asset(
-                                                "assets/images/printing_receipt.png",
+                                              child: SvgPicture.asset(
+                                                'assets/svg/printing_receipt.svg',
                                                 fit: BoxFit.contain,
                                               ),
                                             ),
@@ -1847,13 +1848,12 @@ class _CancleWidgetState extends State<CancleWidget>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: 35.w,
-                        height: 35.w,
-                        child: Image.asset(
-                          "assets/images/receipt.png",
-                          fit: BoxFit.contain,
-                        ),
-                      ),
+                          width: 35.w,
+                          height: 35.w,
+                          child: SvgPicture.asset(
+                            'assets/svg/receipt.svg',
+                            fit: BoxFit.contain,
+                          )),
                       SizedBox(
                         height: 10.h,
                       ),

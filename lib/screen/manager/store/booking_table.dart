@@ -11,6 +11,7 @@ import 'package:app_restaurant/widgets/text/text_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -476,8 +477,8 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                                 SizedBox(
                                                                                   width: 35.w,
                                                                                   height: 35.w,
-                                                                                  child: Image.asset(
-                                                                                    "assets/images/receipt.png",
+                                                                                  child: SvgPicture.asset(
+                                                                                    'assets/svg/receipt.svg',
                                                                                     fit: BoxFit.contain,
                                                                                   ),
                                                                                 ),
@@ -577,8 +578,8 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                                 SizedBox(
                                                                                   width: 35.w,
                                                                                   height: 35.w,
-                                                                                  child: Image.asset(
-                                                                                    "assets/images/printing_receipt.png",
+                                                                                  child: SvgPicture.asset(
+                                                                                    'assets/svg/printing_receipt.svg',
                                                                                     fit: BoxFit.contain,
                                                                                   ),
                                                                                 ),
@@ -626,13 +627,12 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                                 Row(
                                                                               children: [
                                                                                 SizedBox(
-                                                                                  width: 35.w,
-                                                                                  height: 35.w,
-                                                                                  child: Image.asset(
-                                                                                    "assets/images/coin.png",
-                                                                                    fit: BoxFit.contain,
-                                                                                  ),
-                                                                                ),
+                                                                                    width: 35.w,
+                                                                                    height: 35.w,
+                                                                                    child: SvgPicture.asset(
+                                                                                      'assets/svg/coin.svg',
+                                                                                      fit: BoxFit.contain,
+                                                                                    )),
                                                                                 space10W,
                                                                                 TextApp(
                                                                                   text: "Thanh toán hoá đơn",
@@ -652,8 +652,9 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                       Alignment
                                                                           .center,
                                                                   children: [
-                                                                    Image.asset(
-                                                                      "assets/images/table_image.png",
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                      'assets/svg/table_image.svg',
                                                                       fit: BoxFit
                                                                           .contain,
                                                                     ),
