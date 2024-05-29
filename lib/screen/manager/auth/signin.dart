@@ -1,5 +1,12 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
 import 'package:app_restaurant/config/text.dart';
+import 'package:app_restaurant/config/void_show_dialog.dart';
+import 'package:app_restaurant/model/manager_infor_model.dart';
+import 'package:app_restaurant/routers/app_router_config.dart';
+import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/background/background_welcome.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/copy_right_text.dart';
@@ -10,6 +17,9 @@ import 'package:app_restaurant/config/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
+import 'package:app_restaurant/env/index.dart';
+import 'package:app_restaurant/constant/api/index.dart';
 
 class ManagerSignIn extends StatefulWidget {
   const ManagerSignIn({super.key});
@@ -25,16 +35,61 @@ class _ManagerSignInState extends State<ManagerSignIn> {
   final emailController = TextEditingController();
   final passworldController = TextEditingController();
   @override
+  @override
   void dispose() {
     emailController.dispose();
     passworldController.dispose();
     super.dispose();
   }
 
+  void handleLoginManager({
+    required String emailText,
+    required String passwordText,
+    required bool remember,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl$managerLoginApi'),
+      headers: {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: jsonEncode({
+        'email': emailText,
+        'password': passwordText,
+        'remember': remember,
+      }),
+    );
+    final data = jsonDecode(response.body);
+    try {
+      if (data['status'] == 200) {
+        var authManagerDataRes = ManagerInforModel.fromJson(data);
+        var authMangerDataString = jsonEncode(authManagerDataRes);
+
+        var token = authManagerDataRes.token;
+        var tokenExpiresAt = authManagerDataRes.tokenExpiresAt;
+        StorageUtils.instance.setString(key: 'token_manager', val: token ?? '');
+        StorageUtils.instance
+            .setString(key: 'token_manager_expires', val: tokenExpiresAt ?? '');
+        StorageUtils.instance
+            .setString(key: 'auth_manager', val: authMangerDataString);
+        navigatorKey.currentContext?.go("/manager_home");
+        Future.delayed(const Duration(milliseconds: 300), () {
+          showLoginSuccesDialog();
+        });
+      } else {
+        log("ERROR _onManagerLoginButtonPressed 1");
+      }
+    } catch (error) {
+      log("ERROR _onManagerLoginButtonPressed 2");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ManagerLoginBloc, ManagerLoginState>(
         builder: (context, state) {
+      debugPrint("stateScreen  ${state.loginStatus}");
+
       return Scaffold(
           resizeToAvoidBottomInset: true,
           backgroundColor: const Color.fromRGBO(248, 249, 250, 1),

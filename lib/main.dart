@@ -9,10 +9,6 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await StorageUtils.instance.init();
-  // runApp(BlocProvider<InternetCubit>(
-  //   create: (context) => InternetCubit(),
-  //   child: const MyApp(),
-  // ));
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeProvider(),
@@ -29,14 +25,26 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  final ValueNotifier<ThemeMode> _notifier = ValueNotifier(ThemeMode.light);
-  // late InternetCubit internetCubit;
   @override
   void initState() {
-    // internetCubit = context.read<InternetCubit>();
-    // internetCubit.checkConectivity();
-    // internetCubit.trackConnectivityChange();
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    debugPrint("App $state");
+    if (state == AppLifecycleState.resumed) {
+      // Logic to handle app resume
+      debugPrint("App Resumed");
+    }
   }
 
   @override
@@ -44,44 +52,22 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     return ScreenUtilInit(
       designSize: const Size(430, 932),
       builder: (BuildContext context, Widget? child) {
-        // print("Build lai Screen");
         return child!;
       },
       child: AppBlocProvider(
-        child: ValueListenableBuilder(
-          valueListenable: _notifier,
-          builder: (_, mode, __) {
+        child: Consumer<ThemeProvider>(
+          builder: (context, themeProvider, child) {
             return MaterialApp.router(
-                theme: Provider.of<ThemeProvider>(context).themeDataStyle,
-                debugShowCheckedModeBanner: false,
-                routerConfig: NyAppRouter().router);
+              theme: themeProvider.themeDataStyle,
+              debugShowCheckedModeBanner: false,
+              routerConfig: NyAppRouter().router,
+            );
           },
         ),
       ),
     );
   }
 }
-
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // bool isLogin = true;
-//     return ScreenUtilInit(
-//       designSize: const Size(430, 932),
-//       builder: (BuildContext context, Widget? child) {
-//         print("Build lai Screen");
-//         return child!;
-//       },
-//       child: MaterialApp.router(
-//           debugShowCheckedModeBanner: false,
-//           routerConfig: NyAppRouter().router),
-//     );
-//   }
-// }
-
 
 
 
