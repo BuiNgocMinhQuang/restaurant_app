@@ -1,5 +1,4 @@
 import 'package:app_restaurant/bloc/staff/login/staff_login_bloc.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/background/background_welcome.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
@@ -68,7 +67,9 @@ class _StaffSignInFromState extends State<StaffSignInFrom> {
                   padding: EdgeInsets.only(left: 20.w, right: 20.w),
                   child: Column(
                     children: [
-                      space15H,
+                      SizedBox(
+                        height: 15.h,
+                      ),
                       Stack(
                         children: [
                           Stack(

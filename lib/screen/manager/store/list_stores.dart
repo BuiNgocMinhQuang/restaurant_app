@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:app_restaurant/bloc/manager/stores/list_stores_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/model/manager/store/details_stores_model.dart';
 import 'package:app_restaurant/model/manager_infor_model.dart';
@@ -131,7 +130,7 @@ class _ListStoresState extends State<ListStores> {
                             child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  space25H,
+                                  SizedBox(height: 25.h),
                                   Stack(
                                     children: [
                                       // Carousel
@@ -234,7 +233,7 @@ class _ListStoresState extends State<ListStores> {
                                                                 ),
                                                               ))
                                                           : Container(),
-                                                      space10H,
+                                                      SizedBox(height: 10.h),
                                                       TextApp(
                                                         text: widget
                                                                 .managerInforData
@@ -245,7 +244,7 @@ class _ListStoresState extends State<ListStores> {
                                                         fontWeight:
                                                             FontWeight.bold,
                                                       ),
-                                                      space10H,
+                                                      SizedBox(height: 10.h),
                                                       TextApp(
                                                         text: widget
                                                                 .managerInforData
@@ -266,7 +265,7 @@ class _ListStoresState extends State<ListStores> {
                                   ),
 
                                   //List Stores
-                                  space15H,
+                                  SizedBox(height: 15.h),
                                   Container(
                                       width: 1.sw,
                                       decoration: BoxDecoration(
@@ -364,7 +363,7 @@ class _ListStoresState extends State<ListStores> {
                                                                               Icons.error),
                                                                     ),
                                                             )),
-                                                        space15H,
+                                                        SizedBox(height: 15.h),
                                                         TextApp(
                                                           text: state
                                                                   .listStoreModel
@@ -373,7 +372,7 @@ class _ListStoresState extends State<ListStores> {
                                                               '',
                                                           fontsize: 14.sp,
                                                         ),
-                                                        space15H,
+                                                        SizedBox(height: 15.h),
                                                         TextApp(
                                                           text: state
                                                                   .listStoreModel
@@ -383,13 +382,13 @@ class _ListStoresState extends State<ListStores> {
                                                           color: blueText,
                                                           fontsize: 16.sp,
                                                         ),
-                                                        space15H,
+                                                        SizedBox(height: 15.h),
                                                         HtmlWidget(
                                                           '''
                                                            $desStore
                                                           ''',
                                                         ),
-                                                        space30H,
+                                                        SizedBox(height: 30.h),
                                                         Row(
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
@@ -428,7 +427,8 @@ class _ListStoresState extends State<ListStores> {
                                                                       232,
                                                                       1),
                                                             ),
-                                                            space25W,
+                                                            SizedBox(
+                                                                width: 25.w),
                                                             SizedBox(
                                                               // width: 120.w,
                                                               height: 50.h,
@@ -469,13 +469,13 @@ class _ListStoresState extends State<ListStores> {
                                                             ),
                                                           ],
                                                         ),
-                                                        space10H,
+                                                        SizedBox(height: 10.h),
                                                         Divider(
                                                           height: 1,
                                                           color: Colors.black
                                                               .withOpacity(0.5),
                                                         ),
-                                                        space10H,
+                                                        SizedBox(height: 10.h),
                                                       ],
                                                     ),
                                                   );
@@ -513,7 +513,7 @@ class _ListStoresState extends State<ListStores> {
                                                       Icons.add,
                                                       color: Colors.grey,
                                                     ),
-                                                    space10H,
+                                                    SizedBox(height: 10.h),
                                                     TextApp(
                                                       text: "Tạo cửa hàng",
                                                       fontWeight:
@@ -525,14 +525,14 @@ class _ListStoresState extends State<ListStores> {
                                                 ),
                                               ),
                                             ),
-                                            space30H,
+                                            SizedBox(height: 30.h),
                                           ],
                                         ),
                                       )),
-                                  space30H,
+                                  SizedBox(height: 30.h),
 
                                   const CopyRightText(),
-                                  space35H
+                                  SizedBox(height: 35.h),
                                 ]),
                           ),
                         )
@@ -556,13 +556,13 @@ class _ListStoresState extends State<ListStores> {
                                     child: Lottie.asset(
                                         'assets/lottie/error.json'),
                                   ),
-                                  space30H,
+                                  SizedBox(height: 30.h),
                                   TextApp(
                                     text: state.errorText.toString(),
                                     fontsize: 20.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  space30H,
+                                  SizedBox(height: 30.h),
                                   SizedBox(
                                     width: 200,
                                     child: ButtonGradient(
@@ -594,20 +594,22 @@ class _ListStoresState extends State<ListStores> {
   Widget contentStores() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          space25H,
+          SizedBox(height: 25.h),
           TextApp(
             text: "Tất cả cửa hàng",
             color: blueText,
             fontsize: 16.sp,
             fontWeight: FontWeight.bold,
           ),
-          space10H,
+          SizedBox(height: 10.h),
           TextApp(
             text: "Bắt đầu quản lý các cửa hàng của bạn.",
             color: grey,
             fontsize: 12.sp,
           ),
-          space20H,
+          SizedBox(
+            height: 20.h,
+          ),
         ],
       );
 

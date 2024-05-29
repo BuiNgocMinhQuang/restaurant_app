@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/space.dart';
+
 import 'package:app_restaurant/model/list_food_menu_model.dart';
 import 'package:app_restaurant/utils/share_getstring.dart';
 import 'package:app_restaurant/utils/storage.dart';
@@ -249,7 +249,9 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                         ),
                       ],
                     )),
-                space30H,
+                SizedBox(
+                  height: 30.h,
+                ),
                 TextFormField(
                   onTapOutside: (event) {
                     FocusManager.instance.primaryFocus?.unfocus();
@@ -275,7 +277,9 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                       hintText: "Nhập nội dung bạn muốn tìm kiếm",
                       contentPadding: EdgeInsets.all(20.w)),
                 ),
-                space15H,
+                SizedBox(
+                  height: 15.h,
+                ),
                 Expanded(
                     child: SizedBox(
                   width: 1.sw,
@@ -309,7 +313,9 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                                   borderRadius: BorderRadius.circular(15.r)),
                               child: Row(
                                 children: [
-                                  space20W,
+                                  SizedBox(
+                                    width: 20.w,
+                                  ),
                                   SizedBox(
                                       width: 80.w,
                                       height: 80.w,
@@ -338,7 +344,9 @@ class _ListFoodStaffState extends State<ListFoodStaff> {
                                                         const Icon(Icons.error),
                                               ),
                                       )),
-                                  space50W,
+                                  SizedBox(
+                                    width: 50.w,
+                                  ),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,

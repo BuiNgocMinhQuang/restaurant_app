@@ -4,7 +4,6 @@ import 'package:app_restaurant/bloc/brought_receipt/brought_receipt_bloc.dart';
 import 'package:app_restaurant/bloc/payment/payment_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/date_time_format.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/model/brought_receipt/list_brought_receipt_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
@@ -253,18 +252,22 @@ class _ManagerBroughtReceiptState extends State<ManagerBroughtReceipt>
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SizedBox(
-                                  width: 100,
-                                  height: 100,
+                                  width: 100.w,
+                                  height: 100.w,
                                   child:
                                       Lottie.asset('assets/lottie/error.json'),
                                 ),
-                                space30H,
+                                SizedBox(
+                                  height: 30.h,
+                                ),
                                 TextApp(
                                   text: statePage.errorText.toString(),
                                   fontsize: 20.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                space30H,
+                                SizedBox(
+                                  height: 30.h,
+                                ),
                                 SizedBox(
                                   width: 200,
                                   child: ButtonGradient(
@@ -565,7 +568,9 @@ class _AllWidgetState extends State<AllWidget>
                                                               fit: BoxFit
                                                                   .contain,
                                                             )),
-                                                        space10W,
+                                                        SizedBox(
+                                                          width: 10.w,
+                                                        ),
                                                         TextApp(
                                                           text:
                                                               "Quản lý hoá đơn",
@@ -575,9 +580,13 @@ class _AllWidgetState extends State<AllWidget>
                                                       ],
                                                     ),
                                                   ),
-                                                  space10H,
+                                                  SizedBox(
+                                                    height: 10.h,
+                                                  ),
                                                   const Divider(),
-                                                  space10H,
+                                                  SizedBox(
+                                                    height: 10.h,
+                                                  ),
                                                   InkWell(
                                                     onTap: () async {
                                                       Navigator.pop(context);
@@ -628,7 +637,9 @@ class _AllWidgetState extends State<AllWidget>
                                                               fit: BoxFit
                                                                   .contain,
                                                             )),
-                                                        space10W,
+                                                        SizedBox(
+                                                          width: 10.w,
+                                                        ),
                                                         TextApp(
                                                           text:
                                                               "Thanh toán hoá đơn",
@@ -638,9 +649,13 @@ class _AllWidgetState extends State<AllWidget>
                                                       ],
                                                     ),
                                                   ),
-                                                  space10H,
+                                                  SizedBox(
+                                                    height: 10.h,
+                                                  ),
                                                   const Divider(),
-                                                  space10H,
+                                                  SizedBox(
+                                                    height: 10.h,
+                                                  ),
                                                   InkWell(
                                                     onTap: () async {
                                                       Navigator.pop(context);
@@ -676,7 +691,9 @@ class _AllWidgetState extends State<AllWidget>
                                                             fit: BoxFit.contain,
                                                           ),
                                                         ),
-                                                        space10W,
+                                                        SizedBox(
+                                                          width: 10.w,
+                                                        ),
                                                         TextApp(
                                                           text: "In hoá đơn",
                                                           color: Colors.black,
@@ -685,9 +702,13 @@ class _AllWidgetState extends State<AllWidget>
                                                       ],
                                                     ),
                                                   ),
-                                                  space10H,
+                                                  SizedBox(
+                                                    height: 10.h,
+                                                  ),
                                                   const Divider(),
-                                                  space10H,
+                                                  SizedBox(
+                                                    height: 10.h,
+                                                  ),
                                                   InkWell(
                                                     onTap: () async {
                                                       Navigator.pop(context);
@@ -731,7 +752,9 @@ class _AllWidgetState extends State<AllWidget>
                                                               fit: BoxFit
                                                                   .contain,
                                                             )),
-                                                        space10W,
+                                                        SizedBox(
+                                                          width: 10.w,
+                                                        ),
                                                         TextApp(
                                                           text: "Huỷ hoá đơn",
                                                           color: Colors.black,
@@ -805,7 +828,9 @@ class _AllWidgetState extends State<AllWidget>
                                                             fit: BoxFit.contain,
                                                           ),
                                                         ),
-                                                        space10W,
+                                                        SizedBox(
+                                                          width: 10.w,
+                                                        ),
                                                         TextApp(
                                                           text: "In hoá đơn",
                                                           color: Colors.black,
@@ -814,9 +839,13 @@ class _AllWidgetState extends State<AllWidget>
                                                       ],
                                                     ),
                                                   ),
-                                                  space10H,
+                                                  SizedBox(
+                                                    height: 10.h,
+                                                  ),
                                                   const Divider(),
-                                                  space10H,
+                                                  SizedBox(
+                                                    height: 10.h,
+                                                  ),
                                                 ],
                                               ),
                                             ));
@@ -1084,7 +1113,9 @@ class _CompleteWidgetState extends State<CompleteWidget>
                                                       fit: BoxFit.contain,
                                                     ),
                                                   ),
-                                                  space10W,
+                                                  SizedBox(
+                                                    width: 10.w,
+                                                  ),
                                                   TextApp(
                                                     text: "In hoá đơn",
                                                     color: Colors.black,
@@ -1093,9 +1124,13 @@ class _CompleteWidgetState extends State<CompleteWidget>
                                                 ],
                                               ),
                                             ),
-                                            space10H,
+                                            SizedBox(
+                                              height: 10.h,
+                                            ),
                                             const Divider(),
-                                            space10H,
+                                            SizedBox(
+                                              height: 10.h,
+                                            ),
                                           ],
                                         ),
                                       ));
@@ -1397,7 +1432,9 @@ class _PendingWidgetState extends State<PendingWidget>
                                                   'assets/svg/receipt.svg',
                                                   fit: BoxFit.contain,
                                                 )),
-                                            space10W,
+                                            SizedBox(
+                                              width: 10.w,
+                                            ),
                                             TextApp(
                                               text: "Quản lý hoá đơn",
                                               color: Colors.black,
@@ -1406,9 +1443,13 @@ class _PendingWidgetState extends State<PendingWidget>
                                           ],
                                         ),
                                       ),
-                                      space10H,
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
                                       const Divider(),
-                                      space10H,
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
                                       InkWell(
                                         onTap: () async {
                                           Navigator.pop(context);
@@ -1446,7 +1487,9 @@ class _PendingWidgetState extends State<PendingWidget>
                                               Icons.monetization_on,
                                               size: 35.sp,
                                             ),
-                                            space10W,
+                                            SizedBox(
+                                              width: 10.w,
+                                            ),
                                             TextApp(
                                               text: "Thanh toán hoá đơn",
                                               color: Colors.black,
@@ -1455,9 +1498,13 @@ class _PendingWidgetState extends State<PendingWidget>
                                           ],
                                         ),
                                       ),
-                                      space10H,
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
                                       const Divider(),
-                                      space10H,
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
                                       InkWell(
                                         onTap: () async {
                                           Navigator.pop(context);
@@ -1488,7 +1535,9 @@ class _PendingWidgetState extends State<PendingWidget>
                                                 fit: BoxFit.contain,
                                               ),
                                             ),
-                                            space10W,
+                                            SizedBox(
+                                              width: 10.w,
+                                            ),
                                             TextApp(
                                               text: "In hoá đơn",
                                               color: Colors.black,
@@ -1497,9 +1546,13 @@ class _PendingWidgetState extends State<PendingWidget>
                                           ],
                                         ),
                                       ),
-                                      space10H,
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
                                       const Divider(),
-                                      space10H,
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
                                       InkWell(
                                         onTap: () async {
                                           Navigator.pop(context);
@@ -1534,7 +1587,9 @@ class _PendingWidgetState extends State<PendingWidget>
                                                   'assets/svg/cancle_icon.svg',
                                                   fit: BoxFit.contain,
                                                 )),
-                                            space10W,
+                                            SizedBox(
+                                              width: 10.w,
+                                            ),
                                             TextApp(
                                               text: "Huỷ hoá đơn",
                                               color: Colors.black,
@@ -1808,7 +1863,9 @@ class _CancleWidgetState extends State<CancleWidget>
                                                 fit: BoxFit.contain,
                                               ),
                                             ),
-                                            space10W,
+                                            SizedBox(
+                                              width: 10.w,
+                                            ),
                                             TextApp(
                                               text: "In hoá đơn",
                                               color: Colors.black,
@@ -1817,9 +1874,13 @@ class _CancleWidgetState extends State<CancleWidget>
                                           ],
                                         ),
                                       ),
-                                      space10H,
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
                                       const Divider(),
-                                      space10H,
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
                                     ],
                                   ),
                                 ),

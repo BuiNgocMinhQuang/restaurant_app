@@ -5,7 +5,6 @@ import 'package:app_restaurant/bloc/list_bill_shop/list_bill_shop_bloc.dart';
 import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
 import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
 import 'package:app_restaurant/model/manager_infor_model.dart';
@@ -432,7 +431,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                         : const Color.fromRGBO(233, 236, 239, 1),
                     textColor: currentIndex == 0 ? Colors.black : menuGrey,
                     subItem: [
-                      space15H,
+                      SizedBox(height: 15.h),
                       SubItemDrawer(
                           fontWeight: currentIndex == 0
                               ? FontWeight.bold
@@ -459,7 +458,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
 
                             Navigator.pop(context);
                           }),
-                      space15H,
+                      SizedBox(height: 15.h),
                     ],
                     icon: Icons.store,
                     isShowIcon: false,
@@ -493,7 +492,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                         ? Theme.of(context).colorScheme.primary
                         : const Color.fromRGBO(233, 236, 239, 1),
                     subItem: [
-                      space15H,
+                      SizedBox(height: 15.h),
                       SubItemDrawer(
                           text: "Danh sách nhân viên",
                           fontWeight: currentIndex == 1
@@ -517,7 +516,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
 
                             Navigator.pop(context);
                           }),
-                      space20H,
+                      SizedBox(height: 20.h),
                       SubItemDrawer(
                           text: "Thêm nhân viên",
                           fontWeight: currentIndex == 5
@@ -538,7 +537,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
 
                             Navigator.pop(context);
                           }),
-                      space15H,
+                      SizedBox(height: 15.h),
                     ],
                     icon: Icons.group,
                     isShowIcon: false,
@@ -566,7 +565,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                         ? Colors.black
                         : menuGrey,
                     subItem: [
-                      space15H,
+                      SizedBox(height: 15.h),
                       SubItemDrawer(
                           text: "Danh sách món ăn",
                           iconColor:
@@ -586,7 +585,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
 
                             Navigator.pop(context);
                           }),
-                      space20H,
+                      SizedBox(height: 20.h),
                       SubItemDrawer(
                           text: "Thêm món ăn",
                           iconColor:
@@ -604,7 +603,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
 
                             Navigator.pop(context);
                           }),
-                      space15H,
+                      SizedBox(height: 15.h),
                     ],
                     iconColor: currentIndex == 3 || currentIndex == 6
                         ? Colors.white
@@ -684,7 +683,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                               ? Theme.of(context).colorScheme.primary
                               : const Color.fromRGBO(233, 236, 239, 1),
                           subItem: [
-                            space15H,
+                            SizedBox(height: 15.h),
                             SubItemDrawer(
                                 iconColor: currentIndex == 7 &&
                                         index == selectedStoreIndex
@@ -715,7 +714,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                   checkTokenExpires();
                                   Navigator.pop(context);
                                 }),
-                            space20H,
+                            SizedBox(height: 20.h),
                             SubItemDrawer(
                                 iconColor: currentIndex == 8 &&
                                         index == selectedStoreIndex
@@ -743,7 +742,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
                                       : null;
                                   Navigator.pop(context);
                                 }),
-                            space20H,
+                            SizedBox(height: 20.h),
                             SubItemDrawer(
                                 iconColor: currentIndex == 9 &&
                                         index == selectedStoreIndex
@@ -773,7 +772,7 @@ class _ManagerFabTabState extends State<ManagerFabTab> {
 
                                   Navigator.pop(context);
                                 }),
-                            space15H,
+                            SizedBox(height: 15.h),
                           ],
                         ),
                       );

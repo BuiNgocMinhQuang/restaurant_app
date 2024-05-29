@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/text.dart';
@@ -118,7 +116,9 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                         padding: EdgeInsets.only(left: 20.w, right: 20.w),
                         child: Column(
                           children: [
-                            space15H,
+                            SizedBox(
+                              height: 15.h,
+                            ),
                             Stack(
                               children: [
                                 Stack(
@@ -275,7 +275,9 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                       contentPadding:
                                                           EdgeInsets.all(20.w)),
                                                 ),
-                                                space20H,
+                                                SizedBox(
+                                                  height: 20.h,
+                                                ),
                                                 TextFormField(
                                                   onTapOutside: (event) {
                                                     FocusManager
@@ -363,7 +365,9 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                       contentPadding:
                                                           EdgeInsets.all(20.w)),
                                                 ),
-                                                space40H,
+                                                SizedBox(
+                                                  height: 40.h,
+                                                ),
                                                 ButtonGradient(
                                                   height: 60.h,
                                                   color1: color1BlueButton,
@@ -385,12 +389,16 @@ class _ManagerChangePasswordState extends State<ManagerChangePassword> {
                                                   radius: 8.r,
                                                   textColor: Colors.white,
                                                 ),
-                                                space20H,
+                                                SizedBox(
+                                                  height: 20.h,
+                                                ),
                                               ],
                                             ),
                                           )),
                                     ),
-                                    space30H,
+                                    SizedBox(
+                                      height: 30.h,
+                                    ),
                                     SizedBox(
                                       width: 1.sw,
                                       child: const CopyRightText(),

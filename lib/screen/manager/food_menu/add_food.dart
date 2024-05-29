@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
@@ -260,7 +259,9 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                       fontWeight: FontWeight.bold,
                                       fontsize: 20.sp,
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -317,7 +318,9 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                         ),
                                       ],
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -466,7 +469,9 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                         )
                                       ],
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -542,7 +547,9 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                         ),
                                       ],
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -553,7 +560,9 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
-                                        space10H,
+                                        SizedBox(
+                                          height: 10.h,
+                                        ),
                                         TextFormField(
                                           readOnly: true,
                                           onTapOutside: (event) {
@@ -719,7 +728,9 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                               contentPadding:
                                                   EdgeInsets.all(20.w)),
                                         ),
-                                        space20H,
+                                        SizedBox(
+                                          height: 20.h,
+                                        ),
                                         TextApp(
                                           text: "Chế độ hiển thị",
                                           fontsize: 14.sp,
@@ -762,17 +773,23 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                             ),
                                           ),
                                         ),
-                                        space20H,
+                                        SizedBox(
+                                          height: 20.h,
+                                        ),
                                         TextApp(
                                           text: createFoodInEachYourStore,
                                           fontsize: 14.sp,
                                           fontWeight: FontWeight.normal,
                                           color: blueText,
                                         ),
-                                        space10H,
+                                        SizedBox(
+                                          height: 10.h,
+                                        ),
                                       ],
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -830,7 +847,9 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                         ),
                                       ],
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -842,7 +861,9 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                           fontWeight: FontWeight.bold,
                                           fontsize: 14.sp,
                                         ),
-                                        space10H,
+                                        SizedBox(
+                                          height: 10.h,
+                                        ),
                                         OutlinedButton(
                                             style: OutlinedButton.styleFrom(
                                               shape: RoundedRectangleBorder(
@@ -913,7 +934,9 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                                                           .cover,
                                                                     ),
                                                                   )),
-                                                              space10H,
+                                                              SizedBox(
+                                                                height: 10.h,
+                                                              ),
                                                               InkWell(
                                                                 onTap: () {
                                                                   deleteImages(
@@ -933,7 +956,9 @@ class _ManagerAddFoodState extends State<ManagerAddFood> {
                                                   )),
                                       ],
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [

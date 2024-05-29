@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
@@ -103,7 +102,9 @@ class _StaffForgotPasswordState extends State<StaffForgotPassword> {
                         padding: EdgeInsets.only(left: 20.w, right: 20.w),
                         child: Column(
                           children: [
-                            space15H,
+                            SizedBox(
+                              height: 15.h,
+                            ),
                             Stack(
                               children: [
                                 Stack(

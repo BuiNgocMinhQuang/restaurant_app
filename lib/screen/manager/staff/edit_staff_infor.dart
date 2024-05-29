@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
@@ -567,7 +566,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                       const Icon(Icons.error),
                                 ),
                               ),
-                              space25W,
+                              SizedBox(
+                                height: 25.w,
+                              ),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -641,7 +642,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         fontSize: 24.sp,
                                       ),
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     IntrinsicHeight(
                                       child: Row(
                                         mainAxisAlignment:
@@ -662,7 +665,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
-                                                space10H,
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
                                                 TextFormField(
                                                   readOnly: true,
                                                   onTapOutside: (event) {
@@ -834,7 +839,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -850,7 +857,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
-                                                space10H,
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
                                                 TextFormField(
                                                   readOnly: true,
                                                   onTapOutside: (event) {
@@ -1026,7 +1035,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     IntrinsicHeight(
                                       child: Row(
                                         mainAxisAlignment:
@@ -1046,7 +1057,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
-                                                space10H,
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
                                                 TextFormField(
                                                   onTapOutside: (event) {
                                                     FocusManager
@@ -1113,7 +1126,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -1129,7 +1144,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
-                                                space10H,
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
                                                 TextFormField(
                                                   onTapOutside: (event) {
                                                     FocusManager
@@ -1195,7 +1212,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -1211,7 +1230,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
-                                                space10H,
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
                                                 TextFormField(
                                                   onTapOutside: (event) {
                                                     FocusManager
@@ -1277,7 +1298,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -1293,7 +1316,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
-                                                space10H,
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
                                                 TextFormField(
                                                   onTapOutside: (event) {
                                                     FocusManager
@@ -1366,7 +1391,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -1382,7 +1409,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
-                                                space10H,
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
                                                 TextFormField(
                                                   readOnly: true,
                                                   onTapOutside: (event) {
@@ -1569,7 +1598,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -1585,7 +1616,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
-                                                space10H,
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
                                                 TextFormField(
                                                   readOnly: true,
                                                   onTapOutside: (event) {
@@ -1766,7 +1799,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -1782,7 +1817,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
-                                                space10H,
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
                                                 TextFormField(
                                                   readOnly: true,
                                                   onTapOutside: (event) {
@@ -1964,7 +2001,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -1980,7 +2019,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                                   fontWeight: FontWeight.bold,
                                                   color: blueText,
                                                 ),
-                                                space10H,
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
                                                 TextFormField(
                                                   onTapOutside: (event) {
                                                     FocusManager
@@ -2043,7 +2084,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ],
                                       ),
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -2054,7 +2097,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
-                                        space10H,
+                                        SizedBox(
+                                          height: 10.h,
+                                        ),
                                         TextFormField(
                                           onTapOutside: (event) {
                                             FocusManager.instance.primaryFocus
@@ -2105,7 +2150,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ),
                                       ],
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -2116,7 +2163,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
-                                        space10H,
+                                        SizedBox(
+                                          height: 10.h,
+                                        ),
                                         TextField(
                                           onTapOutside: (event) {
                                             FocusManager.instance.primaryFocus
@@ -2150,7 +2199,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ),
                                       ],
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -2161,7 +2212,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
-                                        space10H,
+                                        SizedBox(
+                                          height: 10.h,
+                                        ),
                                         TextField(
                                           onTapOutside: (event) {
                                             FocusManager.instance.primaryFocus
@@ -2195,7 +2248,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ),
                                       ],
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -2206,7 +2261,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                           fontWeight: FontWeight.bold,
                                           color: blueText,
                                         ),
-                                        space10H,
+                                        SizedBox(
+                                          height: 10.h,
+                                        ),
                                         TextField(
                                           onTapOutside: (event) {
                                             FocusManager.instance.primaryFocus
@@ -2240,7 +2297,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ),
                                       ],
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
@@ -2328,7 +2387,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                         ),
                                       ],
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                   ],
                                 ),
                               )),
@@ -2373,7 +2434,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                     fontSize: 24.sp,
                                   ),
                                 ),
-                                space20H,
+                                SizedBox(
+                                  height: 20.h,
+                                ),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -2383,7 +2446,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                       fontWeight: FontWeight.bold,
                                       color: blueText,
                                     ),
-                                    space10H,
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
                                     TextFormField(
                                       onTapOutside: (event) {
                                         FocusManager.instance.primaryFocus
@@ -2442,7 +2507,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                     ),
                                   ],
                                 ),
-                                space20H,
+                                SizedBox(
+                                  height: 20.h,
+                                ),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -2452,7 +2519,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                       fontWeight: FontWeight.bold,
                                       color: blueText,
                                     ),
-                                    space10H,
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
                                     TextFormField(
                                       onTapOutside: (event) {
                                         FocusManager.instance.primaryFocus
@@ -2514,7 +2583,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                     ),
                                   ],
                                 ),
-                                space20H,
+                                SizedBox(
+                                  height: 20.h,
+                                ),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -2524,7 +2595,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                       fontWeight: FontWeight.bold,
                                       color: blueText,
                                     ),
-                                    space10H,
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
                                     TextFormField(
                                       onTapOutside: (event) {
                                         FocusManager.instance.primaryFocus
@@ -2586,7 +2659,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                     ),
                                   ],
                                 ),
-                                space20H,
+                                SizedBox(
+                                  height: 20.h,
+                                ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
@@ -2624,13 +2699,17 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                     ),
                                   ],
                                 ),
-                                space20H,
+                                SizedBox(
+                                  height: 20.h,
+                                ),
                               ],
                             ),
                           )),
                     ),
                   ),
-                  space25H,
+                  SizedBox(
+                    height: 25.h,
+                  ),
 //Status Account
 
                   Padding(
@@ -2666,7 +2745,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                   fontSize: 24.sp,
                                 ),
                               ),
-                              space10H,
+                              SizedBox(
+                                height: 10.h,
+                              ),
                               SizedBox(
                                 width: 1.sw,
                                 child: TextApp(
@@ -2677,7 +2758,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                   softWrap: true,
                                 ),
                               ),
-                              space20H,
+                              SizedBox(
+                                height: 20.h,
+                              ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -2703,7 +2786,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                           ),
                                         ),
                                       ),
-                                      space20W,
+                                      SizedBox(
+                                        height: 20.w,
+                                      ),
                                       Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -2723,7 +2808,9 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                   )
                                 ],
                               ),
-                              space20H,
+                              SizedBox(
+                                height: 20.h,
+                              ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -2769,15 +2856,21 @@ class _EditStaffInformationState extends State<EditStaffInformation> {
                                   ),
                                 ],
                               ),
-                              space20H
+                              SizedBox(
+                                height: 20.h,
+                              ),
                             ],
                           ),
                         )),
                   ),
-                  space20H,
+                  SizedBox(
+                    height: 20.h,
+                  ),
 
                   const CopyRightText(),
-                  space35H,
+                  SizedBox(
+                    height: 35.h,
+                  ),
                 ],
               ))),
     );

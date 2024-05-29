@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
@@ -100,7 +99,9 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                         padding: EdgeInsets.only(left: 20.w, right: 20.w),
                         child: Column(
                           children: [
-                            space15H,
+                            SizedBox(
+                              height: 15.h,
+                            ),
                             Stack(
                               children: [
                                 Stack(
@@ -189,7 +190,9 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                                             33, 82, 255, 1),
                                                       ]),
                                                 ),
-                                                space10H,
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
                                                 Center(
                                                   child: TextApp(
                                                     softWrap: true,
@@ -198,7 +201,9 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                                     textAlign: TextAlign.center,
                                                   ),
                                                 ),
-                                                space30H,
+                                                SizedBox(
+                                                  height: 30.h,
+                                                ),
                                                 Column(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
@@ -293,7 +298,9 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                                     ),
                                                   ],
                                                 ),
-                                                space20H,
+                                                SizedBox(
+                                                  height: 20.h,
+                                                ),
                                                 ButtonGradient(
                                                   height: 60.h,
                                                   color1: color1BlueButton,
@@ -314,7 +321,9 @@ class _ManagerForgotPasswordState extends State<ManagerForgotPassword> {
                                             ),
                                           )),
                                     ),
-                                    space30H,
+                                    SizedBox(
+                                      height: 30.h,
+                                    ),
                                     SizedBox(
                                       width: 1.sw,
                                       // height: 80,

@@ -4,7 +4,6 @@ import 'package:app_restaurant/bloc/brought_receipt/brought_receipt_bloc.dart';
 import 'package:app_restaurant/bloc/list_bill_shop/list_bill_shop_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/date_time_format.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/model/bill/list_bill_model.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
@@ -161,7 +160,7 @@ class _ManagerListBillState extends State<ManagerListBill>
                                 ListCancleBillShop(shopID: widget.shopID),
                               ]),
                         )),
-                        space15H
+                        SizedBox(height: 15.h),
                       ],
                     ),
                   )
@@ -184,13 +183,13 @@ class _ManagerListBillState extends State<ManagerListBill>
                               height: 100.w,
                               child: Lottie.asset('assets/lottie/error.json'),
                             ),
-                            space30H,
+                            SizedBox(height: 30.h),
                             TextApp(
                               text: state.errorText.toString(),
                               fontsize: 20.sp,
                               fontWeight: FontWeight.bold,
                             ),
-                            space30H,
+                            SizedBox(height: 30.h),
                             SizedBox(
                               width: 200,
                               child: ButtonGradient(
@@ -462,7 +461,7 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                                                       fit: BoxFit.contain,
                                                     ),
                                                   ),
-                                                  space10W,
+                                                  SizedBox(width: 10.w),
                                                   TextApp(
                                                     text: "In hoá đơn",
                                                     color: Colors.black,
@@ -471,9 +470,9 @@ class _ListAllBillShopState extends State<ListAllBillShop>
                                                 ],
                                               ),
                                             ),
-                                            space10H,
+                                            SizedBox(height: 10.h),
                                             const Divider(),
-                                            space10H,
+                                            SizedBox(height: 10.h),
                                           ],
                                         ),
                                       ));
@@ -758,7 +757,7 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                                                           fit: BoxFit.contain,
                                                         ),
                                                       ),
-                                                      space10W,
+                                                      SizedBox(width: 10.w),
                                                       TextApp(
                                                         text: "In hoá đơn",
                                                         color: Colors.black,
@@ -767,9 +766,9 @@ class _CompleteWidgetState extends State<ListCompleteBillShop>
                                                     ],
                                                   ),
                                                 ),
-                                                space10H,
+                                                SizedBox(height: 10.h),
                                                 const Divider(),
-                                                space10H,
+                                                SizedBox(height: 10.h),
                                               ],
                                             ),
                                           ));
@@ -1055,7 +1054,7 @@ class _PendingWidgetState extends State<PendingWidget>
                                                       fit: BoxFit.contain,
                                                     ),
                                                   ),
-                                                  space10W,
+                                                  SizedBox(width: 10.w),
                                                   TextApp(
                                                     text: "In hoá đơn",
                                                     color: Colors.black,
@@ -1064,9 +1063,9 @@ class _PendingWidgetState extends State<PendingWidget>
                                                 ],
                                               ),
                                             ),
-                                            space10H,
+                                            SizedBox(height: 10.h),
                                             const Divider(),
-                                            space10H,
+                                            SizedBox(height: 10.h),
                                           ],
                                         ),
                                       ));
@@ -1345,7 +1344,7 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                                                       fit: BoxFit.contain,
                                                     ),
                                                   ),
-                                                  space10W,
+                                                  SizedBox(width: 10.w),
                                                   TextApp(
                                                     text: "In hoá đơn",
                                                     color: Colors.black,
@@ -1354,9 +1353,9 @@ class _ListCancleBillShopState extends State<ListCancleBillShop>
                                                 ],
                                               ),
                                             ),
-                                            space10H,
+                                            SizedBox(height: 10.h),
                                             const Divider(),
-                                            space10H,
+                                            SizedBox(height: 10.h),
                                           ],
                                         ),
                                       ));

@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/model/manager/manager_list_food_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
@@ -459,13 +458,17 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                           height: 100,
                           child: Lottie.asset('assets/lottie/error.json'),
                         ),
-                        space30H,
+                        SizedBox(
+                          height: 30.h,
+                        ),
                         TextApp(
                           text: "Có lỗi xảy ra, vui lòng thử lại sau",
                           fontsize: 20.sp,
                           fontWeight: FontWeight.bold,
                         ),
-                        space30H,
+                        SizedBox(
+                          height: 30.h,
+                        ),
                         SizedBox(
                           width: 200.w,
                           child: ButtonGradient(
@@ -543,7 +546,9 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: blueText),
-                                                  space10H,
+                                                  SizedBox(
+                                                    height: 10.h,
+                                                  ),
                                                   SizedBox(
                                                     width: 1.sw,
                                                     child: TextApp(
@@ -557,7 +562,9 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                   ),
                                                 ],
                                               ),
-                                              space40H,
+                                              SizedBox(
+                                                height: 40.h,
+                                              ),
                                               Row(
                                                 children: [
                                                   Flexible(
@@ -575,7 +582,9 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                               FontWeight.bold,
                                                           color: blueText,
                                                         ),
-                                                        space10H,
+                                                        SizedBox(
+                                                          height: 10.h,
+                                                        ),
                                                         TextField(
                                                           onTapOutside:
                                                               (event) {
@@ -636,7 +645,9 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                       ],
                                                     ),
                                                   ),
-                                                  space20W,
+                                                  SizedBox(
+                                                    width: 20.w,
+                                                  ),
                                                   Flexible(
                                                     fit: FlexFit.tight,
                                                     flex: 1,
@@ -652,7 +663,9 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                               FontWeight.bold,
                                                           color: blueText,
                                                         ),
-                                                        space10H,
+                                                        SizedBox(
+                                                          height: 10.h,
+                                                        ),
                                                         TextField(
                                                           onTapOutside:
                                                               (event) {
@@ -715,7 +728,9 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                   )
                                                 ],
                                               ),
-                                              space20H,
+                                              SizedBox(
+                                                height: 20.h,
+                                              ),
                                               Row(
                                                 children: [
                                                   Flexible(
@@ -733,7 +748,9 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                               FontWeight.bold,
                                                           color: blueText,
                                                         ),
-                                                        space10H,
+                                                        SizedBox(
+                                                          height: 10.h,
+                                                        ),
                                                         TextFormField(
                                                           readOnly: true,
                                                           onTapOutside:
@@ -937,7 +954,9 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                       ],
                                                     ),
                                                   ),
-                                                  space20W,
+                                                  SizedBox(
+                                                    width: 20.w,
+                                                  ),
                                                   Flexible(
                                                     fit: FlexFit.tight,
                                                     flex: 1,
@@ -953,7 +972,9 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                               FontWeight.bold,
                                                           color: blueText,
                                                         ),
-                                                        space10H,
+                                                        SizedBox(
+                                                          height: 10.h,
+                                                        ),
                                                         TextFormField(
                                                           onTapOutside:
                                                               (event) {
@@ -1016,7 +1037,9 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                   )
                                                 ],
                                               ),
-                                              space20H,
+                                              SizedBox(
+                                                height: 20.h,
+                                              ),
                                               Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
@@ -1057,7 +1080,9 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                                 const Divider(
                                                                   height: 1,
                                                                 ),
-                                                                space5H,
+                                                                SizedBox(
+                                                                  height: 5.h,
+                                                                ),
                                                                 Slidable(
                                                                   // Specify a key if the Slidable is dismissible.
                                                                   key: ValueKey(
@@ -1256,7 +1281,9 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                                                       textAlign: TextAlign.start,
                                                                                       fontWeight: FontWeight.bold,
                                                                                     ),
-                                                                                    space5W,
+                                                                                    SizedBox(
+                                                                                      height: 5.w,
+                                                                                    ),
                                                                                     SizedBox(
                                                                                       width: 150.w,
                                                                                       child: TextApp(
@@ -1274,7 +1301,9 @@ class _ListFoodManagerState extends State<ListFoodManager> {
                                                                         ),
                                                                       )),
                                                                 ),
-                                                                space5H,
+                                                                SizedBox(
+                                                                  height: 5.h,
+                                                                ),
                                                               ],
                                                             );
                                                           } else {

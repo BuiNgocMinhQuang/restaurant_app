@@ -9,7 +9,6 @@ import 'package:app_restaurant/bloc/payment/payment_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/config/fake_data.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/constant/api/index.dart';
@@ -644,7 +643,9 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                           color: blueText,
                           fontWeight: FontWeight.bold,
                         ),
-                        space15H,
+                        SizedBox(
+                          height: 15.h,
+                        ),
                         SizedBox(
                           width: 1.sw,
                           child: SizedBox(
@@ -767,7 +768,9 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                           color: Colors.red,
                                         ),
                                       ),
-                                      space10H,
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
                                       Visibility(
                                         visible:
                                             state.tableModel?.booking == null,
@@ -779,15 +782,18 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                           color: red,
                                         ),
                                       ),
-                                      space10H,
-
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
                                       TextApp(
                                         text: " Thời gian kết thúc",
                                         fontsize: 14.sp,
                                         fontWeight: FontWeight.bold,
                                         color: blueText,
                                       ),
-                                      space10H,
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
                                       TextField(
                                         onTapOutside: (event) {
                                           FocusManager.instance.primaryFocus
@@ -1103,34 +1109,6 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                               tokenReq: widget.token,
                                             );
                                             //Save infor table
-
-                                            // BlocProvider.of<TableSaveInforBloc>(
-                                            //         context)
-                                            //     .add(SaveTableInfor(
-                                            //   token: widget.token,
-                                            //   client: widget.role,
-                                            //   shopId: getStaffShopID,
-                                            //   roomId: widget.idRoom.toString(),
-                                            //   tableId: widget
-                                            //       .currentTable!.roomTableId
-                                            //       .toString(),
-                                            //   clientName:
-                                            //       customerNameController.text,
-                                            //   clientPhone:
-                                            //       customerPhoneController.text,
-                                            //   note: noteController.text,
-                                            //   endDate:
-                                            //       _dateStartController.text,
-                                            //   tables: listBanDaGhep
-                                            //           .map((e) => e.roomTableId)
-                                            //           .toList() ??
-                                            //       [],
-                                            // ));
-
-                                            // ///check dieu kien succes cho nay
-                                            // Navigator.of(context).pop();
-                                            // showUpdateDataSuccesDialog();
-                                            // widget.eventSaveButton();
                                           },
                                           text: save,
                                           colorText: Colors.white,
@@ -1299,7 +1277,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                             ),
                                           ],
                                         )),
-                                    space30H,
+                                    SizedBox(height: 30.h),
                                     IntrinsicHeight(
                                       child: Row(
                                         children: [
@@ -1349,7 +1327,9 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                       EdgeInsets.all(20.w)),
                                             ),
                                           ),
-                                          space20W,
+                                          SizedBox(
+                                            width: 20.w,
+                                          ),
                                           Container(
                                               width: 80.w,
                                               height: 45.w,
@@ -1377,7 +1357,9 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                     fontsize: 14.sp,
                                                     fontWeight: FontWeight.bold,
                                                   ),
-                                                  space5W,
+                                                  SizedBox(
+                                                    width: 5.w,
+                                                  ),
                                                   Icon(
                                                     Icons
                                                         .shopping_basket_rounded,
@@ -1390,7 +1372,9 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                         ],
                                       ),
                                     ),
-                                    space15H,
+                                    SizedBox(
+                                      height: 15.h,
+                                    ),
                                     Expanded(
                                         child: ListView.builder(
                                             controller:
@@ -1493,7 +1477,8 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                               const Icon(Icons.error),
                                                                         ),
                                                                 )),
-                                                            space15W,
+                                                            SizedBox(
+                                                                width: 15.w),
                                                             Expanded(
                                                               child: Row(
                                                                 crossAxisAlignment:
@@ -1526,7 +1511,9 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                               FontWeight.bold,
                                                                         ),
                                                                       ),
-                                                                      space10H,
+                                                                      SizedBox(
+                                                                          height:
+                                                                              10.h),
                                                                       SizedBox(
                                                                         width:
                                                                             80.w,
@@ -1546,7 +1533,9 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                               blueText2,
                                                                         ),
                                                                       ),
-                                                                      space10H,
+                                                                      SizedBox(
+                                                                          height:
+                                                                              10.h),
                                                                     ],
                                                                   ),
                                                                 ],
@@ -1743,7 +1732,7 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                             ),
                                                           ],
                                                         ),
-                                                        space15H,
+                                                        SizedBox(height: 15.h),
                                                         Row(
                                                           crossAxisAlignment:
                                                               CrossAxisAlignment
@@ -1802,7 +1791,8 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                                                                 ),
                                                               ],
                                                             ),
-                                                            space20W,
+                                                            SizedBox(
+                                                                width: 20.w),
                                                             Column(
                                                               crossAxisAlignment:
                                                                   CrossAxisAlignment
@@ -2088,14 +2078,14 @@ class _BookingTableDialogState extends State<BookingTableDialog>
                       height: 100,
                       child: Lottie.asset('assets/lottie/error.json'),
                     ),
-                    space30H,
+                    SizedBox(height: 30.h),
                     TextApp(
                       text: state.errorText.toString(),
                       textAlign: TextAlign.center,
                       fontsize: 20.sp,
                       fontWeight: FontWeight.bold,
                     ),
-                    space30H,
+                    SizedBox(height: 30.h),
                     SizedBox(
                       width: 200,
                       child: ButtonGradient(
@@ -2287,7 +2277,7 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
                                           ),
                                         );
                                       }),
-                                  space10H,
+                                  SizedBox(height: 10.h),
                                   TextApp(
                                     text:
                                         "Lưu ý: Bàn chỉ được ghép khi cùng phòng",
@@ -2295,7 +2285,7 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
                                     fontWeight: FontWeight.normal,
                                     color: grey,
                                   ),
-                                  space10H,
+                                  SizedBox(height: 10.h),
                                   Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
@@ -2410,7 +2400,7 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
                                       )
                                     ],
                                   ),
-                                  space15H,
+                                  SizedBox(height: 15.h),
                                   GridView.builder(
                                       shrinkWrap: true,
                                       physics:
@@ -2579,13 +2569,13 @@ class _MoveTableDialogState extends State<MoveTableDialog> {
                   height: 100,
                   child: Lottie.asset('assets/lottie/error.json'),
                 ),
-                space30H,
+                SizedBox(height: 30.h),
                 TextApp(
                   text: state.errorText.toString(),
                   fontsize: 20.sp,
                   fontWeight: FontWeight.bold,
                 ),
-                space30H,
+                SizedBox(height: 30.h),
                 SizedBox(
                   width: 200,
                   child: ButtonGradient(
@@ -2911,14 +2901,14 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                         height: 100,
                         child: Lottie.asset('assets/lottie/error.json'),
                       ),
-                      space30H,
+                      SizedBox(height: 30.h),
                       TextApp(
                         text: "Có lỗi xảy ra, vui lòng thử lại sau",
                         textAlign: TextAlign.center,
                         fontsize: 20.sp,
                         fontWeight: FontWeight.bold,
                       ),
-                      space30H,
+                      SizedBox(height: 30.h),
                       SizedBox(
                         width: 200,
                         child: ButtonGradient(
@@ -3316,7 +3306,7 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
                                                                                   //   fit: BoxFit.cover,
                                                                                   // ),
                                                                                 )),
-                                                                            space50W,
+                                                                            SizedBox(width: 50.w),
                                                                             Column(
                                                                               crossAxisAlignment: CrossAxisAlignment.center,
                                                                               children: [
@@ -3545,64 +3535,6 @@ class _SeeBillDialogState extends State<SeeBillDialog> {
               ),
             ),
           );
-
-    // return AlertDialog(
-    //   contentPadding: const EdgeInsets.all(0),
-    //   surfaceTintColor: Colors.white,
-    //   backgroundColor: Colors.white,
-    //   content: Center(
-    //     child: SizedBox(
-    //       width: 1.sw,
-    //       height: 200.w,
-    //       child: Lottie.asset('assets/lottie/loading_7_color.json'),
-    //     ),
-    //   ),
-    // );
-    //   } else {
-    //     return AlertDialog(
-    //         contentPadding: const EdgeInsets.all(0),
-    //         surfaceTintColor: Colors.white,
-    //         backgroundColor: Colors.white,
-    //         content: Center(
-    //             child: SizedBox(
-    //           width: 1.sw,
-    //           child: Column(
-    //             mainAxisAlignment: MainAxisAlignment.center,
-    //             crossAxisAlignment: CrossAxisAlignment.center,
-    //             children: [
-    //               SizedBox(
-    //                 width: 100,
-    //                 height: 100,
-    //                 child: Lottie.asset('assets/lottie/error.json'),
-    //               ),
-    //               space30H,
-    //               TextApp(
-    //                 text: state.errorText.toString(),
-    //                 textAlign: TextAlign.center,
-    //                 fontsize: 20.sp,
-    //                 fontWeight: FontWeight.bold,
-    //               ),
-    //               space30H,
-    //               SizedBox(
-    //                 width: 200,
-    //                 child: ButtonGradient(
-    //                   color1: color1BlueButton,
-    //                   color2: color2BlueButton,
-    //                   event: () {
-    //                     // getDataTabIndex("");
-    //                     Navigator.pop(context);
-    //                   },
-    //                   text: 'Thử lại',
-    //                   fontSize: 12.sp,
-    //                   radius: 8.r,
-    //                   textColor: Colors.white,
-    //                 ),
-    //               )
-    //             ],
-    //           ),
-    //         )));
-    //   }
-    // },
   }
 }
 
@@ -3759,7 +3691,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                     // color: Colors.green,
                                     child: Column(
                                       children: [
-                                        space15H,
+                                        SizedBox(height: 15.h),
                                         ListView.builder(
                                             shrinkWrap: true,
                                             itemCount: state.paymentInforModel
@@ -3859,7 +3791,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                                                               .error),
                                                                 ),
                                                         )),
-                                                    space15W,
+                                                    SizedBox(width: 15.w),
                                                     Expanded(
                                                         child: Row(
                                                       crossAxisAlignment:
@@ -3899,7 +3831,8 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                                                         .bold,
                                                               ),
                                                             ),
-                                                            space10H,
+                                                            SizedBox(
+                                                                height: 10.h),
                                                             SizedBox(
                                                               width: 100.w,
                                                               child: TextApp(
@@ -3918,7 +3851,8 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                                                         .bold,
                                                               ),
                                                             ),
-                                                            space10H,
+                                                            SizedBox(
+                                                                height: 10.h),
                                                             Container(
                                                                 width: 35.w,
                                                                 height: 30.w,
@@ -4014,7 +3948,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                             size: 20.sp,
                                             color: Colors.grey,
                                           ),
-                                          space5W,
+                                          SizedBox(height: 5.w),
                                           TextApp(
                                             text: "Giảm giá",
                                             color: Colors.black,
@@ -4099,7 +4033,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                             size: 20.sp,
                                             color: Colors.grey,
                                           ),
-                                          space5W,
+                                          SizedBox(height: 5.w),
                                           TextApp(
                                             text: "Khách thanh toán",
                                             color: Colors.black,
@@ -4165,7 +4099,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                     ],
                                   ),
                                 ),
-                                space20H,
+                                SizedBox(height: 20.h),
                                 Wrap(
                                   children: [
                                     Row(
@@ -4268,8 +4202,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                           ),
                                         ],
                                       ),
-                                      space20H,
-
+                                      SizedBox(height: 20.h),
                                       Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
@@ -4290,28 +4223,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                           ),
                                         ],
                                       ),
-
-                                      // Row(
-                                      //   mainAxisAlignment:
-                                      //       MainAxisAlignment.end,
-                                      //   children: [
-                                      //     TextApp(
-                                      //         text: formatDateTime(state
-                                      //                 .paymentInforModel
-                                      //                 ?.order
-                                      //                 ?.createdAt
-                                      //                 .toString() ??
-                                      //             ''),
-                                      //         fontsize: 14.sp),
-                                      //     space5W,
-                                      //     Icon(
-                                      //       Icons.access_time_filled,
-                                      //       size: 14.sp,
-                                      //       color: Colors.grey,
-                                      //     )
-                                      //   ],
-                                      // ),
-                                      space20H,
+                                      SizedBox(height: 20.h),
                                       Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
@@ -4333,7 +4245,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                                           ),
                                         ],
                                       ),
-                                      space20H,
+                                      SizedBox(height: 20.h),
                                     ],
                                   ),
                                 )
@@ -4362,7 +4274,7 @@ class _PayBillDialogState extends State<PayBillDialog> {
                               outlineColor:
                                   Theme.of(context).colorScheme.primary,
                             ),
-                            space15W,
+                            SizedBox(width: 15.w),
                             ButtonApp(
                               event: () {
                                 showConfirmDialog(context, () {
@@ -4425,14 +4337,14 @@ class _PayBillDialogState extends State<PayBillDialog> {
                       height: 100,
                       child: Lottie.asset('assets/lottie/error.json'),
                     ),
-                    space30H,
+                    SizedBox(height: 30.h),
                     TextApp(
                       text: state.errorText.toString(),
                       textAlign: TextAlign.center,
                       fontsize: 20.sp,
                       fontWeight: FontWeight.bold,
                     ),
-                    space30H,
+                    SizedBox(height: 30.h),
                     SizedBox(
                       width: 200,
                       child: ButtonGradient(
@@ -4837,12 +4749,12 @@ class _ManageBroughtReceiptDialogState
                     )
                   ],
                 ),
-                space20H,
+                SizedBox(height: 20.h),
                 const Divider(
                   height: 1,
                   color: Colors.black,
                 ),
-                space10H,
+                SizedBox(height: 10.h),
                 Card(
                     elevation: 8.w,
                     margin: EdgeInsets.all(8.w),
@@ -4868,7 +4780,7 @@ class _ManageBroughtReceiptDialogState
                                   ),
                                 ],
                               ),
-                              space10H,
+                              SizedBox(height: 10.h),
                               Row(
                                 children: [
                                   TextApp(
@@ -4886,7 +4798,7 @@ class _ManageBroughtReceiptDialogState
                             ],
                           ),
                         ))),
-                space30H,
+                SizedBox(height: 30.h),
                 SizedBox(
                     height: 50,
                     child: Row(
@@ -5013,7 +4925,7 @@ class _ManageBroughtReceiptDialogState
                         ),
                       ],
                     )),
-                space30H,
+                SizedBox(height: 30.h),
                 IntrinsicHeight(
                   child: Row(
                     children: [
@@ -5046,7 +4958,7 @@ class _ManageBroughtReceiptDialogState
                               contentPadding: EdgeInsets.all(20.w)),
                         ),
                       ),
-                      space20W,
+                      SizedBox(height: 20.w),
                       Container(
                           width: 80.w,
                           height: 45.w,
@@ -5068,7 +4980,7 @@ class _ManageBroughtReceiptDialogState
                                 fontsize: 14.sp,
                                 fontWeight: FontWeight.bold,
                               ),
-                              space5W,
+                              SizedBox(width: 5.w),
                               Icon(
                                 Icons.shopping_basket_rounded,
                                 color: Theme.of(context).colorScheme.primary,
@@ -5082,28 +4994,6 @@ class _ManageBroughtReceiptDialogState
                 const SizedBox(height: 10.0),
                 filterProducts2.isEmpty
                     ? Container()
-                    // Container(
-                    //     width: 1.sw,
-                    //     height: 50,
-                    //     decoration: BoxDecoration(
-                    //         borderRadius: BorderRadius.circular(10.r),
-                    //         gradient: const LinearGradient(
-                    //           begin: Alignment.topRight,
-                    //           end: Alignment.bottomLeft,
-                    //           colors: [
-                    //             Color.fromRGBO(33, 82, 255, 1),
-                    //             Color.fromRGBO(33, 212, 253, 1)
-                    //           ],
-                    //         )),
-                    //     child: Center(
-                    //       child: TextApp(
-                    //         text: "Cửa hàng này chưa có món ăn",
-                    //         fontsize: 14.sp,
-                    //         color: Colors.white,
-                    //         fontWeight: FontWeight.bold,
-                    //         textAlign: TextAlign.center,
-                    //       ),
-                    //     ))
                     : Expanded(
                         child: ListView.builder(
                             itemCount: filterProducts2.length + 1,
@@ -5119,8 +5009,7 @@ class _ManageBroughtReceiptDialogState
 
                                 var imagePath1 =
                                     filterProducts2[index]?.foodImages;
-                                // var imagePath2 =
-                                //     imagePath1.replaceAll('"]', '');
+
                                 var listImagePath =
                                     jsonDecode(imagePath1 ?? '[]');
                                 return Container(
@@ -5176,7 +5065,7 @@ class _ManageBroughtReceiptDialogState
                                                         const Icon(Icons.error),
                                                   ),
                                           )),
-                                      space15W,
+                                      SizedBox(width: 15.w),
                                       Expanded(
                                         child: Row(
                                           crossAxisAlignment:
@@ -5201,7 +5090,7 @@ class _ManageBroughtReceiptDialogState
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
-                                                space10H,
+                                                SizedBox(height: 10.h),
                                                 SizedBox(
                                                   width: 80.w,
                                                   child: TextApp(
@@ -5214,7 +5103,7 @@ class _ManageBroughtReceiptDialogState
                                                     color: blueText2,
                                                   ),
                                                 ),
-                                                space10H,
+                                                SizedBox(height: 10.h),
                                               ],
                                             ),
                                           ],
@@ -5479,13 +5368,13 @@ class _ManageBroughtReceiptDialogState
                   height: 100,
                   child: Lottie.asset('assets/lottie/error.json'),
                 ),
-                space30H,
+                SizedBox(height: 30.h),
                 TextApp(
                   text: state.errorText.toString(),
                   fontsize: 20.sp,
                   fontWeight: FontWeight.bold,
                 ),
-                space30H,
+                SizedBox(height: 30.h),
                 SizedBox(
                   width: 200,
                   child: ButtonGradient(
@@ -5581,12 +5470,12 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                           ),
                         ],
                       ),
-                      space10H,
+                      SizedBox(height: 10.h),
                       const Divider(
                         height: 1,
                         color: Colors.black,
                       ),
-                      space10H,
+                      SizedBox(height: 10.h),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -5599,7 +5488,7 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                             color: blueText,
                             fontWeight: FontWeight.bold,
                           ),
-                          space5W,
+                          SizedBox(width: 5.w),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -5609,7 +5498,7 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                                 fontsize: 16.sp,
                                 color: blueText,
                               ),
-                              space10W,
+                              SizedBox(width: 10.w),
                               TextApp(
                                 text: state.printBroughtReceiptModel?.store
                                         .storeAddress ??
@@ -5621,12 +5510,12 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                           )
                         ],
                       ),
-                      space5H,
+                      SizedBox(height: 5.h),
                       const Divider(
                         height: 1,
                         color: Colors.black,
                       ),
-                      space10H,
+                      SizedBox(height: 10.h),
                       Wrap(
                         children: [
                           Row(
@@ -5667,12 +5556,12 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                                 fontsize: 16.sp,
                                 color: blueText,
                               ),
-                              space20W,
+                              SizedBox(width: 20.w),
                             ],
                           )
                         ],
                       ),
-                      space5H,
+                      SizedBox(height: 5.h),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -5696,7 +5585,7 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                           ),
                         ],
                       ),
-                      space20H,
+                      SizedBox(height: 20.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -5722,12 +5611,12 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                           ),
                         ],
                       ),
-                      space5H,
+                      SizedBox(height: 5.h),
                       const Divider(
                         height: 1,
                         color: Colors.black,
                       ),
-                      space10H,
+                      SizedBox(height: 10.h),
                       ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
@@ -5802,11 +5691,11 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                                   height: 1,
                                   color: Colors.black,
                                 ),
-                                space10H
+                                SizedBox(height: 10.h),
                               ],
                             );
                           }),
-                      space35H,
+                      SizedBox(height: 35.h),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -5920,12 +5809,12 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                           ),
                         ],
                       ),
-                      space15H,
+                      SizedBox(height: 15.h),
                       const Divider(
                         height: 1,
                         color: Colors.black,
                       ),
-                      space10H,
+                      SizedBox(height: 10.h),
                       state.printBroughtReceiptModel?.order
                                   .cancellationReason !=
                               null
@@ -5937,7 +5826,7 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                                   color: red,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                space10H,
+                                SizedBox(height: 10.h),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -5960,7 +5849,7 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                               ],
                             )
                           : Container(),
-                      space15H,
+                      SizedBox(height: 15.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -6028,13 +5917,13 @@ class _PrintBillDialogState extends State<PrintBillDialog> {
                     height: 100,
                     child: Lottie.asset('assets/lottie/error.json'),
                   ),
-                  space30H,
+                  SizedBox(height: 30.h),
                   TextApp(
                     text: state.errorText.toString(),
                     fontsize: 20.sp,
                     fontWeight: FontWeight.bold,
                   ),
-                  space30H,
+                  SizedBox(height: 30.h),
                   SizedBox(
                     width: 200,
                     child: ButtonGradient(
@@ -6116,12 +6005,12 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                           ),
                         ],
                       ),
-                      space10H,
+                      SizedBox(height: 10.h),
                       const Divider(
                         height: 1,
                         color: Colors.black,
                       ),
-                      space10H,
+                      SizedBox(height: 10.h),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -6134,7 +6023,7 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                             color: blueText,
                             fontWeight: FontWeight.bold,
                           ),
-                          space5W,
+                          SizedBox(width: 5.w),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -6144,7 +6033,7 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                                 fontsize: 16.sp,
                                 color: blueText,
                               ),
-                              space10W,
+                              SizedBox(width: 10.w),
                               TextApp(
                                 text: state.printBroughtReceiptModel?.store
                                         .storeAddress ??
@@ -6156,12 +6045,12 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                           )
                         ],
                       ),
-                      space5H,
+                      SizedBox(height: 5.h),
                       const Divider(
                         height: 1,
                         color: Colors.black,
                       ),
-                      space10H,
+                      SizedBox(height: 10.h),
                       Wrap(
                         children: [
                           Row(
@@ -6206,7 +6095,7 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                           )
                         ],
                       ),
-                      space5H,
+                      SizedBox(height: 5.h),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -6228,7 +6117,7 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                           ),
                         ],
                       ),
-                      space20H,
+                      SizedBox(height: 20.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -6254,12 +6143,12 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                           ),
                         ],
                       ),
-                      space5H,
+                      SizedBox(height: 5.h),
                       const Divider(
                         height: 1,
                         color: Colors.black,
                       ),
-                      space10H,
+                      SizedBox(height: 10.h),
                       ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
@@ -6272,16 +6161,6 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    // SizedBox(
-                                    //   width: 80.w,
-                                    //   child: TextApp(
-                                    //     text: state.printBroughtReceiptModel
-                                    //             ?.data[index].foodName ??
-                                    //         '',
-                                    //     fontsize: 16.sp,
-                                    //     color: blueText,
-                                    //   ),
-                                    // ),
                                     Wrap(
                                       children: [
                                         SizedBox(
@@ -6342,11 +6221,11 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                                   height: 1,
                                   color: Colors.black,
                                 ),
-                                space10H
+                                SizedBox(height: 10.h),
                               ],
                             );
                           }),
-                      space35H,
+                      SizedBox(height: 35.h),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -6460,12 +6339,12 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                           ),
                         ],
                       ),
-                      space15H,
+                      SizedBox(height: 15.h),
                       const Divider(
                         height: 1,
                         color: Colors.black,
                       ),
-                      space10H,
+                      SizedBox(height: 10.h),
                       state.printBroughtReceiptModel?.order
                                   .cancellationReason !=
                               null
@@ -6477,7 +6356,7 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                                   color: red,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                space10H,
+                                SizedBox(height: 10.h),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -6500,7 +6379,7 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                               ],
                             )
                           : Container(),
-                      space15H,
+                      SizedBox(height: 15.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -6568,13 +6447,13 @@ class PrintBroughtReceiptDialog extends StatelessWidget {
                     height: 100,
                     child: Lottie.asset('assets/lottie/error.json'),
                   ),
-                  space30H,
+                  SizedBox(height: 30.h),
                   TextApp(
                     text: state.errorText.toString(),
                     fontsize: 20.sp,
                     fontWeight: FontWeight.bold,
                   ),
-                  space30H,
+                  SizedBox(height: 30.h),
                   SizedBox(
                     width: 200,
                     child: ButtonGradient(
@@ -6652,12 +6531,12 @@ class _CancleBillDialogState extends State<CancleBillDialog> {
                     ),
                   ],
                 ),
-                space10H,
+                SizedBox(height: 10.h),
                 const Divider(
                   height: 1,
                   color: Colors.black,
                 ),
-                space10H,
+                SizedBox(height: 10.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -6669,7 +6548,7 @@ class _CancleBillDialogState extends State<CancleBillDialog> {
                     ),
                   ],
                 ),
-                space5H,
+                SizedBox(height: 5.h),
                 Column(
                   children: [
                     InkWell(
@@ -6794,12 +6673,12 @@ class _CancleBillDialogState extends State<CancleBillDialog> {
                     )
                   ],
                 ),
-                space15H,
+                SizedBox(height: 15.h),
                 const Divider(
                   height: 1,
                   color: Colors.black,
                 ),
-                space15H,
+                SizedBox(height: 15.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -7009,7 +6888,7 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
                         isDense: true,
                         contentPadding: EdgeInsets.all(20.w)),
                   ),
-                  space20H,
+                  SizedBox(height: 20.h),
                   TextApp(
                     text: "Chế độ hiển thị",
                     fontsize: 14.sp,
@@ -7321,7 +7200,7 @@ class _EditRoomDataDialogState extends State<EditRoomDataDialog> {
                         isDense: true,
                         contentPadding: EdgeInsets.all(20.w)),
                   ),
-                  space20H,
+                  SizedBox(height: 20.h),
                   TextApp(
                     text: "Chế độ hiển thị",
                     fontsize: 14.sp,
@@ -7700,12 +7579,10 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                               isDense: true,
                               contentPadding: EdgeInsets.all(20.w)),
                         ),
-                        ////////
-                        // SizedBox(
-                        //   height: 30.h,
-                        // ),
-                        //////
-                        space20H,
+
+                        SizedBox(
+                          height: 20.h,
+                        ),
                         TextApp(
                           text: storeName,
                           fontsize: 14.sp,
@@ -7750,12 +7627,9 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                               isDense: true,
                               contentPadding: EdgeInsets.all(20.w)),
                         ),
-                        /////
-                        // SizedBox(
-                        //   height: 30.h,
-                        // ),
-                        ////
-                        space20H,
+                        SizedBox(
+                          height: 20.h,
+                        ),
 
                         TextApp(
                           text: storeAddress,
@@ -7800,7 +7674,9 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                               contentPadding: EdgeInsets.all(20.w)),
                         ),
                         /////
-                        space20H,
+                        SizedBox(
+                          height: 20.h,
+                        ),
 
                         ////
                         TextApp(
@@ -7914,11 +7790,9 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                             ),
                           ],
                         ),
-                        // SizedBox(
-                        //   height: 30.h,
-                        // ),
-                        space20H,
-
+                        SizedBox(
+                          height: 20.h,
+                        ),
                         TextApp(
                           text: storeImage,
                           fontsize: 14.sp,
@@ -7987,7 +7861,9 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                                                           fit: BoxFit.cover,
                                                         ),
                                                       )),
-                                                  space10H,
+                                                  SizedBox(
+                                                    height: 10.h,
+                                                  ),
                                                   InkWell(
                                                     onTap: () {
                                                       deleteImages(
@@ -8059,7 +7935,9 @@ class _CreateStoreDialogState extends State<CreateStoreDialog> {
                     ),
                   ),
                 )),
-                space15H,
+                SizedBox(
+                  height: 15.h,
+                ),
                 Container(
                   width: 1.sw,
                   height: 80,
@@ -8906,7 +8784,9 @@ class _EditDetailStoreDialogState extends State<EditDetailStoreDialog> {
                     ),
                   ),
                 )),
-                space15H,
+                SizedBox(
+                  height: 15.h,
+                ),
                 Container(
                   width: 1.sw,
                   height: 80,
@@ -9172,7 +9052,9 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                         ],
                       )),
                   const Divider(),
-                  space10H,
+                  SizedBox(
+                    height: 10.h,
+                  ),
                   SingleChildScrollView(
                       child: Form(
                     key: _formField,
@@ -9281,7 +9163,9 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                           fontWeight: FontWeight.bold,
                           color: blueText,
                         ),
-                        space10H,
+                        SizedBox(
+                          height: 10.h,
+                        ),
                         TextFormField(
                           onTapOutside: (event) {
                             FocusManager.instance.primaryFocus?.unfocus();
@@ -9368,7 +9252,9 @@ class _CreateTableDialogState extends State<CreateTableDialog> {
                       ],
                     ),
                   )),
-                  space15H,
+                  SizedBox(
+                    height: 15.h,
+                  ),
                   SizedBox(
                     width: 1.sw,
                     height: 80,

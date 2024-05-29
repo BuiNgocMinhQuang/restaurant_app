@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/model/manager/chart/chart_data_each_store_model.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_app.dart';
@@ -264,7 +263,9 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                   height: 1,
                   color: Colors.black,
                 ),
-                space15H,
+                SizedBox(
+                  height: 15.h,
+                ),
                 Row(
                   children: [
                     Flexible(
@@ -413,7 +414,9 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                         ],
                       ),
                     ),
-                    space20W,
+                    SizedBox(
+                      width: 20.w,
+                    ),
                     Flexible(
                       fit: FlexFit.tight,
                       flex: 1,
@@ -578,7 +581,9 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                     )
                   ],
                 ),
-                space20H,
+                SizedBox(
+                  height: 20.h,
+                ),
                 Row(
                   children: [
                     Flexible(
@@ -625,7 +630,9 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                         ],
                       ),
                     ),
-                    space20W,
+                    SizedBox(
+                      width: 20.w,
+                    ),
                     Flexible(
                       fit: FlexFit.tight,
                       flex: 1,
@@ -672,7 +679,9 @@ class _OverviewChartDialogState extends State<OverviewChartDialog> {
                     )
                   ],
                 ),
-                space30H,
+                SizedBox(
+                  height: 30.h,
+                ),
                 isShowChart
                     ? SizedBox(
                         width: 1.sw,

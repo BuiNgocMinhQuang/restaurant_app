@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/space.dart';
+
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/manager/manager_list_store_model.dart';
@@ -371,7 +371,9 @@ class _AddStaffState extends State<AddStaff> {
                         fontWeight: FontWeight.bold,
                         fontsize: 20.sp,
                       ),
-                      space10H,
+                      SizedBox(
+                        height: 10.h,
+                      ),
                       TextApp(
                         text: "Thông tin bắt buộc",
                         color: Colors.grey,
@@ -379,7 +381,9 @@ class _AddStaffState extends State<AddStaff> {
                         fontWeight: FontWeight.normal,
                         fontsize: 14.sp,
                       ),
-                      space20H,
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -389,7 +393,9 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          space10H,
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           TextFormField(
                             readOnly: true,
                             onTapOutside: (event) {
@@ -507,7 +513,9 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         ],
                       ),
-                      space20H,
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -517,7 +525,9 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          space10H,
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           TextFormField(
                             readOnly: true,
                             onTapOutside: (event) {
@@ -634,7 +644,9 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         ],
                       ),
-                      space20H,
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -644,7 +656,9 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          space10H,
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           TextFormField(
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
@@ -682,7 +696,9 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         ],
                       ),
-                      space20H,
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -692,7 +708,9 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          space10H,
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           TextFormField(
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
@@ -731,7 +749,9 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         ],
                       ),
-                      space20H,
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -741,7 +761,9 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          space10H,
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           TextFormField(
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
@@ -780,7 +802,9 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         ],
                       ),
-                      space20H,
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -790,7 +814,9 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          space10H,
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           TextFormField(
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
@@ -840,7 +866,9 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         ],
                       ),
-                      space20H,
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -850,7 +878,9 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          space10H,
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           TextFormField(
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
@@ -894,7 +924,9 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         ],
                       ),
-                      space20H,
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -904,7 +936,9 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          space10H,
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           TextFormField(
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
@@ -960,7 +994,9 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         ],
                       ),
-                      space20H,
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -970,7 +1006,9 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          space10H,
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           TextFormField(
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
@@ -1026,7 +1064,9 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         ],
                       ),
-                      space20H,
+                      SizedBox(
+                        height: 20.h,
+                      ),
                     ],
                   ),
                 )),
@@ -1056,7 +1096,9 @@ class _AddStaffState extends State<AddStaff> {
                         fontWeight: FontWeight.bold,
                         fontsize: 20.sp,
                       ),
-                      space10H,
+                      SizedBox(
+                        height: 10.h,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -1066,7 +1108,9 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          space10H,
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           TextFormField(
                             readOnly: true,
                             onTapOutside: (event) {
@@ -1203,7 +1247,9 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         ],
                       ),
-                      space20H,
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -1213,7 +1259,9 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          space10H,
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           TextFormField(
                             readOnly: true,
                             onTapOutside: (event) {
@@ -1339,7 +1387,9 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         ],
                       ),
-                      space20H,
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -1349,7 +1399,9 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          space10H,
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           TextFormField(
                             readOnly: true,
                             onTapOutside: (event) {
@@ -1478,7 +1530,9 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         ],
                       ),
-                      space20H,
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -1488,7 +1542,9 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          space10H,
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           TextFormField(
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
@@ -1517,7 +1573,9 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         ],
                       ),
-                      space20H,
+                      SizedBox(
+                        height: 20.h,
+                      ),
                     ],
                   ),
                 )),
@@ -1547,7 +1605,9 @@ class _AddStaffState extends State<AddStaff> {
                         fontWeight: FontWeight.bold,
                         fontsize: 20.sp,
                       ),
-                      space20H,
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -1557,7 +1617,9 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          space10H,
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           TextField(
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
@@ -1584,7 +1646,9 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         ],
                       ),
-                      space20H,
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -1594,7 +1658,9 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          space10H,
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           TextField(
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
@@ -1621,7 +1687,9 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         ],
                       ),
-                      space20H,
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -1631,7 +1699,9 @@ class _AddStaffState extends State<AddStaff> {
                             fontWeight: FontWeight.bold,
                             color: blueText,
                           ),
-                          space10H,
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           TextField(
                             onTapOutside: (event) {
                               FocusManager.instance.primaryFocus?.unfocus();
@@ -1658,7 +1728,9 @@ class _AddStaffState extends State<AddStaff> {
                           ),
                         ],
                       ),
-                      space20H,
+                      SizedBox(
+                        height: 20.h,
+                      ),
                     ],
                   ),
                 )),
@@ -1702,7 +1774,9 @@ class _AddStaffState extends State<AddStaff> {
                 )
               ],
             ),
-            space25H,
+            SizedBox(
+              height: 25.h,
+            ),
           ],
         ),
       ),

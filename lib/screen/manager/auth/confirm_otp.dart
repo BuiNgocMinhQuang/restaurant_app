@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
@@ -103,7 +102,9 @@ class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
                     padding: EdgeInsets.only(left: 20.w, right: 20.w),
                     child: Column(
                       children: [
-                        space15H,
+                        SizedBox(
+                          height: 15.h,
+                        ),
                         Stack(
                           children: [
                             Stack(
@@ -182,7 +183,9 @@ class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
                                                 fontSize: 24.sp,
                                               ),
                                             ),
-                                            space20H,
+                                            SizedBox(
+                                              height: 20.h,
+                                            ),
                                             OtpTextField(
                                               fieldWidth: 50.w,
                                               numberOfFields: 4,
@@ -213,7 +216,9 @@ class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
                                                     : null;
                                               }, // end onSubmit
                                             ),
-                                            space20H,
+                                            SizedBox(
+                                              height: 20.h,
+                                            ),
                                             CountdownTimer(
                                               duration:
                                                   const Duration(minutes: 5),
@@ -223,7 +228,9 @@ class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
                                                 // Code to execute when the timer finishes
                                               },
                                             ),
-                                            space20H,
+                                            SizedBox(
+                                              height: 20.h,
+                                            ),
                                             Visibility(
                                               visible: showButton,
                                               child: ButtonGradient(
@@ -250,7 +257,9 @@ class _ManagerConfirmOTPState extends State<ManagerConfirmOTP> {
                             ),
                           ],
                         ),
-                        space30H,
+                        SizedBox(
+                          height: 30.h,
+                        ),
                         SizedBox(
                           width: 1.sw / 2,
                           child: const CopyRightText(),
@@ -330,7 +339,9 @@ class _CountdownTimerState extends State<CountdownTimer> {
           fontsize: 14.sp,
           fontWeight: FontWeight.bold,
         ),
-        space10H,
+        SizedBox(
+          height: 10.h,
+        ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

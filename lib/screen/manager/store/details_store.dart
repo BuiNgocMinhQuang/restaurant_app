@@ -5,7 +5,6 @@ import 'package:app_restaurant/bloc/manager/stores/list_stores_bloc.dart';
 import 'package:app_restaurant/config/date_time_format.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/model/manager/store/edit_details_store_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
@@ -255,14 +254,14 @@ class _DetailsStoreState extends State<DetailsStore> {
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
-                              space15H,
+                              SizedBox(height: 15.h),
                               TextApp(
                                   text:
                                       "${MoneyFormatter(amount: (widget.detailsStoreModel?.totalIncome ?? 0).toDouble()).output.withoutFractionDigits.toString()} đ",
                                   fontsize: 20.sp,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
-                              space20H,
+                              SizedBox(height: 20.h),
                               SizedBox(
                                 width: 220.w,
                                 child: ButtonGradient(
@@ -287,7 +286,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                             ],
                           ),
                         ),
-                        space20H,
+                        SizedBox(height: 20.h),
                         Card(
                           elevation: 8.0,
                           margin: const EdgeInsets.all(8),
@@ -299,16 +298,20 @@ class _DetailsStoreState extends State<DetailsStore> {
                                   borderRadius: BorderRadius.circular(20.w)),
                               child: Row(
                                 children: [
-                                  space20W,
                                   SizedBox(
-                                      width: 50,
-                                      height: 50,
+                                    width: 20.w,
+                                  ),
+                                  SizedBox(
+                                      width: 50.w,
+                                      height: 50.w,
                                       // color: Colors.amber,
                                       child: SvgPicture.asset(
                                         'assets/svg/incomes.svg',
                                         fit: BoxFit.contain,
                                       )),
-                                  space20W,
+                                  SizedBox(
+                                    width: 20.w,
+                                  ),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -330,7 +333,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                                 ],
                               )),
                         ),
-                        space15H,
+                        SizedBox(height: 15.h),
                         Card(
                           elevation: 8.0,
                           margin: const EdgeInsets.all(8),
@@ -342,7 +345,9 @@ class _DetailsStoreState extends State<DetailsStore> {
                                   borderRadius: BorderRadius.circular(20.w)),
                               child: Row(
                                 children: [
-                                  space20W,
+                                  SizedBox(
+                                    width: 20.w,
+                                  ),
                                   SizedBox(
                                     width: 50,
                                     height: 50,
@@ -351,7 +356,9 @@ class _DetailsStoreState extends State<DetailsStore> {
                                       fit: BoxFit.contain,
                                     ),
                                   ),
-                                  space20W,
+                                  SizedBox(
+                                    width: 20.w,
+                                  ),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -375,7 +382,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                                 ],
                               )),
                         ),
-                        space25H,
+                        SizedBox(height: 25.h),
                         Card(
                           elevation: 8.0,
                           margin: const EdgeInsets.all(8),
@@ -431,7 +438,9 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                                   Icons.error),
                                                         ),
                                                 )),
-                                            space20W,
+                                            SizedBox(
+                                              width: 20.w,
+                                            ),
                                             Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
@@ -494,7 +503,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                                         )
                                       ],
                                     ),
-                                    space10H,
+                                    SizedBox(height: 10.h),
                                     Row(
                                       children: [
                                         TextApp(
@@ -511,13 +520,13 @@ class _DetailsStoreState extends State<DetailsStore> {
                                         ),
                                       ],
                                     ),
-                                    space10H,
+                                    SizedBox(height: 10.h),
                                     HtmlWidget(
                                       '''
                                                          ${widget.detailsStoreModel?.store.storeDescription ?? ''}
                                                         ''',
                                     ),
-                                    space30H,
+                                    SizedBox(height: 30.h),
                                     Container(
                                       width: 1.sw,
                                       height: 50,
@@ -527,7 +536,9 @@ class _DetailsStoreState extends State<DetailsStore> {
                                           color: Colors.grey.withOpacity(0.2)),
                                       child: Row(
                                         children: [
-                                          space20W,
+                                          SizedBox(
+                                            width: 20.w,
+                                          ),
                                           TextApp(
                                             text:
                                                 "${MoneyFormatter(amount: (widget.detailsStoreModel?.monthTotalOrder ?? 0).toDouble()).output.withoutFractionDigits.toString()} ",
@@ -545,7 +556,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                                 ),
                               )),
                         ),
-                        space25H,
+                        SizedBox(height: 25.h),
                         Card(
                           elevation: 8.0,
                           margin: const EdgeInsets.all(8),
@@ -569,7 +580,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                                       ),
                                     ],
                                   ),
-                                  space10H,
+                                  SizedBox(height: 10.h),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
@@ -605,7 +616,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                                       )
                                     ],
                                   ),
-                                  space10H,
+                                  SizedBox(height: 10.h),
                                   ListView.builder(
                                       physics:
                                           const NeverScrollableScrollPhysics(),
@@ -617,7 +628,7 @@ class _DetailsStoreState extends State<DetailsStore> {
                                         return Column(
                                           children: [
                                             const Divider(),
-                                            space10H,
+                                            SizedBox(height: 10.h),
                                             Container(
                                               width: 1.sw,
                                               padding: EdgeInsets.all(10.w),
@@ -708,7 +719,9 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                                                         fit: BoxFit.contain,
                                                                                       ),
                                                                                     ),
-                                                                                    space10W,
+                                                                                    SizedBox(
+                                                                                      width: 10.w,
+                                                                                    ),
                                                                                     TextApp(
                                                                                       text: "Chỉnh sửa phòng",
                                                                                       color: Colors.black,
@@ -717,9 +730,9 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                                                   ],
                                                                                 ),
                                                                               ),
-                                                                              space10H,
+                                                                              SizedBox(height: 10.h),
                                                                               const Divider(),
-                                                                              space10H,
+                                                                              SizedBox(height: 10.h),
                                                                               InkWell(
                                                                                 onTap: () {
                                                                                   Navigator.pop(context);
@@ -744,7 +757,9 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                                                         fit: BoxFit.contain,
                                                                                       ),
                                                                                     ),
-                                                                                    space10W,
+                                                                                    SizedBox(
+                                                                                      width: 10.w,
+                                                                                    ),
                                                                                     TextApp(
                                                                                       text: "Quản lí bàn",
                                                                                       color: Colors.black,
@@ -753,9 +768,9 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                                                   ],
                                                                                 ),
                                                                               ),
-                                                                              space10H,
+                                                                              SizedBox(height: 10.h),
                                                                               const Divider(),
-                                                                              space10H,
+                                                                              SizedBox(height: 10.h),
                                                                               InkWell(
                                                                                 onTap: () {
                                                                                   Navigator.pop(context);
@@ -774,7 +789,9 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                                                         fit: BoxFit.contain,
                                                                                       ),
                                                                                     ),
-                                                                                    space10W,
+                                                                                    SizedBox(
+                                                                                      width: 10.w,
+                                                                                    ),
                                                                                     TextApp(
                                                                                       text: "Xoá phòng",
                                                                                       color: Colors.black,
@@ -807,7 +824,8 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                           TextApp(
                                                               fontsize: 10.sp,
                                                               text: "Ngày tạo"),
-                                                          space10H,
+                                                          SizedBox(
+                                                              height: 10.h),
                                                           TextApp(
                                                             fontsize: 10.sp,
                                                             text: formatDateTime(
@@ -827,7 +845,8 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                               fontsize: 10.sp,
                                                               text:
                                                                   "Số bàn trong phòng"),
-                                                          space10H,
+                                                          SizedBox(
+                                                              height: 10.h),
                                                           TextApp(
                                                               fontsize: 10.sp,
                                                               text: listRoomOfStoreModel
@@ -847,7 +866,8 @@ class _DetailsStoreState extends State<DetailsStore> {
                                                               fontsize: 10.sp,
                                                               text:
                                                                   "Trạng thái"),
-                                                          space10H,
+                                                          SizedBox(
+                                                              height: 10.h),
                                                           TextApp(
                                                               fontsize: 10.sp,
                                                               text: listRoomOfStoreModel

@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/manager_infor_model.dart';
@@ -736,13 +735,13 @@ class _ManagerInformationState extends State<ManagerInformation> {
                           height: 100.w,
                           child: Lottie.asset('assets/lottie/error.json'),
                         ),
-                        space30H,
+                        SizedBox(height: 30.h),
                         TextApp(
                           text: "Có lỗi xảy ra, vui lòng thử lại sau",
                           fontsize: 20.sp,
                           fontWeight: FontWeight.bold,
                         ),
-                        space30H,
+                        SizedBox(height: 30.h),
                         SizedBox(
                           width: 200.w,
                           child: ButtonGradient(
@@ -879,7 +878,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                                 fit: BoxFit.contain,
                                                                               ),
                                                                             ),
-                                                                            space10W,
+                                                                            SizedBox(width: 10.w),
                                                                             TextApp(
                                                                               text: "Thay đổi ảnh đại diện",
                                                                               color: Colors.black,
@@ -888,9 +887,13 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                           ],
                                                                         ),
                                                                       ),
-                                                                      space10H,
+                                                                      SizedBox(
+                                                                          height:
+                                                                              10.h),
                                                                       const Divider(),
-                                                                      space10H,
+                                                                      SizedBox(
+                                                                          height:
+                                                                              10.h),
                                                                       InkWell(
                                                                         onTap:
                                                                             () async {
@@ -913,7 +916,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                                                 fit: BoxFit.contain,
                                                                               ),
                                                                             ),
-                                                                            space10W,
+                                                                            SizedBox(width: 10.w),
                                                                             TextApp(
                                                                               text: "Xoá ảnh đại diện",
                                                                               color: Colors.black,
@@ -939,7 +942,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                             )
                                           ],
                                         ),
-                                        space25W,
+                                        SizedBox(width: 25.w),
                                         Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -1549,7 +1552,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                   ),
                                                 ],
                                               ),
-                                              space20H,
+                                              SizedBox(
+                                                height: 20.h,
+                                              ),
                                               Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
@@ -1926,7 +1931,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                   ),
                                                 ],
                                               ),
-                                              space20H,
+                                              SizedBox(
+                                                height: 20.h,
+                                              ),
                                               Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
@@ -1993,7 +2000,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                   ),
                                                 ],
                                               ),
-                                              space20H,
+                                              SizedBox(
+                                                height: 20.h,
+                                              ),
                                               Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
@@ -2072,7 +2081,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                   ),
                                                 ],
                                               ),
-                                              space20H,
+                                              SizedBox(
+                                                height: 20.h,
+                                              ),
                                               Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.end,
@@ -2274,7 +2285,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                               ),
                                             ],
                                           ),
-                                          space20H,
+                                          SizedBox(
+                                            height: 20.h,
+                                          ),
                                           Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
@@ -2367,7 +2380,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                               ),
                                             ],
                                           ),
-                                          space20H,
+                                          SizedBox(
+                                            height: 20.h,
+                                          ),
                                           Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
@@ -2463,7 +2478,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                               ),
                                             ],
                                           ),
-                                          space20H,
+                                          SizedBox(
+                                            height: 20.h,
+                                          ),
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.end,
@@ -2574,7 +2591,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                               FontWeight.bold,
                                                           color: blueText,
                                                         ),
-                                                        space10H,
+                                                        SizedBox(height: 10.h),
                                                         InkWell(
                                                           onTap: () {
                                                             pickImageFrontID();
@@ -2633,7 +2650,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                               FontWeight.bold,
                                                           color: blueText,
                                                         ),
-                                                        space10H,
+                                                        SizedBox(height: 10.h),
                                                         InkWell(
                                                           onTap: () {
                                                             pickImageBackID();
@@ -2692,7 +2709,7 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                               FontWeight.bold,
                                                           color: blueText,
                                                         ),
-                                                        space10H,
+                                                        SizedBox(height: 10.h),
                                                         InkWell(
                                                           onTap: () {
                                                             pickImageHoldID();
@@ -2738,7 +2755,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                     ),
                                                   ],
                                                 ),
-                                                space25H,
+                                                SizedBox(
+                                                  height: 25.h,
+                                                ),
                                                 Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
@@ -2917,7 +2936,9 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                                     ),
                                                   ],
                                                 ),
-                                                space25H,
+                                                SizedBox(
+                                                  height: 25.h,
+                                                ),
                                                 Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
@@ -2955,10 +2976,14 @@ class _ManagerInformationState extends State<ManagerInformation> {
                                           )),
                                     ),
                                   ),
-                            space25H,
+                            SizedBox(
+                              height: 25.h,
+                            ),
 
                             const CopyRightText(),
-                            space35H,
+                            SizedBox(
+                              height: 35.h,
+                            ),
                           ],
                         )),
                   )

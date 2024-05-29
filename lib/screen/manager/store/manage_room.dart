@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:app_restaurant/config/void_show_dialog.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/model/manager/store/rooms/table/list_table_of_room_model.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/utils/storage.dart';
@@ -132,7 +131,7 @@ class _ManageRoomState extends State<ManageRoom> {
                                 borderRadius: BorderRadius.circular(20.w)),
                             child: Row(
                               children: [
-                                space20W,
+                                SizedBox(width: 20.w),
                                 ButtonIcon(
                                     isIconCircle: false,
                                     color1: const Color.fromRGBO(20, 23, 39, 1),
@@ -140,7 +139,7 @@ class _ManageRoomState extends State<ManageRoom> {
                                         const Color.fromRGBO(58, 65, 111, 1),
                                     event: () {},
                                     icon: Icons.meeting_room),
-                                space20W,
+                                SizedBox(width: 20.w),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -169,7 +168,7 @@ class _ManageRoomState extends State<ManageRoom> {
                               ],
                             )),
                       ),
-                      space15H,
+                      SizedBox(height: 15.h),
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -184,7 +183,7 @@ class _ManageRoomState extends State<ManageRoom> {
                                     margin: const EdgeInsets.all(8),
                                     child: Stack(
                                       children: [
-                                        space30H,
+                                        SizedBox(height: 30.h),
                                         Container(
                                             width: 1.sw,
                                             //color: Colors.white,
@@ -210,7 +209,7 @@ class _ManageRoomState extends State<ManageRoom> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.end,
                                                 children: [
-                                                  space30H,
+                                                  SizedBox(height: 30.h),
                                                   Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment.start,
@@ -218,7 +217,7 @@ class _ManageRoomState extends State<ManageRoom> {
                                                         CrossAxisAlignment
                                                             .center,
                                                     children: [
-                                                      space20W,
+                                                      SizedBox(width: 20.w),
                                                       SizedBox(
                                                         width: 50.w,
                                                         height: 50.w,
@@ -227,7 +226,7 @@ class _ManageRoomState extends State<ManageRoom> {
                                                           size: 45.w,
                                                         ),
                                                       ),
-                                                      space20W,
+                                                      SizedBox(width: 20.w),
                                                       TextApp(
                                                         text:
                                                             listTableOfRoomModel
@@ -245,7 +244,7 @@ class _ManageRoomState extends State<ManageRoom> {
                                                     height: 1,
                                                     color: Colors.black,
                                                   ),
-                                                  space30H,
+                                                  SizedBox(height: 30.h),
                                                   Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -316,7 +315,7 @@ class _ManageRoomState extends State<ManageRoom> {
                                                       )
                                                     ],
                                                   ),
-                                                  space30H,
+                                                  SizedBox(height: 30.h),
                                                 ],
                                               ),
                                             )),
@@ -389,7 +388,8 @@ class _ManageRoomState extends State<ManageRoom> {
                                                                               fit: BoxFit.contain,
                                                                             ),
                                                                           ),
-                                                                          space10W,
+                                                                          SizedBox(
+                                                                              width: 10.w),
                                                                           TextApp(
                                                                             text:
                                                                                 "Cập nhật",
@@ -401,9 +401,13 @@ class _ManageRoomState extends State<ManageRoom> {
                                                                         ],
                                                                       ),
                                                                     ),
-                                                                    space10H,
+                                                                    SizedBox(
+                                                                        height:
+                                                                            10.h),
                                                                     const Divider(),
-                                                                    space10H,
+                                                                    SizedBox(
+                                                                        height:
+                                                                            10.h),
                                                                     InkWell(
                                                                       onTap:
                                                                           () {
@@ -431,7 +435,8 @@ class _ManageRoomState extends State<ManageRoom> {
                                                                               fit: BoxFit.contain,
                                                                             ),
                                                                           ),
-                                                                          space10W,
+                                                                          SizedBox(
+                                                                              width: 10.w),
                                                                           TextApp(
                                                                             text:
                                                                                 "Xoá",
@@ -458,7 +463,9 @@ class _ManageRoomState extends State<ManageRoom> {
                               })
                         ],
                       ),
-                      space25H,
+                      SizedBox(
+                        height: 25.h,
+                      ),
                       Card(
                           elevation: 8.0,
                           margin: const EdgeInsets.all(8),
@@ -489,7 +496,7 @@ class _ManageRoomState extends State<ManageRoom> {
                                     Icons.add,
                                     color: Colors.grey,
                                   ),
-                                  space10H,
+                                  SizedBox(height: 10.h),
                                   TextApp(
                                     text: "Tạo bàn",
                                     fontWeight: FontWeight.bold,

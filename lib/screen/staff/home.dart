@@ -7,7 +7,6 @@ import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
 import 'package:app_restaurant/bloc/payment/payment_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/date_time_format.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/model/staff/list_food_order_model.dart';
 import 'package:app_restaurant/model/staff/staff_infor_model.dart';
@@ -170,7 +169,9 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
                                             children: [
-                                              space5H,
+                                              SizedBox(
+                                                height: 5.h,
+                                              ),
                                               TextApp(
                                                 text: state
                                                         .listRoomModel
@@ -204,7 +205,9 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                             ),
                           ),
                         ),
-                        space25H,
+                        SizedBox(
+                          height: 25.h,
+                        ),
                         SizedBox(
                           width: 1.sw,
                           child: Row(
@@ -258,7 +261,9 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                             ],
                           ),
                         ),
-                        space15H,
+                        SizedBox(
+                          height: 15.h,
+                        ),
                         state.listRoomModel!.rooms!.isEmpty
                             ? Container(
                                 width: 1.sw,
@@ -500,7 +505,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                               'assets/svg/receipt.svg',
                                                                                               fit: BoxFit.contain,
                                                                                             )),
-                                                                                        space10W,
+                                                                                        SizedBox(width: 10.w),
                                                                                         TextApp(
                                                                                           text: "Quản lý hoá đơn",
                                                                                           color: Colors.black,
@@ -509,9 +514,13 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                       ],
                                                                                     ),
                                                                                   ),
-                                                                                  space10H,
+                                                                                  SizedBox(
+                                                                                    height: 10.h,
+                                                                                  ),
                                                                                   const Divider(),
-                                                                                  space10H,
+                                                                                  SizedBox(
+                                                                                    height: 10.h,
+                                                                                  ),
                                                                                   InkWell(
                                                                                     onTap: () {
                                                                                       Navigator.pop(context);
@@ -551,7 +560,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                             fit: BoxFit.contain,
                                                                                           ),
                                                                                         ),
-                                                                                        space10W,
+                                                                                        SizedBox(width: 10.w),
                                                                                         TextApp(
                                                                                           text: "Chuyển bàn",
                                                                                           color: Colors.black,
@@ -560,9 +569,13 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                       ],
                                                                                     ),
                                                                                   ),
-                                                                                  space10H,
+                                                                                  SizedBox(
+                                                                                    height: 10.h,
+                                                                                  ),
                                                                                   const Divider(),
-                                                                                  space10H,
+                                                                                  SizedBox(
+                                                                                    height: 10.h,
+                                                                                  ),
                                                                                   InkWell(
                                                                                     onTap: () {
                                                                                       Navigator.pop(context);
@@ -596,7 +609,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                               'assets/svg/printing_receipt.svg',
                                                                                               fit: BoxFit.contain,
                                                                                             )),
-                                                                                        space10W,
+                                                                                        SizedBox(width: 10.w),
                                                                                         TextApp(
                                                                                           text: "Xem hoá đơn",
                                                                                           color: Colors.black,
@@ -605,9 +618,13 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                       ],
                                                                                     ),
                                                                                   ),
-                                                                                  space10H,
+                                                                                  SizedBox(
+                                                                                    height: 10.h,
+                                                                                  ),
                                                                                   const Divider(),
-                                                                                  space10H,
+                                                                                  SizedBox(
+                                                                                    height: 10.h,
+                                                                                  ),
                                                                                   InkWell(
                                                                                     onTap: () {
                                                                                       Navigator.pop(context);
@@ -644,7 +661,7 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                                                                                               'assets/svg/coin.svg',
                                                                                               fit: BoxFit.contain,
                                                                                             )),
-                                                                                        space10W,
+                                                                                        SizedBox(width: 10.w),
                                                                                         TextApp(
                                                                                           text: "Thanh toán hoá đơn",
                                                                                           color: Colors.black,
@@ -779,13 +796,17 @@ class _StaffBookingTableState extends State<StaffBookingTable>
                               height: 100,
                               child: Lottie.asset('assets/lottie/error.json'),
                             ),
-                            space30H,
+                            SizedBox(
+                              height: 30.h,
+                            ),
                             TextApp(
                               text: state.errorText.toString(),
                               fontsize: 20.sp,
                               fontWeight: FontWeight.bold,
                             ),
-                            space30H,
+                            SizedBox(
+                              height: 30.h,
+                            ),
                             SizedBox(
                               width: 200,
                               child: ButtonGradient(
@@ -1139,7 +1160,9 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                       ),
                     ],
                   )),
-              space25H,
+              SizedBox(
+                height: 25.h,
+              ),
               IntrinsicHeight(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -1174,7 +1197,9 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                         textColor: Colors.white,
                       ),
                     ),
-                    space15W,
+                    SizedBox(
+                      width: 15.w,
+                    ),
                     Expanded(
                       child: SizedBox(
                         height: 50.h,
@@ -1313,7 +1338,9 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                   ],
                 ),
               ),
-              space25H,
+              SizedBox(
+                height: 25.h,
+              ),
               Expanded(
                 child: Container(
                   width: 1.sw,
@@ -1349,7 +1376,9 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                         var listImagePath = jsonDecode(imagePath1 ?? '[]');
                         return Column(
                           children: [
-                            space10H,
+                            SizedBox(
+                              height: 10.h,
+                            ),
                             Container(
                                 width: 1.sw,
                                 // height: 100.h,
@@ -1428,7 +1457,8 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                                                                     .timer_outlined,
                                                                 size: 35.sp,
                                                               ),
-                                                              space10W,
+                                                              SizedBox(
+                                                                  width: 10.w),
                                                               TextApp(
                                                                 text:
                                                                     "Chờ xác nhận",
@@ -1439,7 +1469,9 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                                                             ],
                                                           ),
                                                         ),
-                                                        space10H,
+                                                        SizedBox(
+                                                          height: 10.h,
+                                                        ),
                                                         const Divider(),
                                                         InkWell(
                                                           onTap: () async {
@@ -1468,7 +1500,8 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                                                                     .food_bank_outlined,
                                                                 size: 35.sp,
                                                               ),
-                                                              space10W,
+                                                              SizedBox(
+                                                                  width: 10.w),
                                                               TextApp(
                                                                 text:
                                                                     "Đang chuẩn bị",
@@ -1480,7 +1513,9 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                                                           ),
                                                         ),
                                                         const Divider(),
-                                                        space10H,
+                                                        SizedBox(
+                                                          height: 10.h,
+                                                        ),
                                                         InkWell(
                                                           onTap: () async {
                                                             Navigator.pop(
@@ -1506,7 +1541,8 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                                                                 Icons.done,
                                                                 size: 35.sp,
                                                               ),
-                                                              space10W,
+                                                              SizedBox(
+                                                                  width: 10.w),
                                                               TextApp(
                                                                 text: "Đã xong",
                                                                 color: Colors
@@ -1587,7 +1623,9 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                                           // typePopMenu
                                         ],
                                       ),
-                                      space10H,
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
                                       Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
@@ -1609,7 +1647,9 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                                                               .staffFullName),
                                                 ],
                                               ),
-                                              space10H,
+                                              SizedBox(
+                                                height: 10.h,
+                                              ),
                                               Row(
                                                 children: [
                                                   TextApp(text: 'Thời gian: '),
@@ -1692,7 +1732,9 @@ class _ChefHomeScreenState extends State<ChefHomeScreen> {
                                     ],
                                   ),
                                 )),
-                            space10H
+                            SizedBox(
+                              height: 10.h,
+                            ),
                           ],
                         );
                       }

@@ -1,5 +1,4 @@
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/text/text_app.dart';
@@ -24,13 +23,17 @@ class NoInternetScreen extends StatelessWidget {
             fontsize: 20.sp,
             fontWeight: FontWeight.bold,
           ),
-          space30H,
+          SizedBox(
+            height: 30.h,
+          ),
           SizedBox(
             width: 300.w,
             height: 300.w,
             child: Lottie.asset('assets/lottie/no_internet.json'),
           ),
-          space50H,
+          SizedBox(
+            height: 50.h,
+          ),
           SizedBox(
             width: 300.w,
             child: ButtonGradient(

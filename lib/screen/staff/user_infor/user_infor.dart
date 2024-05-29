@@ -5,7 +5,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/env/index.dart';
 import 'package:app_restaurant/model/staff/staff_infor_model.dart';
@@ -623,7 +622,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                                     .contain,
                                                               ),
                                                             ),
-                                                            space10W,
+                                                            SizedBox(
+                                                                width: 10.w),
                                                             TextApp(
                                                               text:
                                                                   "Thay đổi ảnh đại diện",
@@ -634,9 +634,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                           ],
                                                         ),
                                                       ),
-                                                      space10H,
+                                                      SizedBox(height: 10.h),
                                                       const Divider(),
-                                                      space10H,
+                                                      SizedBox(height: 10.h),
                                                       InkWell(
                                                         onTap: () async {
                                                           Navigator.pop(
@@ -660,7 +660,8 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                                                     .contain,
                                                               ),
                                                             ),
-                                                            space10W,
+                                                            SizedBox(
+                                                                width: 10.w),
                                                             TextApp(
                                                               text:
                                                                   "Xoá ảnh đại diện",
@@ -688,7 +689,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                 )
                               ],
                             ),
-                            space25W,
+                            SizedBox(
+                              width: 25.w,
+                            ),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -1373,7 +1376,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                       ),
                                     ],
                                   ),
-                                  space20H,
+                                  SizedBox(
+                                    height: 20.h,
+                                  ),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -1695,7 +1700,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                       ),
                                     ],
                                   ),
-                                  space20H,
+                                  SizedBox(
+                                    height: 20.h,
+                                  ),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -1743,7 +1750,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                       ),
                                     ],
                                   ),
-                                  space20H,
+                                  SizedBox(
+                                    height: 20.h,
+                                  ),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -1855,7 +1864,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                       ),
                                     ],
                                   ),
-                                  space20H,
+                                  SizedBox(
+                                    height: 20.h,
+                                  ),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -1902,7 +1913,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                       ),
                                     ],
                                   ),
-                                  space20H,
+                                  SizedBox(
+                                    height: 20.h,
+                                  ),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -1949,7 +1962,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                       ),
                                     ],
                                   ),
-                                  space20H,
+                                  SizedBox(
+                                    height: 20.h,
+                                  ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
@@ -2120,7 +2135,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                   ),
                                 ],
                               ),
-                              space20H,
+                              SizedBox(
+                                height: 20.h,
+                              ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -2194,7 +2211,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                   ),
                                 ],
                               ),
-                              space20H,
+                              SizedBox(
+                                height: 20.h,
+                              ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -2268,7 +2287,9 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                                   ),
                                 ],
                               ),
-                              space20H,
+                              SizedBox(
+                                height: 20.h,
+                              ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
@@ -2309,10 +2330,14 @@ class _StaffUserInformationState extends State<StaffUserInformation> {
                         )),
                   ),
                 ),
-                space25H,
+                SizedBox(
+                  height: 25.h,
+                ),
 
                 const CopyRightText(),
-                space35H,
+                SizedBox(
+                  height: 35.h,
+                ),
               ],
             )),
       )),

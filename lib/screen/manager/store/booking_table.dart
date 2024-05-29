@@ -3,7 +3,6 @@ import 'package:app_restaurant/bloc/manager/room/list_room_bloc.dart';
 import 'package:app_restaurant/bloc/manager/tables/table_bloc.dart';
 import 'package:app_restaurant/bloc/payment/payment_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/utils/storage.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
 import 'package:app_restaurant/widgets/dialog/list_custom_dialog.dart';
@@ -108,7 +107,9 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      space20H,
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       SizedBox(
                         width: 1.sw,
                         child: SizedBox(
@@ -146,7 +147,9 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            space5H,
+                                            SizedBox(
+                                              height: 5.h,
+                                            ),
                                             TextApp(
                                               text: state
                                                       .listRoomModel
@@ -180,7 +183,9 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                           ),
                         ),
                       ),
-                      space25H,
+                      SizedBox(
+                        height: 25.h,
+                      ),
                       SizedBox(
                         width: 1.sw,
                         child: Row(
@@ -196,7 +201,9 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                       borderRadius: BorderRadius.circular(2.r),
                                       color: newGreyApp),
                                 ),
-                                space5W,
+                                SizedBox(
+                                  width: 5.w,
+                                ),
                                 TextApp(
                                   text: "Đang phục vụ",
                                   color: color1DarkGreyButton,
@@ -204,19 +211,23 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                 )
                               ],
                             ),
-                            space10W,
+                            SizedBox(
+                              width: 10.w,
+                            ),
                             Row(
                               children: [
                                 Container(
-                                  width: 40,
-                                  height: 20,
+                                  width: 40.w,
+                                  height: 20.w,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(2.r),
                                     border: Border.all(
                                         width: 1, color: newBlueText),
                                   ),
                                 ),
-                                space5W,
+                                SizedBox(
+                                  width: 5.w,
+                                ),
                                 TextApp(
                                   text: "Bàn trống",
                                   color: color1DarkGreyButton,
@@ -227,7 +238,9 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                           ],
                         ),
                       ),
-                      space15H,
+                      SizedBox(
+                        height: 15.h,
+                      ),
                       state.listRoomModel!.rooms!.isEmpty
                           ? Container(
                               width: 1.sw,
@@ -482,7 +495,9 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                                     fit: BoxFit.contain,
                                                                                   ),
                                                                                 ),
-                                                                                space10W,
+                                                                                SizedBox(
+                                                                                  width: 10.w,
+                                                                                ),
                                                                                 TextApp(
                                                                                   text: "Quản lý hoá đơn",
                                                                                   color: Colors.black,
@@ -491,9 +506,15 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                               ],
                                                                             ),
                                                                           ),
-                                                                          space10H,
+                                                                          SizedBox(
+                                                                            height:
+                                                                                10.h,
+                                                                          ),
                                                                           const Divider(),
-                                                                          space10H,
+                                                                          SizedBox(
+                                                                            height:
+                                                                                10.h,
+                                                                          ),
                                                                           InkWell(
                                                                             onTap:
                                                                                 () {
@@ -535,7 +556,9 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                                     fit: BoxFit.contain,
                                                                                   ),
                                                                                 ),
-                                                                                space10W,
+                                                                                SizedBox(
+                                                                                  width: 10.w,
+                                                                                ),
                                                                                 TextApp(
                                                                                   text: "Chuyển bàn",
                                                                                   color: Colors.black,
@@ -544,9 +567,15 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                               ],
                                                                             ),
                                                                           ),
-                                                                          space10H,
+                                                                          SizedBox(
+                                                                            height:
+                                                                                10.h,
+                                                                          ),
                                                                           const Divider(),
-                                                                          space10H,
+                                                                          SizedBox(
+                                                                            height:
+                                                                                10.h,
+                                                                          ),
                                                                           InkWell(
                                                                             onTap:
                                                                                 () {
@@ -583,7 +612,9 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                                     fit: BoxFit.contain,
                                                                                   ),
                                                                                 ),
-                                                                                space10W,
+                                                                                SizedBox(
+                                                                                  width: 10.w,
+                                                                                ),
                                                                                 TextApp(
                                                                                   text: "Xem hoá đơn",
                                                                                   color: Colors.black,
@@ -592,9 +623,15 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                               ],
                                                                             ),
                                                                           ),
-                                                                          space10H,
+                                                                          SizedBox(
+                                                                            height:
+                                                                                10.h,
+                                                                          ),
                                                                           const Divider(),
-                                                                          space10H,
+                                                                          SizedBox(
+                                                                            height:
+                                                                                10.h,
+                                                                          ),
                                                                           InkWell(
                                                                             onTap:
                                                                                 () {
@@ -633,7 +670,9 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                                                                                       'assets/svg/coin.svg',
                                                                                       fit: BoxFit.contain,
                                                                                     )),
-                                                                                space10W,
+                                                                                SizedBox(
+                                                                                  width: 10.w,
+                                                                                ),
                                                                                 TextApp(
                                                                                   text: "Thanh toán hoá đơn",
                                                                                   color: Colors.black,
@@ -771,13 +810,17 @@ class _ManagerBookingTableState extends State<ManagerBookingTable>
                             height: 100.w,
                             child: Lottie.asset('assets/lottie/error.json'),
                           ),
-                          space30H,
+                          SizedBox(
+                            height: 30.h,
+                          ),
                           TextApp(
                             text: state.errorText.toString(),
                             fontsize: 20.sp,
                             fontWeight: FontWeight.bold,
                           ),
-                          space30H,
+                          SizedBox(
+                            height: 30.h,
+                          ),
                           SizedBox(
                             width: 200.w,
                             child: ButtonGradient(

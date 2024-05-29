@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:app_restaurant/config/colors.dart';
 import 'package:app_restaurant/config/fake_data.dart';
-import 'package:app_restaurant/config/space.dart';
+
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/config/void_show_dialog.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
@@ -264,13 +264,17 @@ class _EditFoodState extends State<EditFood> {
               color: blueText,
               fontWeight: FontWeight.bold,
             ),
-            space10H,
+            SizedBox(
+              height: 10.h,
+            ),
             TextApp(
               text: "Khi bạn nhấn lưu thì không thể trở lại!",
               fontsize: 16.sp,
               color: Colors.grey,
             ),
-            space30H,
+            SizedBox(
+              height: 30.h,
+            ),
             Container(
               width: 1.sw,
               // height: 1.sh,
@@ -308,7 +312,9 @@ class _EditFoodState extends State<EditFood> {
                                 fontWeight: FontWeight.bold,
                                 fontsize: 20.sp,
                               ),
-                              space20H,
+                              SizedBox(
+                                height: 20.h,
+                              ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -379,7 +385,9 @@ class _EditFoodState extends State<EditFood> {
                                   ),
                                 ],
                               ),
-                              space20H,
+                              SizedBox(
+                                height: 20.h,
+                              ),
                               SizedBox(
                                 width: 1.sw,
                                 child: TextApp(
@@ -391,7 +399,9 @@ class _EditFoodState extends State<EditFood> {
                                   color: blueText,
                                 ),
                               ),
-                              space10H,
+                              SizedBox(
+                                height: 10.h,
+                              ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -532,7 +542,9 @@ class _EditFoodState extends State<EditFood> {
                                   )
                                 ],
                               ),
-                              space20H,
+                              SizedBox(
+                                height: 20.h,
+                              ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -672,7 +684,9 @@ class _EditFoodState extends State<EditFood> {
                             ],
                           ),
                         )),
-                    space50H,
+                    SizedBox(
+                      height: 50.h,
+                    ),
                     Container(
                       width: 1.sw,
                       // height: 1.sh,
@@ -709,7 +723,9 @@ class _EditFoodState extends State<EditFood> {
                                       fontWeight: FontWeight.bold,
                                       fontsize: 20.sp,
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -764,7 +780,9 @@ class _EditFoodState extends State<EditFood> {
                                         ),
                                       ],
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     TextApp(
                                       text: "Chế độ hiển thị",
                                       fontsize: 12.sp,
@@ -807,7 +825,9 @@ class _EditFoodState extends State<EditFood> {
                                         ),
                                       ),
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -865,7 +885,9 @@ class _EditFoodState extends State<EditFood> {
                                         ),
                                       ],
                                     ),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                   ],
                                 ),
                               )),
@@ -877,7 +899,9 @@ class _EditFoodState extends State<EditFood> {
               ),
             ),
 
-            space50H,
+            SizedBox(
+              height: 50.h,
+            ),
 
             Container(
               width: 1.sw,
@@ -914,8 +938,12 @@ class _EditFoodState extends State<EditFood> {
                               fontWeight: FontWeight.bold,
                               fontsize: 20.sp,
                             ),
-                            space10H,
-                            space20H,
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            SizedBox(
+                              height: 20.h,
+                            ),
                             TextApp(
                               text: foodImage,
                               color: blueText,
@@ -923,7 +951,9 @@ class _EditFoodState extends State<EditFood> {
                               fontWeight: FontWeight.bold,
                               fontsize: 14.sp,
                             ),
-                            space10H,
+                            SizedBox(
+                              height: 10.h,
+                            ),
                             OutlinedButton(
                               style: OutlinedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
@@ -992,7 +1022,9 @@ class _EditFoodState extends State<EditFood> {
                                                           fit: BoxFit.cover,
                                                         )),
                                                   ),
-                                                  space10H,
+                                                  SizedBox(
+                                                    height: 10.h,
+                                                  ),
                                                   InkWell(
                                                     onTap: () {
                                                       deleteImages(
@@ -1046,7 +1078,9 @@ class _EditFoodState extends State<EditFood> {
                                                       ),
                                                     ),
                                                   ),
-                                                  space10H,
+                                                  SizedBox(
+                                                    height: 10.h,
+                                                  ),
                                                   InkWell(
                                                     onTap: () {
                                                       deleteImages(
@@ -1068,7 +1102,9 @@ class _EditFoodState extends State<EditFood> {
                                           }),
                                     ),
                             ),
-                            space20H,
+                            SizedBox(
+                              height: 20.h,
+                            ),
                           ],
                         ),
                       )),
@@ -1077,7 +1113,9 @@ class _EditFoodState extends State<EditFood> {
             ),
 
             //FORM 4
-            space15H,
+            SizedBox(
+              height: 15.h,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/routers/app_router_config.dart';
 import 'package:app_restaurant/widgets/background/background_welcome.dart';
@@ -153,7 +152,9 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                         padding: EdgeInsets.only(left: 20.w, right: 20.w),
                         child: Column(
                           children: [
-                            space15H,
+                            SizedBox(
+                              height: 15.h,
+                            ),
                             Stack(
                               children: [
                                 Stack(
@@ -227,7 +228,9 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                     fontSize: 24.sp,
                                                   ),
                                                 ),
-                                                space30H,
+                                                SizedBox(
+                                                  height: 30.h,
+                                                ),
                                                 TextFormField(
                                                   onTapOutside: (event) {
                                                     FocusManager
@@ -289,7 +292,9 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                       contentPadding:
                                                           EdgeInsets.all(20.w)),
                                                 ),
-                                                space20H,
+                                                SizedBox(
+                                                  height: 20.h,
+                                                ),
                                                 TextFormField(
                                                   onTapOutside: (event) {
                                                     FocusManager
@@ -353,7 +358,9 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                       contentPadding:
                                                           EdgeInsets.all(20.w)),
                                                 ),
-                                                space20H,
+                                                SizedBox(
+                                                  height: 20.h,
+                                                ),
                                                 TextFormField(
                                                   onTapOutside: (event) {
                                                     FocusManager
@@ -418,7 +425,9 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                       contentPadding:
                                                           EdgeInsets.all(20.w)),
                                                 ),
-                                                space20H,
+                                                SizedBox(
+                                                  height: 20.h,
+                                                ),
                                                 TextFormField(
                                                   onTapOutside: (event) {
                                                     FocusManager
@@ -486,7 +495,9 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                       contentPadding:
                                                           EdgeInsets.all(20.w)),
                                                 ),
-                                                space20H,
+                                                SizedBox(
+                                                  height: 20.h,
+                                                ),
                                                 TextFormField(
                                                   onTapOutside: (event) {
                                                     FocusManager
@@ -563,7 +574,9 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                       contentPadding:
                                                           EdgeInsets.all(20.w)),
                                                 ),
-                                                space20H,
+                                                SizedBox(
+                                                  height: 20.h,
+                                                ),
                                                 TextFormField(
                                                   onTapOutside: (event) {
                                                     FocusManager
@@ -649,7 +662,9 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                       contentPadding:
                                                           EdgeInsets.all(20.w)),
                                                 ),
-                                                space20H,
+                                                SizedBox(
+                                                  height: 20.h,
+                                                ),
                                                 TextFormField(
                                                   onTapOutside: (event) {
                                                     FocusManager
@@ -737,7 +752,9 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                       contentPadding:
                                                           EdgeInsets.all(20.w)),
                                                 ),
-                                                space20H,
+                                                SizedBox(
+                                                  height: 20.h,
+                                                ),
                                                 CheckboxListTile(
                                                   checkColor: Colors.white,
                                                   fillColor:
@@ -797,7 +814,9 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                   contentPadding:
                                                       const EdgeInsets.all(0),
                                                 ),
-                                                space20H,
+                                                SizedBox(
+                                                  height: 20.h,
+                                                ),
                                                 ButtonGradient(
                                                   height: 60.h,
                                                   color1: color1DarkButton,
@@ -835,7 +854,9 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                   radius: 8.r,
                                                   textColor: Colors.white,
                                                 ),
-                                                space20H,
+                                                SizedBox(
+                                                  height: 20.h,
+                                                ),
                                                 RichText(
                                                   text: TextSpan(
                                                     children: [
@@ -875,12 +896,16 @@ class _ManagerSignUpState extends State<ManagerSignUp> {
                                                     ],
                                                   ),
                                                 ),
-                                                space10H
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
                                               ],
                                             ),
                                           )),
                                     ),
-                                    space30H,
+                                    SizedBox(
+                                      height: 30.h,
+                                    ),
                                     SizedBox(
                                       width: 1.sw,
                                       child: const CopyRightText(),

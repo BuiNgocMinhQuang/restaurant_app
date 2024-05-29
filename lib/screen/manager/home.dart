@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
 import 'package:app_restaurant/config/colors.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/model/manager/chart/chart_data_home_model.dart';
 import 'package:app_restaurant/model/manager/home/home_data_model.dart';
 import 'package:app_restaurant/model/manager/store/details_stores_model.dart';
@@ -333,13 +332,13 @@ class _ManagerHomeState extends State<ManagerHome> {
                           height: 100,
                           child: Lottie.asset('assets/lottie/error.json'),
                         ),
-                        space30H,
+                        SizedBox(height: 30.h),
                         TextApp(
                           text: "Có lỗi xảy ra, vui lòng thử lại sau",
                           fontsize: 20.sp,
                           fontWeight: FontWeight.bold,
                         ),
-                        space30H,
+                        SizedBox(height: 30.h),
                         SizedBox(
                           width: 200,
                           child: ButtonGradient(
@@ -387,7 +386,9 @@ class _ManagerHomeState extends State<ManagerHome> {
                                       color: menuGrey,
                                       fontWeight: FontWeight.bold,
                                     ),
-                                    space35H,
+                                    SizedBox(
+                                      height: 35.h,
+                                    ),
                                     Container(
                                         width: 1.sw,
                                         // height: 100.h,
@@ -452,7 +453,9 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                 )
                                               ],
                                             ))),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     Container(
                                         width: 1.sw,
                                         // height: 100.h,
@@ -513,7 +516,9 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                     ))
                                               ],
                                             ))),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     Container(
                                         width: 1.sw,
                                         // height: 100.h,
@@ -576,7 +581,9 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                 )
                                               ],
                                             ))),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     Container(
                                         width: 1.sw,
                                         // height: 100.h,
@@ -638,21 +645,27 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                     ))
                                               ],
                                             ))),
-                                    space20H,
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       children: [
-                                        space20H,
+                                        SizedBox(
+                                          height: 20.h,
+                                        ),
                                         TextApp(
                                           text: "Các cửa hàng của bạn",
                                           fontsize: 16.sp,
                                           color: blueText2,
                                           fontWeight: FontWeight.bold,
                                         ),
-                                        space20H,
+                                        SizedBox(
+                                          height: 20.h,
+                                        ),
                                         SizedBox(
                                           width: 1.sw,
                                           child: ListView.builder(
@@ -680,7 +693,9 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                       const Divider(
                                                         height: 1,
                                                       ),
-                                                      space5H,
+                                                      SizedBox(
+                                                        height: 5.h,
+                                                      ),
                                                       Slidable(
                                                         // Specify a key if the Slidable is dismissible.
                                                         key: ValueKey(dataHome!
@@ -823,7 +838,10 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                                             fontWeight:
                                                                                 FontWeight.bold,
                                                                           ),
-                                                                          space5W,
+                                                                          SizedBox(
+                                                                            width:
+                                                                                5.w,
+                                                                          ),
                                                                           SizedBox(
                                                                             width:
                                                                                 150.w,
@@ -857,7 +875,10 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                                             fontWeight:
                                                                                 FontWeight.bold,
                                                                           ),
-                                                                          space5W,
+                                                                          SizedBox(
+                                                                            width:
+                                                                                5.w,
+                                                                          ),
                                                                           SizedBox(
                                                                             width:
                                                                                 150.w,
@@ -891,7 +912,10 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                                             fontWeight:
                                                                                 FontWeight.bold,
                                                                           ),
-                                                                          space5W,
+                                                                          SizedBox(
+                                                                            height:
+                                                                                5.w,
+                                                                          ),
                                                                           SizedBox(
                                                                             width:
                                                                                 150.w,
@@ -911,7 +935,9 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                               ),
                                                             )),
                                                       ),
-                                                      space5H,
+                                                      SizedBox(
+                                                        height: 5.h,
+                                                      ),
                                                     ],
                                                   );
                                                 } else {
@@ -933,7 +959,7 @@ class _ManagerHomeState extends State<ManagerHome> {
                                         )
                                       ],
                                     ),
-                                    space30H,
+                                    SizedBox(height: 30.h),
                                     Container(
                                       width: 1.sw,
                                       decoration: BoxDecoration(
@@ -952,17 +978,19 @@ class _ManagerHomeState extends State<ManagerHome> {
                                       ),
                                       child: Column(
                                         children: [
-                                          space20H,
+                                          SizedBox(height: 20.h),
                                           TextApp(
                                             text: "Biểu đồ thu nhập",
                                             fontsize: 16.sp,
                                             color: blueText2,
                                             fontWeight: FontWeight.bold,
                                           ),
-                                          space20H,
+                                          SizedBox(height: 20.h),
                                           Row(
                                             children: [
-                                              space10W,
+                                              SizedBox(
+                                                width: 10.w,
+                                              ),
                                               Flexible(
                                                 fit: FlexFit.tight,
                                                 child: Column(
@@ -1177,7 +1205,9 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                   ],
                                                 ),
                                               ),
-                                              space10W,
+                                              SizedBox(
+                                                width: 10.w,
+                                              ),
                                               Flexible(
                                                 fit: FlexFit.tight,
                                                 child: Column(
@@ -1251,7 +1281,9 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                   ],
                                                 ),
                                               ),
-                                              space10W,
+                                              SizedBox(
+                                                width: 10.w,
+                                              ),
                                               Flexible(
                                                 fit: FlexFit.tight,
                                                 child: Column(
@@ -1325,10 +1357,12 @@ class _ManagerHomeState extends State<ManagerHome> {
                                                   ],
                                                 ),
                                               ),
-                                              space10W,
+                                              SizedBox(
+                                                height: 10.w,
+                                              ),
                                             ],
                                           ),
-                                          space20H,
+                                          SizedBox(height: 20.h),
                                           chartDataModel != null
                                               ? SizedBox(
                                                   width: 1.sw,

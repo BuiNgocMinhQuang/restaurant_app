@@ -1,5 +1,4 @@
 import 'package:app_restaurant/bloc/manager/manager_login/manager_login_bloc.dart';
-import 'package:app_restaurant/config/space.dart';
 import 'package:app_restaurant/config/text.dart';
 import 'package:app_restaurant/widgets/background/background_welcome.dart';
 import 'package:app_restaurant/widgets/button/button_gradient.dart';
@@ -50,7 +49,9 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                           padding: EdgeInsets.only(left: 20.w, right: 20.w),
                           child: Column(
                             children: [
-                              space15H,
+                              SizedBox(
+                                height: 15.h,
+                              ),
                               Stack(
                                 children: [
                                   Stack(
@@ -138,7 +139,9 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                       fontSize: 24.sp,
                                                     ),
                                                   ),
-                                                  space10H,
+                                                  SizedBox(
+                                                    height: 10.h,
+                                                  ),
                                                   Container(
                                                     height: 40.h,
                                                     decoration: BoxDecoration(
@@ -171,7 +174,9 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                           fontsize: 12.sp),
                                                     ),
                                                   ),
-                                                  space30H,
+                                                  SizedBox(
+                                                    height: 30.h,
+                                                  ),
                                                   TextFormField(
                                                     onTapOutside: (event) {
                                                       FocusManager
@@ -239,7 +244,9 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                             EdgeInsets.all(
                                                                 20.w)),
                                                   ),
-                                                  space20H,
+                                                  SizedBox(
+                                                    height: 20.h,
+                                                  ),
                                                   TextFormField(
                                                     onTapOutside: (event) {
                                                       FocusManager
@@ -325,7 +332,9 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                             EdgeInsets.all(
                                                                 20.w)),
                                                   ),
-                                                  space10H,
+                                                  SizedBox(
+                                                    height: 10.h,
+                                                  ),
                                                   Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment.start,
@@ -361,7 +370,9 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                           ),
                                                         ),
                                                       ),
-                                                      space10W,
+                                                      SizedBox(
+                                                        width: 10.w,
+                                                      ),
                                                       TextApp(
                                                           text: rememberAccount,
                                                           textAlign:
@@ -374,42 +385,44 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                           fontsize: 14.sp),
                                                     ],
                                                   ),
-                                                  space30H,
+                                                  SizedBox(
+                                                    height: 30.h,
+                                                  ),
                                                   ButtonGradient(
                                                     height: 60.h,
                                                     color1: color1BlueButton,
                                                     color2: color2BlueButton,
                                                     event: () {
-                                                      // if (_formField
-                                                      //     .currentState!
-                                                      //     .validate()) {
-                                                      //   BlocProvider.of<
-                                                      //               ManagerLoginBloc>(
-                                                      //           context)
-                                                      //       .add(
-                                                      //     ManagerLoginButtonPressed(
-                                                      //         email:
-                                                      //             emailController
-                                                      //                 .text,
-                                                      //         password:
-                                                      //             passworldController
-                                                      //                 .text,
-                                                      //         remember:
-                                                      //             isRemember),
-                                                      //   );
-                                                      // }
+                                                      if (_formField
+                                                          .currentState!
+                                                          .validate()) {
+                                                        BlocProvider.of<
+                                                                    ManagerLoginBloc>(
+                                                                context)
+                                                            .add(
+                                                          ManagerLoginButtonPressed(
+                                                              email:
+                                                                  emailController
+                                                                      .text,
+                                                              password:
+                                                                  passworldController
+                                                                      .text,
+                                                              remember:
+                                                                  isRemember),
+                                                        );
+                                                      }
 
-                                                      BlocProvider.of<
-                                                                  ManagerLoginBloc>(
-                                                              context)
-                                                          .add(
-                                                        const ManagerLoginButtonPressed(
-                                                            email:
-                                                                "contact@thuonghieuvietsol.com",
-                                                            password:
-                                                                "thvTHV123!@#",
-                                                            remember: true),
-                                                      );
+                                                      // BlocProvider.of<
+                                                      //             ManagerLoginBloc>(
+                                                      //         context)
+                                                      //     .add(
+                                                      //   const ManagerLoginButtonPressed(
+                                                      //       email:
+                                                      //           "contact@thuonghieuvietsol.com",
+                                                      //       password:
+                                                      //           "thvTHV123!@#",
+                                                      //       remember: true),
+                                                      // );
                                                     },
                                                     text: login,
                                                     fontSize: 14.sp,
@@ -446,7 +459,9 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                               103, 116, 142, 1),
                                                         ),
                                                       ),
-                                                      space10W,
+                                                      SizedBox(
+                                                        width: 10.w,
+                                                      ),
                                                       Container(
                                                         width: 100,
                                                         height: 1, // Thickness
@@ -456,7 +471,9 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                       )
                                                     ],
                                                   ),
-                                                  space20H,
+                                                  SizedBox(
+                                                    height: 20.h,
+                                                  ),
                                                   ButtonGradient(
                                                     height: 60.h,
                                                     color1: color1DarkButton,
@@ -470,7 +487,9 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                                     radius: 8.r,
                                                     textColor: Colors.white,
                                                   ),
-                                                  space20H,
+                                                  SizedBox(
+                                                    height: 20.h,
+                                                  ),
                                                   InkWell(
                                                     onTap: () {
                                                       context.go(
@@ -491,7 +510,9 @@ class _ManagerSignInState extends State<ManagerSignIn> {
                                               ),
                                             )),
                                       ),
-                                      space30H,
+                                      SizedBox(
+                                        height: 30.h,
+                                      ),
                                       SizedBox(
                                         width: 1.sw,
                                         child: const CopyRightText(),
